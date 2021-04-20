@@ -35,7 +35,7 @@ use App\Classes\SaveTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
 use App\FinancialYearResetDate;
 use Session;
 
@@ -71,8 +71,7 @@ class ReorderController extends Controller
         $this->tsl1_type = "tesco_tsl1_orders";
 		$this->tsl3_type = "tesco_tsl3_orders";
 		
-		$this->tesco_material_obj = new TescoMaterialQuery();
-
+		$this->order_history_obj = new StoreOrderManagementHistory();
 
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
@@ -747,33 +746,37 @@ class ReorderController extends Controller
 					$i++;
 				}
 			}
-			
+
 			/** Insert order data into history table */
-			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
-	  
-			$material_name  = $template_level->material;
-			$material_sub   = $template_level->material_sub;
-			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?0:null;
-			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$order_data = [];
+
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
-				   
-			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-			  'buyer_id'                  => $tesco_buyer_id->id,
-			  'season'                    => $newTasks->season_code,
-			  'customer_id'               => $newTasks->tesco_supplier_id,
-			  'material'                  => $material_name,
-			  'sub_material'              => $material_sub,
-			  'style'                     => $newTasks->$style_ref,
-			  'reference'                 => $material_ref,
-			  'buyer_po'                  => $newTasks->po_number,
-			  'ocn_number'                => $newTasks->ocn_number,
-			  'order_status'              => 2,
-			  'pi_status'                 => $pi_approve_status,
-			  'po_status'                 => $po_upload_status,
-			  'name_in_reports'           => $template_level->name_in_reports
-			]);
+	  
+			$order_data['season_code'] = $newTasks->season_code;
+	  
+			$order_data['po_number'] = $newTasks->po_number;
+	  
+			$order_data['ocn_no'] = $newTasks->ocn_number;
+	  
+			$order_data['style'] = $newTasks->$style_ref;
+	  
+			$order_data['customer_id'] = $newTasks->tesco_supplier_id;
+	  
+			$order_data['template_id'] = $newTasks->template_id;
+	  
+			$order_data['order_id'] = $newTasks->id;
+	  
+			$order_data['po_status'] = $po_status;
+	  
+			$order_data['pi_required'] = $pi_status;
+	  
+			$order_data['order_status_id'] = 2;
+	  
+			$order_data['edit_permission'] = 0;
+	  
+			$order_data['tesco_label'] = false;
+	  
+			$this->order_history_obj->storeOrdersHistory($order_data);
 
 		    echo true;
     }
@@ -1166,33 +1169,37 @@ class ReorderController extends Controller
 				}
 				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}	
-			
+
 			/** Insert order data into history table */
-			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
-	  
-			$material_name  = $template_level->material;
-			$material_sub   = $template_level->material_sub;
-			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?0:null;
-			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$order_data = [];
+
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
-				   
-			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-			  'buyer_id'                  => $tesco_buyer_id->id,
-			  'season'                    => $newTasks->season_code,
-			  'customer_id'               => $newTasks->tesco_supplier_id,
-			  'material'                  => $material_name,
-			  'sub_material'              => $material_sub,
-			  'style'                     => $newTasks->$style_ref,
-			  'reference'                 => $material_ref,
-			  'buyer_po'                  => $po,
-			  'ocn_number'                => $ocn_number,
-			  'order_status'              => 2,
-			  'pi_status'                 => $pi_approve_status,
-			  'po_status'                 => $po_upload_status,
-			  'name_in_reports'           => $template_level->name_in_reports
-			]);
+	  
+			$order_data['season_code'] = $newTasks->season_code;
+	  
+			$order_data['po_number'] = $po;
+	  
+			$order_data['ocn_no'] = $ocn_number;
+	  
+			$order_data['style'] = $newTasks->$style_ref;
+	  
+			$order_data['customer_id'] = $newTasks->tesco_supplier_id;
+	  
+			$order_data['template_id'] = $newTasks->template_id;
+	  
+			$order_data['order_id'] = $newTasks->id;
+	  
+			$order_data['po_status'] = $po_status;
+	  
+			$order_data['pi_required'] = $pi_status;
+	  
+			$order_data['order_status_id'] = 2;
+	  
+			$order_data['edit_permission'] = 0;
+	  
+			$order_data['tesco_label'] = false;
+	  
+			$this->order_history_obj->storeOrdersHistory($order_data);
 			
 			echo $data;
     }

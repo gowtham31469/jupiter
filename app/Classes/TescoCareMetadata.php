@@ -7,17 +7,6 @@ use DB;
  */
 class TescoCareMetadata
 {
-
-  /**
-   * Create a new controller instance.
-   *
-   * @return void
-   */
-  public function __construct()
-  {
-      
-  }
-
   /**
    * method to get tesco care labels metadata
    * @return array 

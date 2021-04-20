@@ -203,13 +203,16 @@ function tescoOrders(callback) {
                                                                                 </div>
                                                                             </div>
 																		</div>
-																		<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
-																			<label for="tesco_care_size_chart">Size Chart</label>
-																			<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="">
-																			   `+size_options+`
-																			   </select>	
-																			<div class="help-block with-errors"></div>
-																		</div>
+																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
+																				<label for="tesco_care_size_chart">Size Chart</label>
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, role='admin')">
+																				`+size_options+`
+																				</select>	
+																				<div class="help-block with-errors"></div>
+																			</div>
+																			<div class="form-group has-feedback hidden" id="tesco_care_size_category_div">
+																				
+																			</div>
                                                                         <button class="btn btn-primary btn-block ">Create Order</button>
                                                                     </form>
                                                                 </div>
@@ -523,9 +526,11 @@ function tescoOrders(callback) {
 						if(template_type === 'tesco_care_labels'){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
+							$('#tesco_care_size_category').prop('required', true);
 						} else {
 							$("#tesco_care_size_chart_div").addClass("hidden");
 							$('#tesco_care_size_chart').prop('required', false);
+							$('#tesco_care_size_category').prop('required', false);
 						}
 					}
 				});
@@ -559,8 +564,22 @@ function tescoOrders(callback) {
 							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
 							} else if(template_type === 'tesco_care_labels') {
-								var size_chart = $('#tesco_care_size_chart').val();
-								renderTescoCareOrders(size_chart);
+								var size_id = $('#tesco_care_size_chart').val();
+								var size_category = [];
+								var size_category_text = [];
+
+								/** [ Create array of multi selected categories ] */
+								$.each($("#tesco_care_size_category option:selected"), function() {
+									size_category.push($(this).val());
+									// size_category_text.push($(this).text());
+								});
+
+								/** [ Create array of multiple categories ] */
+								$.each($("#tesco_care_size_category option"), function() {
+									size_category_text.push($(this).text());
+								});
+								
+								renderTescoCareOrders(role="admin", size_id, size_category, size_category_text);
 							}
 							
 								localStorage.setItem("back_flag","create");

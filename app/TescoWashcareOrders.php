@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoWashcareOrders extends Model
 {
+
+    protected $table = 'tesco_washcare_orders';
+
     protected $fillable = [
         'template_id',
         'order_id',
@@ -63,12 +66,32 @@ class TescoWashcareOrders extends Model
         'pi_approved_at',
         'exclusive_trims_text',
         'contains_non_textile_part_text',
-        'part_of_set_text'
+        'part_of_set_text',
+        'kids_warning_text',
+        'country_of_origin_text',
+        'additional_care_id_1',  
+        'additional_care_text_1',
+        'additional_care_id_2',  
+        'additional_care_text_2',
+        'additional_care_id_3',  
+        'additional_care_text_3'
     ]; 
 
     protected $casts = [
-        'country_of_origin_text' => 'json',
-        'kids_warning_text' => 'json',
+        'country_of_origin_text'         => 'array',
+        'kids_warning_text'              => 'array',
+        'exclusive_trims_text'           => 'array',
+        'contains_non_textile_part_text' => 'array',
+        'part_of_set_text'               => 'array',
+        'additional_care_text_1'         => 'array',
+        'additional_care_text_2'         => 'array',
+        'additional_care_text_3'         => 'array',
+        'include_btn_sew_space'          => 'boolean',
+        'exclusive_trims'                => 'boolean',
+        'contains_non_textile_part'      => 'boolean',
+        'part_of_set'                    => 'boolean',
+        'bs_en_declaration'              => 'boolean',
+        'baby_sleeping_bag_symbol'       => 'boolean',
     ];
 
     /**
@@ -103,11 +126,4 @@ class TescoWashcareOrders extends Model
         return $this->hasMany('App\TescoWashcareOrdersQuantity');
     }
 
-    // /**
-    //  * Get the additional care instructions for the order.
-    //  */
-    // public function additionalCare()
-    // {
-    //     return $this->hasMany('App\TescoWashcareOrdersAdditionalCareInstructions');
-    // }
 }

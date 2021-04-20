@@ -36,7 +36,7 @@ use Carbon\Carbon;
 use App\Classes\ErpOrders;
 use Intervention\Image\ImageManagerStatic as Image;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
 use App\FinancialYearResetDate;
 use Session;
 
@@ -60,10 +60,11 @@ class OrderManagementCntrl extends Controller
     private $current_date;
     private $year;
     private $ratio_pack_type;
-    private $tesco_material_obj;
+    private $order_history_obj;
     private $financial_year_date;
     private $financial_year_start;
     private $financial_year_end;
+    private $buyer_id;
 
 
     /**
@@ -98,7 +99,7 @@ class OrderManagementCntrl extends Controller
 
         $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
 
-        $this->tesco_material_obj = new TescoMaterialQuery();
+        $this->order_history_obj = new StoreOrderManagementHistory();
 
         $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
           
@@ -115,6 +116,8 @@ class OrderManagementCntrl extends Controller
           $this->financial_year_start = $this->financial_year_date_format;
           $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
         }
+        
+        $this->buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
         
     }
 
@@ -3133,32 +3136,37 @@ class OrderManagementCntrl extends Controller
       }	
       
       /** Insert order data into history table */
-      $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-      $template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+      $order_data = [];
 
-      $material_name  = $template_level->material;
-      $material_sub   = $template_level->material_sub;
-      $material_ref   = $template_level->ref;
-      $po_upload_status = $po_status === "PO Pending"?0:null;
-      $pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
       $style_ref = strtolower($newTasks->zone).'_style_ref';
-             
-      OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-        'buyer_id'                  => $tesco_buyer_id->id,
-        'season'                    => $newTasks->season_code,
-        'customer_id'               => $newTasks->tesco_supplier_id,
-        'material'                  => $material_name,
-        'sub_material'              => $material_sub,
-        'style'                     => $newTasks->$style_ref,
-        'reference'                 => $material_ref,
-        'buyer_po'                  => $newTasks->po_number,
-        'ocn_number'                => $newTasks->ocn_number,
-        'order_status'              => 2,
-        'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status,
-        'name_in_reports'           => $template_level->name_in_reports
-      ]);
-		    echo true;
+
+      $order_data['season_code'] = $newTasks->season_code;
+
+      $order_data['po_number'] = $newTasks->po_number;
+
+      $order_data['ocn_no'] = $newTasks->ocn_number;
+
+      $order_data['style'] = $newTasks->$style_ref;
+
+      $order_data['customer_id'] = $newTasks->tesco_supplier_id;
+
+      $order_data['template_id'] = $newTasks->template_id;
+
+      $order_data['order_id'] = $newTasks->id;
+
+      $order_data['po_status'] = $po_status;
+
+      $order_data['pi_required'] = $pi_status;
+
+      $order_data['order_status_id'] = 2;
+
+      $order_data['edit_permission'] = 0;
+
+      $order_data['tesco_label'] = false;
+
+      $this->order_history_obj->storeOrdersHistory($order_data);
+
+		  echo true;
     }
   /**
      * This Function is used to set the tesco repeat order.
@@ -3544,31 +3552,35 @@ class OrderManagementCntrl extends Controller
       }	
       
       /** Insert order data into history table */
-      $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-      $template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
+      $order_data = [];
 
-      $material_name  = $template_level->material;
-      $material_sub   = $template_level->material_sub;
-      $material_ref   = $template_level->ref;
-      $po_upload_status = $po_status === "PO Pending"?0:null;
-      $pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
       $style_ref = strtolower($newTasks->zone).'_style_ref';
-             
-      OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-        'buyer_id'                  => $tesco_buyer_id->id,
-        'season'                    => $newTasks->season_code,
-        'customer_id'               => $newTasks->tesco_supplier_id,
-        'material'                  => $material_name,
-        'sub_material'              => $material_sub,
-        'style'                     => $newTasks->$style_ref,
-        'reference'                 => $material_ref,
-        'buyer_po'                  => $po,
-        'ocn_number'                => $ocn_number,
-        'order_status'              => 2,
-        'pi_status'                 => $pi_approve_status,
-        'po_status'                 => $po_upload_status,
-        'name_in_reports'           => $template_level->name_in_reports
-      ]);
+
+      $order_data['season_code'] = $newTasks->season_code;
+
+      $order_data['po_number'] = $po;
+
+      $order_data['ocn_no'] = $ocn_number;
+
+      $order_data['style'] = $newTasks->$style_ref;
+
+      $order_data['customer_id'] = $newTasks->tesco_supplier_id;
+
+      $order_data['template_id'] = $newTasks->template_id;
+
+      $order_data['order_id'] = $newTasks->id;
+
+      $order_data['po_status'] = $po_status;
+
+      $order_data['pi_required'] = $pi_status;
+
+      $order_data['order_status_id'] = 2;
+
+      $order_data['edit_permission'] = 0;
+      
+      $order_data['tesco_label'] = false;
+
+      $this->order_history_obj->storeOrdersHistory($order_data);
 
 		    echo $data;
     }
@@ -4534,33 +4546,21 @@ class OrderManagementCntrl extends Controller
      */
     public function cancelTescoOrder(Request $request)
     {
-        try {
-              /** [ Creating new object for CancelTescoOrders() class ] */
-              $cancel_order_obj = new CancelTescoOrders();
-              $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
-              
-              $table_array = $request->data_array;
 
-              if(sizeof($table_array) > 0)
-              {
-                /** [ Invoking cancelTescoOrderMethod function using class instance ] */
-                $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
-              }
-            
-              if($canceled_order == "cancelled")
-              {
-                $result = response()->json(['error'=> false,'message' =>'success'],200);
-              }
-              else
-              {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
-              }
+        $cancel_order_obj = new CancelTescoOrders();
+          
+        $table_array = $request->data_array;
 
-        } catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        if(sizeof($table_array) > 0) {
+        
+            $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
+
         }
+    
+        $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+
         return $result;
+
     }
 	
 	 /**
