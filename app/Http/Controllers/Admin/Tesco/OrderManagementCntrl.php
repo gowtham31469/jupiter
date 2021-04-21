@@ -3627,7 +3627,9 @@ class OrderManagementCntrl extends Controller
                 $data_array['id'] = $template_id;
                 
                 $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
+
                 $content = $jsonResponse->getContent();
+                
                 $updated_erp_table_array = json_decode($content, true);
 
                 // update po upload status as "PO Uploaded" in order history table

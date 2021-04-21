@@ -36,7 +36,7 @@ class StoreTescoLabelOrder
        
         $total_qty = array_sum($request->quantity);
 
-        $is_order_count_empty = $total_qty>0?0:1;
+        $is_order_count_empty = $total_qty > 0?0:1;
 
         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
 
@@ -239,6 +239,7 @@ class StoreTescoLabelOrder
         $response['pi_required']            = $customer_data['pi_required'];
         $response['po_required']            = $customer_data['po_required'];
         $response['delivery_date_required'] = $customer_data['delivery_date_req'];
+        $response['is_order_count_empty']   = $is_order_count_empty;
 
         return $response;
 
