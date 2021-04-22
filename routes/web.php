@@ -1007,6 +1007,9 @@ Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoS
 Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+Route::put('admin/tesco/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
+Route::put('admin/tesco/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
+Route::get('admin/tesco/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
 
 
 // Update financial year in session
