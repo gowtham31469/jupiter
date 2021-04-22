@@ -31,4 +31,10 @@ class TescoTHL3Orders extends Model
           return $this->belongsTo('App\TescoItemMasterMdl', 'template_id');
 
       }
+
+      public function customer() {
+
+        return $this->belongsTo('App\Customer', 'tesco_supplier_id');
+        
+      }
 }

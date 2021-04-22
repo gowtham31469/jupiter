@@ -22,6 +22,6 @@ class TescoWashcareOrdersQuantity extends Model
      */
     public function order()
     {
-        return $this->belongsTo('App\TescoWashcareOrders');
+        return $this->belongsTo('App\TescoWashcareOrders', 'washcare_order_id');
     }
 }

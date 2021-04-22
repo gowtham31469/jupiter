@@ -99,7 +99,7 @@ class TescoWashcareOrders extends Model
      */
     public function customer()
     {
-        return $this->hasOne('App\Customer', 'tesco_supplier_id');
+        return $this->belongsTo('App\Customer', 'tesco_supplier_id');
     }
 
     /**
@@ -107,7 +107,7 @@ class TescoWashcareOrders extends Model
      */
     public function template()
     {
-        return $this->hasOne('App\TescoItemMasterMdl', 'template_id');
+        return $this->belongsTo('App\TescoItemMasterMdl', 'template_id');
     }
 
     /**
@@ -115,15 +115,15 @@ class TescoWashcareOrders extends Model
      */
     public function pi()
     {
-        return $this->hasOne('App\ProfomaInvoice', 'pi_id');
+        return $this->belongsTo('App\ProfomaInvoice', 'pi_id');
     }
 
     /**
      * Get the size breakup and quantities for the order.
      */
-    public function quantity()
+    public function quantities()
     {
-        return $this->hasMany('App\TescoWashcareOrdersQuantity');
+        return $this->hasMany('App\TescoWashcareOrdersQuantity', 'washcare_order_id')->join('tesco_primary_size', 'tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id');
     }
 
 }

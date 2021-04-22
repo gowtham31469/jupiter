@@ -91,6 +91,7 @@ class StoreTescoLabelOrder
         $insert_data = array(
             'order_id'                       => $order_id,
             'zone'                           => 'joint',
+            'template_type'                  => 'joint',
             'template_id'                    => $request->template_id,
             'po_number'                      => $request->tesco_care_po,
             'uk_style_ref'                   => $request->tesco_care_uk_style,
@@ -268,8 +269,10 @@ class StoreTescoLabelOrder
 
                 $customer_profile_id = DB::table("customer_profile")
                 ->join('customers', 'customers.id', 'customer_profile.company_id')
-                ->where('company_id', $tesco_main_customer_id->customer_id)
-                ->where('role_id', 1)
+                ->where([
+                    'company_id' => $tesco_main_customer_id->customer_id, 
+                    'role_id' => 1
+                ])
                 ->select('customer_profile.id', 'pi_required', 'delivery_date_required', 'delivery_day_count', 'po_required')
                 ->first();
 

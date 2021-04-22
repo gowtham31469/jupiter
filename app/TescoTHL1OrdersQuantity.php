@@ -22,7 +22,7 @@ class TescoTHL1OrdersQuantity extends Model
 
       public function order() {
 
-          return $this->belongsTo('App\TescoTHL1OrdersQuantity');
+          return $this->belongsTo('App\TescoTHL1Orders', 'thl1_order_id');
           
       }
 }

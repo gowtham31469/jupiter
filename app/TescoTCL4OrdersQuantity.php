@@ -22,7 +22,7 @@ class TescoTCL4OrdersQuantity extends Model
 
       public function order() {
 
-          return $this->belongsTo('App\TescoTCL4OrdersQuantity');
+          return $this->belongsTo('App\TescoTCL4Orders', 'tcl4_order_id');
           
       }
 }

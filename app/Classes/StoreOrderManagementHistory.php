@@ -15,7 +15,10 @@ class StoreOrderManagementHistory
 
         $tesco_material_obj = new TescoMaterialQuery();
 
-        $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
+        $tesco_buyer_id = DB::table('buyers')
+        ->select('id')
+        ->where('buyer_name','=','Tesco')
+        ->first();
 
         $template_level = $tesco_material_obj->tescoMaterialDetails($order_data['template_id'], $order_data['tesco_label']);
 
