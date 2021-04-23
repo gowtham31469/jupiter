@@ -15,13 +15,13 @@ class TescoWashcareOrdersQuantity extends Model
         'ce_ean',
         'quantity',
         'selected_secondary_sizes'
-    ]; 
+    ];
 
     /**
      * Get the order that owns the quantity details.
      */
     public function order()
     {
-        return $this->belongsTo('App\TescoWashcareOrders');
+        return $this->belongsTo('App\TescoWashcareOrders', 'washcare_order_id');
     }
 }

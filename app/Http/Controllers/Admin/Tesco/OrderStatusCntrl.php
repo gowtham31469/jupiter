@@ -1967,10 +1967,11 @@ class OrderStatusCntrl extends Controller
                 $data_array_2['id'] = $template_id;
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
-                $data_array_2['created_by'] = Auth::guard('web')->id();
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+
                 $content = $jsonResponse->getContent();
+
                 $this->updated_erp_table_array = json_decode($content, true);
                 
                 $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
@@ -2082,7 +2083,6 @@ class OrderStatusCntrl extends Controller
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['id'] = $row_id;
-                $data_array_2['created_by'] = Auth::guard('web')->id();
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
 
@@ -2294,10 +2294,13 @@ class OrderStatusCntrl extends Controller
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    $erpOrders['created_by']= Auth::guard('web')->id();
+                    
                     $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                         $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                     } 
 
                     // update PI approve status as "PI Approved" in order history table
@@ -2319,11 +2322,13 @@ class OrderStatusCntrl extends Controller
                 $erpOrders['tableName'] = $table_name;
                 $erpOrders['id']        = $row_id;
                 $erpOrders['buyer_id']  = $buyer_id;  
-                $erpOrders['created_by']= Auth::guard('web')->id(); 
+
                 $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                     $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                 }
                 
                  // update PI approve status as "PI Approved" in order history table
@@ -2736,7 +2741,7 @@ class OrderStatusCntrl extends Controller
                 $data_array['tableName'] = $value[0];
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
-                $data_array['created_by']= Auth::guard('web')->id();
+
                 $this->erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
@@ -2812,7 +2817,7 @@ class OrderStatusCntrl extends Controller
                     $data_array['tableName'] = $value[0];
                     $data_array['buyer_id'] = $tesco_buyer_id->id;
                     $data_array['id'] = $value[1];
-                    $data_array['created_by']= Auth::guard('web')->id();
+                    
                     $this->erp_obj->updateTescoErpOrders($data_array);
                 }
 				

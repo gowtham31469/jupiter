@@ -13,7 +13,7 @@ class TescoWashcareOrders extends Model
         'template_id',
         'order_id',
         'zone',
-        'template_type',   
+        'template_type',
         'po_number',
         'uk_style_ref',
         'ce_style_ref',
@@ -69,13 +69,13 @@ class TescoWashcareOrders extends Model
         'part_of_set_text',
         'kids_warning_text',
         'country_of_origin_text',
-        'additional_care_id_1',  
+        'additional_care_id_1',
         'additional_care_text_1',
-        'additional_care_id_2',  
+        'additional_care_id_2',
         'additional_care_text_2',
-        'additional_care_id_3',  
+        'additional_care_id_3',
         'additional_care_text_3'
-    ]; 
+    ];
 
     protected $casts = [
         'country_of_origin_text'         => 'array',
@@ -99,7 +99,7 @@ class TescoWashcareOrders extends Model
      */
     public function customer()
     {
-        return $this->hasOne('App\Customer', 'tesco_supplier_id');
+        return $this->belongsTo('App\Customer', 'tesco_supplier_id');
     }
 
     /**
@@ -107,7 +107,7 @@ class TescoWashcareOrders extends Model
      */
     public function template()
     {
-        return $this->hasOne('App\TescoItemMasterMdl', 'template_id');
+        return $this->belongsTo('App\TescoItemMasterMdl', 'template_id');
     }
 
     /**
@@ -115,15 +115,25 @@ class TescoWashcareOrders extends Model
      */
     public function pi()
     {
-        return $this->hasOne('App\ProfomaInvoice', 'pi_id');
+        return $this->belongsTo('App\ProfomaInvoice', 'pi_id');
     }
 
     /**
      * Get the size breakup and quantities for the order.
      */
-    public function quantity()
+    public function quantities()
     {
-        return $this->hasMany('App\TescoWashcareOrdersQuantity');
+        return $this->hasMany('App\TescoWashcareOrdersQuantity', 'washcare_order_id')
+            ->join('tesco_primary_size', 'tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
+            ->select([
+                'tesco_washcare_orders_quanty.id',
+                'washcare_order_id',
+                'uk_ean', 'ce_ean',
+                'quantity as count',
+                'selected_secondary_sizes',
+                'uk_size as size',
+                'ce_size',
+                'department_title'
+            ]);
     }
-
 }
