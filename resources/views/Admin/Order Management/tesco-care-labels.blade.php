@@ -126,7 +126,7 @@
         <div class="col-xs-3">
             <div class="form-group has-feedback">
             <div class="input-group">
-                <input type="number" class="form-control input-sm composition-percentage total-percentage-{{ $j }}" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}" min="100" max="100">
+                <input type="number" class="form-control input-sm composition-percentage total-percentage-{{ $j }}" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}">
                 <div class="input-group-addon">%</div>
             </div>
             <div class="help-block with-errors"></div>
@@ -261,6 +261,7 @@
             </div>
         </div>
     </div>
+    <div class="label-order-invisible-div"></div>
 </div>
 </div>
 <hr>
@@ -295,11 +296,11 @@
 <div class="modal-footer"> 
     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
         page.</span> 
-        <button class="btn btn-xs btn-warning submit-btn" type="submit" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
+        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
-        <button class="btn btn-xs btn-danger cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelOrderModal" ><i class="fa fa-times"
+        <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
+        data-toggle="modal" data-target="#cancelCareLabelOrderModal" style="display: none;"><i class="fa fa-times"
             aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"

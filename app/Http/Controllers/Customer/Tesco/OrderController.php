@@ -57,7 +57,8 @@ class OrderController extends Controller
     private $current_date;
     private $ratio_pack_type;
     private $financial_year_date;
-
+    private $buyer_id;
+    
     /**
      * Create a new controller instance.
      *
@@ -89,6 +90,9 @@ class OrderController extends Controller
        $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
 
        $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+       $this->buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
+
     }
 
     /**
@@ -123,7 +127,9 @@ class OrderController extends Controller
 		  $data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->select('*',DB::raw("'".$this->thl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->whereBetween('created_at', [$from_date, $to_date])->orderBy('id', 'desc')->get();
 		  $data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->select('*',DB::raw("'".$this->tsl1."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->whereBetween('created_at', [$from_date, $to_date])->orderBy('id', 'desc')->get();
 		  $data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'))->where('tesco_supplier_id','=',$customer_role_id->company_id)->where('order_placed_by','=',Auth::guard('web_customer')->id())->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->whereBetween('created_at', [$from_date, $to_date])->orderBy('id', 'desc')->get();
-	  }
+    }
+    
+    $data['tesco_size_department'] = DB::table('tesco_size_department')->pluck('department_name', 'id')->all();
       
       echo json_encode($data);
     }
@@ -3252,32 +3258,20 @@ class OrderController extends Controller
          */
         public function cancelTescoOrder(Request $request)
         {
-            try {
-                  /** [ Creating new object for CancelTescoOrders() class ] */
-                  $cancel_order_obj = new CancelTescoOrders();
-                  $buyer_id = DB::table("buyers")->where('buyer_name','ilike','Tesco')->pluck('id')->first();
 
-                  $table_array = $request->data_array;
-
-                  if(sizeof($table_array) > 0)
-                  {
-                    /** [ Invoking cancelTescoOrderMethod function using class instance ] */
-                    $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $buyer_id);
-                  }
+            $cancel_order_obj = new CancelTescoOrders();
+          
+            $table_array = $request->data_array;
+    
+            if(sizeof($table_array) > 0) {
+            
+                $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
                 
-                  if($canceled_order == "cancelled")
-                  {
-                    $result = response()->json(['error'=> false,'message' =>'success'],200);
-                  }
-                  else
-                  {
-                    $result = response()->json(['error'=> true,'message' =>'Error'],400);
-                  }
-
-            } catch (\Exception $e)
-            {
-                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
             }
+        
+            $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+    
             return $result;
+
         }
 }
