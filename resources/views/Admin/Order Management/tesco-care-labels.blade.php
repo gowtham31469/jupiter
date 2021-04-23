@@ -300,7 +300,7 @@
             aria-hidden="true"></i> Submit</button> 
 
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times"
+        data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times"
             aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"

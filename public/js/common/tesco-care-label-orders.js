@@ -657,7 +657,7 @@ $(function () {
                 200: function (response) {
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been cancelled successfully</div>');
 
-                    $('#cancelOrderModal').modal('hide');
+                    $('#cancelLabelOrderModal').modal('hide');
                     $('.label-order-cancel-btn').remove();
                     $(window).scrollTop(0);
                 },
