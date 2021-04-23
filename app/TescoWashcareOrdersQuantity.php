@@ -15,7 +15,7 @@ class TescoWashcareOrdersQuantity extends Model
         'ce_ean',
         'quantity',
         'selected_secondary_sizes'
-    ]; 
+    ];
 
     /**
      * Get the order that owns the quantity details.

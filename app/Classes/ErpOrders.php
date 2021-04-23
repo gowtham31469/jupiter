@@ -89,7 +89,7 @@ class ErpOrders
 			])
 			->where('id', $order_table_id)
 			->first();
-// dd($orders);
+
 			if ($orders->customer->pi_required == 1 && $orders->customer->po_required == 0) {
 
 				$po_no     = $orders->pi_id;
@@ -119,7 +119,7 @@ class ErpOrders
 
 				$erp_order_id = $erp_order->id;
 
-				$res = $this->insertOrderDetails(
+				$this->insertOrderDetails(
 					$qnty_table,
 					$orders,
 					$erp_order,
@@ -149,7 +149,7 @@ class ErpOrders
 				
 				$erp_order_id = $new_erp_order->id;
 				
-				$res = $this->insertOrderDetails(
+				$this->insertOrderDetails(
 					$qnty_table,
 					$orders,
 					$new_erp_order,
@@ -157,7 +157,7 @@ class ErpOrders
 					$po_no
 				);
 			}
-// dd($res);
+
 			$result = response()->json([
 				'error' => false, 'message' => 'success',
 				'erp_id' => $erp_order_id,
@@ -183,13 +183,13 @@ class ErpOrders
 	 */
 	function insertOrderDetails($qnty_table, $orders, $erp_order, $buyer_id, $customer_po_no)
 	{
-		
+
 		$order_status_id  = DB::table('orders_status')
 		->where('status_name', $orders->order_status)
 		->select('id')
 		->first();
 
-		$style_ref = strtolower($orders->zone).'_style_ref';
+		$style_ref = strtolower($orders->zone) . '_style_ref';
 		$style_no  = $orders->zone === "joint" ? $orders->ce_style_ref . '/' . $orders->uk_style_ref : $orders->$style_ref;
 		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
@@ -212,9 +212,9 @@ class ErpOrders
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype
 		$unique_id = 'ERP-' . str_replace(' ', '-', $orders->item_name) . '-' . $erp_order->id . '-' . $style_no . '-' . $orders->po_number . '-' . $orders->order_flag;
-		
+
 		foreach ($orders->quantities as $key => $value) {
-			
+
 			$dataExists = DB::table('erp_order_details')
 			->where([
 				'order_qnty_table_name' => $qnty_table,
@@ -222,13 +222,11 @@ class ErpOrders
 				'erp_order_id' => $erp_order->id
 			])
 			->count();
-			
+
 			try {
-				
+
 				if ($dataExists == 0) {
-					
-					// dd($erp_order->id.'-'.$style_no.'-'.$value->count.'-'.$value->size.'-'.$orders->delivery_date.'-'.$qnty_table.'-'.$value->id.'-'.$orders->template_id.'-'.$orders->template->company_id.'-'.$orders->template->item_name.'-'.$orders->ocn_number.'-'.$orders->template_type.'-'.$custom_ref_name.'-'.$orders->po_number.'-'.$orders->zone.'-'.$orders->order_flag.'-'.$this->current_date.'-'.$order_status_id->id.'-'.$orders->order_created_at.'-'.$orders->order_approved_at.'-'.$unique_id.'-'.$this->financial_year_start.'='.$this->financial_year_end);
-					
+
 					$erp_order_details_id = ErpOrderDetails::create([
 						'erp_order_id'     		=> $erp_order->id,
 						'style_no'         		=> $style_no,
@@ -256,7 +254,7 @@ class ErpOrders
 						'fiscal_year_start'     => $this->financial_year_start,
 						'fiscal_year_end'       => $this->financial_year_end
 					])->id;
-					
+
 					/** Get updated data and update in history table */
 
 					$history_id = History::create([
@@ -276,7 +274,7 @@ class ErpOrders
 						'created_at'           => $this->current_date,
 						'updated_at'           => $this->current_date,
 					])->id;
-					
+
 					DB::table('event_history')
 					->insert([
 						'history_id'  => $history_id,
@@ -284,7 +282,7 @@ class ErpOrders
 						'created_at'  => $this->current_date,
 						'updated_at'  => $this->current_date,
 					]);
-				} 
+				}
 			} catch (\Exception $e) {
 
 				$errorCode  = $e->errorInfo[1];

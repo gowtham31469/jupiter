@@ -266,11 +266,8 @@ border: 0;
 .po-number-div::before {
 font-weight: 700;
 display: inline-block;
-max-width: 100%;
-margin-bottom: 4px;
 content: '';
 margin-left: -117px;
-height: 1px;
 width: 75%;
 background: rgba(0,0,0,0.2);
 }

@@ -3631,7 +3631,7 @@ class OrderManagementCntrl extends Controller
                 $content = $jsonResponse->getContent();
                 
                 $updated_erp_table_array = json_decode($content, true);
-dd($updated_erp_table_array);
+
                 // update po upload status as "PO Uploaded" in order history table
                 OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
                   'po_status'   => 1,
