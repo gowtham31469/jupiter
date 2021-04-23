@@ -618,6 +618,8 @@ Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl
 
 
 Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
@@ -1007,6 +1009,9 @@ Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoS
 Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+Route::put('admin/tesco/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
+Route::put('admin/tesco/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
+Route::get('admin/tesco/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
 
 
 // Update financial year in session

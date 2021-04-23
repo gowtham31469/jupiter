@@ -1881,6 +1881,62 @@ class TescoSettings extends Controller
       return $result;
     }
 
+      /**
+     * Make primary Size chart enabled
+     * @param enableTescoPrimarySize chart id
+     * @return boolean true or false
+     */
+      public function enableTescoPrimarySize(Request $request){
+        try {
+              $id = $request['id'];
+              TescoPrimarySize::where('id',$id)->update([
+                      'is_flag'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+        } catch (\Exception $e) {
+                  $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    /**
+     * Make tesco_primary_size size chart
+     * @return boolean true or false
+     */
+    public function disableTescoPrimarySizeChart(Request $request){
+      try {
+          $id = $request['id'];
+          TescoPrimarySize::where('id',$id)->update([
+            'is_flag'  => 0
+          ]);
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      } catch (\Exception $e) {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+          return $result;
+    }
+
+     /**
+     * Get tesco_primary_size details by ID for editing.
+     * @param tesco_primary_size id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoPrimarySizeById(Request $request){
+      try {
+            $id = $request['id'];
+            // $id = 2;
+            
+            $tesco_primary_size = TescoPrimarySize::where('id',$id)->with(['secSizeChart' => function ($query) {
+              $query->leftJoin('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+            }])->orderBy('is_flag','desc')->get();
+
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_primary_size' => $tesco_primary_size]);
+      }
+      catch (\Exception $e){
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
 }
 
 
