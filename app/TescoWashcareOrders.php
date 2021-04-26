@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TescoWashcareOrders extends Model
+class TescoWASHCAREOrders extends Model
 {
 
     protected $table = 'tesco_washcare_orders';
@@ -123,7 +123,7 @@ class TescoWashcareOrders extends Model
      */
     public function quantities()
     {
-        return $this->hasMany('App\TescoWashcareOrdersQuantity', 'washcare_order_id')
+        return $this->hasMany('App\TescoWASHCAREOrdersQuantity', 'washcare_order_id')
             ->join('tesco_primary_size', 'tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
             ->select([
                 'tesco_washcare_orders_quanty.id',

@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\TescoWashcareOrders::class, function (Faker $faker) {
+$factory->define(App\TescoWASHCAREOrders::class, function (Faker $faker) {
     return [
             'template_id' => 20,
             'order_id' => $faker->name,

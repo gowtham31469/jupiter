@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TescoWashcareOrdersComponentFibreMapping extends Model
+class TescoWASHCAREOrdersComponentFibreMapping extends Model
 {
     protected $table = 'tesco_washcare_orders_component_fibre_mapping';
 

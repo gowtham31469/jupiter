@@ -540,42 +540,14 @@ $(function () {
                     }
                 });
             } else if (data.pi_required === 1 && data.po_required != 1) {
-                var template_id = '';
-                var tabl_name = "";
+                var template_id = localStorage.getItem("templates");
+                var order_table_name = "tesco_washcare_orders";
                 var order_flag = "newOrder";
                 var pi_status = false;
                 var template_name = 'Washcare';
-                var row_id = data.last_insertion;
-                var temp_details = JSON.parse(localStorage.getItem("data"));
-                $.each(temp_details, function (i, item) {
-                    if (temp_details[i].template_name == 'Washcare') {
-                        template_id = temp_details[i].id;
-                    }
-                });
-                switch (template_name) {
-                    case 'TCL1':
-                        tabl_name = "tesco_tcl1_orders";
-                        break;
-                    case 'TCL2':
-                        tabl_name = "tesco_tcl2_orders";
-                        break;
-                    case 'TSL1':
-                        tabl_name = "tesco_tsl1_orders";
-                        break;
-                    case 'TCL4':
-                        tabl_name = "tesco_tcl4_orders";
-                        break;
-                    case 'TSL3':
-                        tabl_name = "tesco_tsl3_orders";
-                        break;
-                    case 'THL1':
-                        tabl_name = "tesco_thl1_orders";
-                        break;
-                    case 'THL3':
-                        tabl_name = "tesco_thl3_orders";
-                        break;
-                }
-                genarateTescoPI(row_id, tabl_name, pi_status, stl_no, template_id, po_number, template_name, order_flag)
+                var order_table_id = data.last_insertion;
+                
+                genarateTescoPI(order_table_id, order_table_name, pi_status, data.style_number, template_id, data.po_number, template_name, order_flag)
             }
 
         }
