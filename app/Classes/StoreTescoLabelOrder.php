@@ -220,7 +220,7 @@ class StoreTescoLabelOrder
         $order_data['season_code'] = null;
         $order_data['po_number'] = $request->tesco_care_po;
         $order_data['ocn_no'] = null;
-        $order_data['style'] = null;
+        $order_data['style'] = $request->tesco_care_uk_style . '/' . $request->tesco_care_ce_style;
         $order_data['customer_id'] = $customer_data['customer_id'];
         $order_data['template_id'] = $request->template_id;
         $order_data['order_id'] = $washcare_order_id;
@@ -241,6 +241,8 @@ class StoreTescoLabelOrder
         $response['po_required']            = $customer_data['po_required'];
         $response['delivery_date_required'] = $customer_data['delivery_date_req'];
         $response['is_order_count_empty']   = $is_order_count_empty;
+        $response['style_number']           = $request->tesco_care_uk_style . '/' . $request->tesco_care_ce_style;
+        $response['po_number']              = $request->tesco_care_po;
 
         return $response;
 
