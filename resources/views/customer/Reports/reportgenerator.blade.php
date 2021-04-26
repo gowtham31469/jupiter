@@ -95,7 +95,7 @@
 						
 
 						<div class="row rowSep" style="margin-top: 1.5%;">
-							<div class="col-md-2 filters">
+							<div class="col-md-2 filters" style="margin-top: -0.2%;">
 								<label>Select Buyer</label>
 								{!! Form::select('buyer', $buyers,null,['class' => 'selectpicker buyer_selection filterLevel1','required','data-size'=>"10","title"=>'None Selected','id'=>'buyer']) !!}
 

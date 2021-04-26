@@ -4218,7 +4218,7 @@ function tescoLabelSizeChart() {
         '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoLabelSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Label Size </a></div></div>'+
         '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Label Size Chart </h3></div>'+
         '<table id="tesco-label-sizechart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
-        '<tr><th>Sl. No</th><th>Department Title</th><th>UK Size</th><th>CE Size</th>'+
+        '<tr><th>Sl. No</th><th>Department Title</th><th>UK Size</th><th>CE Size</th><th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         // '<th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         '<th>Status</th><th>Actions</th></tr></thead><tbody>';
         $.each(data.tesco_translationlist, function(i, item) {
@@ -4227,7 +4227,12 @@ function tescoLabelSizeChart() {
           '<td>' + index + '</td>'+
           '<td>' + item.department_title + '</td>'+
           '<td>' + item.uk_size + '</td>'+
-          '<td>' + item.ce_size + '</td>';
+          '<td>' + item.ce_size + '</td>'+
+          '<td>' + item.Height + '</td>'+
+          '<td>' + item.Weight + '</td>'+
+          '<td>' + item.Chest + '</td>'+
+          '<td>' + item.Bust + '</td>'+
+          '<td>' + item.Waist + '</td>';
           
 
           if (item.is_flag) {
@@ -4240,7 +4245,7 @@ function tescoLabelSizeChart() {
           } else {
             tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoTranslation" data-placement="left"></i></a>';
           }
-          tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-translations filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+          tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-translations filterbtn options" title="Edit" data-placement="left" id="editEntry" ></i></a></td></tr>';
         })
         tesco_metadata += '</tbody></table></div>';
         $('.content').html(tesco_metadata)
@@ -4391,3 +4396,9 @@ function addTescoLabelSizeChart() {
       console.log("Error:" + e)
   }
 }
+
+$(document).on('click', '#editEntry', function(event) {
+  event.preventDefault();
+  /* Act on the event */
+  alert()
+});
