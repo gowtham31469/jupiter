@@ -148,7 +148,7 @@ class CareLabelOrdersController extends Controller
 
             $request->validated();
 
-            $response = $this->storeorder->storeTescoLabelOrder($request, $role = 'admin');
+            $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
 
             return response()->json([
                 'message' => 'success',

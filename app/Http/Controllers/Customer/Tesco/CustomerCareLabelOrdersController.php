@@ -31,7 +31,6 @@ class CustomerCareLabelOrdersController extends Controller
 {
     private $storeorder;
     private $caremeta;
-    private $buyer_id;
 
     public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
     {
@@ -189,7 +188,7 @@ class CustomerCareLabelOrdersController extends Controller
 
             $request->validated();
 
-            $response = $this->storeorder->storeTescoLabelOrder($request, $role = 'customer');
+            $response = $this->storeorder->storeTescoLabelOrder($request, 'customer');
 
             return response()->json([
                 'message' => 'success',
