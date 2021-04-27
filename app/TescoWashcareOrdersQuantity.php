@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TescoWASHCAREOrdersQuantity extends Model
+class TescoWashcareOrdersQuantity extends Model
 {
     protected $table = 'tesco_washcare_orders_quanty';
 
@@ -22,6 +22,6 @@ class TescoWASHCAREOrdersQuantity extends Model
      */
     public function order()
     {
-        return $this->belongsTo('App\TescoWASHCAREOrders', 'washcare_order_id');
+        return $this->belongsTo('App\TescoWashcareOrders', 'washcare_order_id');
     }
 }

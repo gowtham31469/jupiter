@@ -2304,7 +2304,7 @@ class OrderStatusCntrl extends Controller
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
 
                         $res= $this->erp_obj->updateTescoErpOrders($erpOrders);
-dd($res);
+
                     }
 
                     // update PI approve status as "PI Approved" in order history table
