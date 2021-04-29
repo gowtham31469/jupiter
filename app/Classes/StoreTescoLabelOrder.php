@@ -36,7 +36,7 @@ class StoreTescoLabelOrder
        
         $total_qty = array_sum($request->quantity);
 
-        $is_order_count_empty = $total_qty>0?0:1;
+        $is_order_count_empty = $total_qty > 0?0:1;
 
         $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
 
@@ -91,6 +91,7 @@ class StoreTescoLabelOrder
         $insert_data = array(
             'order_id'                       => $order_id,
             'zone'                           => 'joint',
+            'template_type'                  => 'joint',
             'template_id'                    => $request->template_id,
             'po_number'                      => $request->tesco_care_po,
             'uk_style_ref'                   => $request->tesco_care_uk_style,
@@ -219,7 +220,7 @@ class StoreTescoLabelOrder
         $order_data['season_code'] = null;
         $order_data['po_number'] = $request->tesco_care_po;
         $order_data['ocn_no'] = null;
-        $order_data['style'] = null;
+        $order_data['style'] = $request->tesco_care_uk_style . '/' . $request->tesco_care_ce_style;
         $order_data['customer_id'] = $customer_data['customer_id'];
         $order_data['template_id'] = $request->template_id;
         $order_data['order_id'] = $washcare_order_id;
@@ -239,6 +240,9 @@ class StoreTescoLabelOrder
         $response['pi_required']            = $customer_data['pi_required'];
         $response['po_required']            = $customer_data['po_required'];
         $response['delivery_date_required'] = $customer_data['delivery_date_req'];
+        $response['is_order_count_empty']   = $is_order_count_empty;
+        $response['style_number']           = $request->tesco_care_uk_style . '/' . $request->tesco_care_ce_style;
+        $response['po_number']              = $request->tesco_care_po;
 
         return $response;
 
@@ -267,8 +271,10 @@ class StoreTescoLabelOrder
 
                 $customer_profile_id = DB::table("customer_profile")
                 ->join('customers', 'customers.id', 'customer_profile.company_id')
-                ->where('company_id', $tesco_main_customer_id->customer_id)
-                ->where('role_id', 1)
+                ->where([
+                    'company_id' => $tesco_main_customer_id->customer_id, 
+                    'role_id' => 1
+                ])
                 ->select('customer_profile.id', 'pi_required', 'delivery_date_required', 'delivery_day_count', 'po_required')
                 ->first();
 

@@ -2297,10 +2297,11 @@ class OrderStatusController extends Controller
                 $data_array_2['id'] = $template_id;
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
-                $data_array_2['created_by'] = Auth::guard('web_customer')->id();
 				
-				$jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+                $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+                
                 $content = $jsonResponse->getContent();
+
                 $this->updated_erp_table_array = json_decode($content, true);
                 
                 $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
@@ -2401,14 +2402,16 @@ class OrderStatusController extends Controller
 
             if ($data)
             {
-                if ($data['bank_details']->zone == "CE")
+                $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
+                if ($data['bank_details']->zone === "joint")
                 {
-                    $style_no = $data['bank_details']->ce_style_ref;
+                    $style_no = $data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref;
                 }
                 else
                 {
-                    $style_no = $data['bank_details']->uk_style_ref;
+                    $style_no = $data['bank_details']->$zone_style_no;
                 }
+
                 if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
@@ -2463,17 +2466,19 @@ class OrderStatusController extends Controller
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
                foreach ($data['tables'] as $table => $vals) {
-                    if ($data['bank_details']->zone == "CE") {
-                       
+                    
+                    if ($data['bank_details']->zone === "joint") {
                         $tableID =  DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref',$style_no)
+                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)->value('id');
                         $approved_data   =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref',$style_no)
+                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
@@ -2483,35 +2488,40 @@ class OrderStatusController extends Controller
                                                'pi_file' => $attachment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
-                    }
-                    else {
-                        $tableID = DB::table($table)
+                    } else {
+                        $tableID =  DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('uk_style_ref',$style_no)
+                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   = DB::table($table)
+                        $approved_data   =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('uk_style_ref',$style_no)
+                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
-                                                'pi_status' => "PI Approved",
-                                                'pi_id' => $pi_details->id,
+                                               'pi_status' => "PI Approved",
+                                               'pi_id' => $pi_details->id,
+                                               'pi_file' => $attachment,
                                                 'pi_file' => $attachment,   
-                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                             ]);
+                                               'pi_file' => $attachment,
+                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                                            ]);
+                        
                     }
                     /** @var array [Pass array of values to updateTescoErpOrders function] */
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    $erpOrders['created_by']= Auth::guard('web_customer')->id();
+
                     $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                         $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                     }
 
                     // update PI approve status as "PI Approved" in order history table
@@ -2534,11 +2544,13 @@ class OrderStatusController extends Controller
                 $erpOrders['tableName'] = $table_name;
                 $erpOrders['id']        = $row_id;
                 $erpOrders['buyer_id']  = $buyer_id;
-                $erpOrders['created_by']= Auth::guard('web_customer')->id(); 
+                 
                 $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                     $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                 }
 
                 // update PI approve status as "PI Approved" in order history table
@@ -2576,34 +2588,52 @@ class OrderStatusController extends Controller
             $table_data =   DB::table($table_name)->where('id',$row_id)->first();
 
             if ($table_data->order_flag =="newOrder") {
-               if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-                  $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-                  $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
 
+                if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+
+                    $table_array = array('tesco_tcl1_orders', 'tesco_tcl2_orders', 'tesco_tsl1_orders');
+                    $qnty_id_array = array('tesco_tcl1_orders_quanty', 'tesco_tcl2_orders_quanty', 'tesco_tsl1_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
                 }
+
                 if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-                  $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-                  $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-                  $template_array = array_combine($table_array, $qnty_id_array);
+
+                    $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders');
+                    $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
+                }
+
+                if ($table_name == "tesco_washcare_orders") {
+
+                    $table_array = array('tesco_washcare_orders');
+                    $qnty_id_array = array('tesco_washcare_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
                 }
             }
             
             if (!empty($template_array)) {
+
                 foreach ($template_array as $table => $value) {
-                    if ($table_data->zone == "CE") {
+
+                    if ($table_data->zone == "joint") {
+
                         DB::table($table)
                         ->where('ce_style_ref',$table_data->ce_style_ref)
+                        ->where('uk_style_ref',$table_data->uk_style_ref)
                         ->where('po_number',$table_data->po_number)
                         ->where('order_flag',$table_data->order_flag)
                         ->update([
                           'pi_status' => "PI Rejected",
                           'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
+
                     }
                     else{
+
+                        $zone_style_ref = strtolower($table_data->zone).'_style_ref';
+
                         DB::table($table)
-                        ->where('uk_style_ref',$table_data->uk_style_ref)
+                        ->where(strtolower($table_data->zone).'_style_ref',$table_data->$zone_style_ref)
                         ->where('po_number',$table_data->po_number)
                         ->where('order_flag',$table_data->order_flag)
                         ->update([
@@ -2614,15 +2644,15 @@ class OrderStatusController extends Controller
                 }
             }
             else{
-                $data = DB::table($table_name)
+                    DB::table($table_name)
                         ->where('id',$row_id)
-                         ->update([
-                          'pi_status' => "PI Rejected",
-                          'pi_rev_no' => $table_data->pi_rev_no + 1
+                            ->update([
+                            'pi_status' => "PI Rejected",
+                            'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
             }
-    
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         catch (\Exception $e)
         {
@@ -3138,7 +3168,7 @@ class OrderStatusController extends Controller
                 $data_array['tableName'] = $value[0];
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
-                $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                
                 $this->erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
@@ -3214,7 +3244,7 @@ class OrderStatusController extends Controller
                         $data_array['tableName'] = $value[0];
                         $data_array['buyer_id'] = $tesco_buyer_id->id;
                         $data_array['id'] = $value[1];
-                        $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                        
                         $this->erp_obj->updateTescoErpOrders($data_array);
                   }
             }
@@ -3694,7 +3724,6 @@ class OrderStatusController extends Controller
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['id'] = $row_id;
-                $data_array_2['created_by']= Auth::guard('web_customer')->id(); 
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
 

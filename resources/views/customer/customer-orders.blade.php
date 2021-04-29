@@ -268,11 +268,8 @@ border: 0;
 .po-number-div::before {
 font-weight: 700;
 display: inline-block;
-max-width: 100%;
-margin-bottom: 4px;
 content: '';
 margin-left: -117px;
-height: 1px;
 width: 75%;
 background: rgba(0,0,0,0.2);
 } 
@@ -730,23 +727,23 @@ background: rgba(0,0,0,0.2);
             </div>
         </div>
     </div>
-    <div class="modal fade" id="cancelCareLabelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelCareLabelOrderModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="cancelCareLabelOrderModalLabel">Cancel Order</h4>
-                </div>
-                    <div class="modal-body">
-                            <p>You are about to cancel this order. Do you want to proceed ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                        {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_care_label_order_btn','onclick' => 'cancelCareLabelOrder()'] ) !!}
-                    </div>
-            </div>
-        </div>
-    </div>
+    <div class="modal fade" id="cancelLabelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelLabelOrderModal">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="cancelLabelOrderModal">Cancel Order</h4>
+               </div>
+                   <div class="modal-body">
+                         <p>You are about to cancel this order. Do you want to proceed ?</p>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelCareLabelOrder()'] ) !!}
+                   </div>
+           </div>
+       </div>
+   </div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/customer') }}";

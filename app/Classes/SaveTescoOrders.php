@@ -27,19 +27,32 @@ class SaveTescoOrders
            $order_history_obj = new StoreOrderManagementHistory();
 
            /** [ Get company id for template ] */
-           $template_data = DB::table('tesco_item_master')->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')->where('tesco_item_master.id','=',$template_id)->first();
+           $template_data = DB::table('tesco_item_master')
+           ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
+           ->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')
+           ->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')
+           ->where('tesco_item_master.id','=',$template_id)
+           ->first();
 
            //Dynamic function name and database model name for each templates
            $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
            if($request['supplier'] != '')
            {
-             $customer_ids = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+
+             $customer_ids = DB::table("customer_metadata")
+             ->where('customer_metadata_id','=',$request['supplier'])
+             ->select('customer_id')
+             ->first();
+
              $customer_id = $customer_ids != ''?$customer_ids->customer_id:NULL;
+
            }
            else
            {
+
              $customer_id = NULL;
+             
            }
 
             /** Insert order details first time. If data already exits, update old values**/

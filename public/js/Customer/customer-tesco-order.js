@@ -542,12 +542,15 @@ function tescoOrders(callback) {
 						if(template_type === 'tesco_care_labels'){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
-							$('#tesco_care_size_category').prop('required', true);
+							$('#tesco_care_size_chart').val('');
 						} else {
 							$("#tesco_care_size_chart_div").addClass("hidden");
+							$('#tesco_care_size_category_div').html('');
 							$('#tesco_care_size_chart').prop('required', false);
 							$('#tesco_care_size_category').prop('required', false);
-						}
+							$('#tesco_care_size_chart').val('');
+                        }
+                        $(".selectpicker").selectpicker("refresh");
                     }
                 });
 
