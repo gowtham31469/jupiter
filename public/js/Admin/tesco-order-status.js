@@ -1157,6 +1157,19 @@ function tescoStatusTable(data, path) {
                     }
                 } else if (key == "PI Status") {
                     var str = value[key];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (str === 'PI Approved') {
                             action_status = true;
@@ -1185,10 +1198,17 @@ function tescoStatusTable(data, path) {
                     if (value['order_status'] != 'Saved') {
                         var zone = value.Zone
                         var style_no = "";
-                        if (zone == "CE") {
-                            style_no = value.ce_style_ref;
-                        } else {
-                            style_no = value.uk_style_ref;
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                        }
+                        else
+                        {
+                            if (zone == "CE") {
+                                style_no = value.ce_style_ref;
+                            } else {
+                                style_no = value.uk_style_ref;
+                            }
                         }
                         if(value.tableName == "tesco_washcare_orders")
                         {
@@ -1211,10 +1231,17 @@ function tescoStatusTable(data, path) {
                     if (value['order_status'] != 'Saved') {
                         var zone = value.Zone
                         var style_no = "";
-                        if (zone == "CE") {
-                            style_no = value.ce_style_ref;
-                        } else {
-                            style_no = value.uk_style_ref;
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                        }
+                        else
+                        {
+                            if (zone == "CE") {
+                                style_no = value.ce_style_ref;
+                            } else {
+                                style_no = value.uk_style_ref;
+                            }
                         }
                         if(value.tableName == "tesco_washcare_orders")
                         {
@@ -1261,6 +1288,19 @@ function tescoStatusTable(data, path) {
                     var str = value[key];
                     var status_text = " - ";
                     var po_file = value['po_file'];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (value['PO Status'] === 'PO Uploaded') {
                             status = str.replace(/ /g, "");
@@ -3990,10 +4030,17 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
             200: function (data) {
                 var options = "<option>Select Style Number</option>";
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
-                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
-                    } else {
-                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    if(value.type == "stickers")
+                    {
+                        if (value.zone == "CE") {
+                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                        } else {
+                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                        }
+                    }
+                    else
+                    {
+                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
                     }
                 })
                 $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
