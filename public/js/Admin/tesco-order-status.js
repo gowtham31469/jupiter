@@ -1289,11 +1289,19 @@ function tescoStatusTable(data, path) {
                     }
                     var zone = value.Zone
                     var style_no = "";
-                    if (zone == "CE") {
-                        style_no = value.ce_style_ref;
-                    } else {
-                        style_no = value.uk_style_ref;
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
                     }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
+                    
 
                     if (value['order_status'] != 'Saved'){
                         tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
@@ -2277,6 +2285,24 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                             svgDoc.getElementById("tog_name").setAttribute('style', "visibility:hidden");
                         }
+
+
+                        var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
+                        var selected_secondary_sizes_text = "";
+                        console.log(selected_secondary_sizes)
+                        $size_y=0;
+                        $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
+                            if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
+                            {
+                                selected_secondary_sizes_text += '<tspan x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
+                                $size_y += 6;
+                            }
+                        })
+                        svgDoc.getElementById("height_text").innerHTML = selected_secondary_sizes_text;
+
+                        
+
+
                         svgDoc.getElementById("uk_ean_barcode").innerHTML = val.uk_ean;
                         svgDoc.getElementById("ce_ean_barcode").innerHTML = val.ce_ean;
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
@@ -2294,7 +2320,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                     })
 
                     var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan x="12.53" y="6.94">'+country_of_origin_text[0].czech+'</tspan><tspan x="12.53" y="13.88">'+country_of_origin_text[0].slovak+'</tspan><tspan x="4" y="20.82">'+country_of_origin_text[0].hungarian+'</tspan>';
+                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan style="font-weight:bold;" x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan style="font-weight:bold;"  x="12.53" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan style="font-weight:bold;"  x="12.53" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan style="font-weight:bold;" x="4" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
 
                     svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
                     svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
@@ -2331,15 +2357,15 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                         en_care_instructions += " / " + data.degree_text[0].english
                     }
                     
-                    $chunk_str = chunkSubstr(en_care_instructions, 24).split(/\r?\n/);
+                    $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
                     //console.log($chunk_str);
-                    var chunks='<tspan x="0" y="0">EN</tspan>';
+                    var chunks='<tspan style="font-weight:bold;" x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
                     console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
-                        chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
+                        chunks += '<tspan style="font-weight:bold;" x="12" y="'+$y+'">'+chunk_val+'</tspan>';
                         if($chunk_str.length == $ind)
                         {
                             $y+=6;
@@ -2464,11 +2490,11 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                         hu_garment_component += " / " + data.degree_text[0].hungarian
                     }
 
-                    $garment_str = chunkSubstr(en_garment_component, 24).split(/\r?\n/);
-                    $pl_garment_str = chunkSubstr(pl_garment_component, 24).split(/\r?\n/);
-                    $cz_garment_str = chunkSubstr(cz_garment_component, 24).split(/\r?\n/);
-                    $sk_garment_str = chunkSubstr(sk_garment_component, 24).split(/\r?\n/);
-                    $hu_garment_str = chunkSubstr(hu_garment_component, 24).split(/\r?\n/);
+                    $garment_str = chunkSubstr(en_garment_component, 28).split(/\r?\n/);
+                    $pl_garment_str = chunkSubstr(pl_garment_component, 28).split(/\r?\n/);
+                    $cz_garment_str = chunkSubstr(cz_garment_component, 28).split(/\r?\n/);
+                    $sk_garment_str = chunkSubstr(sk_garment_component, 28).split(/\r?\n/);
+                    $hu_garment_str = chunkSubstr(hu_garment_component, 28).split(/\r?\n/);
 
                     chunks += '<tspan x="0" y="'+$y+'">EN</tspan>';
 
@@ -2490,12 +2516,12 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                     chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
                     var new_chunks = '';
                     $($pl_garment_str).each(function(index,pl_garment_val){
-                        if($y == 84)
+                        if($y == 96)
                         {
                             $z=0;
                         }
 
-                        if($y > 88)
+                        if($y > 96)
                         {
                             new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
                         }
@@ -2508,7 +2534,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                         $z+=6;
                     })
 
-                    if($y > 88)
+                    if($y > 96)
                     {
                         new_chunks += '<tspan x="0" y="'+$z+'">CZ</tspan>';
                     }
@@ -2518,12 +2544,12 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                     }
 
                     $($cz_garment_str).each(function(index,cz_garment_val){
-                        if($y == 84)
+                        if($y == 96)
                         {
                             $z=0;
                         }
 
-                        if($y > 88)
+                        if($y > 96)
                         {
                             new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
                         }
@@ -2536,7 +2562,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                         $z+=6;
                     })
 
-                    if($y > 88)
+                    if($y > 96)
                     {
                         new_chunks += '<tspan x="0" y="'+$z+'">SK</tspan>';
                     }
@@ -2546,12 +2572,12 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                     }
 
                     $($sk_garment_str).each(function(index,sk_garment_val){
-                        if($y == 84)
+                        if($y == 96)
                         {
                             $z=0;
                         }
 
-                        if($y > 88)
+                        if($y > 96)
                         {
                             new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
                         }
@@ -2564,7 +2590,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                         $z+=6;
                     })
 
-                    if($y > 88)
+                    if($y > 96)
                     {
                         new_chunks += '<tspan x="0" y="'+$z+'">HU</tspan>';
                     }
@@ -2574,12 +2600,12 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj) {
                     }
 
                     $($hu_garment_str).each(function(index,hu_garment_val){
-                        if($y == 84)
+                        if($y == 96)
                         {
                             $z=0;
                         }
 
-                        if($y > 88)
+                        if($y > 96)
                         {
                             new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
                         }
