@@ -18,4 +18,9 @@ class TescoWashcareOrdersComponentMapping extends Model
     protected $casts = [
         'garment_component_text' => 'array',
     ];
+
+    public function fibers()
+    {
+        return $this->hasMany('App\TescoWashcareOrdersComponentFibreMapping', 'washcare_component_id');
+    }
 }
