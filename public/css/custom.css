@@ -608,6 +608,25 @@ span.navbar-brand.logo:hover {
     transition: 0.5s ease all;
 }
 
+
+.care_label_reorder {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.care_label_reorder.active {
+    margin-right: 25%;
+    transition: 0.5s ease all;
+}
+
 .left-panelorc {
     position: fixed;
     right: 0px;

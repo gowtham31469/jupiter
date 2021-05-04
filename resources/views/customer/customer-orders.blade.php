@@ -359,7 +359,10 @@ background: rgba(0,0,0,0.2);
 
 	.left-panel.active {
     	margin-right: 0%;
-	}
+    }
+    .care_label_reorder.active {
+    margin-right: 0%;
+}
 
 </style>
 <input type="hidden" id="status_flag">
@@ -596,7 +599,7 @@ background: rgba(0,0,0,0.2);
 </div>
 
 
-<div class="left-panel care_label_reorder col-md-12" style="display: none">
+<div class="care_label_reorder col-md-12" style="display: none">
 	<div class="loader" style="display: none; margin-top: 0%;"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 	<div class="div-max">
 		<div class="col-md-5">
