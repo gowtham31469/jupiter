@@ -3769,37 +3769,15 @@ class OrderManagementCntrl extends Controller
           }
         } else {
 
-            // $tesco_washcare_orders = DB::table('tesco_washcare_orders')
-            // ->join('tesco_item_master', 'tesco_item_master.id', 'tesco_washcare_orders.template_id')
-            // ->where([
-            //   'po_number' => $request->po_number,
-            //   'uk_style_ref' => $style_array[0],
-            //   'ce_style_ref' => $style_array[1],
-            //   'order_flag' => 'newOrder'
-            // ])
-            // ->where('tesco_washcare_orders.order_status', '!=', 'Order Cancelled')
-            // ->select('*','tesco_item_master.item_name as TemplateName', DB::raw("'" . $this->tesco_washcare_orders_type . "'" . ' as "type"'))
-            // ->first();
-
-            // if($tesco_washcare_orders) {
-            //   $data['tesco_washcare_orders'] = $tesco_washcare_orders;
-
-            //   $data['tesco_washcare_orders']->order_quantity = DB::table('tesco_washcare_orders_quanty')
-            //   ->where('washcare_order_id',$tesco_washcare_orders->id)
-            //   ->select('*')
-            //   ->orderBy('tesco_washcare_orders_quanty.id')
-            //   ->get();
-            // }
-
             $data['tesco_washcare_orders']  = TescoWashcareOrders::with([
               'quantities',
-              'template',
               'garment_components'
             ])
             ->where([
               'tesco_washcare_orders.id' => $request->orderid
             ])
             ->first();
+            
         } 
 
         $result = response()->json(['error'=> false,'result' => $data],200); 

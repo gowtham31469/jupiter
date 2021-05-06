@@ -1,0 +1,118 @@
+$( () => {
+
+    // Method to render view tesco care label orders page
+    renderLabelViewOrderPage = (order_data, user_role) => {
+
+        $('.main-content').load('/' + user_role + '/tesco/care-label-orders', (response, status, xhr) => {
+            $('li.year-nav-menu, li.buyer-nav-menu').addClass('hidden');
+
+            $('li.buyer-nav-menu').addClass('hidden');
+
+            /** Make form as readonly */
+            $('#tesco_care_label_order_form input').prop('disabled', 'true');
+            $('.selectpicker').prop('disabled', true);
+            $('.label-order-submit-btn').remove();
+
+            // Map stored values 
+            $('#tesco_care_po').val(order_data.tesco_washcare_orders.po_number)
+            $('#tesco_care_eqos').val(order_data.tesco_washcare_orders.eqos_site_code)
+            $('#tesco_care_ce_style').val(order_data.tesco_washcare_orders.ce_style_ref)
+            $('#tesco_care_uk_style').val(order_data.tesco_washcare_orders.uk_style_ref)
+            $('#tesco_care_fabric_code').val(order_data.tesco_washcare_orders.fabric_batch_code)
+            $('#tesco_care_leather_id').val(order_data.tesco_washcare_orders.leather_suede_code)
+            $('#tesco_care_coo').val(order_data.tesco_washcare_orders.country_of_origin_id)
+            $('#tesco_care_supplier').val(order_data.tesco_washcare_orders.tesco_metadata_supplier_id)
+
+            $('#tesco_care_button_space').prop('checked', order_data.tesco_washcare_orders.include_btn_sew_space);
+            $('#tesco_care_exclusive_trim').prop('checked', order_data.tesco_washcare_orders.exclusive_trims);
+            $('#tesco_care_non_textile_part').prop('checked', order_data.tesco_washcare_orders.contains_non_textile_part);
+            $('#tesco_care_part_of_set').prop('checked', order_data.tesco_washcare_orders.part_of_set);
+
+            $('#tesco_care_wash_instruction').val(order_data.tesco_washcare_orders.wash_symbol_id)
+            $('#tesco_care_bleach_instruction').val(order_data.tesco_washcare_orders.bleach_symbol_id)
+            $('#tesco_care_dry_instruction').val(order_data.tesco_washcare_orders.dry_symbol_id)
+            $('#tesco_care_iron_instruction').val(order_data.tesco_washcare_orders.ironing_symbol_id)
+            $('#tesco_care_dry_clean_instruction').val(order_data.tesco_washcare_orders.dryclean_symbol_id)
+
+            $('#tesco_care_additional_instruction_1').val(order_data.tesco_washcare_orders.additional_care_id_1)
+            $('#tesco_care_additional_instruction_2').val(order_data.tesco_washcare_orders.additional_care_id_2)
+            $('#tesco_care_additional_instruction_3').val(order_data.tesco_washcare_orders.additional_care_id_3)
+
+            $('#tesco_care_kids_warning').val(order_data.tesco_washcare_orders.kids_warning_id)
+
+            if (order_data.tesco_washcare_orders.primary_size_id === 4) {
+                $('#baby_sleeping_bag_div').removeClass("hidden");
+
+                $('#tesco_care_bs_en').prop('checked', order_data.tesco_washcare_orders.bs_en_declaration)
+                $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.tesco_washcare_orders.baby_sleeping_bag_symbol)
+                $('#tesco_care_tog').val(order_data.tesco_washcare_orders.tog)
+            }
+
+            var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>UK</th>
+                                                <th>EUR</th>
+                                                <th>Secondary Size</th>
+                                                <th>UK EAN</th>
+                                                <th>CE EAN</th>
+                                                <th>Quantity <small>(Units)</small></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>`;
+
+            $.each(order_data.tesco_washcare_orders.quantities, (indexInArray, valueOfElement) => {
+                quantity_html += `<tr>
+                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
+                                            <td >` + valueOfElement.size + `</td>
+                                            <td >` + valueOfElement.ce_size + `</td>  <td >`;
+
+                for (var index = 0; index < valueOfElement.selected_secondary_sizes.length; index++) {
+
+                    quantity_html += `<strong class="text-justify">` + $.trim(valueOfElement.selected_secondary_sizes[index].secondary_size) + `</strong> : ` + $.trim(valueOfElement.selected_secondary_sizes[index].value) + `<br>`;
+
+                }
+
+                quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value=` + valueOfElement.uk_ean + ` disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value=` + valueOfElement.ce_ean + ` disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value=` + valueOfElement.count + ` disabled><div class="help-block with-errors"></div></div></td>
+                                            <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
+                                        </tr>`;
+            });
+            quantity_html += `</tbody>
+                                        </table>
+                                        </div>`;
+            $('.teasco-care-quantity-div').html(quantity_html);
+
+            // dynamic fiber component values mapping
+            $.each(order_data.tesco_washcare_orders.garment_components, (i, component) => {
+                var index = i + 1;
+                
+                if (index > 3) {
+                    
+                    $('#add_garment_component_btn').trigger('click');
+                }
+
+                $('#tesco_care_garment_component_' + index).val(component.garment_component_id);
+                $('#fiber_total_percentage_' + index).val(component.total_composition_percentage);
+
+                $.each(component.fibers, (j, fiber) => {
+                    var index_1 = j + 1;
+
+                    $('#tesco_care_fiber_' + index + '_' + index_1).val(fiber.fibre_composition_id);
+                    $('#fiber_individual_percentage_' + index + '_' + index_1).val(fiber.fibre_composition_percentage);
+                    
+
+                });
+
+            });
+
+            $(".selectpicker").selectpicker("refresh");
+            $('#add_garment_component_btn').remove();
+        });
+
+    }
+
+});

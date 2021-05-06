@@ -106,7 +106,7 @@ function viewOrder(pNumber,aWork, style_number, zone, orderid) {
                     if( !is_joint_order) {
                         createOrders(data.result, "viewOrder");
                     } else {
-                        console.log("PKDDD");
+                        renderLabelViewOrderPage(data.result, 'admin')
                     }
                 },
                 400: function() {
