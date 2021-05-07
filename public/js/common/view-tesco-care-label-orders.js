@@ -1,4 +1,4 @@
-$( () => {
+$(() => {
 
     // Method to render view tesco care label orders page
     renderLabelViewOrderPage = (order_data, user_role) => {
@@ -89,12 +89,72 @@ $( () => {
             // dynamic fiber component values mapping
             $.each(order_data.tesco_washcare_orders.garment_components, (i, component) => {
                 var index = i + 1;
-                
+
+                // map values for dynamic components div
                 if (index > 3) {
-                    
-                    $('#add_garment_component_btn').trigger('click');
+
+                    $.ajax({
+                        url: base_url + "/"+user_role+"/tesco/care-label-fiber-components",
+                        type: "get",
+                        dataType: "json",
+                        data: {
+                            _token: csrf_token
+                        },
+                        statusCode: {
+                            200: function (data) {
+
+                                var fiber_count = 0;
+
+                                var component_text = component.garment_component_id === null ? '-- Select Garment Component --' : component.garment_component_text[0]['english'];
+
+                                var fiber_text = component.fibers.length > 0 ? component.fibers[fiber_count].fibre_composition_text[0].english : '-- Select Fiber --';
+
+                                var garment_comp_div = `<div class="col-md-4 component-div">
+                                                            <div class="row">
+                                                                <div class="col-xs-12">
+                                                                <div class="form-group has-feedback">
+                                                                    <label for="tesco_care_garment_component_` + index + `" class="component-label">Garment Component </label>
+                                                                    <input type="text" class="form-control input-sm "  id="tesco_care_garment_component_` + index + `" value="` + component_text + `" disabled>
+                                                            </div>
+                                                        </div>`;
+                                while (fiber_count < 6) {
+                                    garment_comp_div += `<div class="col-xs-9">
+                                                                    <div class="form-group has-feedback">
+                                                                    <input type="text" class="form-control input-sm"  id="tesco_care_fiber_` + index + `_` + fiber_count + `" value="` + fiber_text + `" disabled>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xs-3">
+                                                                <div class="form-group has-feedback">
+                                                                <div class="input-group">
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" id="fiber_individual_percentage_` + index + `_` + fiber_count + `" value="` + component.fibers[fiber_count].fibre_composition_percentage + `" disabled>
+                                                                    <div class="input-group-addon">%</div>
+                                                                </div>
+                                                                </div>
+                                                            </div>`;
+                                    fiber_count++
+                                }
+                                garment_comp_div += `<div class="col-xs-9">
+                                                                    <h5 class="text-right"><strong>Total</strong></h5>
+                                                                </div>
+                                                                <div class="col-xs-3">
+                                                                    <div class="form-group has-feedback">
+                                                                    <div class="input-group">
+                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" value="` + component.total_composition_percentage + `" disabled>
+                                                                        <div class="input-group-addon">%</div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>`;
+                                $('.garment-component-div').append(garment_comp_div);
+
+                            }
+                        }
+                    });
+
                 }
 
+                // map values to default 3 components selection divs.
                 $('#tesco_care_garment_component_' + index).val(component.garment_component_id);
                 $('#fiber_total_percentage_' + index).val(component.total_composition_percentage);
 
@@ -103,7 +163,7 @@ $( () => {
 
                     $('#tesco_care_fiber_' + index + '_' + index_1).val(fiber.fibre_composition_id);
                     $('#fiber_individual_percentage_' + index + '_' + index_1).val(fiber.fibre_composition_percentage);
-                    
+
 
                 });
 
