@@ -67,7 +67,7 @@ function viewOrder(pNumber,aWork, style_number, zone, orderid) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, orderid:orderid},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, "orderid":orderid},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',

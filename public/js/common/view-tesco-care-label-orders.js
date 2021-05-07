@@ -92,10 +92,8 @@ $( () => {
                 
                 if (index > 3) {
                     
-                    // $('#add_garment_component_btn').trigger('click');
-
                     $.ajax({
-                        url: base_url + "/admin/tesco/care-label-fiber-components",
+                        url: base_url + "/" + user_role + "/tesco/care-label-fiber-components",
                         type: "get",
                         dataType: "json",
                         data: {
