@@ -9,22 +9,8 @@ use DB;
 use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
-use App\Classes\CancelTescoOrders;
 
-use App\TescoCareSymbols;
-use App\TescoComponents;
-use App\TescoCountries;
-use App\TescoFabricLists;
-use App\TescoKidsWarningStatements;
 use App\TescoPrimarySize;
-use App\TescoSecondarySizeCategory;
-use App\TescoSecondarySizeChart;
-use App\TescoWashcareOrders;
-use App\TescoWashcareOrdersQuantity;
-use App\TescoWashcareOrdersComponentFibreMapping;
-use App\TescoWashcareOrdersComponentMapping;
-use App\OrderManagementHistory;
-use App\FinancialYearResetDate;
 use App\Http\Requests\SubmitTescoLabelOrder;
 
 class CareLabelOrdersController extends Controller

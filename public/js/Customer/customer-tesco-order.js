@@ -67,7 +67,7 @@ function tescoOrders(callback) {
             
                 var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
 			
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders)))))));
 			
 				newObj1.sort(function(obj1, obj2) {
 						var date1 =obj1.created_at;
@@ -81,7 +81,10 @@ function tescoOrders(callback) {
                 var CEPOCollection = [];
                 var UKPOCollection = [];
                 var artwork_collection = {};
-                                for(i = 0; i< newObj1.length; i++) {
+                var JointUniqueNames = [];
+				var JointPOCollection = [];
+				var JointOrderIds = [];
+                for(i = 0; i< newObj1.length; i++) {
                     if(newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
                         if(CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
                             CEPOCollection.push(newObj1[i].po_number); 
@@ -114,7 +117,15 @@ function tescoOrders(callback) {
                             }
                             
                         }
-                    }
+                    } else if (newObj1[i].zone === 'joint' && newObj1[i].uk_style_ref !== null && newObj1[i].ce_style_ref !== null) {
+						
+                        JointPOCollection.push(newObj1[i].po_number);
+                        JointUniqueNames.push(newObj1[i].uk_style_ref+'/'+newObj1[i].ce_style_ref);
+                        JointOrderIds.push(newObj1[i].id);
+                        artwork_collection[newObj1[i].id] = {};
+                        artwork_collection[newObj1[i].id][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
+                    
+                }
                        
                 }
                 var options="<option value=''>Search Style Number</option>";
@@ -132,6 +143,14 @@ function tescoOrders(callback) {
                     }
                     options+="</optgroup>";
                 }
+
+                if (JointUniqueNames.length > 0) {
+					options += "<optgroup label='Joint'>";
+					for (i = 0; i < JointUniqueNames.length; i++) {
+						options += "<option data-zone='joint' data-orderid ='"+JointOrderIds[i]+"'>" + JointUniqueNames[i] + "</option>";
+					}
+					options += "</optgroup>";
+				}
 
                 // tesco care size chart dropdown
 				size_options = `<option value=''>Select Size Chart</option>`;
@@ -278,7 +297,8 @@ function tescoOrders(callback) {
                 });
 
                 $('body').on('change', '#po_number', function() {
-                    loadArtworkNames(artwork_collection[this.value]);
+                    let selected_value = $(this).find(':selected').data('zone') === 'joint' ?$(this).find(':selected').data('orderid'):this.value;
+					loadArtworkNames(artwork_collection[selected_value]);
                 });
 
                 /** [ Load selectpicker ] */
@@ -460,8 +480,6 @@ function tescoOrders(callback) {
 
                 /** [ To get selected leaf node ] */
                 var template_id = 0;
-                var type;
-                var zone;
                 $('#jstree').on('activate_node.jstree', function (e, data) {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
@@ -632,11 +650,12 @@ function tescoOrders(callback) {
 						var style_number = $('#po_number').val();
                         var artwork  = $('#artwork_list').find(':selected').text();
                         var zone = $('#po_number').find(':selected').data('zone');
+                        var orderid = $('#artwork_list').find(':selected').data('orderid') != undefined?$('#artwork_list').find(':selected').data('orderid'):0;
 						localStorage.setItem('style_number_back',style_number)
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-                        viewOrder(po_num, artwork, style_number, zone);  
+                        viewOrder(po_num, artwork, style_number, zone, orderid);
                     }
                 })
 				callback();
@@ -7262,8 +7281,11 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber,aWork,style_number, zone) {
+function viewOrder(pNumber,aWork,style_number, zone, orderid) {
     try {
+
+        is_joint_order = zone === "joint"?true:false;
+
         $.ajax({
             url: base_url + "/customer/tesco/view-order",
             type: 'POST',
@@ -7273,7 +7295,7 @@ function viewOrder(pNumber,aWork,style_number, zone) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, "orderid":orderid},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
@@ -7308,7 +7330,12 @@ function viewOrder(pNumber,aWork,style_number, zone) {
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
                     localStorage.setItem("template_group", group);
-                    createOrders(data.result, "viewOrder");
+
+                    if( !is_joint_order) {
+                        createOrders(data.result, "viewOrder");
+                    } else {
+                        renderLabelViewOrderPage(data.result, 'customer');
+                    }
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
@@ -7485,7 +7512,9 @@ function loadArtworkNames(artwork_collection_style) {
             var ratioTHLArtworks = [];
             var singleTHL = [];
             var singleTHLArtworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus;
+            var jointWashcareLabels = [];
+            var jointWashcareLabelArtworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId;
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
@@ -7523,6 +7552,11 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                    default:
+                        jointWashcareLabels.push(templateInfo[1]);
+                        jointWashcareLabelArtworks.push(templateInfo[0]);
+                        jointWashcareLabelsStatus = templateInfo[2];
+                        jointWashcareLabelsId = templateInfo[3];
                 }
             }
             if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
@@ -7542,6 +7576,11 @@ function loadArtworkNames(artwork_collection_style) {
 
             if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
                 options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                
+            }
+
+            if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
                 
             }
         });

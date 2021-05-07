@@ -4,16 +4,18 @@
  * 
  */
 $(function () {
-    $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
     renderTescoCareOrders = (role, size_id, size_category, size_category_text) => {
         user_role = role;
-        $('.main-content').load('/' + user_role + '/tesco/care-label-orders');
-        $('li.year-nav-menu').addClass('hidden');
-        $('li.buyer-nav-menu').addClass('hidden');
 
-        getSizechart(size_id, size_category, size_category_text, user_role);
+        $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
+            $(".selectpicker").selectpicker("refresh");
+            $('li.year-nav-menu').addClass('hidden');
+            $('li.buyer-nav-menu').addClass('hidden');
+
+            getSizechart(size_id, size_category, size_category_text, user_role);
+        });
 
     }
 
@@ -116,14 +118,10 @@ $(function () {
         $('#tesco_care_label_order_form').validator('update');
     }
 
-    $('#add_garment_component_btn').click(function () {
-        addComponent(this);
-    });
-
     // Method to add dynamic garment component
-    addComponent = (obj) => {
+    addComponent = (obj, user) => {
         $.ajax({
-            url: base_url + "/" + user_role + "/tesco/care-label-fiber-components",
+            url: base_url + "/" + user + "/tesco/care-label-fiber-components",
             type: "get",
             dataType: "json",
             data: {
@@ -158,7 +156,7 @@ $(function () {
                                                         <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber_` + component_count + `[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
-                            garment_comp_div += `<option value=` + item + `>` + item + `</option>`;
+                            garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
                         });
                         garment_comp_div += `</select>
                                                     </div>
@@ -390,7 +388,6 @@ $(function () {
             },
             statusCode: {
                 200: function (response) {
-                    console.log(JSON.stringify(response))
 
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
