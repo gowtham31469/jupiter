@@ -1,4 +1,4 @@
-$(() => {
+$( () => {
 
     // Method to render view tesco care label orders page
     renderLabelViewOrderPage = (order_data, user_role) => {
@@ -89,12 +89,13 @@ $(() => {
             // dynamic fiber component values mapping
             $.each(order_data.tesco_washcare_orders.garment_components, (i, component) => {
                 var index = i + 1;
-
-                // map values for dynamic components div
+                
                 if (index > 3) {
+                    
+                    // $('#add_garment_component_btn').trigger('click');
 
                     $.ajax({
-                        url: base_url + "/"+user_role+"/tesco/care-label-fiber-components",
+                        url: base_url + "/admin/tesco/care-label-fiber-components",
                         type: "get",
                         dataType: "json",
                         data: {
@@ -102,31 +103,45 @@ $(() => {
                         },
                         statusCode: {
                             200: function (data) {
-
+            
                                 var fiber_count = 0;
-
-                                var component_text = component.garment_component_id === null ? '-- Select Garment Component --' : component.garment_component_text[0]['english'];
-
-                                var fiber_text = component.fibers.length > 0 ? component.fibers[fiber_count].fibre_composition_text[0].english : '-- Select Fiber --';
-
                                 var garment_comp_div = `<div class="col-md-4 component-div">
                                                             <div class="row">
                                                                 <div class="col-xs-12">
                                                                 <div class="form-group has-feedback">
                                                                     <label for="tesco_care_garment_component_` + index + `" class="component-label">Garment Component </label>
-                                                                    <input type="text" class="form-control input-sm "  id="tesco_care_garment_component_` + index + `" value="` + component_text + `" disabled>
+                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_garment_component_` + index + `" name="tesco_care_garment_component[]" value="`+component.garment_component_id+`" disabled>
+                                                                    <option value="">-- Select Garment Component --</option>`;
+                                $.each(data.data.components, function (component_index, item) {
+
+                                    garment_comp_div += component.garment_component_id === parseInt(component_index) ?`<option value=` + component_index + ` selected>` + item + `</option>`:`<option value=` + component_index + `>` + item + `</option>`;
+                                    
+                                });
+                                garment_comp_div += `</select>
                                                             </div>
                                                         </div>`;
+
                                 while (fiber_count < 6) {
+                                    var fibre_composition_id = component.fibers[fiber_count] != undefined?component.fibers[fiber_count].fibre_composition_id:0;
+                                    var fibre_composition_percentage = component.fibers[fiber_count] != undefined?component.fibers[fiber_count].fibre_composition_percentage:"";
+
                                     garment_comp_div += `<div class="col-xs-9">
                                                                     <div class="form-group has-feedback">
-                                                                    <input type="text" class="form-control input-sm"  id="tesco_care_fiber_` + index + `_` + fiber_count + `" value="` + fiber_text + `" disabled>
+                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber_` + index + `[]" disabled>
+                                                                    <option value="">-- Select Fiber --</option>`;
+                                    $.each(data.data.fabriclists, function (fabric_index, item) {
+
+                                        garment_comp_div +=  fibre_composition_id === parseInt(fabric_index)?`<option value=`+fabric_index+` selected>` + item + `</option>`:`<option value=`+fabric_index+`>` + item + `</option>`;
+
+                                    });
+                                    
+                                    garment_comp_div += `</select>
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-3">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" id="fiber_individual_percentage_` + index + `_` + fiber_count + `" value="` + component.fibers[fiber_count].fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="`+fibre_composition_percentage+`" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 </div>
@@ -139,7 +154,7 @@ $(() => {
                                                                 <div class="col-xs-3">
                                                                     <div class="form-group has-feedback">
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" value="` + component.total_composition_percentage + `" disabled>
+                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="`+component.total_composition_percentage+`" disabled>
                                                                         <div class="input-group-addon">%</div>
                                                                     </div>
                                                                     </div>
@@ -148,13 +163,14 @@ $(() => {
                                                         </div>`;
                                 $('.garment-component-div').append(garment_comp_div);
 
+                                $(".selectpicker").selectpicker("refresh");
+                                
                             }
                         }
                     });
-
+                    
                 }
 
-                // map values to default 3 components selection divs.
                 $('#tesco_care_garment_component_' + index).val(component.garment_component_id);
                 $('#fiber_total_percentage_' + index).val(component.total_composition_percentage);
 
@@ -171,6 +187,7 @@ $(() => {
 
             $(".selectpicker").selectpicker("refresh");
             $('#add_garment_component_btn').remove();
+            $('#remove_component_btn').remove();
         });
 
     }

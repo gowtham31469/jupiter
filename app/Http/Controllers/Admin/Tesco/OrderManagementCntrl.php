@@ -44,7 +44,6 @@ use App\OrderManagementHistory;
 use App\Classes\StoreOrderManagementHistory;
 use App\FinancialYearResetDate;
 use Session;
-use App\TescoWashcareOrders;
 
 class OrderManagementCntrl extends Controller
 {
