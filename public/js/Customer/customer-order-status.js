@@ -236,11 +236,19 @@ function tescoOrderStatus() {
                 })
 
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
+                    if(value.type == "stickers")	
+                    {
+                        if (value.zone == "CE") {
                             $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
-                    } else {
+                        } else {
                             $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                        }
                     }
+                    else
+                    {
+                        $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                    }
+                    
                 })
                 
                 $('.selectpicker').selectpicker();
@@ -335,11 +343,19 @@ function tescoOrderStatus() {
 
                 var options = "<option>Select Style Number</option>";
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
-                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
-                    } else {
-                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    if(value.type == "stickers")	
+                    {
+                        if (value.zone == "CE") {
+                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                        } else {
+                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                        }
                     }
+                    else
+                    {
+                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
+                    }
+                    
                 })
 
                 $('#artwork-approve-upload-button').click(function () {
@@ -369,7 +385,7 @@ function tescoOrderStatus() {
                                     200: function (data) {
                                         $('#exist_artwork_approve_div_status').removeClass('hidden')
                                         $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -641,7 +657,7 @@ function tescoOrderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -649,17 +665,26 @@ function tescoOrderStatus() {
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
+                                            if(value1.TemplateName.length <= 5)	
+                                            {	
+                                                var margin_right="160px";	
+                                            }	
+                                            else	
+                                            {	
+                                                var margin_right="85px";	
+                                            }
+
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+  '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+  '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+  '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+  '</li>')
                                             }
 
                                         });
@@ -1092,6 +1117,12 @@ function submitOs(obj)
         {
             stylenoos.push($(this).val());
         }
+        else if($(this).data("id") == "labels")	
+        {	
+            var splitstyle = $(this).val().split("/");	
+            ukstylenoos.push(splitstyle[0]);	
+            stylenoos.push(splitstyle[1]);	
+        }
         else
         {
             ukstylenoos.push($(this).val());
@@ -1294,6 +1325,19 @@ function tescoStatusTable(data, path) {
                     }
                 } else if (key == "PI Status") {
                     var str = value[key];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (str === 'PI Approved') {
                             action_status = true;
@@ -1322,12 +1366,28 @@ function tescoStatusTable(data, path) {
                     if (value['order_status'] != 'Saved') {
                         var zone = value.Zone
                         var style_no = "";
-                        if (zone == "CE") {
-                            style_no = value.ce_style_ref;
-                        } else {
-                            style_no = value.uk_style_ref;
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            style_no = value.uk_style_ref+"/"+value.ce_style_ref;
                         }
-                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        else
+                        {
+                            if (zone == "CE") {
+                                style_no = value.ce_style_ref;
+                            } else {
+                                style_no = value.uk_style_ref;
+                            }
+                        }
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            var temp_file = value.template_file.split(',');	
+                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        }
+                        else
+                        {
+                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        }
+                        
                     }
                     else{
                         tr += '<td align="center">-</td>';
@@ -1360,6 +1420,19 @@ function tescoStatusTable(data, path) {
                     var str = value[key];
                     var status_text = " - ";
                     var po_file = value['po_file'];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (value['PO Status'] === 'PO Uploaded') {
                             status = str.replace(/ /g, "");
@@ -1388,11 +1461,19 @@ function tescoStatusTable(data, path) {
                     }
                     var zone = value.Zone
                     var style_no = "";
-                    if (zone == "CE") {
-                        style_no = value.ce_style_ref;
-                    } else {
-                        style_no = value.uk_style_ref;
+                    if(value.tableName == "tesco_washcare_orders")	
+                    {	
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;	
+                    }	
+                    else	
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
                     }
+                    
 
                     if (value['order_status'] != 'Saved'){
                         tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
@@ -1838,10 +1919,17 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
             200: function (data) {
                 var options = "<option>Select Style Number</option>";
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
-                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
-                    } else {
-                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    if(value.type == "stickers")
+                    {
+                        if (value.zone == "CE") {
+                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                        } else {
+                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                        }
+                    }
+                    else
+                    {
+                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
                     }
                 })
                 $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
@@ -1895,7 +1983,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -1903,17 +1991,27 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
+                                            if(value1.TemplateName.length <= 5)	
+                                            {	
+                                                var margin_right="160px";	
+                                            }	
+                                            else	
+                                            {	
+                                                var margin_right="85px";	
+                                            }
+                                                    
+
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+ '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+ '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+ '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+ '</li>')
                                             }
 
                                         });
@@ -5655,6 +5753,31 @@ function approveTescoArtwork() {
 		/** [error statements] */
 		console.error("Error:" + e)
 	}
+}
+
+
+function chunkSubstr(str, maxWidth) {
+    var newLineStr = "\n"; done = false; res = '';
+    while (str.length > maxWidth) {                 
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + [str.slice(0, i), newLineStr].join('');
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res += [str.slice(0, maxWidth), newLineStr].join('');
+            str = str.slice(maxWidth);
+        }
+
+    }
+
+    return res + str;
 }
 
 
