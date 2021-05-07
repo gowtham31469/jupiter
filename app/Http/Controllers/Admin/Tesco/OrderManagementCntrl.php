@@ -27,9 +27,14 @@ use App\TescoTSL1Orders;
 use App\TescoTSL1OrdersQuantity;
 use App\TescoTSL3Orders;
 use App\TescoTSL3OrdersQuantity;
+use App\TescoWashcareOrders;
+use App\TescoWashcareOrdersQuantity;
+use App\TescoWashcareOrdersComponentFibreMapping;
+use App\TescoWashcareOrdersComponentMapping;
 use App\Classes\TescoOrders;
 use App\Classes\SaveTescoOrders;
 use App\Classes\CancelTescoOrders;
+use App\TescoPrimarySize;
 use PDF;
 use Auth;
 use Carbon\Carbon;
@@ -2826,6 +2831,54 @@ class OrderManagementCntrl extends Controller
      
           echo json_encode($data);
     }
+
+    public function extraQuantityLabelTesco(Request $request)
+    {
+      $type         =   $request->type;
+      $id           =   $request->id;
+      $type_id      =   explode('_',$type);
+      
+      $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
+
+      $data['orders']=DB::table('tesco_washcare_orders')->where('id',$id)->select('*')->get();
+    
+      $data['template']=DB::table($type)
+                        ->join('tesco_suppliers','tesco_suppliers.id','=',$type.'.tesco_metadata_supplier_id')
+                        ->where($type.'.id',$id)
+                        ->select($type.'.*','tesco_suppliers.supplier_name')->get();
+    
+      $data['template_file']=DB::table('tesco_template')->where('item_id',$data['template']{0}->template_id)->select('*')->get();     
+	  
+      $data['tesco_item_master']=DB::table('tesco_item_master')->where('id',$data['template']{0}->template_id)->select('*')->get(); 
+      
+      $data['moq']=DB::table('price_taxation')->where('template_id',$data['template']{0}->template_id)->where('customer_id',$data['template']{0}->tesco_supplier_id)->where('buyer_id',2)->select('*')->get();
+
+      $size_category_json = json_decode($data['qty']{0}->selected_secondary_sizes);
+
+      $size_category =array();
+      $data['size_category_text'] =array();
+      foreach($size_category_json as $sizes)
+      {
+        if($sizes->id != "" && $sizes->id != null)
+        {
+          array_push($size_category,$sizes->id);
+          array_push($data['size_category_text'],$sizes->secondary_size);
+        }
+        
+      }
+
+
+      $data['tesco_sizelists'] = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($size_category) {
+          $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $size_category);
+      }])
+        ->where('tesco_primary_size.tesco_size_department_id', $data['orders']{0}->primary_size_id)
+        ->orderBy('tesco_primary_size.id')
+        ->get();
+	  
+     
+      echo json_encode($data);
+    }
+
   /**
      * This Function is used to set the tesco reorder.
      *
@@ -3175,6 +3228,91 @@ class OrderManagementCntrl extends Controller
 					$i++;
 				}
       }	
+
+
+      if($type == "tesco_washcare_orders")
+			{
+				$tasks = TescoWashcareOrders::find($id);
+				$newTasks = $tasks->replicate(['order_id']);
+        $newTasks->save();
+        
+        $template_data = DB::table('tesco_item_master')
+        ->join('tesco_template', 'tesco_item_master.id', 'tesco_template.item_id')
+        ->join('reports_template_level_name', 'reports_template_level_name.id', 'tesco_template.name_in_reports')
+        ->where('tesco_item_master.id', $tasks->template_id)
+        ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
+        ->first();
+
+        $max_id = TescoWashcareOrders::max('id');
+
+        $order_id = $template_data->company_id == 1?"JGA_".str_replace(" ","",$template_data->item_name)."00".($max_id+1):"SP_".str_replace(" ","",$template_data->item_name)."00".($max_id+1);
+
+        $newTasks->order_id = $order_id;
+        $newTasks->save();
+				
+				$factory=DB::table('tesco_washcare_orders')->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')->where('tesco_washcare_orders.id',$id)->select('*')->get();
+				
+				$pi_required=$factory{0}->pi_required;
+				if($pi_required == 1)
+				{
+					$pi_status="PI Approval Pending";
+					if($factory{0}->po_required == 1)
+					{
+						$po_status="PO Pending";
+					}
+					else
+					{
+						$po_status="";
+					}
+
+				}
+				else
+				{
+					$po_status="PO Pending";
+					$pi_status="";
+				}
+				$newTasks->po_status = $po_status;
+				$newTasks->pi_status = $pi_status;
+				$newTasks->purchase_order_no = "";
+				$newTasks->po_file = null;
+        $newTasks->order_flag = "reOrder";
+        $newTasks->total_qty = array_sum($counts);
+				$newTasks->save();
+				
+				$data['tesco']=DB::table('tesco_washcare_orders_quanty')->where('washcare_order_id',$id)->select('*')->get();
+				$i=0;
+				foreach($data['tesco'] as $value)
+				{
+					$tasks = TescoWashcareOrdersQuantity::find($value->id);
+					$newTask = $tasks->replicate();
+					$newTask->save();
+					$newTask->washcare_order_id = $newTasks->id;
+					$newTask->quantity = $counts[$i];
+					$newTask->save();
+					$i++;
+        }
+        
+        $data['tesco_component']=DB::table('tesco_washcare_orders_component_mapping')->where('washcare_order_id',$id)->select('*')->get();
+				foreach($data['tesco_component'] as $value)
+				{
+					$tasks = TescoWashcareOrdersComponentMapping::find($value->id);
+					$newTas = $tasks->replicate();
+					$newTas->save();
+					$newTas->washcare_order_id = $newTasks->id;
+          $newTas->save();
+          
+          $data['tesco_fibre']=DB::table('tesco_washcare_orders_component_fibre_mapping')->where('washcare_component_id',$tasks->id)->select('*')->get();
+          foreach($data['tesco_fibre'] as $tesco_fibre)
+				  {
+            $tasks = TescoWashcareOrdersComponentFibreMapping::find($tesco_fibre->id);
+            $newTa = $tasks->replicate();
+            $newTa->save();
+            $newTa->washcare_component_id = $newTas->id;
+            $newTa->save();
+          }
+        }
+        
+      }
       
       /** Insert order data into history table */
       $order_data = [];
