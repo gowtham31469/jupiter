@@ -2,12 +2,11 @@
  * call the method for getting all the details for profoma invoice generation
  * @return {[type]} [description]
  */
-const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,template_name,order_flag) => 
-{
+const genarateTescoPI = (id, tableName, pi_status, style_no, template_id, buyer_po, template_name, order_flag) => {
     $('#uvc_number').text(style_no)
     
     var buyer_id = localStorage.getItem("buyer_id");
-    var tr = "";
+   
     $.ajax({
         url: base_url + "/admin/tesco/order-management/show-tesco-pi",
         type: "Post",
@@ -61,7 +60,7 @@ const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,te
                     var subtotal = 0;
                    
                     var tr = '';
-                    if (data.data.bank_details.template_type == "single")
+                    if (data.data.bank_details.template_type != 'ratio')
                     {
                         tr += '<div class="col-lg-12 col-md-12 col-sm-12"><div class="table-responsive"><table class="table table-bordered table-condensed"><thead><tr><th>S.No.</th><th>Style</th><th>Po.No.</th><th>Ref</th><th class="size-pi">Size</th><th>Quantity</th><th>Unit Cost</th><th>Tax</th><th>Total</th></tr></thead><div class="col-lg-12 col-md-12 col-sm-12">';    
                     }
@@ -105,7 +104,7 @@ const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,te
                             taxamnt = (value.quantity*unit_price)*(tax/100);
                             amnt =  (value.quantity*unit_price) + taxamnt ;
 
-                            if (data.data.bank_details.template_type == "single")
+                            if (data.data.bank_details.template_type != 'ratio')
                             {
                                 size = value.size ;
                                 tr += '<tr><td>'+ ++i +'</td><td>'+value.style+'</td><td>'+value.po_no+'</td><td>'+value.ref_no+'</td><td>'+size+'</td><td>'+value.quantity+'</td><td>'+unit_price+'</td><td>'+tax+'</td><td style="text-align: right;">'+amnt.toFixed(2)+'</td></tr>'

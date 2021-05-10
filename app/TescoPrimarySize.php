@@ -18,7 +18,7 @@ class TescoPrimarySize extends Model
      *
      * @var array
      */
-    protected $fillable = ['tesco_size_department_id', 'department_title', 'uk_sizes', 'ce_size', 'is_flag'];
+    protected $fillable = ['tesco_size_department_id', 'department_title', 'uk_size', 'ce_size', 'is_flag'];
 
 
 <<<<<<< HEAD

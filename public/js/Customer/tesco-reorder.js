@@ -412,6 +412,188 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
 	})
 }
 
+
+/**
+ * This Function is used to get the artwork and quantity information.
+ *
+ * @return View
+ */
+
+function extraQuantityLabelTesco(type,id,name,zone,po_number,liid)
+{
+	var buyer = localStorage.getItem("buyer");
+    
+	$.ajax({
+		url: base_url + "/customer/tesco/extra-quantity-label-tesco",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			type:type,
+			id:id
+		},
+		beforeSend: function () {
+			
+		},
+		success: function (data) {
+			
+			var quantity_html = `<div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>UK</th>
+                                                <th>EUR</th>
+                                                <th>Secondary Size</th>
+                                                <th>UK EAN</th>
+                                                <th>CE EAN</th>
+                                                <th>Quantity <small>(Units)</small></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>`;
+
+                size_array = [];
+                $.each(data.tesco_sizelists, function (indexInArray, valueOfElement) {
+                    quantity_html += `<tr>
+                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
+                                            <td >` + valueOfElement.uk_size + `</td>
+											<td >` + valueOfElement.ce_size + `</td>  <td >`;
+					var check_size = jQuery.grep(data.qty, function (data_qty) { return data_qty.size_id == valueOfElement.id })
+
+					if(check_size != "")
+					{
+						var ce_ean_check = check_size[0].ce_ean
+						var uk_ean_check = check_size[0].uk_ean
+					}
+					else
+					{
+						var ce_ean_check = ""
+						var uk_ean_check = ""
+					}
+
+                    secondary_sizes = [];
+
+                    for (var index = 0; index < data.size_category_text.length; index++) {
+
+                        var category_value = '-';
+                        var size_id = null;
+
+                        $.each(valueOfElement.sec_size_chart, function (index_1, category) {
+
+                            if ($.trim(data.size_category_text[index]) === $.trim(category['category_name'])) {
+
+                                category_value = category['secondary_size'];
+                                size_id = category['id'];
+                                return false;
+
+                            }
+
+                        });
+
+                        quantity_html += `<strong class="text-justify">` + $.trim(data.size_category_text[index]) + `</strong> : ` + category_value + `<br>`;
+
+                        size_value = category_value === '-' ? null : category_value;
+
+                        secondary_sizes.push({
+                            id: size_id,
+                            secondary_size: $.trim(data.size_category_text[index]),
+                            value: size_value
+                        });
+
+                    }
+
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="`+uk_ean_check+`" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="`+ce_ean_check+`" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control tot_qty_table_label_reorder input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
+                                        </tr>`;
+                });
+                quantity_html += `</tbody>
+                                        </table>
+                                        </div>`;
+
+			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
+
+			var split_template = data.template_file[0].template_file.split(',')
+
+			$('.sample_artwork_care_label_reorder').html('<img src="/images/FRONT.png"><img src="/images/BACK.png">')
+
+			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
+
+			$('.remove_care_label_reorder').click(function(){
+				$('.care_label_reorder').removeClass('active');
+		   })
+
+		   $('#qty_table_care_label_reorder').validator().on('submit', function (e) {
+			if (e.isDefaultPrevented()) {
+
+			} else {
+				e.preventDefault();
+				setTescoCareLabelReorder(type,id,liid)
+			}
+		})
+
+		},
+		error: function (data) {
+
+		},
+		complete: function () {
+			$('.care_label_reorder').show();
+	 		$('.care_label_reorder').addClass('active');
+		}
+	})
+}
+
+
+function setTescoCareLabelReorder(type,id,liid)
+{
+	$('.submitbutton').attr('disabled','disabled')
+	var item = $('.li-item.active').find('a').text();
+	var count=[];
+	var val_count=0;
+	 $('.tot_qty_table_label_reorder').each(function(i, item)
+        {
+            count[i]    = $(item).val();
+		 	val_count	+= parseInt($(item).val());
+        });
+        count = count.join(',');
+		
+	if(item == "Repeat Order")
+	{
+		
+	}
+	else
+	{
+		var buyer = localStorage.getItem("buyer");
+		
+		$.ajax({
+			url: base_url + "/customer/tesco/set-tesco-reorder",
+			type: "Post",
+			dataType: "json",
+			data: {
+				_token: csrf_token,
+				type:type,
+				id:id,
+				counts:count
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+				$('.care_label_reorder').removeClass('active');
+				$('.snackbar_span').html('Reorder Created Successfully ...!');
+				showSnackbar();
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+
+			}
+		})
+	}
+	
+}
+
 function checkLength(len, ele) {
 	var fieldLength = ele.value.length;
 	if (fieldLength <= len) {

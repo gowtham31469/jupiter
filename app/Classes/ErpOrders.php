@@ -77,10 +77,10 @@ class ErpOrders
 			$buyer_id		= $request['buyer_id'];
 			$order_table_id	= $request['id'];
 			$qnty_table     = $table_name . '_quanty';
-			$qnty_id        =  str_replace("_orders", "_order_id", str_replace("tesco_", "", $table_name));
-			$order_table_array = (explode("_", $table_name));
+			$order_table_array = explode("_", $table_name);
+			$template_name = $order_table_array[1] !=  'washcare'?strtoupper($order_table_array[1]):title_case($order_table_array[1]);
 
-			$model_name  = 'App\\' . "Tesco" . strtoupper($order_table_array[1]) . "Orders";
+			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
 
 			$orders  = $model_name::with([
 				'quantities',
@@ -190,7 +190,7 @@ class ErpOrders
 		->first();
 
 		$style_ref = strtolower($orders->zone) . '_style_ref';
-		$style_no  = $orders->zone === "joint" ? $orders->ce_style_ref . '/' . $orders->uk_style_ref : $orders->$style_ref;
+		$style_no  = $orders->zone === "joint" ? $orders->uk_style_ref . '/' . $orders->ce_style_ref : $orders->$style_ref;
 		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
 		$custom_ref_name = DB::table('price_taxation')

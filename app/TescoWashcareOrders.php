@@ -136,4 +136,12 @@ class TescoWashcareOrders extends Model
                 'department_title'
             ]);
     }
+
+    /**
+     * Get the garment components and fiber compositions for the order.
+     */
+    public function garment_components()
+    {
+        return $this->hasMany('App\TescoWashcareOrdersComponentMapping', 'washcare_order_id')->with(['fibers']);
+    }
 }

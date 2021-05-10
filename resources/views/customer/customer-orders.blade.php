@@ -359,7 +359,10 @@ background: rgba(0,0,0,0.2);
 
 	.left-panel.active {
     	margin-right: 0%;
-	}
+    }
+    .care_label_reorder.active {
+    margin-right: 0%;
+}
 
 </style>
 <input type="hidden" id="status_flag">
@@ -595,6 +598,33 @@ background: rgba(0,0,0,0.2);
 	</div>
 </div>
 
+
+<div class="care_label_reorder col-md-12" style="display: none">
+	<div class="loader" style="display: none; margin-top: 0%;"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+	<div class="div-max">
+		<div class="col-md-5">
+			<h4 class="artwork_name_care_label_reorder"></h4>
+			<hr>
+			<div class="section-1 sections">
+				<div class="sample_artwork_care_label_reorder scroll" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
+			</div>
+		</div>
+		<div class="col-md-7 scroll" style="overflow-y: scroll;height: 100%;">
+			<h4>Quantity Information</h4>
+			<hr>
+
+			<div class="merchandiser-area">
+
+				<div class="quantity_care_label_reorder"></div>
+				<div class="buttons pull-right" style="margin-top:10px;">
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
     <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -758,6 +788,7 @@ background: rgba(0,0,0,0.2);
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
+<script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>
