@@ -132,6 +132,13 @@ function tescoOrders(callback) {
                     }
                     options+="</optgroup>";
                 }
+
+                // tesco care size chart dropdown
+				size_options = `<option value=''>Select Size Chart</option>`;
+				$.each(data.tesco_size_department, function(i, item){
+					size_options += `<option value=` + i + `>` + item + `</option>`;
+                });
+                
                 $('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
                                                 <div class="col-md-5" style="width:37%">
@@ -215,6 +222,16 @@ function tescoOrders(callback) {
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
+																				<label for="tesco_care_size_chart">Size Chart</label>
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, role='customer')">
+																				`+size_options+`
+																				</select>	
+																				<div class="help-block with-errors"></div>
+																			</div>
+																			<div class="form-group has-feedback hidden" id="tesco_care_size_category_div">
+																				
+																			</div>
                                                                         <button class="btn btn-primary btn-block ">Create Order</button>
                                                                     </form>
                                                                 </div>
@@ -316,25 +333,29 @@ function tescoOrders(callback) {
                                         "text": "TCL 1 , TCL 2 & TSL 1 with QR",
                                         "parent_id": "3",
                                         "type": "ratio",
-                                        "zone": "CE"
+                                        "zone": "CE",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "28,23",
                                         "text": "TCL 4 & TSL 3 with QR",
                                         "parent_id": "3",
                                         "type": "single",
-                                        "zone": "CE"
+                                        "zone": "CE",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "24",
                                         "text": "THL 1 with QR",
                                         "parent_id": "3",
                                         "type": "ratio",
-                                        "zone": "CE"
+                                        "zone": "CE",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "25",
                                         "text": "THL 3 with QR",
                                         "parent_id": "3",
                                         "type": "single",
-                                        "zone": "CE"
+                                        "zone": "CE",
+										"template_type": 'tesco_carton_stickers'
                                         }]
                                     }, {
                                     "id": 4,
@@ -345,25 +366,29 @@ function tescoOrders(callback) {
                                         "text": "TCL 1 , TCL 2 & TSL 1",
                                         "parent_id": 4,
                                         "type":"ratio",
-                                        "zone": "UK"
+                                        "zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "31,16",
                                         "text": "TCL 4 & TSL 3",
                                         "parent_id": 4,
                                         "type":"single",
-                                        "zone": "UK"
+                                        "zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "17",
                                         "text": "THL 1",
                                         "parent_id": 4,
                                         "type":"ratio",
-                                        "zone": "UK"
+                                        "zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
                                         "id": "18",
                                         "text": "THL 3",
                                         "parent_id": 4,
                                         "type":"single",
-                                        "zone": "UK"
+                                        "zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }]
                                     }]
                                 },
@@ -379,20 +404,24 @@ function tescoOrders(callback) {
                                         "id": "34",
                                         "text": "GCL25W/M12723G",
                                         "parent_id": "33",
+                                        "template_type": 'tesco_care_labels'
                                         }, {
                                         "id": "35",
                                         "text": "GCL25W/M13220G",
                                         "parent_id": "33",
+                                        "template_type": 'tesco_care_labels'
                                         },
                                         {
                                         "id": "36",
                                         "text": "GCL25W/M12723G",
                                         "parent_id": "33",
+                                        "template_type": 'tesco_care_labels'
                                         }, 
                                         {
                                         "id": "37",
                                         "text": "GCL25W/M13220G",
                                         "parent_id": "33",
+                                        "template_type": 'tesco_care_labels'
                                         }, ]
                                     }]
                                 }]
@@ -437,6 +466,7 @@ function tescoOrders(callback) {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
                         template_id = data.node.id;
+                        template_type = data.node.original.template_type;
                         $.ajax({
                             url: base_url + "/customer/tesco/template-view",
                             type: "Post",
@@ -507,6 +537,20 @@ function tescoOrders(callback) {
                             $('#ce_orms').prop('required', false);
                             $('#ce_retek').prop('required', false);
                         }
+
+						// toggle size chart select box for template_type = tesco_care_labels
+						if(template_type === 'tesco_care_labels'){
+							$("#tesco_care_size_chart_div").removeClass("hidden");
+							$('#tesco_care_size_chart').prop('required', true);
+							$('#tesco_care_size_chart').val('');
+						} else {
+							$("#tesco_care_size_chart_div").addClass("hidden");
+							$('#tesco_care_size_category_div').html('');
+							$('#tesco_care_size_chart').prop('required', false);
+							$('#tesco_care_size_category').prop('required', false);
+							$('#tesco_care_size_chart').val('');
+                        }
+                        $(".selectpicker").selectpicker("refresh");
                     }
                 });
 
@@ -539,9 +583,26 @@ function tescoOrders(callback) {
                                 formData.append('zone', localStorage.getItem("zone"));
                                 formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
                                 uploadPurchaseOrder(formData, localStorage.getItem("zone"));
-                            } else {
-                                createOrders();
-                            }
+                            } else if (template_type === 'tesco_carton_stickers') {
+								createOrders();
+							} else if(template_type === 'tesco_care_labels') {
+								var size_id = $('#tesco_care_size_chart').val();
+								var size_category = [];
+								var size_category_text = [];
+
+								/** [ Create array of multi selected categories ] */
+								$.each($("#tesco_care_size_category option:selected"), function() {
+									size_category.push($(this).val());
+									// size_category_text.push($(this).text());
+								});
+
+								/** [ Create array of multiple categories ] */
+								$.each($("#tesco_care_size_category option"), function() {
+									size_category_text.push($(this).text());
+								});
+								
+								renderTescoCareOrders(role="customer", size_id, size_category, size_category_text);
+							}
 							localStorage.setItem("back_flag","create");
 							localStorage.setItem("back_template_id",$('#jstree').jstree("get_selected"));
 							localStorage.setItem("back_zone",localStorage.getItem("zone"));

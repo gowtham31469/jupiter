@@ -11,17 +11,32 @@ class ERPOrderStatusCheck
 			$row_id     = $data['id'];
             $table_name = $data['table_name'];
             $erp_order_details = array();
-            $order_details  =   DB::table($table_name)->where('id',$row_id)
-                            ->select('*')->first();
+
+            $order_details  =   DB::table($table_name)
+            ->where('id',$row_id)
+            ->select('*')
+            ->first();
+
             $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
+
             $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$order_details->id)->orderBy('id')->get();
+                                ->where($qnty_id,$order_details->id)
+                                ->orderBy('id')
+                                ->get();
 
             // fetch erp_order_details table status
             foreach($quantity_details as $quantity)
             {
+
                $quantity_id = $quantity->id;
-               $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
+
+               $erp_order_details[] = DB::table('erp_order_details')
+               ->where('order_qnty_table_name','ilike', $table_name.'_quanty')
+               ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
+               ->where('order_qnty_table_id','=', $quantity_id)
+               ->select('erp_order_details.id','erp_status.status_name')
+               ->first();
+               
             }
 
             return $erp_order_details;

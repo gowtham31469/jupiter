@@ -35,7 +35,7 @@ use App\Classes\SaveTescoOrders;
 use PDF;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
 use App\FinancialYearResetDate;
 use Session;
 
@@ -69,10 +69,10 @@ class ReorderController extends Controller
         $this->thl1_type = "tesco_thl1_orders";
         $this->thl3_type = "tesco_thl3_orders";
         $this->tsl1_type = "tesco_tsl1_orders";
-		$this->tsl3_type = "tesco_tsl3_orders";
+				$this->tsl3_type = "tesco_tsl3_orders";
+				$this->tesco_washcare_orders_type = "tesco_washcare_orders";
 		
-		$this->tesco_material_obj = new TescoMaterialQuery();
-
+		$this->order_history_obj = new StoreOrderManagementHistory();
 
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
@@ -123,37 +123,43 @@ class ReorderController extends Controller
 	  {
 		$customer_id = Auth::guard('web_customer')->user()->id;
 
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'labels' as \"type\""))->get();
+
 		echo json_encode($data);
 	  }
 	  else
 	  {
 		  $customer_id = Auth::guard('web_customer')->user()->id;
-        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+        $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
 
-		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*')->get();
+		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'stickers' as \"type\""))->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->where('tesco_supplier_id',$customer_role_id->company_id)->whereBetween('created_at', [$from_date, $to_date])->where('order_placed_by','=',$customer_id)->select('*',DB::raw("'labels' as \"type\""))->get();
+
 		echo json_encode($data);
 	  }
 		
@@ -228,6 +234,20 @@ class ReorderController extends Controller
 										})
 										->where('order_status', '!=', 'Saved')
 										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
+                    ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+										->where(function ($query) use ($style) {
+                      $style_split = explode("/",$style);
+                      if(count($style_split) > 1)
+                      {
+                        $query->where('uk_style_ref',$style_split[0])
+                        ->where('ce_style_ref',$style_split[1]);
+                      }
+										})
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->where('tesco_supplier_id',$customer_role_id->company_id)
+                    ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
 	  }
 	  else
 	  {
@@ -239,7 +259,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl1_orders"."id") as id'),DB::raw('max("tesco_tcl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.zone','tesco_tcl1_orders.po_number',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl1_orders"."id") as id'),DB::raw('max("tesco_tcl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.zone','tesco_tcl1_orders.po_number',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
 	  
 
 		$data['tesco_tcl2_orders'] = DB::table('tesco_tcl2_orders')->where(function ($query) use ($style) {
@@ -247,7 +267,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl2_orders"."id") as id'),DB::raw('max("tesco_tcl2_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.zone','tesco_tcl2_orders.po_number',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->groupBy('tesco_tcl2_orders.uk_style_ref')->groupBy('tesco_tcl2_orders.ce_style_ref')->groupBy('tesco_tcl2_orders.zone')->groupBy('tesco_tcl2_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl2_orders"."id") as id'),DB::raw('max("tesco_tcl2_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.zone','tesco_tcl2_orders.po_number',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->groupBy('tesco_tcl2_orders.uk_style_ref')->groupBy('tesco_tcl2_orders.ce_style_ref')->groupBy('tesco_tcl2_orders.zone')->groupBy('tesco_tcl2_orders.po_number')->get();
 
 
 		$data['tesco_tcl4_orders'] = DB::table('tesco_tcl4_orders')->where(function ($query) use ($style) {
@@ -255,7 +275,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
 
 
 		$data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')->where(function ($query) use ($style) {
@@ -263,7 +283,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl1_orders"."id") as id'),DB::raw('max("tesco_thl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.zone','tesco_thl1_orders.po_number',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->groupBy('tesco_thl1_orders.uk_style_ref')->groupBy('tesco_thl1_orders.ce_style_ref')->groupBy('tesco_thl1_orders.zone')->groupBy('tesco_thl1_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl1_orders"."id") as id'),DB::raw('max("tesco_thl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.zone','tesco_thl1_orders.po_number',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->groupBy('tesco_thl1_orders.uk_style_ref')->groupBy('tesco_thl1_orders.ce_style_ref')->groupBy('tesco_thl1_orders.zone')->groupBy('tesco_thl1_orders.po_number')->get();
 
 
 		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where(function ($query) use ($style) {
@@ -271,7 +291,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 
 
 		$data['tesco_tsl1_orders'] = DB::table('tesco_tsl1_orders')->where(function ($query) use ($style) {
@@ -279,7 +299,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl1_orders"."id") as id'),DB::raw('max("tesco_tsl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.zone','tesco_tsl1_orders.po_number',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->groupBy('tesco_tsl1_orders.uk_style_ref')->groupBy('tesco_tsl1_orders.ce_style_ref')->groupBy('tesco_tsl1_orders.zone')->groupBy('tesco_tsl1_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl1_orders"."id") as id'),DB::raw('max("tesco_tsl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.zone','tesco_tsl1_orders.po_number',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->groupBy('tesco_tsl1_orders.uk_style_ref')->groupBy('tesco_tsl1_orders.ce_style_ref')->groupBy('tesco_tsl1_orders.zone')->groupBy('tesco_tsl1_orders.po_number')->get();
 
 
 		$data['tesco_tsl3_orders'] = DB::table('tesco_tsl3_orders')->where(function ($query) use ($style) {
@@ -287,7 +307,22 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
+                    ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+										->where(function ($query) use ($style) {
+                      $style_split = explode("/",$style);
+                      if(count($style_split) > 1)
+                      {
+                        $query->where('uk_style_ref',$style_split[0])
+                        ->where('ce_style_ref',$style_split[1]);
+                      }
+										})
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->where('tesco_supplier_id',$customer_role_id->company_id)
+										->where('order_placed_by','=',$customer_id)
+                    ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
 	  }
 		
 
@@ -334,6 +369,20 @@ class ReorderController extends Controller
 										})
 										->where('order_status', '!=', 'Saved')
 										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
+                    ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+										->where(function ($query) use ($style) {
+                      $style_split = explode("/",$style);
+                      if(count($style_split) > 1)
+                      {
+                        $query->where('uk_style_ref',$style_split[0])
+                        ->where('ce_style_ref',$style_split[1]);
+                      }
+										})
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->where('tesco_supplier_id',$customer_role_id->company_id)
+                    ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
 	  }
 	  else
 	  {
@@ -345,7 +394,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
 
 
 		$data['tesco_thl3_orders'] = DB::table('tesco_thl3_orders')->where(function ($query) use ($style) {
@@ -353,7 +402,7 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 
 
 
@@ -362,7 +411,22 @@ class ReorderController extends Controller
 											->orWhere('ce_style_ref',$style);
 										})
 										->where('order_status', '!=', 'Saved')
-										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+										->where('order_status','!=','Order Cancelled')->where('tesco_supplier_id',$customer_role_id->company_id)->where('order_placed_by','=',$customer_id)->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
+
+		$data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
+                    ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+										->where(function ($query) use ($style) {
+                      $style_split = explode("/",$style);
+                      if(count($style_split) > 1)
+                      {
+                        $query->where('uk_style_ref',$style_split[0])
+                        ->where('ce_style_ref',$style_split[1]);
+                      }
+										})
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->where('tesco_supplier_id',$customer_role_id->company_id)
+										->where('order_placed_by','=',$customer_id)
+                    ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
 	  }
 		
 
@@ -747,33 +811,37 @@ class ReorderController extends Controller
 					$i++;
 				}
 			}
-			
+
 			/** Insert order data into history table */
-			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
-	  
-			$material_name  = $template_level->material;
-			$material_sub   = $template_level->material_sub;
-			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?0:null;
-			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$order_data = [];
+
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
-				   
-			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-			  'buyer_id'                  => $tesco_buyer_id->id,
-			  'season'                    => $newTasks->season_code,
-			  'customer_id'               => $newTasks->tesco_supplier_id,
-			  'material'                  => $material_name,
-			  'sub_material'              => $material_sub,
-			  'style'                     => $newTasks->$style_ref,
-			  'reference'                 => $material_ref,
-			  'buyer_po'                  => $newTasks->po_number,
-			  'ocn_number'                => $newTasks->ocn_number,
-			  'order_status'              => 2,
-			  'pi_status'                 => $pi_approve_status,
-			  'po_status'                 => $po_upload_status,
-			  'name_in_reports'           => $template_level->name_in_reports
-			]);
+	  
+			$order_data['season_code'] = $newTasks->season_code;
+	  
+			$order_data['po_number'] = $newTasks->po_number;
+	  
+			$order_data['ocn_no'] = $newTasks->ocn_number;
+	  
+			$order_data['style'] = $newTasks->$style_ref;
+	  
+			$order_data['customer_id'] = $newTasks->tesco_supplier_id;
+	  
+			$order_data['template_id'] = $newTasks->template_id;
+	  
+			$order_data['order_id'] = $newTasks->id;
+	  
+			$order_data['po_status'] = $po_status;
+	  
+			$order_data['pi_required'] = $pi_status;
+	  
+			$order_data['order_status_id'] = 2;
+	  
+			$order_data['edit_permission'] = 0;
+	  
+			$order_data['tesco_label'] = false;
+	  
+			$this->order_history_obj->storeOrdersHistory($order_data);
 
 		    echo true;
     }
@@ -1166,33 +1234,37 @@ class ReorderController extends Controller
 				}
 				$data=DB::table($type)->where('id',$newTasks->id)->select('*',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$type."'".' as "type"'))->get();
 			}	
-			
+
 			/** Insert order data into history table */
-			$tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-			$template_level = $this->tesco_material_obj->tescoMaterialDetails($newTasks->template_id);
-	  
-			$material_name  = $template_level->material;
-			$material_sub   = $template_level->material_sub;
-			$material_ref   = $template_level->ref;
-			$po_upload_status = $po_status === "PO Pending"?0:null;
-			$pi_approve_status = $pi_status === "PI Approval Pending"?0:null;
+			$order_data = [];
+
 			$style_ref = strtolower($newTasks->zone).'_style_ref';
-				   
-			OrderManagementHistory::updateOrCreate(['order_table_name'  => $type, 'order_table_id'    => $newTasks->id],[
-			  'buyer_id'                  => $tesco_buyer_id->id,
-			  'season'                    => $newTasks->season_code,
-			  'customer_id'               => $newTasks->tesco_supplier_id,
-			  'material'                  => $material_name,
-			  'sub_material'              => $material_sub,
-			  'style'                     => $newTasks->$style_ref,
-			  'reference'                 => $material_ref,
-			  'buyer_po'                  => $po,
-			  'ocn_number'                => $ocn_number,
-			  'order_status'              => 2,
-			  'pi_status'                 => $pi_approve_status,
-			  'po_status'                 => $po_upload_status,
-			  'name_in_reports'           => $template_level->name_in_reports
-			]);
+	  
+			$order_data['season_code'] = $newTasks->season_code;
+	  
+			$order_data['po_number'] = $po;
+	  
+			$order_data['ocn_no'] = $ocn_number;
+	  
+			$order_data['style'] = $newTasks->$style_ref;
+	  
+			$order_data['customer_id'] = $newTasks->tesco_supplier_id;
+	  
+			$order_data['template_id'] = $newTasks->template_id;
+	  
+			$order_data['order_id'] = $newTasks->id;
+	  
+			$order_data['po_status'] = $po_status;
+	  
+			$order_data['pi_required'] = $pi_status;
+	  
+			$order_data['order_status_id'] = 2;
+	  
+			$order_data['edit_permission'] = 0;
+	  
+			$order_data['tesco_label'] = false;
+	  
+			$this->order_history_obj->storeOrdersHistory($order_data);
 			
 			echo $data;
     }

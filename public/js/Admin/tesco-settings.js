@@ -4221,7 +4221,7 @@ function tescoLabelSizeChart() {
         '<tr><th>Sl. No</th><th>Department Title</th><th>UK Size</th><th>CE Size</th><th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         // '<th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         '<th>Status</th><th>Actions</th></tr></thead><tbody>';
-        $.each(data.tesco_translationlist, function(i, item) {
+        $.each(data.tesco_primarySize, function(i, item) {
           var index = i + 1;
           tesco_metadata += '<tr id="' + item.id + '">'+
           '<td>' + index + '</td>'+
@@ -4241,11 +4241,15 @@ function tescoLabelSizeChart() {
             tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
           }
           if (item.is_flag) {
-            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoTranslation" data-placement="left"></i></a>';
+            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoSizeChart" data-placement="left"></i></a>';
           } else {
-            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoTranslation" data-placement="left"></i></a>';
+            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoSizeChart" data-placement="left"></i></a>';
           }
+<<<<<<< HEAD
           tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-translations filterbtn options" title="Edit" data-placement="left" id="editEntry" ></i></a></td></tr>';
+=======
+          tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+>>>>>>> 4bd6a953b15c3c288bdc912306f1b39086e76dad
         })
         tesco_metadata += '</tbody></table></div>';
         $('.content').html(tesco_metadata)
@@ -4397,8 +4401,153 @@ function addTescoLabelSizeChart() {
   }
 }
 
+<<<<<<< HEAD
 $(document).on('click', '#editEntry', function(event) {
   event.preventDefault();
   /* Act on the event */
   alert()
 });
+=======
+/**
+ * Makes a Tesco size chart Enabled.
+ * @param id,csrf_token
+ */
+ function enableTescoPrimarySizeChart(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/enable-tesco-size-chart",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Size Chart is enabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoLabelSizeChart();
+            $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Makes a size chart Enabled.
+ * @param id,csrf_token
+ */
+ function disableTescoPrimarySizeChart(id, csrf_token) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/disable-tesco-size-chart",
+          dataType: "json",
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          method: "put",
+          data: { _token: csrf_token, id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          statusCode: {
+              /** [Show response status based on HTTP status code] */
+              200: function() {
+                  isSubmitting = false;
+                  $('.snackbar_span').html('Size Chart is disabled ');
+                  showSnackbar();
+              }
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+            tescoLabelSizeChart();
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+/**
+ * Function for get tesco size chart ById details for editing
+ * @param id
+ */
+ function getTescoSizeChartById(id) {
+  try {
+      if (isSubmitting) {
+          return;
+      }
+      isSubmitting = true;
+      $.ajax({
+          url: base_url + "/admin/tesco/get-tesco-primary-size-details",
+          dataType: "json",
+          method: "get",
+          data: { id: id },
+          tryCount: 0,
+          retryLimit: 2,
+          beforeSend: function() {
+              $(".loader").show();
+          },
+          success: function(data) {
+              isSubmitting = false;
+              $('#edit_tesco_primary_id').val(id);
+              $('#edit_size_department').val();
+              $('#edit_labelsize_dept_title').val();
+              $('#edit_labelsize_uksize').val();
+              $('#edit_labelsize_cesize').val();
+              $('#editTescoPrimarySizeModal').modal({
+                  backdrop: 'static',
+                  keyboard: false
+              })
+              $('#edit-tesco-labelsize-chart-form').validator('validate');
+              
+              getLabelSizeModalData()
+              $('#editTescoPrimarySizeModal').modal('show');
+
+          },
+          error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+          },
+          complete: function() {
+              $(".loader").hide();
+          }
+      })
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+>>>>>>> 4bd6a953b15c3c288bdc912306f1b39086e76dad

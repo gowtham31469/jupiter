@@ -618,6 +618,8 @@ Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl
 
 
 Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
@@ -1007,6 +1009,9 @@ Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoS
 Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+Route::put('admin/tesco/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
+Route::put('admin/tesco/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
+Route::get('admin/tesco/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
 
 
 // Update financial year in session
@@ -1017,9 +1022,24 @@ Route::post('jga/set-financial-year-session', function (Request $request) {
 
 # Tesco care label orders admin routes
 Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
+
 	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
 	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
 	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
 	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
 	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
+	
+  });
+
+
+  # Tesco care label orders customer routes
+Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], function() {
+	
+	Route::get('care-label-orders', 'Customer\Tesco\CustomerCareLabelOrdersController@index');
+	Route::get('care-label-fiber-components', 'Customer\Tesco\CustomerCareLabelOrdersController@getFiberComponentsMeta');
+	Route::get('care-size-lists', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeListsBySizeCategoryID');
+	Route::post('submit-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@submitCareLabelOrder');
+	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
+	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
+	
   });
