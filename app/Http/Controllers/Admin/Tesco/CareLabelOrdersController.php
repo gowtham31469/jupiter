@@ -142,4 +142,21 @@ class CareLabelOrdersController extends Controller
             ], 200);
         }
     }
+
+    public function updateCareLabelOrder(SubmitTescoLabelOrder $request)
+    {
+
+        if ($request->ajax()) {
+
+            $request->validated();
+
+            dd($request->tesco_care_supplier);
+            // $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => $response
+            ], 200);
+        }
+    }
 }

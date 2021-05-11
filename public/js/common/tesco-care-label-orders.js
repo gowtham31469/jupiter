@@ -266,8 +266,8 @@ $(function () {
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" type="number" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="number" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
@@ -381,6 +381,9 @@ $(function () {
             type: "post",
             url: base_url + "/" + user_role + "/tesco/submit-care-label-order",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrf_token
+            },
             dataType: "json",
             beforeSend: function () {
                 $(".loader").show();
@@ -413,10 +416,6 @@ $(function () {
     }
 
     postLabelOrderSubmit = (data) => {
-
-        // var order_date = data.delivery_date_start;
-        // var delivery_date_req = data.delivery_date_required;
-        // var last_insertions_length = Object.keys(data.last_insertions).length;
 
         // Handle po upload modal button issue after page reloading
         $('.po-submit-btn').text('Save');

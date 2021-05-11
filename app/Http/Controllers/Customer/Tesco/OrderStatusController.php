@@ -29,6 +29,7 @@ use App\Classes\CleanString;
 use App\OrderManagementHistory;
 use App\Classes\ApproveTescoOrders;
 use PDF;
+use App\Classes\TescoCareMetadata;
 
 class OrderStatusController extends Controller
 {
@@ -36,13 +37,14 @@ class OrderStatusController extends Controller
     private $updated_erp_table_array;
     private $class_status;
     private $erp_obj;
+    private $caremeta;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(TescoCareMetadata $caremeta)
     {
 
        $this->middleware('customer_auth');
@@ -51,6 +53,9 @@ class OrderStatusController extends Controller
        $this->updated_erp_table_array = [];
        $this->class_status = 'success';
        $this->erp_obj    = new ErpOrders();
+
+       $this->caremeta = $caremeta;
+
     }
 
     /**
@@ -3531,41 +3536,63 @@ class OrderStatusController extends Controller
      */
     public function editArtwork(Request $request)
     {
-        try
-        {
-            $row_id     =   $request->id;
-            $table_name =   $request->table_name;
-            $erp_order_details = array();
-            $order_details       =   DB::table($table_name)->where('id',$row_id)
-                            ->select('*')->first();
-            $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
-            $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$order_details->id)->orderBy('id')->get();
-            $template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-			
-			$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details->template_id)->select('*')->get();
-			
-            $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
+        $table_name =   $request->table_name;
+        $erp_order_details = array();
+        $order_table_array = explode("_", $table_name);
+        $template_name = $order_table_array[1] !=  'washcare' ? strtoupper($order_table_array[1]) : title_case($order_table_array[1]);
 
-            // fetch erp_order_details table status
-            foreach($quantity_details as $quantity)
-            {
-               $quantity_id = $quantity->id;
-               $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
-            }
+        $model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
+        $care_label_metadata = [];
 
-            if ($order_details && $quantity_details)
-            {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'tesco_item_master'=>$tesco_item_master,'moq' => $moq, 'erp_details' => $erp_order_details],200);
-            }
-            else
-            {
-                $result = response()->json(['error'=> true,'message'=>'Error'],400);
-            }
+        if ($order_table_array[1] ==  'washcare') {
+            $order_details  = $model_name::with([
+                'quantities',
+                'garment_components'
+            ])
+                ->where([
+                    'id' => $request->id
+                ])
+                ->first();
+                
+            $care_label_metadata = $this->caremeta->getCareMetadata();
+        } else {
+            $order_details  = $model_name::with([
+                'quantities'
+            ])
+                ->where([
+                    'id' => $request->id
+                ])
+                ->first();
         }
-        catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+
+        $order_quantity_ids = $order_details->quantities->pluck('id');
+
+        $tesco_item_master = DB::table('tesco_template')
+        ->join('tesco_item_master', 'tesco_item_master.id', 'tesco_template.item_id')
+        ->where('tesco_template.item_id', $order_details->template_id)
+            ->select('tesco_template.template_file', 'tesco_item_master.is_qrcode_required')
+            ->get();
+
+        $moq     =    DB::table('price_taxation')
+        ->where([
+            'template_id' => $order_details->template_id,
+            'customer_id' => $order_details->tesco_supplier_id,
+            'buyer_id' => 2
+        ])
+            ->value('moq');
+
+        // fetch erp_order_details table status
+        $erp_order_details[] = DB::table('erp_order_details')
+        ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
+        ->where('order_qnty_table_name', $table_name . '_quanty')
+        ->whereIn('order_qnty_table_id', $order_quantity_ids)
+            ->select('erp_order_details.id', 'erp_status.status_name')
+            ->first();
+
+        if ($order_details) {
+            $result = response()->json(['error' => false, 'message' => 'success', 'order_details' => $order_details, 'tesco_item_master' => $tesco_item_master, 'moq' => $moq, 'erp_details' => $erp_order_details, 'metadata' => $care_label_metadata], 200);
+        } else {
+            $result = response()->json(['error' => true, 'message' => 'Error'], 400);
         }
         return $result;
     }
