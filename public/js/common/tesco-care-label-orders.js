@@ -381,6 +381,9 @@ $(function () {
             type: "post",
             url: base_url + "/" + user_role + "/tesco/submit-care-label-order",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrf_token
+            },
             dataType: "json",
             beforeSend: function () {
                 $(".loader").show();
@@ -413,10 +416,6 @@ $(function () {
     }
 
     postLabelOrderSubmit = (data) => {
-
-        // var order_date = data.delivery_date_start;
-        // var delivery_date_req = data.delivery_date_required;
-        // var last_insertions_length = Object.keys(data.last_insertions).length;
 
         // Handle po upload modal button issue after page reloading
         $('.po-submit-btn').text('Save');
