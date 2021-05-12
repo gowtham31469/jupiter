@@ -470,12 +470,14 @@
             <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
         </div>
         <div class="div-max">
-            <form method="POST" id="update_tesco_label_order_status_form" data-toggle="validator" role="form" novalidate="true">
+            {!! Form::open(['id' => 'update_tesco_label_order_status_form','data-toggle' => 'validator','role' => 'form']) !!}
             <span id="edit_label_order_result"></span>
                 <div class="col-md-2">
                     <h4 class="text-center label-order-details">Order Details</h4>
                     <div class="scroll" style="height: calc(100vh - 80px);">
                         <input type="hidden" id="label_order_id">
+                        <input type="hidden" id="label_template_id">
+                        <input type="hidden" id="label_template_name">
                         <div class="form-group has-feedback">
                             {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
                             {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
@@ -571,16 +573,19 @@
                 </div>
                 <div class="col-md-10">
                     <div class="scroll" style="height: calc(100vh - 40px);">
-                        <p class="enlarge-btn"></p>
-
-                        <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
-
-                        <div class="teasco-care-quantity-div"></div>
-                        <div class="garment-component-div"></div>
-                        <div class="label-order-footer"></div>
+                        <div class="row">
+                             <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
+                             <div class="teasco-care-quantity-div"></div>
+                        </div>
+                        <div class="row">
+                             <div class="garment-component-div"></div>
+                        </div>                        
+                       <div class="row">
+                            <div class="label-order-footer"></div>
+                       </div>
                     </div>
                 </div>
-            </form>
+                {!! Form::close() !!}
             <div class="loader">
                 <div class=" fa-3x">
                     <i class="fa fa-spinner fa-pulse"></i>
