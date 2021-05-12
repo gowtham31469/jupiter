@@ -3570,7 +3570,7 @@ class OrderStatusController extends Controller
         $tesco_item_master = DB::table('tesco_template')
         ->join('tesco_item_master', 'tesco_item_master.id', 'tesco_template.item_id')
         ->where('tesco_template.item_id', $order_details->template_id)
-            ->select('tesco_template.template_file', 'tesco_item_master.is_qrcode_required')
+            ->select('tesco_template.template_file', 'tesco_item_master.is_qrcode_required', 'tesco_item_master.item_name')
             ->get();
 
         $moq     =    DB::table('price_taxation')
