@@ -90,7 +90,7 @@
 <div class="row garment-component-div">
     <div class="col-md-12">
         <h4 class="pull-left">Garment Component & Fibres</h4>
-        <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
+        <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'customer')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
     </div>
     
     @for ($j = 1; $j <= 3; $j++)

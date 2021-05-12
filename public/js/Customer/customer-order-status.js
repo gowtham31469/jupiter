@@ -236,11 +236,19 @@ function tescoOrderStatus() {
                 })
 
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
+                    if(value.type == "stickers")	
+                    {
+                        if (value.zone == "CE") {
                             $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
-                    } else {
+                        } else {
                             $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                        }
                     }
+                    else
+                    {
+                        $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                    }
+                    
                 })
                 
                 $('.selectpicker').selectpicker();
@@ -335,11 +343,19 @@ function tescoOrderStatus() {
 
                 var options = "<option>Select Style Number</option>";
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
-                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
-                    } else {
-                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    if(value.type == "stickers")	
+                    {
+                        if (value.zone == "CE") {
+                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                        } else {
+                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                        }
                     }
+                    else
+                    {
+                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
+                    }
+                    
                 })
 
                 $('#artwork-approve-upload-button').click(function () {
@@ -369,7 +385,7 @@ function tescoOrderStatus() {
                                     200: function (data) {
                                         $('#exist_artwork_approve_div_status').removeClass('hidden')
                                         $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -641,7 +657,7 @@ function tescoOrderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -649,17 +665,26 @@ function tescoOrderStatus() {
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
+                                            if(value1.TemplateName.length <= 5)	
+                                            {	
+                                                var margin_right="160px";	
+                                            }	
+                                            else	
+                                            {	
+                                                var margin_right="85px";	
+                                            }
+
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+  '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+  '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+  '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+  '</li>')
                                             }
 
                                         });
@@ -1092,6 +1117,12 @@ function submitOs(obj)
         {
             stylenoos.push($(this).val());
         }
+        else if($(this).data("id") == "labels")	
+        {	
+            var splitstyle = $(this).val().split("/");	
+            ukstylenoos.push(splitstyle[0]);	
+            stylenoos.push(splitstyle[1]);	
+        }
         else
         {
             ukstylenoos.push($(this).val());
@@ -1294,6 +1325,19 @@ function tescoStatusTable(data, path) {
                     }
                 } else if (key == "PI Status") {
                     var str = value[key];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (str === 'PI Approved') {
                             action_status = true;
@@ -1322,12 +1366,28 @@ function tescoStatusTable(data, path) {
                     if (value['order_status'] != 'Saved') {
                         var zone = value.Zone
                         var style_no = "";
-                        if (zone == "CE") {
-                            style_no = value.ce_style_ref;
-                        } else {
-                            style_no = value.uk_style_ref;
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            style_no = value.uk_style_ref+"/"+value.ce_style_ref;
                         }
-                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        else
+                        {
+                            if (zone == "CE") {
+                                style_no = value.ce_style_ref;
+                            } else {
+                                style_no = value.uk_style_ref;
+                            }
+                        }
+                        if(value.tableName == "tesco_washcare_orders")
+                        {
+                            var temp_file = value.template_file.split(',');	
+                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        }
+                        else
+                        {
+                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                        }
+                        
                     }
                     else{
                         tr += '<td align="center">-</td>';
@@ -1360,6 +1420,19 @@ function tescoStatusTable(data, path) {
                     var str = value[key];
                     var status_text = " - ";
                     var po_file = value['po_file'];
+                    var style_no = "";
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+                    }
+                    else
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
+                    }
                     if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                         if (value['PO Status'] === 'PO Uploaded') {
                             status = str.replace(/ /g, "");
@@ -1388,11 +1461,19 @@ function tescoStatusTable(data, path) {
                     }
                     var zone = value.Zone
                     var style_no = "";
-                    if (zone == "CE") {
-                        style_no = value.ce_style_ref;
-                    } else {
-                        style_no = value.uk_style_ref;
+                    if(value.tableName == "tesco_washcare_orders")	
+                    {	
+                        style_no = value.uk_style_ref+"/"+value.ce_style_ref;	
+                    }	
+                    else	
+                    {
+                        if (zone == "CE") {
+                            style_no = value.ce_style_ref;
+                        } else {
+                            style_no = value.uk_style_ref;
+                        }
                     }
+                    
 
                     if (value['order_status'] != 'Saved'){
                         tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
@@ -1838,10 +1919,17 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
             200: function (data) {
                 var options = "<option>Select Style Number</option>";
                 $(data.style_no).each(function(index,value){
-                    if (value.zone == "CE") {
-                        options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
-                    } else {
-                        options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                    if(value.type == "stickers")
+                    {
+                        if (value.zone == "CE") {
+                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                        } else {
+                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                        }
+                    }
+                    else
+                    {
+                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
                     }
                 })
                 $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')
@@ -1895,7 +1983,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -1903,17 +1991,27 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         var new_po_div_status = 0;
                                         $(newObj).each(function (index1, value1) {
 
+                                            if(value1.TemplateName.length <= 5)	
+                                            {	
+                                                var margin_right="160px";	
+                                            }	
+                                            else	
+                                            {	
+                                                var margin_right="85px";	
+                                            }
+                                                    
+
                                             if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
                                                 if (old_po != value1.purchase_order_no) {
                                                     options += "<option>" + value1.purchase_order_no + "</option>";
                                                 }
                                                 old_po = value1.purchase_order_no
                                                 coun++;
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+ '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.purchase_order_no+ '</li>')
                                                 new_po_div_status++;
 
                                             } else {
-                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+ '</li>')
+                                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName +'<span style="display: inline-block;margin-left: '+margin_right+';" class="tab"></span>'+ value1.po_number +'<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-'+ '</li>')
                                             }
 
                                         });
@@ -2384,200 +2482,215 @@ function updateArtwork(obj) {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-                if (data.order_details != 0) {
-                    $('#tesco_po_number').val(data.order_details.po_number);
-					$('#qr_flag').val(data.tesco_item_master[0].is_qrcode_required);
-                    $('#tesco_uk_style').val(data.order_details.uk_style_ref);
-                    $('#tesco_ce_style').val(data.order_details.ce_style_ref);
-                    $('#tesco_eqos').val(data.order_details.eqos_site_code);
-                    $('#tesco_description').val(data.order_details.short_description);
-                    $('#tesco_season_code').val(data.order_details.season_code);
-                    $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
-                    if(data.order_details.full_description != null)
-                    {
-                        $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
-                    }
-                    else 
-                    {
-                        $('#tesco_description').prev().text('Short Description');
-                    }
-
-                    var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
-                    var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
-
-                    $('#tesco_supplier').selectpicker('val', data.order_details.tesco_metadata_supplier_id);
-                    $('#tesco_brand').selectpicker('val', data.order_details.tesco_brand_id);
-                    $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
-                    $('#tesco_rfid').selectpicker('val', rfid);
-                    $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
-                    $('#tesco_ocn').val(data.order_details.ocn_number);
-
-                    //Disable option for Customer
-
-                    $('#tesco_po_number').prop('disabled', true);
-                    $('#tesco_uk_style').prop('disabled', true);
-                    $('#tesco_ce_style').prop('disabled', true);
-                    $('#tesco_eqos').prop('disabled', true);
-                    $('#tesco_description').prop('disabled', true);
-                    $('#tesco_season_code').prop('disabled', true);
-                    $('#tesco_manufacture_date').prop('disabled', true);
-                    $('#tesco_supplier').prop('disabled', true);
-                    $('#tesco_brand').prop('disabled', true);
-                    $(".dropdown-toggle").css("background-color", "#eee");
-                    $('#tesco_department').prop('disabled', true);
-                    $('#tesco_rfid').prop('disabled', true);
-                    $('#tesco_tag_at_source').prop('disabled', true);
-                    $('#tesco_ocn').prop('disabled', true);
-
-
-                    $('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="' + data.template_file[0].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
-
-                    var zone = data.order_details.zone;
-                    var moq = data.moq
-
-                    if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-                        var qty = "No Of Pieces In Ratio";
-                        var barcode_tr = "ITF Barcode";
-                        var tpnd_tr = "ORMS TPND";
-                        var th_tr = "";
-                    } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-                        var qty = "Units Per Case";
-                        var barcode_tr = "EAN Barcode";
-                        var tpnd_tr = "ORMS TPND";
-                        var th_tr = "<th>Size</th>";
-                    } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-                        var qty = "Units Per Case";
-                        var barcode_tr = "EAN Barcode";
-                        var tpnd_tr = "TPND";
-                        var th_tr = "<th>Size</th>";
-                    } else if ((TemplateName == "TCL1" && zone == "UK") || (TemplateName == "TCL2" && zone == "UK") || (TemplateName == "TSL1" && zone == "UK") || (TemplateName == "THL1" && zone == "UK")) {
-                        var qty = "Units Per Carton";
-                        var barcode_tr = "ITF Barcode";
-                        var tpnd_tr = "TPND";
-                        var th_tr = "";
-                    }
-
-                    var tr = "";
-                    var i = 1;
-                    $(data.quantity_details).each(function (key, value) {
-
-                        if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
-                            var unit_qty = value.cases_per_carton;
-                            var barcode_td = value.itf_barcode;
-                            var maxlength = 14;
-                            var tpnd = value.orms_tpn;
-                            var th_td = "";
-                            var tpn_th = "Enter ORMS TPND";
-                            var tpn_len = "13";
-                            var unit_len = "5";
-                        } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
-                            var unit_qty = value.case_size;
-                            var barcode_td = value.ean_barcode;
-                            var maxlength = 13;
-                            var tpnd = value.orms_tpn;
-                            var th_td = '<td><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="' + value.size + '" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
-                            var tpn_th = "Enter ORMS TPND";
-                            var tpn_len = "13";
-                            var unit_len = "6";
-                        } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
-                            var unit_qty = value.case_size;
-                            var barcode_td = value.ean_barcode;
-                            var maxlength = 13;
-                            var tpnd = value.tpnd;
-                            var th_td = '<td><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '" value="' + value.size + '" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
-                            var tpn_th = "Enter TPND";
-                            var tpn_len = "9";
-                            var unit_len = "4";
-                        } else if ((TemplateName == "TCL1" && zone == "UK") || (TemplateName == "TCL2" && zone == "UK") || (TemplateName == "TSL1" && zone == "UK") || (TemplateName == "THL1" && zone == "UK")) {
-                            var unit_qty = value.units_per_carton;
-                            var barcode_td = value.itf_barcode;
-                            var maxlength = 14;
-                            var tpnd = value.tpnd;
-                            var th_td = "";
-                            var tpn_th = "Enter TPND";
-                            var tpn_len = "9";
-                            var unit_len = "4";
-                        }
-
-                        if (value.id == data.quantity_details[0].id) {
-                            var delete_td = '';
-                        } else {
-                            var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
-                        }
-
-                        tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td></tr>';
-                        row_id = i;
-                        i++;
-                    })
-
-                    $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-row-id="'+row_id+'" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th> <th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
-
-                    $('#edit_template_name').val(TemplateName)
-                    $('#edit_zone').val(data.order_details.zone)
-                    $('#edit_template_type').val(data.order_details.template_type)
-                    $('#edit_id').val(data.order_details.id)
-
-                    $('.osorderdetails').text(" Order Details - " + TemplateName)
-                    $('.osartwork').text(" Artwork - " + TemplateName)
-                    if (data.order_details.edit_permission == 1 || data.order_details.is_order_count_empty == 1) {
-                        $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit" disabled="true">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                if (data.order_details.order_status == "Saved") {
+                    $('.snackbar_span').html('Please Check in Create Order Page!!!');
+                    showSnackbar();
+                } else if (data.order_details.order_status == "Order Cancelled") {
+                    $('.snackbar_span').html('Order Cancelled!!!');
+                    showSnackbar();
+                } else {
+                    if( table_name === 'tesco_washcare_orders') {
+                        viewOrderDetailsPanel(data, "customer")
                     } else {
-                        $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
-                    }
-
-
-
-                    $('#create_tesco_order_status_form').validator().on('submit', function (e) {
-                        if (e.isDefaultPrevented()) {
-
-                        } else {
-                            e.preventDefault();
-			    $('#submit').prop('disabled',true)
-                            setEditOrderStatus()
+                        if (data.order_details != 0) {
+                            $('#tesco_po_number').val(data.order_details.po_number);
+                            $('#qr_flag').val(data.tesco_item_master[0].is_qrcode_required);
+                            $('#tesco_uk_style').val(data.order_details.uk_style_ref);
+                            $('#tesco_ce_style').val(data.order_details.ce_style_ref);
+                            $('#tesco_eqos').val(data.order_details.eqos_site_code);
+                            $('#tesco_description').val(data.order_details.short_description);
+                            $('#tesco_season_code').val(data.order_details.season_code);
+                            $('#tesco_manufacture_date').val(data.order_details.manufacture_date);
+                            if(data.order_details.full_description != null)
+                            {
+                                $('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+data.order_details.full_description+')');
+                            }
+                            else 
+                            {
+                                $('#tesco_description').prev().text('Short Description');
+                            }
+    
+                            var tag_at_source = data.order_details.tag_at_source == 0 ? "no" : "yes";
+                            var rfid = data.order_details.rfid_compliant == 0 ? "no" : "yes";
+    
+                            $('#tesco_supplier').selectpicker('val', data.order_details.tesco_metadata_supplier_id);
+                            $('#tesco_brand').selectpicker('val', data.order_details.tesco_brand_id);
+                            $('#tesco_department').selectpicker('val', data.order_details.tesco_department_id);
+                            $('#tesco_rfid').selectpicker('val', rfid);
+                            $('#tesco_tag_at_source').selectpicker('val', tag_at_source);
+                            $('#tesco_ocn').val(data.order_details.ocn_number);
+    
+                            //Disable option for Customer
+    
+                            $('#tesco_po_number').prop('disabled', true);
+                            $('#tesco_uk_style').prop('disabled', true);
+                            $('#tesco_ce_style').prop('disabled', true);
+                            $('#tesco_eqos').prop('disabled', true);
+                            $('#tesco_description').prop('disabled', true);
+                            $('#tesco_season_code').prop('disabled', true);
+                            $('#tesco_manufacture_date').prop('disabled', true);
+                            $('#tesco_supplier').prop('disabled', true);
+                            $('#tesco_brand').prop('disabled', true);
+                            $(".dropdown-toggle").css("background-color", "#eee");
+                            $('#tesco_department').prop('disabled', true);
+                            $('#tesco_rfid').prop('disabled', true);
+                            $('#tesco_tag_at_source').prop('disabled', true);
+                            $('#tesco_ocn').prop('disabled', true);
+    
+    
+                            $('.artwork_tesco').html('<object style="border: 2px #333 solid;" id="svg_tesco_os" class="center-block svg2" data="' + data.tesco_item_master[0].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
+    
+                            var zone = data.order_details.zone;
+                            var moq = data.moq
+    
+                            if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
+                                var qty = "No Of Pieces In Ratio";
+                                var barcode_tr = "ITF Barcode";
+                                var tpnd_tr = "ORMS TPND";
+                                var th_tr = "";
+                            } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
+                                var qty = "Units Per Case";
+                                var barcode_tr = "EAN Barcode";
+                                var tpnd_tr = "ORMS TPND";
+                                var th_tr = "<th>Size</th>";
+                            } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
+                                var qty = "Units Per Case";
+                                var barcode_tr = "EAN Barcode";
+                                var tpnd_tr = "TPND";
+                                var th_tr = "<th>Size</th>";
+                            } else if ((TemplateName == "TCL1" && zone == "UK") || (TemplateName == "TCL2" && zone == "UK") || (TemplateName == "TSL1" && zone == "UK") || (TemplateName == "THL1" && zone == "UK")) {
+                                var qty = "Units Per Carton";
+                                var barcode_tr = "ITF Barcode";
+                                var tpnd_tr = "TPND";
+                                var th_tr = "";
+                            }
+    
+                            var tr = "";
+                            var i = 1;
+                            $(data.order_details.quantities).each(function (key, value) {
+    
+                                if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
+                                    var unit_qty = value.cases_per_carton;
+                                    var barcode_td = value.itf_barcode;
+                                    var maxlength = 14;
+                                    var tpnd = value.orms_tpn;
+                                    var th_td = "";
+                                    var tpn_th = "Enter ORMS TPND";
+                                    var tpn_len = "13";
+                                    var unit_len = "5";
+                                } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
+                                    var unit_qty = value.case_size;
+                                    var barcode_td = value.ean_barcode;
+                                    var maxlength = 13;
+                                    var tpnd = value.orms_tpn;
+                                    var th_td = '<td><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="' + value.size + '" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+                                    var tpn_th = "Enter ORMS TPND";
+                                    var tpn_len = "13";
+                                    var unit_len = "6";
+                                } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
+                                    var unit_qty = value.case_size;
+                                    var barcode_td = value.ean_barcode;
+                                    var maxlength = 13;
+                                    var tpnd = value.tpnd;
+                                    var th_td = '<td><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '" value="' + value.size + '" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
+                                    var tpn_th = "Enter TPND";
+                                    var tpn_len = "9";
+                                    var unit_len = "4";
+                                } else if ((TemplateName == "TCL1" && zone == "UK") || (TemplateName == "TCL2" && zone == "UK") || (TemplateName == "TSL1" && zone == "UK") || (TemplateName == "THL1" && zone == "UK")) {
+                                    var unit_qty = value.units_per_carton;
+                                    var barcode_td = value.itf_barcode;
+                                    var maxlength = 14;
+                                    var tpnd = value.tpnd;
+                                    var th_td = "";
+                                    var tpn_th = "Enter TPND";
+                                    var tpn_len = "9";
+                                    var unit_len = "4";
+                                }
+    
+                                if (value.id == data.order_details.quantities[0].id) {
+                                    var delete_td = '';
+                                } else {
+                                    var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
+                                }
+    
+                                tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input type="text" disabled class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits." name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_ratio_itf" disabled required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter ITF Barcode"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"><input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."><div class="help-block with-errors"></div></div></td></tr>';
+                                row_id = i;
+                                i++;
+                            })
+    
+                            $('.edit-qty-table-div').html('<hr><h4 class="text-center">Order Quantity - ' + TemplateName + '</h4><button type="button" onclick=addRowOs(this,"' + TemplateName + '","' + data.order_details.zone + '","' + moq + '") data-row-id="'+row_id+'" id="add_row" class="btn btn-default add-row-btn" disabled><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button><table class="table table-bordered table-responsive qty-table-modal" style="font-size:11px;margin-top: 15px;"> <thead> <tr> <th width="180">' + tpnd_tr + '</th><th width="180">' + barcode_tr + '</th> <th>' + qty + '</th>' + th_tr + ' <th>Quantity</th> <th>Actions</th></tr></thead> <tbody style="font-size: 11px">' + tr + '</tbody></table>')
+    
+                            $('#edit_template_name').val(TemplateName)
+                            $('#edit_zone').val(data.order_details.zone)
+                            $('#edit_template_type').val(data.order_details.template_type)
+                            $('#edit_id').val(data.order_details.id)
+    
+                            $('.osorderdetails').text(" Order Details - " + TemplateName)
+                            $('.osartwork').text(" Artwork - " + TemplateName)
+                            if (data.order_details.edit_permission == 1 || data.order_details.is_order_count_empty == 1) {
+                                $('.osfooter').html('<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit" type="submit" disabled="true">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit" style="width: 55px;margin-left: 10px;" onclick ="editArtwork()" type="button">Edit</button><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                            } else {
+                                $('.osfooter').html('<span id="error_msg_alert" style="color:red;"></span><button class="btn btn-default pull-right remove input-sm" id="close" type="button">Close</button>')
+                            }
+    
+    
+    
+                            $('#create_tesco_order_status_form').validator().on('submit', function (e) {
+                                if (e.isDefaultPrevented()) {
+    
+                                } else {
+                                    e.preventDefault();
+                        $('#submit').prop('disabled',true)
+                                    setEditOrderStatus()
+                                }
+                            })
+                            $('#create_tesco_order_status_form').validator('update');
+    
+    
+                            $('.remove').click(function () {
+                                $('.edit-sticker-order-panel').removeClass('active');
+                            })
+    
+                            var mySVG1 = document.getElementById("svg_tesco_os");
+                            var svgDoc1;
+                            mySVG1.addEventListener("load", function () {
+                                svgDoc1 = mySVG1.contentDocument;
+                                dynamicSVGTemplatescard(svgDoc1, TemplateName, data.order_details.zone, data.order_details.template_type)
+                            }, false);
+                            if(data.order_details.is_order_count_empty == 1)
+                            {
+                            // editArtwork()
+                            $('#edit').remove();
+                            $('#submit').removeClass('hidden');
+                            $("#submit").prop("disabled", false);
+                            $("#add_row").prop("disabled", false);
+                            $(".qty-table-modal :input").prop("disabled", false);
+                            }
+    
                         }
-                    })
-                    $('#create_tesco_order_status_form').validator('update');
-
-
-                    $('.remove').click(function () {
-                        $('.left-panel').removeClass('active');
-                    })
-
-                    var mySVG1 = document.getElementById("svg_tesco_os");
-                    var svgDoc1;
-                    mySVG1.addEventListener("load", function () {
-                        svgDoc1 = mySVG1.contentDocument;
-                        dynamicSVGTemplatescard(svgDoc1, TemplateName, data.order_details.zone, data.order_details.template_type)
-                    }, false);
-                    if(data.order_details.is_order_count_empty == 1)
-                    {
-                       // editArtwork()
-                       $('#edit').remove();
-                       $('#submit').removeClass('hidden');
-                       $("#submit").prop("disabled", false);
-                       $("#add_row").prop("disabled", false);
-                       $(".qty-table-modal :input").prop("disabled", false);
+    
+                        // erp_details array null , if order is not moved to erp tables
+                        // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
+                        if (data.erp_details[0] != null) {
+                            if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
+                                $('#edit').remove();
+                                $('#submit').remove();
+                                $('#error_msg_alert').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
+                            }
+                        }
+    
+                        if(data.order_details.pi_status == "PI Approved")
+                        {
+                            $('#enable_edit').remove();
+                            $('#disable_edit').remove();
+                            $('#edit').remove();
+                            $('#submit').remove();
+                            $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
+                        }
+    
+                        $('.edit-sticker-order-panel').addClass('active');
+                        $('.edit-sticker-order-panel').show();
                     }
-
-                }
-
-                // erp_details array null , if order is not moved to erp tables
-                // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
-                if (data.erp_details[0] != null) {
-                    if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
-                        $('#edit').remove();
-                        $('#submit').remove();
-                        $('#error_msg_alert').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not allowed to edit this order.')
-                    }
-                }
-
-                if(data.order_details.pi_status == "PI Approved")
-                {
-                    $('#enable_edit').remove();
-                    $('#disable_edit').remove();
-                    $('#edit').remove();
-                    $('#submit').remove();
-                    $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
                 }
 
             },
@@ -2595,12 +2708,9 @@ function updateArtwork(obj) {
         }
     })
 
-    $('.left-panel').addClass('active');
-    $('.left-panel').show();
-
 }
 $("#close").click(function () {
-    $(".left-panel").removeClass('active');
+    $(".edit-sticker-order-panel").removeClass('active');
 })
 
 function checkLength(len, ele) {
@@ -2765,7 +2875,7 @@ function setEditOrderStatus() {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html('Order updated Successfully');
                     showSnackbar();
-                    $('.left-panel').removeClass('active');
+                    $('.edit-sticker-order-panel').removeClass('active');
                     location.reload()
                 },
                 409: function (data) {
@@ -5655,6 +5765,31 @@ function approveTescoArtwork() {
 		/** [error statements] */
 		console.error("Error:" + e)
 	}
+}
+
+
+function chunkSubstr(str, maxWidth) {
+    var newLineStr = "\n"; done = false; res = '';
+    while (str.length > maxWidth) {                 
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + [str.slice(0, i), newLineStr].join('');
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res += [str.slice(0, maxWidth), newLineStr].join('');
+            str = str.slice(maxWidth);
+        }
+
+    }
+
+    return res + str;
 }
 
 

@@ -4,16 +4,18 @@
  * 
  */
 $(function () {
-    $(".selectpicker").selectpicker("refresh");
 
     // Method to render tesco care label orders page
     renderTescoCareOrders = (role, size_id, size_category, size_category_text) => {
         user_role = role;
-        $('.main-content').load('/' + user_role + '/tesco/care-label-orders');
-        $('li.year-nav-menu').addClass('hidden');
-        $('li.buyer-nav-menu').addClass('hidden');
 
-        getSizechart(size_id, size_category, size_category_text, user_role);
+        $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
+            $(".selectpicker").selectpicker("refresh");
+            $('li.year-nav-menu').addClass('hidden');
+            $('li.buyer-nav-menu').addClass('hidden');
+
+            getSizechart(size_id, size_category, size_category_text, user_role);
+        });
 
     }
 
@@ -116,14 +118,10 @@ $(function () {
         $('#tesco_care_label_order_form').validator('update');
     }
 
-    $('#add_garment_component_btn').click(function () {
-        addComponent(this);
-    });
-
     // Method to add dynamic garment component
-    addComponent = (obj) => {
+    addComponent = (obj, user) => {
         $.ajax({
-            url: base_url + "/" + user_role + "/tesco/care-label-fiber-components",
+            url: base_url + "/" + user + "/tesco/care-label-fiber-components",
             type: "get",
             dataType: "json",
             data: {
@@ -158,7 +156,7 @@ $(function () {
                                                         <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber_` + component_count + `[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
-                            garment_comp_div += `<option value=` + item + `>` + item + `</option>`;
+                            garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
                         });
                         garment_comp_div += `</select>
                                                     </div>
@@ -268,8 +266,8 @@ $(function () {
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" type="number" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="number" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
@@ -383,6 +381,9 @@ $(function () {
             type: "post",
             url: base_url + "/" + user_role + "/tesco/submit-care-label-order",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrf_token
+            },
             dataType: "json",
             beforeSend: function () {
                 $(".loader").show();
@@ -390,7 +391,6 @@ $(function () {
             },
             statusCode: {
                 200: function (response) {
-                    console.log(JSON.stringify(response))
 
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
@@ -416,10 +416,6 @@ $(function () {
     }
 
     postLabelOrderSubmit = (data) => {
-
-        // var order_date = data.delivery_date_start;
-        // var delivery_date_req = data.delivery_date_required;
-        // var last_insertions_length = Object.keys(data.last_insertions).length;
 
         // Handle po upload modal button issue after page reloading
         $('.po-submit-btn').text('Save');

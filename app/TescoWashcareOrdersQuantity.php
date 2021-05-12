@@ -17,6 +17,10 @@ class TescoWashcareOrdersQuantity extends Model
         'selected_secondary_sizes'
     ];
 
+    protected $casts = [
+        'selected_secondary_sizes' => 'array',
+    ];
+
     /**
      * Get the order that owns the quantity details.
      */

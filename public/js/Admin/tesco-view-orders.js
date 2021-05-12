@@ -54,8 +54,10 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber,aWork, style_number, zone) {
+function viewOrder(pNumber,aWork, style_number, zone, orderid) {
     try {
+        is_joint_order = zone === "joint"?true:false;
+        
         $.ajax({
             url: base_url + "/admin/tesco/view-order",
             type: 'POST',
@@ -65,7 +67,7 @@ function viewOrder(pNumber,aWork, style_number, zone) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, "orderid":orderid},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
@@ -100,7 +102,12 @@ function viewOrder(pNumber,aWork, style_number, zone) {
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
                     localStorage.setItem("template_group", group);
-                    createOrders(data.result, "viewOrder");
+                    
+                    if( !is_joint_order) {
+                        createOrders(data.result, "viewOrder");
+                    } else {
+                        renderLabelViewOrderPage(data.result, 'admin')
+                    }
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
@@ -325,6 +332,7 @@ function mapStoredValues(oDetails) {
  * @param  {object} artwork_collection Collection of all orders
  */
 function loadArtworkNames(artwork_collection_style) {
+    
     if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
         var options="<option value=''>Search Artwork</option>";
@@ -338,7 +346,10 @@ function loadArtworkNames(artwork_collection_style) {
             var ratioTHLArtworks = [];
             var singleTHL = [];
             var singleTHLArtworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus;
+            var jointWashcareLabels = [];
+            var jointWashcareLabelArtworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId;
+
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
@@ -376,6 +387,11 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                    default:
+                        jointWashcareLabels.push(templateInfo[1]);
+                        jointWashcareLabelArtworks.push(templateInfo[0]);
+                        jointWashcareLabelsStatus = templateInfo[2];
+                        jointWashcareLabelsId = templateInfo[3];
                 }
             }
             if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
@@ -395,6 +411,11 @@ function loadArtworkNames(artwork_collection_style) {
 
             if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
                 options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                
+            }
+
+            if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
                 
             }
         });

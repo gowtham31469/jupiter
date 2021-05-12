@@ -51,7 +51,7 @@ function tescoOrders(callback) {
 				$(".loader").show();
 			},
 			success: function (data) {
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders)))))));
 				
 				newObj1.sort(function(obj1, obj2) {
 					var date1 =obj1.created_at;
@@ -65,7 +65,10 @@ function tescoOrders(callback) {
 				var UKUniqueNames = [];
 				var CEPOCollection = [];
 				var UKPOCollection = [];
+				var JointUniqueNames = [];
+				var JointPOCollection = [];
 				var artwork_collection = {};
+				var JointOrderIds = [];
 				for (i = 0; i < newObj1.length; i++) {
 					if (newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
 						if (CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
@@ -100,6 +103,14 @@ function tescoOrders(callback) {
 							}
 
 						}
+					} else if (newObj1[i].zone === 'joint' && newObj1[i].uk_style_ref !== null && newObj1[i].ce_style_ref !== null) {
+						
+							JointPOCollection.push(newObj1[i].po_number);
+							JointUniqueNames.push(newObj1[i].uk_style_ref+'/'+newObj1[i].ce_style_ref);
+							JointOrderIds.push(newObj1[i].id);
+							artwork_collection[newObj1[i].id] = {};
+							artwork_collection[newObj1[i].id][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
+						
 					}
 
 				}
@@ -116,6 +127,14 @@ function tescoOrders(callback) {
 					options += "<optgroup label='UK'>";
 					for (i = 0; i < UKUniqueNames.length; i++) {
 						options += "<option data-zone='uk'>" + UKUniqueNames[i] + "</option>";
+					}
+					options += "</optgroup>";
+				}
+
+				if (JointUniqueNames.length > 0) {
+					options += "<optgroup label='Joint'>";
+					for (i = 0; i < JointUniqueNames.length; i++) {
+						options += "<option data-zone='joint' data-orderid ='"+JointOrderIds[i]+"'>" + JointUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
@@ -276,7 +295,8 @@ function tescoOrders(callback) {
 				});
 
 				$('body').on('change', '#po_number', function () {
-					loadArtworkNames(artwork_collection[this.value]);
+					let selected_value = $(this).find(':selected').data('zone') === 'joint' ?$(this).find(':selected').data('orderid'):this.value;
+					loadArtworkNames(artwork_collection[selected_value]);
 				});
 
 				/** [ Load selectpicker ] */
@@ -715,11 +735,12 @@ function tescoOrders(callback) {
 						var style_number = $('#po_number').val();
 						var artwork = $('#artwork_list').find(':selected').text();
 						var zone = $('#po_number').find(':selected').data('zone');
+						var orderid = $('#artwork_list').find(':selected').data('orderid') != undefined?$('#artwork_list').find(':selected').data('orderid'):0;
 						localStorage.setItem('style_number_back',style_number)
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-						viewOrder(po_num, artwork, style_number, zone);
+						viewOrder(po_num, artwork, style_number, zone, orderid);
 					}
 				})
 				callback();
