@@ -24,11 +24,43 @@ class StoreOrderManagementHistory
 
         $order_table_name = $order_data['tesco_label'] === false?"tesco_".strtolower(str_replace(" ","",$template_level->ref))."_orders":$order_data['order_table'];
 
-        $po_upload_status = $order_data['po_status'] === null?null:0;
+        switch ($order_data['po_status']) {
+            case 'PO Pending':
+                $po_upload_status = 0;
+                break;
+            case 'PO Uploaded':
+                $po_upload_status = 1;
+                break;
+            case null:
+                $po_upload_status = null;
+                break;
+            case 'null':
+                $po_upload_status = null;
+                break;
+            default:
+                $po_upload_status = null;
+        }
 
-        $pi_approve_status = $order_data['pi_required'] === null?null:0;
+        switch ($order_data['pi_status']) {
+            case 'PI Approval Pending':
+                $pi_approve_status = 0;
+                break;
+            case 'PI Rejected':
+                $pi_approve_status = 0;
+                break;
+            case 'PI Approved':
+                $pi_approve_status = 1;
+                break;
+            case null:
+                $pi_approve_status = null;
+                break;
+            case 'null':
+                $po_upload_status = null;
+                break;
+            default:
+                $pi_approve_status = null;
+        }
 
-        // order_status = 1 , ID of saved status in order_status table.
         OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_data['order_id'] ],[
             'buyer_id'                  => $tesco_buyer_id->id,
             'season'                    => $order_data['season_code'],

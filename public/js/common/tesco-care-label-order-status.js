@@ -130,7 +130,7 @@ $( () => {
             <div class="col-xs-12">
                 <div class="form-group has-feedback">
                     <label for="tesco_care_garment_component_`+component_index+`" class="component-label">Garment Component </label>
-                    <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_component_`+component_index+`" name="tesco_care_garment_component_`+component_index+`" name="tesco_care_garment_component[]">
+                    <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_component_`+component_index+`"  name="tesco_care_garment_component[]">
                         <option value="">-- Select Garment Component --</option>`;
                         $.each(order_data.metadata.components, function (id, name) {
 
@@ -282,7 +282,13 @@ $( () => {
     }
 
     updateCarelabelOrder = () => {
-        var formData = $('#update_tesco_label_order_status_form').serialize();
+
+        var form_obj = [{
+            "order_id": $('#label_order_id').val(),
+            "template_id": $('#label_template_id').val(),
+        }];
+
+        var formData = $('#update_tesco_label_order_status_form').serialize() + '&' + $.param(form_obj[0]);
 
         $.ajax({
             type: "put",
@@ -300,9 +306,7 @@ $( () => {
                 200: function (response) {
 
                     $('#edit_label_order_result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been updated successfully</div>');
-
-                    $('.edit-label-order-panel').removeClass('active');
-                    location.reload()
+                    $(".loader").hide();
                 },
                 400: function (error) {
                     $('#edit_label_order_result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');

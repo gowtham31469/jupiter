@@ -48,45 +48,7 @@ class StoreTescoLabelOrder
 
         $delivery_date_start     = Carbon::now('Asia/Kolkata')->addDay($customer_data['day_count']);
 
-        $country_translation = DB::table('tesco_countries')
-        ->where('id', $request->tesco_care_coo)
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get();
-
-        $kids_warning_translation = DB::table('tesco_kids_warning_statements')
-        ->where('id', $request->tesco_care_kids_warning)
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get();
-
-        $additional_text_1 = !is_null($request->tesco_care_additional_instruction_1)?DB::table('tesco_care_additional_instructions')
-        ->where('id', $request->tesco_care_additional_instruction_1)
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
-        
-        $additional_text_2 = !is_null($request->tesco_care_additional_instruction_2)?DB::table('tesco_care_additional_instructions')
-        ->where('id', $request->tesco_care_additional_instruction_2)
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
-
-        $additional_text_3 = !is_null($request->tesco_care_additional_instruction_3)?DB::table('tesco_care_additional_instructions')
-        ->where('id', $request->tesco_care_additional_instruction_3)
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
-
-        $exclusive_trim = !is_null($request->tesco_care_exclusive_trim)?DB::table('tesco_care_additional_instructions')
-        ->where('english', 'Exclusive of trims')
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
-
-        $non_textile_part = !is_null($request->tesco_care_non_textile_part)?DB::table('tesco_fabriclists')
-        ->where('english', 'Contains non-textile parts of animal origin')
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
-
-        $part_of_set = !is_null($request->tesco_care_part_of_set)?DB::table('tesco_care_additional_instructions')
-        ->where('english', 'part of set')
-        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-        ->get():null;
+        $translation_texts = $this->getTranslationTexts($request);
         
         $insert_data = array(
             'order_id'                       => $order_id,
@@ -103,9 +65,9 @@ class StoreTescoLabelOrder
             'leather_suede_code'             => $request->tesco_care_leather_id,
             'tog'                            => $request->tesco_care_tog,
             'country_of_origin_id'           => $request->tesco_care_coo,
-            'country_of_origin_text'         => $country_translation,
+            'country_of_origin_text'         => $translation_texts['country_translation'],
             'kids_warning_id'                => $request->tesco_care_kids_warning,
-            'kids_warning_text'              => $kids_warning_translation,
+            'kids_warning_text'              => $translation_texts['kids_warning_translation'],
             'primary_size_id'                => $request->primary_size_id,
             'wash_symbol_id'                 => $request->tesco_care_wash_instruction,
             'bleach_symbol_id'               => $request->tesco_care_bleach_instruction,
@@ -125,17 +87,17 @@ class StoreTescoLabelOrder
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
             'order_placed_by'                => $customer_data['created_by'],
-            'exclusive_trims_text'           => $exclusive_trim,
-            'contains_non_textile_part_text' => $non_textile_part,
-            'part_of_set_text'               => $part_of_set,
+            'exclusive_trims_text'           => $translation_texts['exclusive_trim'],
+            'contains_non_textile_part_text' => $translation_texts['non_textile_part'],
+            'part_of_set_text'               => $translation_texts['part_of_set'],
             'is_order_count_empty'           => $is_order_count_empty,
             'order_created_at'               => Carbon::now('Asia/Kolkata')->toDateTimeString(),
             'additional_care_id_1'           => $request->tesco_care_additional_instruction_1,
-            'additional_care_text_1'         => $additional_text_1,
+            'additional_care_text_1'         => $translation_texts['additional_text_1'],
             'additional_care_id_2'           => $request->tesco_care_additional_instruction_2,
-            'additional_care_text_2'         => $additional_text_2,
+            'additional_care_text_2'         => $translation_texts['additional_text_2'],
             'additional_care_id_3'           => $request->tesco_care_additional_instruction_3,
-            'additional_care_text_3'         => $additional_text_3,
+            'additional_care_text_3'         => $translation_texts['additional_text_3'],
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;
@@ -156,63 +118,11 @@ class StoreTescoLabelOrder
 
         TescoWashcareOrdersQuantity::insert($qty_data);
 
-        $tesco_care_garment_component = $request->tesco_care_garment_component;
+        $request->merge([
+            'order_id' => $washcare_order_id,
+        ]);
 
-        $fiber_total_percentage = $request->fiber_total_percentage;
-       
-        for($component_index = 0; $component_index < count($tesco_care_garment_component); $component_index++)
-        {
-
-            if(is_null($tesco_care_garment_component[$component_index]) && ( is_null($fiber_total_percentage[$component_index]) || $fiber_total_percentage[$component_index] === 0  ) ) {
-
-                continue;
-
-            }
-            
-            $component_text = DB::table('tesco_components')
-            ->where('id', $tesco_care_garment_component[$component_index])
-            ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-            ->get();
-            
-            $garment_comp_id = TescoWashcareOrdersComponentMapping::create([
-                'washcare_order_id' => $washcare_order_id,
-                'garment_component_id'   => $tesco_care_garment_component[$component_index],
-                'garment_component_text'   => $component_text,
-                'total_composition_percentage' => $fiber_total_percentage[$component_index]
-            ])->id;
-            
-            $fiber_array_name = 'tesco_care_fiber_'.($component_index+1);
-            $tesco_care_fiber = $request->$fiber_array_name;
-            
-            $individual_per_array_name = 'fiber_individual_percentage_'.($component_index+1);
-            $fiber_individual_percentage = $request->$individual_per_array_name;
-
-            $fiber_data = [];
-            for ($fiber_index=0; $fiber_index < count($tesco_care_fiber); $fiber_index++) { 
-
-                if(is_null($tesco_care_fiber[$fiber_index]) && ( is_null($fiber_individual_percentage[$fiber_index]) || $fiber_individual_percentage[$fiber_index] === 0  ) ) {
-
-                    continue;
-
-                }
-                
-                $fiber_text = DB::table('tesco_fabriclists')
-                ->where('id', $tesco_care_fiber[$fiber_index])
-                ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
-                ->get();
-                
-                $fiber_data[] = array(
-                    'washcare_component_id' => $garment_comp_id,
-                    'fibre_composition_id'   => $tesco_care_fiber[$fiber_index],
-                    'fibre_composition_text'   => $fiber_text,
-                    'fibre_composition_percentage' => $fiber_individual_percentage[$fiber_index]
-                );
-
-            }
-
-            TescoWashcareOrdersComponentFibreMapping::insert($fiber_data);
-            
-        }
+        $this->storeGarmentComponents($request);
 
         /** Insert order data into history table */
         $order_data = [];
@@ -225,7 +135,7 @@ class StoreTescoLabelOrder
         $order_data['template_id'] = $request->template_id;
         $order_data['order_id'] = $washcare_order_id;
         $order_data['po_status'] = $po_status;
-        $order_data['pi_required'] = $customer_data['pi_required'];
+        $order_data['pi_status'] = $pi_status;
         $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
         $order_data['edit_permission'] = $edit_permission;
         $order_data['tesco_label'] = true;
@@ -298,6 +208,116 @@ class StoreTescoLabelOrder
         }
 
         return $customer_data;
+     }
+
+
+     public function getTranslationTexts($request)
+     {
+         $translations = [];
+
+         $translations['country_translation'] = DB::table('tesco_countries')
+        ->where('id', $request->tesco_care_coo)
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get();
+
+        $translations['kids_warning_translation'] = DB::table('tesco_kids_warning_statements')
+        ->where('id', $request->tesco_care_kids_warning)
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get();
+
+        $translations['additional_text_1'] = !is_null($request->tesco_care_additional_instruction_1)?DB::table('tesco_care_additional_instructions')
+        ->where('id', $request->tesco_care_additional_instruction_1)
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+        
+        $translations['additional_text_2'] = !is_null($request->tesco_care_additional_instruction_2)?DB::table('tesco_care_additional_instructions')
+        ->where('id', $request->tesco_care_additional_instruction_2)
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+
+        $translations['additional_text_3'] = !is_null($request->tesco_care_additional_instruction_3)?DB::table('tesco_care_additional_instructions')
+        ->where('id', $request->tesco_care_additional_instruction_3)
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+
+        $translations['exclusive_trim'] = !is_null($request->tesco_care_exclusive_trim)?DB::table('tesco_care_additional_instructions')
+        ->where('english', 'Exclusive of trims')
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+
+        $translations['non_textile_part'] = !is_null($request->tesco_care_non_textile_part)?DB::table('tesco_fabriclists')
+        ->where('english', 'Contains non-textile parts of animal origin')
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+
+        $translations['part_of_set'] = !is_null($request->tesco_care_part_of_set)?DB::table('tesco_care_additional_instructions')
+        ->where('english', 'part of set')
+        ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+        ->get():null;
+
+        return $translations;
+
+     }
+
+     public function storeGarmentComponents($request)
+     {
+        $tesco_care_garment_component = $request->tesco_care_garment_component;
+
+        $fiber_total_percentage = $request->fiber_total_percentage;
+       
+        for($component_index = 0; $component_index < count($tesco_care_garment_component); $component_index++)
+        {
+
+            if(is_null($tesco_care_garment_component[$component_index]) && ( is_null($fiber_total_percentage[$component_index]) || $fiber_total_percentage[$component_index] === 0  ) ) {
+
+                continue;
+
+            }
+            
+            $component_text = DB::table('tesco_components')
+            ->where('id', $tesco_care_garment_component[$component_index])
+            ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+            ->get();
+            
+            $garment_comp_id = TescoWashcareOrdersComponentMapping::create([
+                'washcare_order_id' => $request->order_id,
+                'garment_component_id'   => $tesco_care_garment_component[$component_index],
+                'garment_component_text'   => $component_text,
+                'total_composition_percentage' => $fiber_total_percentage[$component_index]
+            ])->id;
+            
+            $fiber_array_name = 'tesco_care_fiber_'.($component_index+1);
+            $tesco_care_fiber = $request->$fiber_array_name;
+            
+            $individual_per_array_name = 'fiber_individual_percentage_'.($component_index+1);
+            $fiber_individual_percentage = $request->$individual_per_array_name;
+
+            $fiber_data = [];
+            for ($fiber_index=0; $fiber_index < count($tesco_care_fiber); $fiber_index++) { 
+
+                if(is_null($tesco_care_fiber[$fiber_index]) && ( is_null($fiber_individual_percentage[$fiber_index]) || $fiber_individual_percentage[$fiber_index] === 0  ) ) {
+
+                    continue;
+
+                }
+                
+                $fiber_text = DB::table('tesco_fabriclists')
+                ->where('id', $tesco_care_fiber[$fiber_index])
+                ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+                ->get();
+                
+                $fiber_data[] = array(
+                    'washcare_component_id' => $garment_comp_id,
+                    'fibre_composition_id'   => $tesco_care_fiber[$fiber_index],
+                    'fibre_composition_text'   => $fiber_text,
+                    'fibre_composition_percentage' => $fiber_individual_percentage[$fiber_index]
+                );
+
+            }
+
+            TescoWashcareOrdersComponentFibreMapping::insert($fiber_data);
+            
+        }
      }
 
 }
