@@ -301,12 +301,15 @@ $( () => {
             beforeSend: function () {
                 $(".loader").show();
                 $('#submit_label_order_btn').prop('disabled', true);
+                $('#update_tesco_label_order_status_form input').prop('disabled', 'true');
+                $('.selectpicker').prop('disabled', true);
+                $(".selectpicker").selectpicker("refresh");
             },
             statusCode: {
                 200: function (response) {
 
                     $('#edit_label_order_result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been updated successfully</div>');
-                    $(".loader").hide();
+                    
                 },
                 400: function (error) {
                     $('#edit_label_order_result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
@@ -319,6 +322,15 @@ $( () => {
                     $('#edit_label_order_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
                     $(window).scrollTop(0);
                 }
+            },
+            complete: function () {
+                
+                $(".loader").hide();
+
+                $("#alert_success").fadeTo(2000, 500).slideUp(500, function () {
+                    $("#alert_success").slideUp(500);
+                });
+                
             }
         });
     }

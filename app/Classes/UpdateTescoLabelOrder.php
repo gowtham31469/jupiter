@@ -1,40 +1,40 @@
 <?php
+
 namespace App\Classes;
+
 use DB;
-use Auth;
 
 use App\TescoWashcareOrders;
 use App\TescoWashcareOrdersQuantity;
-use App\TescoWashcareOrdersComponentFibreMapping;
 use App\TescoWashcareOrdersComponentMapping;
-use Carbon\Carbon;
 use App\Classes\StoreOrderManagementHistory;
 use App\Classes\StoreTescoLabelOrder;
+
 /**
  * Class to update tesco label orders
  * @author Praveen
  */
-class UpdateTescoLabelOrder 
+class UpdateTescoLabelOrder
 {
 
-     public function updateTescoLabelOrder($request, $role)
-     {
+    public function updateTescoLabelOrder($request, $role)
+    {
         $order_history_obj = new StoreOrderManagementHistory();
 
         $store_order_obj = new StoreTescoLabelOrder();
 
         $customer_data = $store_order_obj->getCustomerDetails($request->tesco_care_supplier, $role);
-       
+
         $total_qty = array_sum($request->quantity);
 
-        $is_order_count_empty = $total_qty > 0?0:1;
+        $is_order_count_empty = $total_qty > 0 ? 0 : 1;
 
-        $order_status  = $is_order_count_empty === 1?'Order Pending':'Order Placed';
+        $order_status  = $is_order_count_empty === 1 ? 'Order Pending' : 'Order Placed';
 
-        $edit_permission  = $is_order_count_empty === 1?1:0;
+        $edit_permission  = $is_order_count_empty === 1 ? 1 : 0;
 
         $translation_texts = $store_order_obj->getTranslationTexts($request);
-        
+
         $insert_data = array(
             'po_number'                      => $request->tesco_care_po,
             'uk_style_ref'                   => $request->tesco_care_uk_style,
@@ -54,12 +54,12 @@ class UpdateTescoLabelOrder
             'dry_symbol_id'                  => $request->tesco_care_dry_instruction,
             'ironing_symbol_id'              => $request->tesco_care_iron_instruction,
             'dryclean_symbol_id'             => $request->tesco_care_dry_clean_instruction,
-            'include_btn_sew_space'          => !is_null($request->tesco_care_button_space)?$request->tesco_care_button_space:0,
-            'exclusive_trims'                => !is_null($request->tesco_care_exclusive_trim)?$request->tesco_care_exclusive_trim:0,
-            'contains_non_textile_part'      => !is_null($request->tesco_care_non_textile_part)?$request->tesco_care_non_textile_part:0,
-            'part_of_set'                    => !is_null($request->tesco_care_part_of_set)?$request->tesco_care_part_of_set:0,
-            'bs_en_declaration'              => !is_null($request->tesco_care_bs_en)?$request->tesco_care_bs_en:0,
-            'baby_sleeping_bag_symbol'       => !is_null($request->tesco_care_sleep_bag_symbol)?$request->tesco_care_sleep_bag_symbol:0,
+            'include_btn_sew_space'          => !is_null($request->tesco_care_button_space) ? $request->tesco_care_button_space : 0,
+            'exclusive_trims'                => !is_null($request->tesco_care_exclusive_trim) ? $request->tesco_care_exclusive_trim : 0,
+            'contains_non_textile_part'      => !is_null($request->tesco_care_non_textile_part) ? $request->tesco_care_non_textile_part : 0,
+            'part_of_set'                    => !is_null($request->tesco_care_part_of_set) ? $request->tesco_care_part_of_set : 0,
+            'bs_en_declaration'              => !is_null($request->tesco_care_bs_en) ? $request->tesco_care_bs_en : 0,
+            'baby_sleeping_bag_symbol'       => !is_null($request->tesco_care_sleep_bag_symbol) ? $request->tesco_care_sleep_bag_symbol : 0,
             'order_status'                   => $order_status,
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
@@ -77,8 +77,7 @@ class UpdateTescoLabelOrder
 
         TescoWashcareOrders::where(['id' => $request->order_id])->update($insert_data);
 
-        for($qty_index = 0; $qty_index < count($request->uk_ean); $qty_index++)
-        {
+        for ($qty_index = 0; $qty_index < count($request->uk_ean); $qty_index++) {
 
             $qty_data = array(
                 'uk_ean'                   => $request->uk_ean[$qty_index],
@@ -89,13 +88,14 @@ class UpdateTescoLabelOrder
             TescoWashcareOrdersQuantity::where([
                 'id' => $request->secondary_size_id[$qty_index]
             ])
-            ->update($qty_data);
-
+                ->update($qty_data);
         }
 
         TescoWashcareOrdersComponentMapping::where('washcare_order_id', $request->order_id)->delete();
 
         $store_order_obj->storeGarmentComponents($request);
+
+        $current_pi_po_status = DB::table('tesco_washcare_orders')->where(['id' => $request->order_id])->select('po_status', 'pi_status')->first();
 
         /** Insert order data into history table */
         $order_data = [];
@@ -107,9 +107,9 @@ class UpdateTescoLabelOrder
         $order_data['customer_id'] = $customer_data['customer_id'];
         $order_data['template_id'] = $request->template_id;
         $order_data['order_id'] = $request->order_id;
-        $order_data['po_status'] = null;
-        $order_data['pi_status'] = $customer_data['pi_required'];
-        $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
+        $order_data['po_status'] = $current_pi_po_status->po_status;
+        $order_data['pi_status'] = $current_pi_po_status->pi_status;
+        $order_data['order_status_id'] = $order_status === 'Order Pending' ? 6 : 2;
         $order_data['edit_permission'] = $edit_permission;
         $order_data['tesco_label'] = true;
         $order_data['order_table'] = "tesco_washcare_orders";
@@ -117,7 +117,5 @@ class UpdateTescoLabelOrder
         $order_history_obj->storeOrdersHistory($order_data);
 
         return 'success';
-
-     }
-
+    }
 }
