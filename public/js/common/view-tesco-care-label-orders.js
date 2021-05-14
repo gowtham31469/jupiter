@@ -87,7 +87,7 @@ $( () => {
 
             quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value=` + valueOfElement.uk_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value=` + valueOfElement.ce_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." required disabled><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
                                         </tr>`;
         });

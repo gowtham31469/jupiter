@@ -968,7 +968,7 @@ class ReorderController extends Controller
 	  
 			$order_data['po_status'] = $po_status;
 	  
-			$order_data['pi_required'] = $pi_status;
+			$order_data['pi_status'] = $pi_status;
 	  
 			$order_data['order_status_id'] = 2;
 	  
@@ -1391,7 +1391,7 @@ class ReorderController extends Controller
 	  
 			$order_data['po_status'] = $po_status;
 	  
-			$order_data['pi_required'] = $pi_status;
+			$order_data['pi_status'] = $pi_status;
 	  
 			$order_data['order_status_id'] = 2;
 	  
