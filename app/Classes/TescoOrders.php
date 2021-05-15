@@ -115,7 +115,7 @@ class TescoOrders
 
           $order_data['po_status'] = $po_status;
 
-          $order_data['pi_required'] = $pi_required;
+          $order_data['pi_status'] = $pi_status;
 
           $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
 

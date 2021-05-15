@@ -7,7 +7,7 @@ $(function () {
 
     // Method to render tesco care label orders page
     renderTescoCareOrders = (role, size_id, size_category, size_category_text) => {
-        user_role = role;
+        user_role = role.toLowerCase();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
@@ -119,7 +119,7 @@ $(function () {
     }
 
     // Method to add dynamic garment component
-    addComponent = (obj, user) => {
+    addComponent = (obj, user, form_id) => {
         $.ajax({
             url: base_url + "/" + user + "/tesco/care-label-fiber-components",
             type: "get",
@@ -192,7 +192,7 @@ $(function () {
                     $(obj).attr("data-id", component_count);
 
                     $(".selectpicker").selectpicker("refresh");
-                    $('#tesco_care_label_order_form').validator('update');
+                    $('#'+form_id).validator('update');
                 }
             }
         });
@@ -266,8 +266,8 @@ $(function () {
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" required><div class="help-block with-errors"></div></div></td>
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" type="number" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="number" required><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
@@ -286,10 +286,11 @@ $(function () {
     }
 
     // Get MOQ value based on supplier value.
-    $('#tesco_care_supplier').on('change', function () {
+    getMoq = (user_role, crud_type) => {
         var supplier_id = $('#tesco_care_supplier option:selected').val();
         var buyer_id = localStorage.getItem("buyer_id");
-        var templates = localStorage.getItem("templates");
+        var template_id = crud_type === 'create'?localStorage.getItem("templates"):$('#label_template_id').val();
+        var template_name = crud_type === 'create'?localStorage.getItem("template_group"):$('#label_template_name').val();
 
         if (supplier_id != '') {
 
@@ -300,7 +301,7 @@ $(function () {
                 data: {
                     supplier: supplier_id,
                     buyer_id: buyer_id,
-                    templates: templates
+                    templates: template_id
                 },
                 tryCount: 0,
                 retryLimit: 2,
@@ -316,8 +317,8 @@ $(function () {
                     $('.help-block').html('');
                     /** [ Dynamic moq value assignment on supplier change ] */
                     $('.label-quantity-field').each(function () {
-                        $(this).attr("min", data.moq[0][localStorage.getItem("template_group")]);
-                        $(this).data("min-error", "Qty should be >= " + data.moq[0][localStorage.getItem("template_group")]);
+                        $(this).attr("min", data.moq[0][template_name]);
+                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template_name]);
                     });
 
                 },
@@ -352,13 +353,11 @@ $(function () {
             });
 
         }
-    });
+    }
 
 
     // Method to validate and submit tesco care label orders
-    submitTescoCareLabelOrder = () => {
-        $('#tesco_care_label_order_form').validator('validate');
-
+    validateTescoCareLabelOrder = () => {
         /** [ bootstrap validator for create tesco order form ] **/
         $('#tesco_care_label_order_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
@@ -381,6 +380,9 @@ $(function () {
             type: "post",
             url: base_url + "/" + user_role + "/tesco/submit-care-label-order",
             data: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrf_token
+            },
             dataType: "json",
             beforeSend: function () {
                 $(".loader").show();
@@ -413,10 +415,6 @@ $(function () {
     }
 
     postLabelOrderSubmit = (data) => {
-
-        // var order_date = data.delivery_date_start;
-        // var delivery_date_req = data.delivery_date_required;
-        // var last_insertions_length = Object.keys(data.last_insertions).length;
 
         // Handle po upload modal button issue after page reloading
         $('.po-submit-btn').text('Save');

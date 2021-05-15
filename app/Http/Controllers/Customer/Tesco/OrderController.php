@@ -2407,7 +2407,7 @@ class OrderController extends Controller
             }
         } else {
 
-          $data['tesco_washcare_orders']  = TescoWashcareOrders::with([
+          $data['order_details']  = TescoWashcareOrders::with([
             'quantities',
             'garment_components'
           ])

@@ -3334,7 +3334,7 @@ class OrderManagementCntrl extends Controller
 
       $order_data['po_status'] = $po_status;
 
-      $order_data['pi_required'] = $pi_status;
+      $order_data['pi_status'] = $pi_status;
 
       $order_data['order_status_id'] = 2;
 
@@ -3750,7 +3750,7 @@ class OrderManagementCntrl extends Controller
 
       $order_data['po_status'] = $po_status;
 
-      $order_data['pi_required'] = $pi_status;
+      $order_data['pi_status'] = $pi_status;
 
       $order_data['order_status_id'] = 2;
 
@@ -3906,7 +3906,7 @@ class OrderManagementCntrl extends Controller
           }
         } else {
 
-            $data['tesco_washcare_orders']  = TescoWashcareOrders::with([
+            $data['order_details']  = TescoWashcareOrders::with([
               'quantities',
               'garment_components'
             ])
