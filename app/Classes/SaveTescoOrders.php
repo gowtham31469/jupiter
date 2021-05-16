@@ -1,14 +1,6 @@
 <?php
 namespace App\Classes;
 use DB;
-use App\TescoTCL1Orders;
-use App\TescoTCL2Orders;
-use App\TescoTCL4Orders;
-use App\TescoTHL1Orders;
-use App\TescoTHL3Orders;
-use App\TescoTSL1Orders;
-use App\TescoTSL3Orders;
-use App\OrderManagementHistory;
 use App\Classes\StoreOrderManagementHistory;
 /**
  * Class to save the tesco template orders
@@ -99,7 +91,7 @@ class SaveTescoOrders
 
           $order_data['po_status'] = null;
 
-          $order_data['pi_required'] = null;
+          $order_data['pi_status'] = null;
 
           $order_data['order_status_id'] = 1;
 

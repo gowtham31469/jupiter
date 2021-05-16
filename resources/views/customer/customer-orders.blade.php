@@ -788,6 +788,7 @@ background: rgba(0,0,0,0.2);
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
+<script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>

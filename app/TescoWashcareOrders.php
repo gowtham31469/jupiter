@@ -128,12 +128,22 @@ class TescoWashcareOrders extends Model
             ->select([
                 'tesco_washcare_orders_quanty.id',
                 'washcare_order_id',
-                'uk_ean', 'ce_ean',
+                'uk_ean', 
+                'ce_ean',
                 'quantity as count',
                 'selected_secondary_sizes',
                 'uk_size as size',
                 'ce_size',
-                'department_title'
+                'department_title',
+                'tesco_primary_size.id as size_id'
             ]);
+    }
+
+    /**
+     * Get the garment components and fiber compositions for the order.
+     */
+    public function garment_components()
+    {
+        return $this->hasMany('App\TescoWashcareOrdersComponentMapping', 'washcare_order_id')->with(['fibers']);
     }
 }

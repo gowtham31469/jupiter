@@ -9,35 +9,25 @@ use DB;
 use Auth;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
-use App\Classes\CancelTescoOrders;
+use App\Classes\UpdateTescoLabelOrder;
 
-use App\TescoCareSymbols;
-use App\TescoComponents;
-use App\TescoCountries;
-use App\TescoFabricLists;
-use App\TescoKidsWarningStatements;
 use App\TescoPrimarySize;
-use App\TescoSecondarySizeCategory;
-use App\TescoSecondarySizeChart;
-use App\TescoWashcareOrders;
-use App\TescoWashcareOrdersQuantity;
-use App\TescoWashcareOrdersComponentFibreMapping;
-use App\TescoWashcareOrdersComponentMapping;
-use App\OrderManagementHistory;
-use App\FinancialYearResetDate;
 use App\Http\Requests\SubmitTescoLabelOrder;
 
 class CustomerCareLabelOrdersController extends Controller
 {
     private $storeorder;
     private $caremeta;
+    private $updateLabelOrder;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder)
     {
 
         $this->caremeta = $caremeta;
 
         $this->storeorder = $storeorder;
+
+        $this->updateLabelOrder = $updateLabelOrder;
     }
 
     public function index()
@@ -189,6 +179,22 @@ class CustomerCareLabelOrdersController extends Controller
             $request->validated();
 
             $response = $this->storeorder->storeTescoLabelOrder($request, 'customer');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => $response
+            ], 200);
+        }
+    }
+
+    public function updateCareLabelOrder(SubmitTescoLabelOrder $request)
+    {
+
+        if ($request->ajax()) {
+
+            $request->validated();
+            
+            $response = $this->updateLabelOrder->updateTescoLabelOrder($request, 'admin');
 
             return response()->json([
                 'message' => 'success',
