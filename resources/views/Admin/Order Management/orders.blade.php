@@ -822,7 +822,7 @@ input[type="number"] {
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelCareLabelOrder()'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelCareLabelOrder("admin")'] ) !!}
                    </div>
            </div>
        </div>

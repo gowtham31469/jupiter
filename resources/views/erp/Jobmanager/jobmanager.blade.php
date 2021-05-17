@@ -843,37 +843,11 @@ $(document).ready(function() {
         $(this).blur();
     });
 	localStorage.removeItem('file_path')
-	/** reset all filters  **/
-	$('#erp_id_filter').val('').change();
-	$('#customer_name_filter').val('').change();
-	$('#po_number_filter').val('').change();
-	$('#style_number_filter').val('').change();
-	$('#ref_number_filter').val('').change();
-	$('#delivery_date_filter').val('').change();
 
-	/** [ Refresh  bootstrap selectpicker ] */
-	$('#erp_id_filter').selectpicker('val', 1);
-	$('#erp_id_filter').selectpicker('refresh');
-
-	$('#customer_name_filter').selectpicker('val', 1);
-	$('#customer_name_filter').selectpicker('refresh');
-
-	$('#po_number_filter').selectpicker('val', 1);
-	$('#po_number_filter').selectpicker('refresh');
-
-	$('#style_number_filter').selectpicker('val', 1);
-	$('#style_number_filter').selectpicker('refresh');
-
-	$('#ref_number_filter').selectpicker('val', 1);
-	$('#ref_number_filter').selectpicker('refresh');
-
-	$('#delivery_date_filter').selectpicker('val', 1);
-	$('#delivery_date_filter').selectpicker('refresh');
-
-	$('#finish_type').selectpicker('refresh');
-	$('#teeth_no').selectpicker('refresh');
-	$('#machine').selectpicker('refresh');
-	$('#disp_mode').selectpicker('refresh');
+	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').val('');
+	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('val', 1);
+	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('refresh');
+	$('#finish_type, #teeth_no, #machine, #disp_mode').selectpicker('refresh');
 
 	/** [ Toggle bootstrap tooltip ] */
 	$('.preview-pdf').tooltip('show');
