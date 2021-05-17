@@ -42,6 +42,7 @@ Route::get('delete_now', function () {
     dd(App\OrchestraTemplate::where('item_id',60)->first());
 });
 
+Route::view('test','test_blade');
 
 // Auth::routes();
 
@@ -451,6 +452,9 @@ Route::put('admin/tesco/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@c
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
+//Repeat Order
+Route::post('admin/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder');
+Route::get('admin/getReorderDetails/{id}', ['as'=>'getReorderDetails','uses'=>'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder']);
 //Reorder
 
 Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');

@@ -281,6 +281,25 @@ function repeatordertescoartworks() {
 	}
 }
 
+
+function extraQuantityTesco_repeatOrder(type, id, name, zone, po_number, liid) 
+{
+	$.ajax({
+		type : 'post',
+		url : '{{URL::to('triggerNotification')}}',
+		data: {
+			
+		},
+
+		success:function(data)
+		{
+			
+		}
+	});
+}
+
+
+
 /**
  * This Function is used to get the artwork and quantity information.
  *

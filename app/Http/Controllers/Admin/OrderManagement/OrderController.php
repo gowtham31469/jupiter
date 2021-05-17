@@ -15,6 +15,7 @@ use App\Classes\Dashboard;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
 use Session;
+use App\Classes\TescoCareMetadata;
 
 class OrderController extends Controller
 {
@@ -420,7 +421,7 @@ class OrderController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	
-    public function orders()
+    public function orders(TescoCareMetadata $caremeta)
     {
         $module_var = new Modules();
         $is_allowed = $module_var->permittedModules();
@@ -434,7 +435,27 @@ class OrderController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+
+            $symbols = $caremeta->getCareMetadata()['symbols'];
+
+            $coo = $caremeta->getCareMetadata()['coo'];
+
+            $kids_warning = $caremeta->getCareMetadata()['kids_warning'];
+
+            $components = $caremeta->getCareMetadata()['components'];
+
+            $fabriclists = $caremeta->getCareMetadata()['fabriclists'];
+
+            $tesco_suppliers = $caremeta->getCareMetadata()['tesco_suppliers'];
+
+            $additional_instructions = $caremeta->getCareMetadata()['additional_instructions'];
+
+            return view('Admin/Order Management/orders',['buyers' => $buyers,
+            	'buyer_count' => $buyer_count,'symbols' => $symbols,
+            	'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
+            	'kids_warning' => $kids_warning,'components' => $components,
+            	'fabriclists' => $fabriclists,
+                'additional_instructions' => $additional_instructions]);
         }
         else
         {
