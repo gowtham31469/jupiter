@@ -211,7 +211,7 @@ class ErpOrders
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype
-		$unique_id = 'ERP-' . str_replace(' ', '-', $orders->item_name) . '-' . $erp_order->id . '-' . $style_no . '-' . $orders->po_number . '-' . $orders->order_flag;
+		$unique_id = 'ERP-' . str_replace(' ', '-', $orders->template->item_name) . '-' . $erp_order->id . '-' . $style_no . '-' . $orders->po_number . '-' . $orders->order_flag;
 
 		foreach ($orders->quantities as $key => $value) {
 

@@ -2,8 +2,8 @@ $( () => {
     const table_name = 'tesco_washcare_orders';
     
     viewOrderDetailsPanel = (order_data, user_role) => {
-        user_type = user_role.toLowerCase();
-        console.log(order_data);
+        var user_type = user_role.toLowerCase();
+        
         $('.garment-component-div, .label-metadata-select, .teasco-care-quantity-div').html('');
 
         var metadata_select_div = ` <div class="form-group has-feedback">
@@ -193,7 +193,7 @@ $( () => {
         $('#label_template_name').val(order_data.tesco_item_master[0].item_name);
         $('.label-order-details').text(" Order Details - " + order_data.tesco_item_master[0].item_name);
 
-        var footer_btn = `<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit_label_order_btn" type="submit" disabled="true" onclick="validateTescoLabelOrder()">Submit</button>
+        var footer_btn = `<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit_label_order_btn" type="submit" disabled="true" onclick="validateTescoLabelOrder('`+user_type+`')">Submit</button>
         <button class="btn btn-warning  pull-right input-sm" id="edit_label_order_btn" style="width: 55px;margin-left: 10px;" onclick="editLabelOrder()" type="button">Edit</button>
         <button class="btn btn-success  pull-right input-sm hidden" id="enable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick =enableArtworkEdit("`+ table_name +`","` + order_data.order_details.id +`")>Enable Edit</button>
         <button class="btn btn-danger pull-right input-sm hidden" id="disable_edit" style="width: 82px;margin-left: 10px;" type="button" onclick = disableArtworkEdit("`+ table_name +`","` + order_data.order_details.id +`")>Disable Edit</button>
@@ -268,7 +268,7 @@ $( () => {
         $('#update_tesco_label_order_status_form').validator('update');
     }
 
-    validateTescoLabelOrder = () => {
+    validateTescoLabelOrder = (user_role) => {
 
         $('#update_tesco_label_order_status_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
@@ -276,12 +276,12 @@ $( () => {
             } else {
                 e.preventDefault();
                 $('#submit_label_order_btn').prop('disabled',true)
-                updateCarelabelOrder();
+                updateCarelabelOrder(user_role);
             }
         })
     }
 
-    updateCarelabelOrder = () => {
+    updateCarelabelOrder = (user_role) => {
 
         var form_obj = [{
             "order_id": $('#label_order_id').val(),
@@ -292,7 +292,7 @@ $( () => {
 
         $.ajax({
             type: "put",
-            url: base_url + "/" + user_type + "/tesco/update-care-label-order",
+            url: base_url + "/" + user_role + "/tesco/update-care-label-order",
             data: formData,
             headers: {
                 'X-CSRF-TOKEN': csrf_token

@@ -296,7 +296,7 @@
 <div class="modal-footer"> 
     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
         page.</span> 
-        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder()"><i class="fa fa-floppy-o"
+        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder('admin')"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
