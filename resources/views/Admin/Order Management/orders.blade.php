@@ -695,6 +695,8 @@ input[type="number"] {
 
             <div class="merchandiser-area">
                 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <input type="hidden" id="order_type" name="order_type" value="repeatOrder">
+                <input type="hidden" id="primary_size_id" name="primary_size_id" value="">
                 <span id="result"></span>
                 <div class="row">
                     <div class="col-md-2">
@@ -953,7 +955,7 @@ input[type="number"] {
 
 
                 <div class="buttons pull-right" style="margin-top:10px;">
-                    <button style="margin-left: 10px;" class="btn btn-primary pull-right" type="submit" onclick="validateTescoCareLabelOrder()">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button>
+                    <button style="margin-left: 10px;" class="btn btn-primary pull-right" type="submit" onclick="validateTescoCareLabelOrder('admin')">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button>
                 </div>
             </div>
         </div>

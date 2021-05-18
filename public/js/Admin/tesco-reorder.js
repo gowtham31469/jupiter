@@ -485,8 +485,11 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
 		},
 		success: function (data) {
 			// alert('rt')
-			console.log(data.composition.length)
+			// console.log(data.composition.length)
 			console.log(data)
+			$("#primary_size_id").val(data.orders[0]['primary_size_id'])
+			localStorage.removeItem("templates");
+			localStorage.setItem("templates", data.orders[0]['template_id']);
 
 			var quantity_html = `<div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
@@ -503,6 +506,7 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
                                             <tbody>`;
 
                 size_array = [];
+                console.log(data.tesco_sizelists)
                 $.each(data.tesco_sizelists, function (indexInArray, valueOfElement) {
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
