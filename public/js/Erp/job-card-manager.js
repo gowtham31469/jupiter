@@ -434,7 +434,7 @@ function generateJobcard(){
                                                             total += parseInt(row.order_quantity);
                                                             let buyer_po_number = (row.buyer_po_number === null||"") ?'-':row.buyer_po_number;
                                                             let ocn_number = (row.ocn_number === null||"") ?'-':row.ocn_number;
-                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.erp_order_details_id+' data-template-id='+row.template_id+'>\
+                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.id+' data-template-id='+row.template_id+'>\
                                                             <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+''+ratio_pack_type+'</td>\
                                                             <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+buyer_po_number+'</td>\
                                                             <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
@@ -522,7 +522,7 @@ function generateJobcard(){
                                 });
 
                                 single_table_html += '<tr>\
-                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(/ /g, '_')+'">TOTAL</th>';
+                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(/ |\//g, '_')+'">TOTAL</th>';
                                 var total_col = 0;
                                 $.each(erpid.order_data, function(index, common_data){
                                     single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
@@ -530,8 +530,8 @@ function generateJobcard(){
                                     total_col++;
                                 });
                                 
-                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(/ /g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(/ /g, '_')+'"></td>\
+                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(/ |\//g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(/ |\//g, '_')+'"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
@@ -543,23 +543,23 @@ function generateJobcard(){
                                 {
                                     meters_div_html +='<div class="col-md-12">\
                                                 <div class="col-md-3">\
-                                                    <label for="act_excess_'+template_name[0].replace(/ /g, '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(/ /g, '_')+'"></span>\
+                                                    <label for="act_excess_'+template_name[0].replace(/ |\//g, '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(/ |\//g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
-                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(/ /g, '_')+'"></span>\
+                                                    <label for="sticker_mtr_'+template_name[0].replace(/ |\//g, '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(/ |\//g, '_')+'"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback">\
-                                                    <label for="settings_'+template_name[0].replace(/ /g, '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(/ /g, '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(/ /g, '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <label for="settings_'+template_name[0].replace(/ |\//g, '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(/ |\//g, '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(/ |\//g, '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <label for="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                <span id="total_mtrs_'+template_name[0].replace(/ /g, '_')+'" data-tem-ref-name="'+template_name[0].replace(/ /g, '_')+'" class="total-meters"></span>\
+                                                <label for="total_mtrs_'+template_name[0].replace(/ |\//g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
+                                                <span id="total_mtrs_'+template_name[0].replace(/ |\//g, '_')+'" data-tem-ref-name="'+template_name[0].replace(/ |\//g, '_')+'" class="total-meters"></span>\
                                                 </div>\
                                             </div>';
                                 }
@@ -835,7 +835,7 @@ function storeJobcard()
     $('.ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
+        ref_name     = $(this).data('ratio-ref-table').replace(/ |\//g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -876,7 +876,7 @@ function storeJobcard()
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ |\//g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
@@ -1030,20 +1030,20 @@ function storeJobcard()
         erp_order_details_obj = {};
         
         if ($(this).is(':checked')) {
-            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at'); 
-            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type'); 
-            erp_order_details_obj.buyer_po   = $(this).closest('tr').data('buyer-po'); 
-            erp_order_details_obj.refname    = $(this).closest('tr').data('refname'); 
-            erp_order_details_obj.erp_id     = $(this).closest('tr').attr('id');
-            erp_order_details_obj.style_no   = $(this).closest('tr').data('style-no');
-            erp_order_details_obj.temp_file  = $(this).closest('tr').data('template-file');
-			erp_order_details_obj.temp_id  = $(this).closest('tr').data('template-id');
-			erp_order_details_obj.temp_name  = $(this).closest('tr').data('template-name');
-			erp_order_details_obj.disney  = $(this).closest('tr').data('disney');
-			erp_order_details_obj.frontPath  = $(this).closest('tr').data('front-path');
-			erp_order_details_obj.backPath  = $(this).closest('tr').data('back-path');
-			erp_order_details_obj.middlePath  = $(this).closest('tr').data('middle-path');
-            erp_order_details_obj.uuid       = $(this).closest('tr').data('uuid');
+            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at');
+            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type');
+            erp_order_details_obj.buyer_po = $(this).closest('tr').data('buyer-po');
+            erp_order_details_obj.refname = $(this).closest('tr').data('refname');
+            erp_order_details_obj.erp_id = $(this).closest('tr').attr('id');
+            erp_order_details_obj.style_no = $(this).closest('tr').data('style-no');
+            erp_order_details_obj.temp_file = $(this).closest('tr').data('template-file');
+            erp_order_details_obj.temp_id = $(this).closest('tr').data('template-id');
+            erp_order_details_obj.temp_name = $(this).closest('tr').data('template-name');
+            erp_order_details_obj.disney = $(this).closest('tr').data('disney');
+            erp_order_details_obj.frontPath = $(this).closest('tr').data('front-path');
+            erp_order_details_obj.backPath = $(this).closest('tr').data('back-path');
+            erp_order_details_obj.middlePath = $(this).closest('tr').data('middle-path');
+            erp_order_details_obj.uuid = $(this).closest('tr').data('uuid');
 
             jsonArray.push(erp_order_details_obj);
         }
@@ -1343,7 +1343,7 @@ function storeJobcard()
                                 var lastIndex = table.lastIndexOf("_");
 
                                 var template = table.substring(0, lastIndex).replace(',','_');
-                                
+                                console.log(template.replace(/ |\//g, '_'));
                                 //var template = table.split("_");
                                 
                                 single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
@@ -1409,7 +1409,7 @@ function storeJobcard()
                                           table_row++;
                                         });
                                         single_table += '<tr>\
-                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template+'">TOTAL</th>';
+                                                            <th class="highlight_row edit-total-text" data-ref-name="'+template.replace(/ |\//g, '_')+'">TOTAL</th>';
                                         
                                         var qty_total_col = 0;
                                         $.each(table_data.erp_id, function(key, value){
@@ -1418,8 +1418,8 @@ function storeJobcard()
                                             qty_total_col++;
                                         });
                                                             
-                                        single_table += '<td><strong class="edit-total-qty-'+template+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
+                                        single_table += '<td><strong class="edit-total-qty-'+template.replace(/ |\//g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="edit-total-excess-col-table-'+table_count+' edit-total-excess-'+template.replace(/ |\//g, '_')+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
                                                 <td></td>\
                                                 <td></td>\
                                             </tr>\
@@ -1440,23 +1440,23 @@ function storeJobcard()
                     $.each(data.jobcard_data.additional_details, function(key, item){
                         edit_meters_div_html +='<div class="col-md-12">\
                                             <div class="col-md-3">\
-                                                <label for="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
-                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(/ /g, '_')+'">'+item.actual_excess+'</span>\
+                                                <label for="edit_act_excess_'+item.ref_name.replace(/ |\//g, '_')+'" >ACT EXCESS % ('+item.ref_name+'):</label>\
+                                                <span class="edit-act-excess" data-act-excess-ref="'+item.ref_name+'" id="edit_act_excess_'+item.ref_name.replace(/ |\//g, '_')+'">'+item.actual_excess+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
-                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
-                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(/ /g, '_')+'">'+item.mtrs_for_stickers+'</span>\
+                                                <label for="edit_sticker_mtr_'+item.ref_name.replace(/ |\//g, '_')+'" >STKRS MTRS ('+item.ref_name+'):</label>\
+                                                <span class="edit-sticker-mtrs" id="edit_sticker_mtr_'+item.ref_name.replace(/ |\//g, '_')+'">'+item.mtrs_for_stickers+'</span>\
                                             </div>\
                                             <div class="col-md-3">\
                                             <div class="form-group has-feedback">\
-                                                <label for="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
-                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(/ /g, '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
+                                                <label for="edit_settings_'+item.ref_name.replace(/ |\//g, '_')+'" >SETTINGS ('+item.ref_name+') :</label>\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm edit-settings" name="edit_settings_'+item.ref_name.replace(/ |\//g, '_')+'" placeholder="SETTINGS" id="edit_settings_'+item.ref_name.replace(/ |\//g, '_')+'" onkeyup="return totalMetersEdit()" value="'+item.settings+'" >\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                             </div>\
                                             <div class="col-md-3">\
-                                            <label for="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
-                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ /g, '_')+'" data-edit-tem-ref-name="'+item.ref_name.replace(/ /g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
+                                            <label for="edit_total_mtrs_'+item.ref_name.replace(/ |\//g, '_')+'" >TOTAL MTRS ('+item.ref_name+'):</label>\
+                                            <span id="edit_total_mtrs_'+item.ref_name.replace(/ |\//g, '_')+'" data-edit-tem-ref-name="'+item.ref_name.replace(/ |\//g, '_')+'" class="edit-total-meters">'+item.total_mtrs+'</span>\
                                             </div>\
                                         </div>';
                     });
@@ -1719,7 +1719,7 @@ function updateJobcard(formData)
     $('.edit-ratio-list-table').each(function (i, table) {
      var my_object    = new Object();
      var array_list   = [];
-         ref_name     = $(this).data('ratio-ref-table').replace(/ /g, '_');
+         ref_name     = $(this).data('ratio-ref-table').replace(/ |\//g, '_');
 
       $(table).find('tbody tr:not(:last)').each(function (index, row) {
         my_object = {}; 
@@ -1760,7 +1760,7 @@ function updateJobcard(formData)
         var ocn_array      = [];
         var temp_id_object = {};
         var temp_id_array  = [];
-        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ /g, '_');
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ |\//g, '_');
         
         // create erp_id array
         $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
