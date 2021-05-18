@@ -918,7 +918,6 @@ class JobManagerController extends Controller
 	 */
 	public function storeJobcardData(Request $request)
 	{
-		dd($request->all());
 		try {
 				$company_id      = $request['company_id'];
 				$jobcard_id      = $request['workorder_id'];
