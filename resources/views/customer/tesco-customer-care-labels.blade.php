@@ -1,6 +1,7 @@
 <h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
 <hr>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
+<input type="hidden" id="order_type" name="order_type" value="newOrder">
 <span id="result"></span>
 <div class="row">
     <div class="col-md-12">
@@ -296,7 +297,7 @@
 <div class="modal-footer"> 
     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
         page.</span> 
-        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder()"><i class="fa fa-floppy-o"
+        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder('customer')"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"

@@ -26,7 +26,7 @@ class ErpOrderDetails extends Model
      */
     public function orders()
     {
-        return $this->belongsTo('App\ErpOrders');
+        return $this->belongsTo('App\ErpOrders', 'erp_order_id');
     }
     /**
      * Get the Company.
