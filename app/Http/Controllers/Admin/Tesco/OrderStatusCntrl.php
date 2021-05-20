@@ -2762,7 +2762,7 @@ class OrderStatusCntrl extends Controller
 
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
 
-                        $res= $this->erp_obj->updateTescoErpOrders($erpOrders);
+                        $this->erp_obj->updateTescoErpOrders($erpOrders);
 
                     }
 
@@ -2791,10 +2791,10 @@ class OrderStatusCntrl extends Controller
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
 
-                   $res =  $this->erp_obj->updateTescoErpOrders($erpOrders);
+                   $this->erp_obj->updateTescoErpOrders($erpOrders);
 
                 }
-dd($res);
+
                 // update PI approve status as "PI Approved" in order history table
                 OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
                     'pi_status'   => 1
@@ -3692,37 +3692,30 @@ dd($res);
              }
 
             // fetch erp_order_details table details for each quantity_table ids.
-            foreach($quantity_table_ids as $quantity_table_id)
-            {
-                $quantity_id = $quantity_table_id->id;
-                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-            }
-        
-            if(!is_null($erp_order_details[0]))
+            $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+            ->where('order_qnty_table_name', $table_name.'_quanty')
+            ->whereIn('order_qnty_table_id', $quantity_table_ids->pluck('id')->toArray())
+            ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+            ->get();
+
+            if($erp_order_details->isNotEmpty())
             {
                 $erp_details_status =  $erp_order_details[0]->status_name;
                 $erp_order_id =  $erp_order_details[0]->erp_order_id;
+
+                $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
+
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
                 
-                foreach($erp_order_details as $erp_order_detail){
-                    // delete from history table and insert new rows.
-                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
-                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
-                    DB::table('history')->where('id',$history_table_id)->delete();
-                    // delete from erp_order_details table
-                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-                }
-                
-                /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
                 $data_array = [];   
-                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
                 $data_array['tableName'] = $table_name;
-                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
                 $data_array['id'] = $template_id;
                 $data_array['erp_details_status'] = $erp_details_status;
                 $data_array['erp_order_id'] = $erp_order_id;
                 $data_array['created_by'] = $created_by;
 
-                // update erp_order_details and erp_orders table 
                 $result = $edit_erp_obj->updateTescoErpOrderDetails($data_array);
             }
             else

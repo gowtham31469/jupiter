@@ -813,7 +813,7 @@ class JobManagerController extends Controller
 				foreach ($erp_orders_ids as $row => $erp_orders_id) {
 					// buyer po number is not mandatory for orchestra.
 					// So splitting query using conditional statements.
-					$order_detail_id_array = DB::table('erp_order_details')->where([
+					$order_detail_id_array = ErpOrderDetails::where([
 						'erp_order_details.erp_order_id' => $erp_orders_id,
 						'erp_order_details.order_type' => $order_type[$row],
 						'erp_order_details.uuid' => $uuid[$row],
@@ -832,7 +832,7 @@ class JobManagerController extends Controller
 				}
 				sort($order_detail_ids);
 				
-				$order_details_collection = DB::table('erp_orders')->select('erp_orders.*', 'erp_order_details.*')
+				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
 				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 				->whereIn('erp_order_details.id', $order_detail_ids)
 				->get();
