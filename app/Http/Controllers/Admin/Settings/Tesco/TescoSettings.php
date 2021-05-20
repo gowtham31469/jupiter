@@ -1846,8 +1846,59 @@ class TescoSettings extends Controller
                   }
               });
 
+          
+          $tr='';
+          $td='';
+          foreach ($tesco_translationlists as $key => $value) {
+             # code...
+            // dd($value->department_title);
+            $sl_no = $key+1;
+            $tesco_metadata = '';
+            $actions = '';
+            $status = '';
 
-          return response()->json(['error'=>'false','message' =>'success', 'tesco_translationlist' => $tesco_translationlists]);
+            if ($value->is_flag) 
+            {
+                // $tesco_metadata = '<td><span class="label label-success">Enabled</span></td>';
+                $actions = '<a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="" id="disableTescoSizeChart" data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+
+                $status = '<span class="label label-success">Enabled</span>';
+            }
+            else 
+            {
+                // $tesco_metadata = '<td><span class="label label-danger">Disabled</span></td>';
+                $actions = '<a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="" id="enableTescoSizeChart" data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+
+                $status = '<span class="label label-danger">Disabled</span>';
+            }
+            // dd($value->Bust ? $value->Bust : "-");
+            $h = $value->Height!=null ? $value->Height : "-";
+            $w = $value->Weight!=null ? $value->Weight : "-";
+            $c = $value->Chest!=null ? $value->Chest : "-";
+            $b = $value->Bust!=null ? $value->Bust : "-";
+            $w = $value->Waist!=null ? $value->Waist : "-";
+
+            $td.='<tr><td>'.$sl_no.'</td>'.
+                 '<td>'.$value->department_title.'</td>'.
+                 '<td>'.$value->uk_size.'</td>'.
+                 '<td>'.$value->ce_size.'</td>'.
+                 '<td>'.$h.'</td>'.
+                 '<td>'.$w.'</td>'.
+                 '<td>'.$c.'</td>'.
+                 '<td>'.$b.'</td>'.
+                 '<td>'.$w.'</td>'.
+                 '<td>'.$status.'</td>'.
+                 '<td>'.$actions.'</td></tr>'
+                 ;
+
+                 // $tr.='<tr>'.$td.'</tr>'; 
+           } 
+
+           // dd($td);
+
+          return response()->json(['error'=>'false','message' =>'success', 
+            // 'tesco_translationlist' => $tesco_translationlists,s
+            'table_data' => $td]);
       }
       catch (\Exception $e){
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

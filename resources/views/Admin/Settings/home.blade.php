@@ -2950,7 +2950,9 @@
       
        /** get edit tesco size chart details **/
       $(document).on('click','.edit-tesco-size-chart',function(e){
-          var id = $(this).closest('tr').attr('id');
+          // var id = $(this).closest('tr').attr('id');
+          var id = $(this).data('id');
+          // alert(id)
           e.preventDefault();
           /* call getTescoSizeChartById function from tesco-settings.js*/
           getTescoSizeChartById(id);

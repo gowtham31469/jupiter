@@ -4214,35 +4214,38 @@ function tescoLabelSizeChart() {
           $(".loader").show();
       },
       success: function(data) {
+
+        console.log(data)
         var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
         '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoLabelSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Label Size </a></div></div>'+
         '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Label Size Chart </h3></div>'+
         '<table id="tesco-label-sizechart-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
         '<tr><th>Sl. No</th><th>Department Title</th><th>UK Size</th><th>CE Size</th>'+
-        // '<th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
+        '<th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         '<th>Status</th><th>Actions</th></tr></thead><tbody>';
-        $.each(data.tesco_primarySize, function(i, item) {
-          var index = i + 1;
-          tesco_metadata += '<tr id="' + item.id + '">'+
-          '<td>' + index + '</td>'+
-          '<td>' + item.department_title + '</td>'+
-          '<td>' + item.uk_size + '</td>'+
-          '<td>' + item.ce_size + '</td>';
+        // $.each(data.tesco_translationlist, function(i, item) {
+        //   var index = i + 1;
+        //   tesco_metadata += '<tr id="' + item.id + '">'+
+        //   '<td>' + index + '</td>'+
+        //   '<td>' + item.department_title + '</td>'+
+        //   '<td>' + item.uk_size + '</td>'+
+        //   '<td>' + item.ce_size + '</td>';
           
 
-          if (item.is_flag) {
-            tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
-          } else {
-            tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
-          }
-          if (item.is_flag) {
-            tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoSizeChart" data-placement="left"></i></a>';
-          } else {
-            tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoSizeChart" data-placement="left"></i></a>';
-          }
-          tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
-        })
-        tesco_metadata += '</tbody></table></div>';
+        //   if (item.is_flag) {
+        //     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+        //   } else {
+        //     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+        //   }
+        //   if (item.is_flag) {
+        //     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoSizeChart" data-placement="left"></i></a>';
+        //   } else {
+        //     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoSizeChart" data-placement="left"></i></a>';
+        //   }
+        //   tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+        // })
+
+        tesco_metadata += data.table_data+'</tbody></table></div>';
         $('.content').html(tesco_metadata)
         $('#tesco-label-sizechart-list-table').DataTable();
         $('.edit-tesco-labelsizechart').tooltip('show')
