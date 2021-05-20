@@ -7,8 +7,10 @@ use DB;
 use App\TescoWashcareOrders;
 use App\TescoWashcareOrdersQuantity;
 use App\TescoWashcareOrdersComponentMapping;
+use App\ErpOrderDetails;
 use App\Classes\StoreOrderManagementHistory;
 use App\Classes\StoreTescoLabelOrder;
+use App\Classes\EditErpOrders;
 
 /**
  * Class to update tesco label orders
@@ -22,6 +24,8 @@ class UpdateTescoLabelOrder
         $order_history_obj = new StoreOrderManagementHistory();
 
         $store_order_obj = new StoreTescoLabelOrder();
+
+        $edit_erp_obj    = new EditErpOrders();
 
         $customer_data = $store_order_obj->getCustomerDetails($request->tesco_care_supplier, $role);
 
@@ -115,6 +119,33 @@ class UpdateTescoLabelOrder
         $order_data['order_table'] = "tesco_washcare_orders";
 
         $order_history_obj->storeOrdersHistory($order_data);
+
+        // fetch erp_order_details table details for each quantity_table ids.
+        $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+        ->where('order_qnty_table_name', 'tesco_washcare_orders_quanty')
+        ->whereIn('order_qnty_table_id', $request->secondary_size_id)
+        ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+        ->get();
+
+        if($erp_order_details->isNotEmpty())
+        {
+            $erp_details_status =  $erp_order_details[0]->status_name;
+            $erp_order_id =  $erp_order_details[0]->erp_order_id;
+
+            $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
+        
+            // delete from erp_order_details table
+            DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
+            
+            $data_array = [];   
+            $data_array['tableName'] = 'tesco_washcare_orders';
+            $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
+            $data_array['id'] = $request->order_id;
+            $data_array['erp_details_status'] = $erp_details_status;
+            $data_array['erp_order_id'] = $erp_order_id;
+
+            $edit_erp_obj->updateTescoErpOrderDetails($data_array);
+        }
 
         return 'success';
     }
