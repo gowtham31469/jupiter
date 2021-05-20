@@ -133,7 +133,6 @@ class CareLabelOrdersController extends Controller
 
     public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
     {
-
         if ($request->ajax()) {
 
             $request->validated();

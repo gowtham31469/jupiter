@@ -643,9 +643,6 @@ class JobManagerController extends Controller
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
 				$order_type         = explode(',', $request['order_type_array']);
 				$uuid               = explode(',', $request['uuid_array']);
-				$buyers_array       = array();
-				$customers_array    = array();
-				$company_array      = array();
 				$order_dt_array     = array();
 				$delivery_dt_array  = array();
 				$style_array        = array();
@@ -673,8 +670,7 @@ class JobManagerController extends Controller
 				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
 
 				/** Get erp order details table ids from erp orders table id */
-				foreach($erp_orders_ids as $row => $erp_orders_id)
-				{
+				foreach ($erp_orders_ids as $row => $erp_orders_id) {
 					// buyer po number is not mandatory for orchestra.
 					// So splitting query using conditional statements.
 					$order_detail_id_array = ErpOrderDetails::where([
@@ -691,24 +687,55 @@ class JobManagerController extends Controller
 					} else {
 						$order_detail_id_array = $order_detail_id_array->pluck('erp_order_details.id')->all();
 					}
-					
-					$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
+
+					$order_detail_ids = array_unique(array_merge($order_detail_ids, $order_detail_id_array));
 				}
 				sort($order_detail_ids);
 				
 				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
 				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
 				->whereIn('erp_order_details.id', $order_detail_ids)
-				->get(); 
+				->get();
 
-				foreach($order_details_collection as $key => $order_details) { 
-					$this->buyer_name = Buyer::where('id', $order_details->buyer_id)->value('buyer_name');
+				/** Same buyer or not validation */
+				$buyer_id_list = $order_details_collection->pluck('buyer_id')->toArray();
 
-					!in_array($order_details->buyer_id, $buyers_array, true) ? array_push($buyers_array, $order_details->buyer_id) : $buyers_array;
+				if (count(array_unique($buyer_id_list)) === 1) {
+					$buyer = DB::table('buyers')
+					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
+					->where('id', $buyer_id_list[0])
+						->first();
 
-					!in_array($order_details->customer_id, $customers_array, true) ? array_push($customers_array, $order_details->customer_id) : $customers_array;
+					$this->buyer_name = $buyer->buyer_name;
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
+				}
 
-					!in_array($order_details->company_id, $company_array, true) ? array_push($company_array, $order_details->company_id) : $company_array;
+				/** Same customer or not validation */
+				$customer_id_list = $order_details_collection->pluck('customer_id')->toArray();
+
+				if (count(array_unique($customer_id_list)) === 1) {
+					$customer = DB::table('customers')
+					->select('short_name as customer_name', 'id as customer_id')
+					->where('id', $customer_id_list[0])
+						->first();
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
+				}
+
+				/** Same company or not validation */
+				$company_id_list = $order_details_collection->pluck('company_id')->toArray();
+
+				if (count(array_unique($company_id_list)) === 1) {
+					$company = DB::table('company')
+					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
+					->where('id', $company_id_list[0])
+						->first();
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
+				}
+
+				foreach ($order_details_collection as $key => $order_details) {
 
 					!in_array($order_details->created_at, $order_dt_array, true) ? array_push($order_dt_array, $order_details->created_at) : $order_dt_array;
 
@@ -725,126 +752,80 @@ class JobManagerController extends Controller
 					!in_array($order_details->po_no, $customer_po_array, true) ? array_push($customer_po_array, $order_details->po_no) : $customer_po_array;
 
 					/** Create separate ratio/single templates array  */
-					if($order_details->template_type == "ratio")
-					{
-						if($this->buyer_name === "Tesco") {
-							$query_result = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid');
+					if ($order_details->template_type == "ratio") {
+						if ($this->buyer_name === "Tesco") {
+							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
+							->select($order_details->order_qnty_table_name . '.id as qty_table_id', $order_details->order_qnty_table_name . '.ratio_pack_type')
+							->first();
+
+							$order_details->ratio_pack_type = $order_main_table_data->ratio_pack_type;
 						} else {
-							$query_result = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid');
+							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
+							->select($order_details->order_qnty_table_name . '.id as qty_table_id')
+							->first();
 						}
-						$ratio_templates[$order_details->reference_name][] = $query_result->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
-							->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-							->where('erp_order_details.id', $order_details->id)
-							->first();
-					}
-					else
-					{
-						$single_temp_data = Erp::select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid')
-						->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-						->where('erp_order_details.id', $order_details->id)
-							->first();
 
+						$order_details->qty_table_id = $order_main_table_data->qty_table_id;
+
+						$ratio_templates[$order_details->reference_name][] = $order_details;
+					} else {
 						// to differenciate reorder and repeatorder having same values
-						$unique_id = $single_temp_data->uuid;
+						$unique_id = $order_details->uuid;
 
-						$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id;
+						$erp_id_array[$order_details->reference_name][] = $order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id;
 
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['ocn_number'] = $single_temp_data->ocn_number;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['erp_id'] = $single_temp_data->erp_id;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['template_id'] = $single_temp_data->template_id;
-						$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]= $single_temp_data->order_quantity;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['ocn_number'] = $order_details->ocn_number;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['erp_id'] = $order_details->erp_id;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['template_id'] = $order_details->template_id;
+						$single_templates[$order_details->reference_name]['size'][$order_details->size][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id] = $order_details->order_quantity;
 					}
 
 					// Add color code and age group pantone color as tint color for orchestra
-					if($this->buyer_name === "Orchestra") {
+					if ($this->buyer_name === "Orchestra") {
 						// parse orchestra orders table and table id from quantity table name
-						$main_table     = str_replace("_qty","",$order_details->order_qnty_table_name);
-						$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+						$main_table     = str_replace("_qty", "", $order_details->order_qnty_table_name);
+						$result_str     = str_replace("_", " ", str_replace("_orders", "", $main_table));
 						$qnty_id        = '';
-						foreach (explode(' ', $result_str) as $word)
-						{
-						   $qnty_id .= strtolower($word[0]);
+						foreach (explode(' ', $result_str) as $word) {
+							$qnty_id .= strtolower($word[0]);
 						}
-						
+
 						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
-						->select($main_table.'.color_code', 'orchestra_age_group.pantone_color')
-						->join($main_table, $main_table.'.id', $order_details->order_qnty_table_name.'.'.$qnty_id.'_id')
-						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table.'.group_id')
-						->where($order_details->order_qnty_table_name.'.id', $order_details->order_qnty_table_id)
+						->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
+						->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
+						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
+						->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
 						->first();
-						
-						!in_array($orchestra_color_details->color_code, $color_code, true)?array_push($color_code,$orchestra_color_details->color_code):$color_code;
-						!in_array($orchestra_color_details->pantone_color, $tint_color, true)?array_push($tint_color,$orchestra_color_details->pantone_color):$tint_color;
 
+						!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
+						!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
 					}
 				}
 
-				/** Same buyer or not validation */
-				$buyer_first_val = current($buyers_array);
-				foreach ($buyers_array as $val) {
-					if ($buyer_first_val !== $val) {
-						return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
-					} else {
-						$buyer = DB::table('buyers')
-						->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
-						->where('id', $buyer_first_val)
-							->first();
-						/** Dynamic artwork template table and item master table (Based on buyer) */
-						$template_table    = $buyer->template_table;
-						$item_master_table = $buyer->item_master_table;
-					}
-				}
-
-				/** Unset unwanted values from buyers array */
-				unset($buyer->template_table);
-				unset($buyer->item_master_table);
-
-				/** Same customer or not validation */
-				$customer_first_val = current($customers_array);
-				foreach ($customers_array as $val) {
-					if ($customer_first_val !== $val) {
-						return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
-					} else {
-						$customer = DB::table('customers')
-						->select('short_name as customer_name', 'id as customer_id')
-						->where('id', $customer_first_val)
-							->first();
-					}
-				}
-
-				/** Same company or not validation */
-				$company_first_val = current($company_array);
-				foreach ($company_array as $val) {
-					if ($company_first_val !== $val) {
-						return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
-					} else {
-						$company = DB::table('company')->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_first_val)->first();
-					}
-				}
-				
 				/** Get templates metadata details */
-				foreach ($temp_id_array as $template_id) {
-					$template_details = DB::table($template_table)
-						->select($template_table . '.color', $template_table . '.dimension_height as length', $template_table . '.dimension_width as width', $item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $template_table . '.material_id')
-						->join($item_master_table, $item_master_table . '.id', $template_table . '.hierarchy_id')
-						->join('raw_material_master', 'raw_material_master.id', $template_table . '.material_id')
-						->where($template_table . '.item_id', '=', $template_id)
-						->first();
+				if (!empty($temp_id_array)) {
+					$template_details = DB::table($buyer->template_table)
+						->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
+						->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
+						->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
+						->whereIn($buyer->template_table . '.item_id', $temp_id_array)
+						->orderBy($buyer->template_table . '.id')
+						->get();
 
-					if ($template_details) {
-						!in_array($template_details->color, $print_color_array, true) ? array_push($print_color_array, $template_details->color) : $print_color_array;
+					foreach ($template_details as $template_detail) {
+						!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
 
-						!in_array($template_details->material, $material_array, true) ? array_push($material_array, $template_details->material) : $material_array;
+						!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
 
-						!in_array($template_details->article, $article_array, true) ? array_push($article_array, $template_details->article) : $article_array;
+						!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
 
-						!in_array($template_details->length, $length_array, true) ? array_push($length_array, $template_details->length) : $length_array;
+						!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
 
-						!in_array($template_details->width, $width_array, true) ? array_push($width_array, $template_details->width) : $width_array;
-					} else {
-						return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
+						!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
 					}
+				} else {
+					return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
 				}
 				
 				/** Different size breakup value handling */
@@ -888,6 +869,10 @@ class JobManagerController extends Controller
 						}
 					}
 				}
+
+				/** Unset unwanted values from buyers array */
+				unset($buyer->template_table);
+				unset($buyer->item_master_table);
 
 				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
 				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
@@ -986,8 +971,8 @@ class JobManagerController extends Controller
 
 				if(isset($company_id) && isset($jobcard_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
-					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
+					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
 
 					$article_array = explode(', ', $article);
 					
@@ -995,7 +980,7 @@ class JobManagerController extends Controller
 					$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
 
 					// Get Erp status table id for 'Jobcard Created' status.
-					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
+					$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
 						'work_order_id'          => $workorder_id,
 						'company_id'             => $company_id,
@@ -1086,12 +1071,12 @@ class JobManagerController extends Controller
 							/** Get updated data and update in history table */
 							// buyer po is optional for orchestra orders 
 							$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
-							->where('erp_order_details.uuid', 'ilike', $uuid[$row])
-							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row]);
+							->where('erp_order_details.order_type', $order_types[$row])
+							->where('erp_order_details.uuid', $uuid[$row])
+							->where('erp_order_details.reference_name', $selected_ref[$row]);
 
 							if($buyer_pos[$row] != "") {
-								$update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+								$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 								->update([
 									'status'  => $erp_status_id,
 									'jc_number' => $workorder_id,
@@ -1099,7 +1084,7 @@ class JobManagerController extends Controller
 									'jc_created_date' => $current_timestamp
 								]);
 
-								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])->get();
+								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
 							} else {
 								$update_query->update([
 									'status'  => $erp_status_id,
@@ -1112,7 +1097,7 @@ class JobManagerController extends Controller
 							}
 
 							$template       = 'Available';
-							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
+							$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
 							
 							foreach($jobcard_data as $key => $data)
 							{
@@ -1170,8 +1155,8 @@ class JobManagerController extends Controller
 									$template_data = DB::table('orchestra_item_master')
 													->where('orchestra_item_master.id', $template_id)
 													->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-									$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-									$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
+									$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
+									$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
 									
 									$material_ref   = $template_data->item_name;
 
@@ -1243,12 +1228,12 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
 
-						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
-						$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
-						$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
-						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
+						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
+						$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
+						$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
+						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
 
 						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
 						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
