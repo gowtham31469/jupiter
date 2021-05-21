@@ -68,34 +68,43 @@
                     <div class="col-md-12 edit-secondary-departments">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_size_department', 'Department', ['class' => 'form_label']) !!}
-                            <select id="edit_size_department" name="edit_size_department" class="form-control input-sm" required="True"></select>
+                            {{-- <select id="edit_size_department" name="edit_size_department" class="form-control input-sm" required="True"></select> --}}
+
+                            {!! Form::select('edit_size_department', $departments,null,['class' => 'form-control input-sm edit_size_department','required','id'=>'edit_size_department'])!!}
+
                          <div class="help-block with-errors"></div>
                        </div>
                     </div>
                     <div class="col-md-12 edit-econdary-categories">
+
+                        @foreach($categories as $id => $value)
+                            <div class="form-check form-check-inline col-md-2"><input class="form-check-input" type="checkbox" value="" data-id="{{$id}}" id="category_{{$value}}" data-name="Height"><label class="form-check-label" for="height">{{$value}}</label></div>
+                        @endforeach
+
                         {{-- appends checkbox on modal show --}}
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_labelsize_dept_title', 'Title', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_labelsize_dept_title',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Department Title','required')) !!}
+                            {!! Form::text('edit_labelsize_dept_title ',$value = '', array('class' => 'form-control input-sm edit_labelsize_dept_title','placeholder' => 'Department Title','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_labelsize_uksize', 'UK Size', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_labelsize_uksize',$value = '', array('class' => 'form-control input-sm','placeholder' => 'UK Size','required')) !!}
+                            {!! Form::text('edit_labelsize_uksize',$value = '', array('class' => 'form-control input-sm edit_labelsize_uksize','placeholder' => 'UK Size','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_labelsize_cesize', 'CE Size', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_labelsize_cesize',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CE Size','required')) !!}
+                            {!! Form::text('edit_labelsize_cesize',$value = '', array('class' => 'form-control input-sm edit_labelsize_cesize','placeholder' => 'CE Size','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div class="selected_fields"></div>
                 </div>
             </div>
             <div class="modal-footer">

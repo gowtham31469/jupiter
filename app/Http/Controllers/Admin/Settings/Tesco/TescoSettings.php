@@ -1821,89 +1821,153 @@ class TescoSettings extends Controller
      */
     public function tescoLabelSizeChartLists(){
       try {
-          // $tesco_translationlists = TescoPrimarySize::with('secSizeChart')->get();
+         
+          $size_chart = TescoPrimarySize::with('secSizeChart')->get();
+          $categories = DB::table('tesco_secondary_size_category')->pluck('category_name')->toArray();
 
-            $tesco_translationlists = TescoPrimarySize::with(['secSizeChart'=>function($q)
+          foreach ($size_chart as $key => $row) {
+            foreach ($row->secSizeChart as $k => $v) {
+              $temp[$v->category_name]=$v->secondary_size;
+            }            
+          }
+
+
+          $size_chart->map(function ($size_chart,$key) use($categories) 
             {
-              $q->leftJoin('tesco_secondary_size_category','tesco_secondary_size_category.id','tesco_secondary_size_chart.tesco_secondary_size_category_id');
-            }])->get();
+              $dump=[];
+               foreach ($categories as $category) {
+                      $size_chart->$category="-";
+                    }
 
-
-              $param_arr = DB::table('tesco_secondary_size_category')->pluck('category_name')->toArray();
-
-              $tesco_translationlists->map(function ($tesco_translationlists,$key) use($param_arr)
+              foreach ($size_chart->secSizeChart as $value) 
               {
-                  $temp_arr=[];
-                  foreach ($tesco_translationlists->secSizeChart as $key => $value)
-                  {
-                    array_push($temp_arr, $value->category_name);
                     $temp = $value->category_name;
-                    $tesco_translationlists->$temp= $value->secondary_size;
-                  }
-
-                  foreach (array_diff($param_arr,$temp_arr) as $key => $value) {
-                    $tesco_translationlists->$value= NULL;
-                  }
-              });
-
-          
-          $tr='';
-          $td='';
-          foreach ($tesco_translationlists as $key => $value) {
-             # code...
-            // dd($value->department_title);
-            $sl_no = $key+1;
-            $tesco_metadata = '';
+                    $size_chart->$temp=$value->secondary_size;
+              }
+              $size_chart->No =$key+1;
+            });
+        
+            // $sl_no = $key+1;
             $actions = '';
             $status = '';
+            $td='';
+            foreach ($size_chart as $k => $data) 
+             {
+              // dd($data);
+              if ($data->is_flag) 
+              {
+                  $actions = '<a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="" id="disableTescoSizeChart" data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
 
-            if ($value->is_flag) 
-            {
-                // $tesco_metadata = '<td><span class="label label-success">Enabled</span></td>';
-                $actions = '<a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="" id="disableTescoSizeChart" data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+                  $status = '<span class="label label-success">Enabled</span>';
+              }
+              else 
+              {
+                  $actions = '<a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="" id="enableTescoSizeChart" data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
 
-                $status = '<span class="label label-success">Enabled</span>';
-            }
-            else 
-            {
-                // $tesco_metadata = '<td><span class="label label-danger">Disabled</span></td>';
-                $actions = '<a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="" id="enableTescoSizeChart" data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+                  $status = '<span class="label label-danger">Disabled</span>';
+              }
 
-                $status = '<span class="label label-danger">Disabled</span>';
-            }
-            // dd($value->Bust ? $value->Bust : "-");
-            $h = $value->Height!=null ? $value->Height : "-";
-            $w = $value->Weight!=null ? $value->Weight : "-";
-            $c = $value->Chest!=null ? $value->Chest : "-";
-            $b = $value->Bust!=null ? $value->Bust : "-";
-            $w = $value->Waist!=null ? $value->Waist : "-";
-
-            $td.='<tr><td>'.$sl_no.'</td>'.
-                 '<td>'.$value->department_title.'</td>'.
-                 '<td>'.$value->uk_size.'</td>'.
-                 '<td>'.$value->ce_size.'</td>'.
-                 '<td>'.$h.'</td>'.
-                 '<td>'.$w.'</td>'.
-                 '<td>'.$c.'</td>'.
-                 '<td>'.$b.'</td>'.
-                 '<td>'.$w.'</td>'.
+        
+              $td.='<tr><td>'.$data->No.'</td>'.
+                 '<td>'.$data->department_title.'</td>'.
+                 '<td>'.$data->uk_size.'</td>'.
+                 '<td>'.$data->ce_size.'</td>'.
+                 '<td>'.$data->Height.'</td>'.
+                 '<td>'.$data->Weight.'</td>'.
+                 '<td>'.$data->Chest.'</td>'.
+                 '<td>'.$data->Bust.'</td>'.
+                 '<td>'.$data->Waist.'</td>'.
                  '<td>'.$status.'</td>'.
                  '<td>'.$actions.'</td></tr>'
                  ;
-
-                 // $tr.='<tr>'.$td.'</tr>'; 
-           } 
-
-           // dd($td);
+             }
+         
 
           return response()->json(['error'=>'false','message' =>'success', 
-            // 'tesco_translationlist' => $tesco_translationlists,s
+            // 'tesco_translationlist' => $tesco_translationlists,
             'table_data' => $td]);
-      }
+
+           }
       catch (\Exception $e){
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
     }
+
+          //   $tesco_translationlists = TescoPrimarySize::with(['secSizeChart'=>function($q)
+          //   {
+          //     $q->leftJoin('tesco_secondary_size_category','tesco_secondary_size_category.id','tesco_secondary_size_chart.tesco_secondary_size_category_id');
+          //   }])->get();
+
+
+          //     $param_arr = DB::table('tesco_secondary_size_category')->pluck('category_name')->toArray();
+
+          //     $tesco_translationlists->map(function ($tesco_translationlists,$key) use($param_arr)
+          //     {
+          //         $temp_arr=[];
+          //         foreach ($tesco_translationlists->secSizeChart as $key => $value)
+          //         {
+          //           array_push($temp_arr, $value->category_name);
+          //           $temp = $value->category_name;
+          //           $tesco_translationlists->$temp= $value->secondary_size;
+          //         }
+
+          //         foreach (array_diff($param_arr,$temp_arr) as $key => $value) {
+          //           $tesco_translationlists->$value= NULL;
+          //         }
+          //     });
+
+          
+          // $tr='';
+          // $td='';
+          // foreach ($tesco_translationlists as $key => $value) {
+          //    # code...
+          //   // dd($value->department_title);
+          //   $sl_no = $key+1;
+          //   $tesco_metadata = '';
+          //   $actions = '';
+          //   $status = '';
+
+          //   if ($value->is_flag) 
+          //   {
+          //       $actions = '<a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="" id="disableTescoSizeChart" data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+
+          //       $status = '<span class="label label-success">Enabled</span>';
+          //   }
+          //   else 
+          //   {
+          //       $actions = '<a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="" id="enableTescoSizeChart" data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$value->id.'"></i></a>';
+
+          //       $status = '<span class="label label-danger">Disabled</span>';
+          //   }
+          //   $h = $value->Height!=null ? $value->Height : "-";
+          //   $w = $value->Weight!=null ? $value->Weight : "-";
+          //   $c = $value->Chest!=null ? $value->Chest : "-";
+          //   $b = $value->Bust!=null ? $value->Bust : "-";
+          //   $w = $value->Waist!=null ? $value->Waist : "-";
+
+          //   $td.='<tr><td>'.$sl_no.'</td>'.
+          //        '<td>'.$value->id.'</td>'.
+          //        '<td>'.$value->department_title.'</td>'.
+          //        '<td>'.$value->uk_size.'</td>'.
+          //        '<td>'.$value->ce_size.'</td>'.
+          //        '<td>'.$h.'</td>'.
+          //        '<td>'.$w.'</td>'.
+          //        '<td>'.$c.'</td>'.
+          //        '<td>'.$b.'</td>'.
+          //        '<td>'.$w.'</td>'.
+          //        '<td>'.$status.'</td>'.
+          //        '<td>'.$actions.'</td></tr>'
+          //        ;
+
+          //        $tr.='<tr>'.$td.'</tr>'; 
+          //  } 
+
+           // dd($td);
+
+          // return response()->json(['error'=>'false','message' =>'success', 
+          //   'tesco_translationlist' => $tesco_translationlists,
+          //   'table_data' => $td]);
+     
 
      /**
      * for LabelSize add form modal data (categories and departments)
@@ -2002,10 +2066,21 @@ class TescoSettings extends Controller
             // $id = 2;
             
             $tesco_primary_size = TescoPrimarySize::where('id',$id)->with(['secSizeChart' => function ($query) {
-              $query->leftJoin('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+              $query->leftJoin('tesco_secondary_size_category', 'tesco_secondary_size_category.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
             }])->orderBy('is_flag','desc')->get();
 
-            return response()->json(['error'=>'false','message' =>'success', 'tesco_primary_size' => $tesco_primary_size]);
+            $categories_values = [];
+            $categories = [];
+
+            foreach ($tesco_primary_size as $key => $value) {
+              foreach ($value->secSizeChart as $k => $inner_loop) {
+                array_push($categories, $inner_loop->category_name);  
+                array_push($categories_values, $inner_loop->secondary_size);  
+                // $categories_values[$inner_loop->category_name] = $inner_loop->secondary_size;
+              }
+            }
+
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_primary_size' => $tesco_primary_size,'selected_fields'=>$categories_values,'categories'=>$categories]);
       }
       catch (\Exception $e){
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

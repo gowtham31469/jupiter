@@ -4507,11 +4507,32 @@ function addTescoLabelSizeChart() {
           },
           success: function(data) {
               isSubmitting = false;
+              console.log()
               $('#edit_tesco_primary_id').val(id);
               $('#edit_size_department').val();
               $('#edit_labelsize_dept_title').val();
               $('#edit_labelsize_uksize').val();
               $('#edit_labelsize_cesize').val();
+
+              $(".edit_labelsize_dept_title").val(data.tesco_primary_size[0]['department_title'])
+              $(".edit_labelsize_uksize").val(data.tesco_primary_size[0]['uk_size'])
+              $(".edit_labelsize_cesize").val(data.tesco_primary_size[0]['ce_size'])
+              $(".edit_size_department").val(data.tesco_primary_size[0]['tesco_size_department_id'])
+
+              $div = '';
+              $(".selected_fields").empty()
+              
+              for(var i=0; i<data.categories.length; i++)
+              {
+                
+                $("#category_"+data.categories[i]).prop('checked',true);
+
+                $div+='<div class="col-md-6"><div class="form-group has-feedback has-success"><label for="edit_labelsize_cesize" class="form_label">'+data.categories[i]+'</label><input class="form-control input-sm edit_labelsize_cesize" placeholder='+data.categories[i]+' required="" name="edit_labelsize_cesize" type="text" value='+data.selected_fields[i]+' id="edit_labelsize_cesize"><div class="help-block with-errors"></div></div></div>'
+
+              }
+
+              $(".selected_fields").append($div)
+
               $('#editTescoPrimarySizeModal').modal({
                   backdrop: 'static',
                   keyboard: false
