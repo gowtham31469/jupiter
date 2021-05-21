@@ -394,7 +394,11 @@
 										</tr>
 									@endif
 								@else
-									<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+									@if($value['order_qnty_table_name'] == 'tesco_washcare_orders_quanty')
+										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="" data-template-name="tesco_care_labels" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+									@else
+										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+									@endif		
 										<td>
 											<div class="form-check">
 											<a href="javascript:void(0)">

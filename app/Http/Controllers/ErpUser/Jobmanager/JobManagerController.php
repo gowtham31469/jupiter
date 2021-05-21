@@ -6313,7 +6313,11 @@ class JobManagerController extends Controller
         //print_r($svgStringBack);
 
         PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-        print_r(url('/storage/app/template/label.pdf'));
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
      } 
 
 }
