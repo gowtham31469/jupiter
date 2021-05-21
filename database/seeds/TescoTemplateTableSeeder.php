@@ -350,7 +350,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'template_file' => '/storage/app/template/tesco/GCL25W_M12723G.svg',
                 'disney' => 0,
                 'tax' => 0,
-                'hierarchy_id' => 2,
+                'hierarchy_id' => 33,
                 'flag' => 0,
             ),
             29 => 
@@ -362,7 +362,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'template_file' => '/storage/app/template/tesco/GCL25W_M13220G.svg',
                 'disney' => 0,
                 'tax' => 0,
-                'hierarchy_id' => 2,
+                'hierarchy_id' => 33,
                 'flag' => 0,
             ),
             30 => 
@@ -374,7 +374,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'template_file' => '/storage/app/template/tesco/GCL25W_M12723G.svg',
                 'disney' => 0,
                 'tax' => 0,
-                'hierarchy_id' => 2,
+                'hierarchy_id' => 33,
                 'flag' => 0,
             ),
             31 => 
@@ -386,7 +386,7 @@ class TescoTemplateTableSeeder extends Seeder
                 'template_file' => '/storage/app/template/tesco/GCL25W_M13220G.svg',
                 'disney' => 0,
                 'tax' => 0,
-                'hierarchy_id' => 2,
+                'hierarchy_id' => 33,
                 'flag' => 0,
             ),
         ));
