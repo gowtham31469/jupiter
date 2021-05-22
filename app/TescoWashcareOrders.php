@@ -102,6 +102,11 @@ class TescoWashcareOrders extends Model
         return $this->belongsTo('App\Customer', 'tesco_supplier_id');
     }
 
+    public function item_master() {
+
+        return $this->hasOne('App\TescoTemplate', 'item_id', 'template_id');
+    }
+
     /**
      * Get the template details for the order.
      */

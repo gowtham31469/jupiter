@@ -6,7 +6,7 @@
 $(function () {
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (role, size_id, size_category, size_category_text) => {
+    renderTescoCareOrders = (role, size_id, size_category, size_category_text,template_id) => {
         var user_role = role.toLowerCase();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
@@ -14,7 +14,7 @@ $(function () {
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
 
-            getSizechart(size_id, size_category, size_category_text, user_role);
+            getSizechart(size_id, size_category, size_category_text, user_role,template_id);
         });
 
     }
@@ -200,7 +200,7 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category, size_category_text, role) => {
+    getSizechart = (size_id, size_category, size_category_text, role, template_id) => {
 
         $.ajax({
             type: "get",
@@ -209,11 +209,15 @@ $(function () {
             data: {
                 _token: csrf_token,
                 size_id: size_id,
-                size_category: size_category
+                size_category: size_category,
+                template_id:template_id
             },
             success: function (response) {
 
+                var temp_file = response.tesco_template[0].template_file.split(',');
+                $('#hidden_name').val(response.tesco_template[0].template_name)
                 var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id" value="` + size_id + `">
+                <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal" class="center-block tesco_svg" data="` + temp_file[0]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal" class="center-block tesco_svg" data="` + temp_file[1]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal" class="center-block tesco_svg" data="` + temp_file[2]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal" class="center-block tesco_svg" data="` + temp_file[3]+`" type="image/svg+xml"></object>
                                         <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
                                             <thead>
@@ -390,7 +394,9 @@ $(function () {
             },
             statusCode: {
                 200: function (response) {
-
+                    //alert(response.data.last_insertion)
+                    $('#hidden_id').val(response.data.last_insertion)
+                    $('.create-download-artwork').css('display','inline-block')
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
                     $('.label-order-cancel-btn').show();

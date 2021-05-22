@@ -24,6 +24,10 @@ $( () => {
     }
 
     mapStoredValues = (order_data, user_role) => {
+        $('#hidden_id').val(order_data.order_details.id)
+        $('#hidden_name').val(order_data.order_details.item_master.template_name)
+        $('.create-download-artwork').css('display','inline-block')
+        $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_eqos').val(order_data.order_details.eqos_site_code)
         $('#tesco_care_ce_style').val(order_data.order_details.ce_style_ref)
@@ -57,8 +61,11 @@ $( () => {
             $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
             $('#tesco_care_tog').val(order_data.order_details.tog)
         }
+        
+        var temp_file = order_data.order_details.item_master.template_file.split(',');
 
         var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">
+        <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal" class="center-block tesco_svg" data="` + temp_file[0]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal" class="center-block tesco_svg" data="` + temp_file[1]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal" class="center-block tesco_svg" data="` + temp_file[2]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal" class="center-block tesco_svg" data="` + temp_file[3]+`" type="image/svg+xml"></object>
                                         <div class="table-responsive">
                                         <table class="table table-bordered table-striped table-hover">
                                             <thead>
