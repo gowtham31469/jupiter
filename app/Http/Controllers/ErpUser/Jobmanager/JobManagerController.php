@@ -6318,6 +6318,62 @@ class JobManagerController extends Controller
 				$file_path =  "/storage/app/template/label.pdf";	
 				
 				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
-     } 
+		 } 
+		 
+		 public function printDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
+		 } 
 
 }
