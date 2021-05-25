@@ -687,6 +687,9 @@ Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getT
 Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
 Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
 
+
+Route::post('customer/tesco/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
+
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
 
 // Email related routes

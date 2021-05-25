@@ -4198,9 +4198,29 @@ class OrderStatusController extends Controller
             }
             
 			
-		}
+        }
+        $tesco_tiny  = 	DB::table('tesco_translation')
+									->where('id',1)
+									->select('*')
+                                    ->get();
+        $tesco_nb  = 	DB::table('tesco_translation')
+                                    ->where('id',2)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up1  = 	DB::table('tesco_translation')
+                                    ->where('id',3)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up3  = 	DB::table('tesco_translation')
+                                    ->where('id',4)
+                                    ->select('*')
+                                    ->get();
+        $tesco_onesize  = 	DB::table('tesco_translation')
+                                    ->where('id',5)
+                                    ->select('*')
+                                    ->get();
 		
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
     }
 
     public function downloadTescoPI(Request $request)
