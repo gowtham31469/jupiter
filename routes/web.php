@@ -421,7 +421,6 @@ Route::post('admin/tesco/order-management/orders', 'Admin\Tesco\OrderManagementC
 Route::get('admin/tesco/template-management', 'Admin\Tesco\TemplateManagementCntrl@index');
 Route::get('admin/tesco/templates-details', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateDetails');
 Route::post('admin/tesco/po-upload', 'Admin\Tesco\OrderManagementCntrl@createStickerOrders');
-Route::post('admin/tesco/po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
 Route::post('admin/tesco/view-order', 'Admin\Tesco\OrderManagementCntrl@viewOrders');
 Route::get('admin/tesco/get-tsl-size', 'Admin\Tesco\OrderManagementCntrl@getTescoTSLSizechart');
 Route::get('admin/tesco/get-moq-value', 'Admin\Tesco\OrderManagementCntrl@getTescoTemplateMoq');
@@ -1032,7 +1031,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
 	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
 	Route::put('update-care-label-order',  'Admin\Tesco\CareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
-	
+	Route::post('po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
   });
 
 
@@ -1046,5 +1045,6 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
 	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
 	Route::put('update-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
 	
   });

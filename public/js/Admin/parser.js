@@ -770,7 +770,7 @@ function parseSingleXml(data) {
                                 // Intersection to find out atleast one size is common
                                 let intersection = po_size_chart.filter(x => size_chart.includes(x));
                                 if(intersection.length > 0) {
-                                    renderTescoCareOrders(role="admin", size_id, size_category, size_category_text, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                    renderTescoCareOrders(role, size_id, size_category, size_category_text, renderParsedLabelValues.bind(null, parsedObj, po_zone));
                                 } else {
                                     $('.snackbar_span').html("Size details mismatch!! Please check the file");
 					                showSnackbar();
