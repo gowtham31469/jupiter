@@ -220,6 +220,15 @@ function tescoOrders(callback) {
                                                                             <div class="template-error"></div>
                                                                         </div>
                                                                         <div id="jstree"></div>
+                                                                        <div class="form-group has-feedback hidden" id="tesco_care_parser_type_div">
+																		<label for="pdf_parser_type" class="form_label" style="margin-right: 5px;">Select PO Zone</label>
+																		<div>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="UK" style="margin-right: 5px;">UK</label>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="CE" style="margin-right: 5px;">CE</label>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="BOTH" style="margin-right: 5px;">Both</label>
+																		</div>
+																		<div class="help-block with-errors"></div>
+																		</div>
                                                                         <div class="form-group has-feedback">
                                                                             <div class="po-upload hidden">
                                                                                 <div class="form-group files" id="single_file ">
@@ -309,6 +318,7 @@ function tescoOrders(callback) {
                     globalOrderType = ($(this).attr("value") === '1') ? 1 : 0;
                     var currentNode = $('#jstree').jstree(true).get_selected('full',true);
                     var zone        = (currentNode.length > 0) ? currentNode[0].original.zone : false;
+                    var temp_type   = currentNode[0].original.template_type;
 
                     if(zone === 'UK' && globalOrderType === 1) {
                         $(".po-upload").removeClass("hidden");
@@ -330,6 +340,63 @@ function tescoOrders(callback) {
                         $('#ce_retek').prop('required', false);
                     }
 
+                    // Label Parser
+
+					if(globalOrderType === 1 && temp_type === 'tesco_care_labels') { // Show only for PO upload
+						$("#tesco_care_parser_type_div").removeClass("hidden");
+						$('input[type="radio"].pdf_parser_type').prop('required', true);
+
+						if($('input[type="radio"].pdf_parser_type').is(':checked')){
+							var parserPOzone =  $('input[type="radio"].pdf_parser_type:checked').val();
+							if (parserPOzone === 'UK') {
+								$(".po-upload").removeClass("hidden");
+								$('#po_upload').prop('required', true);
+								$(".ce-po-upload").addClass("hidden");
+								$('#ce_orms').prop('required', false);
+								$('#ce_retek').prop('required', false);
+
+							} else{
+								$(".po-upload").addClass("hidden");
+								$('#po_upload').prop('required', false);
+								$(".ce-po-upload").removeClass("hidden");
+								$('#ce_orms').prop('required', true);
+								$('#ce_retek').prop('required', true);
+							} 
+						}
+					} else if(globalOrderType === 0 && temp_type === 'tesco_care_labels') {
+						$("#tesco_care_parser_type_div").addClass("hidden");
+						$('input[type="radio"].pdf_parser_type').prop('required', false);
+						$('input[type="radio"].pdf_parser_type').prop('checked', false);
+
+					}
+
+				});
+
+				/** [ Hide/Show PO upload div for tesco care labels ] */
+				$('input[type="radio"].pdf_parser_type').click(function () {
+					var parserPOzone =  $(this).attr("value");
+					var currentNode = $('#jstree').jstree(true).get_selected('full', true);
+					var zone = (currentNode.length > 0) ? currentNode[0].original.zone : false;
+					var temp_type = currentNode[0].original.template_type;
+					if (parserPOzone === 'UK' && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
+						$(".po-upload").removeClass("hidden");
+						$('#po_upload').prop('required', true);
+						$(".ce-po-upload").addClass("hidden");
+						$('#ce_orms').prop('required', false);
+						$('#ce_retek').prop('required', false);
+					} else if ((parserPOzone === 'CE' || parserPOzone === 'BOTH') && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
+						$(".po-upload").addClass("hidden");
+						$('#po_upload').prop('required', false);
+						$(".ce-po-upload").removeClass("hidden");
+						$('#ce_orms').prop('required', true);
+						$('#ce_retek').prop('required', true);
+					} else {
+						$(".po-upload").addClass("hidden");
+						$('#po_upload').prop('required', false);
+						$(".ce-po-upload").addClass("hidden");
+						$('#ce_orms').prop('required', false);
+						$('#ce_retek').prop('required', false);
+					}
                 });
 
                 /** [ Show tesco templates hierarchy ] */
@@ -561,12 +628,39 @@ function tescoOrders(callback) {
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
+                            // Label Parser
+							if(globalOrderType === 1) { // Show only for PO upload
+								$("#tesco_care_parser_type_div").removeClass("hidden");
+								$('input[type="radio"].pdf_parser_type').prop('required', true);
+								if($('input[type="radio"].pdf_parser_type').is(':checked')){
+									var parserPOzone =  $('input[type="radio"].pdf_parser_type:checked').val();
+									if (parserPOzone === 'UK') {
+										$(".po-upload").removeClass("hidden");
+										$('#po_upload').prop('required', true);
+										$(".ce-po-upload").addClass("hidden");
+										$('#ce_orms').prop('required', false);
+										$('#ce_retek').prop('required', false);
+									} else{
+										$(".po-upload").addClass("hidden");
+										$('#po_upload').prop('required', false);
+										$(".ce-po-upload").removeClass("hidden");
+										$('#ce_orms').prop('required', true);
+										$('#ce_retek').prop('required', true);
+									} 
+								}
+							}
 						} else {
 							$("#tesco_care_size_chart_div").addClass("hidden");
 							$('#tesco_care_size_category_div').html('');
 							$('#tesco_care_size_chart').prop('required', false);
 							$('#tesco_care_size_category').prop('required', false);
 							$('#tesco_care_size_chart').val('');
+                            // Label Parser
+							if(globalOrderType === 1){
+								$("#tesco_care_parser_type_div").addClass("hidden");
+								$('input[type="radio"].pdf_parser_type').prop('checked', false);
+								$('input[type="radio"].pdf_parser_type').prop('required', false);
+							}
                         }
                         $(".selectpicker").selectpicker("refresh");
                     }
@@ -598,9 +692,30 @@ function tescoOrders(callback) {
                                 formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
                                 formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
                                 formData.append('type', localStorage.getItem("template type"));
-                                formData.append('zone', localStorage.getItem("zone"));
                                 formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
-                                uploadPurchaseOrder(formData, localStorage.getItem("zone"));
+                                if(template_type === 'tesco_care_labels') {
+									var poZone =  $('input[type="radio"].pdf_parser_type:checked').val();
+									poZone = poZone == 'BOTH'?'CE':poZone;
+									formData.append('zone', poZone);
+									var size_id = $('#tesco_care_size_chart').val();
+									var size_category = [];
+									var size_category_text = [];
+
+									/** [ Create array of multi selected categories ] */
+									$.each($("#tesco_care_size_category option:selected"), function() {
+										size_category.push($(this).val());
+										// size_category_text.push($(this).text());
+									});
+
+									/** [ Create array of multiple categories ] */
+									$.each($("#tesco_care_size_category option"), function() {
+										size_category_text.push($(this).text());
+									});
+									uploadPurchaseOrderForLabels(formData, poZone, role="customer", size_id, size_category, size_category_text,template_id);
+								} else {
+									formData.append('zone', localStorage.getItem("zone"));
+									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
+								}
                             } else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
 							} else if(template_type === 'tesco_care_labels') {

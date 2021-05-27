@@ -6,7 +6,7 @@
 $(function () {
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (role, size_id, size_category, size_category_text,template_id) => {
+    renderTescoCareOrders = (role, size_id, size_category, size_category_text,template_id, callback=null) => {
         var user_role = role.toLowerCase();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
@@ -14,9 +14,9 @@ $(function () {
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
 
-            getSizechart(size_id, size_category, size_category_text, user_role,template_id);
-        });
-
+            getSizechart(size_id, size_category, size_category_text, user_role,template_id, callback);
+            
+        }); 
     }
 
     // Remove garment component
@@ -200,8 +200,8 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category, size_category_text, role, template_id) => {
-
+    getSizechart = (size_id, size_category, size_category_text, role,template_id, callback=null) => {
+        var size_chart = [];
         $.ajax({
             type: "get",
             url: base_url + "/" + role + "/tesco/care-size-lists",
@@ -234,6 +234,7 @@ $(function () {
 
                 size_array = [];
                 $.each(response.data, function (indexInArray, valueOfElement) {
+                    size_chart.push(valueOfElement);
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.uk_size + `</td>
@@ -284,6 +285,10 @@ $(function () {
                 // show only for "Baby Sleeping Bags"
                 if (size_id === '4') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
+                }
+                if(callback != null) {
+                    let sized_callback = callback.bind(this, size_chart);
+                    sized_callback();
                 }
             }
         });

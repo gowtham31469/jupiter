@@ -10,6 +10,7 @@ use Auth;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
 use App\Classes\UpdateTescoLabelOrder;
+use App\Classes\TescoCareLabelParser;
 
 use App\TescoPrimarySize;
 use App\Http\Requests\SubmitTescoLabelOrder;
@@ -19,8 +20,9 @@ class CustomerCareLabelOrdersController extends Controller
     private $storeorder;
     private $caremeta;
     private $updateLabelOrder;
+    private $parselabel;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel)
     {
 
         $this->caremeta = $caremeta;
@@ -28,6 +30,8 @@ class CustomerCareLabelOrdersController extends Controller
         $this->storeorder = $storeorder;
 
         $this->updateLabelOrder = $updateLabelOrder;
+
+        $this->parselabel = $parselabel;
     }
 
     public function index()
@@ -200,6 +204,28 @@ class CustomerCareLabelOrdersController extends Controller
                 'message' => 'success',
                 'data' => $response
             ], 200);
+        }
+    }
+
+    /**
+     * Method to parse Tesco Label Orders using PO upload.
+     * @param  Request $request Formdata
+     * @param  $role either admin or customer
+     * @return [type] view
+     */
+    public function createLabelOrders(Request $request) {
+        try {
+            if($request->zone === 'UK') {
+                //handle the order using createOrderForUK method
+                return $this->parselabel->createOrderForUK($request);
+            } else if($request->zone === 'CE') {
+                //handle the order using createOrderForCE method
+                return  $this->parselabel->createOrderForCE($request);
+            } else {
+                return response()->json(['error' => 'Unknown Template Zone'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
 }
