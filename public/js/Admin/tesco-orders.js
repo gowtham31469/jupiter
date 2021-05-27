@@ -348,8 +348,6 @@ function tescoOrders(callback) {
 								$('#ce_orms').prop('required', true);
 								$('#ce_retek').prop('required', true);
 							} 
-						} else {
-							// console.log('not checked');
 						}
 					} else if(globalOrderType === 0 && temp_type === 'tesco_care_labels') {
 						$("#tesco_care_parser_type_div").addClass("hidden");
@@ -636,8 +634,6 @@ function tescoOrders(callback) {
 										$('#ce_orms').prop('required', true);
 										$('#ce_retek').prop('required', true);
 									} 
-								} else {
-									console.log('not checked')
 								}
 							}
 
@@ -684,9 +680,30 @@ function tescoOrders(callback) {
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
-								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
-								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
+								if(template_type === 'tesco_care_labels') {
+									var poZone =  $('input[type="radio"].pdf_parser_type:checked').val();
+									poZone = poZone == 'BOTH'?'CE':poZone;
+									formData.append('zone', poZone);
+									var size_id = $('#tesco_care_size_chart').val();
+									var size_category = [];
+									var size_category_text = [];
+
+									/** [ Create array of multi selected categories ] */
+									$.each($("#tesco_care_size_category option:selected"), function() {
+										size_category.push($(this).val());
+										// size_category_text.push($(this).text());
+									});
+
+									/** [ Create array of multiple categories ] */
+									$.each($("#tesco_care_size_category option"), function() {
+										size_category_text.push($(this).text());
+									});
+									uploadPurchaseOrderForLabels(formData, poZone, role="admin", size_id, size_category, size_category_text);
+								} else {
+									formData.append('zone', localStorage.getItem("zone"));
+									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
+								}
 							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
 							} else if(template_type === 'tesco_care_labels') {

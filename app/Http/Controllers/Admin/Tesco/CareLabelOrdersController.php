@@ -9,6 +9,7 @@ use DB;
 use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
+use App\Classes\TescoCareLabelParser;
 
 use App\TescoPrimarySize;
 use App\Http\Requests\SubmitTescoLabelOrder;
@@ -18,14 +19,17 @@ class CareLabelOrdersController extends Controller
     private $storeorder;
     private $caremeta;
     private $module;
+    private $parselabel;
 
-    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder)
+    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, TescoCareLabelParser $parselabel)
     {
         $this->module = $module;
 
         $this->caremeta = $caremeta;
 
         $this->storeorder = $storeorder;
+
+        $this->parselabel = $parselabel;
     }
 
 
@@ -157,6 +161,29 @@ class CareLabelOrdersController extends Controller
                 'message' => 'success',
                 'data' => $response
             ], 200);
+        }
+    }
+
+
+    /**
+     * Method to parse Tesco Label Orders using PO upload.
+     * @param  Request $request Formdata
+     * @param  $role either admin or customer
+     * @return [type] view
+     */
+    public function createLabelOrders(Request $request) {
+        try {
+            if($request->zone === 'UK') {
+                //handle the order using createOrderForUK method
+                return $this->parselabel->createOrderForUK($request);
+            } else if($request->zone === 'CE') {
+                //handle the order using createOrderForCE method
+                return  $this->parselabel->createOrderForCE($request);
+            } else {
+                return response()->json(['error' => 'Unknown Template Zone'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
 }
