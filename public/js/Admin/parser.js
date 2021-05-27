@@ -689,7 +689,7 @@ function parseSingleXml(data) {
  * Render the the order form with autofilled fields which are parsed from the customer PDF.
  * @return {xml} XML from the parser. 
  */
- function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, size_category, size_category_text) {
+ function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, size_category, size_category_text,template_id) {
 	try {
 		$.ajax({
 			url: base_url + "/"+ role +"/tesco/po-upload-labels",
@@ -770,7 +770,7 @@ function parseSingleXml(data) {
                                 // Intersection to find out atleast one size is common
                                 let intersection = po_size_chart.filter(x => size_chart.includes(x));
                                 if(intersection.length > 0) {
-                                    renderTescoCareOrders(role, size_id, size_category, size_category_text, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                    renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
                                 } else {
                                     $('.snackbar_span').html("Size details mismatch!! Please check the file");
 					                showSnackbar();

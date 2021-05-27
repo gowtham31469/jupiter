@@ -287,6 +287,7 @@ class JobManagerController extends Controller
 		$id = $request['id'];
 		$order_type = $request['order_type'];
 		$created_at = $request['created_at'];
+		$table_name_print = $request['table_name_print'];
 
 		if($request->buyer=="orchestra")
 		{
@@ -558,6 +559,145 @@ class JobManagerController extends Controller
 
 
 		else{
+			if($table_name_print == "tesco_washcare_orders")
+			{
+				$order_details  = 	DB::table('erp_order_details')
+									->where('erp_order_details.style_no',$style_no)
+									->where('erp_order_details.erp_order_id',$id)
+									->where('erp_order_details.reference_name',$ref_name)
+									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.order_type',$order_type)
+									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.order_status_id','!=',3)
+									->where('erp_order_details.deleted_at', null)
+									->orderBy('erp_order_details.order_qnty_table_id', 'asc')
+									->select('*')
+									->get();
+									if(sizeof($order_details) > 0)
+									{
+										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
+
+										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
+										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
+			
+										foreach($order_details as $value)
+										{
+											$order_details_omp  = 	DB::table($value->order_qnty_table_name)
+																	->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
+																	->where($value->order_qnty_table_name.'.id',$value->order_qnty_table_id)
+																	->select('*')
+																	->get();
+											
+											$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+											$order_id  = "washcare_order_id";
+
+
+											$component  = 	DB::table('tesco_washcare_orders_component_mapping')
+																					->where('washcare_order_id',$order_details_omp{0}->washcare_order_id)
+																					->select('*')
+																					->get();
+											foreach($component as $comp_val)
+											{
+													$fibre =  DB::table('tesco_washcare_orders_component_fibre_mapping')
+																					->where('washcare_component_id',$comp_val->id)
+																					->select('*')
+																					->get();
+													$comp_val->fibre=$fibre;
+													
+											}
+
+											$degree_text  = DB::table('tesco_care_additional_instructions')
+																			->where('english','UNLESS IT’S DIRTY WASH AT 30º')
+																			->select('*')
+																			->get();
+
+
+
+								
+											$order_omp  = 	DB::table($order_table)
+																->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+																->join('tesco_care_symbols as washing',$order_table.'.wash_symbol_id', 'washing.id')
+                                ->join('tesco_care_symbols as whitening',$order_table.'.bleach_symbol_id', 'whitening.id')
+                                ->join('tesco_care_symbols as dry',$order_table.'.dry_symbol_id', 'dry.id')
+                                ->join('tesco_care_symbols as iron',$order_table.'.ironing_symbol_id', 'iron.id')
+                                ->join('tesco_care_symbols as cleaning',$order_table.'.dryclean_symbol_id', 'cleaning.id')
+																	->where($order_table.'.id',$order_details_omp[0]->$order_id)
+																	->select($order_table.'.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+																	->get();
+
+																	$value->washcare_order_id=$order_details_omp{0}->washcare_order_id;
+																	$value->size_id=$order_details_omp{0}->size_id;
+																	$value->uk_ean=$order_details_omp{0}->uk_ean;
+																	$value->ce_ean=$order_details_omp{0}->ce_ean;
+																	$value->quantity=$order_details_omp{0}->quantity;
+																	$value->selected_secondary_sizes=$order_details_omp{0}->selected_secondary_sizes;
+																	$value->uk_size=$order_details_omp{0}->uk_size;
+																	$value->ce_size=$order_details_omp{0}->ce_size;
+
+											
+																	$value->po_number=$order_omp{0}->po_number;
+																	$value->uk_style_ref=$order_omp{0}->uk_style_ref;
+																	$value->ce_style_ref=$order_omp{0}->ce_style_ref;
+																	$value->eqos_site_code=$order_omp{0}->eqos_site_code;
+																	$value->fabric_batch_code=$order_omp{0}->fabric_batch_code;
+																	$value->leather_suede_code=$order_omp{0}->leather_suede_code;
+																	$value->tog=$order_omp{0}->tog;
+																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
+																	$value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
+																	$value->internal_reference=$order_omp{0}->internal_reference;
+																	$value->customer_name=$customer_name{0}->short_name;
+																	$value->country_of_origin_text=$order_omp{0}->country_of_origin_text;
+																	$value->wash_iso=$order_omp{0}->wash_iso;
+																	$value->wash_astm=$order_omp{0}->wash_astm;
+																	$value->whit_iso=$order_omp{0}->whit_iso;
+																	$value->whit_astm=$order_omp{0}->whit_astm;
+																	$value->dry_iso=$order_omp{0}->dry_iso;
+																	$value->dry_astm=$order_omp{0}->dry_astm;
+																	$value->iron_iso=$order_omp{0}->iron_iso;
+																	$value->iron_astm=$order_omp{0}->iron_astm;
+																	$value->clean_iso=$order_omp{0}->clean_iso;
+																	$value->clean_astm=$order_omp{0}->clean_astm;
+																	$value->degree=$order_omp{0}->degree;
+																	$value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
+																	$value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
+																	$value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
+																	$value->kids_warning_text=$order_omp{0}->kids_warning_text;
+																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
+																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
+																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+											
+										}
+									}
+									else
+									{
+										$tesco_item_master = array();
+									}
+
+									$tesco_tiny  = 	DB::table('tesco_translation')
+																		->where('id',1)
+																		->select('*')
+																		->get();
+									$tesco_nb  = 	DB::table('tesco_translation')
+																		->where('id',2)
+																		->select('*')
+																		->get();
+									$tesco_up1  = 	DB::table('tesco_translation')
+																		->where('id',3)
+																		->select('*')
+																		->get();
+									$tesco_up3  = 	DB::table('tesco_translation')
+																		->where('id',4)
+																		->select('*')
+																		->get();
+									$tesco_onesize  = 	DB::table('tesco_translation')
+																		->where('id',5)
+																		->select('*')
+																		->get();
+																		
+									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
+			}
+			else
+			{
 				$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
@@ -621,8 +761,8 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master = array();
 									}
-	
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
+									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
+			}
 		}
 	
 		
@@ -5956,5 +6096,284 @@ class JobManagerController extends Controller
 			
 			return "uuid updated successfully !!!!";
 		}
+
+		public function proofDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        // PDF::setPrintHeader(false);
+        // PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        $this->template_name = $request->template_name;
+        $this->created_date = $request->created_date;
+        $this->customer_name = $request->customer_name;
+
+        PDF::setHeaderCallback(function($pdf) {
+            $name=$this->template_name;
+            $zone="";
+              $tesco_po_number=$this->tesco_po_number;
+              $style=$this->style;
+              $tesco_description="";
+              $date=date_create($this->created_date);
+              $created_date =  date_format($date,"d.m.Y");
+              $image_file= K_PATH_IMAGES.'logo_example.jpg';
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+                      </g>
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+                              <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+                      </svg>
+                      <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+    
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+              });
+                              
+              // Custom Footer
+              PDF::setFooterCallback(function($pdf) {
+              $tesco_po_number=$this->tesco_po_number;
+              $customer_name=$this->customer_name;
+              // Position at 15 mm from bottom
+              $pdf->SetY(-50);
+              $pdf->SetX(9.5);
+              // Set font
+              //$pdf->SetFont('frankgothcnbt');
+              // Page number
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      
+                       $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+          
+          });
+        
+        
+          
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
+		 } 
+		 
+		 public function printDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
+		 } 
 
 }

@@ -737,16 +737,34 @@ function getErpOrderList()
 							}
                             else{
 
+								if( item.order_qnty_table_name == "tesco_washcare_orders_quanty" )
+								{
+									var zone_ref = "-";
+									var temp_file = item.template_file.split(',');
+
+									var object_ref = `<object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+temp_file[0]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[1]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[2]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[3]+`" type="image/svg+xml"></object>`;
+
+									var down_ref= "labels";
+								}
+								else
+								{
+									var zone_ref = item.zone;
+
+									var object_ref = `<object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object>`;
+
+									var down_ref= "stickers";
+								}
+
                             html += `<tr id="`+item.id+`">
 										<td>`+i+`</td>
 										<td>`+item.style_no+`</td>
 										<td>`+item.buyer_po_number+`</td>
-										<td>`+item.zone+`</td>
+										<td>`+zone_ref+`</td>
 										<td>`+item.reference_name+`</td>
 										<td>`+partial_status +`</td>
 										<td><span class="label `+status+`">`+item.status_name+`</span></td>
 										<td>`+item.created_date+`</td>
-										<td><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object><a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print','stickers','`+item.template_id+`')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof','stickers','`+item.template_id+`','')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a>	</td>
+										<td>`+object_ref+`<a class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print','`+down_ref+`','`+item.template_id+`')" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></a><a style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof','`+down_ref+`','`+item.template_id+`','')"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></a>	</td>
 										</tr>`;
                             }
 							i++;

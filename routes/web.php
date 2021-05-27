@@ -620,6 +620,7 @@ Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl
 
 Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
 Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
+Route::post('admin/tesco/proof-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoLabelos');
 
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
@@ -685,6 +686,9 @@ Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getT
 
 Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
 Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
+
+
+Route::post('customer/tesco/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
 
@@ -782,6 +786,11 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
+
+
+	Route::post('job-manager/tesco/proof-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoLabelos');
+
+	Route::post('job-manager/tesco/print-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@printDivTescoLabelos');
 			
 	Route::post('job-manager/orchestra/proof-pdf', 'ErpUser\Jobmanager\JobManagerController@proofPdf');
 	Route::post('job-manager/orchestra/proof-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@proofPdfArr');

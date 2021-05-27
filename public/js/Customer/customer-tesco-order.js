@@ -711,7 +711,7 @@ function tescoOrders(callback) {
 									$.each($("#tesco_care_size_category option"), function() {
 										size_category_text.push($(this).text());
 									});
-									uploadPurchaseOrderForLabels(formData, poZone, role="customer", size_id, size_category, size_category_text);
+									uploadPurchaseOrderForLabels(formData, poZone, role="customer", size_id, size_category, size_category_text,template_id);
 								} else {
 									formData.append('zone', localStorage.getItem("zone"));
 									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
@@ -734,7 +734,7 @@ function tescoOrders(callback) {
 									size_category_text.push($(this).text());
 								});
 								
-								renderTescoCareOrders(role="customer", size_id, size_category, size_category_text);
+								renderTescoCareOrders(role="customer", size_id, size_category, size_category_text,template_id);
 							}
 							localStorage.setItem("back_flag","create");
 							localStorage.setItem("back_template_id",$('#jstree').jstree("get_selected"));
@@ -1346,6 +1346,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
+										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("proof")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>\
                                         <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\

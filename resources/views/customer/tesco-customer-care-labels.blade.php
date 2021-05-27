@@ -300,6 +300,8 @@
         <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder('customer')"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
+        <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
+
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
         data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times"
             aria-hidden="true"></i> Cancel</button>

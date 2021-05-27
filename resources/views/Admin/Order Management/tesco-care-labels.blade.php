@@ -2,6 +2,8 @@
 <hr>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
+<input type="hidden" id="hidden_id" name="hidden_id">
+<input type="hidden" id="hidden_name" name="hidden_name">
 <span id="result"></span>
 <div class="row">
     <div class="col-md-12">
@@ -299,6 +301,12 @@
         page.</span> 
         <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder('admin')"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
+
+        
+
+        <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('print')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>
+
+        <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
         data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times"
