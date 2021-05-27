@@ -7,7 +7,7 @@ $(function () {
 
     // Method to render tesco care label orders page
     renderTescoCareOrders = (role, size_id, size_category, size_category_text, callback=null) => {
-        user_role = role;
+        var user_role = role.toLowerCase();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
@@ -119,7 +119,7 @@ $(function () {
     }
 
     // Method to add dynamic garment component
-    addComponent = (obj, user) => {
+    addComponent = (obj, user, form_id) => {
         $.ajax({
             url: base_url + "/" + user + "/tesco/care-label-fiber-components",
             type: "get",
@@ -192,7 +192,7 @@ $(function () {
                     $(obj).attr("data-id", component_count);
 
                     $(".selectpicker").selectpicker("refresh");
-                    $('#tesco_care_label_order_form').validator('update');
+                    $('#'+form_id).validator('update');
                 }
             }
         });
@@ -291,10 +291,11 @@ $(function () {
     }
 
     // Get MOQ value based on supplier value.
-    $('#tesco_care_supplier').on('change', function () {
+    getMoq = (user_role, crud_type) => {
         var supplier_id = $('#tesco_care_supplier option:selected').val();
         var buyer_id = localStorage.getItem("buyer_id");
-        var templates = localStorage.getItem("templates");
+        var template_id = crud_type === 'create'?localStorage.getItem("templates"):$('#label_template_id').val();
+        var template_name = crud_type === 'create'?localStorage.getItem("template_group"):$('#label_template_name').val();
 
         if (supplier_id != '') {
 
@@ -305,7 +306,7 @@ $(function () {
                 data: {
                     supplier: supplier_id,
                     buyer_id: buyer_id,
-                    templates: templates
+                    templates: template_id
                 },
                 tryCount: 0,
                 retryLimit: 2,
@@ -321,8 +322,8 @@ $(function () {
                     $('.help-block').html('');
                     /** [ Dynamic moq value assignment on supplier change ] */
                     $('.label-quantity-field').each(function () {
-                        $(this).attr("min", data.moq[0][localStorage.getItem("template_group")]);
-                        $(this).data("min-error", "Qty should be >= " + data.moq[0][localStorage.getItem("template_group")]);
+                        $(this).attr("min", data.moq[0][template_name]);
+                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template_name]);
                     });
 
                 },
@@ -357,26 +358,24 @@ $(function () {
             });
 
         }
-    });
+    }
 
 
     // Method to validate and submit tesco care label orders
-    submitTescoCareLabelOrder = () => {
-        $('#tesco_care_label_order_form').validator('validate');
-
+    validateTescoCareLabelOrder = (user_type) => {
         /** [ bootstrap validator for create tesco order form ] **/
         $('#tesco_care_label_order_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
 
             } else {
                 e.preventDefault();
-                submitCarelabelOrder();
+                submitCarelabelOrder(user_type);
             }
         });
     }
 
     // Method to Save tesco care label orders
-    submitCarelabelOrder = () => {
+    submitCarelabelOrder = (user_type) => {
         var form_obj = [{
             "template_id": localStorage.getItem("templates")
         }];
@@ -384,7 +383,7 @@ $(function () {
 
         $.ajax({
             type: "post",
-            url: base_url + "/" + user_role + "/tesco/submit-care-label-order",
+            url: base_url + "/" + user_type + "/tesco/submit-care-label-order",
             data: formData,
             headers: {
                 'X-CSRF-TOKEN': csrf_token
@@ -605,7 +604,7 @@ $(function () {
         });
     }
 
-    cancelCareLabelOrder = () => {
+    cancelCareLabelOrder = (user_type) => {
 
         var array_list = [];
         my_object = new Object();
@@ -616,7 +615,7 @@ $(function () {
         array_list.push(my_object);
 
         $.ajax({
-            url: base_url + "/" + user_role + "/tesco/cancel-tesco-order",
+            url: base_url + "/" + user_type + "/tesco/cancel-tesco-order",
             type: 'PUT',
             data: {
                 _token: csrf_token,

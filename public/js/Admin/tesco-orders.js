@@ -235,7 +235,7 @@ function tescoOrders(callback) {
 
 																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
 																				<label for="tesco_care_size_chart">Size Chart</label>
-																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, role='admin')">
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, 'admin')">
 																				`+size_options+`
 																				</select>	
 																				<div class="help-block with-errors"></div>

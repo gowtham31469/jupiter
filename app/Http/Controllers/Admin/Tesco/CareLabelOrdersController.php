@@ -10,6 +10,7 @@ use App\Classes\Modules;
 use App\Classes\TescoCareMetadata;
 use App\Classes\StoreTescoLabelOrder;
 use App\Classes\TescoCareLabelParser;
+use App\Classes\UpdateTescoLabelOrder;
 
 use App\TescoPrimarySize;
 use App\Http\Requests\SubmitTescoLabelOrder;
@@ -20,8 +21,9 @@ class CareLabelOrdersController extends Controller
     private $caremeta;
     private $module;
     private $parselabel;
+    private $updateLabelOrder;
 
-    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, TescoCareLabelParser $parselabel)
+    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder,  TescoCareLabelParser $parselabel,UpdateTescoLabelOrder $updateLabelOrder)
     {
         $this->module = $module;
 
@@ -30,6 +32,8 @@ class CareLabelOrdersController extends Controller
         $this->storeorder = $storeorder;
 
         $this->parselabel = $parselabel;
+        
+        $this->updateLabelOrder = $updateLabelOrder;
     }
 
 
@@ -133,7 +137,6 @@ class CareLabelOrdersController extends Controller
 
     public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
     {
-
         if ($request->ajax()) {
 
             $request->validated();
@@ -153,9 +156,8 @@ class CareLabelOrdersController extends Controller
         if ($request->ajax()) {
 
             $request->validated();
-
-            dd($request->tesco_care_supplier);
-            // $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
+            
+            $response = $this->updateLabelOrder->updateTescoLabelOrder($request, 'admin');
 
             return response()->json([
                 'message' => 'success',

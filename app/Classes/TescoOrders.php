@@ -13,6 +13,8 @@ use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\OrderManagementHistory;
 use App\Classes\StoreOrderManagementHistory;
+use App\ErpOrderDetails;
+
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -115,7 +117,7 @@ class TescoOrders
 
           $order_data['po_status'] = $po_status;
 
-          $order_data['pi_required'] = $pi_required;
+          $order_data['pi_status'] = $pi_status;
 
           $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
 
@@ -272,37 +274,30 @@ class TescoOrders
         }
 
         // fetch erp_order_details table details for each quantity_table ids.
-        foreach($quantity_data as $quantity_table_id)
-        {
-            $quantity_id = $quantity_table_id->id;
-            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $qunty_tbl)->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-        } 
+        $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+        ->where('order_qnty_table_name', $qunty_tbl)
+        ->whereIn('order_qnty_table_id', $quantity_data->pluck('id')->toArray())
+        ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+        ->get();
 
-        if(!is_null($erp_order_details[0]))
+        if($erp_order_details->isNotEmpty())
         {
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-            foreach($erp_order_details as $erp_order_detail){
-              // delete from history table and insert new rows.
-              $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
-              DB::table('event_history')->where('history_id',$history_table_id)->delete();
-              DB::table('history')->where('id',$history_table_id)->delete();
-              // delete from erp_order_details table
-              DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-          }
+            $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
+        
+            // delete from erp_order_details table
+            DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
             
-            /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
             $data_array = [];   
-            $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
             $data_array['tableName'] = $table;
-            $data_array['buyer_id'] = $tesco_buyer_id->id;
+            $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
             $data_array['id'] = $table_data->id;
             $data_array['erp_details_status'] = $erp_details_status;
             $data_array['erp_order_id'] = $erp_order_id;
             $data_array['created_by'] = $created_by;
 
-            // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);
         }
 

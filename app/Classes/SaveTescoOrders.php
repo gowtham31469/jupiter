@@ -91,7 +91,7 @@ class SaveTescoOrders
 
           $order_data['po_status'] = null;
 
-          $order_data['pi_required'] = null;
+          $order_data['pi_status'] = null;
 
           $order_data['order_status_id'] = 1;
 

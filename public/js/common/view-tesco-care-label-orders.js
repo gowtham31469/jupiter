@@ -1,8 +1,8 @@
 $( () => {
 
     // Method to render view tesco care label orders page
-    renderLabelViewOrderPage = (order_data, user_role) => {
-
+    renderLabelViewOrderPage = (order_data, role) => {
+        user_role = role.toLowerCase();
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', (response, status, xhr) => {
             $('li.year-nav-menu, li.buyer-nav-menu').addClass('hidden');
 
@@ -85,9 +85,9 @@ $( () => {
 
             }
 
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value=` + valueOfElement.uk_ean + ` disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value=` + valueOfElement.ce_ean + ` disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value=` + valueOfElement.count + ` disabled><div class="help-block with-errors"></div></div></td>
+            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value=` + valueOfElement.uk_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value=` + valueOfElement.ce_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." required disabled><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
                                         </tr>`;
         });
@@ -125,7 +125,7 @@ $( () => {
                                 garment_comp_div += component.garment_component_id === parseInt(component_index) ? `<option value=` + component_index + ` selected>` + item + `</option>` : `<option value=` + component_index + `>` + item + `</option>`;
 
                             });
-                            garment_comp_div += `</select>
+                            garment_comp_div += `</select><div class="help-block with-errors"></div>
                                                             </div>
                                                         </div>`;
 
@@ -143,7 +143,7 @@ $( () => {
 
                                 });
 
-                                garment_comp_div += `</select>
+                                garment_comp_div += `</select><div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-xs-3">
@@ -152,6 +152,7 @@ $( () => {
                                                                     <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
+                                                                <div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>`;
                                 fiber_count++
@@ -165,6 +166,7 @@ $( () => {
                                                                         <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
                                                                         <div class="input-group-addon">%</div>
                                                                     </div>
+                                                                    <div class="help-block with-errors"></div>
                                                                     </div>
                                                                 </div>
                                                             </div>

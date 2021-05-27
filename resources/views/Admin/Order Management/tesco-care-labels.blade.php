@@ -1,6 +1,7 @@
 <h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
 <hr>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
+<input type="hidden" id="order_type" name="order_type" value="newOrder">
 <span id="result"></span>
 <div class="row">
     <div class="col-md-12">
@@ -63,7 +64,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("admin", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -90,7 +91,7 @@
 <div class="row garment-component-div">
     <div class="col-md-12">
         <h4 class="pull-left">Garment Component & Fibres</h4>
-        <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'admin')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
+        <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'admin', 'tesco_care_label_order_form')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
     </div>
     
     @for ($j = 1; $j <= 3; $j++)
@@ -296,7 +297,7 @@
 <div class="modal-footer"> 
     <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
         page.</span> 
-        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="submitTescoCareLabelOrder()"><i class="fa fa-floppy-o"
+        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoCareLabelOrder('admin')"><i class="fa fa-floppy-o"
             aria-hidden="true"></i> Submit</button> 
 
         <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"

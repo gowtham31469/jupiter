@@ -72,12 +72,8 @@ class ErpOrders
 	{
 
 		try {
-
-			$table_name     = $request['tableName'];
-			$buyer_id		= $request['buyer_id'];
-			$order_table_id	= $request['id'];
-			$qnty_table     = $table_name . '_quanty';
-			$order_table_array = explode("_", $table_name);
+			$qnty_table     = $request['tableName'] . '_quanty';
+			$order_table_array = explode("_", $request['tableName']);
 			$template_name = $order_table_array[1] !=  'washcare'?strtoupper($order_table_array[1]):title_case($order_table_array[1]);
 
 			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
@@ -87,7 +83,7 @@ class ErpOrders
 				'template',
 				'customer'
 			])
-			->where('id', $order_table_id)
+			->where('id', $request['id'])
 			->first();
 
 			if ($orders->customer->pi_required == 1 && $orders->customer->po_required == 0) {
@@ -101,7 +97,7 @@ class ErpOrders
 			}
 
 			$erp_order = Erp::where([
-				'buyer_id' => $buyer_id,
+				'buyer_id' => $request['buyer_id'],
 				'customer_id' => $orders->tesco_supplier_id,
 				'po_no' => $po_no,
 			])
@@ -123,7 +119,7 @@ class ErpOrders
 					$qnty_table,
 					$orders,
 					$erp_order,
-					$buyer_id,
+					$request['buyer_id'],
 					$po_no
 				);
 				
@@ -138,7 +134,7 @@ class ErpOrders
 				);
 				
 				$new_erp_order = Erp::create([
-					'buyer_id'         => $buyer_id,
+					'buyer_id'         => $request['buyer_id'],
 					'customer_id'      => $orders->tesco_supplier_id,
 					'po_no'            => $po_no,
 					'po_file'          => $po_file,
@@ -153,7 +149,7 @@ class ErpOrders
 					$qnty_table,
 					$orders,
 					$new_erp_order,
-					$buyer_id,
+					$request['buyer_id'],
 					$po_no
 				);
 			}
@@ -161,7 +157,7 @@ class ErpOrders
 			$result = response()->json([
 				'error' => false, 'message' => 'success',
 				'erp_id' => $erp_order_id,
-				'buyer_id' => (int)$buyer_id,
+				'buyer_id' => (int)$request['buyer_id'],
 				'customer_id' => $orders->tesco_supplier_id
 			], 200);
 		} catch (\Exception $e) {
@@ -211,7 +207,7 @@ class ErpOrders
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype
-		$unique_id = 'ERP-' . str_replace(' ', '-', $orders->item_name) . '-' . $erp_order->id . '-' . $style_no . '-' . $orders->po_number . '-' . $orders->order_flag;
+		$unique_id = 'ERP-' . str_replace(' ', '-', $orders->template->item_name) . '-' . $erp_order->id . '-' . $style_no . '-' . $orders->po_number . '-' . $orders->order_flag;
 
 		foreach ($orders->quantities as $key => $value) {
 
@@ -417,10 +413,12 @@ class ErpOrders
 					$po_no
 				);
 			}
+			
 			$result = response()->json([
 				'error' => false,
 				'message' => 'success'
 			], 200);
+
 		} catch (\Exception $e) {
 			$result = response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
 		}
