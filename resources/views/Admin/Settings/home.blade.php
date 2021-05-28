@@ -2934,6 +2934,15 @@
         }
       })
 
+      $('#edit-tesco-labelsize-chart-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+            console.log("logged")
+        }else{
+            e.preventDefault();
+            updateTescoLabelSizeChart();
+        }
+      })
+
       $(document).on('click', '#disableTescoPrimarySizeChart', function(e) {
           var id = $(this).closest('tr').attr('id');
           

@@ -1,12 +1,12 @@
 {{-- Add Tesco Label Size --}}
-<div class="modal fade" id="addTescoLabelSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="TescoLabelSizeChartLabel">
+<div class="modal fade TescoLabelSizeChartModal" id="addTescoLabelSizeChartModal" tabindex="-1" role="dialog" aria-labelledby="TescoLabelSizeChartLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="TescoLabelSizeChartLabel">Add Label Size</h4>
             </div>
-            {!! Form::open(['id' => 'add-tesco-labelsize-chart-form','data-toggle' => 'validator','role' => 'form']) !!}
+            {!! Form::open(['id' => 'add-tesco-labelsize-chart-form','class'=>'tesco-labelsize-chart-form','data-toggle' => 'validator','role' => 'form']) !!}
             <div class="modal-body">
                 <div id="labelsize_error"></div>
                 <div class="row">
@@ -53,14 +53,14 @@
 </div>
 
 {{-- Edit Tesco Label Size --}}
-<div class="modal fade" id="editTescoPrimarySizeModal" tabindex="-1" role="dialog" aria-labelledby="editTescoPrimarySizeLabel">
+<div class="modal fade TescoLabelSizeChartModal" id="editTescoPrimarySizeModal" tabindex="-1" role="dialog" aria-labelledby="editTescoPrimarySizeLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="editTescoPrimarySizeLabel">Edit PrimarySize</h4>
             </div>
-            {!! Form::open(['id' => 'edit-tesco-labelsize-chart-form','data-toggle' => 'validator','role' => 'form']) !!}
+            {!! Form::open(['id' => 'edit-tesco-labelsize-chart-form','class'=>'tesco-labelsize-chart-form','data-toggle' => 'validator','role' => 'form']) !!}
             <div class="modal-body">
                 <div id="edit_labelsize_error"></div>
                 {!! Form::hidden('edit_tesco_primary_id',$value = null, array('id'=>'edit_tesco_primary_id','class' => 'form-control input-sm')) !!}
@@ -78,7 +78,7 @@
                     <div class="col-md-12 edit-econdary-categories">
 
                         @foreach($categories as $id => $value)
-                            <div class="form-check form-check-inline col-md-2"><input class="form-check-input" type="checkbox" value="" data-id="{{$id}}" id="category_{{$value}}" data-name="Height"><label class="form-check-label" for="height">{{$value}}</label></div>
+                            <div class="form-check form-check-inline col-md-2"><input class="form-check-input" type="checkbox" value="" data-id="{{$id}}" id="category_{{$value}}" data-name="{{$value}}"><label class="form-check-label" for="height">{{$value}}</label></div>
                         @endforeach
 
                         {{-- appends checkbox on modal show --}}
@@ -86,7 +86,7 @@
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_labelsize_dept_title', 'Title', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_labelsize_dept_title ',$value = '', array('class' => 'form-control input-sm edit_labelsize_dept_title','placeholder' => 'Department Title','required')) !!}
+                            {!! Form::text('edit_labelsize_dept_title',$value = '', array('class' => 'form-control input-sm edit_labelsize_dept_title','placeholder' => 'Department Title','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

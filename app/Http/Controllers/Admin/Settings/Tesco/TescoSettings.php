@@ -1856,13 +1856,13 @@ class TescoSettings extends Controller
               // dd($data);
               if ($data->is_flag) 
               {
-                  $actions = '<a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="" id="disableTescoSizeChart" data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
+                  $actions = '<a href=""><i class="fa fa-ban filterbtn options fa-button status update_status" aria-hidden="true" title="" id="disableTescoSizeChart" data-id= "'.$data->id.'"data-status=1 data-placement="left" data-original-title="Make Disabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
 
                   $status = '<span class="label label-success">Enabled</span>';
               }
               else 
               {
-                  $actions = '<a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="" id="enableTescoSizeChart" data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
+                  $actions = '<a href=""><i class="fa fa-check filterbtn options fa-button status update_status" aria-hidden="true" title="" id="enableTescoSizeChart" data-id="'.$data->id.'" data-status=0 data-placement="left" data-original-title="Make Enabled"></i></a><a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left" data-id="'.$data->id.'"></i></a>';
 
                   $status = '<span class="label label-danger">Disabled</span>';
               }
@@ -2020,6 +2020,79 @@ class TescoSettings extends Controller
       return $result;
     }
 
+    public function updateStatusFlag(Request $request)
+    {
+      // dd($request->all());
+      $row = TescoPrimarySize::where('id',$request->id)->first();
+      if($request->flag)
+      {
+        $row->is_flag=false;
+      }
+      else
+      {
+        $row->is_flag=true;
+      }
+      $row->save();
+
+      return response(1);
+    }
+
+    public function updateTescoLabelSizeChart(Request $request){
+      $data = $request->all();
+      // dd($data);
+      // if (array_key_exists('secondary', $data)) 
+      // {
+      //   $sec_data = $data['customData']['secondary'];
+      // }
+      // else
+      // {
+      //   $sec_data = [];
+      // }
+
+      $primary_data = $data['customData']['primary'];
+      $sec_data = $data['customData']['secondary'];
+
+      // dd(array_key_exists('secondary', $data));
+      // dd(sizeof($sec_data));
+      // if(!empty($sec_data))
+      //     {dd("not empty");}
+      //   else
+      //     {dd("empty");}
+
+      // dd($data);
+       // dd($primary_data['edit_labelsize_dept_title']);
+      // 
+      // dd($sec_data);
+
+      // dd($data['customData']['primary']['edit_labelsize_dept_title']);
+
+      try {
+          TescoPrimarySize::where('id',$data['customData']['primary']['edit_tesco_primary_id'])->first()->delete();
+          $primary_inserted = TescoPrimarySize::create([
+                    'tesco_size_department_id'   => $primary_data['edit_size_department'],
+                    'department_title'    => $primary_data['edit_labelsize_dept_title'],
+                    'uk_size'     => $primary_data['edit_labelsize_uksize'],
+                    'ce_size'    => $primary_data['edit_labelsize_cesize']
+          ]);
+
+          // if(!empty($sec_data))
+          // {
+            foreach ($sec_data as $key => $value) {
+                $cat_id = explode('_', $key);
+                $secondary_inserted = TescoSecondarySizeChart::create([
+                  'tesco_primary_size_id'   => $primary_inserted->id,
+                  'tesco_secondary_size_category_id'    => $cat_id[1],
+                  'secondary_size'     => $value
+                ]);
+            }
+          // }
+
+          $result = $primary_inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+      } catch (\Exception $e) {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+      return $result;
+    }
       /**
      * Make primary Size chart enabled
      * @param enableTescoPrimarySize chart id
@@ -2071,16 +2144,20 @@ class TescoSettings extends Controller
 
             $categories_values = [];
             $categories = [];
+            $cat_id = [];
 
             foreach ($tesco_primary_size as $key => $value) {
               foreach ($value->secSizeChart as $k => $inner_loop) {
                 array_push($categories, $inner_loop->category_name);  
+                array_push($cat_id, $inner_loop->tesco_secondary_size_category_id);  
                 array_push($categories_values, $inner_loop->secondary_size);  
                 // $categories_values[$inner_loop->category_name] = $inner_loop->secondary_size;
               }
             }
 
-            return response()->json(['error'=>'false','message' =>'success', 'tesco_primary_size' => $tesco_primary_size,'selected_fields'=>$categories_values,'categories'=>$categories]);
+            // 
+
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_primary_size' => $tesco_primary_size,'selected_fields'=>$categories_values,'categories'=>$categories,'category_id'=>$cat_id]);
       }
       catch (\Exception $e){
             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

@@ -4324,7 +4324,7 @@ function getLabelSizeModalData() {
 }
 
 function checkboxToTextbox() {
-  $('#add-tesco-labelsize-chart-form input[type="checkbox"]').change(function() {
+  $('.tesco-labelsize-chart-form input[type="checkbox"]').change(function() {
     var data_id = $(this).attr('data-id');
     var data_name = $(this).attr('data-name');
     if ($(this).prop('checked')) {
@@ -4333,13 +4333,13 @@ function checkboxToTextbox() {
       '<label class="form_label" for="category_'+data_id+'"> '+data_name+'</label>'+
       '<input class="form-control input-sm" placeholder="'+data_name+' Value" required="required" name="category_'+data_id+'" type="text" id="labelsize_'+data_name.toLowerCase()+'" data-id="'+data_id+'" >'+
       '<div class="help-block with-errors"></div></div></div>';
-    
-      $('#addTescoLabelSizeChartModal').find('div.col-md-6:last').after(inputBox)
-      $("#add-tesco-labelsize-chart-form").validator('update');  
+      $('.TescoLabelSizeChartModal').find('.sizechart-'+data_name+'').remove()
+      $('.TescoLabelSizeChartModal').find('div.col-md-6:last').after(inputBox)
+      $(".tesco-labelsize-chart-form").validator('update');  
 
     } else {
-      $('#addTescoLabelSizeChartModal').find('.sizechart-'+data_name+'').remove()
-      $("#add-tesco-labelsize-chart-form").validator('update');
+      $('.TescoLabelSizeChartModal').find('.sizechart-'+data_name+'').remove()
+      $(".tesco-labelsize-chart-form").validator('update');
     }
   });
 }
@@ -4380,6 +4380,44 @@ function addTescoLabelSizeChart() {
         },
         success: function () { 
           alert('Success'); 
+          $("#addTescoLabelSizeChartModal").modal('hide')
+          tescoLabelSizeChart()
+        },
+        error: function (xhr, status, error) { 
+          alert('Error:'); 
+        },
+        complete: function() {
+          $(".loader").hide();
+        }
+      });
+
+
+  } catch (e) {
+      console.log("Error:" + e)
+  }
+}
+
+function updateTescoLabelSizeChart() {
+  try {
+      var raw_data = $('#edit-tesco-labelsize-chart-form').serializeArray();
+      var serializedData = categories_data(raw_data)
+      
+      $.ajax({
+        url: base_url + "/admin/tesco/settings/update-tesco-label-size-chart",
+        method: 'POST',
+        data: {
+          _token: csrf_token,
+          customData: serializedData,
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        beforeSend: function() {
+            $(".loader").show();
+        },
+        success: function () { 
+          alert('Success'); 
+          $("#editTescoPrimarySizeModal").modal('hide')
+          tescoLabelSizeChart()
         },
         error: function (xhr, status, error) { 
           alert('Error:'); 
@@ -4507,7 +4545,7 @@ function addTescoLabelSizeChart() {
           },
           success: function(data) {
               isSubmitting = false;
-              console.log()
+              console.log(data)
               $('#edit_tesco_primary_id').val(id);
               $('#edit_size_department').val();
               $('#edit_labelsize_dept_title').val();
@@ -4520,18 +4558,30 @@ function addTescoLabelSizeChart() {
               $(".edit_size_department").val(data.tesco_primary_size[0]['tesco_size_department_id'])
 
               $div = '';
+              $inputBox = '';
               $(".selected_fields").empty()
               
               for(var i=0; i<data.categories.length; i++)
               {
                 
                 $("#category_"+data.categories[i]).prop('checked',true);
+                $class_name = "sizechart-"+data.categories[i]
 
-                $div+='<div class="col-md-6"><div class="form-group has-feedback has-success"><label for="edit_labelsize_cesize" class="form_label">'+data.categories[i]+'</label><input class="form-control input-sm edit_labelsize_cesize" placeholder='+data.categories[i]+' required="" name="edit_labelsize_cesize" type="text" value='+data.selected_fields[i]+' id="edit_labelsize_cesize"><div class="help-block with-errors"></div></div></div>'
+                // $div+='<div class="col-md-6 removeLabelSizeItem sizechart-'+data.categories[i]+'"><div class="form-group has-feedback has-success"><label for="category_'+data.category_id[i]+'" class="form_label">'+data.categories[i]+'</label><input class="form-control input-sm edit_labelsize_cesize" placeholder='+data.categories[i]+' required="" name="category_'+data.category_id[i]+'" type="text" value='+data.selected_fields[i]+' id="edit_labelsize_cesize"><div class="help-block with-errors"></div></div></div>'
+
+$('.TescoLabelSizeChartModal').find('.sizechart-'+data.categories[i]+'').remove()
+$inputBox+= '<div class="col-md-6 removeLabelSizeItem sizechart-'+data.categories[i]+'"><div class="form-group has-feedback">'+
+      '<label class="form_label" for="category_'+data.category_id[i]+'"> '+data.categories[i]+'</label>'+
+      '<input class="form-control input-sm" placeholder="'+data.categories[i]+' Value" required="required" name="category_'+data.category_id[i]+'" type="text" value="'+data.selected_fields[i]+'" id="labelsize_'+data.categories[i].toLowerCase()+'" data-id="'+data.category_id[i]+'" >'+
+      '<div class="help-block with-errors"></div></div></div>';
+    
+      // $('.TescoLabelSizeChartModal').find('div.col-md-6:last').after(inputBox)
+
+                // $div+='<div class="col-md-6 removeLabelSizeItem sizechart-'+data.categories[i]+'"><div class="form-group has-feedback"><label class="form_label" for="category_'+data.category_id[i]+'"> '+data.categories[i]+'</label><input class="form-control input-sm" placeholder='+data.categories[i]+' required="required" name="category_'+data.category_id[i]+'" type="text" value='+data.selected_fields[i]+' id="labelsize_'+data.categories[i]+'" data-id='+data.category_id[i]+'><div class="help-block with-errors"></div></div></div>'
 
               }
 
-              $(".selected_fields").append($div)
+              $(".selected_fields").append($inputBox)
 
               $('#editTescoPrimarySizeModal').modal({
                   backdrop: 'static',
@@ -4558,3 +4608,20 @@ function addTescoLabelSizeChart() {
       console.log("Error:" + e)
   }
 }
+
+$(document).on('click', '.update_status', function(event) {
+  event.preventDefault();
+  /* Act on the event */
+  // alert($(this).data('status'))
+
+  $.ajax({
+          url: base_url + "/admin/tesco/updateStatusFlag",
+          method: "get",
+          data: { flag: $(this).data('status'), id: $(this).data('id') },
+          success:function(data)
+                {
+                  tescoLabelSizeChart()
+                }
+      })
+
+});
