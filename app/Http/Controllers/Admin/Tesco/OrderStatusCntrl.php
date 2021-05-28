@@ -1741,14 +1741,16 @@ class OrderStatusCntrl extends Controller
         $data_back=explode(',_',$request->data_back);
         $data_back_text=explode(',_',$request->data_back_text);
         $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
         $svgStringBack=urldecode($data_back[0]);
         $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
 
-        define ('PDF_FONT_NAME_MAIN', 'arialunicodems_4302');
-        define ('PDF_FONT_NAME_DATA', 'arialunicodems_4302');
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
         // PDF::setPrintHeader(false);
         // PDF::setPrintFooter(false);
-        PDF::SetFont('arialunicodems_4302');
+        PDF::SetFont('arialuni');
 
         $this->tesco_po_number = $request->tesco_po_number;
         $this->style = $request->style;
@@ -1757,9 +1759,66 @@ class OrderStatusCntrl extends Controller
         $this->customer_name = $request->customer_name;
         
         
+          
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
 
-          // Custom Header
-          PDF::setHeaderCallback(function($pdf) {
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+        print_r(url('/storage/app/template/label.pdf'));
+     } 
+     
+     public function proofDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        // PDF::setPrintHeader(false);
+        // PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        $this->template_name = $request->template_name;
+        $this->created_date = $request->created_date;
+        $this->customer_name = $request->customer_name;
+
+        PDF::setHeaderCallback(function($pdf) {
             $name=$this->template_name;
             $zone="";
               $tesco_po_number=$this->tesco_po_number;
@@ -1840,8 +1899,8 @@ class OrderStatusCntrl extends Controller
                       </g>
                       <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
-                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
@@ -1917,6 +1976,8 @@ class OrderStatusCntrl extends Controller
                        $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
           
           });
+        
+        
           
         $i=0;
         $xx=15;
@@ -1937,6 +1998,7 @@ class OrderStatusCntrl extends Controller
             $svgString=urldecode($value);
             //print_r($svgString);
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
         }
@@ -1951,7 +2013,6 @@ class OrderStatusCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
         print_r(url('/storage/app/template/label.pdf'));
      } 
-     
           /**
     * Print Preview For Stickers
     *
@@ -2161,6 +2222,7 @@ class OrderStatusCntrl extends Controller
             $order_details  = 	DB::table($qty_table)
                                     ->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
 									->where($table_id,$id)
+                                    ->orderBy('tesco_washcare_orders_quanty.id', 'asc')
 									->select('*')
                                     ->get();
                                     
@@ -2280,9 +2342,29 @@ class OrderStatusCntrl extends Controller
                 $value->rfid_compliant=$order_omp{0}->rfid_compliant;
                 $value->tag_at_source=$order_omp{0}->tag_at_source;
             }
-		}
+        }
+        $tesco_tiny  = 	DB::table('tesco_translation')
+									->where('id',1)
+									->select('*')
+                                    ->get();
+        $tesco_nb  = 	DB::table('tesco_translation')
+                                    ->where('id',2)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up1  = 	DB::table('tesco_translation')
+                                    ->where('id',3)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up3  = 	DB::table('tesco_translation')
+                                    ->where('id',4)
+                                    ->select('*')
+                                    ->get();
+        $tesco_onesize  = 	DB::table('tesco_translation')
+                                    ->where('id',5)
+                                    ->select('*')
+                                    ->get();
 		
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
     }
     
     /**
