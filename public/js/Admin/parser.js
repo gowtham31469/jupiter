@@ -807,53 +807,40 @@ function parseSingleXml(data) {
 	}
 }
 
-
-
 /**
  * Method to check the size paramenter of PDF againt the order page.
  * @param  {[type]} parsedObj [description]
  * @return {[type]}           [description]
  */
  function renderParsedLabelValues(parsedObj, po_zone, size_chart) {
-    let uk_size_chart =  size_chart.map(function (sizes) {
-        return sizes.uk_size;
+    var zonal = po_zone.toLowerCase();
+    var zone_size = zonal+'_size';
+    let zonal_size_chart =  size_chart.map(function (sizes) {
+        return sizes[zone_size];
     });
 
-    let ce_size_chart =  size_chart.map(function (sizes) {
-        return sizes.ce_size;
+    // Purchase order
+    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
+
+    // Style number
+    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', false);
+
+    var zonal_size_index = {};
+    $.each(size_chart, function (i, sizes) {    
+        zonal_size_index[sizes[zone_size]] = sizes.id;
     });
 
-    if(po_zone == 'UK') {
-        var uk_size_index = {};
-        $.each(size_chart, function (i, sizes) {
-            uk_size_index[sizes.uk_size] = sizes.id;
-        });
-        parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
-        parsedObj.styleNumber != null?$('#tesco_care_uk_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_uk_style').val(parsedObj.styleNumber).attr('disabled', false);
-        $.each(parsedObj.orderQuantity, function(i, j) {
-            if($.inArray(j.Size, uk_size_chart) != -1) {
-                let index = uk_size_index[j.Size];
-                // EAN Barcode 
-                j.EAN_Barcode != null?$('#'+po_zone.toLowerCase()+'_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#'+po_zone.toLowerCase()+'_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
-                // Quantity
-                j.Single_Qty != null?$('#'+'quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#'+'quantity_'+index).val(j.Single_Qty).attr('disabled', false);
-            }
-        });
-    } else {
-        var ce_size_index = {};
-        $.each(size_chart, function (i, sizes) {
-            ce_size_index[sizes.uk_size] = sizes.id;
-        });
-        parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
-        parsedObj.styleNumber != null?$('#tesco_care_ce_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_ce_style').val(parsedObj.styleNumber).attr('disabled', false);
-        $.each(parsedObj.orderQuantity, function(i, j) {
-            if($.inArray(j.Size, ce_size_chart) != -1) {
-                let index = ce_size_index[j.Size];
-                // EAN Barcode 
-                j.EAN_Barcode != null?$('#'+po_zone.toLowerCase()+'_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#'+po_zone.toLowerCase()+'_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
-                // Quantity
-                j.Single_Qty != null?$('#'+'quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#'+'quantity_'+index).val(j.Single_Qty).attr('disabled', false);
-            }
-        });
-    }
+    $.each(parsedObj.orderQuantity, function(i, j) {
+        if($.inArray(j.Size, zonal_size_chart) != -1) {
+            let index = zonal_size_index[j.Size];
+            console.log(index);
+            // EAN Barcode for UK
+            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+
+            // EAN Barcode for CE
+            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            // Quantity
+            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false);
+        }
+    });
  }
