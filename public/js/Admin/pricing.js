@@ -105,30 +105,18 @@ function price_template_list() {
                             $('.viewDiv').html('');
                         },
                         success: function (data) {
-
-                            if (data.length > 0) {
-								
-								if(data[0].template_file != "")
-								{
-									$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-									$('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
-									$('.descriptionDiv').css('margin-top', '20px')
-									$('.viewDiv').css('margin-top', '0px');
-								}
-								else
-								{
-									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
-									$('.descriptionDiv').html('<b>Template Not Found</b>');
-									$('.descriptionDiv').css('margin-top', '0px')
-									$('.viewDiv').css('margin-top', '140px');
-								}
-                               
-                            } else {
-                                $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
-                                $('.descriptionDiv').html('<b>Template Not Found</b>');
-                                $('.descriptionDiv').css('margin-top', '0px')
-                                $('.viewDiv').css('margin-top', '140px');
+                            
+                            if(buyer === 'tesco') {
+                                tescoTemplateView(data)
                             }
+                            else if(buyer === 'orchestra') {
+                                orchestraTemplateView(data)
+                            }
+                            else{
+                                otherTemplateView(data)
+                            }
+
+                            
 
 
                         },
@@ -383,3 +371,91 @@ $('.customer-select').on('click', 'li', function() {
     $('#tree1').jstree('refresh');
     $('.viewDiv').empty();
 })
+
+function tescoTemplateView(data)
+{
+    if (data.length > 0) {
+								
+        if(data[0].template_file != "")
+        {
+            if(data[0].type == "Labels")
+            {
+                //alert()
+                var object_ref = '<img src="/images/FRONT.png" style="height: 500px;"><img style="margin-left: 10px;height: 500px;" src="/images/BACK.png">';
+            }
+            else
+            {
+                var object_ref = '<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>';
+            }
+            $('.viewDiv').html(object_ref)
+            $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
+            $('.descriptionDiv').css('margin-top', '20px')
+            $('.viewDiv').css('margin-top', '0px');
+        }
+        else
+        {
+            $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+            $('.descriptionDiv').html('<b>Template Not Found</b>');
+            $('.descriptionDiv').css('margin-top', '0px')
+            $('.viewDiv').css('margin-top', '140px');
+        }
+       
+    } else {
+        $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+        $('.descriptionDiv').html('<b>Template Not Found</b>');
+        $('.descriptionDiv').css('margin-top', '0px')
+        $('.viewDiv').css('margin-top', '140px');
+    }
+}
+
+function orchestraTemplateView(objdata)
+{
+    var data = objdata.treeviewData;
+    if (data.length > 0) {
+        if (data[0].template_file != "" && data[0].template_file != null) {
+            
+            if( data[0].template_file.substr(data[0].template_file.length - 3) == "svg")
+            {
+                if (data.length > 1) {
+                $('.viewDiv').html('<div class="row">');
+                $.each(data, function (index, value) {
+                    $('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+                });
+                $('.viewDiv').append('</div>');
+            } else {
+                $('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
+            }
+            }
+            else
+            {
+                $('.viewDiv').html('<img style="    width: 100px;margin-left: 50%;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
+            }
+        }
+    }
+}
+
+function otherTemplateView(data)
+{
+    var data = objdata.treeviewData;
+    if (data.length > 0) {
+        if (data[0].template_file != "" && data[0].template_file != null) {
+            
+            if( data[0].template_file.substr(data[0].template_file.length - 3) == "svg")
+            {
+                if (data.length > 1) {
+                $('.viewDiv').html('<div class="row">');
+                $.each(data, function (index, value) {
+                    $('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+                });
+                $('.viewDiv').append('</div>');
+            } else {
+                $('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
+            }
+            }
+            else
+            {
+                $('.viewDiv').html('<img style="    width: 100px;margin-left: 50%;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
+            }
+        }
+    }
+}
