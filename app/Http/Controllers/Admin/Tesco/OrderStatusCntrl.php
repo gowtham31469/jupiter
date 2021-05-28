@@ -759,11 +759,11 @@ class OrderStatusCntrl extends Controller
 
                                 if(count($ukstylenoos))
                                 {
-                                    $query->orWhereIn('uk_style_ref', $ukstylenoos);
+                                    $query->WhereIn('uk_style_ref', $ukstylenoos);
                                 }
                                 if(count($stylenoos))
                                 {
-                                    $query->orWhereIn('ce_style_ref', $stylenoos);
+                                    $query->WhereIn('ce_style_ref', $stylenoos);
                                 }
                             })
                             ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){

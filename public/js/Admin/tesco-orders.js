@@ -560,7 +560,17 @@ function tescoOrders(callback) {
 											$('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										} else {
-											$('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
+											//console.log("type" + value[0].type);
+											if(value[0].type == "Labels")
+											{
+												//alert()
+												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
+											}
+											else
+											{
+												var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
+											}
+											$('.templateDiv').append('<div class="col-md-4">'+object_ref+'<div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										}
 									});
