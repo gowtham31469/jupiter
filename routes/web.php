@@ -42,6 +42,7 @@ Route::get('delete_now', function () {
     dd(App\OrchestraTemplate::where('item_id',60)->first());
 });
 
+Route::view('test','test_blade');
 
 // Auth::routes();
 
@@ -451,6 +452,9 @@ Route::put('admin/tesco/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@c
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
+//Repeat Order
+Route::post('admin/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder');
+Route::get('admin/getReorderDetails/{id}', ['as'=>'getReorderDetails','uses'=>'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder']);
 //Reorder
 
 Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');
@@ -1017,12 +1021,16 @@ Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSe
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
 
 #Tesco Label Size Chart
+
 Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
 Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
 Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+Route::post('admin/tesco/settings/update-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@updateTescoLabelSizeChart');
 Route::put('admin/tesco/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
 Route::put('admin/tesco/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
 Route::get('admin/tesco/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
+
+Route::get('admin/tesco/updateStatusFlag', ['as'=>'updateStatusFlag','uses'=>'Admin\Settings\Tesco\TescoSettings@updateStatusFlag']);
 
 
 // Update financial year in session

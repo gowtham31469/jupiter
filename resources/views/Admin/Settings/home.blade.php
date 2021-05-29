@@ -2934,6 +2934,15 @@
         }
       })
 
+      $('#edit-tesco-labelsize-chart-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+            console.log("logged")
+        }else{
+            e.preventDefault();
+            updateTescoLabelSizeChart();
+        }
+      })
+
       $(document).on('click', '#disableTescoPrimarySizeChart', function(e) {
           var id = $(this).closest('tr').attr('id');
           
@@ -2950,7 +2959,9 @@
       
        /** get edit tesco size chart details **/
       $(document).on('click','.edit-tesco-size-chart',function(e){
-          var id = $(this).closest('tr').attr('id');
+          // var id = $(this).closest('tr').attr('id');
+          var id = $(this).data('id');
+          // alert(id)
           e.preventDefault();
           /* call getTescoSizeChartById function from tesco-settings.js*/
           getTescoSizeChartById(id);
