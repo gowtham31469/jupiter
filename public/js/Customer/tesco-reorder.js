@@ -238,7 +238,7 @@ function repeatordertescoartworks() {
 						{
 							//alert()
 							var span = '<span class="label labels">-</span><span id="list-li-repeatorder' + i + '">';
-							$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="' + base_url + '/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-' + uvc + '</p></div><div class="col-md-2"><p class="po">PO-' + index.po_number + '</p></div><div class="col-md-2"><p class="name">' + index.TemplateName + '</p></div><div class="col-md-2">' + span + ' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityLabelTesco("' + index.type + '","' + index.id + '","' + index.TemplateName.replace(' ', '') + '","' + index.zone + '","' + index.po_number + '","list-li-repeatorder' + i + '")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
+							$('<li class="list-group-item"><div class="row"><div class="col-md-1"> <img src="' + base_url + '/images/price-tag.png" alt="Tag"></div><div class="col-md-2"><p class="uvc">Style-' + uvc + '</p></div><div class="col-md-2"><p class="po">PO-' + index.po_number + '</p></div><div class="col-md-2"><p class="name">' + index.TemplateName + '</p></div><div class="col-md-2">' + span + ' </div><div class="col-md-3"> <button class="btn btn-block btn-ghost" onclick=extraQuantityLabelTescoRepeatOrderCustomer("' + index.type + '","' + index.id + '","' + index.TemplateName.replace(' ', '') + '","' + index.zone + '","' + index.po_number + '","list-li-repeatorder' + i + '")>ADDITIONAL QUANTITY</button></div></div></li>').appendTo('.list_div_reorder ul').show('slow')
 							$('.list_div_reorder').removeClass("hidden")
 						}
 						else
@@ -438,12 +438,14 @@ function extraQuantityTesco(type, id, name, zone, po_number, liid) {
  * @return View
  */
 
-function extraQuantityLabelTesco(type,id,name,zone,po_number,liid)
+function extraQuantityLabelTescoRepeatOrderCustomer(type,id,name,zone,po_number,liid)
 {
+
 	var buyer = localStorage.getItem("buyer");
     
 	$.ajax({
-		url: base_url + "/customer/tesco/extra-quantity-label-tesco",
+		// url: base_url + "/customer/tesco/extra-quantity-label-tesco",
+		url: base_url + "/customer/tesco/order-management/extra-quantity-label-tesco-repeatOrder",
 		type: "Post",
 		dataType: "json",
 		data: {

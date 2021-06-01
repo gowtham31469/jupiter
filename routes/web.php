@@ -454,7 +454,7 @@ Route::post('admin/orchestra/template-management/create-template-view', 'Admin\O
 
 //Repeat Order
 Route::post('admin/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder');
-Route::get('admin/getReorderDetails/{id}', ['as'=>'getReorderDetails','uses'=>'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder']);
+// Route::get('admin/getReorderDetails/{id}', ['as'=>'getReorderDetails','uses'=>'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder']);
 //Reorder
 
 Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');
@@ -683,6 +683,8 @@ Route::post('customer/tesco/edit-check-exist-po-repeat', 'Customer\Tesco\Reorder
 
 Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
 
+//Customer Repeat Order
+Route::post('customer/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Customer\Tesco\RepeatOrderController@extraQuantityLabelTescoRepeatOrder');
 
 
 //Customer Print Option
