@@ -16,7 +16,7 @@ class CreateTescoWashcareOrdersComponentMappingTable extends Migration
         Schema::create('tesco_washcare_orders_component_mapping', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('washcare_order_id')->index();
-            $table->unsignedInteger('garment_component_id')->index();
+            $table->unsignedInteger('garment_component_id')->nullable()->index();
             $table->json('garment_component_text')->nullable();
             $table->timestamps();
 
