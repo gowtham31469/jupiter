@@ -400,28 +400,30 @@ $(function () {
             },
             statusCode: {
                 200: function (response) {
-                    //alert(response.data.last_insertion)
-                    $('#hidden_id').val(response.data.last_insertion)
-                    $('.create-download-artwork').css('display','inline-block')
-                    $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
-                    $('.label-order-cancel-btn').show();
+                        $('#hidden_id').val(response.data.last_insertion)
+                        $('.create-download-artwork').css('display', 'inline-block')
+                        $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
-                    postLabelOrderSubmit(response.data);
+                        $('.label-order-cancel-btn').show();
 
-                    $(window).scrollTop(0);
-                },
-                400: function (error) {
-                    $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-                },
-                422: function (errorXHR) {
-                    var error_msg = ``;
-                    $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
-                        error_msg += `<li>` + valueOfElement + `</li>`;
-                    });
-                    $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-                    $(window).scrollTop(0);
-                }
+                        postLabelOrderSubmit(response.data);
+
+                        $(window).scrollTop(0);
+                    },
+                    400: function (error) {
+                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                        $('.label-order-submit-btn').prop('disabled', false);
+                    },
+                    422: function (errorXHR) {
+                        var error_msg = ``;
+                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                            error_msg += `<li>` + valueOfElement + `</li>`;
+                        });
+                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                        $('.label-order-submit-btn').prop('disabled', false);
+                        $(window).scrollTop(0);
+                    }
             }
         });
     }
