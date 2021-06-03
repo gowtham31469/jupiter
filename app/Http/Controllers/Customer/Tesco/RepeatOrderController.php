@@ -102,7 +102,7 @@ class RepeatOrderController extends Controller
             // ->with('quantities')
             // ->with('garment_components')
             // ->get();
-            dd($data);
+            // dd($data);
       echo json_encode($data);
     }
 }
