@@ -341,6 +341,54 @@ class TescoTemplateTableSeeder extends Seeder
                 'hierarchy_id' => 2,
                 'flag' => 0,
             ),
+            28 => 
+            array (
+                'id' => 28,
+                'item_id' => 34,
+                'template_name' => 'GCL25W/M12723G',
+                'template_description' => 'GCL25W/M12723G',
+                'template_file' => '/storage/app/template/tesco/GCL25W_M12723G.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 33,
+                'flag' => 0,
+            ),
+            29 => 
+            array (
+                'id' => 29,
+                'item_id' => 35,
+                'template_name' => 'GCL25W/M13220G',
+                'template_description' => 'GCL25W/M13220G',
+                'template_file' => '/storage/app/template/tesco/GCL25W_M13220G.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 33,
+                'flag' => 0,
+            ),
+            30 => 
+            array (
+                'id' => 30,
+                'item_id' => 36,
+                'template_name' => 'GCL25W/M12723G',
+                'template_description' => 'GCL25W/M12723G',
+                'template_file' => '/storage/app/template/tesco/GCL25W_M12723G.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 33,
+                'flag' => 0,
+            ),
+            31 => 
+            array (
+                'id' => 31,
+                'item_id' => 37,
+                'template_name' => 'GCL25W/M13220G',
+                'template_description' => 'GCL25W/M13220G',
+                'template_file' => '/storage/app/template/tesco/GCL25W_M13220G.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 33,
+                'flag' => 0,
+            ),
         ));
         
         

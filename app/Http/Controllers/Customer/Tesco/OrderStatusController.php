@@ -29,6 +29,7 @@ use App\Classes\CleanString;
 use App\OrderManagementHistory;
 use App\Classes\ApproveTescoOrders;
 use PDF;
+use App\Classes\TescoCareMetadata;
 
 class OrderStatusController extends Controller
 {
@@ -36,13 +37,14 @@ class OrderStatusController extends Controller
     private $updated_erp_table_array;
     private $class_status;
     private $erp_obj;
+    private $caremeta;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(TescoCareMetadata $caremeta)
     {
 
        $this->middleware('customer_auth');
@@ -51,6 +53,9 @@ class OrderStatusController extends Controller
        $this->updated_erp_table_array = [];
        $this->class_status = 'success';
        $this->erp_obj    = new ErpOrders();
+
+       $this->caremeta = $caremeta;
+
     }
 
     /**
@@ -286,6 +291,11 @@ class OrderStatusController extends Controller
                 ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                         ->select("season_code");
+
+                $tesco_washcare_orders = DB::table("tesco_washcare_orders")	
+                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                        ->select("season_code");
                     
                 $data = DB::table("tesco_thl3_orders")
                 ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -298,48 +308,55 @@ class OrderStatusController extends Controller
                     ->union($tsl1)
                     ->union($tsl3)
                     ->union($thl1)
+                    ->union($tesco_washcare_orders)
                     ->get();
     
                 $tcl1_style = DB::table("tesco_tcl1_orders")
                 ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
     
                 $tcl2_style = DB::table("tesco_tcl2_orders")
                 ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                         
                 $tcl4_style = DB::table("tesco_tcl4_orders")
                 ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                 
                 $tsl1_style = DB::table("tesco_tsl1_orders")
                 ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                 
                 $tsl3_style = DB::table("tesco_tsl3_orders")
                 ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
     
                 $thl1_style = DB::table("tesco_thl1_orders")
                 ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
+                $tesco_washcare_orders_style = DB::table("tesco_washcare_orders")	
+                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])	
+                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
     
                 $style_no = DB::table("tesco_thl3_orders")
                             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
-                            ->select("uk_style_ref","ce_style_ref","zone")
+                            ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
                             ->union($tcl1_style)
                             ->union($tcl2_style)
                             ->union($tcl4_style)
                             ->union($tsl1_style)
                             ->union($tsl3_style)
                             ->union($thl1_style)
+                            ->union($tesco_washcare_orders_style)
                             ->get();
                 
             }
@@ -387,6 +404,12 @@ class OrderStatusController extends Controller
                 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_thl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                         ->select("season_code");
+
+                $tesco_washcare_orders = DB::table("tesco_washcare_orders")	
+                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                        ->select("season_code");
                     
                 $data = DB::table("tesco_thl3_orders")
                 ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -400,55 +423,64 @@ class OrderStatusController extends Controller
                     ->union($tsl1)
                     ->union($tsl3)
                     ->union($thl1)
+                    ->union($tesco_washcare_orders)
                     ->get();
     
                 $tcl1_style = DB::table("tesco_tcl1_orders")
                 ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_tcl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
     
                 $tcl2_style = DB::table("tesco_tcl2_orders")
                 ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_tcl2_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                         
                 $tcl4_style = DB::table("tesco_tcl4_orders")
                 ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_tcl4_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                 
                 $tsl1_style = DB::table("tesco_tsl1_orders")
                 ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_tsl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                 
                 $tsl3_style = DB::table("tesco_tsl3_orders")
                 ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_tsl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
     
                 $thl1_style = DB::table("tesco_thl1_orders")
                 ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_thl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                        ->select("uk_style_ref","ce_style_ref","zone");
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
+                
+                $tesco_washcare_orders_style = DB::table("tesco_washcare_orders")	
+                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])	
+                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
     
                 $style_no = DB::table("tesco_thl3_orders")
                             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
                             ->where('tesco_thl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
-                            ->select("uk_style_ref","ce_style_ref","zone")
+                            ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
                             ->union($tcl1_style)
                             ->union($tcl2_style)
                             ->union($tcl4_style)
                             ->union($tsl1_style)
                             ->union($tsl3_style)
                             ->union($thl1_style)
+                            ->union($tesco_washcare_orders_style)
                             ->get();
 
             }
@@ -1090,6 +1122,58 @@ class OrderStatusController extends Controller
                                     }
                                 })
                                 ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_thl1_orders.season_code','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_thl1_orders.order_status as artwork_status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+                $wcl = "WCL";
+                $tesco_washcare_orders = "tesco_washcare_orders";
+                $tesco_washcare_orders = DB::table("tesco_washcare_orders")
+                ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+                                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where(function($query) use ($seasonos){
+                                    if(count($seasonos))
+                                    {
+                                        $query->orWhereIn('season_code', $seasonos);
+                                    }
+                                })
+                                ->where(function($query) use ($stylenoos,$ukstylenoos){
+    
+                                    if(count($ukstylenoos))
+                                    {
+                                        $query->WhereIn('uk_style_ref', $ukstylenoos);
+                                    }
+                                    if(count($stylenoos))
+                                    {
+                                        $query->WhereIn('ce_style_ref', $stylenoos);
+                                    }
+                                })
+                                ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){
+                                    if(count($orderstatusosref))
+                                    {
+                                        $query->orWhereIn('order_status', $orderstatusosref);
+                                    }
+                                    if(in_array("Pending", $orderstatusos))
+                                    {
+                                        $query->orWhere('is_order_count_empty', 1);
+                                    }
+                                    if(count($artworkstatusos))
+                                    {
+                                        $query->orWhereIn('order_status', $artworkstatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($postatusos){
+                                    if(count($postatusos))
+                                    {
+                                        $query->orWhereIn('po_status', $postatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($pistatusos){
+                                    if(count($pistatusos))
+                                    {
+                                        $query->orWhereIn('pi_status', $pistatusos);
+                                    }
+                                })
+                                ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_washcare_orders.season_code','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.po_number as BuyerPO','tesco_washcare_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_washcare_orders.template_type as Template Type','customers.id as customer_id','tesco_washcare_orders.created_at as OrderDate',DB::raw('to_char(tesco_washcare_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_washcare_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_washcare_orders.order_status as artwork_status','tesco_washcare_orders.pi_status as PI Status','tesco_washcare_orders.po_status as PO Status','tesco_washcare_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_washcare_orders.id as tableID','tesco_washcare_orders.po_file','customers.pi_required','customers.po_required','tesco_washcare_orders.template_id','tesco_washcare_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
     
                 $thl3 = "THL 3";
                 $tesco_thl3_orders = "tesco_thl3_orders";
@@ -1148,6 +1232,7 @@ class OrderStatusController extends Controller
                             ->union($tesco_tsl1_orders)
                             ->union($tesco_tsl3_orders)
                             ->union($tesco_thl1_orders)
+                            ->union($tesco_washcare_orders)
                             ->get();
             }
             else
@@ -1473,6 +1558,59 @@ class OrderStatusController extends Controller
                                     }
                                 })
                                 ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_thl1_orders.season_code','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_thl1_orders.order_status as artwork_status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+
+                $wcl = "WCL";
+                $tesco_washcare_orders = "tesco_washcare_orders";
+                $tesco_washcare_orders = DB::table("tesco_washcare_orders")
+                ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                ->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+                                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                                ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where(function($query) use ($seasonos){
+                                    if(count($seasonos))
+                                    {
+                                        $query->orWhereIn('season_code', $seasonos);
+                                    }
+                                })
+                                ->where(function($query) use ($stylenoos,$ukstylenoos){
+    
+                                    if(count($ukstylenoos))
+                                    {
+                                        $query->orWhereIn('uk_style_ref', $ukstylenoos);
+                                    }
+                                    if(count($stylenoos))
+                                    {
+                                        $query->orWhereIn('ce_style_ref', $stylenoos);
+                                    }
+                                })
+                                ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){
+                                    if(count($orderstatusosref))
+                                    {
+                                        $query->orWhereIn('order_status', $orderstatusosref);
+                                    }
+                                    if(in_array("Pending", $orderstatusos))
+                                    {
+                                        $query->orWhere('is_order_count_empty', 1);
+                                    }
+                                    if(count($artworkstatusos))
+                                    {
+                                        $query->orWhereIn('order_status', $artworkstatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($postatusos){
+                                    if(count($postatusos))
+                                    {
+                                        $query->orWhereIn('po_status', $postatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($pistatusos){
+                                    if(count($pistatusos))
+                                    {
+                                        $query->orWhereIn('pi_status', $pistatusos);
+                                    }
+                                })
+                                ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_washcare_orders.season_code','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.po_number as BuyerPO','tesco_washcare_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_washcare_orders.template_type as Template Type','customers.id as customer_id','tesco_washcare_orders.created_at as OrderDate',DB::raw('to_char(tesco_washcare_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_washcare_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_washcare_orders.order_status as artwork_status','tesco_washcare_orders.pi_status as PI Status','tesco_washcare_orders.po_status as PO Status','tesco_washcare_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_washcare_orders.id as tableID','tesco_washcare_orders.po_file','customers.pi_required','customers.po_required','tesco_washcare_orders.template_id','tesco_washcare_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
     
                 $thl3 = "THL 3";
                 $tesco_thl3_orders = "tesco_thl3_orders";
@@ -1532,6 +1670,7 @@ class OrderStatusController extends Controller
                             ->union($tesco_tsl1_orders)
                             ->union($tesco_tsl3_orders)
                             ->union($tesco_thl1_orders)
+                            ->union($tesco_washcare_orders)
                             ->get();
             }
             
@@ -2297,10 +2436,11 @@ class OrderStatusController extends Controller
                 $data_array_2['id'] = $template_id;
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
-                $data_array_2['created_by'] = Auth::guard('web_customer')->id();
 				
-				$jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+                $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
+                
                 $content = $jsonResponse->getContent();
+
                 $this->updated_erp_table_array = json_decode($content, true);
                 
                 $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
@@ -2401,14 +2541,16 @@ class OrderStatusController extends Controller
 
             if ($data)
             {
-                if ($data['bank_details']->zone == "CE")
+                $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
+                if ($data['bank_details']->zone === "joint")
                 {
-                    $style_no = $data['bank_details']->ce_style_ref;
+                    $style_no = $data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref;
                 }
                 else
                 {
-                    $style_no = $data['bank_details']->uk_style_ref;
+                    $style_no = $data['bank_details']->$zone_style_no;
                 }
+
                 if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
@@ -2463,17 +2605,19 @@ class OrderStatusController extends Controller
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
                foreach ($data['tables'] as $table => $vals) {
-                    if ($data['bank_details']->zone == "CE") {
-                       
+                    
+                    if ($data['bank_details']->zone === "joint") {
                         $tableID =  DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref',$style_no)
+                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)->value('id');
                         $approved_data   =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref',$style_no)
+                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
@@ -2483,35 +2627,40 @@ class OrderStatusController extends Controller
                                                'pi_file' => $attachment,
                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                                             ]);
-                    }
-                    else {
-                        $tableID = DB::table($table)
+                    } else {
+                        $tableID =  DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('uk_style_ref',$style_no)
+                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   = DB::table($table)
+                        $approved_data   =   DB::table($table)
                                             ->where($table.'.is_order_count_empty',0)
-                                            ->where('uk_style_ref',$style_no)
+                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
                                             ->where('order_flag',$data['item_details'][0]->order_flag)
                                             ->where('pi_status',$data['item_details'][0]->pi_status)
                                             ->where('po_number',$data['bank_details']->po_number)
                                             ->update([
-                                                'pi_status' => "PI Approved",
-                                                'pi_id' => $pi_details->id,
+                                               'pi_status' => "PI Approved",
+                                               'pi_id' => $pi_details->id,
+                                               'pi_file' => $attachment,
                                                 'pi_file' => $attachment,   
-                                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                             ]);
+                                               'pi_file' => $attachment,
+                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                                            ]);
+                        
                     }
                     /** @var array [Pass array of values to updateTescoErpOrders function] */
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
                     $erpOrders['buyer_id']  = $buyer_id;
-                    $erpOrders['created_by']= Auth::guard('web_customer')->id();
+
                     $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+
                     if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                         $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                     }
 
                     // update PI approve status as "PI Approved" in order history table
@@ -2534,11 +2683,13 @@ class OrderStatusController extends Controller
                 $erpOrders['tableName'] = $table_name;
                 $erpOrders['id']        = $row_id;
                 $erpOrders['buyer_id']  = $buyer_id;
-                $erpOrders['created_by']= Auth::guard('web_customer')->id(); 
+                 
                 $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
 
                 if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
+
                     $this->erp_obj->updateTescoErpOrders($erpOrders);
+
                 }
 
                 // update PI approve status as "PI Approved" in order history table
@@ -2576,34 +2727,52 @@ class OrderStatusController extends Controller
             $table_data =   DB::table($table_name)->where('id',$row_id)->first();
 
             if ($table_data->order_flag =="newOrder") {
-               if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
-                  $table_array = array('tesco_tcl1_orders','tesco_tcl2_orders','tesco_tsl1_orders');
-                  $qnty_id_array = array('tesco_tcl1_orders_quanty','tesco_tcl2_orders_quanty','tesco_tsl1_orders_quanty');
-              $template_array = array_combine($table_array, $qnty_id_array);
 
+                if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
+
+                    $table_array = array('tesco_tcl1_orders', 'tesco_tcl2_orders', 'tesco_tsl1_orders');
+                    $qnty_id_array = array('tesco_tcl1_orders_quanty', 'tesco_tcl2_orders_quanty', 'tesco_tsl1_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
                 }
+
                 if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-                  $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-                  $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
-                  $template_array = array_combine($table_array, $qnty_id_array);
+
+                    $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders');
+                    $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
+                }
+
+                if ($table_name == "tesco_washcare_orders") {
+
+                    $table_array = array('tesco_washcare_orders');
+                    $qnty_id_array = array('tesco_washcare_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
                 }
             }
             
             if (!empty($template_array)) {
+
                 foreach ($template_array as $table => $value) {
-                    if ($table_data->zone == "CE") {
+
+                    if ($table_data->zone == "joint") {
+
                         DB::table($table)
                         ->where('ce_style_ref',$table_data->ce_style_ref)
+                        ->where('uk_style_ref',$table_data->uk_style_ref)
                         ->where('po_number',$table_data->po_number)
                         ->where('order_flag',$table_data->order_flag)
                         ->update([
                           'pi_status' => "PI Rejected",
                           'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
+
                     }
                     else{
+
+                        $zone_style_ref = strtolower($table_data->zone).'_style_ref';
+
                         DB::table($table)
-                        ->where('uk_style_ref',$table_data->uk_style_ref)
+                        ->where(strtolower($table_data->zone).'_style_ref',$table_data->$zone_style_ref)
                         ->where('po_number',$table_data->po_number)
                         ->where('order_flag',$table_data->order_flag)
                         ->update([
@@ -2614,15 +2783,15 @@ class OrderStatusController extends Controller
                 }
             }
             else{
-                $data = DB::table($table_name)
+                    DB::table($table_name)
                         ->where('id',$row_id)
-                         ->update([
-                          'pi_status' => "PI Rejected",
-                          'pi_rev_no' => $table_data->pi_rev_no + 1
+                            ->update([
+                            'pi_status' => "PI Rejected",
+                            'pi_rev_no' => $table_data->pi_rev_no + 1
                         ]);
             }
-    
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
+
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         catch (\Exception $e)
         {
@@ -2643,11 +2812,27 @@ class OrderStatusController extends Controller
             $style_num = $request->styleNum;
             $zone      = $request->zone;
             if ($zone=="CE") {
-               $col = "ce_style_ref";
-            }
-            else{
-                 $col = "uk_style_ref";
-            }
+                $col = "ce_style_ref";
+                $uk_col="ce_style_ref";
+                $ce_col="ce_style_ref";
+                $uk_style =  "";
+                $ce_style = $request->styleNum;
+             }
+             else if($zone=="labels"){
+                 $uk_col="uk_style_ref";
+                 $ce_col="ce_style_ref";
+                 $explode_style = explode('/',$request->styleNum);
+                 $uk_style=$explode_style[0];
+                 $ce_style=$explode_style[1];
+                 $col ="uk_style_ref";
+             }
+             else{
+                  $col = "uk_style_ref";
+                  $uk_col="uk_style_ref";
+                  $ce_col="uk_style_ref";
+                  $ce_style = "";
+                  $ce_col="uk_style_ref";
+             }
 			$customer_id = Auth::guard('web_customer')->user()->id;
 			$customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 				$tcl1 = "TCL 1";
@@ -2663,7 +2848,10 @@ class OrderStatusController extends Controller
 			$tsl1 = "TSL 1";
 			$tesco_tsl1_orders = "tesco_tsl1_orders";							
 			$tsl3 = "TSL 3";
-			$tesco_tsl3_orders = "tesco_tsl3_orders";	
+			$tesco_tsl3_orders = "tesco_tsl3_orders";				
+			$wcl = "WCL";
+            $tesco_washcare_orders = "tesco_washcare_orders";	
+            	
 	  		if($customer_role_id->role_id == 1)
 		    {
 				$data['tcl1'] = DB::table('tesco_tcl1_orders')
@@ -2743,6 +2931,18 @@ class OrderStatusController extends Controller
                                 ->where("zone",$zone)
                                 ->where($col,$style_num)
                                 ->get();
+
+            $data['wcl'] = DB::table('tesco_washcare_orders')
+                            ->join('tesco_item_master','tesco_washcare_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
+                            ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                            ->where('tesco_washcare_orders.is_order_count_empty',0)
+                            ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where($uk_col,$uk_style)
+                            ->where($ce_col,$ce_style)
+                            ->get();
 			}
 			else
 			{
@@ -2750,7 +2950,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-					        ->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
+					        ->whereNotIn('tesco_tcl1_orders.order_status',['Saved','Order Cancelled'])
 							->where('tesco_tcl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tcl1_orders.is_order_count_empty',0)
@@ -2763,7 +2963,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_tcl2_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_tcl2_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tcl2_orders.order_status',['Saved','Order Cancelled'])
 							->where('tesco_tcl2_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl2_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->select('tesco_tcl2_orders.*',DB::raw("'".$tcl2."'".' as "TemplateName"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_item_master.company_id')
@@ -2774,7 +2974,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_tcl4_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tcl4_orders.order_status',['Saved','Order Cancelled'])
 				            ->where('tesco_tcl4_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tcl4_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tcl4_orders.is_order_count_empty',0)
@@ -2786,7 +2986,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_thl1_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_thl1_orders.order_status',['Saved','Order Cancelled'])
 							->where('tesco_thl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_thl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_thl1_orders.is_order_count_empty',0)
@@ -2798,7 +2998,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_thl3_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_thl3_orders.order_status',['Saved','Order Cancelled'])
 				            ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_thl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_thl3_orders.is_order_count_empty',0)
@@ -2810,7 +3010,7 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_tsl1_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
+				            ->whereNotIn('tesco_tsl1_orders.order_status',['Saved','Order Cancelled'])
 				            ->where('tesco_tsl1_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tsl1_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tsl1_orders.is_order_count_empty',0)
@@ -2822,13 +3022,26 @@ class OrderStatusController extends Controller
                             ->join('tesco_item_master','tesco_tsl3_orders.template_id','=','tesco_item_master.id')
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
                             ->where('customers.po_required',1)
-				            ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
+                            ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
 				            ->where('tesco_tsl3_orders.tesco_supplier_id', $customer_role_id->company_id)
 							->where('tesco_tsl3_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                             ->where('tesco_tsl3_orders.is_order_count_empty',0)
                             ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where("zone",$zone)
                             ->where($col,$style_num)
+                            ->get();
+
+            $data['wcl'] = DB::table('tesco_washcare_orders')
+                            ->join('tesco_item_master','tesco_washcare_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
+                            ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+							->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                            ->where('tesco_washcare_orders.is_order_count_empty',0)
+                            ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where($uk_col,$uk_style)
+                            ->where($ce_col,$ce_style)
                             ->get();
 			}
             
@@ -2890,11 +3103,27 @@ class OrderStatusController extends Controller
             $style_num = $request->styleNum;
             $zone      = $request->zone;
             if ($zone=="CE") {
-               $col = "ce_style_ref";
-            }
-            else{
-                 $col = "uk_style_ref";
-            }
+                $col = "ce_style_ref";
+                $uk_col="ce_style_ref";
+                $ce_col="ce_style_ref";
+                $uk_style =  "";
+                $ce_style = $request->styleNum;
+             }
+             else if($zone=="labels"){
+                 $uk_col="uk_style_ref";
+                 $ce_col="ce_style_ref";
+                 $explode_style = explode('/',$request->styleNum);
+                 $uk_style=$explode_style[0];
+                 $ce_style=$explode_style[1];
+                 $col ="uk_style_ref";
+             }
+             else{
+                  $col = "uk_style_ref";
+                  $uk_col="uk_style_ref";
+                  $uk_style =  $request->styleNum;
+                  $ce_style = "";
+                  $ce_col="uk_style_ref";
+             }
 			
 			
 			
@@ -2911,7 +3140,9 @@ class OrderStatusController extends Controller
 			$tsl1 = "TSL 1";
 			$tesco_tsl1_orders = "tesco_tsl1_orders";							
 			$tsl3 = "TSL 3";
-            $tesco_tsl3_orders = "tesco_tsl3_orders";	
+            $tesco_tsl3_orders = "tesco_tsl3_orders";			
+			$wcl = "WCL";
+			$tesco_washcare_orders = "tesco_washcare_orders";	
             
             $customer_id = Auth::guard('web_customer')->user()->id;
             $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
@@ -2994,6 +3225,17 @@ class OrderStatusController extends Controller
                                 ->select('tesco_tsl3_orders.*',DB::raw("'".$tsl3."'".' as "TemplateName"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                                 ->where("zone",$zone)
                                 ->where($col,$style_num)
+                                ->get();
+                $data['wcl'] = DB::table('tesco_washcare_orders')
+                                ->join('tesco_item_master','tesco_washcare_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1)
+                                ->where('tesco_washcare_orders.is_order_count_empty',0)
+                                ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
+                                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where($uk_col,$uk_style)
+                                ->where($ce_col,$ce_style)
                                 ->get();
             }
             else
@@ -3083,6 +3325,18 @@ class OrderStatusController extends Controller
                                 ->where("zone",$zone)
                                 ->where($col,$style_num)
                                 ->get();
+                $data['wcl'] = DB::table('tesco_washcare_orders')
+                                ->join('tesco_item_master','tesco_washcare_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_washcare_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1)
+                                ->where('tesco_washcare_orders.is_order_count_empty',0)
+                                ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
+                                ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
+							    ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                                ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                                ->where($uk_col,$uk_style)
+                                ->where($ce_col,$ce_style)
+                                ->get();
             }
 			
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
@@ -3138,7 +3392,7 @@ class OrderStatusController extends Controller
                 $data_array['tableName'] = $value[0];
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $value[1];
-                $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                
                 $this->erp_obj->updateTescoErpOrders($data_array);
             }
             $result = response()->json(['error'=> false,'message' =>'success'],200); 
@@ -3214,7 +3468,7 @@ class OrderStatusController extends Controller
                         $data_array['tableName'] = $value[0];
                         $data_array['buyer_id'] = $tesco_buyer_id->id;
                         $data_array['id'] = $value[1];
-                        $data_array['created_by']= Auth::guard('web_customer')->id(); 
+                        
                         $this->erp_obj->updateTescoErpOrders($data_array);
                   }
             }
@@ -3282,41 +3536,64 @@ class OrderStatusController extends Controller
      */
     public function editArtwork(Request $request)
     {
-        try
-        {
-            $row_id     =   $request->id;
-            $table_name =   $request->table_name;
-            $erp_order_details = array();
-            $order_details       =   DB::table($table_name)->where('id',$row_id)
-                            ->select('*')->first();
-            $qnty_id         =  str_replace("_orders","_order_id",str_replace("tesco_","",$table_name));
-            $quantity_details = DB::table($table_name.'_quanty')
-                                ->where($qnty_id,$order_details->id)->orderBy('id')->get();
-            $template_file=DB::table('tesco_template')->where('item_id',$order_details->template_id)->select('*')->get();
-			
-			$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details->template_id)->select('*')->get();
-			
-            $moq     =    DB::table('price_taxation')->where('template_id',$order_details->template_id)->where('customer_id',$order_details->tesco_supplier_id)->where('buyer_id',2)->value('moq');
+        $table_name =   $request->table_name;
+        $erp_order_details = array();
+        $order_table_array = explode("_", $table_name);
+        $template_name = $order_table_array[1] !=  'washcare' ? strtoupper($order_table_array[1]) : title_case($order_table_array[1]);
 
-            // fetch erp_order_details table status
-            foreach($quantity_details as $quantity)
-            {
-               $quantity_id = $quantity->id;
-               $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name')->first();
-            }
+        $model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
+        $care_label_metadata = [];
 
-            if ($order_details && $quantity_details)
-            {
-                $result = response()->json(['error'=> false,'message' =>'success','order_details'=>$order_details,'quantity_details'=>$quantity_details,'template_file'=>$template_file,'tesco_item_master'=>$tesco_item_master,'moq' => $moq, 'erp_details' => $erp_order_details],200);
-            }
-            else
-            {
-                $result = response()->json(['error'=> true,'message'=>'Error'],400);
-            }
+        if ($order_table_array[1] ==  'washcare') {
+            $order_details  = $model_name::with([
+                'quantities',
+                'garment_components',
+                'item_master'
+            ])
+                ->where([
+                    'id' => $request->id
+                ])
+                ->first();
+                
+            $care_label_metadata = $this->caremeta->getCareMetadata();
+        } else {
+            $order_details  = $model_name::with([
+                'quantities'
+            ])
+                ->where([
+                    'id' => $request->id
+                ])
+                ->first();
         }
-        catch (\Exception $e)
-        {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+
+        $order_quantity_ids = $order_details->quantities->pluck('id');
+
+        $tesco_item_master = DB::table('tesco_template')
+        ->join('tesco_item_master', 'tesco_item_master.id', 'tesco_template.item_id')
+        ->where('tesco_template.item_id', $order_details->template_id)
+            ->select('tesco_template.template_file', 'tesco_item_master.is_qrcode_required', 'tesco_item_master.item_name')
+            ->get();
+
+        $moq     =    DB::table('price_taxation')
+        ->where([
+            'template_id' => $order_details->template_id,
+            'customer_id' => $order_details->tesco_supplier_id,
+            'buyer_id' => 2
+        ])
+            ->value('moq');
+
+        // fetch erp_order_details table status
+        $erp_order_details[] = DB::table('erp_order_details')
+        ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
+        ->where('order_qnty_table_name', $table_name . '_quanty')
+        ->whereIn('order_qnty_table_id', $order_quantity_ids)
+            ->select('erp_order_details.id', 'erp_status.status_name')
+            ->first();
+
+        if ($order_details) {
+            $result = response()->json(['error' => false, 'message' => 'success', 'order_details' => $order_details, 'tesco_item_master' => $tesco_item_master, 'moq' => $moq, 'erp_details' => $erp_order_details, 'metadata' => $care_label_metadata], 200);
+        } else {
+            $result = response()->json(['error' => true, 'message' => 'Error'], 400);
         }
         return $result;
     }
@@ -3526,38 +3803,32 @@ class OrderStatusController extends Controller
                 }
                 $i++;
             }
-            // fetch erp_order_details table details for each quantity_table ids.
-            foreach($quantity_table_ids as $quantity_table_id)
-            {
-                $quantity_id = $quantity_table_id->id;
-                $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $table_name.'_quanty')->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-            }
 
-            if(!is_null($erp_order_details[0]))
+            // fetch erp_order_details table details for each quantity_table ids.
+            $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+            ->where('order_qnty_table_name', $table_name.'_quanty')
+            ->whereIn('order_qnty_table_id', $quantity_table_ids->pluck('id')->toArray())
+            ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+            ->get();
+
+            if($erp_order_details->isNotEmpty())
             {
                 $erp_details_status =  $erp_order_details[0]->status_name;
                 $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-                foreach($erp_order_details as $erp_order_detail){
-                    // delete from history table and insert new rows.
-                    $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
-                    DB::table('event_history')->where('history_id',$history_table_id)->delete();
-                    DB::table('history')->where('id',$history_table_id)->delete();
-                    // delete from erp_order_details table
-                    DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-                }
+                $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
+
+                // delete from erp_order_details table
+                DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
                 
-                /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
                 $data_array = [];   
-                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
                 $data_array['tableName'] = $table_name;
-                $data_array['buyer_id'] = $tesco_buyer_id->id;
+                $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
                 $data_array['id'] = $template_id;
                 $data_array['erp_details_status'] = $erp_details_status;
                 $data_array['erp_order_id'] = $erp_order_id;
                 $data_array['created_by'] = $created_by;
 
-                // pass $table_name, $template_id, $erp_details_status and $erp_order_id
                 $result = $edit_erp_obj->updateTescoErpOrderDetails($data_array);
             }
             else
@@ -3694,7 +3965,6 @@ class OrderStatusController extends Controller
                 $data_array_2['tableName'] = $table_name;
                 $data_array_2['buyer_id'] = $request->buyer_id;
                 $data_array_2['id'] = $row_id;
-                $data_array_2['created_by']= Auth::guard('web_customer')->id(); 
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
 
@@ -3754,6 +4024,7 @@ class OrderStatusController extends Controller
 	{
 		$id = $request['id'];
 		$name = $request['name'];
+		$table_name_print = $request['table_name_print'];
 		
 		if($name == "TCL1-sticker"){
 			$table = "tesco_tcl1_orders";
@@ -3795,48 +4066,162 @@ class OrderStatusController extends Controller
 			$table = "tesco_tsl3_orders";
 			$qty_table = "tesco_tsl3_orders_quanty";
 			$table_id = "tsl3_order_id";
-		}
-		
-		
-		$order_details  = 	DB::table($qty_table)
+        }
+        
+        if($table_name_print == "tesco_washcare_orders")
+        {
+            $table = "tesco_washcare_orders";
+			$qty_table = "tesco_washcare_orders_quanty";
+            $table_id = "washcare_order_id";
+
+            $order_details  = 	DB::table($qty_table)
+                                    ->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
+                                    ->where($table_id,$id)
+                                    ->orderBy('tesco_washcare_orders_quanty.id', 'asc')
+									->select('*')
+                                    ->get();
+                                    
+            $component  = 	DB::table('tesco_washcare_orders_component_mapping')
+                                ->where('washcare_order_id',$id)
+                                ->select('*')
+                                ->get();
+            foreach($component as $comp_val)
+            {
+               $fibre =  DB::table('tesco_washcare_orders_component_fibre_mapping')
+                                ->where('washcare_component_id',$comp_val->id)
+                                ->select('*')
+                                ->get();
+                $comp_val->fibre=$fibre;
+                
+            }
+
+            $degree_text  = DB::table('tesco_care_additional_instructions')
+                            ->where('english','UNLESS IT’S DIRTY WASH AT 30º')
+                            ->select('*')
+                            ->get();
+        }
+        else
+        {
+            $order_details  = 	DB::table($qty_table)
 									->where($table_id,$id)
 									->select('*')
-									->get();
+                                    ->get();
+            $component  = "";
+            $degree_text  = "";
+        }
 		
 		foreach($order_details as $value)
 		{
-            $odetails  = 	DB::table($table)
+            if($table_name_print == "tesco_washcare_orders")
+            {
+                $odetails  = 	DB::table($table)
+                                ->where('id',$id)
+                                ->select('*')
+                                ->get();
+                                
+                $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+
+                $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
+
+                $order_omp  = 	DB::table('tesco_washcare_orders')
+                                ->join('tesco_suppliers',$table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+                                ->join('tesco_care_symbols as washing',$table.'.wash_symbol_id', 'washing.id')
+                                ->join('tesco_care_symbols as whitening',$table.'.bleach_symbol_id', 'whitening.id')
+                                ->join('tesco_care_symbols as dry',$table.'.dry_symbol_id', 'dry.id')
+                                ->join('tesco_care_symbols as iron',$table.'.ironing_symbol_id', 'iron.id')
+                                ->join('tesco_care_symbols as cleaning',$table.'.dryclean_symbol_id', 'cleaning.id')
+                                ->where('tesco_washcare_orders.id',$value->$table_id)
+                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+                                ->get();
+                
+                $value->po_number=$order_omp{0}->po_number;
+                $value->uk_style_ref=$order_omp{0}->uk_style_ref;
+                $value->ce_style_ref=$order_omp{0}->ce_style_ref;
+                $value->eqos_site_code=$order_omp{0}->eqos_site_code;
+                $value->fabric_batch_code=$order_omp{0}->fabric_batch_code;
+                $value->leather_suede_code=$order_omp{0}->leather_suede_code;
+                $value->tog=$order_omp{0}->tog;
+                $value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
+                $value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
+                $value->internal_reference=$order_omp{0}->internal_reference;
+                $value->customer_name=$customer_name{0}->short_name;
+                $value->country_of_origin_text=$order_omp{0}->country_of_origin_text;
+                $value->wash_iso=$order_omp{0}->wash_iso;
+                $value->wash_astm=$order_omp{0}->wash_astm;
+                $value->whit_iso=$order_omp{0}->whit_iso;
+                $value->whit_astm=$order_omp{0}->whit_astm;
+                $value->dry_iso=$order_omp{0}->dry_iso;
+                $value->dry_astm=$order_omp{0}->dry_astm;
+                $value->iron_iso=$order_omp{0}->iron_iso;
+                $value->iron_astm=$order_omp{0}->iron_astm;
+                $value->clean_iso=$order_omp{0}->clean_iso;
+                $value->clean_astm=$order_omp{0}->clean_astm;
+                $value->degree=$order_omp{0}->degree;
+                $value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
+                $value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
+                $value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
+                $value->kids_warning_text=$order_omp{0}->kids_warning_text;
+                $value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
+                $value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
+                $value->part_of_set_text=$order_omp{0}->part_of_set_text;
+                
+            }
+            else
+            {
+                $odetails  = 	DB::table($table)
 									->where('id',$id)
 									->select('*')
 									->get();
-			$tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+                $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+                
+                $order_omp  = 	DB::table($table)
+                    ->join('tesco_department',$table.'.tesco_department_id', 'tesco_department.id')
+                    ->join('tesco_brand',$table.'.tesco_brand_id', 'tesco_brand.id')
+                    ->join('tesco_suppliers',$table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+                                        ->where($table.'.id',$value->$table_id)
+                                        ->select($table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
+                                        ->get();
+                
+                
+                $value->zone=$order_omp{0}->zone;
+                $value->po_number=$order_omp{0}->po_number;
+                $value->uk_style_ref=$order_omp{0}->uk_style_ref;
+                $value->ce_style_ref=$order_omp{0}->ce_style_ref;
+                $value->season_code=$order_omp{0}->season_code;
+                $value->short_description=$order_omp{0}->short_description;
+                $value->eqos_site_code=$order_omp{0}->eqos_site_code;
+                $value->manufacture_date=$order_omp{0}->manufacture_date;
+                $value->department=$order_omp{0}->department;
+                $value->brand=$order_omp{0}->brand;
+                $value->supplier_name=$order_omp{0}->supplier_name;
+                $value->rfid_compliant=$order_omp{0}->rfid_compliant;
+                $value->tag_at_source=$order_omp{0}->tag_at_source;
+            }
+            
 			
-			$order_omp  = 	DB::table($table)
-				->join('tesco_department',$table.'.tesco_department_id', 'tesco_department.id')
-				->join('tesco_brand',$table.'.tesco_brand_id', 'tesco_brand.id')
-				->join('tesco_suppliers',$table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
-									->where($table.'.id',$value->$table_id)
-									->select($table.'.*','tesco_department.department','tesco_brand.brand','tesco_suppliers.supplier_name')
-									->get();
-			
-			
-			$value->zone=$order_omp{0}->zone;
-			$value->po_number=$order_omp{0}->po_number;
-			$value->uk_style_ref=$order_omp{0}->uk_style_ref;
-			$value->ce_style_ref=$order_omp{0}->ce_style_ref;
-			$value->season_code=$order_omp{0}->season_code;
-			$value->short_description=$order_omp{0}->short_description;
-			$value->eqos_site_code=$order_omp{0}->eqos_site_code;
-			$value->manufacture_date=$order_omp{0}->manufacture_date;
-			$value->department=$order_omp{0}->department;
-			$value->brand=$order_omp{0}->brand;
-			$value->supplier_name=$order_omp{0}->supplier_name;
-			$value->rfid_compliant=$order_omp{0}->rfid_compliant;
-			$value->tag_at_source=$order_omp{0}->tag_at_source;
-			
-		}
+        }
+        $tesco_tiny  = 	DB::table('tesco_translation')
+									->where('id',1)
+									->select('*')
+                                    ->get();
+        $tesco_nb  = 	DB::table('tesco_translation')
+                                    ->where('id',2)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up1  = 	DB::table('tesco_translation')
+                                    ->where('id',3)
+                                    ->select('*')
+                                    ->get();
+        $tesco_up3  = 	DB::table('tesco_translation')
+                                    ->where('id',4)
+                                    ->select('*')
+                                    ->get();
+        $tesco_onesize  = 	DB::table('tesco_translation')
+                                    ->where('id',5)
+                                    ->select('*')
+                                    ->get();
 		
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
     }
 
     public function downloadTescoPI(Request $request)

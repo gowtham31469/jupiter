@@ -47,13 +47,11 @@
     
     <script type="text/javascript" src="{{ asset('DataTables/jQuery-3.2.1/jquery-3.2.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bootstrap-3.3.7-dist/js/bootstrap.min.js') }}"></script>
-    <!-- <script type="text/javascript" src="{{ asset('DataTables/DataTables-1.10.16/js/jquery.dataTables.min.js') }}"></script> -->
     <script src="{{ asset('js/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/datatables.js') }}"></script> 
     <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
 
      <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.html5.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/dataTables.buttons.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.print.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('DataTables/Buttons-1.5.1/js/buttons.colVis.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('DataTables/JSZip-2.5.0/jszip.min.js') }}"></script>
@@ -445,71 +443,6 @@ function toTitleCase(str) {
     }).parent('li').addClass('current-page').find('a').addClass('active');
 });
 
-    var myDoughnutChart = new Chart(myChart, {
-        type: 'doughnut',
-        data: data = {
-            datasets: [{
-                data: [1600, 2230],
-                backgroundColor: [
-                    '#facc55', '#5ac0c0', '#e74c3c'
-                ],
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Orchestra',
-                'Enrich',
-            ]
-        },
-        options: [{
-        }]
-    });
-    var myDoughnutChart = new Chart(myChart1, {
-        type: 'doughnut',
-        data: data = {
-            datasets: [{
-                data: [1600, 2230],
-                backgroundColor: [
-                    '#facc55', '#5ac0c0', '#e74c3c'
-                ],
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Orchestra',
-                'Enrich',
-            ]
-        },
-        options: [{
-
-        }]
-    });
-    var myDoughnutChart = new Chart(myChart2, {
-        type: 'doughnut',
-        data: data = {
-            datasets: [{
-                data: [1600, 2230],
-                backgroundColor: [
-                    '#facc55', '#5ac0c0', '#e74c3c'
-                ],
-            }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-                'Orchestra',
-                'Enrich',
-            ]
-        },
-        options: [{
-
-        }]
-    });
-//         $('.buyer-select').select2({
-//            placeholder: "Buyer Listing",
-//            allowClear: true
-//        });
-    
-    
 </script>
 </body>
 </html>

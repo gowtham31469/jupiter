@@ -19,6 +19,7 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
+var globalParserZone = 0;
 function tescoOrders(callback) {
 	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	$('.top-content').html('');
@@ -50,7 +51,7 @@ function tescoOrders(callback) {
 				$(".loader").show();
 			},
 			success: function (data) {
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders)))))));
 				
 				newObj1.sort(function(obj1, obj2) {
 					var date1 =obj1.created_at;
@@ -64,7 +65,10 @@ function tescoOrders(callback) {
 				var UKUniqueNames = [];
 				var CEPOCollection = [];
 				var UKPOCollection = [];
+				var JointUniqueNames = [];
+				var JointPOCollection = [];
 				var artwork_collection = {};
+				var JointOrderIds = [];
 				for (i = 0; i < newObj1.length; i++) {
 					if (newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
 						if (CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
@@ -99,6 +103,14 @@ function tescoOrders(callback) {
 							}
 
 						}
+					} else if (newObj1[i].zone === 'joint' && newObj1[i].uk_style_ref !== null && newObj1[i].ce_style_ref !== null) {
+						
+							JointPOCollection.push(newObj1[i].po_number);
+							JointUniqueNames.push(newObj1[i].uk_style_ref+'/'+newObj1[i].ce_style_ref);
+							JointOrderIds.push(newObj1[i].id);
+							artwork_collection[newObj1[i].id] = {};
+							artwork_collection[newObj1[i].id][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
+						
 					}
 
 				}
@@ -118,6 +130,20 @@ function tescoOrders(callback) {
 					}
 					options += "</optgroup>";
 				}
+
+				if (JointUniqueNames.length > 0) {
+					options += "<optgroup label='Joint'>";
+					for (i = 0; i < JointUniqueNames.length; i++) {
+						options += "<option data-zone='joint' data-orderid ='"+JointOrderIds[i]+"'>" + JointUniqueNames[i] + "</option>";
+					}
+					options += "</optgroup>";
+				}
+				
+				// tesco care size chart dropdown
+				size_options = `<option value=''>Select Size Chart</option>`;
+				$.each(data.tesco_size_department, function(i, item){
+					size_options += `<option value=` + i + `>` + item + `</option>`;
+				});
 
 				$('.main-content').html(`<div class="container-fluid">
                                             <div class="row">
@@ -176,6 +202,15 @@ function tescoOrders(callback) {
                                                                             <div class="template-error"></div>
                                                                         </div>
                                                                         <div id="jstree"></div>
+																		<div class="form-group has-feedback hidden" id="tesco_care_parser_type_div">
+																		<label for="pdf_parser_type" class="form_label" style="margin-right: 5px;">Select PO Zone</label>
+																		<div>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="UK" style="margin-right: 5px;">UK</label>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="CE" style="margin-right: 5px;">CE</label>
+																			<label><input type="radio" class="pdf_parser_type" name="zone" value="BOTH" style="margin-right: 5px;">Both</label>
+																		</div>
+																		<div class="help-block with-errors"></div>
+																		</div>
                                                                         <div class="form-group has-feedback">
                                                                             <div class="po-upload hidden">
                                                                                 <div class="form-group files" id="single_file ">
@@ -196,7 +231,20 @@ function tescoOrders(callback) {
                                                                                     <div class="help-block with-errors"></div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
+																		</div>
+
+																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
+																				<label for="tesco_care_size_chart">Size Chart</label>
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, 'admin')">
+																				`+size_options+`
+																				</select>	
+																				<div class="help-block with-errors"></div>
+																			</div>
+																			<div class="form-group has-feedback hidden" id="tesco_care_size_category_div">
+																				
+																			</div>
+
+																			
                                                                         <button class="btn btn-primary btn-block ">Create Order</button>
                                                                     </form>
                                                                 </div>
@@ -247,17 +295,19 @@ function tescoOrders(callback) {
 				});
 
 				$('body').on('change', '#po_number', function () {
-					loadArtworkNames(artwork_collection[this.value]);
+					let selected_value = $(this).find(':selected').data('zone') === 'joint' ?$(this).find(':selected').data('orderid'):this.value;
+					loadArtworkNames(artwork_collection[selected_value]);
 				});
 
 				/** [ Load selectpicker ] */
-				$('.selectpicker').selectpicker();
+				$('.selectpicker').selectpicker("refresh");
 
 				/** [ Hide/Show PO upload div, PO number search based on order type selected ] */
 				$('input[type="radio"].order_type').click(function () {
 					globalOrderType = ($(this).attr("value") === '1') ? 1 : 0;
 					var currentNode = $('#jstree').jstree(true).get_selected('full', true);
 					var zone = (currentNode.length > 0) ? currentNode[0].original.zone : false;
+					var temp_type = currentNode[0].original.template_type;
 
 					if (zone === 'UK' && globalOrderType === 1) {
 						$(".po-upload").removeClass("hidden");
@@ -279,6 +329,60 @@ function tescoOrders(callback) {
 						$('#ce_retek').prop('required', false);
 					}
 
+					// Label Parser
+					if(globalOrderType === 1 && temp_type === 'tesco_care_labels') { // Show only for PO upload
+						$("#tesco_care_parser_type_div").removeClass("hidden");
+						$('input[type="radio"].pdf_parser_type').prop('required', true);
+						if($('input[type="radio"].pdf_parser_type').is(':checked')){
+							var parserPOzone =  $('input[type="radio"].pdf_parser_type:checked').val();
+							if (parserPOzone === 'UK') {
+								$(".po-upload").removeClass("hidden");
+								$('#po_upload').prop('required', true);
+								$(".ce-po-upload").addClass("hidden");
+								$('#ce_orms').prop('required', false);
+								$('#ce_retek').prop('required', false);
+							} else{
+								$(".po-upload").addClass("hidden");
+								$('#po_upload').prop('required', false);
+								$(".ce-po-upload").removeClass("hidden");
+								$('#ce_orms').prop('required', true);
+								$('#ce_retek').prop('required', true);
+							} 
+						}
+					} else if(globalOrderType === 0 && temp_type === 'tesco_care_labels') {
+						$("#tesco_care_parser_type_div").addClass("hidden");
+						$('input[type="radio"].pdf_parser_type').prop('required', false);
+						$('input[type="radio"].pdf_parser_type').prop('checked', false);
+					}
+				});
+
+
+				/** [ Hide/Show PO upload div for tesco care labels ] */
+				$('input[type="radio"].pdf_parser_type').click(function () {
+					var parserPOzone =  $(this).attr("value");
+					var currentNode = $('#jstree').jstree(true).get_selected('full', true);
+					var zone = (currentNode.length > 0) ? currentNode[0].original.zone : false;
+					var temp_type = currentNode[0].original.template_type;
+
+					if (parserPOzone === 'UK' && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
+						$(".po-upload").removeClass("hidden");
+						$('#po_upload').prop('required', true);
+						$(".ce-po-upload").addClass("hidden");
+						$('#ce_orms').prop('required', false);
+						$('#ce_retek').prop('required', false);
+					} else if ((parserPOzone === 'CE' || parserPOzone === 'BOTH') && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
+						$(".po-upload").addClass("hidden");
+						$('#po_upload').prop('required', false);
+						$(".ce-po-upload").removeClass("hidden");
+						$('#ce_orms').prop('required', true);
+						$('#ce_retek').prop('required', true);
+					} else {
+						$(".po-upload").addClass("hidden");
+						$('#po_upload').prop('required', false);
+						$(".ce-po-upload").addClass("hidden");
+						$('#ce_orms').prop('required', false);
+						$('#ce_retek').prop('required', false);
+					}
 				});
 
 				/** [ Show tesco templates hierarchy ] */
@@ -302,25 +406,29 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "28,23",
 										"text": "TCL 4 & TSL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "24",
 										"text": "THL 1 with QR",
 										"parent_id": "3",
 										"type": "ratio",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}, {
 										"id": "25",
 										"text": "THL 3 with QR",
 										"parent_id": "3",
 										"type": "single",
-										"zone": "CE"
+										"zone": "CE",
+										"template_type": 'tesco_carton_stickers'
 										}]
                                     }, {
 									"id": "4",
@@ -331,29 +439,66 @@ function tescoOrders(callback) {
 										"text": "TCL 1 , TCL 2 & TSL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "31,16",
 										"text": "TCL 4 & TSL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "17",
 										"text": "THL 1",
 										"parent_id": "4",
 										"type": "ratio",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }, {
 										"id": "18",
 										"text": "THL 3",
 										"parent_id": "4",
 										"type": "single",
-										"zone": "UK"
+										"zone": "UK",
+										"template_type": 'tesco_carton_stickers'
                                         }]
                                     }]
                                 }]
-                            }]
+							},
+							{
+							"id": "32",
+							"text": "Labels",
+							"parent_id": "0",
+							"children": [{
+								"id": "33",
+								"text": "Printed Labels",
+								"parent_id": "32",
+								"children": [{
+									"id": "34",
+									"text": "GCL25W/M12723G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, {
+									"id": "35",
+									"text": "GCL25W/M13220G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									},
+									{
+									"id": "36",
+									"text": "GCL25W/M12723G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, 
+									{
+									"id": "37",
+									"text": "GCL25W/M13220G",
+									"parent_id": "33",
+									"template_type": 'tesco_care_labels'
+									}, ]
+								}]
+							}]
 					},
 					"types": {
 						"default": {
@@ -393,6 +538,7 @@ function tescoOrders(callback) {
 				$('#jstree').on('activate_node.jstree', function (e, data) {
 					if (data.instance.is_leaf(data.node) != '') {
 						template_id = data.node.id;
+						template_type = data.node.original.template_type;
 						$.ajax({
 							url: base_url + "/admin/tesco/template-management/template-view",
 							type: "Post",
@@ -414,7 +560,17 @@ function tescoOrders(callback) {
 											$('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										} else {
-											$('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
+											//console.log("type" + value[0].type);
+											if(value[0].type == "Labels")
+											{
+												//alert()
+												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
+											}
+											else
+											{
+												var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
+											}
+											$('.templateDiv').append('<div class="col-md-4">'+object_ref+'<div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										}
 									});
@@ -443,7 +599,7 @@ function tescoOrders(callback) {
 						localStorage.setItem("templates", data.node.id);
 						localStorage.setItem("zone", data.node.original.zone);
 						localStorage.setItem("template type", data.node.original.type);
-						localStorage.setItem("template_group", data.node.text.trim());
+						localStorage.setItem("template_group", data.node.text.trim());					
 						if (data.node.original.zone === 'UK' && globalOrderType === 1) {
 							$(".po-upload").removeClass("hidden");
 							$('#po_upload').prop('required', true);
@@ -463,6 +619,51 @@ function tescoOrders(callback) {
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
 						}
+
+						// toggle size chart select box for template_type = tesco_care_labels
+						if(template_type === 'tesco_care_labels'){
+							$("#tesco_care_size_chart_div").removeClass("hidden");
+							$('#tesco_care_size_chart').prop('required', true);
+							$('#tesco_care_size_chart').val('');
+							// Label Parser
+							if(globalOrderType === 1) { // Show only for PO upload
+								$("#tesco_care_parser_type_div").removeClass("hidden");
+								$('input[type="radio"].pdf_parser_type').prop('required', true);
+								if($('input[type="radio"].pdf_parser_type').is(':checked')){
+									var parserPOzone =  $('input[type="radio"].pdf_parser_type:checked').val();
+									if (parserPOzone === 'UK') {
+										$(".po-upload").removeClass("hidden");
+										$('#po_upload').prop('required', true);
+										$(".ce-po-upload").addClass("hidden");
+										$('#ce_orms').prop('required', false);
+										$('#ce_retek').prop('required', false);
+									} else{
+										$(".po-upload").addClass("hidden");
+										$('#po_upload').prop('required', false);
+										$(".ce-po-upload").removeClass("hidden");
+										$('#ce_orms').prop('required', true);
+										$('#ce_retek').prop('required', true);
+									} 
+								}
+							}
+
+						} else {
+							$("#tesco_care_size_chart_div").addClass("hidden");
+							$('#tesco_care_size_category_div').html('');
+							$('#tesco_care_size_chart').prop('required', false);
+							$('#tesco_care_size_category').prop('required', false);
+							$('#tesco_care_size_chart').val('');
+							// Label Parser
+							if(globalOrderType === 1){
+								$("#tesco_care_parser_type_div").addClass("hidden");
+								$('input[type="radio"].pdf_parser_type').prop('checked', false);
+								$('input[type="radio"].pdf_parser_type').prop('required', false);
+							}
+
+
+
+						}
+						$(".selectpicker").selectpicker("refresh");
 					}
 				});
 
@@ -489,11 +690,49 @@ function tescoOrders(callback) {
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
-								formData.append('zone', localStorage.getItem("zone"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
-								uploadPurchaseOrder(formData, localStorage.getItem("zone"));
-							} else {
+								if(template_type === 'tesco_care_labels') {
+									var poZone =  $('input[type="radio"].pdf_parser_type:checked').val();
+									poZone = poZone == 'BOTH'?'CE':poZone;
+									formData.append('zone', poZone);
+									var size_id = $('#tesco_care_size_chart').val();
+									var size_category = [];
+									var size_category_text = [];
+
+									/** [ Create array of multi selected categories ] */
+									$.each($("#tesco_care_size_category option:selected"), function() {
+										size_category.push($(this).val());
+										// size_category_text.push($(this).text());
+									});
+
+									/** [ Create array of multiple categories ] */
+									$.each($("#tesco_care_size_category option"), function() {
+										size_category_text.push($(this).text());
+									});
+									uploadPurchaseOrderForLabels(formData, poZone, role="admin", size_id, size_category, size_category_text,template_id);
+								} else {
+									formData.append('zone', localStorage.getItem("zone"));
+									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
+								}
+							} else if (template_type === 'tesco_carton_stickers') {
 								createOrders();
+							} else if(template_type === 'tesco_care_labels') {
+								var size_id = $('#tesco_care_size_chart').val();
+								var size_category = [];
+								var size_category_text = [];
+
+								/** [ Create array of multi selected categories ] */
+								$.each($("#tesco_care_size_category option:selected"), function() {
+									size_category.push($(this).val());
+									// size_category_text.push($(this).text());
+								});
+
+								/** [ Create array of multiple categories ] */
+								$.each($("#tesco_care_size_category option"), function() {
+									size_category_text.push($(this).text());
+								});
+								
+								renderTescoCareOrders(role="admin", size_id, size_category, size_category_text,template_id);
 							}
 							
 								localStorage.setItem("back_flag","create");
@@ -523,11 +762,12 @@ function tescoOrders(callback) {
 						var style_number = $('#po_number').val();
 						var artwork = $('#artwork_list').find(':selected').text();
 						var zone = $('#po_number').find(':selected').data('zone');
+						var orderid = $('#artwork_list').find(':selected').data('orderid') != undefined?$('#artwork_list').find(':selected').data('orderid'):0;
 						localStorage.setItem('style_number_back',style_number)
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-						viewOrder(po_num, artwork, style_number, zone);
+						viewOrder(po_num, artwork, style_number, zone, orderid);
 					}
 				})
 				callback();
@@ -578,6 +818,8 @@ function createOrders(parsedObj = false, oType = false) {
 		var template_id = localStorage.getItem("templates");
 		var zone = localStorage.getItem("zone");
 		var type = localStorage.getItem("template type");
+		$('li.year-nav-menu').addClass('hidden');
+		$('li.buyer-nav-menu').addClass('hidden');
 
 		var word = localStorage.getItem("templates").length === 1 ? 'Artwork' : 'Artworks';
 		$('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For TESCO-' + zone + ' ' + localStorage.getItem("template_group") + '</strong></h4></div>');
@@ -749,7 +991,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addUKRatio(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -821,7 +1063,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addUKSingle(this,event)" data-id="1" class="btn btn-default add-row-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -899,7 +1141,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <hr>\
                                                 <h4>Order Quantity</h4>\
                                                 <p>\
-                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                    <button type="button" onclick="addCERatio(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                                 </p>\
                                             </div>\
                                         </div>\
@@ -966,7 +1208,7 @@ function createOrders(parsedObj = false, oType = false) {
                                             <hr>\
                                             <h4>Order Quantity</h4>\
                                             <p>\
-                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" title="Select a supplier" data-placement="right"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
+                                                <button type="button" onclick="addCESingle(this,event)" data-id="1" class="btn btn-default add-row-btn" ><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>\
                                             </p>\
                                         </div>\
                                     </div>\
@@ -1096,7 +1338,9 @@ function createOrders(parsedObj = false, oType = false) {
                                      <span class="pagename pull-left hidden-xs">Please save or submit changes before closing page.</span>\
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
-                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("print")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>\
+										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("proof")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>\
+										<button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
@@ -8459,7 +8703,8 @@ function dynamicTescoSuppliers(id)
 
 function reload_back()
 {
-	
+	$('li.year-nav-menu').removeClass('hidden');
+	$('li.buyer-nav-menu').removeClass('hidden');
 	var back_flag = localStorage.getItem("back_flag");
 	if(back_flag == "view")
 	{
@@ -8547,6 +8792,724 @@ function wordWrap(str, maxWidth) {
     } while (!done);
     return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
 }
+function testWhite(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
+}
+
+
+function create_download_artwork(print_type)
+{
+	var a = document.getElementById('tesco_svg_modal');
+    var svgDoc = a.contentDocument;
+
+	var a_back = document.getElementById('tesco_svg_back_modal');
+    var svgDoc_back = a_back.contentDocument;
+
+    var a_back_text = document.getElementById('tesco_svg_back_text_modal');
+    var svgDoc_back_text = a_back_text.contentDocument;
+
+    var a_front_text = document.getElementById('tesco_svg_front_modal');
+    var svgDoc_front_text = a_front_text.contentDocument;
+    
+            var svgarr = [];
+            var svgarr_back = [];
+            var svgarr_back_text = [];
+            var svgarr_front = [];
+            ajax_count=0;
+            $.ajax({
+				url: base_url + "/admin/tesco/get-order-details",
+                type: "Post",
+                dataType: "json",
+                data: {
+                    _token: csrf_token,
+                    name: $('#hidden_name').val(),
+                    id: $('#hidden_id').val(),
+                    table_name_print:"tesco_washcare_orders"
+                },
+				beforeSend: function() {
+
+				},
+				success: function(data) {
+                    
+                    var svgRoot_back =svgDoc_back.documentElement;
+                    var svgRoot_back_text =svgDoc_back_text.documentElement;
+                    var svgRoot_front_text =svgDoc_front_text.documentElement;
+
+                    if(data.order_details[0].bs_en_declaration == 0)
+                    {
+                        console.log("hai")
+                        svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
+                    }
+
+                    if(data.order_details[0].baby_sleeping_bag_symbol == 0)
+                    {
+                        svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
+                    }
+
+                    if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
+                    {
+                        svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
+                    }
+
+                    $(data.order_details).each(function (key, val) {
+                        svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
+                        svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
+                        svgDoc.getElementById("style_value").innerHTML = "STYLE:"+ val.uk_style_ref;
+                        if(val.fabric_batch_code != null && val.fabric_batch_code != "")
+                        {
+                            svgDoc.getElementById("batch_code").innerHTML = val.fabric_batch_code;
+                        }
+                        else
+                        {
+                            //alert()
+                            svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 103)");
+                            svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 110)");
+                            svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 117)");
+                            svgDoc.getElementById("batch_code").innerHTML = "";
+                        }
+
+                        if(val.internal_reference != "" && val.internal_reference != null)
+                        {
+                            svgDoc.getElementById("packaging_reference_number").innerHTML = val.internal_reference;
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("packaging_reference_number").innerHTML = "";
+                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.7049, 160.7462)");
+                            
+                        }
+                        
+                        if(val.tog != "" && val.tog != null)
+                        {
+                            svgDoc.getElementById("tog_value_1_").innerHTML = val.tog;
+                        }
+                        else
+                        {
+                            //console.log("hai")
+                            svgDoc.getElementById("tog_value_1_").innerHTML = "";
+                        }
+
+
+                        var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
+                        var selected_secondary_sizes_text = "";
+                        console.log(selected_secondary_sizes)
+                        $size_y=0;
+                        $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
+                            if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
+                            {
+                                selected_secondary_sizes_text += '<tspan x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
+                                $size_y += 6;
+                            }
+                        })
+                        svgDoc.getElementById("height_text").innerHTML = selected_secondary_sizes_text;
+
+                        
+
+
+                        svgDoc.getElementById("uk_ean_barcode").innerHTML = val.uk_ean;
+                        svgDoc.getElementById("ce_ean_barcode").innerHTML = val.ce_ean;
+                        
+                        if(val.uk_size == "tiny baby")
+                        {
+                            svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+                            
+
+                            svgDoc.getElementById("small_english").innerHTML = "tiny baby";
+
+                            var polish = data.tesco_tiny[0].polish
+                            var czech = data.tesco_tiny[0].czech
+                            var slovak = data.tesco_tiny[0].slovak
+                            var hungarian = data.tesco_tiny[0].hungarian
+                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                        }
+                        else if(val.uk_size == "Newborn")
+                        {
+                            svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+
+                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").innerHTML = "Newborn";
+
+                            var polish = data.tesco_nb[0].polish
+                            var czech = data.tesco_nb[0].czech
+                            var slovak = data.tesco_nb[0].slovak
+                            var hungarian = data.tesco_nb[0].hungarian
+                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                        }
+                        else if(val.uk_size == "up to 1M")
+                        {
+                            svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").innerHTML = "up to 1M";
+                            
+                            var polish = data.tesco_up1[0].polish
+                            var czech = data.tesco_up1[0].czech
+                            var slovak = data.tesco_up1[0].slovak
+                            var hungarian = data.tesco_up1[0].hungarian
+                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                        }
+                        else if(val.uk_size == "up to 3M")
+                        {
+                            svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").innerHTML = "up to 3M";
+                            
+                            var polish = data.tesco_up3[0].polish
+                            var czech = data.tesco_up3[0].czech
+                            var slovak = data.tesco_up3[0].slovak
+                            var hungarian = data.tesco_up3[0].hungarian
+                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                        }
+                        else if(val.uk_size == "One size")
+                        {
+                            svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").innerHTML = "One size";
+                            
+                            var polish = data.tesco_onesize[0].polish
+                            var czech = data.tesco_onesize[0].czech.split(' ')
+                            var slovak = data.tesco_onesize[0].slovak
+                            var hungarian = data.tesco_onesize[0].hungarian
+                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech[0];
+                            svgDoc.getElementById("small_translation2").innerHTML =czech[1]+ " • "+slovak+ " • "+hungarian;
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                            svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+                        }
+                        svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
+                        var country_of_origin_text = JSON.parse(val.country_of_origin_text)
+                        svgDoc.getElementById("made_in_english").innerHTML = country_of_origin_text[0].english;
+                        var svgRoot = svgDoc.documentElement;
+                        var s = new XMLSerializer();
+                        var d = svgRoot;
+                        var str = s.serializeToString(d);
+                        var svg = encodeURI(str)
+                        svgarr.push(svg)
+                        ajax_count++;
+                    })
+
+                    var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
+                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan  x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan   x="2.53" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2.53" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="2" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
+
+                    svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
+                    svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
+                    svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
+                    svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
+                    svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
+                    svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
+                    svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
+                    svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
+                    svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
+                    svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
+
+                    var additional_care_text_1 = JSON.parse(data.order_details[0].additional_care_text_1)
+                    var additional_care_text_2 = JSON.parse(data.order_details[0].additional_care_text_2)
+                    var additional_care_text_3 = JSON.parse(data.order_details[0].additional_care_text_3)
+                    var degree =data.order_details[0].degree
+
+                    var en_care_instructions = "";
+                    if(additional_care_text_1 != "" && additional_care_text_1 != null)
+                    {
+                        en_care_instructions += additional_care_text_1[0].english
+                    }
+                    if(additional_care_text_2 != "" && additional_care_text_2 != null)
+                    {
+                        en_care_instructions += " / " + additional_care_text_2[0].english
+                    }
+                    if(additional_care_text_3 != "" && additional_care_text_3 != null)
+                    {
+                        en_care_instructions += " / " + additional_care_text_3[0].english
+                    }
+                    
+                    if(degree >= 30)
+                    {
+                        en_care_instructions += " / " + data.degree_text[0].english
+                    }
+                    
+                    $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
+
+                    //console.log($chunk_str);
+                    var chunks='<tspan  x="0" y="0">EN</tspan>';
+                    $y=0;
+                    $ind=1;
+                    console.log("gy:"+$chunk_str.length)
+                    $($chunk_str).each(function(index,chunk_val){
+                        chunks += '<tspan  x="12" y="'+$y+'">'+chunk_val+'</tspan>';
+                        if($chunk_str.length == $ind)
+                        {
+                            $y+=6;
+                        }
+                        else
+                        {
+                            $y+=6;
+                        }
+                        $ind++;
+                        
+                    })
+
+                    var en_garment_component = "";
+                    var pl_garment_component = "";
+                    var cz_garment_component = "";
+                    var sk_garment_component = "";
+                    var hu_garment_component = "";
+                    $(data.component).each(function(index,comp_val){
+                        
+                        var garment_component_text = JSON.parse(comp_val.garment_component_text)
+                        if(index != 0)
+                        {
+                            en_garment_component += " / " +garment_component_text[0].english;
+                            pl_garment_component += " / " +garment_component_text[0].polish;
+                            cz_garment_component += " / " +garment_component_text[0].czech;
+                            sk_garment_component += " / " +garment_component_text[0].slovak;
+                            hu_garment_component += " / " +garment_component_text[0].hungarian;
+                        }
+                        else
+                        {
+                            en_garment_component += garment_component_text[0].english;
+                            pl_garment_component += garment_component_text[0].polish;
+                            cz_garment_component += garment_component_text[0].czech;
+                            sk_garment_component += garment_component_text[0].slovak;
+                            hu_garment_component += garment_component_text[0].hungarian;
+                        }
+                        
+                        $(comp_val.fibre).each(function(index,fibre_val){
+                            var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
+                            en_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].english;
+
+                            pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].polish;
+
+                            cz_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].czech;
+
+                            sk_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].slovak;
+
+                            hu_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].hungarian;
+                        });
+                    })
+
+                    var exclusive_trims_text = JSON.parse(data.order_details[0].exclusive_trims_text)
+                    var contains_non_textile_part_text = JSON.parse(data.order_details[0].contains_non_textile_part_text)
+                    var kids_warning_text = JSON.parse(data.order_details[0].kids_warning_text)
+                    var part_of_set_text = JSON.parse(data.order_details[0].part_of_set_text)
+                    
+
+                    if(exclusive_trims_text != "" && exclusive_trims_text != null)
+                    {
+                        en_garment_component += " / " + exclusive_trims_text[0].english
+                        pl_garment_component += " / " + exclusive_trims_text[0].polish
+                        cz_garment_component += " / " + exclusive_trims_text[0].czech
+                        sk_garment_component += " / " + exclusive_trims_text[0].slovak
+                        hu_garment_component += " / " + exclusive_trims_text[0].hungarian
+                    }
+
+                    if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
+                    {
+                        en_garment_component += " / " + contains_non_textile_part_text[0].english
+                        pl_garment_component += " / " + contains_non_textile_part_text[0].polish
+                        cz_garment_component += " / " + contains_non_textile_part_text[0].czech
+                        sk_garment_component += " / " + contains_non_textile_part_text[0].slovak
+                        hu_garment_component += " / " + contains_non_textile_part_text[0].hungarian
+                    }
+
+                    if(kids_warning_text != "" && kids_warning_text != null)
+                    {
+                        en_garment_component += " / " + kids_warning_text[0].english
+                        pl_garment_component += " / " + kids_warning_text[0].polish
+                        cz_garment_component += " / " + kids_warning_text[0].czech
+                        sk_garment_component += " / " + kids_warning_text[0].slovak
+                        hu_garment_component += " / " + kids_warning_text[0].hungarian
+                    }
+
+                    if(additional_care_text_1 != "" && additional_care_text_1 != null)
+                    {
+                        console.log("Polish : "+additional_care_text_1[0].polish)
+                        pl_garment_component += " / " + additional_care_text_1[0].polish
+                        cz_garment_component += " / " + additional_care_text_1[0].czech
+                        sk_garment_component += " / " + additional_care_text_1[0].slovak
+                        hu_garment_component += " / " + additional_care_text_1[0].hungarian
+                    }
+                    if(additional_care_text_2 != "" && additional_care_text_2 != null)
+                    {
+                        pl_garment_component += " / " + additional_care_text_2[0].polish
+                        cz_garment_component += " / " + additional_care_text_2[0].czech
+                        sk_garment_component += " / " + additional_care_text_2[0].slovak
+                        hu_garment_component += " / " + additional_care_text_2[0].hungarian
+                    }
+                    if(additional_care_text_3 != "" && additional_care_text_3 != null)
+                    {
+                        pl_garment_component += " / " + additional_care_text_3[0].polish
+                        cz_garment_component += " / " + additional_care_text_3[0].czech
+                        sk_garment_component += " / " + additional_care_text_3[0].slovak
+                        hu_garment_component += " / " + additional_care_text_3[0].hungarian
+                    }
+
+                    if(part_of_set_text != "" && part_of_set_text != null)
+                    {
+                        en_garment_component += " / " + part_of_set_text[0].english
+                        pl_garment_component += " / " + part_of_set_text[0].polish
+                        cz_garment_component += " / " + part_of_set_text[0].czech
+                        sk_garment_component += " / " + part_of_set_text[0].slovak
+                        hu_garment_component += " / " + part_of_set_text[0].hungarian
+                    }
+
+                    if(degree >= 30)
+                    {
+                        pl_garment_component += " / " + data.degree_text[0].polish
+                        cz_garment_component += " / " + data.degree_text[0].czech
+                        sk_garment_component += " / " + data.degree_text[0].slovak
+                        hu_garment_component += " / " + data.degree_text[0].hungarian
+                    }
+
+                    $garment_str = chunkSubstr(en_garment_component, 28).split(/\r?\n/);
+                    $pl_garment_str = chunkSubstr(pl_garment_component, 28).split(/\r?\n/);
+                    $cz_garment_str = chunkSubstr(cz_garment_component, 28).split(/\r?\n/);
+                    $sk_garment_str = chunkSubstr(sk_garment_component, 28).split(/\r?\n/);
+                    $hu_garment_str = chunkSubstr(hu_garment_component, 28).split(/\r?\n/);
+
+                    chunks += '<tspan x="0" y="'+$y+'">EN</tspan>';
+
+                    $ind_en=1;
+                    $z=0;
+                    $($garment_str).each(function(index,garment_val){
+                        chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
+                        if($garment_str.length == $ind_en)
+                        {
+                            $y+=6;
+                        }
+                        else
+                        {
+                            $y+=6;
+                        }
+                        $ind_en++;
+                    })
+
+                    chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
+                    var new_chunks = '';
+                    $($pl_garment_str).each(function(index,pl_garment_val){
+                        if($y == 96)
+                        {
+                            $z=0;
+                        }
+
+                        if($y > 96)
+                        {
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
+                        }
+                        
+                        $y+=6;
+                        $z+=6;
+                    })
+
+                    if($y > 96)
+                    {
+                        new_chunks += '<tspan x="0" y="'+$z+'">CZ</tspan>';
+                    }
+                    else
+                    {
+                        chunks += '<tspan x="0" y="'+$y+'">CZ</tspan>';
+                    }
+
+                    $($cz_garment_str).each(function(index,cz_garment_val){
+                        if($y == 96)
+                        {
+                            $z=0;
+                        }
+
+                        if($y > 96)
+                        {
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';   
+                        }
+                        
+                        $y+=6;
+                        $z+=6;
+                    })
+
+                    if($y > 96)
+                    {
+                        new_chunks += '<tspan x="0" y="'+$z+'">SK</tspan>';
+                    }
+                    else
+                    {
+                        chunks += '<tspan x="0" y="'+$y+'">SK</tspan>';
+                    }
+
+                    $($sk_garment_str).each(function(index,sk_garment_val){
+                        if($y == 96)
+                        {
+                            $z=0;
+                        }
+
+                        if($y > 96)
+                        {
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';   
+                        }
+                        
+                        $y+=6;
+                        $z+=6;
+                    })
+
+                    if($y > 96)
+                    {
+                        new_chunks += '<tspan x="0" y="'+$z+'">HU</tspan>';
+                    }
+                    else
+                    {
+                        chunks += '<tspan x="0" y="'+$y+'">HU</tspan>';
+                    }
+
+                    $($hu_garment_str).each(function(index,hu_garment_val){
+                        if($y == 96)
+                        {
+                            $z=0;
+                        }
+
+                        if($y > 96)
+                        {
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            chunks += '<tspan x="12" y="'+$y+'">'+hu_garment_val+'</tspan>';   
+                        }
+                        
+                        $y+=6;
+                        $z+=6;
+                    })
+                    
+                    svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
+                    svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
+
+
+                    
+                    // console.log(en_care_instructions)
+                    // console.log(en_care_instructions)
+
+                    var s_front = new XMLSerializer();
+                    var d_front = svgRoot_front_text;
+                    var str_front = s_front.serializeToString(d_front);
+                    var svg_front = encodeURI(str_front)
+                    svgarr_front.push(svg_front)
+                    
+                    var s_back = new XMLSerializer();
+                    var d_back = svgRoot_back;
+                    var str_back = s_back.serializeToString(d_back);
+                    var svg_back = encodeURI(str_back)
+                    svgarr_back.push(svg_back)
+
+                    var s_back_text = new XMLSerializer();
+                    var d_back_text = svgRoot_back_text;
+                    var str_back_text = s_back_text.serializeToString(d_back_text);
+                    var svg_back_text = encodeURI(str_back_text)
+                    svgarr_back_text.push(svg_back_text)
+                   
+                    if (ajax_count == data.order_details.length) {
+                        var svg_fin = svgarr.join(',_');
+                        var svg_fin_back = svgarr_back.join(',_');
+                        var svg_fin_back_text = svgarr_back_text.join(',_');
+						var svg_fin_front = svgarr_front.join(',_');
+						
+						if(print_type == "print")
+						{
+							PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+						}
+						else
+						{
+							PopupTescoLabelsProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+						}
+                        
+                    }
+				
+				},
+				error: function(data) {
+
+				},
+				complete: function() {
+
+				}
+			});
+}
+
+
+function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/admin/tesco/generate-div-tescolabelos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            data_back_text: data_back_text,
+            data_front_image: data_front_image,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+
+function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/admin/tesco/proof-div-tescolabelos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            data_back_text: data_back_text,
+            data_front_image: data_front_image,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+
+function chunkSubstr(str, maxWidth) {
+    var newLineStr = "\n"; done = false; res = '';
+    while (str.length > maxWidth) {                 
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+                res = res + [str.slice(0, i), newLineStr].join('');
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res += [str.slice(0, maxWidth), newLineStr].join('');
+            str = str.slice(maxWidth);
+        }
+
+    }
+
+    return res + str;
+}
+
 function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));

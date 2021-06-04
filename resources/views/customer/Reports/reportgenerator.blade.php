@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/buttons.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style type="text/css">
 	.container-fluid {
@@ -59,15 +60,16 @@
 						<h4 class="modal-title">Report Generation</h4>
 					</div>
 					<div class="modal-body model1">
-						<div class="row rowSep">
-							<div class="col-md-2" style="margin-right: 2%;">
+						<div class="row rowSep" style="width: 90%;">
+							{{-- <div class="col-md-2" style="margin-right: 2%;">
 								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off"/>
 							</div>
 							<div class="col-md-2" style="margin-right: 3.1%;">
 								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off"/>
-							</div>
-
-							<div class="col-md-3 movLft">
+							</div> --}}
+							<div class="col-md-4 "><input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" /></div>
+                {{-- <div class="col-md-2"></div> --}}
+							<div class="col-md-4">
 								{{-- <select class="selectpicker roleSelection" name="roleSelection" title="Select Role">
 									@foreach($allActions as $key=> $action)
 									<option value="{{ $action_as_id[$key] }}"> {{ $action }}</option>
@@ -76,21 +78,24 @@
 									{!! Form::select('roleSelection', $allActions,null,['class' => 'selectpicker roleSelection','required','data-size'=>"10","title"=>'Select Role','id'=>'roleSelection']) !!}
 								</select>
 							</div>
-							<div class="col-md-3" style="padding-left: 0;width: 24%;">
+							<div class="col-md-4" style="">
 								<select class="selectpicker tempSelection" id="tempSelect" title="Select Status" disabled>
 								</select>
 
-								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders']) !!}
+								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders',"data-actions-box"=>'true',"data-done-button"=>'true']) !!}
 
-								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery']) !!}
+								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery',"data-actions-box"=>'true',"data-done-button"=>'true']) !!}
 
 								{{-- {!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
 
 								{!! Form::select('role_Status[]', $invoice,null,['class' => 'selectpicker all_status _invoice hidden','required','data-size'=>"10",'data-actions-box'=>"true","title"=>'Select Status [ Invoice ]','id'=>'_invoice']) !!} --}}
 							</div>
 						</div>
-						<div class="row rowSep">
-							<div class="col-md-2 filters">
+
+						
+
+						<div class="row rowSep" style="margin-top: 1.5%;">
+							<div class="col-md-2 filters" style="margin-top: -0.2%;">
 								<label>Select Buyer</label>
 								{!! Form::select('buyer', $buyers,null,['class' => 'selectpicker buyer_selection filterLevel1','required','data-size'=>"10","title"=>'None Selected','id'=>'buyer']) !!}
 
@@ -132,16 +137,19 @@
 								@endif
 								
 							</div>
-							<div class="col-md-2 filters">
-								<label>Select Material</label>
-								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
-								</select>
-							</div>
+							
 							<div class="col-md-2 filters">
 								<label>Select Style</label>
 								<select id="style" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Style" multiple data-live-search="true">
 								</select>
 							</div>
+
+							<div class="col-md-2 filters">
+								<label>Select Material</label>
+								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
+								</select>
+							</div>
+
 							<div class="col-md-2 filters">
 								<label>Select Mat-sub</label>
 								<select id="mat_sub" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Mat-sub" multiple data-live-search="true">
@@ -181,14 +189,27 @@
 								<button class="btn btn-default nxtBtn" id="filter3" disabled=""><span class="multiselect-selected-text">&nbsp;Done&nbsp;</span></button>
 							</div>
 						</div>
+						<div class="row rowSep">
+							<div class="col-md-3 filters">
+								<label>Select Sticker Type</label>
+								<select id="sticker_types" class="multiselect filterLevel3" 	data-actions-box="true" data-size="10" title="Select Sticker Type" multiple data-live-search="true">
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<div class="row ReportSection hidden" style="margin-bottom: 1%;">
+		<div class="col-md-12">
+			<h4 class="text-center" id="headerText">Consolidated Data</h4>
+		</div>
+	</div>
+
 	<div class="row ReportSection hidden reportSec">
-		<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
+		
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
@@ -204,6 +225,8 @@
 		</div>
 	</div>
 </div>
+<input type="hidden" id="txtFrom">
+<input type="hidden" id="txtTo">
 @endsection
     @else
     <script type="text/javascript">
@@ -221,16 +244,112 @@
 <script type="text/javascript" src="{{ asset('js/Erp/report/vfs_fonts.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/buttons.html5.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/bootstrap-multiselect.min.js') }}"></script>
-
-
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Admin/report.js') }}"></script>
 <script type="text/javascript">
+
+
+	// var d = new Date();
+                // var maxDate = d.toLocaleDateString('en-US');
+                // d.setMonth(d.getMonth() - 6);
+                // var minDate = d.toLocaleDateString('en-US');
+
+                // alert(minDate)
+                // alert(maxDate)
+
+                // $('input[name="startdateos"]').daterangepicker({
+                //     "minDate": minDate,
+                //     "maxDate": maxDate,
+                //     autoUpdateInput: false
+                // });
+
+                $(function() {
+  $('input[name="startdateos"]').daterangepicker({
+    opens: 'left',
+    autoUpdateInput: false,
+    // "minDate": minDate,
+        // "startDate": minDate
+
+                //     "maxDate": maxDate,
+  }, function(start, end, label) {
+  
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  });
+});
+                // ,
+                // function (start, end, label) {
+                //     var start_date = start.format('YYYY-MM-DD');
+                //     var end_date = end.format('YYYY-MM-DD');
+                //     $('#start_date').val(start_date);
+                //     $('#end_date').val(end_date);
+                //     $.ajax({
+                //         url: base_url + "/customer/tesco/tesco-orders-submit-filter",
+                //         type: "Post",
+                //         dataType: "json",
+                //         data: {
+                //             _token: csrf_token,
+                //             start_date:start_date,
+                //             end_date:end_date
+                //         },
+                //         beforeSend: function () {
+                //             $(".loader").show();
+                //             $(".loader").css('margin-top', '12%');
+                //         },
+                //         statusCode: {
+                //             /** [Show response status based on HTTP status code] */
+                //             200: function (data) {
+                                
+                //                 $("#seasonos").html("");
+                //                 $("#ukstylenoos").html("");
+                //                 $("#stylenoos").html("");
+
+                //                 $(data.data).each(function(index,value){
+                //                     $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                //                 })
+                
+                //                 $(data.style_no).each(function(index,value){
+                //                     if (value.zone == "CE") {
+                //                         if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
+                //                             $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                //                         }
+                //                     } else {
+                //                         if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
+                //                             $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                //                         }
+                //                     }
+                //                 })
+                //                 $(".selectpicker").val('');
+                //                 $('.selectpicker').selectpicker('refresh');
+                //             },
+                //             400: function () {
+                //                 $('.snackbar_span').html('Something went wrong');
+                //                 showSnackbar();
+                //             }
+                //         },
+                //         error: function (data) {
+                //         },
+                //         complete: function () {
+                //             $(".loader").hide();
+                //             $(".loader").css('margin-top', '0%');
+                //         }
+                //     })
+                // });
+
+                $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+                    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+                    	$("#txtFrom").val(picker.startDate.format('YYYY-MM-DD'))
+  						$("#txtTo").val(picker.endDate.format('YYYY-MM-DD'))
+                });
+
+                $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                });
 
 	function triggerLevel1()
 	{	
 
-		if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
-		{
+		// /
 			if($("#buyer").val().length > 0 && $("#season").val().length > 0 )
 			{
 				$("#loader1").removeClass('hidden')
@@ -337,11 +456,11 @@
 				$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
 				showSnackbar();
 			}
-		}
-		else{
-			$('.snackbar_span').html("Please set the date interval.");
-			showSnackbar();
-		}
+		// }
+		// else{
+		// 	$('.snackbar_span').html("Please set the date interval.");
+		// 	showSnackbar();
+		// }
 	}
 
 function triggerLevel2()
@@ -425,6 +544,16 @@ function triggerLevel2()
 								.text(value)); 
 							}
 					});
+
+					$.each(data.Names, function(key, value)
+					{ 
+
+							if(value != null && value != ',')
+							{
+								$('#sticker_types').append($("<option></option>")
+								.text(value)); 
+							}
+					});
 				}
 				else{
 					$('.snackbar_span').html("No results could be fetched for this combination.");
@@ -460,11 +589,10 @@ function triggerLevel3()
 			$('.selectpicker').removeClass('open');
 			if($(".roleSelection option:selected").val().length > 0)
 			{
-				console.log($("#options_for_orders").val().length)
 				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
 		
-					if($("#reference").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+					if($("#reference").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#sticker_types").val().length > 0)
 					{
 						$status =[]
 						if($(".roleSelection option:selected").html() == "Orders")
@@ -514,8 +642,11 @@ function triggerLevel3()
 			}
 		}
 
+	
+
 function create_table(def,extra)
 { 
+	$(".selectpicker").selectpicker('refresh')
 	$("#reportTable").DataTable().destroy();
 	$("#all_data").empty();
 	$("#all_fields").html('')
@@ -530,7 +661,8 @@ function create_table(def,extra)
 	po = [];
 	buyer_po = [];
 	ocn = [];
-	$status =[]
+	$status =[];
+	report_names =[];
 
 	if($(".roleSelection option:selected").html() == "Orders")
 	{
@@ -557,15 +689,32 @@ function create_table(def,extra)
 		ocn.push($(this).html());
 	});
 
+	$.each($("#sticker_types option:selected"), function(){            
+		report_names.push($(this).html());
+	});
+
 	allColoumns=[]
 	for (var i = 0; i < def.length ; i++)
 	{
 		heading+='<th>'+def[i]+'</th>'
 		$("#all_fields").html(heading)
 		$(".ReportSection").removeClass('hidden')
-		allColoumns.push({
-			data: def[i]
-		});
+
+		if(def[i] == "DT_Row_Index")
+		{
+			allColoumns.push({
+			data: def[i],
+			title:"S_No"
+			});
+		}
+		else
+		{
+			allColoumns.push({
+			data: def[i],
+			title: def[i]
+			});	
+		}
+		
 	}
 
 		reportTable = $('#reportTable').dataTable( {
@@ -623,18 +772,69 @@ function create_table(def,extra)
 				mat_subs : mat_sub,
 				customers : $("#customer").val(),
 				season : seasons,
+				names : report_names,
 				date_start : date1,
 				date_end : date2
 			}
 		},
-		"columns" :allColoumns
+		"columns" :allColoumns,
+
+		// initComplete: function () 
+		// 	 {
+	 {{-- //                   $('.dataTables_filter').after('{!! Form::select('sticker_type', $sticker_types,null,['class' => 'selectpicker','required','id'=>'sticker_type','data-live-search'=>"true",'title'=>'Select Type'])!!}') --}}
+		// 				$(".selectpicker").selectpicker('refresh')
+	 //         }
 	});
-		$('table tr:first th:first').text('S.No');
-		$("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
+		// $('table tr:first th:first').text('S.No');
+		// $("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text()+selections+" ]")
+
+			var selections = "[ ";
+		    if($(".roleSelection option:selected").html() == "Orders")
+				{
+					$.each($("#options_for_orders option:selected"), function(i,v){     
+
+						if(i== $("#options_for_orders option:selected").length-1)
+							{
+								selections+=$(this).html()
+							}
+						else
+							{
+								selections+=$(this).html()+", "
+							}
+						
+					});
+
+				}
+			else
+				{
+					$.each($("#options_for_delivery option:selected"), function(i,v){            
+					
+						if(i== $("#options_for_delivery option:selected").length)
+							{
+								selections+=$(this).html()
+							}
+						else
+							{
+								selections+=$(this).html()+", "
+							}
+						});
+				}
+
+		$("#headerText").html(" Report of "+selections+" ]"+" - "+$("#buyer option:selected").text())
+
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')
+		
 
 	}
 
+	// $(document).on('change', '#sticker_type', function (event) {
+ //            var options = [];
+ //            $.each($(this).children("option:selected"), function () {
+ //                options.push($(this).text());
+ //            });
+ //            var filter = options.join().replace(/,/g,'|');
+ //            reportTable.api().columns(10).search(filter ? '\\b'+filter+'\\b' : ''  ,true, false).draw();
+ //        })
 </script>
 @endsection 

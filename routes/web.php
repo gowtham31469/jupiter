@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\TescoPrimarySize;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +42,7 @@ Route::get('delete_now', function () {
     dd(App\OrchestraTemplate::where('item_id',60)->first());
 });
 
+Route::view('test','test_blade');
 
 // Auth::routes();
 
@@ -450,12 +452,16 @@ Route::put('admin/tesco/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@c
 Route::get('admin/orchestra/template-management', 'Admin\Orchestra\TemplateManagementCntrl@index');
 Route::post('admin/orchestra/template-management/create-template-view', 'Admin\Orchestra\TemplateManagementCntrl@orchestraCreateTemplateView');
 
+//Repeat Order
+Route::post('admin/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder');
+// Route::get('admin/getReorderDetails/{id}', ['as'=>'getReorderDetails','uses'=>'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTescoRepeatOrder']);
 //Reorder
 
 Route::post('admin/tesco/order-management/reorder', 'Admin\Tesco\OrderManagementCntrl@reOrder');
 Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderManagementCntrl@reOrderArtwork');
 Route::post('admin/tesco/order-management/repeatorder-artwork', 'Admin\Tesco\OrderManagementCntrl@repeatOrderArtwork');
 Route::post('admin/tesco/order-management/extra-quantity', 'Admin\Tesco\OrderManagementCntrl@extraQuantity');
+Route::post('admin/tesco/order-management/extra-quantity-label-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTesco');
 Route::post('admin/tesco/order-management/extra-quantity-reorder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityReorder');
 Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\OrderManagementCntrl@setTescoReorder');
 Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
@@ -473,6 +479,9 @@ Route::post('admin/tesco/template-management/template-list', 'Admin\Tesco\Templa
 /** upload csv **/
 
 Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
+Route::get('admin/upload-translation', 'Admin\UploadCSV\UploadCsvController@uploadTranslation');
+Route::post('admin/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController@uploadTranslationCsv');
+
 Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
 Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
@@ -617,6 +626,9 @@ Route::post('admin/tesco/print-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl
 
 
 Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@generateDivTesco');
+Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
+Route::post('admin/tesco/proof-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoLabelos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
@@ -666,6 +678,7 @@ Route::post('customer/tesco/reorder', 'Customer\Tesco\ReorderController@reOrder'
 Route::post('customer/tesco/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
 Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderController@repeatOrderArtwork');
 Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
+Route::post('customer/tesco/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
@@ -674,12 +687,17 @@ Route::post('customer/tesco/edit-check-exist-po-repeat', 'Customer\Tesco\Reorder
 
 Route::get('customer/tesco/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
 
+//Customer Repeat Order
+Route::post('customer/tesco/order-management/extra-quantity-label-tesco-repeatOrder', 'Customer\Tesco\RepeatOrderController@extraQuantityLabelTescoRepeatOrder');
 
 
 //Customer Print Option
 
 Route::post('customer/tesco/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
 Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
+
+
+Route::post('customer/tesco/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
 
 //Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
 
@@ -777,6 +795,11 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
+
+
+	Route::post('job-manager/tesco/proof-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoLabelos');
+
+	Route::post('job-manager/tesco/print-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@printDivTescoLabelos');
 			
 	Route::post('job-manager/orchestra/proof-pdf', 'ErpUser\Jobmanager\JobManagerController@proofPdf');
 	Route::post('job-manager/orchestra/proof-pdf-arr', 'ErpUser\Jobmanager\JobManagerController@proofPdfArr');
@@ -1002,8 +1025,48 @@ Route::put('admin/tesco/update-tesco-translation-details', 'Admin\Settings\Tesco
 Route::put('admin/tesco/enable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@enableTescoTranslation');
 Route::put('admin/tesco/disable-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@disableTescoTranslation');
 
+#Tesco Label Size Chart
+
+Route::post('admin/tesco/settings/get-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@tescoLabelSizeChartLists');
+Route::get('admin/tesco/settings/get-label-category-data', 'Admin\Settings\Tesco\TescoSettings@getLabelSizeCategories');
+Route::post('admin/tesco/settings/add-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@addTescoLabelSizeChart');
+Route::post('admin/tesco/settings/update-tesco-label-size-chart', 'Admin\Settings\Tesco\TescoSettings@updateTescoLabelSizeChart');
+Route::put('admin/tesco/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
+Route::put('admin/tesco/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
+Route::get('admin/tesco/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
+
+Route::get('admin/tesco/updateStatusFlag', ['as'=>'updateStatusFlag','uses'=>'Admin\Settings\Tesco\TescoSettings@updateStatusFlag']);
+
+
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
 	Session::put('fiscal-year', $request['year']);  
 	return response()->json(['message' => 'success'], 200);
 });
+
+# Tesco care label orders admin routes
+Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
+
+	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
+	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
+	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
+	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
+	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
+	Route::put('update-care-label-order',  'Admin\Tesco\CareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+	Route::post('po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
+  });
+
+
+  # Tesco care label orders customer routes
+Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], function() {
+	
+	Route::get('care-label-orders', 'Customer\Tesco\CustomerCareLabelOrdersController@index');
+	Route::get('care-label-fiber-components', 'Customer\Tesco\CustomerCareLabelOrdersController@getFiberComponentsMeta');
+	Route::get('care-size-lists', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeListsBySizeCategoryID');
+	Route::post('submit-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@submitCareLabelOrder');
+	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
+	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
+	Route::put('update-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
+	
+  });

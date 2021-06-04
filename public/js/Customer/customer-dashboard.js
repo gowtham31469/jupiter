@@ -239,18 +239,26 @@ $(document).ready(function() {
    */
   function displayApprovedTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
       var html = "";
       $(orders).each(function(index, value)
       {
-          if(value.zone == "CE")
+          if(value.tablename == "tesco_washcare_orders")
           {
-              var style_no = value.ce_style_ref;
+            var style_no = value.uk_style_ref+"/"+value.ce_style_ref;
           }
           else
           {
-              var style_no = value.uk_style_ref;
-          }   
+            if(value.zone == "CE")
+            {
+                var style_no = value.ce_style_ref;
+            }
+            else
+            {
+                var style_no = value.uk_style_ref;
+            }   
+          }
+          
 		  
 		  if(value.purchase_order_no != null)
 		  {
@@ -394,10 +402,16 @@ $(document).ready(function() {
    */
   function displayPendingTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
       var html = "";
       $(orders).each(function(index, value)
       {
+        if(value.tablename == "tesco_washcare_orders")
+        {
+          var style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+        }
+        else
+        {
           if(value.zone == "CE")
           {
               var style_no = value.ce_style_ref;
@@ -406,6 +420,7 @@ $(document).ready(function() {
           {
               var style_no = value.uk_style_ref;
           }
+        }
           var date1 = new Date();
           var date2 = new Date(value.order_created_at.split(' ')[0]);
           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -454,19 +469,26 @@ $(document).ready(function() {
    */
   function displayCancelledTable(data)
   {
-    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3']))))));
+    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
                  
     var html = "";
     $(orders).each(function(index, value)
     {
-        if(value.zone == "CE")
-        {
-            var style_no = value.ce_style_ref;
-        }
-        else
-        {
-            var style_no = value.uk_style_ref;
-        }   
+        if(value.tablename == "tesco_washcare_orders")
+          {
+            var style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+          }
+          else
+          {
+            if(value.zone == "CE")
+            {
+                var style_no = value.ce_style_ref;
+            }
+            else
+            {
+                var style_no = value.uk_style_ref;
+            }   
+         }
 		
 		if(value.order_cancelled_at != "" && value.order_cancelled_at != null)
 	    {

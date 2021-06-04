@@ -16,6 +16,7 @@ function parseUKPurchaseOrder(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
+        console.log(parsedObj);
         callback(parsedObj);
     } catch(e) {
         // error statements
@@ -47,6 +48,7 @@ function parseCEPurchaseOrder(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
+
         callback(cParsedObj);
     } catch(e) {
         // error statements
@@ -679,3 +681,166 @@ function parseSingleXml(data) {
 
         return singleObj;
 }
+
+/**
+ * Tesco Create Order by PO upload Method.
+ * Get the template type and zone from the form along with PDF.
+ * File to be uploaded for parsing.
+ * Render the the order form with autofilled fields which are parsed from the customer PDF.
+ * @return {xml} XML from the parser. 
+ */
+ function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, size_category, size_category_text,template_id) {
+	try {
+		$.ajax({
+			url: base_url + "/"+ role +"/tesco/po-upload-labels",
+			type: 'POST',
+			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+			data: formData,
+			dataType: 'JSON',
+			async: true,
+			cache: false,
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			statusCode: {
+				200: function (data) {
+                    var parsedObj = {};
+					if (po_zone === 'UK') {
+                        //Check for Purchase Order Type
+                        var po_type = data.type;
+                        switch(po_type) {
+                            case 'single': parsedObj = parseSingleType(data);
+                                break;
+                            case 'ratio': parsedObj = parseRatioType(data);
+                                break;
+                            default: console.log("Failed to identify Purchase Order Type!! Exiting..");
+                                break;
+                        }
+					} else {
+                        //Parse the ORMS data
+                        parsedObj.purchaseOrder  =  data.details.orms.order_number;
+                        //Check for Purchase Order Type
+                        var po_type = data.details.retek.retek_po_type;
+                        switch(po_type) {
+                            case 'single':
+                                    parsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
+                                    parseSingleTypeForCE(data.details.retek, parsedObj);
+                                break;
+                            case 'ratio' :
+                                    parsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
+                                    parseRatioTypeForCE(data.details.retek, parsedObj);
+                                break;
+                            default: console.log("Failed to identify Purchase Order Type!! Exiting..");
+                                break;
+                        }
+					}
+                    // Compare size for atleast one match else raise error
+                        $.ajax({
+                            type: "get",
+                            url: base_url + "/" + role + "/tesco/care-size-lists",
+                            dataType: "json",
+                            data: {
+                                _token: csrf_token,
+                                size_id: size_id,
+                                size_category: size_category
+                            },
+                            success: function (response) {
+                                var meta_size_chart = [];
+                                $.each(response.data, function (indexInArray, valueOfElement) {
+                                    meta_size_chart.push(valueOfElement);
+                                });
+                                
+                                let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
+                                    return order.Size;
+                                });
+
+                                let size_chart;
+                                if(po_zone == 'UK'){
+                                    size_chart =  meta_size_chart.map(function (sizes) {
+                                        return sizes.uk_size;
+                                    });
+                                } else {
+                                    size_chart =  meta_size_chart.map(function (sizes) {
+                                        return sizes.ce_size;
+                                    });
+                                }
+
+                                // Intersection to find out atleast one size is common
+                                let intersection = po_size_chart.filter(x => size_chart.includes(x));
+                                if(intersection.length > 0) {
+                                    renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                } else {
+                                    $('.snackbar_span').html("Size details mismatch!! Please check the file");
+					                showSnackbar();
+                                }
+                            }
+                        });
+				},
+				422: function (data) {
+					$('.snackbar_span').html("File Mismatch!! Please check the file.");
+					showSnackbar();
+				},
+				400: function () {
+					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
+					showSnackbar();
+				}
+			},
+			error: function (errorXHR, errorStatus, errorThrown) {},
+			complete: function () {
+				/** [To make top menu active] */
+				$(function () {
+					var url = window.location;
+					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+					$('.dynamic-menu a').filter(function () {
+						return this.href == url;
+					}).parent('li').addClass('current-page').find('a').addClass('active');
+				});
+				$(".loader").hide();
+			}
+		})
+
+	} catch (e) {
+		// error statements
+		console.log("Error:" + e)
+	}
+}
+
+/**
+ * Method to check the size paramenter of PDF againt the order page.
+ * @param  {[type]} parsedObj [description]
+ * @return {[type]}           [description]
+ */
+ function renderParsedLabelValues(parsedObj, po_zone, size_chart) {
+    var zonal = po_zone.toLowerCase();
+    var zone_size = zonal+'_size';
+    let zonal_size_chart =  size_chart.map(function (sizes) {
+        return sizes[zone_size];
+    });
+
+    // Purchase order
+    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
+
+    // Style number
+    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', false);
+
+    var zonal_size_index = {};
+    $.each(size_chart, function (i, sizes) {    
+        zonal_size_index[sizes[zone_size]] = sizes.id;
+    });
+
+    $.each(parsedObj.orderQuantity, function(i, j) {
+        if($.inArray(j.Size, zonal_size_chart) != -1) {
+            let index = zonal_size_index[j.Size];
+            console.log(index);
+            // EAN Barcode for UK
+            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+
+            // EAN Barcode for CE
+            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            // Quantity
+            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false);
+        }
+    });
+ }

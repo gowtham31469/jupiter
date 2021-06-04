@@ -55,7 +55,12 @@ class OrchestraSettings extends Controller
             $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
             $company = DB::table('company')->pluck('name','id')->all();
             $buyer_count = count($buyers);
-            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company]);
+
+            $label_categories = DB::table('tesco_secondary_size_category')->pluck('category_name','id');
+            $size_departments = DB::table('tesco_size_department')->pluck('department_name','id');
+
+            // dd($label_categories,$size_departments);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company,'categories' => $label_categories,'departments'=>$size_departments]);
         }
         else
         {

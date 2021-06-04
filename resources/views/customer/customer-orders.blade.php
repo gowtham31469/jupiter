@@ -259,18 +259,6 @@ border: 0;
     transform: translate(0, 0) scale(1);
     pointer-events: auto;
 }
-.input-fields {
- margin-bottom: 20px;
- }
- .input-fields input,
- select {
- width: 100%;
- height: 20px;
- -ms-box-sizing: content-box;
- -moz-box-sizing: content-box;
- box-sizing: content-box;
- -webkit-box-sizing: content-box;
- }
  .order-details-notes {
  font-weight: 300;
  }
@@ -280,11 +268,8 @@ border: 0;
 .po-number-div::before {
 font-weight: 700;
 display: inline-block;
-max-width: 100%;
-margin-bottom: 4px;
 content: '';
 margin-left: -117px;
-height: 1px;
 width: 75%;
 background: rgba(0,0,0,0.2);
 } 
@@ -374,7 +359,10 @@ background: rgba(0,0,0,0.2);
 
 	.left-panel.active {
     	margin-right: 0%;
-	}
+    }
+    .care_label_reorder.active {
+    margin-right: 0%;
+}
 
 </style>
 <input type="hidden" id="status_flag">
@@ -610,6 +598,319 @@ background: rgba(0,0,0,0.2);
 	</div>
 </div>
 
+
+<div class="care_label_reorder col-md-12" style="display: none">
+	<div class="loader" style="display: none; margin-top: 0%;"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+	<div class="div-max">
+		<div class="col-md-5">
+			<h4 class="artwork_name_care_label_reorder"></h4>
+			<hr>
+			<div class="section-1 sections">
+				<div class="sample_artwork_care_label_reorder scroll" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
+			</div>
+		</div>
+		<div class="col-md-7 scroll" style="overflow-y: scroll;height: 100%;">
+			<h4>Quantity Information</h4>
+			<hr>
+
+			<div class="merchandiser-area">
+
+				<div class="quantity_care_label_reorder"></div>
+				<div class="buttons pull-right" style="margin-top:10px;">
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="care_label_repeatorder col-md-12" style="display: none">
+    <div class="loader" style="display: none; margin-top: 0%;"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
+    <div class="div-max" style="margin-left: 25%;">
+        {{-- <div class="col-md-5">
+            <h4 class="artwork_name_care_label_reorder"></h4>
+            <hr>
+            <div class="section-1 sections">
+                <div class="sample_artwork_care_label_reorder scroll" style="text-align:center;height: calc(100vh - 120px);overflow-y: scroll;"></div>
+            </div>
+        </div> --}}
+        <div class="col-md-12 scroll" style="overflow-y: scroll;height: 100%;">
+            {{-- <h4>Quantity Information12345</h4> --}}
+            <h4 class="artwork_name_care_label_reorder"></h4>
+            <hr>
+
+            <div class="merchandiser-area">
+                {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <input type="hidden" id="order_type" name="order_type" value="repeatOrder">
+                <input type="hidden" id="primary_size_id" name="primary_size_id" value="">
+                <span id="result"></span>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_po" class="form_label">Tesco PO Number</label>
+                            <input class="form-control input-sm " placeholder="Tesco PO Number" required="" maxlength="10" name="tesco_care_po" type="text" value="" id="tesco_care_po">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_eqos" class="form_label">EQOS Supplier Number</label>
+                            <input class="form-control input-sm " placeholder="EQOS Supplier Number" required="" maxlength="10" name="tesco_care_eqos" type="text" value="" id="tesco_care_eqos">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_ce_style" class="form_label">Option ID</label>
+                            <input class="form-control input-sm " placeholder="Option ID" required="" maxlength="" name="tesco_care_ce_style" type="text" value="" id="tesco_care_ce_style">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_uk_style" class="form_label">UK Style Number</label>
+                            <input class="form-control input-sm " placeholder="UK Style Number" required="" maxlength="8" name="tesco_care_uk_style" type="text" value="" id="tesco_care_uk_style">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_fabric_code" class="form_label">Fabric Batch Code</label>
+                            <input class="form-control input-sm " placeholder="Fabric Batch Code" maxlength="7" name="tesco_care_fabric_code" type="text" value="" id="tesco_care_fabric_code">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group has-feedback">
+                            <label for="tesco_care_leather_id" class="form_label">Leather &amp; Suede ID</label>
+                            <input class="form-control input-sm " placeholder="Leather &amp; Suede ID" maxlength="" name="tesco_care_leather_id" type="text" value="" id="tesco_care_leather_id">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+                
+               <div class="row">
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
+            {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --'] + $coo),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("admin", "create")')) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+                    <div class="col-md-3">
+                        <div class="form-group has-feedback"><label for="tesco_care_button_space" class="form_label" style="visibility:hidden">Dont Show</label>
+                            <div class="checkbox">
+                                <label>
+                                    <input id="tesco_care_button_space" name="tesco_care_button_space" type="checkbox"> Include Button Sew Space
+                                </label>
+                            </div>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+<hr>
+    <h4>Order Quantity</h4>
+                <div class="quantity_care_label_repeatorder"></div>
+
+<hr>
+                <div class="row garment-component-div">
+    <div class="col-md-12">
+        <h4 class="pull-left">Garment Component & Fibres</h4>
+        <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'admin', 'tesco_care_label_order_form')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
+    </div>
+    
+    @for ($j = 1; $j <= 3; $j++)
+    <div class="col-md-4 component-div">
+        <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group has-feedback">
+                {!! Form::label('tesco_care_garment_component_'.$j, 'Garment Component', ['class' => 'form_label component-label']) !!}
+                {{  Form::select('tesco_care_garment_component_'.$j,(['' => '-- Select Garment Component --']+$components),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_garment_component_'.$j, 'data-live-search' => 'true', 'name' => 'tesco_care_garment_component[]')) }}
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        @for ($i = 1; $i <= 6; $i++)
+            <div class="col-xs-9">
+                <div class="form-group has-feedback">
+                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber_'.$j.'[]')) }}
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                <div class="input-group">
+                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage()" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage_{{$j}}[]" data-max-error= "Value must be <= 100">
+                    <div class="input-group-addon">%</div>
+                </div>
+                <div class="help-block with-errors"></div>
+                </div>
+            </div>
+        @endfor
+        <div class="col-xs-9">
+            <h5 class="text-right"><strong>Total</strong></h5>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group has-feedback">
+            <div class="input-group">
+                <input type="number" class="form-control input-sm composition-percentage total-percentage-{{ $j }}" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}">
+                <div class="input-group-addon">%</div>
+            </div>
+            <div class="help-block with-errors"></div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    @endfor
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <div class="align-items form-group has-feedback">
+        <div class="checkbox">
+            <label>
+                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
+            </label>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="checkbox">
+            <label>
+                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
+            </label>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="checkbox">
+            <label>
+                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
+            </label>
+            <div class="help-block with-errors"></div>
+        </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h4>Care Instructions</h4>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_wash_instruction', 'Wash Instructions', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction">
+                <option value="">-- Select Wash Instructions --</option>
+                @foreach($symbols['Washing'] as $key => $value)
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required >{{ $value->degree }}</option>
+                @endforeach
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instructions', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction">
+                <option value="">-- Select Bleach Instructions --</option>
+                @foreach($symbols['Whitening'] as $key => $value)
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                @endforeach
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_dry_instruction', 'Dry Instructions', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction">
+                <option value="">-- Select Dry Instructions --</option>
+                @foreach($symbols['Dryer'] as $key => $value)
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                @endforeach
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_iron_instruction', 'Iron Instructions', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction">
+                <option value="">-- Select Iron Instructions --</option>
+                @foreach($symbols['Ironing'] as $key => $value)
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                @endforeach
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instructions', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction">
+                <option value="">-- Select Dry Clean Instructions --</option>
+                @foreach($symbols['Prof Cleaning'] as $key => $value)
+                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                @endforeach
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-8">
+    <div class="row">
+    <div class="col-md-12">
+        <h4>Additional Instructions</h4>
+    </div>
+    @for ($i = 1; $i <= 3; $i++)
+    <div class="col-md-4">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_additional_instruction_'.$i, 'Additional Instruction '.$i, ['class' => 'form_label']) !!}
+            {{  Form::select('tesco_care_additional_instruction_'.$i,(['' => '-- Select Additional Instruction --'] + $additional_instructions),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_additional_instruction_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_additional_instruction_'.$i)) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    @endfor
+    
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Additional Instructions</h4>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group has-feedback">
+                {!! Form::label('tesco_care_kids_warning', 'Kids Warning Statement', ['class' => 'form_label']) !!}
+                {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Kids Warning Statement --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kids_warning', 'data-live-search' => 'true')) }}
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+    </div>
+    <div class="label-order-invisible-div"></div>
+</div>
+</div>
+
+
+
+
+                <div class="buttons pull-right" style="margin-top:10px;">
+                    <button style="margin-left: 10px;" class="btn btn-primary pull-right" type="submit" onclick="validateTescoCareLabelOrder('admin')">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
+
+    </div>
+</div>
+
     <div class="modal fade" id="po-file-upload-group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -742,6 +1043,23 @@ background: rgba(0,0,0,0.2);
             </div>
         </div>
     </div>
+    <div class="modal fade" id="cancelLabelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelLabelOrderModal">
+       <div class="modal-dialog" role="document">
+           <div class="modal-content">
+               <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <h4 class="modal-title" id="cancelLabelOrderModal">Cancel Order</h4>
+               </div>
+                   <div class="modal-body">
+                         <p>You are about to cancel this order. Do you want to proceed ?</p>
+                   </div>
+                   <div class="modal-footer">
+                       {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelCareLabelOrder("customer")'] ) !!}
+                   </div>
+           </div>
+       </div>
+   </div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/customer') }}";
@@ -755,6 +1073,8 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+<script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
+<script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>

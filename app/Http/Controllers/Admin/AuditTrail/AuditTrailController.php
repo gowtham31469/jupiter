@@ -8,6 +8,9 @@ use App\Classes\Modules;
 use View;
 use DB;
 use Illuminate\Support\Facades\Redis;
+use Session;
+use App\FinancialYearResetDate;
+use Carbon\Carbon;
 
 
 /**
@@ -16,6 +19,12 @@ use Illuminate\Support\Facades\Redis;
  */
 class AuditTrailController extends Controller
 {
+    private $year;
+    private $financial_year_date;
+    private $financial_year_start;
+    private $financial_year_end;
+    private $financial_year_date_format;
+    private $today_date;
     /**
      * Create a new controller instance.
      *
@@ -25,6 +34,28 @@ class AuditTrailController extends Controller
     {
        $this->middleware('auth');
        $this->module = $module;
+
+       // get year as "2020"
+        $this->year = Carbon::now('Asia/Kolkata')->format('Y');
+
+        $this->financial_year_date = FinancialYearResetDate::value('financial_year_date');
+
+        // format financial year date as "yyyy-dd-mm" 
+        $this->financial_year_date_format = $this->year.'-'.$this->financial_year_date;
+
+        // get the current date in "dd-mm-yyyy" format
+        $this->today_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+            
+            // financial year identification
+        if($this->today_date < $this->financial_year_date_format){
+          $this->financial_year_start = Carbon::parse($this->financial_year_date_format)->subYear()->toDateString();
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->subDay()->toDateString();
+          $this->financial_year = Carbon::parse($this->financial_year_date_format)->subYear()->format('y');
+        } else {
+          $this->financial_year_start = $this->financial_year_date_format;
+          $this->financial_year_end = Carbon::parse($this->financial_year_date_format)->addYear()->subDay()->toDateString();
+          $this->financial_year = Carbon::parse($this->financial_year_date_format)->format('y');
+        }
     }
     /**
      * Show the Audits list page.
@@ -39,9 +70,19 @@ class AuditTrailController extends Controller
         {
             $get_main_module = $this->module->getMainModules();
             $get_sub_module = $this->module->getSubModules(44);
+
+            if(Session::get('fiscal-year') != null) {
+              $year = explode('-', Session::get('fiscal-year'));
+              $from_date = $year[0].'-'.$this->financial_year_date;
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            } else {
+              $from_date = $this->financial_year_start;
+              $to_date =$this->financial_year_end; 
+            }
+
             $audit_data = DB::table('audits')
                           ->join('users','users.id','audits.user_id')
-                          ->select('audits.id','audits.module','audits.ip_address','audits.user_agent','audits.event','audits.url','audits.created_at','users.name','users.email')
+                          ->select('audits.id','audits.module','audits.ip_address','audits.user_agent','audits.event','audits.url','audits.created_at','users.name','users.email')->whereBetween('audits.created_at', [$from_date, $to_date])
                           ->get();
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
