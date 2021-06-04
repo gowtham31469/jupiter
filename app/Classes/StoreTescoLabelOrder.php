@@ -30,9 +30,7 @@ class StoreTescoLabelOrder
             ->where('tesco_item_master.id', $request->template_id)
             ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
             ->first();
-            // dd("fgjhfg");
-// dd($template_data);
-// dd("ASD");
+
         $max_id = TescoWashcareOrders::max('id');
 
         $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1);

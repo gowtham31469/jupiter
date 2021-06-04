@@ -82,7 +82,7 @@ class CustomerCareLabelOrdersController extends Controller
         }
     }
 
-    public function getFiberComponentsMeta(Request $request)
+    public function getFiberComponentsMeta()
     {
         $data['components'] = DB::table('tesco_components')
             ->where('is_enabled', 1)
