@@ -14,6 +14,7 @@ use Auth;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
 use Session;
+use App\Classes\TescoCareMetadata;
 
 class HomeController extends Controller
 {
@@ -583,7 +584,7 @@ class HomeController extends Controller
      * Show the customer orders.
      * @return \Illuminate\Http\Response
      */
-    public function customerOrders()
+    public function customerOrders(TescoCareMetadata $caremeta)
     {
         try{
             $customer_id = Auth::guard('web_customer')->user()->id;
@@ -593,7 +594,29 @@ class HomeController extends Controller
                           ->where('customer_profile_buyer.customer_profile_id',$customer_id)
                           ->get();
             $buyer_count = count($buyers);
-            return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+
+            $symbols = $caremeta->getCareMetadata()['symbols'];
+
+            $coo = $caremeta->getCareMetadata()['coo'];
+
+            $kids_warning = $caremeta->getCareMetadata()['kids_warning'];
+
+            $components = $caremeta->getCareMetadata()['components'];
+
+            $fabriclists = $caremeta->getCareMetadata()['fabriclists'];
+
+            $tesco_suppliers = $caremeta->getCareMetadata()['tesco_suppliers'];
+
+            $additional_instructions = $caremeta->getCareMetadata()['additional_instructions'];
+
+            return view('customer/customer-orders',['buyers' => $buyers,
+              'buyer_count' => $buyer_count,'symbols' => $symbols,
+              'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
+              'kids_warning' => $kids_warning,'components' => $components,
+              'fabriclists' => $fabriclists,
+                'additional_instructions' => $additional_instructions]);
+            
+            // return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
         } catch (\Exception $e) {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         
