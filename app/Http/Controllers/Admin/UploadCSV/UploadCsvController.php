@@ -102,7 +102,11 @@ class UploadCsvController extends Controller
           if (preg_match('/Clothing/',$filename))
           {
               $data = \Excel::load($path)->get();
-
+              $country_arr[]=array();
+              $comp_arr[]=array();
+              $fibre_arr[]=array();
+              $care_arr[]=array();
+              $kids_arr[]=array();
               if($data->count()){
                   foreach ($data as $key => $value) {
                     if($value->category == "COUNTRIES")
