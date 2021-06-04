@@ -251,7 +251,7 @@ $( () => {
             $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
         }
 
-        mapStoredValues(order_data, user_type);
+        mapLabelStoredValues(order_data, user_type);
 
         $('.edit-label-order-panel').addClass('active');
         $(".selectpicker").selectpicker("refresh");

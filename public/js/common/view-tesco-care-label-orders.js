@@ -14,7 +14,7 @@ $( () => {
             $('.label-order-submit-btn').remove();
 
             // Map stored values 
-            mapStoredValues(order_data, user_role);
+            mapLabelStoredValues(order_data, user_role);
 
             $(".selectpicker").selectpicker("refresh");
             $('#add_garment_component_btn').remove();
@@ -23,7 +23,7 @@ $( () => {
 
     }
 
-    mapStoredValues = (order_data, user_role) => {
+    mapLabelStoredValues = (order_data, user_role) => {
         $('#hidden_id').val(order_data.order_details.id)
         $('#hidden_name').val(order_data.order_details.item_master.template_name)
         $('.create-download-artwork').css('display','inline-block')
