@@ -3430,7 +3430,8 @@ class OrderStatusCntrl extends Controller
         if ($order_table_array[1] ==  'washcare') {
             $order_details  = $model_name::with([
                 'quantities',
-                'garment_components'
+                'garment_components',
+                'item_master'
             ])
             ->where([
                 'id' => $request->id
