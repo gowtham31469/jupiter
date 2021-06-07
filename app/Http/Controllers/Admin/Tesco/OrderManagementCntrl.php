@@ -2833,9 +2833,6 @@ class OrderManagementCntrl extends Controller
 
     public function extraQuantityLabelTescoRepeatOrder(Request $request)
     {
-      
-
-      // dd($caremeta->getCareMetadata()['symbols']);
 
       $type         =   $request->type;
       $id           =   $request->id;
@@ -2877,15 +2874,10 @@ class OrderManagementCntrl extends Controller
         ->where('tesco_primary_size.tesco_size_department_id', $data['orders']{0}->primary_size_id)
         ->orderBy('tesco_primary_size.id')
         ->get();
-
-        // dd($size_category,$data['tesco_sizelists']);
     
       $data['composition'] =  TescoWashcareOrdersComponentMapping::with('fibers')
             ->where('washcare_order_id',$request->id)
             ->get();
-            // ->with('quantities')
-            // ->with('garment_components')
-            // ->get();
       echo json_encode($data);
     }
 
