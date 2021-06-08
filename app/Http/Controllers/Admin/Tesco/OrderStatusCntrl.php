@@ -12,7 +12,7 @@ use App\ProfomaInvoice as PI;
 use App\Classes\ErpOrders;
 use App\ProfomaInvoiceItemDetails;
 use Response;
-use View;
+use +;
 use DB;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
