@@ -1493,6 +1493,28 @@ function tescoStatusTable(data, path) {
                     } else {
                         tr += '<td><span style=display:none;>' + value.OrderDate + '</span> - </td>';
                     }
+                } else if (key == "Zone") {
+
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        tr += '<td> - </td>';
+                    }
+                    else
+                    {
+                        tr += '<td>' + value[key] + '</td>';
+                    }
+
+                } else if (key == "Template Type") {
+
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        tr += '<td> - </td>';
+                    }
+                    else
+                    {
+                        tr += '<td>' + value[key] + '</td>';
+                    }
+
                 } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
                     if (value[key] == "" || value[key] == null) {
                         tr += '<td> - </td>';
