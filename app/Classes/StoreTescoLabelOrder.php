@@ -263,7 +263,7 @@ class StoreTescoLabelOrder
 
         for ($component_index = 0; $component_index < count($tesco_care_garment_component); $component_index++) {
 
-            if (is_null($tesco_care_garment_component[$component_index]) && (is_null($fiber_total_percentage[$component_index]) || $fiber_total_percentage[$component_index] === 0)) {
+            if (is_null($tesco_care_garment_component[$component_index]) && ( (int)$fiber_total_percentage[$component_index] === 0)) {
 
                 continue;
             }
@@ -289,7 +289,7 @@ class StoreTescoLabelOrder
             $fiber_data = [];
             for ($fiber_index = 0; $fiber_index < count($tesco_care_fiber); $fiber_index++) {
 
-                if (is_null($tesco_care_fiber[$fiber_index]) && (is_null($fiber_individual_percentage[$fiber_index]) || $fiber_individual_percentage[$fiber_index] === 0)) {
+                if (is_null($tesco_care_fiber[$fiber_index]) && (is_null($fiber_individual_percentage[$fiber_index]) || (int)$fiber_individual_percentage[$fiber_index] === 0)) {
 
                     continue;
                 }
