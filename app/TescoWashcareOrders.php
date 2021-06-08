@@ -141,7 +141,7 @@ class TescoWashcareOrders extends Model
                 'ce_size',
                 'department_title',
                 'tesco_primary_size.id as size_id'
-            ]);
+            ])->orderBy('tesco_washcare_orders_quanty.id', 'asc');
     }
 
     /**
@@ -149,6 +149,6 @@ class TescoWashcareOrders extends Model
      */
     public function garment_components()
     {
-        return $this->hasMany('App\TescoWashcareOrdersComponentMapping', 'washcare_order_id')->with(['fibers']);
+        return $this->hasMany('App\TescoWashcareOrdersComponentMapping', 'washcare_order_id')->with(['fibers'])->orderBy('id', 'asc');
     }
 }
