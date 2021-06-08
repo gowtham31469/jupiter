@@ -21,6 +21,7 @@ class TescoCareMetadata
     $metadata_array['symbols'] = DB::table('tesco_care_symbols')
       ->select('tesco_care_symbols.id', 'tesco_care_symbols.iso_symbols', 'tesco_care_symbols.degree', 'tesco_care_category.category_name')
       ->join('tesco_care_category', 'tesco_care_category.id', 'tesco_care_symbols.category_id')
+      ->where('is_enabled', 1)
       ->get()
       ->groupBy('category_name')
       ->toArray();
