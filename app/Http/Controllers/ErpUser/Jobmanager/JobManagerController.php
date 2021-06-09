@@ -806,8 +806,6 @@ class JobManagerController extends Controller
 				$color_code         = array();
 				$tint_color         = array();
 
-				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
-
 				/** Get erp order details table ids from erp orders table id */
 				foreach ($erp_orders_ids as $row => $erp_orders_id) {
 					// buyer po number is not mandatory for orchestra.

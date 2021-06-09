@@ -150,10 +150,7 @@ class CareLabelOrdersController extends Controller
 
             $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
 
-            return response()->json([
-                'message' => 'success',
-                'data' => $response
-            ], 200);
+            return $response;
         }
     }
 
