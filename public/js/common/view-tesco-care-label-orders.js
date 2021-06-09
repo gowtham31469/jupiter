@@ -123,7 +123,7 @@ $( () => {
                     statusCode: {
                         200: function (data) {
 
-                            var fiber_count = 0;
+                            var fiber_count = 1;
                             var garment_comp_div = `<div class="col-md-4 component-div">
                                                             <div class="row">
                                                                 <div class="col-xs-12">
@@ -160,7 +160,7 @@ $( () => {
                                                             <div class="col-xs-3">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage(this, ` + index + `, event)" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>
