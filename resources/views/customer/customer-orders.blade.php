@@ -803,9 +803,9 @@ background: rgba(0,0,0,0.2);
     </div>
     <div class="col-md-3">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_wash_instruction', 'Wash Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_wash_instruction', 'Wash Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction">
-                <option value="">-- Select Wash Instructions --</option>
+                <option value="">-- Select Wash Instruction --</option>
                 @foreach($symbols['Washing'] as $key => $value)
                         <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required >{{ $value->degree }}</option>
                 @endforeach
@@ -815,9 +815,9 @@ background: rgba(0,0,0,0.2);
     </div>
     <div class="col-md-3">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction">
-                <option value="">-- Select Bleach Instructions --</option>
+                <option value="">-- Select Bleach Instruction --</option>
                 @foreach($symbols['Whitening'] as $key => $value)
                         <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
@@ -827,9 +827,9 @@ background: rgba(0,0,0,0.2);
     </div>
     <div class="col-md-3">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_dry_instruction', 'Dry Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_dry_instruction', 'Dry Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction">
-                <option value="">-- Select Dry Instructions --</option>
+                <option value="">-- Select Dry Instruction --</option>
                 @foreach($symbols['Dryer'] as $key => $value)
                         <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
@@ -839,9 +839,9 @@ background: rgba(0,0,0,0.2);
     </div>
     <div class="col-md-3">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_iron_instruction', 'Iron Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_iron_instruction', 'Iron Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction">
-                <option value="">-- Select Iron Instructions --</option>
+                <option value="">-- Select Iron Instruction --</option>
                 @foreach($symbols['Ironing'] as $key => $value)
                         <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
@@ -851,9 +851,9 @@ background: rgba(0,0,0,0.2);
     </div>
     <div class="col-md-3">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction">
-                <option value="">-- Select Dry Clean Instructions --</option>
+                <option value="">-- Select Dry Clean Instruction --</option>
                 @foreach($symbols['Prof Cleaning'] as $key => $value)
                         <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach

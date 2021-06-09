@@ -30,9 +30,12 @@ class StoreTescoLabelOrder
             ->where('tesco_item_master.id', $request->template_id)
             ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
             ->first();
-            // dd("fgjhfg");
-// dd($template_data);
-// dd("ASD");
+
+        if(count($template_data) === 0){
+            $errors = ["tesco_template" => "Template details are missing"];
+            return response()->json(['errors' => $errors, 'message' => 'Template details are missing'], 422);
+        }
+        
         $max_id = TescoWashcareOrders::max('id');
 
         $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1);
@@ -157,7 +160,10 @@ class StoreTescoLabelOrder
         $response['style_number']           = $request->tesco_care_uk_style . '/' . $request->tesco_care_ce_style;
         $response['po_number']              = $request->tesco_care_po;
 
-        return $response;
+        return response()->json([
+            'message' => 'success',
+            'data' => $response
+        ], 200);
     }
 
 
@@ -265,7 +271,7 @@ class StoreTescoLabelOrder
 
         for ($component_index = 0; $component_index < count($tesco_care_garment_component); $component_index++) {
 
-            if (is_null($tesco_care_garment_component[$component_index]) && (is_null($fiber_total_percentage[$component_index]) || $fiber_total_percentage[$component_index] === 0)) {
+            if (is_null($tesco_care_garment_component[$component_index]) && ( (int)$fiber_total_percentage[$component_index] === 0)) {
 
                 continue;
             }
@@ -291,7 +297,7 @@ class StoreTescoLabelOrder
             $fiber_data = [];
             for ($fiber_index = 0; $fiber_index < count($tesco_care_fiber); $fiber_index++) {
 
-                if (is_null($tesco_care_fiber[$fiber_index]) && (is_null($fiber_individual_percentage[$fiber_index]) || $fiber_individual_percentage[$fiber_index] === 0)) {
+                if (is_null($tesco_care_fiber[$fiber_index]) && (is_null($fiber_individual_percentage[$fiber_index]) || (int)$fiber_individual_percentage[$fiber_index] === 0)) {
 
                     continue;
                 }

@@ -470,15 +470,15 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
 
-    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', false);
+    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     if(zone === 'ce') {
-        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', false);
+        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', false);
      } else {
-        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', false);
+        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
      }
    
-   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', false);
+   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
 
     $('#tesco_description').val(parsedObj.shortDescription);
 	if(typeof parsedObj.originalDescription !== 'undefined') {
@@ -492,16 +492,16 @@ function renderParsedValues(parsedObj) {
             var index = i + 1;
 
             if(zone === 'ce') {
-                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', false);
+                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', false);
             } else {
-                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', false);
+                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', false);
             }
             
-            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
 
-            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', false);
+            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', false);
 
-            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', false);
+            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', false);
 
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
@@ -511,16 +511,16 @@ function renderParsedValues(parsedObj) {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
 
-            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', false);
+            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', false);
 
             if(zone === 'ce') {
-                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', false);
+                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', false);
 
-                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', false);
+                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', false);
             } else {
-                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', false);
+                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', false);
 
-                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', false);
+                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', false);
             }
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
@@ -820,10 +820,10 @@ function parseSingleXml(data) {
     });
 
     // Purchase order
-    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
+    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     // Style number
-    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', false);
+    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false);
 
     var zonal_size_index = {};
     $.each(size_chart, function (i, sizes) {    
@@ -835,12 +835,12 @@ function parseSingleXml(data) {
             let index = zonal_size_index[j.Size];
             console.log(index);
             // EAN Barcode for UK
-            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
 
             // EAN Barcode for CE
-            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
             // Quantity
-            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false);
+            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false):$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false);
         }
     });
  }

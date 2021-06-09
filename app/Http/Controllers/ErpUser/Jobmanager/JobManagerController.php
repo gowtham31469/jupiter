@@ -138,7 +138,7 @@ class JobManagerController extends Controller
 				}
 				$i++;
 			}
-				// dd($new_orders);
+			
 			$orders_erp = array();
 			foreach($new_orders as $key => $values)
 			{
@@ -311,7 +311,6 @@ class JobManagerController extends Controller
 							->select('*')
 							->get();
 
-							// dd($order_details);
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
 				
@@ -806,8 +805,6 @@ class JobManagerController extends Controller
 				$customer_po_array  = array();
 				$color_code         = array();
 				$tint_color         = array();
-
-				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
 
 				/** Get erp order details table ids from erp orders table id */
 				foreach ($erp_orders_ids as $row => $erp_orders_id) {
@@ -5931,45 +5928,24 @@ class JobManagerController extends Controller
 					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		});
-	   
-		//$svg=urldecode($request->svg);
-		
-		// $made_in_select=$request->made_in_select;
 
 
 	
 		$selectedWashCare = OrchestraWashCare::where('id',$request->parentId)->first();
-		
-
-		// dd($selectedWashCare);
+	
 
 		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$selectedWashCare->made_in_id)->get();
 		
-				// dd($orchestra_countries);
-		// $care_instruction_select = explode(',',$request->care_instruction_select_fin); 
-		
 		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
 					->select('*')->whereIn('id',explode(',',$selectedWashCare->care_instruction_id))->get();
-		
-
-		// dd($orchestra_care_instruction);
-		//print_r($orchestra_countries);
-		
-		//print_r($orchestra_countries);
 		
 		$svg=urldecode($request->svg); 
 		$svg_back=urldecode($request->svg_back); 
 		$svg_middle=urldecode($request->svg_middle); 
 		
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('tahoma', '',  1.5, '', true);
 		PDF::AddPage();
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::SetFillColor(255, 255, 255);
-		//PDF::SetTextColor(0, 0, 0);
-		
 		
 	
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
@@ -5981,13 +5957,10 @@ class JobManagerController extends Controller
 			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
 		}
 		
-		//print_r($tbl2);
 		$tbl3="";
 		$orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')
 					->select('*')->where('owcl_id',$request->parentId)->get();
-					//print_r($orchestra_wash_care_composition);
 		$composition = json_decode($request->composition);
-		//print_r($composition);
 		$page_id = "";
 		foreach($orchestra_wash_care_composition as $key => $value)
 		{

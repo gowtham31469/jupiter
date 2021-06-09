@@ -82,7 +82,7 @@ class CareLabelOrdersController extends Controller
     }
 
 
-    public function getFiberComponentsMeta(Request $request)
+    public function getFiberComponentsMeta()
     {
         $data['components'] = DB::table('tesco_components')
             ->where('is_enabled', 1)
@@ -126,6 +126,7 @@ class CareLabelOrdersController extends Controller
             $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $request['size_category']);
         }])
             ->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])
+            ->where('tesco_primary_size.is_flag', true)
             ->orderBy('tesco_primary_size.id')
             ->get();
 
@@ -149,10 +150,7 @@ class CareLabelOrdersController extends Controller
 
             $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
 
-            return response()->json([
-                'message' => 'success',
-                'data' => $response
-            ], 200);
+            return $response;
         }
     }
 

@@ -28,6 +28,6 @@ class TescoPrimarySize extends Model
      */
     public function secSizeChart()
     {
-        return $this->hasMany(TescoSecondarySizeChart::class)->join('tesco_secondary_size_category as tssc', 'tssc.id', '=', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
+        return $this->hasMany(TescoSecondarySizeChart::class)->join('tesco_secondary_size_category as tssc', 'tssc.id', 'tesco_secondary_size_chart.tesco_secondary_size_category_id');
     }
 }
