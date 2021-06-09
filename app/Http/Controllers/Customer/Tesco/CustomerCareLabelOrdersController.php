@@ -185,10 +185,7 @@ class CustomerCareLabelOrdersController extends Controller
 
             $response = $this->storeorder->storeTescoLabelOrder($request, 'customer');
 
-            return response()->json([
-                'message' => 'success',
-                'data' => $response
-            ], 200);
+            return $response;
         }
     }
 
