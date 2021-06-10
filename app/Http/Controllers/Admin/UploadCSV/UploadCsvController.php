@@ -144,6 +144,46 @@ class UploadCsvController extends Controller
                     {
                       $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
                     }
+                    else if($value->english == "tiny baby")
+                    {
+                      $tiny = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+
+                      DB::table('tesco_translation')
+                          ->where('id', 1)
+                          ->update($tiny);
+                    }
+                    else if($value->english == "newborn")
+                    {
+                      $newborn = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+
+                      DB::table('tesco_translation')
+                          ->where('id', 2)
+                          ->update($newborn);
+                    }
+                    else if($value->english == "up to 1 mth")
+                    {
+                      $up1m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+
+                      DB::table('tesco_translation')
+                          ->where('id', 3)
+                          ->update($up1m);
+                    }
+                    else if($value->english == "up to 3 mths")
+                    {
+                      $up3m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+
+                      DB::table('tesco_translation')
+                          ->where('id', 4)
+                          ->update($up3m);
+                    }
+                    else if($value->english == "one size")
+                    {
+                      $onesize = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+
+                      DB::table('tesco_translation')
+                          ->where('id', 5)
+                          ->update($onesize);
+                    }
                   }
 
                  //print_r($arr);
