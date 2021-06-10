@@ -36,6 +36,8 @@
         <div id="svgdiv" style="position:absolute;visibility:hidden">\
          <svg id="ean-13"></svg>\
        </div>
+       <div id="objectDiv" style="position:absolute;visibility:hidden">
+       </div>
     </div>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
