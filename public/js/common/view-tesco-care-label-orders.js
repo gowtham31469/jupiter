@@ -124,6 +124,8 @@ $( () => {
                         200: function (data) {
 
                             var fiber_count = 1;
+                            let fiber_count_index = 0;
+
                             var garment_comp_div = `<div class="col-md-4 component-div">
                                                             <div class="row">
                                                                 <div class="col-xs-12">
@@ -140,9 +142,9 @@ $( () => {
                                                             </div>
                                                         </div>`;
 
-                            while (fiber_count < 6) {
-                                var fibre_composition_id = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_id : 0;
-                                var fibre_composition_percentage = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_percentage : "";
+                            while (fiber_count <= 6) {
+                                var fibre_composition_id = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_id : 0;
+                                var fibre_composition_percentage = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_percentage : "";
 
                                 garment_comp_div += `<div class="col-xs-9">
                                                                     <div class="form-group has-feedback">
@@ -166,7 +168,8 @@ $( () => {
                                                                 <div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>`;
-                                fiber_count++
+                                fiber_count++;
+                                fiber_count_index++;
                             }
                             garment_comp_div += `<div class="col-xs-9">
                                                                     <h5 class="text-right"><strong>Total</strong></h5>
