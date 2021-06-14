@@ -1305,7 +1305,22 @@ function tescoStatusTable(data, path) {
     //         }
     //     }
     // }
+    var template_array = [];
+    $('#objectDiv').html("")
     $.each(data, function (index, value) {
+        if(template_array.includes(value.TemplateName.replace(/ /g, "")+"_"+value.template_id) == false)
+        {
+            template_array.push(value.TemplateName.replace(/ /g, "")+"_"+value.template_id)
+            if(value.tableName == "tesco_washcare_orders")
+            {
+                var temp_file = value.template_file.split(',');
+                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_text_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_front_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object>')
+            }
+            else
+            {
+                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object>')
+            }
+        }
         var action_status = false;
         tr += '<tr class="trClass" id="' + value.tableName + '_' + value.tableID + '">';
         for (var key in columnsIn) {
@@ -1380,12 +1395,11 @@ function tescoStatusTable(data, path) {
                         }
                         if(value.tableName == "tesco_washcare_orders")
                         {
-                            var temp_file = value.template_file.split(',');	
-                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal' + value.tableID + '" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                            tr += '<td align="center"><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
                         }
                         else
                         {
-                            tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal' + value.tableID + '" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("tesco_svg_modal' + value.tableID + '","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this)><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                            tr += '<td align="center"><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
                         }
                         
                     }
@@ -1493,6 +1507,28 @@ function tescoStatusTable(data, path) {
                     } else {
                         tr += '<td><span style=display:none;>' + value.OrderDate + '</span> - </td>';
                     }
+                } else if (key == "Zone") {
+
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        tr += '<td> - </td>';
+                    }
+                    else
+                    {
+                        tr += '<td>' + value[key] + '</td>';
+                    }
+
+                } else if (key == "Template Type") {
+
+                    if(value.tableName == "tesco_washcare_orders")
+                    {
+                        tr += '<td> - </td>';
+                    }
+                    else
+                    {
+                        tr += '<td>' + value[key] + '</td>';
+                    }
+
                 } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty") {
                     if (value[key] == "" || value[key] == null) {
                         tr += '<td> - </td>';
@@ -2893,7 +2929,7 @@ function setEditOrderStatus() {
 
 }
 
-function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
+function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id) {
 
     var created_at = $(obj).parent().attr('data-orderdate');
     var status = $(obj).parent().attr('data-order_status');
@@ -3649,13 +3685,13 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj) {
         {
 
             
-            var a_back = document.getElementById('tesco_svg_back_modal'+id);
+            var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
     var svgDoc_back = a_back.contentDocument;
 
-    var a_back_text = document.getElementById('tesco_svg_back_text_modal'+id);
+    var a_back_text = document.getElementById(name2+"_"+art_temp_id+"_back_text_modal");
     var svgDoc_back_text = a_back_text.contentDocument;
 
-    var a_front_text = document.getElementById('tesco_svg_front_modal'+id);
+    var a_front_text = document.getElementById(name2+"_"+art_temp_id+"_front_modal");
     var svgDoc_front_text = a_front_text.contentDocument;
     
             var svgarr = [];
