@@ -78,41 +78,34 @@ $(function () {
     }
 
     // Method to Calculate total fiber percentage
-    calculateTotalFiberPercentage = () => {
+    calculateTotalFiberPercentage = (obj, component, e) => {
 
-        var table = 1;
-        $('.component-div').each(function () {
+        var total_fiber_percentage = 0;
 
-            var total_fiber_percentage = 0;
+        for (let index = 1; index <= 6; index++) {
+            var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
 
-            $(this).find('.fiber-individual-percentage-' + table).each(function () {
+            if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
 
-                var individual_percentage = $(this).val();
+                total_fiber_percentage += parseInt(individual_percentage);
 
-                if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
-
-                    total_fiber_percentage += parseInt(individual_percentage);
-
-                }
-
-            });
-            $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage).change();
-
-            // toggle min & max validation for total percentage
-            if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
-
-                $('#fiber_total_percentage_' + (table)).removeAttr("min");
-                $('#fiber_total_percentage_' + (table)).removeAttr("max");
-
-            } else {
-
-                $('#fiber_total_percentage_' + (table)).attr('min', 100);
-                $('#fiber_total_percentage_' + (table)).attr('max', 100);
-                
             }
+        }
 
-            table++;
-        });
+        $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
+
+        // toggle min & max validation for total percentage
+        if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
+
+            $('#fiber_total_percentage_' + (component)).removeAttr("min");
+            $('#fiber_total_percentage_' + (component)).removeAttr("max");
+
+        } else {
+
+            $('#fiber_total_percentage_' + (component)).attr('min', 100);
+            $('#fiber_total_percentage_' + (component)).attr('max', 100);
+
+        }
 
         $(".selectpicker").selectpicker("refresh");
         $('#tesco_care_label_order_form').validator('update');
@@ -164,7 +157,7 @@ $(function () {
                                                 <div class="col-xs-3">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-` + component_count + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-` + component_count + `" onkeyup="return calculateTotalFiberPercentage(this, ` + component_count + `, event)" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
