@@ -381,7 +381,15 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
 									action: function ( e, dt, node, config ) {
@@ -524,7 +532,15 @@
 													dom: 'Bfrtip',
 
 													buttons: [
-														'excelHtml5',
+														{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 														 {
 															text: 'Mark as viewed',
 															action: function ( e, dt, node, config ) {
@@ -960,7 +976,15 @@ function getCookie(cname) {
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
 									action: function ( e, dt, node, config ) {
@@ -1299,7 +1323,15 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
 										action: function ( e, dt, node, config ) {
@@ -1654,7 +1686,15 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
 										action: function ( e, dt, node, config ) {
@@ -1918,7 +1958,15 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
 										action: function ( e, dt, node, config ) {
@@ -2090,7 +2138,15 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
 										action: function ( e, dt, node, config ) {
