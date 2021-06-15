@@ -123,7 +123,9 @@ $( () => {
                     statusCode: {
                         200: function (data) {
 
-                            var fiber_count = 0;
+                            var fiber_count = 1;
+                            let fiber_count_index = 0;
+
                             var garment_comp_div = `<div class="col-md-4 component-div">
                                                             <div class="row">
                                                                 <div class="col-xs-12">
@@ -140,9 +142,9 @@ $( () => {
                                                             </div>
                                                         </div>`;
 
-                            while (fiber_count < 6) {
-                                var fibre_composition_id = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_id : 0;
-                                var fibre_composition_percentage = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_percentage : "";
+                            while (fiber_count <= 6) {
+                                var fibre_composition_id = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_id : 0;
+                                var fibre_composition_percentage = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_percentage : "";
 
                                 garment_comp_div += `<div class="col-xs-9">
                                                                     <div class="form-group has-feedback">
@@ -160,13 +162,14 @@ $( () => {
                                                             <div class="col-xs-3">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage(this, ` + index + `, event)" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>`;
-                                fiber_count++
+                                fiber_count++;
+                                fiber_count_index++;
                             }
                             garment_comp_div += `<div class="col-xs-9">
                                                                     <h5 class="text-right"><strong>Total</strong></h5>
