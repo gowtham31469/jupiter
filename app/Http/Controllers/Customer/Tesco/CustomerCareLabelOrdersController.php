@@ -119,6 +119,7 @@ class CustomerCareLabelOrdersController extends Controller
 
     public function getSecondarySizeListsBySizeCategoryID(Request $request)
     {
+        $template_id = $request['template_id'];
         $tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($request) {
             $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $request['size_category']);
         }])
@@ -127,9 +128,14 @@ class CustomerCareLabelOrdersController extends Controller
             ->orderBy('tesco_primary_size.id')
             ->get();
 
+        $tesco_template = DB::table('tesco_template')
+            ->where('item_id', $template_id)
+            ->get();
+
         return response()->json([
             'message' => 'success',
-            'data' => $tesco_sizelists
+            'data' => $tesco_sizelists,
+            'tesco_template' => $tesco_template 
         ], 200);
     }
 
