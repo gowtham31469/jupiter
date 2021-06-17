@@ -381,9 +381,18 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
+									className : 'mark-selected hidden',
 									action: function ( e, dt, node, config ) {
 										pendingproductionsubmit()
 									}
@@ -524,9 +533,18 @@
 													dom: 'Bfrtip',
 
 													buttons: [
-														'excelHtml5',
+														{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 														 {
 															text: 'Mark as viewed',
+															className : 'mark-selected hidden',
 															action: function ( e, dt, node, config ) {
 																pendingproductionsubmit()
 															}
@@ -550,7 +568,13 @@
 													$('#example-select-all').on('click', function(){
 													  // Check/uncheck all checkboxes in the table
 													  var rows = table.rows({ 'search': 'applied' }).nodes();
-													  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+														$('input[type="checkbox"]', rows).prop('checked', this.checked);
+														setSelectAll(this,"frm-example",table)
+													});
+
+													$('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+														setcheckBox(this,"frm-example",table)                           
 													});
 
 												 $("#penproductiondiv input[type=search]").addClass('form-control');
@@ -570,8 +594,14 @@
 	   $('#example-select-all').on('click', function(){
 		  // Check/uncheck all checkboxes in the table
 		  var rows = table.rows({ 'search': 'applied' }).nodes();
-		  $('input[type="checkbox"]', rows).prop('checked', this.checked);
-	   }); 
+			$('input[type="checkbox"]', rows).prop('checked', this.checked);
+			setSelectAll(this,"frm-example",table)
+		 }); 
+		 
+		 $('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+				setcheckBox(this,"frm-example",table)                           
+			});
 		
 	
 		function neworderssubmit()
@@ -960,9 +990,18 @@ function getCookie(cname) {
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
+									className : 'mark-selected hidden',
 									action: function ( e, dt, node, config ) {
 										pendingproductionsubmit()
 									}
@@ -986,7 +1025,13 @@ function getCookie(cname) {
 							$('#example-select-all').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example",table)
+							});
+
+							$('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example",table)                           
 							});
 						
 						$("#penproductiondiv input[type=search]").addClass('form-control');
@@ -1299,9 +1344,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											neworderssubmit()
 										}
@@ -1325,7 +1379,13 @@ function getCookie(cname) {
 							$('#example-select-all-new').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-new",table)
+							});
+
+							$('.new_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-new",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -1654,9 +1714,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											aowpsubmit()
 										}
@@ -1680,7 +1749,13 @@ function getCookie(cname) {
 							$('#example-select-all-aowp').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-aowp",table)
+							});
+
+							$('.aowp_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-aowp",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -1918,9 +1993,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											approvedorderssubmit()
 										}
@@ -1944,7 +2028,13 @@ function getCookie(cname) {
 							$('#example-select-all-app').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-app",table)
+							});
+
+							$('.approved_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-app",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -2090,9 +2180,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											pendingorderssubmit()
 										}
@@ -2116,13 +2215,74 @@ function getCookie(cname) {
 							$('#example-select-all-pen').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-pen",table)
+							});
+
+							$('.pending_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-pen",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input[type=search]").attr('placeholder', 'Data Search');
 		}
+		
+  /**
+   * method to set all the check boxes by clicking select all button for the form formname
+   * @param {[type]} source   [checkbox]
+   * @param {[type]} formname [form name]
+   * @param {[type]} table    [data table]
+   */
+	 function setSelectAll(source,formname,table)
+  {
+      // var rows = table.rows({ 'search': 'applied' }).nodes();
+      // $('input[type="checkbox"]', rows).prop('checked');
+      var $checkboxes = $('#'+formname+' td input[type="checkbox"]');
+      for (var i = 0,n=$checkboxes.length;i<n;i++) {
+          $checkboxes[i].checked = source.checked;
+      }
+      var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+      if (countCheckedCheckboxes==0) {
+      $('#'+formname+' .mark-selected').addClass("hidden")
+      }
+      else{
+      $('#'+formname+' .mark-selected').removeClass("hidden")
+      }
+  }
+
+  /**
+   * method to set the checkbox
+   * @param  {[type]} obj      [checkbox]
+   * @param  {[type]} formname [form name]
+   * @param  {[type]} table    [data table]
+   */
+  function setcheckBox(obj,formname,table)
+  {
+      var $checkboxes = $('#'+formname+' td input[type="checkbox"]');
+      var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+    
+      var ischecked= $(obj).is(':checked');
+      if (ischecked) {
+          $('#'+formname+' .mark-selected').removeClass("hidden")
+
+      }
+      else if(countCheckedCheckboxes==0){
+          $('#'+formname+' .mark-selected').addClass("hidden")
+      }
+      
+      //If checkbox is not checked
+      if(!this.checked){
+         var el = $('#select-all').get(0);
+         // If "Select all" control is checked and has 'indeterminate' property
+         if(el && el.checked && ('indeterminate' in el)){
+            // Set visual state of "Select all" control 
+            // as 'indeterminate'
+            el.indeterminate = true;
+         }
+      }
+  }
 
 	</script>
 	<script src="{{ asset('js/dropzone.js') }}"></script>
