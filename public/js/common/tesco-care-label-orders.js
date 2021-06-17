@@ -106,9 +106,6 @@ $(function () {
             $('#fiber_total_percentage_' + (component)).attr('max', 100);
 
         }
-
-        $(".selectpicker").selectpicker("refresh");
-        $('#tesco_care_label_order_form').validator('update');
     }
 
     // Method to add dynamic garment component
