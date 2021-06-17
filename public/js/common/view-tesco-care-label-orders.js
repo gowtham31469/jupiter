@@ -162,7 +162,7 @@ $( () => {
                                                             <div class="col-xs-3">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage(this, ` + index + `, event)" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>
@@ -177,7 +177,7 @@ $( () => {
                                                                 <div class="col-xs-3">
                                                                     <div class="form-group has-feedback">
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
+                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
                                                                         <div class="input-group-addon">%</div>
                                                                     </div>
                                                                     <div class="help-block with-errors"></div>
