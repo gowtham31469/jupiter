@@ -499,8 +499,7 @@ class ReorderController extends Controller
       $data['tesco_sizelists'] = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($size_category) {
           $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $size_category);
       }])
-				->where('tesco_primary_size.tesco_size_department_id', $data['orders']{0}->primary_size_id)
-        ->where('tesco_primary_size.is_flag', true)
+        ->where('tesco_primary_size.tesco_size_department_id', $data['orders']{0}->primary_size_id)
         ->orderBy('tesco_primary_size.id')
         ->get();
 	  
