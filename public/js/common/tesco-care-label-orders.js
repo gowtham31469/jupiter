@@ -109,43 +109,39 @@ $(function () {
 //         }
 //     }
 
-$('.fiber-individual-percentage').on('change', function(){
-    var total_fiber_percentage = 0;
-    var component = $(this).attr("id").split('_')[3];
-   
-    // $('#fiber_individual_percentage_' + (component)).each(function(index, item){
-    //     var val = $(item).val();
-    //     total_fiber_percentage += Number(val);
-        
-    // });
+    // Calculate total fiber percentage
+    $(document).on('change', '.fiber-individual-percentage', function() {
 
-    for (let index = 1; index <= 6; index++) {
-    
-        var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
+        var total_fiber_percentage = 0;
+        var component = $(this).attr("id").split('_')[3];
 
-        if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
-            
-            total_fiber_percentage += Number(individual_percentage);
+        for (let index = 1; index <= 6; index++) {
+
+            var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
+
+            if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+
+                total_fiber_percentage += Number(individual_percentage);
+
+            }
+        }
+
+        $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
+
+        // toggle min & max validation for total percentage
+        if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
+
+            $('#fiber_total_percentage_' + (component)).removeAttr("min");
+            $('#fiber_total_percentage_' + (component)).removeAttr("max");
+
+        } else {
+
+            $('#fiber_total_percentage_' + (component)).attr('min', 100);
+            $('#fiber_total_percentage_' + (component)).attr('max', 100);
 
         }
-    }
 
-    $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
-
-    // toggle min & max validation for total percentage
-    if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
-
-        $('#fiber_total_percentage_' + (component)).removeAttr("min");
-        $('#fiber_total_percentage_' + (component)).removeAttr("max");
-
-    } else {
-
-        $('#fiber_total_percentage_' + (component)).attr('min', 100);
-        $('#fiber_total_percentage_' + (component)).attr('max', 100);
-
-    }
-    console.log(total_fiber_percentage);
-  });
+    });
 
     // Method to add dynamic garment component
     addComponent = (obj, user, form_id) => {
