@@ -91,6 +91,7 @@ class RepeatOrderController extends Controller
           $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $size_category);
       }])
         ->where('tesco_primary_size.tesco_size_department_id', $data['orders']{0}->primary_size_id)
+        ->where('tesco_primary_size.is_flag', true)
         ->orderBy('tesco_primary_size.id')
         ->get();
 
