@@ -800,7 +800,7 @@ input[type="number"] {
             <div class="col-xs-3">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage_{{$j}}[]" data-max-error= "Value must be <= 100">
+                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage_{{$j}}[]" data-max-error= "Value must be <= 100">
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>

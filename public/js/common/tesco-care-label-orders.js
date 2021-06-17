@@ -78,35 +78,74 @@ $(function () {
     }
 
     // Method to Calculate total fiber percentage
-    calculateTotalFiberPercentage = (obj, component, e) => {
+//     calculateTotalFiberPercentage = (obj, component, e) => {
 
-        var total_fiber_percentage = 0;
+//         var total_fiber_percentage = 0;
 
-        for (let index = 1; index <= 6; index++) {
-            var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
+//         for (let index = 1; index <= 6; index++) {
+           
+//             var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
 
-            if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+//             if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+//                 console.log($(document.getElementById('fiber_individual_percentage_' + component + '_' + index)).val());
+//                 total_fiber_percentage += parseInt(individual_percentage);
 
-                total_fiber_percentage += parseInt(individual_percentage);
+//             }
+//         }
 
-            }
-        }
+//         $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
 
-        $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
+//         // toggle min & max validation for total percentage
+//         if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
 
-        // toggle min & max validation for total percentage
-        if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
+//             $('#fiber_total_percentage_' + (component)).removeAttr("min");
+//             $('#fiber_total_percentage_' + (component)).removeAttr("max");
 
-            $('#fiber_total_percentage_' + (component)).removeAttr("min");
-            $('#fiber_total_percentage_' + (component)).removeAttr("max");
+//         } else {
 
-        } else {
+//             $('#fiber_total_percentage_' + (component)).attr('min', 100);
+//             $('#fiber_total_percentage_' + (component)).attr('max', 100);
 
-            $('#fiber_total_percentage_' + (component)).attr('min', 100);
-            $('#fiber_total_percentage_' + (component)).attr('max', 100);
+//         }
+//     }
+
+$('.fiber-individual-percentage').on('change', function(){
+    var total_fiber_percentage = 0;
+    var component = $(this).attr("id").split('_')[3];
+   
+    // $('#fiber_individual_percentage_' + (component)).each(function(index, item){
+    //     var val = $(item).val();
+    //     total_fiber_percentage += Number(val);
+        
+    // });
+
+    for (let index = 1; index <= 6; index++) {
+    
+        var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
+
+        if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+            
+            total_fiber_percentage += Number(individual_percentage);
 
         }
     }
+
+    $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
+
+    // toggle min & max validation for total percentage
+    if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
+
+        $('#fiber_total_percentage_' + (component)).removeAttr("min");
+        $('#fiber_total_percentage_' + (component)).removeAttr("max");
+
+    } else {
+
+        $('#fiber_total_percentage_' + (component)).attr('min', 100);
+        $('#fiber_total_percentage_' + (component)).attr('max', 100);
+
+    }
+    console.log(total_fiber_percentage);
+  });
 
     // Method to add dynamic garment component
     addComponent = (obj, user, form_id) => {
@@ -154,7 +193,7 @@ $(function () {
                                                 <div class="col-xs-3">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-` + component_count + `" onkeyup="return calculateTotalFiberPercentage(this, ` + component_count + `, event)" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
@@ -168,7 +207,7 @@ $(function () {
                                                     <div class="col-xs-3">
                                                         <div class="form-group has-feedback">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage-` + component_count + `" id="fiber_total_percentage_` + component_count + `" name="fiber_total_percentage[]">
+                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage" id="fiber_total_percentage_` + component_count + `" name="fiber_total_percentage[]">
                                                             <div class="input-group-addon">%</div>
                                                         </div>
                                                         <div class="help-block with-errors"></div>
