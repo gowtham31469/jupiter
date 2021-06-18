@@ -246,7 +246,7 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-              location.reload();
+              //location.reload();
             },
             400: function()
             {
@@ -300,7 +300,7 @@ function tescoRejectPI(id,table_name)
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
 
                showSnackbar();
-               location.reload();             
+               //location.reload();             
             },
             400: function()
             {
