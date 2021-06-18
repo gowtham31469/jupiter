@@ -225,7 +225,7 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
                $('.snackbar_span').html('PI Approved Successfully');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
-               location.reload();             
+               //location.reload();             
             },
             400: function()
             {
@@ -278,7 +278,7 @@ function orchestraRejectPI(id,table_name)
                $('.snackbar_span').html('PI Rejected!');
                $('#profoma-invoice').modal("hide")
                showSnackbar();    
-               location.reload();             
+               //location.reload();             
             },
             400: function()
             {
