@@ -145,7 +145,7 @@ $( () => {
             for (let fiber_index = 1; fiber_index <= 6; fiber_index++) {
                 fiber_component_div +=  `<div class="col-xs-9">
                     <div class="form-group has-feedback">
-                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber_`+component_index+`[]">
+                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
                             <option value="">-- Select Select Fiber --</option>`;
                             $.each(order_data.metadata.fabriclists, function (id, name) {
 
@@ -159,7 +159,7 @@ $( () => {
                 <div class="col-xs-3">
                     <div class="form-group has-feedback">
                     <div class="input-group">
-                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage_`+component_index+`[]" data-max-error= "Value must be <= 100">
+                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
                         <div class="input-group-addon">%</div>
                     </div>
                     <div class="help-block with-errors"></div>

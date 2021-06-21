@@ -178,7 +178,7 @@ $(function () {
                     while (fiber_count <= 6) {
                         garment_comp_div += `<div class="col-xs-9">
                                                         <div class="form-group has-feedback">
-                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber_` + component_count + `[]">
+                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
                             garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
@@ -189,7 +189,7 @@ $(function () {
                                                 <div class="col-xs-3">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>

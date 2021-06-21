@@ -148,7 +148,7 @@ $( () => {
 
                                 garment_comp_div += `<div class="col-xs-9">
                                                                     <div class="form-group has-feedback">
-                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber_` + index + `[]" disabled>
+                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
                                                                     <option value="">-- Select Fiber --</option>`;
                                 $.each(data.data.fabriclists, function (fabric_index, item) {
 
@@ -162,7 +162,7 @@ $( () => {
                                                             <div class="col-xs-3">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>
