@@ -269,9 +269,13 @@ class StoreTescoLabelOrder
 
         $fiber_total_percentage = $request->fiber_total_percentage;
 
+        $tesco_care_fiber = array_chunk($request->tesco_care_fiber, 6);
+
+        $fiber_individual_percentage = array_chunk($request->fiber_individual_percentage, 6);
+
         for ($component_index = 0; $component_index < count($tesco_care_garment_component); $component_index++) {
 
-            if (is_null($tesco_care_garment_component[$component_index]) && ( (int)$fiber_total_percentage[$component_index] === 0)) {
+            if ( is_null($tesco_care_garment_component[$component_index]) || ( (int)$fiber_total_percentage[$component_index] === 0 || is_null($fiber_total_percentage[$component_index]) ) ) {
 
                 continue;
             }
@@ -288,30 +292,24 @@ class StoreTescoLabelOrder
                 'total_composition_percentage' => $fiber_total_percentage[$component_index]
             ])->id;
 
-            $fiber_array_name = 'tesco_care_fiber_' . ($component_index + 1);
-            $tesco_care_fiber = $request->$fiber_array_name;
-
-            $individual_per_array_name = 'fiber_individual_percentage_' . ($component_index + 1);
-            $fiber_individual_percentage = $request->$individual_per_array_name;
-
             $fiber_data = [];
-            for ($fiber_index = 0; $fiber_index < count($tesco_care_fiber); $fiber_index++) {
+            for ($fiber_index = 0; $fiber_index < count($tesco_care_fiber[$component_index]); $fiber_index++) {
 
-                if (is_null($tesco_care_fiber[$fiber_index]) && (is_null($fiber_individual_percentage[$fiber_index]) || (int)$fiber_individual_percentage[$fiber_index] === 0)) {
+                if (is_null($tesco_care_fiber[$component_index][$fiber_index]) && (is_null($fiber_individual_percentage[$component_index][$fiber_index]) || (int)$fiber_individual_percentage[$component_index][$fiber_index] === 0)) {
 
                     continue;
                 }
 
                 $fiber_text = DB::table('tesco_fabriclists')
-                    ->where('id', $tesco_care_fiber[$fiber_index])
+                    ->where('id', $tesco_care_fiber[$component_index][$fiber_index])
                     ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
                     ->get();
 
                 $fiber_data[] = array(
                     'washcare_component_id' => $garment_comp_id,
-                    'fibre_composition_id'   => $tesco_care_fiber[$fiber_index],
+                    'fibre_composition_id'   => $tesco_care_fiber[$component_index][$fiber_index],
                     'fibre_composition_text'   => $fiber_text,
-                    'fibre_composition_percentage' => $fiber_individual_percentage[$fiber_index]
+                    'fibre_composition_percentage' => $fiber_individual_percentage[$component_index][$fiber_index]
                 );
             }
 
