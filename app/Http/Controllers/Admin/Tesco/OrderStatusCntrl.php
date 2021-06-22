@@ -2803,11 +2803,11 @@ class OrderStatusCntrl extends Controller
             }
             if ($approved_data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success'],200);
+               $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = response()->json(['error'=> true,'message' =>'Error', 'pi_status' => false],400);
             }
         }
         catch (\Exception $e)
