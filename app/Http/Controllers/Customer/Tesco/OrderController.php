@@ -2409,7 +2409,8 @@ class OrderController extends Controller
 
           $data['order_details']  = TescoWashcareOrders::with([
             'quantities',
-            'garment_components'
+            'garment_components',
+            'item_master'
           ])
           ->where([
             'tesco_washcare_orders.id' => $request->orderid

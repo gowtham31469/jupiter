@@ -2,6 +2,8 @@
 <hr>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
+<input type="hidden" id="hidden_id" name="hidden_id">
+<input type="hidden" id="hidden_name" name="hidden_name">
 <span id="result"></span>
 <div class="row">
     <div class="col-md-12">
