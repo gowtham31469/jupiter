@@ -738,13 +738,13 @@ background: rgba(0,0,0,0.2);
             </div>
         </div>
         @for ($i = 1; $i <= 6; $i++)
-            <div class="col-xs-9">
+            <div class="col-xs-8">
                 <div class="form-group has-feedback">
                     {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-4">
                 <div class="form-group has-feedback">
                 <div class="input-group">
                     <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
@@ -754,10 +754,10 @@ background: rgba(0,0,0,0.2);
                 </div>
             </div>
         @endfor
-        <div class="col-xs-9">
+        <div class="col-xs-8">
             <h5 class="text-right"><strong>Total</strong></h5>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-4">
             <div class="form-group has-feedback">
             <div class="input-group">
                 <input type="number" class="form-control input-sm composition-percentage total-percentage-{{ $j }}" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}">

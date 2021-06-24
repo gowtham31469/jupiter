@@ -146,7 +146,7 @@ $( () => {
                                 var fibre_composition_id = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_id : 0;
                                 var fibre_composition_percentage = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_percentage : "";
 
-                                garment_comp_div += `<div class="col-xs-9">
+                                garment_comp_div += `<div class="col-xs-8">
                                                                     <div class="form-group has-feedback">
                                                                     <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
                                                                     <option value="">-- Select Fiber --</option>`;
@@ -159,7 +159,7 @@ $( () => {
                                 garment_comp_div += `</select><div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xs-3">
+                                                            <div class="col-xs-4">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
                                                                     <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
@@ -171,10 +171,10 @@ $( () => {
                                 fiber_count++;
                                 fiber_count_index++;
                             }
-                            garment_comp_div += `<div class="col-xs-9">
+                            garment_comp_div += `<div class="col-xs-8">
                                                                     <h5 class="text-right"><strong>Total</strong></h5>
                                                                 </div>
-                                                                <div class="col-xs-3">
+                                                                <div class="col-xs-4">
                                                                     <div class="form-group has-feedback">
                                                                     <div class="input-group">
                                                                         <input type="number" class="form-control input-sm composition-percentage total-percentage" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
