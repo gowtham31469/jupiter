@@ -446,6 +446,7 @@ $(document).ready(function() {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
                         $('row c[r^="D"]', sheet).attr('s', '50');
+                        $('row c[r^="H"]', sheet).attr('s', '50');
                         $('c[r=D2]', sheet).attr('s', '27');
                     },
                 },

@@ -1349,7 +1349,8 @@ function getCookie(cname) {
 										 customize: function (xlsx) {
                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
-												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('row c[r^="E"]', sheet).attr('s', '50');
+												$('row c[r^="H"]', sheet).attr('s', '50');
 												$('c[r=D2]', sheet).attr('s', '27');
                     },
 									 },
@@ -2186,6 +2187,7 @@ function getCookie(cname) {
                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
 
 												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('row c[r^="I"]', sheet).attr('s', '50');
 												$('c[r=D2]', sheet).attr('s', '27');
                     },
 									 },
