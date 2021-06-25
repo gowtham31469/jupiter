@@ -887,6 +887,16 @@ class PrintController extends Controller
 		   $i++;
 	   }
 
+	   if($i == 6)
+        {
+            $xx=15;
+			PDF::AddPage();
+			$img_file = public_path('/images/jgawat.png');
+
+				// Render the image
+				PDF::Image($img_file, 45, 80, 130, 130, '', '', '', false, 150, '', false, false, 0);
+        }
+
 	   PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 	   
 

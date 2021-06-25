@@ -1796,6 +1796,12 @@ class OrderStatusCntrl extends Controller
             $i++;
         }
 
+        if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
+        }
+
         PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         
 
@@ -2041,6 +2047,12 @@ class OrderStatusCntrl extends Controller
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
+        }
+
+        if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
         }
 
         PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
