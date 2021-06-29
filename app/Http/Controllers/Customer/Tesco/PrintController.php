@@ -675,6 +675,17 @@ class PrintController extends Controller
 	   $svgStringBackText=urldecode($data_back_text[0]);
 	   $svgStringFrontImage=urldecode($data_front_image[0]);
 
+	   $wash_astm = $request->wash_astm;
+	   $wash_iso = $request->wash_iso;
+	   $whit_astm = $request->whit_astm;
+	   $whit_iso = $request->whit_iso;
+	   $dry_astm = $request->dry_astm;
+	   $dry_iso = $request->dry_iso;
+	   $iron_astm = $request->iron_astm;
+	   $iron_iso = $request->iron_iso;
+	   $clean_astm = $request->clean_astm;
+	   $clean_iso = $request->clean_iso;
+
 	   define ('PDF_FONT_NAME_MAIN', 'arialuni');
 	   define ('PDF_FONT_NAME_DATA', 'arialuni');
 	   // PDF::setPrintHeader(false);
@@ -876,10 +887,37 @@ class PrintController extends Controller
 		   $i++;
 	   }
 
+	   if($i == 6)
+        {
+            $xx=15;
+			PDF::AddPage();
+			$img_file = public_path('/images/jgawat.png');
+
+				// Render the image
+				PDF::Image($img_file, 45, 80, 130, 130, '', '', '', false, 150, '', false, false, 0);
+        }
+
 	   PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 	   
 
 	   PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+	   PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+	   PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
 	   //print_r($svgStringBack);
 
