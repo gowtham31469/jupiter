@@ -846,6 +846,115 @@ function tescoSuppliers() {
    }
   }
 
+   /**
+   * Function for get tesco suppliers details for editing
+   * @param id
+   * @author <Sumanth>
+   *
+   */
+  function editTescoSymbol(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/tesco/get-tesco-symbol-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                 isSubmitting = false;
+                 $('#edit_tesco_symbol_id').val(id);
+                 $('#edit_care_degree').val(data.tesco_symbols[0].degree);
+                 $('#edit_symbol_category').val(data.tesco_symbols[0].category_id);
+                 $('#edit_care_instruction').val(data.tesco_symbols[0].care_instruction);
+
+
+                 $('#iso_image').attr('src',data.tesco_symbols[0].iso_symbols);
+
+                 $('#astm_image').attr('src',data.tesco_symbols[0].astms_symbol);
+        
+                 $('#editTescoSymbolsModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_tesco_symbols_form').validator('validate');
+                 $('#editTescoSymbolsModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+ function updateTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree,id,csrf_token)
+ {
+  try{
+       var form_data = new FormData();
+
+      form_data.append('iso_symbols', iso_symbols);
+      form_data.append('astms_symbol', astms_symbol);
+      form_data.append('category_id', category_id);
+      form_data.append('care_instruction', care_instruction);
+      form_data.append('care_degree', care_degree);
+      form_data.append('id', id);
+      form_data.append('_token', csrf_token);
+
+       
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-symbols",
+           type: "post",
+           data: form_data,
+           cache: false,
+           contentType: false,
+           processData: false,
+           tryCount: 0,
+           retryLimit: 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Tesco Symbols Updated Successfully");
+                       showSnackbar();
+                       $('#editTescoSymbolsModal').modal('hide');
+                       tescoSymbols()
+                  },
+                  422: function() {
+                    $('.hidden-error').html('<div class="alert alert-warning">\
+                        Invalid File Format\
+                      </div>')
+                }
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+               $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
   /**
   * Function for edit tesco department details
   * @author <Sumanth>
@@ -2243,7 +2352,7 @@ function tescoSymbols() {
           } else {
             tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enable_tesco_symbol" data-placement="left"></i></a>';
           }
-          tesco_metadata += '</td></tr>';
+          tesco_metadata += '<a href="#"><i class="fa fa-pencil filterbtn options fa-button edit_tesco_symbol" aria-hidden="true" title="Edit Symbol" id="edit_tesco_symbol" data-placement="left"></i></a></td></tr>';
         });
         tesco_metadata += '</tbody></table></div>';
         $('.content').html(tesco_metadata)
