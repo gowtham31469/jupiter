@@ -206,6 +206,7 @@ class PoManagerController extends Controller
 
 					$orderlist   = ErpOrderDetails::join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
 									->join('erp_status','erp_order_details.status','erp_status.id')
+									->where('erp_order_details.order_status_id','!=',3)
 									->where('erp_order_details.erp_order_id',$id)
 									->select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
 									->get();

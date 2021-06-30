@@ -2647,6 +2647,32 @@
               disableTescoSymbol(id,csrf_token)
           });
 
+          $(document).on('click', '#edit_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              editTescoSymbol(id)
+          });
+
+        /** submit edit tesco symbol form **/
+        $('#edit_tesco_symbols_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented()){
+         }else{
+            e.preventDefault();
+            /* call editTescoCountry function from tesco-settings.js*/
+
+            var id = $(this).find('#edit_tesco_symbol_id').val();
+
+            var iso_file = $(this).find("input[name='edit_iso_symbol']")[0].files[0];
+            var astms_file = $(this).find("input[name='edit_astms_symbol']")[0].files[0];
+            var symbol_category = $(this).find('#edit_symbol_category option:selected').val();
+            var care_instruction = $(this).find('#edit_care_instruction').val();
+            var care_degree = $(this).find('#edit_care_degree').val();
+
+            updateTescoSymbols(iso_file, astms_file, symbol_category, care_instruction, care_degree,id,csrf_token);
+         }
+       })
+
           /** Add tesco country form validation **/
         $('#add-tesco-countries-form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented()){

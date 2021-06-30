@@ -581,7 +581,16 @@ Route::put('admin/tesco/make-departments-disabled', 'Admin\Settings\Tesco\TescoS
 Route::post('admin/tesco/settings/suppliers', 'Admin\Settings\Tesco\TescoSettings@tescoSuppliers');
 Route::post('admin/tesco/add-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@addTescoSuppliers');
 Route::get('/admin/tesco/get-tesco-suppliers-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSuppliersById');
+
+
+Route::get('/admin/tesco/get-tesco-symbol-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSymbolDetails');
+
+
 Route::put('/admin/tesco/update-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@updateTescoSuppliersById');
+
+
+Route::post('/admin/tesco/update-tesco-symbols', 'Admin\Settings\Tesco\TescoSettings@updateTescoSymbols');
+
 Route::put('/admin/tesco/make-supplier-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierEnabled');
 Route::put('/admin/tesco/make-supplier-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierDisabled');
 Route::post('admin/tesco/settings/sizechart', 'Admin\Settings\Tesco\TescoSettings@tescoSizeChart');
