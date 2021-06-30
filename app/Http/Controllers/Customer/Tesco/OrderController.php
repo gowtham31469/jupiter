@@ -149,7 +149,11 @@ class OrderController extends Controller
       ->get();
     }
     
-    $data['tesco_size_department'] = DB::table('tesco_size_department')->pluck('department_name', 'id')->all();
+    $data['tesco_size_department'] = DB::table('tesco_size_department')
+    ->join('tesco_primary_size', 'tesco_size_department_id', 'tesco_size_department.id')
+    ->where('tesco_primary_size.is_flag', 1)
+    ->pluck('tesco_size_department.department_name', 'tesco_size_department.id')
+      ->all();
       
       echo json_encode($data);
     }
