@@ -6,7 +6,11 @@ use Illuminate\Database\Migrations\Migration;
 
 class ChangeTogToTescoWashcareOrdersTable extends Migration
 {
-
+    public function __construct()
+    {
+        \Illuminate\Support\Facades\DB::getDoctrineSchemaManager()
+        ->getDatabasePlatform()->registerDoctrineTypeMapping('json', 'string');
+    }
     /**
      * Run the migrations.
      *
