@@ -61,7 +61,8 @@ class ReportController extends Controller
 
 			$order_hisory = OrderManagementHistory::all();
 
-			$seasons = $order_hisory->unique('season')->pluck('season');
+			$seasons = $order_hisory->unique('season')->pluck('season')->filter();
+		
 
 			$buyer_id = $order_hisory->unique('buyer_id')->pluck('buyer_id');
 
@@ -93,11 +94,23 @@ class ReportController extends Controller
 
     public function level1Filter(Request $request)
 	{
-		
-		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
-		->whereIn('season',$request->season)
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
 
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
+		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
+		// ->whereIn('season',$request->season)
+
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
 		->select('material','customer_id','style','sub_material')
 		->get();
 
@@ -105,6 +118,7 @@ class ReportController extends Controller
 
 		$materials = $result->unique('material')->pluck('material')->toArray();
 		$sub_materials = $result->unique('sub_material')->pluck('sub_material')->toArray();
+
 		$style = $result->unique('style')->pluck('style')->toArray();
 
 		$customers=Customer::whereIn('id',$customer_id)->orderBy('company_name')
@@ -117,23 +131,37 @@ class ReportController extends Controller
 	public function level2Filter(Request $request)
 	{
 
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
+
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
-		->whereIn('season',$request->season)
+		// ->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
 		->whereIn('sub_material',$request->mat_subs)
 		->whereIn('style',$request->styles)
 		->whereIn('customer_id',$request->customers)
 
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
-		->select('reference','buyer_po','ocn_number','customer_po')
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
+		->select('reference','buyer_po','ocn_number','customer_po','name_in_reports')
 		->get();
 
 		$reference = $result->unique('reference')->pluck('reference')->toArray();
 		$buyer_po = $result->unique('buyer_po')->pluck('buyer_po')->toArray();
 		$customer_po = $result->unique('customer_po')->pluck('customer_po')->toArray();
 		$ocn = $result->unique('ocn_number')->pluck('ocn_number')->toArray();
+		$names = $result->unique('name_in_reports')->pluck('name_in_reports')->toArray();
 
-		return response()->json(['Reference'=>array_filter($reference),'BuyerPo'=>array_filter($buyer_po),'CustomerPo'=>array_filter($customer_po),'Ocn'=>array_filter($ocn)]);
+		return response()->json(['Reference'=>array_filter($reference),'BuyerPo'=>array_filter($buyer_po),'CustomerPo'=>array_filter($customer_po),'Ocn'=>array_filter($ocn),'Names'=>array_filter($names)]);
 	}
 
 
@@ -243,9 +271,29 @@ class ReportController extends Controller
 
 	public function admin_setUpDatatable(Request $request)
 	{   
-		// dd($request->pos);
+		// dd($request->all());
+
+		if($request->date_start == null || $request->date_end == null)
+		{
+			$endDate = Carbon::now();
+        	$startDate = Carbon::now()->subMonth(6);
+		}
+
+		else
+		{
+			$endDate = $request->date_end;
+        	$startDate = $request->date_start;
+		}
+
 		$table_names = OrderManagementHistory::where('buyer_id',$request->buyer)
-		->whereIn('season',$request->season)
+
+			->where(function ($query) use ($request) {
+				$request->type == "others" ? $query
+					->whereIn('season',$request->season)
+					->whereIn('ocn_number',$request->ocns)
+					: '';
+			})
+		// ->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
 		->whereIn('sub_material',$request->mat_subs)
 		->whereIn('style',$request->styles)
@@ -253,8 +301,10 @@ class ReportController extends Controller
 		->whereIn('reference',$request->references)
 		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
-		->whereIn('ocn_number',$request->ocns)
-		->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		// ->whereIn('ocn_number',$request->ocns)
+		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
+		->whereBetween('created_at', [$startDate, $endDate])
+		// ->whereIn('name_in_reports',$request->names)
 		->where(function($q1) use ($request) {
 			$request->pos!=null ? $q1->whereIn('customer_po',$request->pos) : '';
 		})

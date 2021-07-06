@@ -4379,8 +4379,11 @@ function addTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          // alert('Success'); 
+
           $("#addTescoLabelSizeChartModal").modal('hide')
+          $('.snackbar_span').html("Label Size Added Successfully");
+          showSnackbar();
           tescoLabelSizeChart()
         },
         error: function (xhr, status, error) { 
@@ -4415,8 +4418,10 @@ function updateTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          // alert('Success'); 
           $("#editTescoPrimarySizeModal").modal('hide')
+          $('.snackbar_span').html("Label Size Updated Successfully");
+          showSnackbar();
           tescoLabelSizeChart()
         },
         error: function (xhr, status, error) { 
@@ -4587,7 +4592,7 @@ $inputBox+= '<div class="col-md-6 removeLabelSizeItem sizechart-'+data.categorie
                   backdrop: 'static',
                   keyboard: false
               })
-              $('#edit-tesco-labelsize-chart-form').validator('validate');
+              // $('#edit-tesco-labelsize-chart-form').validator('validate');
               
               getLabelSizeModalData()
               $('#editTescoPrimarySizeModal').modal('show');
