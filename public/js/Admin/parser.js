@@ -753,7 +753,25 @@ function parseSingleXml(data) {
                                 });
                                 
                                 let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
-                                    return order.Size;
+                                    let po_updated_size = order.Size;
+                                    switch(order.Size) {
+                                        case 'TB':
+                                            po_updated_size = 'tiny baby';
+                                            break;
+                                        case 'NB':
+                                            po_updated_size = 'Newborn';
+                                            break;
+                                        case 'UP1M':
+                                            po_updated_size = 'up to 1M';
+                                            break;
+                                        case 'UP3M':
+                                            po_updated_size = 'up to 3M';
+                                            break;
+                                        default:
+                                            po_updated_size = rder.Size;
+                                    }
+                                    po_updated_size = po_updated_size.replace("/", "-");
+                                    return po_updated_size;
                                 });
 
                                 let size_chart;
