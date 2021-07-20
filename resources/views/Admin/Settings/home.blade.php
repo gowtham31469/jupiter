@@ -37,9 +37,9 @@
             <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
             <li id="7" onclick="tescoComponents()"><a>Component</a></li>
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
-            <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
-            <li id="9" onclick="tescoTranslations()"><a>Translation</a></li>
-            <li id="9" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
+            <li id="9" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
+            {{-- <li id="9" onclick="tescoTranslations()"><a>Translation</a></li> --}}
+            <li id="10" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
           </ul>
         </div>
         <div class="content">

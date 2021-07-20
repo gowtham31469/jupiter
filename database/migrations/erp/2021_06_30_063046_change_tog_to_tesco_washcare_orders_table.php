@@ -11,7 +11,6 @@ class ChangeTogToTescoWashcareOrdersTable extends Migration
         \Illuminate\Support\Facades\DB::getDoctrineSchemaManager()
         ->getDatabasePlatform()->registerDoctrineTypeMapping('json', 'string');
     }
-    
     /**
      * Run the migrations.
      *

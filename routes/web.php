@@ -482,6 +482,9 @@ Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
 Route::get('admin/upload-translation', 'Admin\UploadCSV\UploadCsvController@uploadTranslation');
 Route::post('admin/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController@uploadTranslationCsv');
 
+Route::get('admin/upload-size-chart', 'Admin\UploadCSV\UploadCsvController@uploadSizeChart');
+Route::post('admin/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@uploadSizeChartCsv');
+
 Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
 Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
