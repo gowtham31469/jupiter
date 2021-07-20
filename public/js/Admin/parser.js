@@ -768,7 +768,7 @@ function parseSingleXml(data) {
                                             po_updated_size = 'up to 3M';
                                             break;
                                         default:
-                                            po_updated_size = rder.Size;
+                                            po_updated_size = order.Size;
                                     }
                                     po_updated_size = po_updated_size.replace("/", "-");
                                     return po_updated_size;
@@ -847,11 +847,26 @@ function parseSingleXml(data) {
     $.each(size_chart, function (i, sizes) {    
         zonal_size_index[sizes[zone_size]] = sizes.id;
     });
-
     $.each(parsedObj.orderQuantity, function(i, j) {
-        if($.inArray(j.Size, zonal_size_chart) != -1) {
-            let index = zonal_size_index[j.Size];
-            console.log(index);
+        let po_updated_size = j.Size;
+        switch(j.Size) {
+            case 'TB':
+                po_updated_size = 'tiny baby';
+                break;
+            case 'NB':
+                po_updated_size = 'Newborn';
+                break;
+            case 'UP1M':
+                po_updated_size = 'up to 1M';
+                break;
+            case 'UP3M':
+                po_updated_size = 'up to 3M';
+                break;
+            default:
+                po_updated_size = j.Size;
+        }
+        if($.inArray(po_updated_size, zonal_size_chart) != -1) {
+            let index = zonal_size_index[po_updated_size];
             // EAN Barcode for UK
             j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
 
