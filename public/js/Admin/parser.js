@@ -865,6 +865,7 @@ function parseSingleXml(data) {
             default:
                 po_updated_size = j.Size;
         }
+        po_updated_size = po_updated_size.replace("/", "-");
         if($.inArray(po_updated_size, zonal_size_chart) != -1) {
             let index = zonal_size_index[po_updated_size];
             // EAN Barcode for UK
