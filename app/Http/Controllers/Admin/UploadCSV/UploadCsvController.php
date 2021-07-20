@@ -133,6 +133,9 @@ class UploadCsvController extends Controller
             })->get();
             $rows = $rows->toArray();
 
+            DB::statement('TRUNCATE TABLE tesco_primary_size RESTART IDENTITY CASCADE');
+            DB::statement('TRUNCATE TABLE tesco_secondary_size_chart RESTART IDENTITY CASCADE');
+
             foreach ($rows as $key => $value)
             {
                 $department = $value[0];
@@ -235,9 +238,19 @@ class UploadCsvController extends Controller
                     }
                     else if($value->category == "FIBRE NAMES")
                     {
-                      if($value->english !=  null && $value->english !=  "" )
+                      if($value->subcategory == "COMPOSITION")
                       {
-                        $fibre_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        if($value->english !=  null && $value->english !=  "" )
+                        {
+                          $comp_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        }
+                      }
+                      else
+                      {
+                        if($value->english !=  null && $value->english !=  "" )
+                        {
+                          $fibre_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        }
                       }
                     }
                     else if($value->category == "CARE INSTRUCTIONS")
