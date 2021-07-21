@@ -16,7 +16,6 @@ function parseUKPurchaseOrder(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
-        console.log(parsedObj);
         callback(parsedObj);
     } catch(e) {
         // error statements
@@ -751,46 +750,50 @@ function parseSingleXml(data) {
                                 $.each(response.data, function (indexInArray, valueOfElement) {
                                     meta_size_chart.push(valueOfElement);
                                 });
-                                
-                                let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
-                                    let po_updated_size = order.Size;
-                                    switch(order.Size) {
-                                        case 'TB':
-                                            po_updated_size = 'tiny baby';
-                                            break;
-                                        case 'NB':
-                                            po_updated_size = 'Newborn';
-                                            break;
-                                        case 'UP1M':
-                                            po_updated_size = 'up to 1M';
-                                            break;
-                                        case 'UP3M':
-                                            po_updated_size = 'up to 3M';
-                                            break;
-                                        default:
-                                            po_updated_size = order.Size;
+                                if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
+                                    let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
+                                        let po_updated_size = order.Size;
+                                        switch(order.Size) {
+                                            case 'TB':
+                                                po_updated_size = 'tiny baby';
+                                                break;
+                                            case 'NB':
+                                                po_updated_size = 'Newborn';
+                                                break;
+                                            case 'UP1M':
+                                                po_updated_size = 'up to 1M';
+                                                break;
+                                            case 'UP3M':
+                                                po_updated_size = 'up to 3M';
+                                                break;
+                                            default:
+                                                po_updated_size = order.Size;
+                                        }
+                                        po_updated_size = po_updated_size.replace("/", "-");
+                                        return po_updated_size;
+                                    });
+
+                                    let size_chart;
+                                    if(po_zone == 'UK'){
+                                        size_chart =  meta_size_chart.map(function (sizes) {
+                                            return sizes.uk_size;
+                                        });
+                                    } else {
+                                        size_chart =  meta_size_chart.map(function (sizes) {
+                                            return sizes.ce_size;
+                                        });
                                     }
-                                    po_updated_size = po_updated_size.replace("/", "-");
-                                    return po_updated_size;
-                                });
 
-                                let size_chart;
-                                if(po_zone == 'UK'){
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.uk_size;
-                                    });
-                                } else {
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.ce_size;
-                                    });
-                                }
-
-                                // Intersection to find out atleast one size is common
-                                let intersection = po_size_chart.filter(x => size_chart.includes(x));
-                                if(intersection.length > 0) {
-                                    renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
-                                } else {
-                                    $('.snackbar_span').html("Size details mismatch!! Please check the file");
+                                    // Intersection to find out atleast one size is common
+                                    let intersection = po_size_chart.filter(x => size_chart.includes(x));
+                                    if(intersection.length > 0) {
+                                        renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                    } else {
+                                        $('.snackbar_span').html("Size details mismatch!! Please check the file");
+                                        showSnackbar();
+                                    }
+                                } else{
+                                    $('.snackbar_span').html("Ratio PO not supported!!");
 					                showSnackbar();
                                 }
                             }
@@ -838,10 +841,10 @@ function parseSingleXml(data) {
     });
 
     // Purchase order
-    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
+    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     // Style number
-    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false);
+    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false);
 
     var zonal_size_index = {};
     $.each(size_chart, function (i, sizes) {    
