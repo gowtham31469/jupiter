@@ -1286,8 +1286,18 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 	
 	$('.bs-example-modal-lg2').on('shown.bs.modal', function (e) {
 	  	var mySVG1 = document.getElementById("svg4");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+		svgDoc1 = mySVG1.contentDocument;
+		if($('#age option:selected').val() != 6)
+		{
+			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
+		}
+		else
+		{
+			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
+			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
+		}
+        
 	})
 
 	
@@ -2012,15 +2022,38 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
         var mySVG1 = document.getElementById("svg1");
         var svgDoc1;
         mySVG1.addEventListener("load", function () {
-            svgDoc1 = mySVG1.contentDocument;
-            svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc1 = mySVG1.contentDocument;
+			
+			if($('#age option:selected').val() != 6)
+			{
+				svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+				svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
+			}
+			else
+			{
+				svgDoc1.getElementById("round").style.fill = "#FFFFFF"
+				svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
+			}
+
         }, false);
 
         var mySVG = document.getElementById("svg4");
         var svgDoc;
         mySVG.addEventListener("load", function () {
-            svgDoc = mySVG.contentDocument;
-            svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc = mySVG.contentDocument;
+			
+			if($('#age option:selected').val() != 6)
+			{
+				svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+				svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+			}
+			else
+			{
+				svgDoc.getElementById("round").style.fill = "#FFFFFF"
+				svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+			}
+
+            
         }, false);
 
     }
@@ -2030,7 +2063,16 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
         $('#age_modal').modal("show");
         var mySVG1 = document.getElementById("svg1");
         svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+        if($('#age option:selected').val() != 6)
+		{
+			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
+		}
+		else
+		{
+			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
+			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
+		}
     });
 
 }
