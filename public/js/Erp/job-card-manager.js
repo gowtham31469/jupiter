@@ -4749,8 +4749,22 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
-								console.log(value)
-								svgDoc.getElementById("round").style.fill = details.age_group
+                                console.log(value)
+                                
+                                if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+                                }
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
@@ -4769,7 +4783,21 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 
 						case "Solid Polybag Stickers":
 							$(details['solidpolystickerqty']).each(function(index,value){
-								svgDoc.getElementById("round").style.fill = details.age_group
+
+                                if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+                                }
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
