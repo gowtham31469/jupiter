@@ -1410,7 +1410,21 @@ function SolidPolyBagStickersOs(data)
 	$('#age').change(function () {
         var mySVG1 = document.getElementById("svg2");
         svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+
+        if($('#age option:selected').val() != 6)
+		{
+			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
+			svgDoc1.getElementById("pmm").innerHTML = "";
+		}
+		else
+		{
+			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
+			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
+			svgDoc1.getElementById("pmm").innerHTML = "PMM";
+        }
+        
+        
     });
 
 
@@ -1636,7 +1650,19 @@ function StandardPolyBagStickersOs(data)
 	$('#age').change(function () {
         var mySVG1 = document.getElementById("svg2");
         svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+        if($('#age option:selected').val() != 6)
+		{
+			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
+			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
+			svgDoc1.getElementById("pmm").innerHTML = "";
+		}
+		else
+		{
+			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
+			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
+			svgDoc1.getElementById("pmm").innerHTML = "PMM";
+        }
+        
     });
 
     $('#standard_poly_bagform').validator().on('submit', function (e) {
@@ -1695,8 +1721,22 @@ function barcode_polybagOs(id, data) {
 		svgDoc = mySVG.contentDocument;
 		var svgItem = svgDoc.getElementById("uvc_tco");
 
-			svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
-			svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+            svgDoc.getElementById("parcel_code").innerHTML = data.orchestra_parcel_details[0].UVC_TCO;
+            
+            if($('#age option:selected').val() != 6)
+            {
+                svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+                svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+                svgDoc.getElementById("pmm").innerHTML = "";
+            }
+            else
+            {
+                svgDoc.getElementById("round").style.fill = "#FFFFFF"
+                svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+                svgDoc.getElementById("pmm").innerHTML = "PMM";
+            }
+
+			
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
 			svgDoc.getElementById("color").innerHTML = data.orchestra_parcel_details[0].colour_Code;
@@ -1767,8 +1807,22 @@ function barcode_std_polybagOs(id, data) {
 
 
 		})
-		$tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
-		svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+        $tbl = '<tr><td>Size:</td>' + $td_size + '<td>Total</td></tr><tr> <td>'+data.orchestra_parcel_details[0].colour_Code+'</td>' + $td_col + '<td>' + $total + '</td></tr>';
+        
+        if($('#age option:selected').val() != 6)
+        {
+            svgDoc.getElementById("round").style.fill = $('#age option:selected').data('color');
+            svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+            svgDoc.getElementById("pmm").innerHTML = "";
+        }
+        else
+        {
+            svgDoc.getElementById("round").style.fill = "#FFFFFF"
+            svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+            svgDoc.getElementById("pmm").innerHTML = "PMM";
+        }
+
+		
 		var code = data.orchestra_parcel_details[0].ParcelBarCode.toString();
 		svgDoc.getElementById("theme").innerHTML = data.orchestra_parcel_details[0].Theme;
 		svgDoc.getElementById("cartontable").innerHTML = $tbl;
