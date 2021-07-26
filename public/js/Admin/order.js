@@ -2106,7 +2106,7 @@ function printDiv(data, isstd,uvc,po) {
 						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
 						if(size == "TAILLE UNIQUE")
 						{
-							svgDoc.getElementById("size").style.fontSize = "15px"
+							svgDoc.getElementById("size").style.fontSize = "14px"
 							svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
 							svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 						}
@@ -2214,7 +2214,7 @@ function proofDiv(data, isstd,uvc) {
 						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
 						if(size == "TAILLE UNIQUE")
 						{
-							svgDoc.getElementById("size").style.fontSize = "15px"
+							svgDoc.getElementById("size").style.fontSize = "14px"
 							svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
 							svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 						}
