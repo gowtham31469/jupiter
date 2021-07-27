@@ -4802,9 +4802,9 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
