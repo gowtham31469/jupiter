@@ -449,7 +449,26 @@ class OrderController extends Controller
         {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			
+			if($i == 0)
+			{
+				$yy=50;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+				
+				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
+					
+		
+				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
+
+				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
+				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
+				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
 				$yy=50;
@@ -466,24 +485,6 @@ class OrderController extends Controller
 				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
 				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
-			}
-			else if($i == 0)
-			{
-				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				
-				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
 			}
 			else
 			{
