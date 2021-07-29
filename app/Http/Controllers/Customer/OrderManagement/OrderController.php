@@ -1306,7 +1306,7 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-PS";
+		 $this->template_name = "SOL-POLY";
 		 $this->template_zone = "";
 	     $this->template_desc = "";
 		 $this->tesco_po_number = $request->buyer_no;
