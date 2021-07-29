@@ -898,7 +898,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -947,7 +947,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							PopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1123,7 +1123,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1172,7 +1172,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
