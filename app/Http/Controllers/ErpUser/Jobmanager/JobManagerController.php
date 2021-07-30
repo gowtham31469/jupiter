@@ -3545,6 +3545,10 @@ class JobManagerController extends Controller
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
+
+
+$style_no=$request->style_no;
+$buyer_no=$request->buyer_no;
 		
 		$sticker = DB::table("orchestra_standard_poly_bag_sticker_orders")
 						->select('*')
@@ -3714,9 +3718,10 @@ class JobManagerController extends Controller
 		PDF::writeHTMLCell(147, '', '309', '257.5', $tbl, '', 1, 1, true, '', true);
 		
         
-  $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+	$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
         
     }
 	
@@ -3731,6 +3736,8 @@ class JobManagerController extends Controller
     {
 		 $name=$request->name;
          $svg=urldecode($request->svg);
+				 $style_no=$request->style_no;
+				 $buyer_no=$request->buyer_no;
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
@@ -3799,10 +3806,11 @@ class JobManagerController extends Controller
 		
 		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
+
+				$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
 		
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     } 
 	
 	
