@@ -623,9 +623,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -914,9 +914,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -1704,9 +1704,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -2221,9 +2221,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   

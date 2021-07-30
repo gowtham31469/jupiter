@@ -4740,7 +4740,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit,id,style_no,buyer_no,created_at); 
+							  PopupOrchestraJCPreview(svgDoc,"STD-CS",isEdit,id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -4776,7 +4776,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
