@@ -743,7 +743,7 @@ function table(data,path){
 
 					if($('.logo').text() == "Orders")
 					{
-						 tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '")>' + value[key] + '</a></td>';
+						 tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '",this)>' + value[key] + '</a></td>';
 					}
 					else
 					{
@@ -973,7 +973,10 @@ function showSnackbar() {
  * @return View
  */
 
-function order_details(uvc, po) {
+function order_details(uvc, po,obj) {
+
+	$(obj).css('pointer-events','none')
+	$(obj).css('cursor','default')
 
     if($('.logo').text() == "Orders")
     {
@@ -1309,20 +1312,32 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#update_new_po').addClass('hidden')
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
+		$('#new_po_no').val("")
+		$('#combined_delivery_date').val("")
+		document.getElementById("new_po_file").value=null; 
+		$('#new_po_error').addClass('hidden')
+		$('#new_po_file_error').addClass('hidden')
 
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/get-existing-solid-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
-				uvc: $('#uvc_id').val()
+				uvc: $('#uvc_id').val(),
+				po : $('#po').val()
 			},
 			beforeSend: function () {
 
 			},
 			success: function (data) {
 
-
+				var order_date = data.orchestra_solid_carton_sticker_orders[0].created_at
+				var today = new Date(order_date);
+				$('#datePicker3').datepicker({
+					autoclose: true,
+					startDate: today,
+					format: 'yyyy-mm-dd',
+				})
 
 				$('#po-file-upload-div').modal('show')
 				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
@@ -1457,12 +1472,12 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				//End bootstrap checkbox 
 				
 		$('#selectpo').html('<label>Select PO</label><select id="select_po" style="width:96%" class="form-control">' + options + '</select>')
-				if (coun == 0) {
+				// if (coun == 0) {
 					$('#map_po').addClass('hidden');
 					$('#new_po1').addClass('hidden');
 					$('#new_po_div').removeClass('hidden');
 					$('#update_new_po').removeClass('hidden');
-				}
+				//}
 				
 				$('#update_new_po').click(function () {
 					var sList = 0;
@@ -1474,7 +1489,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 					if (sList > 0) {
 						$('#check_error').addClass('hidden')
-					if ($('#new_po_no').val() != "") {
+					if ($('#new_po_no').val() != "" && $('#new_po_file').val() != "") {
 						var a = [];
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
 							if (this.checked) {
@@ -1484,10 +1499,12 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
+						var combined_delivery_date = $('#combined_delivery_date').val();
 						
 						var form_data = new FormData();
 						form_data.append('id', aa);
 						form_data.append('po_file', new_po_file);
+						form_data.append('combined_delivery_date', combined_delivery_date);
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
@@ -1500,17 +1517,38 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							type: 'post',
 							success: function (data) {
 								//location.reload()
-								$('#po-file-upload-div').modal('hide')
-								$('.snackbar_span').html('PO Updated Successfully');
-								showSnackbar();
+								// $('#po-file-upload-div').modal('hide')
+								// $('.snackbar_span').html('PO Updated Successfully');
+								// showSnackbar();
+
+								$.each(a, function (index, value) {
+									$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
+									$('li[data-id=' + value + ']').removeAttr('style')
+									$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
+								});
+
+								$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+									$("#success-alert").slideUp(500);
+								});
+								/** Reset po upload form**/
+								$('#new_po_no').val("")
+								$('#combined_delivery_date').val("")
+								document.getElementById("new_po_file").value=null; 
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
 							}
 
 						});
-					} else {
+					} else if ($('#new_po_no').val() == "" && $('#new_po_file').val() != ""){
 						$('#new_po_error').removeClass('hidden')
+						$('#new_po_file_error').addClass('hidden')
+					} else if ($('#new_po_no').val() != "" && $('#new_po_file').val() == ""){
+						$('#new_po_file_error').removeClass('hidden')
+						$('#new_po_error').addClass('hidden')
+					} else if ($('#new_po_no').val() == "" && $('#new_po_file').val() == ""){
+						$('#new_po_error').removeClass('hidden')
+						$('#new_po_file_error').removeClass('hidden')
 					}
 					} else {
 						$('#check_error').removeClass('hidden')
@@ -1634,20 +1672,32 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#update_new_po').addClass('hidden')
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
+		$('#new_po_no').val("")
+		$('#combined_delivery_date').val("")
+		document.getElementById("new_po_file").value=null; 
+		$('#new_po_error').addClass('hidden')
+		$('#new_po_file_error').addClass('hidden')
 
 		$.ajax({
 			url: base_url + "/admin/" + buyer + "/order-management/get-existing-standard-sticker-orders-po",
 			type: "get",
 			dataType: "json",
 			data: {
-				uvc: $('#uvc_id').val()
+				uvc: $('#uvc_id').val(),
+				po : $('#po').val()
 			},
 			beforeSend: function () {
 
 			},
 			success: function (data) {
 
-
+				var order_date = data.orchestra_standard_carton_sticker_orders[0].created_at
+				var today = new Date(order_date);
+				$('#datePicker3').datepicker({
+					autoclose: true,
+					startDate: today,
+					format: 'yyyy-mm-dd',
+				})
 
 				$('#po-file-upload-div').modal('show')
 				$('#po-file-upload-div').find('#exist_artwork_div ul').html("");
@@ -1782,12 +1832,12 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 				//End bootstrap checkbox 
 				
 		$('#selectpo').html('<label>Select PO</label><select id="select_po" style="width:96%" class="form-control">' + options + '</select>')
-				if (coun == 0) {
+				// if (coun == 0) {
 					$('#map_po').addClass('hidden');
 					$('#new_po1').addClass('hidden');
 					$('#new_po_div').removeClass('hidden');
 					$('#update_new_po').removeClass('hidden');
-				}
+				//}
 				
 				$('#update_new_po').click(function () {
 					var sList = 0;
@@ -1799,7 +1849,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 
 					if (sList > 0) {
 						$('#check_error').addClass('hidden')
-					if ($('#new_po_no').val() != "") {
+					if ($('#new_po_no').val() != "" && $('#new_po_file').val() != "") {
 						var a = [];
 						$('#exist_artwork_div input[type=checkbox]').each(function () {
 							if (this.checked) {
@@ -1809,10 +1859,12 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
+						var combined_delivery_date = $('#combined_delivery_date').val();
 						
 						var form_data = new FormData();
 						form_data.append('id', aa);
 						form_data.append('po_file', new_po_file);
+						form_data.append('combined_delivery_date', combined_delivery_date);
 						form_data.append('po', new_po_no);
 						form_data.append('_token', csrf_token);
 						$.ajax({
@@ -1824,17 +1876,38 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: form_data,
 							type: 'post',
 							success: function (data) {
-								$('#po-file-upload-div').modal('hide')
-								$('.snackbar_span').html('PO Updated Successfully');
-								showSnackbar();
+								// $('#po-file-upload-div').modal('hide')
+								// $('.snackbar_span').html('PO Updated Successfully');
+								// showSnackbar();
+
+								$.each(a, function (index, value) {
+									$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
+									$('li[data-id=' + value + ']').removeAttr('style')
+									$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
+								});
+
+								$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+									$("#success-alert").slideUp(500);
+								});
+								/** Reset po upload form**/
+								$('#new_po_no').val("")
+								$('#combined_delivery_date').val("")
+								document.getElementById("new_po_file").value=null; 
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
 							}
 
 						});
-					} else {
+					} else if ($('#new_po_no').val() == "" && $('#new_po_file').val() != ""){
 						$('#new_po_error').removeClass('hidden')
+						$('#new_po_file_error').addClass('hidden')
+					} else if ($('#new_po_no').val() != "" && $('#new_po_file').val() == ""){
+						$('#new_po_file_error').removeClass('hidden')
+						$('#new_po_error').addClass('hidden')
+					} else if ($('#new_po_no').val() == "" && $('#new_po_file').val() == ""){
+						$('#new_po_error').removeClass('hidden')
+						$('#new_po_file_error').removeClass('hidden')
 					}
 					} else {
 						$('#check_error').removeClass('hidden')
@@ -2073,7 +2146,31 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
 			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
 		}
-    });
+	});
+	
+
+	if (data.template_name == "Standard") {
+
+		if(data.orchestra_standard_carton_sticker_orders[0].po_status == "PO Uploaded")
+		{
+			$('#po-file-upload-button-standard').remove()
+		}
+		else
+		{
+			$('#po-file-upload-button-standard').addClass('hidden')
+		}
+	}
+	else{
+
+		if(data.orchestra_solid_poly_bag_sticker_orders[0].po_status == "PO Uploaded")
+		{
+			$('#po-file-upload-button-solid').remove()
+		}
+		else
+		{
+			$('#po-file-upload-button-solid').addClass('hidden')
+		}
+	}
 
 }
 /**
@@ -10466,7 +10563,7 @@ function setSolidStickers() {
 			},
 			success: function (data) {
 				$('#save_sticker_button').addClass('hidden')
-				$('#po-file-upload-button-standard').css('display','block')
+				//$('#po-file-upload-button-standard').css('display','block')
 				$('#polybag_print_button').removeClass('hidden')
 				$('#carton_print_button').removeClass('hidden')
 				$('#polybag_proof_button').removeClass('hidden')
@@ -10474,6 +10571,8 @@ function setSolidStickers() {
 				//$('#cancel_sticker_button').removeClass('hidden')
 				$('#std_carton_id').val(data.carton_id);
 				$('#std_poly_id').val(data.poly_id);
+
+				document.getElementById("po-file-upload-button-standard").click();
 			},
 			error: function (data) {
 
@@ -10541,7 +10640,7 @@ function setSolidStickers() {
 			},
 			success: function (data) {
 				$('#save_sticker_button').addClass('hidden')
-				$('#po-file-upload-button-solid').css('display','block')
+				//$('#po-file-upload-button-solid').css('display','block')
 				$('#polybag_print_button').removeClass('hidden')
 				$('#carton_print_button').removeClass('hidden')
 				$('#polybag_proof_button').removeClass('hidden')
@@ -10549,6 +10648,8 @@ function setSolidStickers() {
 				//$('#cancel_sticker_button').removeClass('hidden')
 				$('#carton_id').val(data.carton_id);
 				$('#poly_id').val(data.poly_id);
+
+				document.getElementById("po-file-upload-button-solid").click();
 			},
 			error: function (data) {
 

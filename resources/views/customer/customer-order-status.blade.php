@@ -72,7 +72,6 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
-                            <input type="text" placeholder="Enter Revise PO Number" class="form-control" name="po_number_updation" id="po_number_updation">
                             <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
                             <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
@@ -132,7 +131,7 @@
                         <div class="form-group">
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
-                            <input type="file" id="new_po_file">
+                            <input type="file" accept="application/pdf" id="new_po_file">
                             <p class="help-block"></p>
                         </div>
                     </div>

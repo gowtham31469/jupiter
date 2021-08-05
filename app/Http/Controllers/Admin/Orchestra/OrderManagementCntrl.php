@@ -4045,10 +4045,11 @@ class OrderManagementCntrl extends Controller
     public function getExistingStandardStickerOrdersPo(Request $request)
     {
 		 $uvc        =   $request->uvc;
+		 $po        =   $request->po;
 	
-		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->where('po',$po)->get();
 		
-		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->where('po',$po)->get();
 		
 		 echo json_encode($data);
     } 
@@ -4061,10 +4062,11 @@ class OrderManagementCntrl extends Controller
     public function getExistingSolidStickerOrdersPo(Request $request)
     {
 		 $uvc        =   $request->uvc;
+		 $po        =   $request->po;
 		
-		 $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+		 $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"type\""))->where('uvc',$uvc)->where('po',$po)->get();
 		
-         $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->get();
+         $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id', DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"type\""))->where('uvc',$uvc)->where('po',$po)->get();
 		
 		
 		
@@ -4150,6 +4152,7 @@ class OrderManagementCntrl extends Controller
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
             $po_file   =   $request->po_file;
+            $combined_delivery_date        =   $request->combined_delivery_date;
            
             $destination_path_insert = "";
             $destination_path_db = "";
@@ -4176,13 +4179,29 @@ class OrderManagementCntrl extends Controller
                     $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
-                    DB::table($value[0])->where('id',$value[1])
+                    if($combined_delivery_date != null)
+                    {
+                        DB::table($value[0])->where('id',$value[1])
+                        ->update([
+                            'po_number' => $po,
+                            'po_file' => $destination_path_insert,
+                            'delivery_date' => $combined_delivery_date,
+                            'po_status' => "PO Uploaded",
+                            'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+                    }
+                    else
+                    {
+                        DB::table($value[0])->where('id',$value[1])
                         ->update([
                             'po_number' => $po,
                             'po_file' => $destination_path_insert,
                             'po_status' => "PO Uploaded",
                             'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
+                    }
+
+                    
                     $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }
@@ -4200,12 +4219,27 @@ class OrderManagementCntrl extends Controller
                     $request_array['buyer_id'] = $tesco_buyer_id->id;  
                     $request_array['created_by'] = Auth::guard('web')->id();
 
-                    DB::table($value[0])->where('id',$value[1])
+                    if($combined_delivery_date != null)
+                    {
+                        DB::table($value[0])->where('id',$value[1])
+                        ->update([
+                            'po_number' => $po,
+                            'delivery_date' => $combined_delivery_date,
+                            'po_status' => "PO Uploaded",
+                            'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+                    }
+                    else
+                    {
+                        DB::table($value[0])->where('id',$value[1])
                         ->update([
                             'po_number' => $po,
                             'po_status' => "PO Uploaded",
                             'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
+                    }
+
+                    
                     $erp_obj->updateOrchestraErpOrders($request_array);
                 }
             }

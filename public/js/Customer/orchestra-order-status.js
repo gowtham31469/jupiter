@@ -309,7 +309,7 @@ function orderStatus() {
                                             }
 
                                         });
-                                        $('#update_new_po_status').click(function () {
+                                        $('#update_new_po_status').unbind().click(function () {
 
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -384,7 +384,7 @@ function orderStatus() {
                                             }
                                         });
 
-                                        $('#new_pos_status').click(function () {
+                                        $('#new_pos_status').unbind().click(function () {
                                             var sList = 0;
                                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
                                                 if (this.checked) {
@@ -1131,6 +1131,11 @@ function updateArtworkOrc(obj) {
 					
 					if (data.solid_carton_erp_details != null) {
 							if (data.solid_carton_erp_details.status_name !== 'Hold For JC Queue' && data.solid_carton_erp_details.status_name !== 'Moved To ERP') {
+                                $('.tot_qty_table_carton').prop("disabled", true);
+                                $('#age').prop("disabled", true);
+                                $('#modal_height').prop("disabled", true);
+                                $('#width').prop("disabled", true);
+                                $('#save_solid_carton_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1141,6 +1146,9 @@ function updateArtworkOrc(obj) {
 					
 					if (data.solid_poly_erp_details != null) {
 							if (data.solid_poly_erp_details.status_name !== 'Hold For JC Queue' && data.solid_poly_erp_details.status_name !== 'Moved To ERP') {
+                                $('.tot_qty_table_poly').prop("disabled", true);
+                                $('#age').prop("disabled", true);
+                                $('#save_solid_poly_bag_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1151,6 +1159,14 @@ function updateArtworkOrc(obj) {
 					
 					if (data.standard_carton_erp_details != null) {
 							if (data.standard_carton_erp_details.status_name !== 'Hold For JC Queue' && data.standard_carton_erp_details.status_name !== 'Moved To ERP') {
+                                $('.standard_carton_qty').prop("disabled", true);
+                                $('#age').prop("disabled", true);
+                                $('#modal_height').prop("disabled", true);
+                                $('#width').prop("disabled", true);
+                                $('#needed_modal').prop("disabled", true);
+                                $('#total_polybag').prop("disabled", true);
+
+                                $('#save_standard_carton_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1161,6 +1177,9 @@ function updateArtworkOrc(obj) {
 					
 					if (data.standard_poly_erp_details != null) {
 							if (data.standard_poly_erp_details.status_name !== 'Hold For JC Queue' && data.standard_poly_erp_details.status_name !== 'Moved To ERP') {
+                                $('.standard_poly_bag_qty').prop("disabled", true);
+                                $('#age').prop("disabled", true);
+                                $('#save_standard_poly_bag_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}

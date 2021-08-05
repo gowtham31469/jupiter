@@ -35,7 +35,8 @@ class OrderController extends Controller
     {
 		 $name=$request->name.'-'.$request->buyer_no;
          $svg=urldecode($request->svg);
-         $id = $request->id;
+		
+		 $id = $request->id;
 		 $customer = DB::table("orchestra_standard_carton_sticker_orders")
 						->join('customers', 'orchestra_standard_carton_sticker_orders.customer_id', 'customers.id')
 						->select('customers.short_name','orchestra_standard_carton_sticker_orders.created_at')
@@ -215,26 +216,17 @@ class OrderController extends Controller
 					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		});
+		
 //          print_r($svg);
         PDF::setImageScale(1);
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
         PDF::AddPage();
-        $style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
         //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
         //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
         PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
-		
-		file_put_contents(public_path('/storage/app/template/demo.svg'), $svg);
-					
-		
-		exec('inkscape -z -e '.public_path('/storage/app/template/out.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo.svg'));
-		
-		$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out.png').'">';
-		PDF::writeHTMLCell(147, 97, 11.5, 50, $html, '', 0, 0, false, 'L', false);
-        //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::ImageSVG('@' . $svg, $x=12.5, $y=50, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
     } 
@@ -437,13 +429,15 @@ class OrderController extends Controller
 //        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
+		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
         PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
-		$count=0;
 		$yy=50;
 		foreach($svgarr as $value)
         {
@@ -452,60 +446,39 @@ class OrderController extends Controller
 			
 			if($i == 0)
 			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy=50;
 				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
-				
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
+				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 				$yy=50;
 				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else
 			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy += 112.5;
 				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:684px;height:449px;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(147, 97, 11.5, $yy, $html, '', 0, 0, false, 'L', false);
-				
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
-			$count++;
 		 }
 		 
 		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
@@ -1138,6 +1111,7 @@ class OrderController extends Controller
 					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		});
+//          print_r($svg);
 		
 		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
 		if(count($orchestra_color) > 0)
@@ -1149,15 +1123,20 @@ class OrderController extends Controller
 			$color_code="";
 		}
 		
-//          print_r($svg);
         PDF::setImageScale(1);
 //        PDF::setPrintHeader(false);
 //        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
         PDF::AddPage();
+		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
+        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
         PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+		
+		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
         $td_size="";
         $td_col="";
         $total=0;
@@ -1168,12 +1147,12 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			$size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$size[0]);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
+						array_push($index_arr,$val);
 						if($size_var[1] == "MOIS")
 						{
 							if(count($size) > 6)
@@ -1196,13 +1175,14 @@ class OrderController extends Controller
 								$td_size.="<td><br><br>".$val."</td>";
 							}
 						}
+						
 						$td_col.="<td>".$size_break[$i]."</td>";
 					} 
 			  } 
            
             $total+=$size_break[$i];
             $i++;
-        }
+		}
 		if(count($size) > 6)
 		{
 			if(strlen($color_code) > 6)
@@ -1231,6 +1211,7 @@ class OrderController extends Controller
 			$line_height = "2.5";
 			$line="1.5";
 		}
+		
           $tbl = '<table  border="1" style="text-align:center;">
 		  			<tr style="line-height:0.53">
                           <td style="font-size:14px;text-align:center;line-height:0.45"><br><br>Size:</td>
@@ -1245,17 +1226,9 @@ class OrderController extends Controller
             </table>';
         PDF::SetFillColor(255, 255, 255);
         PDF::SetTextColor(0, 0, 0);
-		
-		file_put_contents(public_path('/storage/app/template/demo.svg'), $svg);
-					
-		
-		exec('inkscape -z -e '.public_path('/storage/app/template/out.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo.svg'));
-		
-		$html = '<img style="width:520px;height:341;border:1px solid #333" src="'.public_path('/storage/app/template/out.png').'">';
-		PDF::writeHTMLCell(147, 97, 11.5, 50, $html, '', 0, 0, false, 'L', false);
         
-        //PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::writeHTMLCell(147, '', '11.5', '92.5', $tbl, '', 1, 1, true, '', true);
+        PDF::ImageSVG('@' . $svg, $x=12.5, $y=50, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		PDF::writeHTMLCell(147, '', '11.5', '92.5', $tbl, '', 1, 1, true, '', true);
         
   
         
@@ -1289,13 +1262,13 @@ class OrderController extends Controller
 	 * @return pdf
 	 */
 	
-     public function printPdfSmall(Request $request)
+	public function printPdfSmall(Request $request)
     {
 		 
-		  $name=$request->name.'-'.$request->buyer_no;
+		 $name=$request->name.'-'.$request->buyer_no;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
-        $id = $request->id;
+         $id = $request->id;
 		 $customer = DB::table("orchestra_solid_poly_bag_sticker_orders")
 						->join('customers', 'orchestra_solid_poly_bag_sticker_orders.customer_id', 'customers.id')
 						->select('customers.short_name','orchestra_solid_poly_bag_sticker_orders.created_at')
@@ -1400,7 +1373,7 @@ class OrderController extends Controller
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 150x100mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 100x70mm</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>
@@ -1481,12 +1454,15 @@ class OrderController extends Controller
 //        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
+		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
+		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
+		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
+		 
 //		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=50;
-		$count=0;
 		foreach($svgarr as $value)
         {
 			$svg=urldecode($value);
@@ -1500,62 +1476,40 @@ class OrderController extends Controller
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(97, 67, 57.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
 			}
 			else  if($i == 0)
 			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
+				
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(97, 67, 57.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				
 			}
 			else if($i == 1)
 			{
+				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 122.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 125, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(97, 67, 57.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			else
 			{
+				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
+				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 197.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 200, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
-				//PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				file_put_contents(public_path('/storage/app/template/demo'.$count.'.svg'), $svg);
-					
-		
-				exec('inkscape -z -e '.public_path('/storage/app/template/out'.$count.'.png').' -w 1000 -h 1000 '.public_path('/storage/app/template/demo'.$count.'.svg'));
-
-				$html = '<img style="width:520px;height:341;" src="'.public_path('/storage/app/template/out'.$count.'.png').'">';
-				PDF::writeHTMLCell(97, 67, 57.5, $yy, $html, '', 0, 0, false, 'L', false);
+				PDF::ImageSVG('@' . $svg, $x=57.5, $y=$yy, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			}
 			$i++;
 			$j++;
-			$count++;
 		 }
         PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.$name.'.pdf'));
