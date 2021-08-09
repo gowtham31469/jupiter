@@ -1304,13 +1304,13 @@ input[type="number"] {
                     localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
                     $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
                     $('#buyerSelectionModalCenter').modal('hide');
-                    var buyer = localStorage.getItem("buyer");
-                    if (buyer === 'orchestra') 
-                    {
-                        orders();
-                    } else if (buyer === 'tesco')  {
-                        tescoOrders(reOrderTesco);
-                    }
+                    // var buyer = localStorage.getItem("buyer");
+                    // if (buyer === 'orchestra') 
+                    // {
+                    //     orders();
+                    // } else if (buyer === 'tesco')  {
+                    //     tescoOrders(reOrderTesco);
+                    // }
                 } else {
                     localStorage.removeItem("buyer");
                     localStorage.removeItem("buyer_id");

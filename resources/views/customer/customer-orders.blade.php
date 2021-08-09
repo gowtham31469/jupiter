@@ -1131,13 +1131,13 @@ background: rgba(0,0,0,0.2);
               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
               $('#buyerSelectionModalCenter').modal('hide');
-              var buyer = localStorage.getItem("buyer");
-              if (buyer === 'orchestra') 
-              {
-                  orders();
-              } else {
-                  tescoOrders(reOrderTesco);
-              }
+            //   var buyer = localStorage.getItem("buyer");
+            //   if (buyer === 'orchestra') 
+            //   {
+            //       orders();
+            //   } else {
+            //       tescoOrders(reOrderTesco);
+            //   }
           } else {
               localStorage.removeItem("buyer");
               localStorage.removeItem("buyer_id");
