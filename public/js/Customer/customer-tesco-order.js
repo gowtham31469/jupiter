@@ -37,6 +37,14 @@ var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
 function tescoOrders(callback) {
+    if(localStorage.getItem("buyer") == "orchestra") 
+	{
+			$('#financialYear').selectpicker('hide')
+	}
+	else
+	{
+			$('#financialYear').selectpicker('show')
+	}
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
     $('.template-error').html('');

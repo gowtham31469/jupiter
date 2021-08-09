@@ -33,6 +33,14 @@ function isNumber(evt) {
  */
 
 function orders() {
+	if(localStorage.getItem("buyer") == "orchestra") 
+        {
+                $('#financialYear').selectpicker('hide')
+        }
+        else
+        {
+                $('#financialYear').selectpicker('show')
+        }
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     
     $.ajax({
