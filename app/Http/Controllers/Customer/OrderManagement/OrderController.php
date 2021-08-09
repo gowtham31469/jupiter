@@ -1153,15 +1153,29 @@ class OrderController extends Controller
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
@@ -1175,6 +1189,7 @@ class OrderController extends Controller
 								$td_size.="<td><br><br>".$val."</td>";
 							}
 						}
+						
 						
 						$td_col.="<td>".$size_break[$i]."</td>";
 					} 
