@@ -1170,7 +1170,7 @@ class OrderController extends Controller
 							{
 								if(count($size) > 7)
 								{
-									$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 								}
 								else
 								{
@@ -1182,7 +1182,7 @@ class OrderController extends Controller
 						{
 							if(count($size) > 7)
 							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
 							else
 							{
@@ -1204,7 +1204,7 @@ class OrderController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
