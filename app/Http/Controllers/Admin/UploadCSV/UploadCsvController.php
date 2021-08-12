@@ -16,6 +16,7 @@ use App\TescoKidsWarningStatements;
 use App\TescoAdditionalInstructions;
 use Carbon\Carbon;
 use DB;
+use App\Customer;
 
 
 class UploadCsvController extends Controller
@@ -374,13 +375,22 @@ class UploadCsvController extends Controller
 
             $parcel_details_data_exists = OrchestraParcelDetails::exists();
             
-            $this->upload->isCustomerExists($data);
+            $customers = Customer::pluck('factory_code')->all();
 
             /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
             if ($parcel_details_data_exists)
             {
                foreach ($data as $value)
                {
+                  if (
+                    !isset($customers[trim($value['SUPPLIER CODE'])])
+                    && trim($value['SUPPLIER EMAIL']) != '_'
+                    && trim($value['SUPPLIER EMAIL']) != ''
+                  ) {
+                    // new contact
+                    $this->upload->createCustomer($value);
+                  }
+
                   $parcel_details_uvc = OrchestraParcelDetails::where('UVC', '=', trim($value['REFERENCE CODE']))->exists();
                   if ($parcel_details_uvc)
                   {
@@ -461,6 +471,15 @@ class UploadCsvController extends Controller
             {
               foreach ($data as $value)
               {
+                if (
+                  !isset($customers[trim($value['SUPPLIER CODE'])])
+                  && trim($value['SUPPLIER EMAIL']) != '_'
+                  && trim($value['SUPPLIER EMAIL']) != ''
+                ) {
+                  // new contact
+                  $this->upload->createCustomer($value);
+                }
+
                 $this->upload->insertOrchestraParcelDetails($value);
 
                 // check PO details missing for this sku code (ie, PO number = null).
@@ -514,7 +533,7 @@ class UploadCsvController extends Controller
         if (preg_match('/ORC_M3_PRICE_FILE/',$filename))
         {
           $data     =  $this->upload->csv_to_array($path,$delimiter);
-          
+          dd($data);
           // Foreach begins
           foreach ($data as $value)
           {

@@ -36,32 +36,25 @@ class Uploads
 
 	/**
 	 * method to add customer based on supplier code
-	 * @param  [array]  $data 
+	 * @param  [array]  $value 
 	 * @return boolean       
 	 */
-	public function isCustomerExists($data)
+	public function createCustomer($value)
 	{
-		foreach ($data as $value)
-		{
-			if(Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false && trim($value['SUPPLIER EMAIL']) != '_' && trim($value['SUPPLIER EMAIL']) != '')
-			{
-				$custm_details = Customer::create([
-								    'company_name'  => trim($value['SUPPLIER NAME']) === '_'?null:trim($value['SUPPLIER NAME']),
-				       				'factory_code' 	=> trim($value['SUPPLIER CODE']) === '_'?null:trim($value['SUPPLIER CODE']),
-				       				'email'		    => trim($value['SUPPLIER EMAIL'])
-								  ]);				
-				CustomerBillAddress::create([
-			                        'customer_id'   => $custm_details->id,
-			                        'address'       => trim($value['SUPPLIER ADDRESS']) === '_'?null:trim($value['SUPPLIER ADDRESS']),
-			                        'country'       => trim($value['SUPPLIER COUNTRY']) === '_'?null:trim($value['SUPPLIER COUNTRY']),
-						       		'email'			=> trim($value['SUPPLIER EMAIL'])
-									]);
-		    	CustomerContactPersons::create([
-			                        'customer_id'   => $custm_details->id
-			                        ]);
-			}
-		}
-		
+		$custm_details = Customer::create([
+			'company_name'  => trim($value['SUPPLIER NAME']) === '_' ? null : trim($value['SUPPLIER NAME']),
+			'factory_code' 	=> trim($value['SUPPLIER CODE']) === '_' ? null : trim($value['SUPPLIER CODE']),
+			'email'		    => trim($value['SUPPLIER EMAIL'])
+		]);
+		CustomerBillAddress::create([
+			'customer_id'   => $custm_details->id,
+			'address'       => trim($value['SUPPLIER ADDRESS']) === '_' ? null : trim($value['SUPPLIER ADDRESS']),
+			'country'       => trim($value['SUPPLIER COUNTRY']) === '_' ? null : trim($value['SUPPLIER COUNTRY']),
+			'email'			=> trim($value['SUPPLIER EMAIL'])
+		]);
+		CustomerContactPersons::create([
+			'customer_id'   => $custm_details->id
+		]);
 	}
 
 	/**
