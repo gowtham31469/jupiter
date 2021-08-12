@@ -32,7 +32,7 @@ class SubmitTescoLabelOrder extends FormRequest
             'tesco_care_coo'                   => ['required', 'numeric', 'exists:tesco_countries,id'],
             'tesco_care_supplier'              => ['required', 'numeric', 'exists:tesco_suppliers,id'],
             'template_id'                      => ['required', 'numeric', 'exists:tesco_item_master,id'],
-            'order_type'                       => ['required', Rule::in(['newOrder', 'repeatOrder'])],
+            'order_type'                       => ['nullable', 'sometimes', Rule::in(['newOrder', 'repeatOrder'])],
 
             'tesco_care_wash_instruction'      => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
             'tesco_care_bleach_instruction'    => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
@@ -53,7 +53,7 @@ class SubmitTescoLabelOrder extends FormRequest
             'quantity.*'                       => ['nullable', 'sometimes', 'numeric'],
             'uk_ean.*'                         => ['nullable', 'sometimes', 'digits:13'],
             'ce_ean.*'                         => ['nullable', 'sometimes', 'digits:13'],
-            'secondary_size_id.*'              => ['required', 'numeric', 'exists:tesco_primary_size,id'],
+            'secondary_size_id.*'              => ['nullable', 'sometimes', 'numeric'],
             
         ];
     }
