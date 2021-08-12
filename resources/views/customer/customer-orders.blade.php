@@ -403,14 +403,19 @@ background: rgba(0,0,0,0.2);
         </div>
     </div>
 </div>
-<div class="modal fade" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" data-backdrop="static" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="gridSystemModalLabel">Purchase Order</h4>
+                        <h4 class="modal-title" id="gridSystemModalLabel">Customer Purchase Order Upload</h4>
                     </div>
                     <div class="modal-body">
+                            <div class="alert alert-success" id="success-alert">
+                                    <button type="button" class="close" data-dismiss="alert">x</button>
+                                    <strong>Success! </strong>
+                                    PO uploaded successfully.
+                                </div>
                         <div id="exist_artwork_div">
                             <h4>Artworks : </h4>
                             <label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
@@ -439,19 +444,30 @@ background: rgba(0,0,0,0.2);
                         
                         <div id="new_po_div" class="hidden">
                             <h4>New PO : </h4>
-                            <label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label>
+                            <label style='color:red' id='new_po_error' class='hidden'>Please Enter PO Number</label><br>
+                            <label style='color:red' id='new_po_file_error' class='hidden'>Please Upload PO File</label>
                              <div class="form-group">
                             <label>PO Number</label>
-                            <input id="new_po_no" type="text" class="form-control">
+                            <input id="new_po_no" type="text" placeholder="PO Number" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputFile">PO File</label>
-                                <input type="file" id="new_po_file">
+                                <input type="file" accept="application/pdf" id="new_po_file">
                                 <p class="help-block"></p>
                             </div>
+                            <div class="form-group has-feedback">
+                                    <label for="combined_delivery_date">Delivery Date</label>
+                                    <div class="input-group date" data-provide="datepicker" id="datePicker3">
+                                        <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span >
+                                        </div >
+                                    </div >
+                                </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
                         <button type="button" id="update_new_po" class="btn btn-primary hidden" >Update</button>
                         <button type="button" id="update_po" class="btn btn-primary hidden" >Update</button>
                         
@@ -1115,13 +1131,13 @@ background: rgba(0,0,0,0.2);
               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
               $('#buyerSelectionModalCenter').modal('hide');
-              var buyer = localStorage.getItem("buyer");
-              if (buyer === 'orchestra') 
-              {
-                  orders();
-              } else {
-                  tescoOrders(reOrderTesco);
-              }
+            //   var buyer = localStorage.getItem("buyer");
+            //   if (buyer === 'orchestra') 
+            //   {
+            //       orders();
+            //   } else {
+            //       tescoOrders(reOrderTesco);
+            //   }
           } else {
               localStorage.removeItem("buyer");
               localStorage.removeItem("buyer_id");
