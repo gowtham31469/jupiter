@@ -3038,7 +3038,7 @@ class JobManagerController extends Controller
 
  public function printPdfTable(Request $request)
 	{
-		 $name=$request->style_no."-STD-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-STD-PS-".$request->buyer_no;
 	 	 $id=$request->id;
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3082,9 +3082,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -3281,9 +3281,34 @@ class JobManagerController extends Controller
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
+							{
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
+							}
+							else
+							{
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
+							}
+						}
+						else
+						{
+							if(count($size) > 7)
 							{
 								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
@@ -3292,17 +3317,7 @@ class JobManagerController extends Controller
 								$td_size.="<td><br><br>".$val."</td>";
 							}
 						}
-						else
-						{
-							if(count($size) > 7)
-							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
-							}
-							else
-							{
-								$td_size.="<td><br><br>".$val."</td>";
-							}
-						}
+						
 						$td_col.="<td>".$sizebrk[$i]."</td>";
 					} 
 			  } 
@@ -3316,7 +3331,7 @@ class JobManagerController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
@@ -3396,6 +3411,9 @@ class JobManagerController extends Controller
     {
 		 
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3521,9 +3539,9 @@ class JobManagerController extends Controller
 			PDF::RoundedRect(214.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
 			PDF::ImageSVG('@' . $svg, $x=214.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		 $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+     PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		 $file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     }
 	
 	
@@ -3542,6 +3560,10 @@ class JobManagerController extends Controller
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
+
+
+$style_no=$request->style_no;
+$buyer_no=$request->buyer_no;
 		
 		$sticker = DB::table("orchestra_standard_poly_bag_sticker_orders")
 						->select('*')
@@ -3588,16 +3610,30 @@ class JobManagerController extends Controller
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
-							if($size_var[1] == "MOIS")
+							array_push($index_arr,$val);
+							if(count($size_var) > 1)
 							{
-								if(count($size) > 6)
+								if($size_var[1] == "MOIS")
 								{
-									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									if(count($size) > 6)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 								else
 								{
-									$td_size.="<td><br><br>".$val."</td>";
+									if(count($size) > 7)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 							}
 							else
@@ -3611,6 +3647,7 @@ class JobManagerController extends Controller
 									$td_size.="<td><br><br>".$val."</td>";
 								}
 							}
+							
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
 			  } 
@@ -3711,9 +3748,10 @@ class JobManagerController extends Controller
 		PDF::writeHTMLCell(147, '', '309', '257.5', $tbl, '', 1, 1, true, '', true);
 		
         
-  $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+	$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
         
     }
 	
@@ -3728,6 +3766,8 @@ class JobManagerController extends Controller
     {
 		 $name=$request->name;
          $svg=urldecode($request->svg);
+				 $style_no=$request->style_no;
+				 $buyer_no=$request->buyer_no;
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
@@ -3796,10 +3836,11 @@ class JobManagerController extends Controller
 		
 		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
+
+				$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
 		
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     } 
 	
 	
@@ -3814,6 +3855,9 @@ class JobManagerController extends Controller
     public function proofPdfArr(Request $request)
     {
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3895,14 +3939,14 @@ class JobManagerController extends Controller
 			PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
 		 
-		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+		 PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
 		
     } 
 	public function printPdfArr(Request $request)
     {
-		 $name=$request->style_no."-SOL-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3923,9 +3967,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -4159,7 +4203,7 @@ class JobManagerController extends Controller
 
 	public function printPdf(Request $request)
 	{
-		 $name=$request->style_no."-STD-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-STD-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
 //		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -4178,9 +4222,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -4373,7 +4417,7 @@ class JobManagerController extends Controller
 	public function printPdfSmall(Request $request)
 	{
 		 
-		 $name=$request->style_no."-SOL-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-PS-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
 		 //$svg=urldecode($request->svg);
@@ -4391,9 +4435,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   

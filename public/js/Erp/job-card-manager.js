@@ -4740,7 +4740,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit,id,style_no,buyer_no,created_at); 
+							  PopupOrchestraJCPreview(svgDoc,"STD-CS",isEdit,id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -4776,7 +4776,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4814,7 +4814,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJCPreview(svg_fin, "SOLID-POLY",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmallJCPreview(svg_fin, "SOL-PS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4863,7 +4863,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJCPreview(svg_fin, "SOLID-CARTON",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupArrOrchestraJCPreview(svg_fin, "SOL-CS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block

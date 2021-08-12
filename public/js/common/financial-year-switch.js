@@ -34,4 +34,13 @@ $(document).ready (function(){
                 }
             })
         });
+
+        if(localStorage.getItem("buyer") == "orchestra") 
+        {
+                $('#financialYear').selectpicker('hide')
+        }
+        else
+        {
+                $('#financialYear').selectpicker('show')
+        }
  });

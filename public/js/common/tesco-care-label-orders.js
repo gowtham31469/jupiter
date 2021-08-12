@@ -77,38 +77,6 @@ $(function () {
         });
     }
 
-    // Method to Calculate total fiber percentage
-//     calculateTotalFiberPercentage = (obj, component, e) => {
-
-//         var total_fiber_percentage = 0;
-
-//         for (let index = 1; index <= 6; index++) {
-           
-//             var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
-
-//             if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
-//                 console.log($(document.getElementById('fiber_individual_percentage_' + component + '_' + index)).val());
-//                 total_fiber_percentage += parseInt(individual_percentage);
-
-//             }
-//         }
-
-//         $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
-
-//         // toggle min & max validation for total percentage
-//         if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
-
-//             $('#fiber_total_percentage_' + (component)).removeAttr("min");
-//             $('#fiber_total_percentage_' + (component)).removeAttr("max");
-
-//         } else {
-
-//             $('#fiber_total_percentage_' + (component)).attr('min', 100);
-//             $('#fiber_total_percentage_' + (component)).attr('max', 100);
-
-//         }
-//     }
-
     // Calculate total fiber percentage
     $(document).on('change', '.fiber-individual-percentage', function() {
 
@@ -296,15 +264,15 @@ $(function () {
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)"><div class="help-block with-errors"></div></div></td>
+                    quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
                                         </table>
-                                        </div>`;
+                                        </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
                 $('.teasco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
@@ -677,6 +645,56 @@ $(function () {
             }
         })
 
+    }
+
+    validateEanBarcodeValue = (obj) => {
+            
+            if (obj.value.length === 13) {
+                
+                var barcodecheck = generateEanBarcode(obj.value);
+
+                if (barcodecheck == "false") {
+                    barcode_checks++;
+                    $(obj).next('div').html('');
+
+                    /**  [ Show validation error message ] **/
+                    $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    $('.label-order-submit-btn').prop('disabled', true);
+
+                } else {
+                    barcode_checks = 0;
+
+                    $(obj).next('div').html('');
+
+                    $('.label-order-submit-btn').prop('disabled', false);
+                }
+            } else {
+                barcode_checks = 0;
+
+                $(obj).next('div').html('');
+
+                $('.label-order-submit-btn').prop('disabled', false);
+            }
+
+    }
+
+    generateEanBarcode = (code) => {
+        var return_value = "";
+        JsBarcode("#barcode-ean-13", code, {
+            format: "ean13",
+            width: 3.45,
+            height: 125,
+            fontSize: 35,
+            flat: true,
+            valid:  (valid) => {
+                if (valid == false) {
+                    return_value = "false";
+                } else {
+                    return_value = "true";
+                }
+            }
+        });
+        return return_value;
     }
 
 });
