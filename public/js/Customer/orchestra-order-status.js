@@ -1056,7 +1056,7 @@ function updateArtworkOrc(obj) {
 							if (data.hang_erp_details.status_name !== 'Hold For JC Queue' && data.hang_erp_details.status_name !== 'Moved To ERP') {
 								$('.tot_qty_tablehang').prop("disabled", true);
 								$('.extra_percentagehang').prop("disabled", true);
-								$('#save_hang_button').addClass('hidden')
+								$('#save_hang_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.hang_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1069,7 +1069,7 @@ function updateArtworkOrc(obj) {
 					if (data.special_erp_details != null) {
 							if (data.special_erp_details.status_name !== 'Hold For JC Queue' && data.special_erp_details.status_name !== 'Moved To ERP') {
 						    	$('.special_qty').prop("disabled", true);
-								$('#save_special_button').addClass('hidden')
+								$('#save_special_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.special_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1081,7 +1081,7 @@ function updateArtworkOrc(obj) {
 					if (data.main_erp_details != null) {
 							if (data.main_erp_details.status_name !== 'Hold For JC Queue' && data.main_erp_details.status_name !== 'Moved To ERP') {
 								$('.main_label_qty').prop("disabled", true);
-								$('#save_main_label_button').addClass('hidden')
+								$('#save_main_label_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1094,7 +1094,7 @@ function updateArtworkOrc(obj) {
 							if (data.wash_erp_details.status_name !== 'Hold For JC Queue' && data.wash_erp_details.status_name !== 'Moved To ERP') {
 								$('.tot_qty_tablewash').prop("disabled", true);
 								$('.extra_percentagewash').prop("disabled", true);
-								$('#save_wash_button').addClass('hidden')
+								$('#save_wash_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.wash_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1107,7 +1107,7 @@ function updateArtworkOrc(obj) {
 							if (data.size_erp_details.status_name !== 'Hold For JC Queue' && data.size_erp_details.status_name !== 'Moved To ERP') {
 								$('.tot_qty_tablesize').prop("disabled", true);
 								$('.extra_percentagesize').prop("disabled", true);
-								$('#save_size_label_button').addClass('hidden')
+								$('#save_size_label_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.size_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1120,7 +1120,7 @@ function updateArtworkOrc(obj) {
 							if (data.heat_erp_details.status_name !== 'Hold For JC Queue' && data.heat_erp_details.status_name !== 'Moved To ERP') {
 								$('.tot_qty_tableheat').prop("disabled", true);
 								$('.extra_percentageheat').prop("disabled", true);
-								$('#save_heat_transfer_button').addClass('hidden')
+								$('#save_heat_transfer_button').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.heat_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
