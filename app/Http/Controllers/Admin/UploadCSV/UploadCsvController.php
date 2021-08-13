@@ -369,145 +369,142 @@ class UploadCsvController extends Controller
         $path     = $request->file('file')->getRealPath();
         $filename = strtok($request->file('file')->getClientOriginalName(), " ");
         
-          if (preg_match('/ORC_M3_PO_FILE/',$filename))
-          {
-            $data     =  $this->upload->csv_to_array($path,$delimiter);
+        if (!preg_match('/ORC_M3_PO_FILE/',$filename))
+        {
+          return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
+        }
 
-            $parcel_details_data_exists = OrchestraParcelDetails::exists();
-            
-            $customers = Customer::pluck('factory_code')->all();
+        $data     =  $this->upload->csv_to_array($path,$delimiter);
 
-            /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
-            if ($parcel_details_data_exists)
+        $parcel_details_data_exists = OrchestraParcelDetails::exists();
+        
+        /** If there is no collision, Insert into parcel details table otherwise update temp parcel details table*/
+        if ($parcel_details_data_exists)
+        {
+            foreach ($data as $value)
             {
-               foreach ($data as $value)
-               {
-                  if (
-                    !isset($customers[trim($value['SUPPLIER CODE'])])
-                    && trim($value['SUPPLIER EMAIL']) != '_'
-                    && trim($value['SUPPLIER EMAIL']) != ''
-                  ) {
-                    // new contact
-                    $this->upload->createCustomer($value);
-                  }
+              if (
+                Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false
+                && trim($value['SUPPLIER EMAIL']) != '_'
+                && trim($value['SUPPLIER EMAIL']) != ''
+              ) {
+                // new customer
+                $this->upload->createCustomer($value);
+              }
 
-                  $parcel_details_uvc = OrchestraParcelDetails::where('UVC', '=', trim($value['REFERENCE CODE']))->exists();
-                  if ($parcel_details_uvc)
+              $parcel_details_uvc = OrchestraParcelDetails::where('UVC', '=', trim($value['REFERENCE CODE']))->exists();
+              if ($parcel_details_uvc)
+              {
+                $parcel_details_po = OrchestraParcelDetails::where([
+                                                                    ['UVC', '=', trim($value['REFERENCE CODE'])], 
+                                                                    ['BuyerPONo', '=', trim($value['PO'])],
+                                                                  ])->exists();
+                if ($parcel_details_po)
+                {  
+                  $parcel_details_sku_code = OrchestraParcelDetails::where([
+                                                                            ['UVC', '=', trim($value['REFERENCE CODE'])],
+                                                                            ['BuyerPONo', '=', trim($value['PO'])],
+                                                                            ['SKU_Code', '=', trim($value['SKU CODE'])],
+                                                                          ])->exists();
+                  if($parcel_details_sku_code)
                   {
-                    $parcel_details_po = OrchestraParcelDetails::where([
-                                                                        ['UVC', '=', trim($value['REFERENCE CODE'])], 
-                                                                        ['BuyerPONo', '=', trim($value['PO'])],
-                                                                      ])->exists();
-                    if ($parcel_details_po)
-                    {  
-                      $parcel_details_sku_code = OrchestraParcelDetails::where([
+                    $parcel_details_last_date = OrchestraParcelDetails::where([
                                                                                 ['UVC', '=', trim($value['REFERENCE CODE'])],
                                                                                 ['BuyerPONo', '=', trim($value['PO'])],
                                                                                 ['SKU_Code', '=', trim($value['SKU CODE'])],
+                                                                                ['Po_Change_Date', '<>', trim($value['PO CHANGE DATE'])],
                                                                               ])->exists();
-                      if($parcel_details_sku_code)
-                      {
-                        $parcel_details_last_date = OrchestraParcelDetails::where([
-                                                                                    ['UVC', '=', trim($value['REFERENCE CODE'])],
-                                                                                    ['BuyerPONo', '=', trim($value['PO'])],
-                                                                                    ['SKU_Code', '=', trim($value['SKU CODE'])],
-                                                                                    ['Po_Change_Date', '<>', trim($value['PO CHANGE DATE'])],
-                                                                                 ])->exists();
 
-                        if($parcel_details_last_date)
-                        {
-                          // collision. update temp parcel details table
-                          $this->upload->updateOrchestraTempParcelDetails($value);
-                        }
-                      }
-                      else
-                      {
-                        $parcel_details_last_date = OrchestraParcelDetails::where([
-                                                                                    ['UVC', '=', trim($value['REFERENCE CODE'])],
-                                                                                    ['BuyerPONo', '=', trim($value['PO'])],
-                                                                                    ['Po_Change_Date','<>',trim($value['PO CHANGE DATE'])],
-                                                                                 ])->exists();
-
-                        if($parcel_details_last_date)
-                        {
-                          //collision. update temp parcel details table 
-                          $this->upload->updateOrchestraTempParcelDetails($value);
-                        }
-                        else 
-                        {
-                          $this->upload->insertOrchestraParcelDetails($value);
-                        }
-                      }
-                    }
-                    else
+                    if($parcel_details_last_date)
                     {
-                      $this->upload->insertOrchestraParcelDetails($value);
+                      // collision. update temp parcel details table
+                      $this->upload->updateOrchestraTempParcelDetails($value);
                     }
                   }
                   else
                   {
-                    $this->upload->insertOrchestraParcelDetails($value);
-                  }
+                    $parcel_details_last_date = OrchestraParcelDetails::where([
+                                                                                ['UVC', '=', trim($value['REFERENCE CODE'])],
+                                                                                ['BuyerPONo', '=', trim($value['PO'])],
+                                                                                ['Po_Change_Date','<>',trim($value['PO CHANGE DATE'])],
+                                                                              ])->exists();
 
-                  // check PO details missing for this sku code (ie, PO number = null).
-                  $po_missing = OrchestraParcelQuantityDetails::where([
-                                                                        ['UVC_TCO', '=', trim($value['SKU CODE'])],
-                                                                        ['BuyerPONo', '=', null],
-                                                                      ])->exists();
-
-                  if($po_missing)
-                  {
-                    // get po details from orchestra_parcel_details for this sku code.
-                    $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
-
-                    // get po data for current uvc_tco value and update in parcel_quantity_details table.
-                    $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
-
+                    if($parcel_details_last_date)
+                    {
+                      //collision. update temp parcel details table 
+                      $this->upload->updateOrchestraTempParcelDetails($value);
+                    }
+                    else 
+                    {
+                      $this->upload->insertOrchestraParcelDetails($value);
+                    }
                   }
                 }
-                unset($value);
-            }
-            else
-            {
-              foreach ($data as $value)
-              {
-                if (
-                  !isset($customers[trim($value['SUPPLIER CODE'])])
-                  && trim($value['SUPPLIER EMAIL']) != '_'
-                  && trim($value['SUPPLIER EMAIL']) != ''
-                ) {
-                  // new contact
-                  $this->upload->createCustomer($value);
-                }
-
-                $this->upload->insertOrchestraParcelDetails($value);
-
-                // check PO details missing for this sku code (ie, PO number = null).
-                $po_missing = OrchestraParcelQuantityDetails::where([
-                                                                      ['UVC_TCO', '=', trim($value['SKU CODE'])], 
-                                                                      ['BuyerPONo', '=', null],
-                                                                    ])->exists();
-
-                if($po_missing)
+                else
                 {
-                  // get po details from orchestra_parcel_details for this sku code.
-                  $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
-
-                  // get po data for current uvc_tco value and update in parcel_quantity_details table.
-                  $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
-
+                  $this->upload->insertOrchestraParcelDetails($value);
                 }
+              }
+              else
+              {
+                $this->upload->insertOrchestraParcelDetails($value);
+              }
+
+              // check PO details missing for this sku code (ie, PO number = null).
+              $po_missing = OrchestraParcelQuantityDetails::where([
+                                                                    ['UVC_TCO', '=', trim($value['SKU CODE'])],
+                                                                    ['BuyerPONo', '=', null],
+                                                                  ])->exists();
+
+              if($po_missing)
+              {
+                // get po details from orchestra_parcel_details for this sku code.
+                $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
+
+                // get po data for current uvc_tco value and update in parcel_quantity_details table.
+                $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
 
               }
-              unset($value);
-              
             }
-            $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
-          }
-          else
+            unset($value);
+        }
+        else
+        {
+          foreach ($data as $value)
           {
-            $result = response()->json(['error' =>true,'message' => 'Invalid File'], 403);
+            if (
+              Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false
+              && trim($value['SUPPLIER EMAIL']) != '_'
+              && trim($value['SUPPLIER EMAIL']) != ''
+            ) {
+              // new customer
+              $this->upload->createCustomer($value);
+            }
+
+            $this->upload->insertOrchestraParcelDetails($value);
+
+            // check PO details missing for this sku code (ie, PO number = null).
+            $po_missing = OrchestraParcelQuantityDetails::where([
+                                                                  ['UVC_TCO', '=', trim($value['SKU CODE'])], 
+                                                                  ['BuyerPONo', '=', null],
+                                                                ])->exists();
+
+            if($po_missing)
+            {
+              // get po details from orchestra_parcel_details for this sku code.
+              $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
+
+              // get po data for current uvc_tco value and update in parcel_quantity_details table.
+              $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);                 
+
+            }
+
           }
+          unset($value);
+          
+        }
+        
+        $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
       }
       catch (\Exception $e)
       {
@@ -530,101 +527,99 @@ class UploadCsvController extends Controller
         $filename = strtok($request->file('file')->getClientOriginalName(), " ");
        
         // validate correct file or not
-        if (preg_match('/ORC_M3_PRICE_FILE/',$filename))
+        if (!preg_match('/ORC_M3_PRICE_FILE/',$filename))
         {
-          $data     =  $this->upload->csv_to_array($path,$delimiter);
-          dd($data);
-          // Foreach begins
-          foreach ($data as $value)
+          return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
+        }
+
+        $data     =  $this->upload->csv_to_array($path,$delimiter);
+
+        // Foreach begins
+        foreach ($data as $value)
+        {
+          // get po details from orchestra_parcel_details for this sku code.
+          $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
+
+          // check sku code already exists or not 
+          $sku_exists = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($value['SKU CODE']))->exists();
+          if($sku_exists)
           {
-            // get po details from orchestra_parcel_details for this sku code.
-            $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))->select('*')->first();
 
-            // check sku code already exists or not 
-            $sku_exists = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($value['SKU CODE']))->exists();
-            if($sku_exists)
+            // check PO details missing for this sku code (ie, PO number = null).
+            $po_missing = OrchestraParcelQuantityDetails::where([
+                                                                  ['UVC_TCO', '=', trim($value['SKU CODE'])],
+                                                                  ['BuyerPONo', '=', null],
+                                                                ])->exists();
+
+            if($po_missing)
             {
-
-              // check PO details missing for this sku code (ie, PO number = null).
-              $po_missing = OrchestraParcelQuantityDetails::where([
-                                                                    ['UVC_TCO', '=', trim($value['SKU CODE'])],
-                                                                    ['BuyerPONo', '=', null],
-                                                                  ])->exists();
-
-              if($po_missing)
+              // get po data for current uvc_tco value and update in parcel_quantity_details table.
+              if($parcel_details_data)
               {
-                // get po data for current uvc_tco value and update in parcel_quantity_details table.
-                if($parcel_details_data)
-                {
-                  $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);  
-                }               
+                $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);  
+              }               
 
-              }
-
-              // check price details already exists for this sku code with different Country_Code.
-              $diff_order = OrchestraParcelQuantityDetails::where([
-                                                                    ['UVC_TCO', '=', trim($value['SKU CODE'])],
-                                                                    ['Country_Code', '=', trim($value['COUNTRY CODE'])],
-                                                                  ])->exists();
-
-              if ($diff_order)
-              {
-                // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
-                $quantity_date = OrchestraParcelQuantityDetails::where([
-                                                                          ['UVC_TCO', '=', trim($value['SKU CODE'])],
-                                                                          ['Country_Code', '=', trim($value['COUNTRY CODE'])],
-                                                                          ['Last_Change_Date', '<>', trim($value['LAST_CHANGE_DATE'])],
-                                                                        ])->exists();
-
-                if($quantity_date)
-                {
-                  // collision. update temp orchestra parcel quantity details table 
-                  $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
-                }
-                
-              }
-              else
-              {
-                // check price details already exists with same UVC_TCO & Last_Change_Date
-                $quantity_date = OrchestraParcelQuantityDetails::where([
-                                                                        ['UVC_TCO', '=', trim($value['SKU CODE'])],
-                                                                        ['Last_Change_Date', '=', trim($value['LAST_CHANGE_DATE'])],
-                                                                      ])->exists();
-                
-                // insert price details, iff order with same sku code, country code and last change date doesn't exists.
-                if($quantity_date)
-                {
-                  // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-                  // if($parcel_details_data)
-                  // {
-                    $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
-                  //}
-                }
-                else 
-                {
-                  // collision. update temp orchestra parcel quantity details table 
-                  $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
-                }
-              }
             }
-            else 
+
+            // check price details already exists for this sku code with different Country_Code.
+            $diff_order = OrchestraParcelQuantityDetails::where([
+                                                                  ['UVC_TCO', '=', trim($value['SKU CODE'])],
+                                                                  ['Country_Code', '=', trim($value['COUNTRY CODE'])],
+                                                                ])->exists();
+
+            if ($diff_order)
             {
-              // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-              // if($parcel_details_data)
-              // {
-                $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
-              //}
+              // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
+              $quantity_date = OrchestraParcelQuantityDetails::where([
+                                                                        ['UVC_TCO', '=', trim($value['SKU CODE'])],
+                                                                        ['Country_Code', '=', trim($value['COUNTRY CODE'])],
+                                                                        ['Last_Change_Date', '<>', trim($value['LAST_CHANGE_DATE'])],
+                                                                      ])->exists();
+
+              if($quantity_date)
+              {
+                // collision. update temp orchestra parcel quantity details table 
+                $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
+              }
+              
+            }
+            else
+            {
+              // check price details already exists with same UVC_TCO & Last_Change_Date
+              $quantity_date = OrchestraParcelQuantityDetails::where([
+                                                                      ['UVC_TCO', '=', trim($value['SKU CODE'])],
+                                                                      ['Last_Change_Date', '=', trim($value['LAST_CHANGE_DATE'])],
+                                                                    ])->exists();
+              
+              // insert price details, iff order with same sku code, country code and last change date doesn't exists.
+              if($quantity_date)
+              {
+                // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+                // if($parcel_details_data)
+                // {
+                  $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
+                //}
+              }
+              else 
+              {
+                // collision. update temp orchestra parcel quantity details table 
+                $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
+              }
             }
           }
-          unset($value);
-          // end of foreach
+          else 
+          {
+            // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+            // if($parcel_details_data)
+            // {
+              $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
+            //}
+          }
+        }
+        unset($value);
+        // end of foreach
 
-          $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
-        }
-        else
-        {
-          $result = response()->json(['error' =>true,'message' => 'Invalid File'], 403);
-        }
+        $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
       }
       catch (\Exception $e)
       {
