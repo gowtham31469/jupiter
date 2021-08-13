@@ -1526,22 +1526,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							type: 'post',
 							success: function (data) {
 								//location.reload()
-								// $('#po-file-upload-div').modal('hide')
-								// $('.snackbar_span').html('PO Updated Successfully');
-								// showSnackbar();
-								$.each(a, function (index, value) {
-									$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
-									$('li[data-id=' + value + ']').removeAttr('style')
-									$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
-								});
+								$('#po-file-upload-div').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+								// $.each(a, function (index, value) {
+								// 	$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
+								// 	$('li[data-id=' + value + ']').removeAttr('style')
+								// 	$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
+								// });
 
-								$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-									$("#success-alert").slideUp(500);
-								});
-								/** Reset po upload form**/
-								$('#new_po_no').val("")
-								$('#combined_delivery_date').val("")
-								document.getElementById("new_po_file").value=null; 
+								// $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+								// 	$("#success-alert").slideUp(500);
+								// });
+								// /** Reset po upload form**/
+								// $('#new_po_no').val("")
+								// $('#combined_delivery_date').val("")
+								// document.getElementById("new_po_file").value=null; 
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
@@ -1884,22 +1884,22 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: form_data,
 							type: 'post',
 							success: function (data) {
-								// $('#po-file-upload-div').modal('hide')
-								// $('.snackbar_span').html('PO Updated Successfully');
-								// showSnackbar();
-								$.each(a, function (index, value) {
-									$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
-									$('li[data-id=' + value + ']').removeAttr('style')
-									$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
-								});
+								$('#po-file-upload-div').modal('hide')
+								$('.snackbar_span').html('PO Updated Successfully');
+								showSnackbar();
+								// $.each(a, function (index, value) {
+								// 	$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
+								// 	$('li[data-id=' + value + ']').removeAttr('style')
+								// 	$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
+								// });
 
-								$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-									$("#success-alert").slideUp(500);
-								});
-								/** Reset po upload form**/
-								$('#new_po_no').val("")
-								$('#combined_delivery_date').val("")
-								document.getElementById("new_po_file").value=null; 
+								// $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+								// 	$("#success-alert").slideUp(500);
+								// });
+								// /** Reset po upload form**/
+								// $('#new_po_no').val("")
+								// $('#combined_delivery_date').val("")
+								// document.getElementById("new_po_file").value=null; 
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
