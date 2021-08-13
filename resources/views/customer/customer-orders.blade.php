@@ -411,11 +411,11 @@ background: rgba(0,0,0,0.2);
                         <h4 class="modal-title" id="gridSystemModalLabel">Customer Purchase Order Upload</h4>
                     </div>
                     <div class="modal-body">
-                            <div class="alert alert-success" id="success-alert">
+                            {{-- <div class="alert alert-success" id="success-alert">
                                     <button type="button" class="close" data-dismiss="alert">x</button>
                                     <strong>Success! </strong>
                                     PO uploaded successfully.
-                                </div>
+                                </div> --}}
                         <div id="exist_artwork_div">
                             <h4>Artworks : </h4>
                             <label style='color:red' id='check_error' class='hidden'>Please select atleast one artwork</label>
