@@ -2219,6 +2219,14 @@ function printDiv(data, isstd,uvc,po) {
 						var barcode = $(this).find('.barcode').text();
 						var SKU_Code = $(this).find('.SKU_Code').val();
 						svgDoc.getElementById("size").innerHTML = size;
+						if(size == "NAISSANCE")
+						{
+							svgDoc.getElementById("size").style.fontSize = "16px";
+						}
+						else if(size == "PREMATURE")
+						{
+							svgDoc.getElementById("size").style.fontSize = "15.5px";
+						}
 						svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
 						jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
 						if(size == "TAILLE UNIQUE")
@@ -2278,6 +2286,14 @@ function printDiv(data, isstd,uvc,po) {
 						var barcode = $(this).find('.barcode').text();
 						var SKU_Code = $(this).find('.SKU_Code').val();
 						svgDoc.getElementById("size").innerHTML = size;
+						if(size == "NAISSANCE")
+						{
+							svgDoc.getElementById("size").style.fontSize = "8px";
+						}
+						else if(size == "PREMATURE")
+						{
+							svgDoc.getElementById("size").style.fontSize = "7px";
+						}
 						svgDoc.getElementById("parcelcode").innerHTML = SKU_Code;
 						jsbarcodesolidcartonA(barcode, 'barcode1', svgDoc)
 						jsbarcodesolidcartonB(barcode, 'barcode2', svgDoc)

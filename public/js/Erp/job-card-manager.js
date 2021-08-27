@@ -4798,7 +4798,15 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
                                 }
 
 								//svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+                                svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
@@ -4822,7 +4830,15 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							$(details['solidcartonstickerqty']).each(function(index,value){
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
-								svgDoc.getElementById("size").innerHTML = value.size
+                                svgDoc.getElementById("size").innerHTML = value.size
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
