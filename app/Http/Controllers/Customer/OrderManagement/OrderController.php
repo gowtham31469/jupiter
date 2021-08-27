@@ -1147,7 +1147,7 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			  $size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
@@ -1186,7 +1186,18 @@ class OrderController extends Controller
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:11px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:10px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						
