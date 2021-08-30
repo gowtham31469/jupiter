@@ -36,32 +36,25 @@ class Uploads
 
 	/**
 	 * method to add customer based on supplier code
-	 * @param  [array]  $data 
+	 * @param  [array]  $value 
 	 * @return boolean       
 	 */
-	public function isCustomerExists($data)
+	public function createCustomer($value)
 	{
-		foreach ($data as $value)
-		{
-			if(Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false && trim($value['SUPPLIER EMAIL']) != '_' && trim($value['SUPPLIER EMAIL']) != '')
-			{
-				$custm_details = Customer::create([
-								    'company_name'  => trim($value['SUPPLIER NAME']) === '_'?null:trim($value['SUPPLIER NAME']),
-				       				'factory_code' 	=> trim($value['SUPPLIER CODE']) === '_'?null:trim($value['SUPPLIER CODE']),
-				       				'email'		    => trim($value['SUPPLIER EMAIL'])
-								  ]);				
-				CustomerBillAddress::create([
-			                        'customer_id'   => $custm_details->id,
-			                        'address'       => trim($value['SUPPLIER ADDRESS']) === '_'?null:trim($value['SUPPLIER ADDRESS']),
-			                        'country'       => trim($value['SUPPLIER COUNTRY']) === '_'?null:trim($value['SUPPLIER COUNTRY']),
-						       		'email'			=> trim($value['SUPPLIER EMAIL'])
-									]);
-		    	CustomerContactPersons::create([
-			                        'customer_id'   => $custm_details->id
-			                        ]);
-			}
-		}
-		
+		$custm_details = Customer::create([
+			'company_name'  => trim($value['SUPPLIER NAME']) === '_' ? null : trim($value['SUPPLIER NAME']),
+			'factory_code' 	=> trim($value['SUPPLIER CODE']) === '_' ? null : trim($value['SUPPLIER CODE']),
+			'email'		    => trim($value['SUPPLIER EMAIL'])
+		]);
+		CustomerBillAddress::create([
+			'customer_id'   => $custm_details->id,
+			'address'       => trim($value['SUPPLIER ADDRESS']) === '_' ? null : trim($value['SUPPLIER ADDRESS']),
+			'country'       => trim($value['SUPPLIER COUNTRY']) === '_' ? null : trim($value['SUPPLIER COUNTRY']),
+			'email'			=> trim($value['SUPPLIER EMAIL'])
+		]);
+		CustomerContactPersons::create([
+			'customer_id'   => $custm_details->id
+		]);
 	}
 
 	/**
@@ -73,7 +66,7 @@ class Uploads
 	 */
 	public function insertOrchestraParcelDetails($value)
 	{
-		OrchestraParcelDetails::create([
+		return  [
 			'FactoryCode'                        => trim($value['SUPPLIER CODE']) === '_'?null:trim($value['SUPPLIER CODE']),
 			'SupplierName'                       => trim($value['SUPPLIER NAME']) === '_'?null:trim($value['SUPPLIER NAME']),
 			'SupplierAddress'			         => trim($value['SUPPLIER ADDRESS']) === '_'?null:trim($value['SUPPLIER ADDRESS']),
@@ -154,7 +147,7 @@ class Uploads
 			'UVC_TCO'                            => trim($value['SKU CODE']) === '_'?null:trim($value['SKU CODE']),
 			'Size'                               => trim($value['SIZE LABEL']) === '_'?null:trim($value['SIZE LABEL']),
 			'ParcelBarCode'                      => trim($value['STANDARD BARCODE']) === '_'?null:trim($value['STANDARD BARCODE']),
-   		]);
+			 ];
 	}
 
 	/**
@@ -177,7 +170,7 @@ class Uploads
 			$UVC         = $parcel_details_data->UVC;
 			$Size_Label  = $parcel_details_data->Size_Label;
 			$po_status_code = $parcel_details_data->Po_Status_Code;
-      $po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
+      		$po_status_code_desc = $parcel_details_data->Po_Status_Code_Description;
 		}
 		else 
 		{
@@ -192,7 +185,7 @@ class Uploads
             $po_status_code_desc = null;
 		}
 
-		OrchestraParcelQuantityDetails::create([
+		return $data = [
 			'FactoryCode' 	       		    => $FactoryCode,
 			'BuyerPONo'            		    => $BuyerPONo,
 			'Theme'                		    => $Theme,
@@ -213,7 +206,7 @@ class Uploads
 			'Supplier_Name'        		    => trim($value['SUPPLIER_NAME']) === '_'?null:trim($value['SUPPLIER_NAME']),
 			'Po_Status_Code'              => $po_status_code,
 			'Po_Status_Code_Description'  => $po_status_code_desc,
-			]);
+			];
 	}
 
 	/**
@@ -225,6 +218,8 @@ class Uploads
 	 */
 	public function updateOrchestraTempParcelDetails($value)
 	{
+		$data = [];
+
 		// check if UVC_TCO, UVC and PO change date already exists or not
 		$parcel_details_exists = DB::table('temp_orchestra_parcel_details')
 		->where([
@@ -238,7 +233,7 @@ class Uploads
 		
 		if($parcel_details_exists === false)
 		{
-			TempOrchestraParcelDetails::create([
+			$data = [
 				'FactoryCode'                        => trim($value['SUPPLIER CODE']) === '_'?null:trim($value['SUPPLIER CODE']),
 				'SupplierName'                       => trim($value['SUPPLIER NAME']) === '_'?null:trim($value['SUPPLIER NAME']),
 				'SupplierAddress'			               => trim($value['SUPPLIER ADDRESS']) === '_'?null:trim($value['SUPPLIER ADDRESS']),
@@ -319,8 +314,10 @@ class Uploads
 				'UVC_TCO'                            => trim($value['SKU CODE']) === '_'?null:trim($value['SKU CODE']),
 				'Size'                               => trim($value['SIZE LABEL']) === '_'?null:trim($value['SIZE LABEL']),
 				'ParcelBarCode'                      => trim($value['STANDARD BARCODE']) === '_'?null:trim($value['STANDARD BARCODE']),
-			   ]);
+				 ];
 		}
+
+		return $data;
 	}
 
   /**
@@ -333,6 +330,7 @@ class Uploads
 	 */
 	public function updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data)
 	{
+		$data = [];
 		if($parcel_details_data)
 		{
 			$FactoryCode = $parcel_details_data->FactoryCode;
@@ -368,7 +366,7 @@ class Uploads
 
 		if($parcel_details_exists === false)
 		{
-			TempOrchestraParcelQuantityDetails::create([
+			$data = [
 				'FactoryCode' 	              => $FactoryCode,
 				'BuyerPONo'                   => $BuyerPONo,
 				'Theme'                       => $Theme,
@@ -389,8 +387,10 @@ class Uploads
 				'Supplier_Name'               => trim($value['SUPPLIER_NAME']) === '_'?null:trim($value['SUPPLIER_NAME']),
 				'Po_Status_Code'              => $po_status_code,
 			    'Po_Status_Code_Description'  => $po_status_code_desc
-				]);
+				];
 		}
+
+		return $data;
 	}
 
 
