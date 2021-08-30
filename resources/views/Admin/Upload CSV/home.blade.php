@@ -60,7 +60,6 @@
         // Prevents Dropzone from uploading dropped files immediately
         url:"upload-orchestra-po-file-csv",
         autoProcessQueue: false,
-        maxFilesize: 10,
         maxFiles: 1,
         acceptedFiles: ".csv, .xlsx, .xls",
         addRemoveLinks: true,
@@ -109,7 +108,6 @@
       // Prevents Dropzone from uploading dropped files immediately
         url:"upload-orchestra-price-file-csv",
         autoProcessQueue: false,
-        maxFilesize: 10,
         maxFiles: 1,
         acceptedFiles: ".csv, .xlsx, .xls",
         addRemoveLinks: true,
