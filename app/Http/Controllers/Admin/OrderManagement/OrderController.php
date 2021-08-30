@@ -623,9 +623,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -914,9 +914,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -1103,7 +1103,19 @@ class OrderController extends Controller
         {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			
+			if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=50;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
 				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
@@ -1114,17 +1126,6 @@ class OrderController extends Controller
         		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
-			}
-			else if($i == 0)
-			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
-				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				
-				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
 			}
 			else
 			{
@@ -1703,9 +1704,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -1908,34 +1909,60 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			  $size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
 						{
 							if(count($size) > 7)
 							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:11px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:10px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						
 						$td_col.="<td>".$size_break[$i]."</td>";
 					} 
@@ -1950,7 +1977,7 @@ class OrderController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
@@ -2061,21 +2088,35 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			  $size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
@@ -2086,9 +2127,21 @@ class OrderController extends Controller
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:18px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:16px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
@@ -2220,9 +2273,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -2314,7 +2367,7 @@ class OrderController extends Controller
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 150x100mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 100x70mm</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>

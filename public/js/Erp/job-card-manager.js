@@ -4740,7 +4740,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit,id,style_no,buyer_no,created_at); 
+							  PopupOrchestraJCPreview(svgDoc,"STD-CS",isEdit,id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -4776,7 +4776,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4798,13 +4798,21 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
                                 }
 
 								//svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+                                svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -4814,7 +4822,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJCPreview(svg_fin, "SOLID-POLY",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmallJCPreview(svg_fin, "SOL-PS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4822,7 +4830,15 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							$(details['solidcartonstickerqty']).each(function(index,value){
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
-								svgDoc.getElementById("size").innerHTML = value.size
+                                svgDoc.getElementById("size").innerHTML = value.size
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -4863,7 +4879,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJCPreview(svg_fin, "SOLID-CARTON",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupArrOrchestraJCPreview(svg_fin, "SOL-CS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block

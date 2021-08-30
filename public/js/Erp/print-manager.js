@@ -824,7 +824,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							  PopupOrchestra(svgDoc,"STD-CS",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -860,7 +860,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+							PopupTableOrchestra(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -883,12 +883,22 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 
 								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
+								
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -898,7 +908,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -907,6 +917,16 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
+								
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -947,7 +967,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							PopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1047,7 +1067,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  ProofPopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							  ProofPopupOrchestra(svgDoc,"STD-CS",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -1084,7 +1104,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+							ProofPopupTableOrchestra(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1108,12 +1128,20 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
 								svgDoc.getElementById("round").style.fill = "#FFFFFF"
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -1123,7 +1151,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1132,6 +1160,14 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -1172,7 +1208,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
