@@ -11,26 +11,52 @@ use DB;
 
 class Uploads
 {
-	public function csv_to_array($filename='', $delimiter=';')
-	{
-		if(!file_exists($filename) || !is_readable($filename))
-			return FALSE;
+	// public function csv_to_array($filename='', $delimiter=';')
+	// {
+	// 	if(!file_exists($filename) || !is_readable($filename))
+	// 		return FALSE;
 		
-		$header = NULL;
-		$data = array();
-		if (($handle = fopen($filename, 'r')) !== FALSE)
-		{
-			while (($row = fgetcsv($handle, 5000, $delimiter)) !== FALSE)
-			{
-				$row =  array_map("utf8_encode", $row);
-				if(!$header)
-					$header = $row;
-				else
-					$data[] = array_combine($header, $row);
-			}
-			fclose($handle);
+	// 	$header = NULL;
+	// 	$data = array();
+	// 	if (($handle = fopen($filename, 'r')) !== FALSE)
+	// 	{
+	// 		while (($row = fgetcsv($handle, 65000, $delimiter)) !== FALSE)
+	// 		{
+	// 			$row =  array_map("utf8_encode", $row);
+	// 			if(!$header)
+	// 				$header = $row;
+	// 			else
+	// 				$data[] = array_combine($header, $row);
+	// 		}
+	// 		fclose($handle);
+	// 	}
+	// 	return $data;
+	// }
+
+	function csv_to_array($filename, $delimeter=';')
+	{
+		$header = [];
+		$row = 0;
+		# tip: dont do that every time calling csv_read(), pass handle as param instead ;)
+		$handle = fopen($filename, "r"); 
+
+		if ($handle === false) {
+			return false;
 		}
-		return $data;
+
+		while (($data = fgetcsv($handle, 10000, $delimeter)) !== false) {
+
+			$data =  array_map("utf8_encode", $data);
+			if (0 == $row) {
+				$header = $data;
+			} else {
+				# on demand usage
+				yield array_combine($header, $data);
+			}
+
+			$row++;
+		}
+		fclose($handle);
 	}
 
 
