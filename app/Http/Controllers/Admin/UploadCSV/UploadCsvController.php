@@ -362,339 +362,347 @@ class UploadCsvController extends Controller
      * @return [boolean] [success or fail]
      * @author Praveen <praveen@wizroots.com>
      */
-    // public function uploadPOCSVFile(Request $request)
-    // {
-    //   try
-    //   {
-    //     ini_set('max_execution_time', 5000);
-    //     $delimiter = ";";
-    //     $path     = $request->file('file')->getRealPath();
-    //     $filename = strtok($request->file('file')->getClientOriginalName(), " ");
-        
-    //     if (!preg_match('/ORC_M3_PO_FILE/',$filename))
-    //     {
-    //       return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
-    //     }
+  // public function uploadPOCSVFile(Request $request)
+  // {
+  //   try
+  //   {
+  //     ini_set('max_execution_time', 5000);
+  //     $delimiter = ";";
+  //     $path     = $request->file('file')->getRealPath();
+  //     $filename = strtok($request->file('file')->getClientOriginalName(), " ");
 
-    //     // $data     =  $this->upload->csv_to_array($path,$delimiter);
+  //     if (!preg_match('/ORC_M3_PO_FILE/',$filename))
+  //     {
+  //       return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
+  //     }
 
-    //     $temp_parcel_array = [];
-    //     $parcel_array = [];
+  //     // $data     =  $this->upload->csv_to_array($path,$delimiter);
 
-    //     foreach ($this->upload->csv_to_array($path,$delimiter) as $value)
-    //     {
-    //       if (
-    //         Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false
-    //         && trim($value['SUPPLIER EMAIL']) != '_'
-    //         && trim($value['SUPPLIER EMAIL']) != ''
-    //       ) {
-    //         // new customer
-    //         $this->upload->createCustomer($value);
-    //       }
+  //     $temp_parcel_array = [];
+  //     $parcel_array = [];
 
-    //       $parcel_details_uvc = OrchestraParcelDetails::where('UVC', trim($value['REFERENCE CODE']))->exists();
-    //       if ($parcel_details_uvc)
-    //       {
-    //         $parcel_details_po = OrchestraParcelDetails::where([
-    //                                                             ['UVC', trim($value['REFERENCE CODE'])], 
-    //                                                             ['BuyerPONo', trim($value['PO'])],
-    //                                                           ])->exists();
-    //         if ($parcel_details_po)
-    //         {  
-    //           $parcel_details_sku_code = OrchestraParcelDetails::where([
-    //                                                                     ['UVC', trim($value['REFERENCE CODE'])],
-    //                                                                     ['BuyerPONo', trim($value['PO'])],
-    //                                                                     ['SKU_Code', trim($value['SKU CODE'])],
-    //                                                                   ])->exists();
-    //           if($parcel_details_sku_code)
-    //           {
-    //             $parcel_details_last_date = OrchestraParcelDetails::where([
-    //                                                                         ['UVC', trim($value['REFERENCE CODE'])],
-    //                                                                         ['BuyerPONo', trim($value['PO'])],
-    //                                                                         ['SKU_Code', trim($value['SKU CODE'])],
-    //                                                                         ['Po_Change_Date', '<>', trim($value['PO CHANGE DATE'])],
-    //                                                                       ])->exists();
+  //     foreach ($this->upload->csv_to_array($path,$delimiter) as $value)
+  //     {
+  //       if (
+  //         Customer::where('factory_code', trim($value['SUPPLIER CODE']))->exists() === false
+  //         && trim($value['SUPPLIER EMAIL']) != '_'
+  //         && trim($value['SUPPLIER EMAIL']) != ''
+  //       ) {
+  //         // new customer
+  //         $this->upload->createCustomer($value);
+  //       }
 
-    //             if($parcel_details_last_date)
-    //             {
-    //               // collision. update temp parcel details table
-    //                $this->upload->updateOrchestraTempParcelDetails($value);
-    //             }
-    //           }
-    //           else
-    //           {
-    //             $parcel_details_last_date = OrchestraParcelDetails::where([
-    //                                                                         ['UVC', trim($value['REFERENCE CODE'])],
-    //                                                                         ['BuyerPONo', trim($value['PO'])],
-    //                                                                         ['Po_Change_Date','<>',trim($value['PO CHANGE DATE'])],
-    //                                                                       ])->exists();
+  //       $parcel_details_uvc = OrchestraParcelDetails::where('UVC', trim($value['REFERENCE CODE']))->exists();
+  //       if ($parcel_details_uvc)
+  //       {
+  //         $parcel_details_po = OrchestraParcelDetails::where([
+  //                                                             ['UVC', trim($value['REFERENCE CODE'])], 
+  //                                                             ['BuyerPONo', trim($value['PO'])],
+  //                                                           ])->exists();
+  //         if ($parcel_details_po)
+  //         {  
+  //           $parcel_details_sku_code = OrchestraParcelDetails::where([
+  //                                                                     ['UVC', trim($value['REFERENCE CODE'])],
+  //                                                                     ['BuyerPONo', trim($value['PO'])],
+  //                                                                     ['SKU_Code', trim($value['SKU CODE'])],
+  //                                                                   ])->exists();
+  //           if($parcel_details_sku_code)
+  //           {
+  //             $parcel_details_last_date = OrchestraParcelDetails::where([
+  //                                                                         ['UVC', trim($value['REFERENCE CODE'])],
+  //                                                                         ['BuyerPONo', trim($value['PO'])],
+  //                                                                         ['SKU_Code', trim($value['SKU CODE'])],
+  //                                                                         ['Po_Change_Date', '<>', trim($value['PO CHANGE DATE'])],
+  //                                                                       ])->exists();
 
-    //             if($parcel_details_last_date)
-    //             {
-    //               //collision. update temp parcel details table 
-    //                $this->upload->updateOrchestraTempParcelDetails($value);
-    //             }
-    //             else 
-    //             {
-    //               $this->upload->insertOrchestraParcelDetails($value);
-    //             }
-    //           }
-    //         }
-    //         else
-    //         {
-    //           $this->upload->insertOrchestraParcelDetails($value);
-    //         }
-    //       }
-    //       else
-    //       {
-    //         $this->upload->insertOrchestraParcelDetails($value);
-    //       }
+  //             if($parcel_details_last_date)
+  //             {
+  //               // collision. update temp parcel details table
+  //                $this->upload->updateOrchestraTempParcelDetails($value);
+  //             }
+  //           }
+  //           else
+  //           {
+  //             $parcel_details_last_date = OrchestraParcelDetails::where([
+  //                                                                         ['UVC', trim($value['REFERENCE CODE'])],
+  //                                                                         ['BuyerPONo', trim($value['PO'])],
+  //                                                                         ['Po_Change_Date','<>',trim($value['PO CHANGE DATE'])],
+  //                                                                       ])->exists();
 
-    //       unset($value);
-    //     }
+  //             if($parcel_details_last_date)
+  //             {
+  //               //collision. update temp parcel details table 
+  //                $this->upload->updateOrchestraTempParcelDetails($value);
+  //             }
+  //             else 
+  //             {
+  //               $this->upload->insertOrchestraParcelDetails($value);
+  //             }
+  //           }
+  //         }
+  //         else
+  //         {
+  //           $this->upload->insertOrchestraParcelDetails($value);
+  //         }
+  //       }
+  //       else
+  //       {
+  //         $this->upload->insertOrchestraParcelDetails($value);
+  //       }
 
-    //     // if($parcel_array)
-    //     // {
-    //     //   $chunks = array_chunk($parcel_array, 20000);
-    //     //   foreach ($chunks as $key => $value) {
-    //     //     DB::table('orchestra_parcel_details')->insert($value);
-    //     //   }
-    //     // }
+  //       unset($value);
+  //     }
 
-    //     // if($temp_parcel_array)
-    //     // {
-    //     //   $chunks = array_chunk($temp_parcel_array, 20000);
-    //     //   foreach ($chunks as $key => $value) {
-    //     //     DB::table('temp_orchestra_parcel_details')->insert($value);
-    //     //   }
-          
-    //     // }
-        
-    //     $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
-    //   }
-    //   catch (\Exception $e)
-    //   {
-    //       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-    //   }
-    //   return $result;
-    // }
+  //     // if($parcel_array)
+  //     // {
+  //     //   $chunks = array_chunk($parcel_array, 20000);
+  //     //   foreach ($chunks as $key => $value) {
+  //     //     DB::table('orchestra_parcel_details')->insert($value);
+  //     //   }
+  //     // }
 
-    // /**
-    //  * method to upload the orchestra price csv file
-    //  * @return [type] [description]
-    //  */
-    // public function uploadPriceCSVFile(Request $request)
-    // {
-    //   try
-    //   {
-    //     ini_set('max_execution_time', 5000);
-    //     $delimiter = ";";
-    //     $path     = $request->file('file')->getRealPath();
-    //     $filename = strtok($request->file('file')->getClientOriginalName(), " ");
-       
-    //     // validate correct file or not
-    //     if (!preg_match('/ORC_M3_PRICE_FILE/',$filename))
-    //     {
-    //       return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
-    //     }
+  //     // if($temp_parcel_array)
+  //     // {
+  //     //   $chunks = array_chunk($temp_parcel_array, 20000);
+  //     //   foreach ($chunks as $key => $value) {
+  //     //     DB::table('temp_orchestra_parcel_details')->insert($value);
+  //     //   }
 
-    //     $array3 = [];
-    //     $array4 = [];
+  //     // }
 
-    //     // $data     =  $this->upload->csv_to_array($path,$delimiter);
+  //     $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully'], 200);
+  //   }
+  //   catch (\Exception $e)
+  //   {
+  //       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  //   }
+  //   return $result;
+  // }
 
-    //     // Foreach begins
-    //     foreach ($this->upload->csv_to_array($path,$delimiter) as $value)
-    //     {
-    //       // get po details from orchestra_parcel_details for this sku code.
-    //       $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))
-    //       ->select(
-    //         'SKU_Code',
-    //         'FactoryCode',
-    //         'BuyerPONo',
-    //         'Theme',
-    //         'Quantity',
-    //         'Color_Code',
-    //         'UVC',
-    //         'Size_Label',
-    //         'Po_Status_Code',
-    //         'Po_Status_Code_Description'
-    //       )
-    //       ->first();
+  // /**
+  //  * method to upload the orchestra price csv file
+  //  * @return [type] [description]
+  //  */
+  // public function uploadPriceCSVFile(Request $request)
+  // {
+  //   try
+  //   {
+  //     ini_set('max_execution_time', 5000);
+  //     $delimiter = ";";
+  //     $path     = $request->file('file')->getRealPath();
+  //     $filename = strtok($request->file('file')->getClientOriginalName(), " ");
 
-    //       // check sku code already exists or not 
-    //       $sku_exists = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($value['SKU CODE']))->exists();
-    //       if($sku_exists)
-    //       {
+  //     // validate correct file or not
+  //     if (!preg_match('/ORC_M3_PRICE_FILE/',$filename))
+  //     {
+  //       return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
+  //     }
 
-    //         // check PO details missing for this sku code (ie, PO number = null).
-    //         $po_missing = OrchestraParcelQuantityDetails::where([
-    //                                                               ['UVC_TCO', trim($value['SKU CODE'])],
-    //                                                               ['BuyerPONo', null],
-    //                                                             ])->exists();
+  //     $array3 = [];
+  //     $array4 = [];
 
-    //         if($po_missing)
-    //         {
-    //           // get po data for current uvc_tco value and update in parcel_quantity_details table.
-    //           if($parcel_details_data)
-    //           {
-    //             $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);  
-    //           }               
+  //     // $data     =  $this->upload->csv_to_array($path,$delimiter);
 
-    //         }
+  //     // Foreach begins
+  //     foreach ($this->upload->csv_to_array($path,$delimiter) as $value)
+  //     {
+  //       // get po details from orchestra_parcel_details for this sku code.
+  //       $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value['SKU CODE']))
+  //       ->select(
+  //         'SKU_Code',
+  //         'FactoryCode',
+  //         'BuyerPONo',
+  //         'Theme',
+  //         'Quantity',
+  //         'Color_Code',
+  //         'UVC',
+  //         'Size_Label',
+  //         'Po_Status_Code',
+  //         'Po_Status_Code_Description'
+  //       )
+  //       ->first();
 
-    //         // check price details already exists for this sku code with different Country_Code.
-    //         $diff_order = OrchestraParcelQuantityDetails::where([
-    //                                                               ['UVC_TCO', trim($value['SKU CODE'])],
-    //                                                               ['Country_Code', trim($value['COUNTRY CODE'])],
-    //                                                             ])->exists();
+  //       // check sku code already exists or not 
+  //       $sku_exists = OrchestraParcelQuantityDetails::where('UVC_TCO', trim($value['SKU CODE']))->exists();
+  //       if($sku_exists)
+  //       {
 
-    //         if ($diff_order)
-    //         {
-    //           // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
-    //           $quantity_date = OrchestraParcelQuantityDetails::where([
-    //                                                                     ['UVC_TCO', trim($value['SKU CODE'])],
-    //                                                                     ['Country_Code', trim($value['COUNTRY CODE'])],
-    //                                                                     ['Last_Change_Date', '<>', trim($value['LAST_CHANGE_DATE'])],
-    //                                                                   ])->exists();
+  //         // check PO details missing for this sku code (ie, PO number = null).
+  //         $po_missing = OrchestraParcelQuantityDetails::where([
+  //                                                               ['UVC_TCO', trim($value['SKU CODE'])],
+  //                                                               ['BuyerPONo', null],
+  //                                                             ])->exists();
 
-    //           if($quantity_date)
-    //           {
-    //             // collision. update temp orchestra parcel quantity details table 
-    //             $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
-    //           }
-              
-    //         }
-    //         else
-    //         {
-    //           // check price details already exists with same UVC_TCO & Last_Change_Date
-    //           $quantity_date = OrchestraParcelQuantityDetails::where([
-    //                                                                   ['UVC_TCO', trim($value['SKU CODE'])],
-    //                                                                   ['Last_Change_Date', trim($value['LAST_CHANGE_DATE'])],
-    //                                                                 ])->exists();
-              
-    //           // insert price details, iff order with same sku code, country code and last change date doesn't exists.
-    //           if($quantity_date)
-    //           {
-    //             // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-    //             // if($parcel_details_data)
-    //             // {
-    //               $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
-    //             //}
-    //           }
-    //           else 
-    //           {
-    //             // collision. update temp orchestra parcel quantity details table 
-    //              $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
-    //           }
-    //         }
-    //       }
-    //       else 
-    //       {
-    //         // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-    //         // if($parcel_details_data)
-    //         // {
-    //           $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
-    //         //}
-    //       }
-    //       unset($value);
-    //     }
-    //     // end of foreach
+  //         if($po_missing)
+  //         {
+  //           // get po data for current uvc_tco value and update in parcel_quantity_details table.
+  //           if($parcel_details_data)
+  //           {
+  //             $this->upload->updateOrchestraParcelQuantityPODetails($parcel_details_data);  
+  //           }               
 
-    //     // if($array3)
-    //     // {
-    //     //   $chunks = array_chunk($array3, 20000);
-    //     //   foreach ($chunks as $key => $value) {
-    //     //     DB::table('temp_orchestra_parcel_quantity_details')->insert($value);
+  //         }
 
-    //     //   }
-    //     // }
+  //         // check price details already exists for this sku code with different Country_Code.
+  //         $diff_order = OrchestraParcelQuantityDetails::where([
+  //                                                               ['UVC_TCO', trim($value['SKU CODE'])],
+  //                                                               ['Country_Code', trim($value['COUNTRY CODE'])],
+  //                                                             ])->exists();
 
-    //     // if($array4)
-    //     // {
-    //     //   $chunks = array_chunk($array4, 20000);
-    //     //   foreach ($chunks as $key => $value) {
-    //     //     DB::table('orchestra_parcel_quantity_details')->insert($value);
+  //         if ($diff_order)
+  //         {
+  //           // check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
+  //           $quantity_date = OrchestraParcelQuantityDetails::where([
+  //                                                                     ['UVC_TCO', trim($value['SKU CODE'])],
+  //                                                                     ['Country_Code', trim($value['COUNTRY CODE'])],
+  //                                                                     ['Last_Change_Date', '<>', trim($value['LAST_CHANGE_DATE'])],
+  //                                                                   ])->exists();
 
-    //     //   }
-    //     // }
+  //           if($quantity_date)
+  //           {
+  //             // collision. update temp orchestra parcel quantity details table 
+  //             $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
+  //           }
 
-    //     $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
-    //   }
-    //   catch (\Exception $e)
-    //   {
-    //       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-    //   }
-    //   return $result;
-    // }
+  //         }
+  //         else
+  //         {
+  //           // check price details already exists with same UVC_TCO & Last_Change_Date
+  //           $quantity_date = OrchestraParcelQuantityDetails::where([
+  //                                                                   ['UVC_TCO', trim($value['SKU CODE'])],
+  //                                                                   ['Last_Change_Date', trim($value['LAST_CHANGE_DATE'])],
+  //                                                                 ])->exists();
 
-    public function uploadPOCSVFile(Request $request)
-    {
-      try
-      {
-        ini_set('max_execution_time', 5000);
-        $delimiter = ";";
-        $filename = strtok($request->file('file')->getClientOriginalName(), " ");
-        
-        if (!preg_match('/ORC_M3_PO_FILE/',$filename))
-        {
-          return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
-        }
+  //           // insert price details, iff order with same sku code, country code and last change date doesn't exists.
+  //           if($quantity_date)
+  //           {
+  //             // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+  //             // if($parcel_details_data)
+  //             // {
+  //               $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
+  //             //}
+  //           }
+  //           else 
+  //           {
+  //             // collision. update temp orchestra parcel quantity details table 
+  //              $this->upload->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
+  //           }
+  //         }
+  //       }
+  //       else 
+  //       {
+  //         // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+  //         // if($parcel_details_data)
+  //         // {
+  //           $this->upload->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
+  //         //}
+  //       }
+  //       unset($value);
+  //     }
+  //     // end of foreach
 
-        DB::table('dump_orchestra_po_csv')->truncate();
+  //     // if($array3)
+  //     // {
+  //     //   $chunks = array_chunk($array3, 20000);
+  //     //   foreach ($chunks as $key => $value) {
+  //     //     DB::table('temp_orchestra_parcel_quantity_details')->insert($value);
 
-        $fileName = time().'.csv';  
-   
-        $request->file->move(public_path('uploads'), $fileName);
+  //     //   }
+  //     // }
 
-        $response =DB::statement(DB::raw("COPY dump_orchestra_po_csv FROM '" . public_path('uploads/'.$fileName) . "' DELIMITER '".$delimiter."' CSV HEADER encoding 'windows-1251'"));
+  //     // if($array4)
+  //     // {
+  //     //   $chunks = array_chunk($array4, 20000);
+  //     //   foreach ($chunks as $key => $value) {
+  //     //     DB::table('orchestra_parcel_quantity_details')->insert($value);
 
-        File::delete(public_path('uploads/'.$fileName));
+  //     //   }
+  //     // }
 
-        $result = response()->json(['error' =>false,'message' => 'PO CSV File Uploaded Successfully', '$response' => $response], 200);
-      }
-      catch (\Exception $e)
-      {
-          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
-      return $result;
+  //     $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully'], 200);
+  //   }
+  //   catch (\Exception $e)
+  //   {
+  //       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  //   }
+  //   return $result;
+  // }
+
+  public function uploadPOCSVFile(Request $request)
+  {
+    $delimiter = ";";
+    $original_file_name = strtok($request->file('file')->getClientOriginalName(), " ");
+
+    if (!preg_match('/ORC_M3_PO_FILE/', $original_file_name)) {
+
+      return response()->json(['error' => true, 'message' => 'Invalid File'], 422);
     }
 
-    /**
-     * method to upload the orchestra price csv file
-     * @return [type] [description]
-     */
-    public function uploadPriceCSVFile(Request $request)
-    {
-      try
-      {
-        ini_set('max_execution_time', 5000);
-        $delimiter = ";";
-        $filename = strtok($request->file('file')->getClientOriginalName(), " ");
-       
-        // validate correct file or not
-        if (!preg_match('/ORC_M3_PRICE_FILE/',$filename))
-        {
-          return response()->json(['error' =>true,'message' => 'Invalid File'], 400);
-        }
-        
-        DB::table('dump_orchestra_price_csv')->truncate();
-        
-        $fileName = time().'.csv';  
-   
-        $request->file->move(public_path('uploads'), $fileName);
+    DB::table('dump_orchestra_po_csv')->truncate();
 
-        
-        $response = DB::statement(DB::raw("COPY dump_orchestra_price_csv FROM '" . public_path('uploads/'.$fileName) . "' DELIMITER '".$delimiter."' CSV HEADER encoding 'windows-1251'"));
+    $file_name = time() . '.csv';
 
-        File::delete(public_path('uploads/'.$fileName));
-        $result = response()->json(['error' =>false,'message' => 'Price CSV File Uploaded Successfully', '$response' => $response], 200);
-      }
-      catch (\Exception $e)
-      {
-          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
-      return $result;
+    $request->file->move(
+      public_path('uploads'),
+      $file_name
+    );
+
+    try {
+
+      DB::statement(DB::raw("COPY dump_orchestra_po_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
+
+      File::delete(public_path('uploads/' . $file_name));
+
+      return response()->json(['error' => false, 'message' => 'PO CSV File Uploaded Successfully'], 200);
+    } catch (\Exception $e) {
+
+      DB::table('dump_orchestra_po_csv')->truncate();
+
+      File::delete(public_path('uploads/' . $file_name));
+
+      return response()->json(['error' => true, 'message' => 'Please upload valid PO CSV file.'], 422);
     }
+  }
+
+  /**
+   * method to upload the orchestra price csv file
+   * @return [type] [description]
+   */
+  public function uploadPriceCSVFile(Request $request)
+  {
+    $delimiter = ";";
+    $original_file_name = strtok($request->file('file')->getClientOriginalName(), " ");
+
+    // validate correct file or not
+    if (!preg_match('/ORC_M3_PRICE_FILE/', $original_file_name)) {
+
+      return response()->json(['error' => true, 'message' => 'Invalid File'], 422);
+    }
+
+    DB::table('dump_orchestra_price_csv')->truncate();
+
+    $file_name = time() . '.csv';
+
+    $request->file->move(
+      public_path('uploads'),
+      $file_name
+    );
+
+    try {
+
+      DB::statement(DB::raw("COPY dump_orchestra_price_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
+
+      File::delete(public_path('uploads/' . $file_name));
+
+      return response()->json(['error' => false, 'message' => 'Price CSV File Uploaded Successfully'], 200);
+    } catch (\Exception $e) {
+
+      DB::table('dump_orchestra_price_csv')->truncate();
+
+      File::delete(public_path('uploads/' . $file_name));
+
+      return response()->json(['error' => true, 'message' => 'Please upload valid Price CSV file.'], 422);
+    }
+  }
     
 }
