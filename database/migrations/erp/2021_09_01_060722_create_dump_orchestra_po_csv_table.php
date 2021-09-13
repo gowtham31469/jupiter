@@ -14,13 +14,13 @@ class CreateDumpOrchestraPoCsvTable extends Migration
     public function up()
     {
         Schema::create('dump_orchestra_po_csv', function (Blueprint $table) {
-			$table->string('PO')->nullable()->default(null);
+			$table->string('PO')->nullable()->default(null)->index();;
 			$table->string('PO LINE NUMBER')->nullable()->default(null);
 			$table->string('PO LINE SUFFIX')->nullable()->default(null);
 			$table->string('PO STATUS CODE')->nullable()->default(null);
 			$table->string('PO STATUS CODE DESCRIPTION')->nullable()->default(null);
 			$table->string('SEASON CODE')->nullable()->default(null);
-			$table->string('SKU CODE')->nullable()->default(null);
+			$table->string('SKU CODE')->nullable()->default(null)->index();;
 			$table->string('STYLE CODE')->nullable()->default(null);
 			$table->string('REFERENCE CODE')->nullable()->default(null);
 			$table->string('ACTIVITY CODE')->nullable()->default(null);

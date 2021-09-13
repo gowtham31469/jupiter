@@ -14,7 +14,7 @@ class CreateDumpOrchestraPriceCsvTable extends Migration
     public function up()
     {
         Schema::create('dump_orchestra_price_csv', function (Blueprint $table) {
-			$table->string('SKU CODE')->nullable()->default(null);
+			$table->string('SKU CODE')->nullable()->default(null)->index();
 			$table->string('SEASON CODE')->nullable()->default(null);
 			$table->string('SKU BARCODE')->nullable()->default(null);
             $table->string('COUNTRY CODE')->nullable()->default(null);
