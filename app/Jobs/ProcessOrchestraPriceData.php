@@ -41,7 +41,6 @@ class ProcessOrchestraPriceData implements ShouldQueue
         
         foreach ($this->price_data as $value) {
             // get po details from orchestra_parcel_details for this sku code.
-            // $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value->{'SKU CODE'}))
             $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($value->{'SKU CODE'}))
             ->select(
             'SKU_Code',
@@ -58,7 +57,7 @@ class ProcessOrchestraPriceData implements ShouldQueue
             ->first();
 
             // check sku code already exists or not 
-            if (DB::table('orchestra_parcel_quantity_details')->select("id")->where('UVC_TCO', trim($value->{'SKU CODE'}))->exists()) {
+            if (DB::table('orchestra_parcel_quantity_details')->select("id")->where('UVC_TCO', trim($value->{'SKU CODE'}))->exists() && $parcel_details_data) {
 
                 // check PO details missing for this sku code (ie, PO number = null).
                 $po_missing = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
@@ -68,10 +67,8 @@ class ProcessOrchestraPriceData implements ShouldQueue
 
                 if ($po_missing) {
                     // get po data for current uvc_tco value and update in parcel_quantity_details table.
-                    if ($parcel_details_data) {
                         $upload_obj->updateOrchestraParcelQuantityPODetails($parcel_details_data);
                         continue;
-                    }
                 }
 
                 // check price details already exists for this sku code with different Country_Code.
@@ -103,11 +100,10 @@ class ProcessOrchestraPriceData implements ShouldQueue
                     // insert price details, iff order with same sku code, country code and last change date doesn't exists.
                     if ($quantity_date) {
                         // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-                        // if($parcel_details_data)
-                        // {
+                       
                         $upload_obj->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
                         continue;
-                        //}
+
                     } else {
                         // collision. update temp orchestra parcel quantity details table 
                         $upload_obj->updateOrchestraTempParcelQuantityDetails($value, $parcel_details_data);
@@ -116,11 +112,10 @@ class ProcessOrchestraPriceData implements ShouldQueue
                 }
             } else {
                 // insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
-                // if($parcel_details_data)
-                // {
+                
                 $upload_obj->insertOrchestraParcelQuantityDetails($value, $parcel_details_data);
                 continue;
-                //}
+                
             }
         }
     }

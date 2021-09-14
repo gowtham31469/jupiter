@@ -35,7 +35,7 @@ class ProcessOrchestraPOData implements ShouldQueue
     public function handle()
     {
       DB::connection()->disableQueryLog();
-        DB::table('dump_orchestra_po_csv')->orderBy('SKU CODE')->chunk(10000, function ($po_data) {
+        DB::table('dump_orchestra_po_csv')->orderBy('SKU CODE')->chunk(5000, function ($po_data) {
             $upload_obj = new Uploads();
 
             $customer_data = $po_data->whereNotIn('SUPPLIER EMAIL', ['_','',null])->unique('SUPPLIER CODE');
