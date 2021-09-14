@@ -18,7 +18,9 @@
                 <div class="parcel-details card">
                     <h4><a class="btn btn-primary btn-sm pull-right upload-csv-files ">Upload</a>Orchestra CSV Files</h4>
                     <hr/>
-
+                    @if($errors->any())
+                    {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
+                    @endif
                     <div class="row">
                         <div class="col-md-6">
                             <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>PO file</strong> </h5>
@@ -77,28 +79,24 @@
                 
                 while(filename.includes("ORC_M3_PO_FILE") === false)
                 {                  
-                    $('.snackbar_span').html("Upload correct file !!");
+                    $('.snackbar_span').html("Select a valid CSV file !!");
                     showSnackbar();
                     this.removeFile(file);
                 }
+
+                if (this.files.length > 1) {
+                 this.removeFile(file);
+                }
             });
     
-            this.on("complete", function(file){        
-                 this.removeFile(file);
-                 $('.snackbar_span').html("PO File uploaded successfully");
-                 showSnackbar();
-            });
             this.on("success", function(file, response){ 
                 $('.snackbar_span').html("PO File uploaded successfully");
                 showSnackbar();
                 $('.dz-remove').hide();
                  this.removeFile(file);
             });
-            this.on("error", function(file, response) {
-                 $('.snackbar_span').html("You can only upload a maximum 1 file. ");
-                 showSnackbar();
-                 this.removeFile(file);
-                 $(".upload-csv-files").addClass("hidden");
+            this.on("error", function (file, responseText) {
+                 $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(responseText.message);
             });
         }
     };
@@ -114,7 +112,7 @@
     
         init: function() {
             myDropzone2 = this; // closure
-    
+            
             // You might want to show the submit button only when files are dropped here:
             this.on("addedfile", function(file) {
                 // Show submit button here and/or inform user to click it.
@@ -123,15 +121,14 @@
                 
                 while(filename.includes("ORC_M3_PRICE_FILE") === false)
                 {                  
-                    $('.snackbar_span').html("Upload correct file !!");
+                    $('.snackbar_span').html("Select a valid CSV file !!");
                     showSnackbar();
                     this.removeFile(file);
                 }
-            });
-            this.on("complete", function(file){   
-                $('.snackbar_span').html("Price CSV File uploaded successfully");
-                showSnackbar();     
-                this.removeFile(file);
+
+                if (this.files.length > 1) {
+                 this.removeFile(file);
+                }
             });
             this.on("success", function(file, response){ 
                 $('.snackbar_span').html("Price CSV File uploaded successfully");
@@ -140,10 +137,7 @@
                  this.removeFile(file);
             });
             this.on("error", function(file, response) {
-                $('.snackbar_span').html("You can only upload a maximum 1 file. ");
-                showSnackbar();
-                this.removeFile(file);
-                $(".upload-csv-files").addClass("hidden");
+                $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.message);
             });
         }
     };
