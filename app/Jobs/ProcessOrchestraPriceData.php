@@ -37,25 +37,25 @@ class ProcessOrchestraPriceData implements ShouldQueue
     public function handle()
     {
         DB::connection()->disableQueryLog();
-            $upload_obj = new Uploads();
-            
-            foreach ($this->price_data as $value) {
-                // get po details from orchestra_parcel_details for this sku code.
-                // $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value->{'SKU CODE'}))
-                $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($value->{'SKU CODE'}))
-                ->select(
-                'SKU_Code',
-                'FactoryCode',
-                'BuyerPONo',
-                'Theme',
-                'Quantity',
-                'Color_Code',
-                'UVC',
-                'Size_Label',
-                'Po_Status_Code',
-                'Po_Status_Code_Description'
-                )
-                ->first();
+        $upload_obj = new Uploads();
+        
+        foreach ($this->price_data as $value) {
+            // get po details from orchestra_parcel_details for this sku code.
+            // $parcel_details_data = OrchestraParcelDetails::where('SKU_Code', trim($value->{'SKU CODE'}))
+            $parcel_details_data = DB::table('orchestra_parcel_details')->where('SKU_Code', trim($value->{'SKU CODE'}))
+            ->select(
+            'SKU_Code',
+            'FactoryCode',
+            'BuyerPONo',
+            'Theme',
+            'Quantity',
+            'Color_Code',
+            'UVC',
+            'Size_Label',
+            'Po_Status_Code',
+            'Po_Status_Code_Description'
+            )
+            ->first();
 
             // check sku code already exists or not 
             if (DB::table('orchestra_parcel_quantity_details')->select("id")->where('UVC_TCO', trim($value->{'SKU CODE'}))->exists()) {
@@ -122,6 +122,6 @@ class ProcessOrchestraPriceData implements ShouldQueue
                 continue;
                 //}
             }
-            }
+        }
     }
 }

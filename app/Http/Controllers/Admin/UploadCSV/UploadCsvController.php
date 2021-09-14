@@ -393,13 +393,9 @@ class UploadCsvController extends Controller
       DB::statement(DB::raw("COPY dump_orchestra_po_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
 
       File::delete(public_path('uploads/' . $file_name));
-
-      DB::table('dump_orchestra_po_csv')->orderBy('SKU CODE')->chunk(5000, function ($po_data) {
           
-            ProcessOrchestraPOData::dispatch($po_data);
+      ProcessOrchestraPOData::dispatch();
           
-      });
-
       return response()->json(['error' => false, 'message' => 'PO CSV File Uploaded Successfully'], 200);
     } catch (\Exception $e) {
 
