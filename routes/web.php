@@ -485,8 +485,7 @@ Route::post('admin/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController
 Route::get('admin/upload-size-chart', 'Admin\UploadCSV\UploadCsvController@uploadSizeChart');
 Route::post('admin/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@uploadSizeChartCsv');
 
-Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
-Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
+Route::post('admin/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadCsvController@uploadOrchestraOrderCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
 Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
 Route::get('admin/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
@@ -1081,4 +1080,12 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::put('update-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
 	
+  });
+
+
+  Route::get('admin/data', function () {
+
+	$data =  App\DumpOrchestraPOCsv::with('price_data')->get()->toArray();
+	
+	return response()->json(['data' => $data], 200);
   });

@@ -15,22 +15,19 @@
             <div class="top-content">
             </div>
             <div class="main-content">
+                <div class="loader">
+                    <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+                </div>
                 <div class="parcel-details card">
                     <h4><a class="btn btn-primary btn-sm pull-right upload-csv-files ">Upload</a>Orchestra CSV Files</h4>
-                    <hr/>
+                    <hr />
                     @if($errors->any())
                     {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
                     @endif
                     <div class="row">
                         <div class="col-md-6">
-                            <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>PO file</strong> </h5>
-                            <form action="/file-upload" class="dropzone" id="po-csv-file">
-                                {{ csrf_field() }}
-                            </form>
-                        </div>
-                        <div class="col-md-6">
-                            <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>Price File</strong> </h5>
-                            <form action="/file-upload" class="dropzone" id="price-csv-file">
+                            <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>PO & Price files</strong> </h5>
+                            <form class="dropzone" id="orch-order-csv-file">
                                 {{ csrf_field() }}
                             </form>
                         </div>
@@ -57,105 +54,60 @@
         })
     })
 
-    Dropzone.options.poCsvFile = {
+    Dropzone.options.orchOrderCsvFile = {
 
         // Prevents Dropzone from uploading dropped files immediately
-        url:"upload-orchestra-po-file-csv",
+        url: "upload-orchestra-order-csv-files",
         autoProcessQueue: false,
-        maxFiles: 1,
-        acceptedFiles: ".csv, .xlsx, .xls",
+        maxFiles: 2,
+        minFiles: 2,
         addRemoveLinks: true,
-    
+        acceptedFiles: 'text/csv',
+        paramName: 'csv_files',
+        autoDiscover: false,
+        uploadMultiple:true,
         init: function() {
-             myDropzone1 = this; // closure
-    
-            // You might want to show the submit button only when 
-            // files are dropped here:
+            myDropzone1 = this;
+
+            this.on('processing', function(file) {
+                $(".loader").show();
+            });
+
             this.on("addedfile", function(file) {
-                // Show submit button here and/or inform user to click it.
-                //Original string 
-                var filename_array = [];
-                var filename       = file.name;    
-                
-                while(filename.includes("ORC_M3_PO_FILE") === false)
-                {                  
-                    $('.snackbar_span').html("Select a valid CSV file !!");
-                    showSnackbar();
+                if (this.files.length > 2) {
                     this.removeFile(file);
                 }
-
-                if (this.files.length > 1) {
-                 this.removeFile(file);
-                }
             });
-    
-            this.on("success", function(file, response){ 
-                $('.snackbar_span').html("PO File uploaded successfully");
+
+            this.on("success", function(file, response) {
+                $(".loader").hide();
+                $('.snackbar_span').html("CSV Files uploaded successfully");
                 showSnackbar();
                 $('.dz-remove').hide();
-                 this.removeFile(file);
+                this.removeFile(file);
             });
-            this.on("error", function (file, responseText) {
-                 $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(responseText.message);
-            });
-        }
-    };
-    
-    Dropzone.options.priceCsvFile = {
-    
-      // Prevents Dropzone from uploading dropped files immediately
-        url:"upload-orchestra-price-file-csv",
-        autoProcessQueue: false,
-        maxFiles: 1,
-        acceptedFiles: ".csv, .xlsx, .xls",
-        addRemoveLinks: true,
-    
-        init: function() {
-            myDropzone2 = this; // closure
-            
-            // You might want to show the submit button only when files are dropped here:
-            this.on("addedfile", function(file) {
-                // Show submit button here and/or inform user to click it.
-                //Original string 
-                var filename       = file.name; 
-                
-                while(filename.includes("ORC_M3_PRICE_FILE") === false)
-                {                  
-                    $('.snackbar_span').html("Select a valid CSV file !!");
-                    showSnackbar();
-                    this.removeFile(file);
-                }
 
-                if (this.files.length > 1) {
-                 this.removeFile(file);
-                }
+            this.on("error", function(file, responseText) {
+                $(".loader").hide();
+                $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(responseText.message);
             });
-            this.on("success", function(file, response){ 
-                $('.snackbar_span').html("Price CSV File uploaded successfully");
-                showSnackbar();
-                $('.dz-remove').hide();
-                 this.removeFile(file);
-            });
-            this.on("error", function(file, response) {
-                $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.message);
-            });
-        }
+        },
+        accept: function(file, done) {
+            if (file.name.includes("ORC_M3_PRICE_FILE") || file.name.includes("ORC_M3_PO_FILE")) {
+                done();
+            } else {
+                done('Error! Select valid CSV files !!');
+            }
+        },
     };
-    
-    
-    $('.upload-csv-files').on('click', function ()
-    {
-        if(myDropzone1.files.length === 1 && myDropzone2.files.length === 1)
-        {
+
+    $('.upload-csv-files').on('click', function() {
+        if (myDropzone1.files.length === 2) {
             myDropzone1.processQueue();
-            myDropzone2.processQueue();
-        }
-        else
-        {
-            $('.snackbar_span').html("Orchestra PO File and Price File Required.");
+        } else {
+            $('.snackbar_span').html("Orchestra PO File and Price Files are Required.");
             showSnackbar();
         }
     });
- 
 </script>
 @endsection
