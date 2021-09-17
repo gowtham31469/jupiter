@@ -29,7 +29,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                            @foreach($result_array as $key => $value)
+                            @foreach($parcel_details_array as $key => $value)
                             <tr>
                                <td>{{ $loop->iteration }}</td>
                                <td>{{ $value['UVC'] ?? '-' }}</td>

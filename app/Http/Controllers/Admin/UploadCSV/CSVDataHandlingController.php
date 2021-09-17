@@ -92,25 +92,11 @@ class CSVDataHandlingController extends Controller
         $UVC_TCO_array1 = [];
         foreach ($parcel_details as $key => $value) {
           array_push($UVC_TCO_array1, $value['UVC_TCO']);
+          unset($value);
         }
-        unset($value);
-
          $parcel_details_array = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'), 'UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'SupplierName', DB::raw("'Price Details Missing ' as \"file_status\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->get()->toArray();
-
-         // check for po data missing for SKU Code(In price CSV)
-         $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
-
-         $UVC_TCO_array2 = [];
-         foreach ($parcel_qty_details as $key => $value) {
-           array_push($UVC_TCO_array2, $value['UVC_TCO']);
-         }
-         unset($value);
-
-         $parcel_qty_details_array = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'), 'UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'Supplier_Name as SupplierName', DB::raw("'PO Details Missing' as \"file_status\""))->whereNotIn('UVC_TCO', $UVC_TCO_array2)->get()->toArray();
-
-          $result_array = array_merge($parcel_qty_details_array, $parcel_details_array);
-
-          return View::make('Admin/Upload CSV/partial-csv-data', compact(['result_array']));
+         
+          return View::make('Admin/Upload CSV/partial-csv-data', compact(['parcel_details_array']));
         }
         else
         {
