@@ -5,10 +5,6 @@ namespace App\Http\Controllers\Admin\UploadCSV;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use View;
-use App\OrchestraParcelDetails;
-use App\OrchestraParcelQuantityDetails;
-use App\TempOrchestraParcelQuantityDetails;
-use App\TempOrchestraParcelDetails;
 use App\Classes\Uploads;
 use App\Classes\Modules;
 use App\TescoCountries;
@@ -18,15 +14,10 @@ use App\TescoKidsWarningStatements;
 use App\TescoAdditionalInstructions;
 use Carbon\Carbon;
 use DB;
-use App\Customer;
-use File;
-
-use App\Jobs\ProcessOrchestraPOData;
-use App\Jobs\ProcessOrchestraPriceData;
-
 
 class UploadCsvController extends Controller
 {
+    protected $upload;
     /**
      * Create a new controller instance.
      * @author <Praveen>
@@ -361,98 +352,35 @@ class UploadCsvController extends Controller
     }
 
   /**
-   * method to upload the the orchestra po csv file
+   * method to upload the the orchestra po and price csv files
    * @return [boolean] [success or fail]
    * @author Praveen <praveen@wizroots.com>
    */
 
-  public function uploadPOCSVFile(Request $request)
+  public function uploadOrchestraOrderCSVFile(Request $request)
   {
+    $success = 0;
 
-    DB::connection()->disableQueryLog();
+    if ($request->hasFile('csv_files')) {
+      foreach ($request->csv_files as $csv_file) {
 
-    $delimiter = ";";
-    $original_file_name = strtok($request->file('file')->getClientOriginalName(), " ");
+        $original_file_name = strtok($csv_file->getClientOriginalName(), " ");
 
-    if (!preg_match('/ORC_M3_PO_FILE/', $original_file_name)) {
+        if (!preg_match('/ORC_M3_PO_FILE/', $original_file_name) && !preg_match('/ORC_M3_PRICE_FILE/', $original_file_name)) {
 
-      return response()->json(['error' => true, 'message' => 'Invalid File'], 422);
+          return response()->json(['error' => true, 'message' => 'Invalid Files'], 422);
+        }
+
+        $success = $this->upload->bulkDumpOrchCsvData($csv_file, $original_file_name, $success);
+      }
     }
 
-    DB::table('dump_orchestra_po_csv')->truncate();
-
-    $file_name = time() . '.csv';
-
-    $request->file->move(
-      public_path('uploads'),
-      $file_name
-    );
-
-    try {
-
-      DB::statement(DB::raw("COPY dump_orchestra_po_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
-
-      File::delete(public_path('uploads/' . $file_name));
-          
-      ProcessOrchestraPOData::dispatch();
-          
-      return response()->json(['error' => false, 'message' => 'PO CSV File Uploaded Successfully'], 200);
-    } catch (\Exception $e) {
-
-      DB::table('dump_orchestra_po_csv')->truncate();
-
-      File::delete(public_path('uploads/' . $file_name));
-
-      return response()->json(['error' => true, 'message' => 'Please upload valid PO CSV file.'], 422);
+    if ($success == 2) {
+      $this->upload->validateCsvData();
+      return response()->json(['error' => false, 'message' => 'CSV Files Uploaded Successfully'], 200);
+    } else {
+      return response()->json(['error' => true, 'message' => 'Please upload valid CSV files.'], 422);
     }
   }
 
-  /**
-   * method to upload the orchestra price csv file
-   * @return [type] [description]
-   */
-  public function uploadPriceCSVFile(Request $request)
-  {
-    DB::connection()->disableQueryLog();
-    $delimiter = ";";
-    $original_file_name = strtok($request->file('file')->getClientOriginalName(), " ");
-
-    // validate correct file or not
-    if (!preg_match('/ORC_M3_PRICE_FILE/', $original_file_name)) {
-
-      return response()->json(['error' => true, 'message' => 'Invalid File'], 422);
-    }
-
-    DB::table('dump_orchestra_price_csv')->truncate();
-
-    $file_name = time() . '.csv';
-
-    $request->file->move(
-      public_path('uploads'),
-      $file_name
-    );
-
-    try {
-
-      DB::statement(DB::raw("COPY dump_orchestra_price_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
-
-      File::delete(public_path('uploads/' . $file_name));
-
-      DB::table('dump_orchestra_price_csv')->orderBy('SKU CODE')->chunk(5000, function ($price_data) {
-          
-            ProcessOrchestraPriceData::dispatch($price_data);
-          
-      });
-
-      return response()->json(['error' => false, 'message' => 'Price CSV File Uploaded Successfully'], 200);
-    } catch (\Exception $e) {
-
-      DB::table('dump_orchestra_price_csv')->truncate();
-
-      File::delete(public_path('uploads/' . $file_name));
-
-      return response()->json(['error' => true, 'message' => 'Please upload valid Price CSV file.'], 422);
-    }
-  }
-    
 }
