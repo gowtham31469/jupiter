@@ -1,13 +1,12 @@
 <?php
 namespace App\Classes;
-use App\OrchestraParcelDetails;
+use App\DumpOrchestraPOCsv;
 use App\OrchestraParcelQuantityDetails;
-use App\TempOrchestraParcelQuantityDetails;
-use App\TempOrchestraParcelDetails;
 use App\Customer;
 use App\CustomerBillAddress;
 use App\CustomerContactPersons;
 use DB;
+use File;
 
 class Uploads
 {
@@ -74,7 +73,7 @@ class Uploads
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	public function insertOrchestraParcelDetails($value)
+	public function insertOrchestraParcelDetails($value, $is_price_data_exists)
 	{
 		DB::table('orchestra_parcel_details')->insert([
 			'FactoryCode'                        => trim($value->{'SUPPLIER CODE'}) === '_'?null:trim($value->{'SUPPLIER CODE'}),
@@ -157,6 +156,7 @@ class Uploads
 			'UVC_TCO'                            => trim($value->{'SKU CODE'}) === '_'?null:trim($value->{'SKU CODE'}),
 			'Size'                               => trim($value->{'SIZE LABEL'}) === '_'?null:trim($value->{'SIZE LABEL'}),
 			'ParcelBarCode'                      => trim($value->{'STANDARD BARCODE'}) === '_'?null:trim($value->{'STANDARD BARCODE'}),
+			'is_price_data_exists'               => $is_price_data_exists
 			 ]);
 	}
 
@@ -201,7 +201,7 @@ class Uploads
 	 * @return void
 	 * @author Praveen <praveen@wizroots.com>
 	 */
-	public function updateOrchestraTempParcelDetails($value)
+	public function updateOrchestraTempParcelDetails($value, $is_price_data_exists)
 	{
 		$data = [];
 
@@ -300,6 +300,7 @@ class Uploads
 				'UVC_TCO'                            => trim($value->{'SKU CODE'}) === '_'?null:trim($value->{'SKU CODE'}),
 				'Size'                               => trim($value->{'SIZE LABEL'}) === '_'?null:trim($value->{'SIZE LABEL'}),
 				'ParcelBarCode'                      => trim($value->{'STANDARD BARCODE'}) === '_'?null:trim($value->{'STANDARD BARCODE'}),
+				'is_price_data_exists'               => $is_price_data_exists
 				 ]);
 		}
 
@@ -363,6 +364,187 @@ class Uploads
 					'Po_Status_Code'              => trim($parcel_details_data->{'PO STATUS CODE'}) === '_'?null:trim($parcel_details_data->{'PO STATUS CODE'}),
 					'Po_Status_Code_Description'  => trim($parcel_details_data->{'PO STATUS CODE DESCRIPTION'}) === '_'?null:trim($parcel_details_data->{'PO STATUS CODE DESCRIPTION'}),
 					]);
+	}
+
+	public function bulkDumpOrchCsvData($csv_file, $original_file_name, $success)
+	{
+		DB::connection()->disableQueryLog();
+		$file_name = time() . '.csv';
+		$delimiter = ";";
+
+		$csv_file->move(
+			public_path('uploads'),
+			$file_name
+		);
+
+		try {
+			if (preg_match('/ORC_M3_PO_FILE/', $original_file_name)) {
+
+			DB::table('dump_orchestra_po_csv')->truncate();
+
+			DB::statement(DB::raw("COPY dump_orchestra_po_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
+			} else {
+
+			DB::table('dump_orchestra_price_csv')->truncate();
+
+			DB::statement(DB::raw("COPY dump_orchestra_price_csv FROM '" . public_path('uploads/' . $file_name) . "' DELIMITER '" . $delimiter . "' CSV HEADER encoding 'windows-1251'"));
+			}
+
+			File::delete(public_path('uploads/' . $file_name));
+			$success++;
+		} catch (\Exception $e) {
+
+			DB::table('dump_orchestra_po_csv')->truncate();
+			DB::table('dump_orchestra_price_csv')->truncate();
+
+			File::delete(public_path('uploads/' . $file_name));
+		}
+
+		return $success;
+		
+	}
+
+	public function validateCsvData()
+	{
+		DB::connection()->disableQueryLog();
+
+		$po_data = DumpOrchestraPOCsv::with('price_data')->get();
+
+		$customer_data = $po_data->whereNotIn('SUPPLIER EMAIL', ['_','',null])->unique('SUPPLIER CODE');
+
+		$this->createCustomer($customer_data);
+
+		foreach ($po_data as $value) {
+
+				$is_price_data_exists = $value->price_data()->count() === 0?0:1;
+				
+				if (DB::table('orchestra_parcel_details')->select("id")->where('UVC', trim($value->{'REFERENCE CODE'}))->exists())
+				{
+					$parcel_details_po = DB::table('orchestra_parcel_details')->select("id")->where([
+																	['UVC', trim($value->{'REFERENCE CODE'})], 
+																	['BuyerPONo', trim($value->PO)],
+																	])->exists();
+				if ($parcel_details_po)
+				{  
+					$parcel_details_sku_code = DB::table('orchestra_parcel_details')->select("id")->where([
+																			['UVC', trim($value->{'REFERENCE CODE'})],
+																			['BuyerPONo', trim($value->PO)],
+																			['SKU_Code', trim($value->{'SKU CODE'})],
+																			])->exists();
+					if($parcel_details_sku_code)
+					{
+					$parcel_details_last_date = DB::table('orchestra_parcel_details')->select("id")->where([
+																				['UVC', trim($value->{'REFERENCE CODE'})],
+																				['BuyerPONo', trim($value->PO)],
+																				['SKU_Code', trim($value->{'SKU CODE'})],
+																				['Po_Change_Date', '<>', trim($value->{'PO CHANGE DATE'})],
+																				])->exists();
+		
+					if($parcel_details_last_date)
+					{
+						// collision. update temp parcel details table
+						$this->updateOrchestraTempParcelDetails($value, $is_price_data_exists);
+						continue;
+					}
+					}
+					else
+					{
+						$parcel_details_last_date = DB::table('orchestra_parcel_details')->select("id")->where([
+																				['UVC', trim($value->{'REFERENCE CODE'})],
+																				['BuyerPONo', trim($value->PO)],
+																				['Po_Change_Date','<>',trim($value->{'PO CHANGE DATE'})],
+																				])->exists();
+		
+					if($parcel_details_last_date)
+					{
+						//collision. update temp parcel details table 
+						$this->updateOrchestraTempParcelDetails($value, $is_price_data_exists);
+						continue;
+					}
+					else 
+					{
+						$this->insertOrchestraParcelDetails($value, $is_price_data_exists);
+						continue;
+					}
+					}
+				}
+				else
+				{
+					$this->insertOrchestraParcelDetails($value, $is_price_data_exists);
+					continue;
+				}
+				}
+				else
+				{
+				$this->insertOrchestraParcelDetails($value, $is_price_data_exists);
+				continue;
+				}
+				
+			foreach ($value->price_data as $key => $price_row) {
+
+			// check sku code already exists or not 
+			if (DB::table('orchestra_parcel_quantity_details')->select("id")->where('UVC_TCO', trim($price_row->{'SKU CODE'}))->exists()) {
+
+				// check PO details missing for this sku code (ie, PO number = null).
+				$po_missing = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+					['UVC_TCO', trim($price_row->{'SKU CODE'})],
+					['BuyerPONo', null],
+				])->exists();
+
+				if ($po_missing) {
+					// get po data for current uvc_tco value and update in parcel_quantity_details table.
+					$this->updateOrchestraParcelQuantityPODetails($value);
+					continue;
+				}
+
+				// check price details already exists for this sku code with same Country_Code.
+				$order_with_same_countrycode = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+					['UVC_TCO', trim($price_row->{'SKU CODE'})],
+					['Country_Code', trim($price_row->{'COUNTRY CODE'})],
+				])->exists();
+
+				if ($order_with_same_countrycode) {
+					// check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
+					$quantity_date = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+						['UVC_TCO', trim($price_row->{'SKU CODE'})],
+						['Country_Code', trim($price_row->{'COUNTRY CODE'})],
+						['Last_Change_Date', trim($price_row->LAST_CHANGE_DATE)],
+					])->exists();
+
+					if (!$quantity_date) {
+						// collision. update temp orchestra parcel quantity details table 
+						$this->updateOrchestraTempParcelQuantityDetails($price_row, $value);
+						continue;
+					}
+				} else {
+					// check price details already exists with same UVC_TCO & Last_Change_Date
+					$quantity_date = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+						['UVC_TCO', trim($price_row->{'SKU CODE'})],
+						['Last_Change_Date', trim($price_row->LAST_CHANGE_DATE)],
+					])->exists();
+
+					// insert price details, iff order with same sku code, country code and last change date doesn't exists.
+					if ($quantity_date) {
+						// insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+						
+						$this->insertOrchestraParcelQuantityDetails($price_row, $value);
+						continue;
+
+					} else {
+						// collision. update temp orchestra parcel quantity details table 
+						$this->updateOrchestraTempParcelQuantityDetails($price_row, $value);
+						continue;
+					}
+				}
+			} else {
+				// insert price details in orchestra_parcel_quantity_details, iff po details exists for this sku code and COUNTRY CODE.
+				$this->insertOrchestraParcelQuantityDetails($price_row, $value);
+				continue;
+				
+			}
+			
+			}
+		}
 	}
 	
 }

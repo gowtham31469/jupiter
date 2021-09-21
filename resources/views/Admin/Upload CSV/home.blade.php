@@ -25,12 +25,14 @@
                     {!! implode('', $errors->all('<div class="alert alert-danger">:message</div>')) !!}
                     @endif
                     <div class="row">
-                        <div class="col-md-6">
+                    <div class="col-md-4"></div>
+                        <div class="col-md-4">
                             <h5><sub class="pull-right"> (Supported Files : .csv)</sub><strong>PO & Price files</strong> </h5>
                             <form class="dropzone" id="orch-order-csv-file">
                                 {{ csrf_field() }}
                             </form>
                         </div>
+                    <div class="col-md-4"></div>
                     </div>
                 </div>
             </div>
