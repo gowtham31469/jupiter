@@ -1081,11 +1081,3 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
 	
   });
-
-
-  Route::get('admin/data', function () {
-
-	$data =  App\DumpOrchestraPOCsv::with('price_data')->get()->toArray();
-	
-	return response()->json(['data' => $data], 200);
-  });
