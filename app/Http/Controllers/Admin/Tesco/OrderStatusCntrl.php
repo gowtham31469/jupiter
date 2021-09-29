@@ -1790,8 +1790,8 @@ class OrderStatusCntrl extends Controller
             
             $svgString=urldecode($value);
             //print_r($svgString);
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
         }
@@ -1802,10 +1802,10 @@ class OrderStatusCntrl extends Controller
             PDF::AddPage();
         }
 
-        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         
 
-        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
 
         PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
@@ -2043,8 +2043,8 @@ class OrderStatusCntrl extends Controller
             
             $svgString=urldecode($value);
             //print_r($svgString);
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
         }
@@ -2055,10 +2055,10 @@ class OrderStatusCntrl extends Controller
             PDF::AddPage();
         }
 
-        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         
 
-        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
         PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
