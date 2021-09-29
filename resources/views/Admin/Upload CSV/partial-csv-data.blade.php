@@ -23,13 +23,13 @@
                           <th>UVC</th>
                           <th>UVC TCO</th>
                           <th>Buyer BO</th>
-                          <th>Collection</th>
+                          <th>Season Code</th>
                           <th>Supplier Name</th>
                           <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                            @foreach($result_array as $key => $value)
+                            @foreach($partial_po_data as $key => $value)
                             <tr>
                                <td>{{ $loop->iteration }}</td>
                                <td>{{ $value['UVC'] ?? '-' }}</td>
@@ -37,11 +37,7 @@
                                <td>{{ $value['BuyerPONo'] ?? '-' }}</td>
                                <td>{{ $value['Season_Code'] ?? '-' }}</td>
                                <td>{{ $value['SupplierName'] ?? '-' }}</td>
-                               @if($value['file_status'] === 'PO Details Missing')
-                                   <td><span class="label label-primary">{{ $value['file_status'] }}</span></td>
-                               @else
-                                  <td><span class="label label-warning">{{ $value['file_status'] }}</span></td>
-                               @endif
+                               <td><span class="label label-warning">Price CSV Data Missing</span></td>
                               </tr>
                          @endforeach
                       </tbody>
