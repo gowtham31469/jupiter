@@ -2357,7 +2357,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         else
                         {
                             svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.7049, 160.7462)");
+                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 4.8456, 160.7462)");
                             
                         }
                         
@@ -2388,8 +2388,8 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         
 
 
-                        svgDoc.getElementById("uk_ean_barcode").innerHTML = val.uk_ean;
-                        svgDoc.getElementById("ce_ean_barcode").innerHTML = val.ce_ean;
+                        svgDoc.getElementById("uk_ean_barcode").innerHTML = "UK EAN: " + val.uk_ean;
+                        svgDoc.getElementById("ce_ean_barcode").innerHTML = "CE EAN: " +val.ce_ean;
                         
                         if(val.uk_size == "tiny baby")
                         {
@@ -2398,19 +2398,21 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
                             
 
-                            svgDoc.getElementById("small_english").innerHTML = "tiny baby";
+                            //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
 
-                            var polish = data.tesco_tiny[0].polish
+                            var polish = "tiny baby"
                             var czech = data.tesco_tiny[0].czech
                             var slovak = data.tesco_tiny[0].slovak
                             var hungarian = data.tesco_tiny[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "Newborn")
                         {
@@ -2420,18 +2422,20 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "Newborn";
+                            //svgDoc.getElementById("small_english").innerHTML = "Newborn";
 
-                            var polish = data.tesco_nb[0].polish
+                            var polish = "Newborn"
                             var czech = data.tesco_nb[0].czech
                             var slovak = data.tesco_nb[0].slovak
                             var hungarian = data.tesco_nb[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 1M")
                         {
@@ -2440,18 +2444,21 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 1M";
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
                             
-                            var polish = data.tesco_up1[0].polish
+                            var polish = "up to 1M"
                             var czech = data.tesco_up1[0].czech
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.3px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 3M")
                         {
@@ -2460,18 +2467,21 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 3M";
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 3M";
                             
-                            var polish = data.tesco_up3[0].polish
+                            var polish = "up to 3M"
                             var czech = data.tesco_up3[0].czech
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.35px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "One size")
                         {
@@ -2480,18 +2490,20 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "One size";
+                            //svgDoc.getElementById("small_english").innerHTML = "One size";
                             
-                            var polish = data.tesco_onesize[0].polish
+                            var polish = "One size"
                             var czech = data.tesco_onesize[0].czech.split(' ')
                             var slovak = data.tesco_onesize[0].slovak
                             var hungarian = data.tesco_onesize[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech[0];
-                            svgDoc.getElementById("small_translation2").innerHTML =czech[1]+ " • "+slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 16.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else
                         {
@@ -2502,6 +2514,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
 
                             svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                             svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
@@ -2712,26 +2725,26 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         $ind_en++;
                     })
 
-                    chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
-                    var new_chunks = '';
-                    $($pl_garment_str).each(function(index,pl_garment_val){
-                        if($y == 96)
-                        {
-                            $z=0;
-                        }
+                    // chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
+                     var new_chunks = '';
+                    // $($pl_garment_str).each(function(index,pl_garment_val){
+                    //     if($y == 96)
+                    //     {
+                    //         $z=0;
+                    //     }
 
-                        if($y > 96)
-                        {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
-                        }
-                        else
-                        {
-                            chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
-                        }
+                    //     if($y > 96)
+                    //     {
+                    //         new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
+                    //     }
+                    //     else
+                    //     {
+                    //         chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
+                    //     }
                         
-                        $y+=6;
-                        $z+=6;
-                    })
+                    //     $y+=6;
+                    //     $z+=6;
+                    // })
 
                     if($y > 96)
                     {
@@ -3906,7 +3919,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         else
                         {
                             svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.7049, 160.7462)");
+                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 4.8456, 160.7462)");
                             
                         }
                         
@@ -3937,8 +3950,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         
 
 
-                        svgDoc.getElementById("uk_ean_barcode").innerHTML = val.uk_ean;
-                        svgDoc.getElementById("ce_ean_barcode").innerHTML = val.ce_ean;
+                        svgDoc.getElementById("uk_ean_barcode").innerHTML =  "UK EAN: " + val.uk_ean;
+                        svgDoc.getElementById("ce_ean_barcode").innerHTML =  "CE EAN: " + val.ce_ean;
                         
                         if(val.uk_size == "tiny baby")
                         {
@@ -3947,18 +3960,20 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "tiny baby";
+                            //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
 
-                            var polish = data.tesco_tiny[0].polish
+                            var polish = "tiny baby"
                             var czech = data.tesco_tiny[0].czech
                             var slovak = data.tesco_tiny[0].slovak
                             var hungarian = data.tesco_tiny[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "Newborn")
                         {
@@ -3967,18 +3982,20 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "Newborn";
+                            //svgDoc.getElementById("small_english").innerHTML = "Newborn";
 
-                            var polish = data.tesco_nb[0].polish
+                            var polish = "Newborn"
                             var czech = data.tesco_nb[0].czech
                             var slovak = data.tesco_nb[0].slovak
                             var hungarian = data.tesco_nb[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 1M")
                         {
@@ -3987,18 +4004,21 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 1M";
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
                             
-                            var polish = data.tesco_up1[0].polish
+                            var polish = "up to 1M"
                             var czech = data.tesco_up1[0].czech
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.3px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 3M")
                         {
@@ -4007,18 +4027,21 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 3M";
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 3M";
                             
-                            var polish = data.tesco_up3[0].polish
+                            var polish = "up to 3M"
                             var czech = data.tesco_up3[0].czech
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.35px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "One size")
                         {
@@ -4027,18 +4050,20 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "One size";
+                            //svgDoc.getElementById("small_english").innerHTML = "One size";
                             
-                            var polish = data.tesco_onesize[0].polish
-                            var czech = data.tesco_onesize[0].czech.split(' ')
+                            var polish = "One size"
+                            var czech = data.tesco_onesize[0].czech
                             var slovak = data.tesco_onesize[0].slovak
                             var hungarian = data.tesco_onesize[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech[0];
-                            svgDoc.getElementById("small_translation2").innerHTML =czech[1]+ " • "+slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 16.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else
                         {
@@ -4049,6 +4074,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 
                             svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                             svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
@@ -4259,26 +4285,26 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         $ind_en++;
                     })
 
-                    chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
-                    var new_chunks = '';
-                    $($pl_garment_str).each(function(index,pl_garment_val){
-                        if($y == 96)
-                        {
-                            $z=0;
-                        }
+                    // chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
+                     var new_chunks = '';
+                    // $($pl_garment_str).each(function(index,pl_garment_val){
+                    //     if($y == 96)
+                    //     {
+                    //         $z=0;
+                    //     }
 
-                        if($y > 96)
-                        {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
-                        }
-                        else
-                        {
-                            chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
-                        }
+                    //     if($y > 96)
+                    //     {
+                    //         new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
+                    //     }
+                    //     else
+                    //     {
+                    //         chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
+                    //     }
                         
-                        $y+=6;
-                        $z+=6;
-                    })
+                    //     $y+=6;
+                    //     $z+=6;
+                    // })
 
                     if($y > 96)
                     {
