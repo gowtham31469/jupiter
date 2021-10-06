@@ -375,9 +375,8 @@ $(function () {
     submitCarelabelOrder = (user_type) => {
         var form_obj = [{
             "template_id": localStorage.getItem("templates")
-            // "template_id": 34
         }];
-       // alert("inside")
+       
         var formData = $('#tesco_care_label_order_form').serialize() + '&' + $.param(form_obj[0]);
         $.ajax({
             type: "post",

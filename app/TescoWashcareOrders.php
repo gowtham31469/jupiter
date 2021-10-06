@@ -74,7 +74,8 @@ class TescoWashcareOrders extends Model
         'additional_care_id_2',
         'additional_care_text_2',
         'additional_care_id_3',
-        'additional_care_text_3'
+        'additional_care_text_3',
+        'potps_id'
     ];
 
     protected $casts = [

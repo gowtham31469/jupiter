@@ -62,6 +62,8 @@ class CareLabelOrdersController extends Controller
 
             $additional_instructions = $this->caremeta->getCareMetadata()['additional_instructions'];
 
+            $part_of_two_piece_set = $this->caremeta->getCareMetadata()['part_of_two_piece_set'];
+
             return View::make('Admin/Order Management/tesco-care-labels')
                 ->with([
                     'symbols' => $symbols,
@@ -70,7 +72,8 @@ class CareLabelOrdersController extends Controller
                     'kids_warning' => $kids_warning,
                     'components' => $components,
                     'fabriclists' => $fabriclists,
-                    'additional_instructions' => $additional_instructions
+                    'additional_instructions' => $additional_instructions,
+                    'part_of_two_piece_set' => $part_of_two_piece_set
                 ]);
         } catch (\Exception $e) {
             return response()->json([
