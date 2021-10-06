@@ -40,6 +40,7 @@ $( () => {
         $('#tesco_care_leather_id').val(order_data.order_details.leather_suede_code)
         $('#tesco_care_coo').val(order_data.order_details.country_of_origin_id)
         $('#tesco_care_supplier').val(order_data.order_details.tesco_metadata_supplier_id)
+        $('#tesco_care_part_of_two_piece_set').val(order_data.order_details.potps_id)
 
         $('#tesco_care_button_space').prop('checked', order_data.order_details.include_btn_sew_space);
         $('#tesco_care_exclusive_trim').prop('checked', order_data.order_details.exclusive_trims);

@@ -71,6 +71,13 @@
         </div>
     </div>
     <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
+            {{  Form::select('tesco_care_part_of_two_piece_set',(['' => '-- Select Part of Two Piece Set --'] + $part_of_two_piece_set),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_part_of_two_piece_set', 'data-live-search' => 'true')) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('tesco_care_button_space', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
         <div class="checkbox">
             <label>
