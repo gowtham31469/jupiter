@@ -398,115 +398,138 @@ function tescoOrders(callback) {
 				$('#jstree').jstree({
 					'core': {
 						'data': [{
-							"id": "1",
-							"text": "Stickers",
-							"parent_id": "0",
-							"children": [{
-								"id": "2",
-								"text": "Carton & Polybag Stickers",
-								"parent_id": "1",
+								"id": "1",
+								"text": "Stickers",
+								"parent_id": "0",
 								"children": [{
-									"id": "3",
-									"text": "CE",
-									"parent_id": "2",
+									"id": "2",
+									"text": "Carton & Polybag Stickers",
+									"parent_id": "1",
 									"children": [{
-										"id": "26,27,21",
-										"text": "TCL 1 , TCL 2 & TSL 1 with QR",
-										"parent_id": "3",
-										"type": "ratio",
-										"zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+										"id": "3",
+										"text": "CE",
+										"parent_id": "2",
+										"children": [{
+											"id": "26,27,21",
+											"text": "TCL 1 , TCL 2 & TSL 1 with QR",
+											"parent_id": "3",
+											"type": "ratio",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
 										}, {
-										"id": "28,23",
-										"text": "TCL 4 & TSL 3 with QR",
-										"parent_id": "3",
-										"type": "single",
-										"zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+											"id": "28,23",
+											"text": "TCL 4 & TSL 3 with QR",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
 										}, {
-										"id": "24",
-										"text": "THL 1 with QR",
-										"parent_id": "3",
-										"type": "ratio",
-										"zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+											"id": "24",
+											"text": "THL 1 with QR",
+											"parent_id": "3",
+											"type": "ratio",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
 										}, {
-										"id": "25",
-										"text": "THL 3 with QR",
-										"parent_id": "3",
-										"type": "single",
-										"zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+											"id": "25",
+											"text": "THL 3 with QR",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "38",
+											"text": "TCL 5",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "39",
+											"text": "TSL 2",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
 										}]
-                                    }, {
-									"id": "4",
-									"text": "UK",
-									"parent_id": "2",
-									"children": [{
-										"id": "29,30,14",
-										"text": "TCL 1 , TCL 2 & TSL 1",
-										"parent_id": "4",
-										"type": "ratio",
-										"zone": "UK",
-										"template_type": 'tesco_carton_stickers'
-                                        }, {
-										"id": "31,16",
-										"text": "TCL 4 & TSL 3",
-										"parent_id": "4",
-										"type": "single",
-										"zone": "UK",
-										"template_type": 'tesco_carton_stickers'
-                                        }, {
-										"id": "17",
-										"text": "THL 1",
-										"parent_id": "4",
-										"type": "ratio",
-										"zone": "UK",
-										"template_type": 'tesco_carton_stickers'
-                                        }, {
-										"id": "18",
-										"text": "THL 3",
-										"parent_id": "4",
-										"type": "single",
-										"zone": "UK",
-										"template_type": 'tesco_carton_stickers'
-                                        }]
-                                    }]
-                                }]
+									}, {
+										"id": "4",
+										"text": "UK",
+										"parent_id": "2",
+										"children": [{
+											"id": "29,30,14",
+											"text": "TCL 1 , TCL 2 & TSL 1",
+											"parent_id": "4",
+											"type": "ratio",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "31,16",
+											"text": "TCL 4 & TSL 3",
+											"parent_id": "4",
+											"type": "single",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "17",
+											"text": "THL 1",
+											"parent_id": "4",
+											"type": "ratio",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "18",
+											"text": "THL 3",
+											"parent_id": "4",
+											"type": "single",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "40",
+											"text": "TSL 2",
+											"parent_id": "4",
+											"type": "single",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}]
+									}]
+								}]
 							},
 							{
-							"id": "32",
-							"text": "Labels",
-							"parent_id": "0",
-							"children": [{
-								"id": "33",
-								"text": "Printed Labels",
-								"parent_id": "32",
+								"id": "32",
+								"text": "Labels",
+								"parent_id": "0",
 								"children": [{
-									"id": "34",
-									"text": "GCL25W/M12723G",
-									"parent_id": "33",
-									"template_type": 'tesco_care_labels'
-									}, {
-									"id": "35",
-									"text": "GCL25W/M13220G",
-									"parent_id": "33",
-									"template_type": 'tesco_care_labels'
-									},
-									{
-									"id": "36",
-									"text": "GCL25W/M12723G",
-									"parent_id": "33",
-									"template_type": 'tesco_care_labels'
-									}, 
-									{
-									"id": "37",
-									"text": "GCL25W/M13220G",
-									"parent_id": "33",
-									"template_type": 'tesco_care_labels'
-									}, ]
+									"id": "33",
+									"text": "Printed Labels",
+									"parent_id": "32",
+									"children": [{
+											"id": "34",
+											"text": "GCL25W/M12723G",
+											"parent_id": "33",
+											"template_type": 'tesco_care_labels'
+										}, {
+											"id": "35",
+											"text": "GCL25W/M13220G",
+											"parent_id": "33",
+											"template_type": 'tesco_care_labels'
+										},
+										{
+											"id": "36",
+											"text": "GCL25W/M12723G",
+											"parent_id": "33",
+											"template_type": 'tesco_care_labels'
+										},
+										{
+											"id": "37",
+											"text": "GCL25W/M13220G",
+											"parent_id": "33",
+											"template_type": 'tesco_care_labels'
+										},
+									]
 								}]
-							}]
+							}
+						]
 					},
 					"types": {
 						"default": {

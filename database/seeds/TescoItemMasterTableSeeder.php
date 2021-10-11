@@ -387,6 +387,33 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),
+            array (
+                'id' => 38,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TCL 5',
+                'ref_no' => 'TCL 5',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            array (
+                'id' => 39,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TSL 2',
+                'ref_no' => 'TSL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            array (
+                'id' => 40,
+                'company_id' => 1,
+                'parent_id' => 4,
+                'item_name' => 'TSL 2',
+                'ref_no' => 'TSL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
         ));
         
         
