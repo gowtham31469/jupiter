@@ -641,6 +641,21 @@ class JobManagerController extends Controller
 																	$value->fabric_batch_code=$order_omp{0}->fabric_batch_code;
 																	$value->leather_suede_code=$order_omp{0}->leather_suede_code;
 																	$value->tog=$order_omp{0}->tog;
+																	$value->potps_id=$order_omp{0}->potps_id;
+
+																	if($order_omp{0}->potps_id != null)
+																	{
+																			$part_name  = 	DB::table('part_of_two_piece_set')
+																											->where('id',$order_omp{0}->potps_id)
+																											->select('*')
+																											->get();
+																			$value->part_name = $part_name{0}->name;
+																	}
+																	else
+																	{
+																			$value->part_name = "";
+																	}
+																	
 																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
 																	$value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
 																	$value->internal_reference=$order_omp{0}->internal_reference;
