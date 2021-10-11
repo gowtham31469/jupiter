@@ -59,6 +59,10 @@ class TescoCareMetadata
       ->pluck('tesco_suppliers.supplier_name', 'tesco_suppliers.id')
       ->all();
 
+    $metadata_array['part_of_two_piece_set'] = DB::table('part_of_two_piece_set')
+      ->pluck('name', 'id')
+      ->all();
+
     return $metadata_array;
   }
 }

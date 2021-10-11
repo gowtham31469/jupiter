@@ -50,6 +50,8 @@ class CustomerCareLabelOrdersController extends Controller
 
             $additional_instructions = $this->caremeta->getCareMetadata()['additional_instructions'];
 
+            $part_of_two_piece_set = $this->caremeta->getCareMetadata()['part_of_two_piece_set'];
+
             $customer = DB::table('customer_profile')
                 ->select('*')
                 ->where('customer_profile.id', Auth::guard('web_customer')->id())
@@ -71,7 +73,8 @@ class CustomerCareLabelOrdersController extends Controller
                     'kids_warning' => $kids_warning,
                     'components' => $components,
                     'fabriclists' => $fabriclists,
-                    'additional_instructions' => $additional_instructions
+                    'additional_instructions' => $additional_instructions,
+                    'part_of_two_piece_set' => $part_of_two_piece_set
                 ]);
         } catch (\Exception $e) {
             return response()->json([
