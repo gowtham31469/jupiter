@@ -2328,10 +2328,10 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
 
-                    if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    {
-                        svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    }
+                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
+                    // {
+                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
+                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -2363,7 +2363,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         
                         if(val.tog != "" && val.tog != null)
                         {
-                            svgDoc.getElementById("tog_value_1_").innerHTML = val.tog;
+                            svgDoc.getElementById("tog_value_1_").innerHTML = "TOG "+val.tog;
                         }
                         else
                         {
@@ -2379,7 +2379,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                             {
-                                selected_secondary_sizes_text += '<tspan x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
+                                selected_secondary_sizes_text += '<tspan text-anchor="middle" x="" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
                                 $size_y += 6;
                             }
                         })
@@ -2456,7 +2456,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.3px";
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.3px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -2479,7 +2479,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.35px";
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.35px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -3890,10 +3890,10 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
 
-                    if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    {
-                        svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    }
+                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
+                    // {
+                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
+                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -3925,7 +3925,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         
                         if(val.tog != "" && val.tog != null)
                         {
-                            svgDoc.getElementById("tog_value_1_").innerHTML = val.tog;
+                            svgDoc.getElementById("tog_value_1_").innerHTML = "TOG "+val.tog;
                         }
                         else
                         {
@@ -3941,7 +3941,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                             {
-                                selected_secondary_sizes_text += '<tspan x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
+                                selected_secondary_sizes_text += '<tspan text-anchor="middle" x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
                                 $size_y += 6;
                             }
                         })
@@ -4009,8 +4009,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_nb[0].slovak
                             var hungarian = data.tesco_nb[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
                             svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.9806, 257.061)");
                             svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.9806, 257.061)");
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
@@ -4035,7 +4035,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.4px";
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4058,7 +4058,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.40px";
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4081,13 +4081,13 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_onesize[0].slovak
                             var hungarian = data.tesco_onesize[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
-                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.9806, 257.061)");
-                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(1.0039 0 0 1 32.9806 264.061)");
+                            //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.786, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.786, 257.061)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(1.0039 0 0 1 35.5806 264.061)");
                             
-                            svgDoc.getElementById("small_translation_1").innerHTML = "• "+czech;
+                            svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
                         }
                         else
