@@ -3952,6 +3952,21 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 
                         svgDoc.getElementById("uk_ean_barcode").innerHTML =  "UK EAN: " + val.uk_ean;
                         svgDoc.getElementById("ce_ean_barcode").innerHTML =  "CE EAN: " + val.ce_ean;
+
+                        if(val.potps_id == null)
+                        {
+                            svgDoc.getElementById("part_of_two_piece_set").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 302.3271)");
+                            svgDoc.getElementById("ce_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 312.2111)");
+                            svgDoc.getElementById("top_line").setAttribute('y1', "294.16");
+                            svgDoc.getElementById("top_line").setAttribute('y2', "294.16");
+                            svgDoc.getElementById("bottom_line").setAttribute('y1', "315.63");
+                            svgDoc.getElementById("bottom_line").setAttribute('y2', "315.63");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("part_of_two_piece_set").removeAttribute("visibility", "hidden");
+                        }
                         
                         if(val.uk_size == "tiny baby")
                         {
@@ -3993,7 +4008,11 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var czech = data.tesco_nb[0].czech
                             var slovak = data.tesco_nb[0].slovak
                             var hungarian = data.tesco_nb[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.9806, 257.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.9806, 257.061)");
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4016,7 +4035,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.3px";
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.4px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4039,7 +4058,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
-                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.35px";
+                            svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.40px";
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4061,9 +4080,15 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             var czech = data.tesco_onesize[0].czech
                             var slovak = data.tesco_onesize[0].slovak
                             var hungarian = data.tesco_onesize[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish;svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 16.9806, 257.061)");
-                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.9806, 257.061)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(1.0039 0 0 1 32.9806 264.061)");
+                            
+                            svgDoc.getElementById("small_translation_1").innerHTML = "• "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
                         }
                         else
                         {
