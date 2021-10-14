@@ -928,6 +928,7 @@ function createOrders(parsedObj = false, oType = false) {
 				var html = '<div class="loader">\
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
+								<span id="result"></span>\
                                 <br>\
                                 <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><input type="hidden" id="qr_flag" value="' + data.templates[0].is_qrcode_required + '">\
 								'+po_number_component+'\
@@ -5336,7 +5337,7 @@ function setTescoOrder() {
 						}
 					}
 
-				} else {
+				} else if(data[0].template_name === 'TCL 4') {
 					/** [ Create array of ce single tcl4 count ] */
 					$('.count_TCL4').each(function (i, item) {
 						count_TCL4[i] = $(item).val() === '' ? 0 : $(item).val();
@@ -5407,7 +5408,9 @@ function setTescoOrder() {
 						}
 					}
 
-				}
+				} else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
+					storeTCL5TSL2(data[0].template_name, 'Admin')
+				} 
 			}
 		} else {
 			if (type === "ratio") {
@@ -5601,7 +5604,7 @@ function setTescoOrder() {
 						}
 					}
 
-				} else {
+				} else if(data[0].template_name === 'TCL 4'){
 					/** [ Create array of uk single tcl4 count ] */
 					$('.count_TCL4').each(function (i, item) {
 						count_TCL4[i] = $(item).val() === '' ? 0 : $(item).val();
@@ -5672,7 +5675,9 @@ function setTescoOrder() {
 						}
 					}
 
-				}
+				} else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
+					storeTCL5TSL2(data[0].template_name, 'Admin')
+				} 
 			}
 		}
 
@@ -5683,11 +5688,11 @@ function setTescoOrder() {
 }
 
 /**
- * [ tescoOrderCommonData  function for getting tesco order common values ( Independent of zone and template type ) .Creating global variables ]
+ * [ tescoAdminOrderCommonData  function for getting tesco order common values ( Independent of zone and template type ) .Creating global variables ]
  * @return {[type]} [ Common data ]
  * @author <praveen>
  */
-function tescoOrderCommonData() {
+function tescoAdminOrderCommonData() {
 	po_number 		 = $('#tesco_po_number').val();
 	uk_style 		 = $('#tesco_uk_style').val();
 	ce_style 		 = $('#tesco_ce_style').val();
@@ -5705,6 +5710,7 @@ function tescoOrderCommonData() {
 	data             = JSON.parse(localStorage.getItem("data"));
 	ocn_no           = $('#tesco_ocn').val();
 	full_description = $('#tesco_full_description').val();
+	created_by       = '';
 }
 
 /**
@@ -5713,8 +5719,8 @@ function tescoOrderCommonData() {
  */
 function storeCERatioTCL1TCL2TSL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var itf_code = [];
@@ -5817,9 +5823,9 @@ function storeCERatioTCL1TCL2TSL1() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -5852,8 +5858,8 @@ function storeCERatioTCL1TCL2TSL1() {
  */
 function storeCERatioTHL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var itf_code = [];
@@ -5935,9 +5941,9 @@ function storeCERatioTHL1() {
 			},
 			success: function (data) {
 
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -5970,8 +5976,8 @@ function storeCERatioTHL1() {
  */
 function storeCESingleTCL4TSL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var ean_code = [];
@@ -6073,9 +6079,9 @@ function storeCESingleTCL4TSL3() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6108,8 +6114,8 @@ function storeCESingleTCL4TSL3() {
  */
 function storeCESingleTHL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var ean_code = [];
@@ -6200,9 +6206,9 @@ function storeCESingleTHL3() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6235,8 +6241,8 @@ function storeCESingleTHL3() {
  */
 function storeUKRatioTCL1TCL2TSL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var itf_code = [];
@@ -6333,9 +6339,9 @@ function storeUKRatioTCL1TCL2TSL1() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6368,8 +6374,8 @@ function storeUKRatioTCL1TCL2TSL1() {
  */
 function storeUKRatioTHL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var itf_code = [];
@@ -6443,9 +6449,9 @@ function storeUKRatioTHL1() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6478,8 +6484,8 @@ function storeUKRatioTHL1() {
  */
 function storeUKSingleTCL4TSL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var ean_code = [];
@@ -6573,9 +6579,9 @@ function storeUKSingleTCL4TSL3() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6608,8 +6614,8 @@ function storeUKSingleTCL4TSL3() {
  */
 function storeUKSingleTHL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var ean_code = [];
@@ -6692,9 +6698,9 @@ function storeUKSingleTHL3() {
 				$('.submit-btn').prop('disabled', true);
 			},
 			success: function (data) {
-				/** Call  afterOrderSubmitted() */
+				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterOrderSubmitted(data,po_number,stl_no)
+				afterAdminOrderSubmitted(data,po_number,stl_no)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -6746,7 +6752,7 @@ function showSnackbar() {
  * After submitting the order callback function.
  * @author    <praveen>
  */
-function afterOrderSubmitted(data,po_number,stl_no) {
+function afterAdminOrderSubmitted(data,po_number,stl_no) {
 	var order_date = data.ordered_date.date;
 	var delivery_date_req = data.delivery_date_required;
 	var last_insertions_length = Object.keys(data.last_insertions).length;
@@ -6914,6 +6920,10 @@ function afterOrderSubmitted(data,po_number,stl_no) {
 				case 'THL1' : tabl_name = "tesco_thl1_orders";
 								break;
 				case 'THL3' : tabl_name = "tesco_thl3_orders";
+								break;
+				case 'TCL5' : tabl_name = "tesco_tcl5_orders";
+								break;
+				case 'TSL2' : tabl_name = "tesco_tsl2_orders";
 								break;
 			}
 			genarateTescoPI(row_id,tabl_name,pi_status,stl_no,template_id,po_number,template_name,order_flag)
@@ -7512,8 +7522,8 @@ function saveTescoOrder() {
  */
 function saveCERatioTCL1TCL2TSL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var itf_code = [];
@@ -7651,8 +7661,8 @@ function saveCERatioTCL1TCL2TSL1() {
  */
 function saveCERatioTHL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var itf_code = [];
@@ -7767,8 +7777,8 @@ function saveCERatioTHL1() {
  */
 function saveCESingleTCL4TSL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var ean_code = [];
@@ -7903,8 +7913,8 @@ function saveCESingleTCL4TSL3() {
  */
 function saveCESingleTHL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var orms_tpn = [];
 		var ean_code = [];
@@ -8028,8 +8038,8 @@ function saveCESingleTHL3() {
  */
 function saveUKRatioTCL1TCL2TSL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var itf_code = [];
@@ -8159,8 +8169,8 @@ function saveUKRatioTCL1TCL2TSL1() {
  */
 function saveUKRatioTHL1() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var itf_code = [];
@@ -8267,8 +8277,8 @@ function saveUKRatioTHL1() {
  */
 function saveUKSingleTCL4TSL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var ean_code = [];
@@ -8395,8 +8405,8 @@ function saveUKSingleTCL4TSL3() {
  */
 function saveUKSingleTHL3() {
 	try {
-		/** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-		tescoOrderCommonData();
+		/** Calling tescoAdminOrderCommonData() function for getting common data(independent of zone and template type) */
+		tescoAdminOrderCommonData();
 		/** @type {Array} [ initializing empty arrays ] */
 		var tpnd = [];
 		var ean_code = [];

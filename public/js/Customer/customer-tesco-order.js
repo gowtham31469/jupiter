@@ -936,6 +936,7 @@ function createOrders(parsedObj = false, oType = false) {
                      var html = '<div class="loader">\
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
+                                <span id="result"></span>\
                                 <br>\
                                 <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><input type="hidden" id="qr_flag" value="'+data.templates[0].is_qrcode_required+'">\
                                 '+po_number_component+'\
@@ -4954,7 +4955,7 @@ function setTescoOrder()
                     }
                     
                 }
-                else
+                else if(data[0].template_name === 'TCL 4')
                 {
                     /** [ Create array of ce single tcl4 count ] */
                     $('.count_TCL4').each(function(i, item)
@@ -5033,7 +5034,9 @@ function setTescoOrder()
                         }
                     }
                     
-                }
+                } else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
+					storeTCL5TSL2(data[0].template_name, 'Customer')
+				} 
             }
         }
         else
@@ -5255,7 +5258,7 @@ function setTescoOrder()
                     }
                     
                 }
-                else
+                else if(data[0].template_name === 'TCL 4')
                 {
                     /** [ Create array of uk single tcl4 count ] */
                     $('.count_TCL4').each(function(i, item)
@@ -5334,7 +5337,9 @@ function setTescoOrder()
                         }
                     }
                     
-                }
+                } else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
+					storeTCL5TSL2(data[0].template_name, 'Customer')
+				} 
             }
         }
         
