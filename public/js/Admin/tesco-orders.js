@@ -5409,7 +5409,7 @@ function setTescoOrder() {
 					}
 
 				} else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
-					storeTCL5TSL2(data[0].template_name, 'Admin')
+					storeTCL5TSL2(data, 'Admin')
 				} 
 			}
 		} else {
@@ -5676,7 +5676,7 @@ function setTescoOrder() {
 					}
 
 				} else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
-					storeTCL5TSL2(data[0].template_name, 'Admin')
+					storeTCL5TSL2(data, 'Admin')
 				} 
 			}
 		}

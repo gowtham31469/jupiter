@@ -13,7 +13,7 @@ use App\Classes\TescoCareLabelParser;
 use App\Classes\UpdateTescoLabelOrder;
 
 use App\TescoPrimarySize;
-use App\Http\Requests\SubmitTescoLabelOrder;
+use App\Http\Requests\TescoLabelOrderRequest;
 
 class CareLabelOrdersController extends Controller
 {
@@ -145,7 +145,7 @@ class CareLabelOrdersController extends Controller
     }
 
 
-    public function submitCareLabelOrder(SubmitTescoLabelOrder $request)
+    public function submitCareLabelOrder(TescoLabelOrderRequest $request)
     {
         if ($request->ajax()) {
 
@@ -157,7 +157,7 @@ class CareLabelOrdersController extends Controller
         }
     }
 
-    public function updateCareLabelOrder(SubmitTescoLabelOrder $request)
+    public function updateCareLabelOrder(TescoLabelOrderRequest $request)
     {
 
         if ($request->ajax()) {
