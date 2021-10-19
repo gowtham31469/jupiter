@@ -35,50 +35,49 @@ class SingleStickerOrdersController extends Controller
         if ($request->ajax()) {
 
             $request->validated();
-            dd($request);
 
             $orms_tpn         = explode(',',$request['orms_tpn']);
-            $ean_code         = explode(',',$request['ean_code']);
+            $barcode          = explode(',',$request['barcode']);
             $case_size        = explode(',',$request['case_size']);
             $size             = explode(',',$request['size']);
             $qr_code          = explode('|',$request['qr_code']);
             $templates        = $request['templates'];
+
             $last_insertions  = [];
             $already_exists   = [];
-            $zero_quantity= [];
+            $zero_quantity    = [];
+            $customer_id      = NULL;
+            $delivery_date_count = 0; 
+            $pi_required      = 0; 
+            $po_required      = 0; 
+            $day_count        = 0; 
+            $created_by       = 0;
 
-            $tesco_main_customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
-
-            if($tesco_main_customer_id)
-            {
-              $customer_id = $tesco_main_customer_id->customer_id;
-              $customer_details = DB::table("customers")->where('id','=',$customer_id)->select('pi_required','delivery_date_required','delivery_day_count','po_required')->first();  
-              $delivery_date_req= $customer_details->delivery_date_required; 
-              $pi_required      = $customer_details->pi_required; 
-              $po_required      = $customer_details->po_required; 
-              $day_count        = $customer_details->delivery_day_count; 
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
+            $customer_details = DB::table("customer_metadata")
+                          ->join('customers', 'customers.id', 'customer_metadata.customer_id')
+                          ->where('customer_metadata.customer_metadata_id', $request['supplier'])
+                          ->select('customers.pi_required','customers.delivery_date_required','customers.delivery_day_count','customers.po_required','customer_metadata.customer_id')
+                          ->first();
+            if($customer_details) {
+              $delivery_date_count = $customer_details->delivery_date_required; 
+              $pi_required         = $customer_details->pi_required; 
+              $po_required         = $customer_details->po_required; 
+              $day_count           = $customer_details->delivery_day_count; 
+              $customer_id         = $customer_details->customer_id; 
             } 
-            else
-            {
-              $customer_id      = NULL;
-              $delivery_date_req= 0; 
-              $pi_required      = 0; 
-              $po_required      = 0; 
-              $day_count        = 0; 
-              $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
-            }
+
+            $ordered_date     = Carbon::now('Asia/Kolkata')->addDay($day_count);
             
             /** [Get comapanies super admin id as created by customer id] */
-            $customer_profile_id = DB::table("customer_profile")->where('company_id','=',$tesco_main_customer_id->customer_id)->where('role_id','=',1)->select('id')->first();
+            $customer_profile_id = DB::table("customer_profile")
+                                  ->where('company_id', $customer_id)
+                                  ->where('role_id', 1)
+                                  ->select('id')
+                                  ->first();
+            
             /** Check if super admin exists or not  */
-            if($customer_profile_id)
-            {
+            if ($customer_profile_id) {
               $created_by = $customer_profile_id->id;
-            }
-            else
-            {
-              $created_by = 0;
             }
 
             foreach ($templates as $template) 
@@ -118,7 +117,7 @@ class SingleStickerOrdersController extends Controller
                             TescoTCL4OrdersQuantity::create([
                                 'tcl4_order_id'    => $tesco_order_id,
                                 'orms_tpn'         => $tpn,
-                                'ean_barcode'      => $ean_code[$i],
+                                'ean_barcode'      => $barcode[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
                                 'count'            => $count_TCL4[$i],
@@ -165,7 +164,7 @@ class SingleStickerOrdersController extends Controller
                             TescoTSL3OrdersQuantity::create([
                                 'tsl3_order_id'    => $tesco_order_id,
                                 'orms_tpn'         => $tpn,
-                                'ean_barcode'      => $ean_code[$i],
+                                'ean_barcode'      => $barcode[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
                                 'count'            => $count_TSL3[$i],
@@ -215,7 +214,7 @@ class SingleStickerOrdersController extends Controller
                             TescoTHL3OrdersQuantity::create([
                                 'thl3_order_id'    => $tesco_order_id,
                                 'orms_tpn'         => $tpn,
-                                'ean_barcode'      => $ean_code[$i],
+                                'ean_barcode'      => $barcode[$i],
                                 'size'             => $size[$i],
                                 'case_size'        => $case_size[$i],
                                 'count'            => $count_THL3[$i],
@@ -235,7 +234,7 @@ class SingleStickerOrdersController extends Controller
               }
             }
             
-           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_req,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
+           return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'delivery_date_required' => $delivery_date_count,'ordered_date' => $ordered_date,'already_exists' => $already_exists,'po_required' => $po_required,'pi_required'=>$pi_required, 'zero_quantity' => $zero_quantity],200);
 
             // $response = $this->storeorder->createTescoOrder($request, 'admin');
 

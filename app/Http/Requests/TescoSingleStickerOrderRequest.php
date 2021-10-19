@@ -27,9 +27,9 @@ class TescoSingleStickerOrderRequest extends FormRequest
         return [ 
             'po_number'             => ['required', 'digits_between:7,10'],
             'eqos'                  => ['required', 'max:7'],
-            'uk_style'              => ['required', 'numeric', 'max:8'],
-            'ce_style'              => ['required', 'numeric', 'max:8'],
-            'season_code'           => ['required', 'numeric', 'max:6'],
+            'uk_style'              => ['required', 'max:8'],
+            'ce_style'              => ['required', 'max:8'],
+            'season_code'           => ['required', 'max:6'],
             'supplier'              => ['required', 'numeric', 'exists:tesco_suppliers,id'],
             'description'           => ['required', 'max:45'],
             'manufacture_date'      => ['required'],
@@ -43,7 +43,6 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'type'                  => ['required'],
             'templates'             => ['required'],
             'created_by'            => ['nullable', 'sometimes'],
-            'sticker_last_id'       => ['required', 'numeric'],
             'full_description'      => ['nullable', 'sometimes'],
             'qr_code'               => ['nullable', 'sometimes'],
 
@@ -51,7 +50,8 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'barcode.*'             => ['required', 'numeric', 'min:13', 'max:14'],
             'case_size.*'           => ['required', 'numeric', 'max:6'],
             'size.*'                => ['nullable', 'sometimes', 'max:9'],
-            'sticker_count.*'       => ['nullable', 'sometimes', 'numeric', 'max:6'],
+            'sticker_count.*'       => ['required', 'nullable'],
+            'sticker_id_array.*'    => ['required', 'nullable'],
             
         ];
     }

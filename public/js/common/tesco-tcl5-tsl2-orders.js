@@ -1,29 +1,30 @@
-
-function storeTCL5TSL2(template_data, user_type) {
+function storeTCL5TSL2(user_type) {
 
 	var sticker_zero_qty = [];
 	var sticker_qty = [];
+	var template_data = JSON.parse(localStorage.getItem("data"));
+	var zone = localStorage.getItem("zone").toLowerCase();
 
 	template_data.forEach(element => {
 
 		var sticker_single_qty = [];
 		var sticker_name = element.template_name.replace(/\s/g, '');
-	
-		$('.count_'+sticker_name).each(function (i, item) {
+
+		$('.count_' + sticker_name).each(function (i, item) {
 			qty = $(item).val() === '' ? 0 : $(item).val();
 			sticker_qty.push(qty);
 			sticker_single_qty.push(qty);
 		});
 
-		let zero_qty = sticker_single_qty.every( e  => e == 0);
+		let zero_qty = sticker_single_qty.every(e => e == 0);
 
-		if(zero_qty){
+		if (zero_qty) {
 			sticker_zero_qty.push(element.template_name);
 		}
 
 	});
 
-	let result = sticker_qty.every( e  => e == 0);
+	let result = sticker_qty.every(e => e == 0);
 
 	if (result) {
 		$('.quantity-feedback').addClass('has-error has-danger');
@@ -33,55 +34,53 @@ function storeTCL5TSL2(template_data, user_type) {
 		return false;
 	}
 
-    /** [Check if valid barcode entered] */
-    if (barcode_checks === 0) {
-            $('.quantity-feedback-err-msg').css('display', 'none');
-            $('.quantity-field').prop('required', false);
-			var msg = "";
-            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-            if (sticker_zero_qty) {
+	/** [Check if valid barcode entered] */
+	if (barcode_checks === 0) {
+		$('.quantity-feedback-err-msg').css('display', 'none');
+		$('.quantity-field').prop('required', false);
+		var msg = "";
+		/** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
+		if (sticker_zero_qty.length > 0) {
 
-				sticker_zero_qty.forEach(element => {
-					msg += '<li style="margin-bottom: 10px;"><strong>'+element+'</strong></li>';
-				});
-                $('#body_msg').html(msg);
+			sticker_zero_qty.forEach(element => {
+				msg += '<li style="margin-bottom: 10px;"><strong>' + element + '</strong></li>';
+			});
+			$('#body_msg').html(msg);
 
-                /** [ Backdrop for bootstrap modal ] */
-                $('#confirmOrder').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                $('#confirm_btn').attr('onclick', 'storeSingleTCL5TSL2(this, template_data, user_type);');
-                $('#confirmOrder').modal('show');
+			/** [ Backdrop for bootstrap modal ] */
+			$('#confirmOrder').modal({
+				backdrop: 'static',
+				keyboard: false
+			});
+			$('#confirm_btn').attr('onclick', 'storeSingleTCL5TSL2(this, "' + user_type + '")');
+			$('#confirmOrder').modal('show');
 
-            } else {
-                /** Function to store single template */
-                storeSingleTCL5TSL2(template_data, user_type);
-                var set_po_number 	 = $('#tesco_po_number').val();
-                var set_style 		 = $('#tesco_ce_style').val();
-
-				template_data.forEach(element => {
-					printDivTescoSet('tesco_svg0',element.template_name.replace(/\s/g, ''),set_po_number,set_style)
-				});
-            }
-    }
+		} else {
+			/** Function to store single template */
+			storeSingleTCL5TSL2(user_type);
+			var set_po_number = $('#tesco_po_number').val();
+			var set_style = $('#tesco_'+zone+'_style').val();
+			template_data.forEach((element, index) => {
+				printDivTescoSet('tesco_svg'+index, element.template_name.replace(/\s/g, ''), set_po_number, set_style)
+			});
+		}
+	}
 }
 
 /**
  * [storeSingleTCL5TSL2 for storing tesco single TCL5 and TSL2 Templates manual orders]
  * @author <praveen>
  */
- function storeSingleTCL5TSL2(sticker_name, user_type) {
+function storeSingleTCL5TSL2(user_type) {
 	try {
 
+		var template_data = JSON.parse(localStorage.getItem("data"));
 		user_type = user_type.toLowerCase();
-		if( user_type === 'admin'){
+		if (user_type === 'admin') {
 			tescoAdminOrderCommonData();
 		} else {
 			tescoOrderCommonData();
 		}
-
-		var sticker_name_trimmed  = sticker_name.replace(/\s/g, '');
 
 		var orms_tpn = [];
 		var barcode = [];
@@ -95,53 +94,74 @@ function storeTCL5TSL2(template_data, user_type) {
 
 		$('.table-id-hidden').each(function (i, item) {
 			// sticker_id[sticker_name_trimmed] = item.value;
-			sticker_id_array.push({sticker_name_trimmed:item.value})
+			sticker_id_array.push({
+				[sticker_name_trimmed]: item.value
+			});
 
 		});
 		// sticker_id_array = sticker_id_array.join(',');
 
-		if(zone === 'CE'){
-			$('.ce_ratio_itf').each(function (i, item) {
-				barcode[i] = $(item).val();
-				barcode_array.push($(item).val()); 
-	
-			});
-			barcode = barcode.join(',');
-	
+		if (zone === 'CE') {
+
+			if ($.inArray(template_data[0].template_name, itf_barcode_stickers) != -1) {
+				$('.ce_ratio_itf').each(function (i, item) {
+					barcode[i] = $(item).val();
+					barcode_array.push($(item).val());
+
+				});
+				barcode = barcode.join(',');
+			} else {
+				$('.ce_single_ean').each(function (i, item) {
+					barcode[i] = $(item).val();
+					barcode_array.push($(item).val());
+
+				});
+				barcode = barcode.join(',');
+			}
+
 			$('.ce_single_orms_tpn').each(function (i, item) {
 				orms_tpn[i] = $(item).val();
-	
+
 				// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
-				qr_code[i] = po_number+','+barcode_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
-	
+				qr_code[i] = po_number + ',' + barcode_array[i] + '/' + ($(item).val().substr($(item).val().length - 3)) + ',' + $(item).val();
+
 			});
 			orms_tpn = orms_tpn.join(',');
 			qr_code = qr_code.join('|');
-	
+
 			$('.ce_single_case_size').each(function (i, item) {
 				case_size[i] = $(item).val();
-	
+
 			});
 			case_size = case_size.join(',');
-	
+
 			$('.ce_single_size').each(function (i, item) {
 				size[i] = $(item).val() === '' ? 0 : $(item).val();
-	
+
 			});
 			size = size.join(',');
-	
+			console.log('pkd4');
+
 		} else {
+			if ($.inArray(template_data[0].template_name, itf_barcode_stickers) != -1) {
+				$('.uk_single_ean').each(function (i, item) {
+					barcode[i] = $(item).val();
+
+				});
+				barcode = barcode.join(',');
+			} else {
+				$('.uk_ratio_itf').each(function (i, item) {
+					barcode[i] = $(item).val();
+
+				});
+				barcode = barcode.join(',');
+			}
+
 			$('.uk_single_tpnd').each(function (i, item) {
 				orms_tpn[i] = $(item).val();
 
 			});
 			orms_tpn = orms_tpn.join(',');
-
-			$('.uk_single_ean').each(function (i, item) {
-				barcode[i] = $(item).val();
-
-			});
-			barcode = barcode.join(',');
 
 			$('.uk_single_case_size').each(function (i, item) {
 				case_size[i] = $(item).val();
@@ -155,17 +175,26 @@ function storeTCL5TSL2(template_data, user_type) {
 			});
 			size = size.join(',');
 		}
+		console.log('pkd5');
 
-		$('.count_'+sticker_name_trimmed).each(function (i, item) {
-			sticker_count[i] = $(item).val() === '' ? 0 : $(item).val();
+		template_data.forEach(element => {
+			var sticker_name_trimmed = element.template_name.replace(/\s/g, '');
+			$('.count_' + sticker_name_trimmed).each(function (i, item) {
+				// sticker_count[i] = $(item).val() === '' ? 0 : $(item).val();
+				let quantity = $(item).val() === '' ? 0 : $(item).val();
 
+				sticker_count.push({
+					[sticker_name_trimmed]: quantity
+				})
+
+			});
+			// sticker_count = sticker_count.join(',');
 		});
-		sticker_count = sticker_count.join(',');
 
 		console.log(sticker_count);
 
 		$.ajax({
-			// url: base_url + "/"+user_type+"/tesco/store-single-sticker-orders",
+			url: base_url + "/"+user_type+"/tesco/store-single-sticker-orders",
 			type: 'POST',
 			data: {
 				_token: csrf_token,
@@ -191,9 +220,9 @@ function storeTCL5TSL2(template_data, user_type) {
 				templates: data,
 				sticker_id_array: sticker_id_array,
 				ocn_no: ocn_no,
-				full_description:full_description,
-				qr_code:qr_code,
-				created_by:created_by,
+				full_description: full_description,
+				qr_code: qr_code,
+				created_by: created_by,
 			},
 			tryCount: 0,
 			retryLimit: 2,
@@ -203,30 +232,30 @@ function storeTCL5TSL2(template_data, user_type) {
 				$('.submit-btn').prop('disabled', true);
 			},
 			statusCode: {
-                200: function (response) {
-                        /** Call  afterAdminOrderSubmitted() */
-						var stl_no =  (zone === "CE")? ce_style : uk_style;
+				200: function (response) {
+					/** Call  afterAdminOrderSubmitted() */
+					var stl_no = (zone === "CE") ? ce_style : uk_style;
 
-						if( user_type === 'admin'){
-							afterAdminOrderSubmitted(response,po_number,stl_no)
-						} else {
-							afterOrderSubmitted(response,po_number,stl_no)
-						}
-                    },
-                    400: function (error) {
-                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-                        $('.submit-btn').prop('disabled', false);
-                    },
-                    422: function (errorXHR) {
-                        var error_msg = ``;
-                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
-                            error_msg += `<li>` + valueOfElement + `</li>`;
-                        });
-                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-                        $('.submit-btn').prop('disabled', false);
-                        $(window).scrollTop(0);
-                    }
-            },
+					if (user_type === 'admin') {
+						afterAdminOrderSubmitted(response, po_number, stl_no)
+					} else {
+						afterOrderSubmitted(response, po_number, stl_no)
+					}
+				},
+				400: function (error) {
+					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+					$('.submit-btn').prop('disabled', false);
+				},
+				422: function (errorXHR) {
+					var error_msg = ``;
+					$.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+						error_msg += `<li>` + valueOfElement + `</li>`;
+					});
+					$('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+					$('.submit-btn').prop('disabled', false);
+					$(window).scrollTop(0);
+				}
+			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
 				if (this.tryCount <= this.retryLimit) {
