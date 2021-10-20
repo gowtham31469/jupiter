@@ -51,7 +51,6 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'case_size.*'           => ['required', 'numeric', 'max:6'],
             'size.*'                => ['nullable', 'sometimes', 'max:9'],
             'sticker_count.*'       => ['required', 'nullable'],
-            'sticker_id_array.*'    => ['required', 'nullable'],
             
         ];
     }

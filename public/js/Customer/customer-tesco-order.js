@@ -6530,6 +6530,10 @@ try{
                                 break;
                 case 'THL3' : tabl_name = "tesco_thl3_orders";
                                 break;
+                case 'TCL5' : tabl_name = "tesco_tcl5_orders";
+								break;
+				case 'TSL2' : tabl_name = "tesco_tsl2_orders";
+								break;
             }
             genarateTescoPI(row_id,tabl_name,pi_status,stl_no,template_id,po_number,template_name,order_flag)
         }   

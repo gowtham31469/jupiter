@@ -1,4 +1,4 @@
-function storeTCL5TSL2(user_type) {
+function storeSingleSticker(user_type) {
 
 	var sticker_zero_qty = [];
 	var sticker_qty = [];
@@ -52,12 +52,12 @@ function storeTCL5TSL2(user_type) {
 				backdrop: 'static',
 				keyboard: false
 			});
-			$('#confirm_btn').attr('onclick', 'storeSingleTCL5TSL2(this, "' + user_type + '")');
+			$('#confirm_btn').attr('onclick', 'submitSingleSticker(this, "' + user_type + '")');
 			$('#confirmOrder').modal('show');
 
 		} else {
 			/** Function to store single template */
-			storeSingleTCL5TSL2(user_type);
+			submitSingleSticker(user_type);
 			var set_po_number = $('#tesco_po_number').val();
 			var set_style = $('#tesco_'+zone+'_style').val();
 			template_data.forEach((element, index) => {
@@ -68,14 +68,14 @@ function storeTCL5TSL2(user_type) {
 }
 
 /**
- * [storeSingleTCL5TSL2 for storing tesco single TCL5 and TSL2 Templates manual orders]
+ * [submitSingleSticker for storing tesco single Templates manual orders]
  * @author <praveen>
  */
-function storeSingleTCL5TSL2(user_type) {
+function submitSingleSticker(user_type) {
 	try {
 
 		var template_data = JSON.parse(localStorage.getItem("data"));
-		user_type = user_type.toLowerCase();
+		
 		if (user_type === 'admin') {
 			tescoAdminOrderCommonData();
 		} else {
@@ -86,20 +86,9 @@ function storeSingleTCL5TSL2(user_type) {
 		var barcode = [];
 		var case_size = [];
 		var size = [];
-		var sticker_count = [];
-		// var sticker_last_id = $('#'+sticker_name_trimmed+'_id').val();
+		var sticker_count = {};
 		var qr_code = [];
 		var barcode_array = [];
-		var sticker_id_array = [];
-
-		$('.table-id-hidden').each(function (i, item) {
-			// sticker_id[sticker_name_trimmed] = item.value;
-			sticker_id_array.push({
-				[sticker_name_trimmed]: item.value
-			});
-
-		});
-		// sticker_id_array = sticker_id_array.join(',');
 
 		if (zone === 'CE') {
 
@@ -140,7 +129,6 @@ function storeSingleTCL5TSL2(user_type) {
 
 			});
 			size = size.join(',');
-			console.log('pkd4');
 
 		} else {
 			if ($.inArray(template_data[0].template_name, itf_barcode_stickers) != -1) {
@@ -175,23 +163,17 @@ function storeSingleTCL5TSL2(user_type) {
 			});
 			size = size.join(',');
 		}
-		console.log('pkd5');
 
 		template_data.forEach(element => {
 			var sticker_name_trimmed = element.template_name.replace(/\s/g, '');
+			var quantity = [];
 			$('.count_' + sticker_name_trimmed).each(function (i, item) {
-				// sticker_count[i] = $(item).val() === '' ? 0 : $(item).val();
-				let quantity = $(item).val() === '' ? 0 : $(item).val();
-
-				sticker_count.push({
-					[sticker_name_trimmed]: quantity
-				})
-
+				let value = $(item).val() === '' ? 0 : $(item).val();
+				quantity.push(value)
 			});
-			// sticker_count = sticker_count.join(',');
-		});
 
-		console.log(sticker_count);
+			sticker_count[element.template_name] = quantity;
+		});
 
 		$.ajax({
 			url: base_url + "/"+user_type+"/tesco/store-single-sticker-orders",
@@ -218,7 +200,6 @@ function storeSingleTCL5TSL2(user_type) {
 				size: size,
 				sticker_count: sticker_count,
 				templates: data,
-				sticker_id_array: sticker_id_array,
 				ocn_no: ocn_no,
 				full_description: full_description,
 				qr_code: qr_code,
@@ -245,6 +226,28 @@ function storeSingleTCL5TSL2(user_type) {
 				400: function (error) {
 					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
 					$('.submit-btn').prop('disabled', false);
+				},
+				409: function (response) {
+					var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                              <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                <span aria-hidden="true">×</span>\
+                              </button>\
+							  </div>';
+
+					$('#order-exists-alert').html(html_content);
+
+					/** [ Show only alertbox if data already exists ] */
+					$('.po-modal-content').hide();
+					$('.close-btn').attr('data-dismiss', 'modal')
+					$('#poUploadModal').modal('show');
+						/** [ Backdrop for bootstrap modal ] */
+					$('#poUploadModal').modal({
+						backdrop: 'static',
+						keyboard: false
+					});
+					$('.submit-btn').prop('disabled', false);
+
 				},
 				422: function (errorXHR) {
 					var error_msg = ``;
