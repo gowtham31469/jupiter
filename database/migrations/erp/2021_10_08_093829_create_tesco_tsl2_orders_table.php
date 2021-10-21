@@ -71,7 +71,6 @@ class CreateTescoTsl2OrdersTable extends Migration
             $table->index(['po_number', 'uk_style_ref']);
             $table->index(['po_number', 'ce_style_ref']);
         });
-        });
     }
 
     /**

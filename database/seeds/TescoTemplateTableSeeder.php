@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\TescoTemplate;
 
 class TescoTemplateTableSeeder extends Seeder
 {
@@ -387,6 +388,42 @@ class TescoTemplateTableSeeder extends Seeder
                 'disney' => 0,
                 'tax' => 0,
                 'hierarchy_id' => 33,
+                'flag' => 0,
+            ),
+            32 => 
+            array (
+                'id' => 32,
+                'item_id' => 38,
+                'template_name' => 'TCL 5',
+                'template_description' => 'TCL 5',
+                'template_file' => '/storage/app/template/tesco/TCL_5.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            33 => 
+            array (
+                'id' => 33,
+                'item_id' => 39,
+                'template_name' => 'TSL 2',
+                'template_description' => 'TSL 2',
+                'template_file' => '/storage/app/template/tesco/TSL_2.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
+                'flag' => 0,
+            ),
+            34 => 
+            array (
+                'id' => 34,
+                'item_id' => 40,
+                'template_name' => 'TSL 2',
+                'template_description' => 'TSL 2',
+                'template_file' => '/storage/app/template/tesco/TSL_2.svg',
+                'disney' => 0,
+                'tax' => 0,
+                'hierarchy_id' => 2,
                 'flag' => 0,
             ),
         ));
