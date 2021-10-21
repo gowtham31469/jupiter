@@ -1076,16 +1076,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], function() {
  	
 	// Tesco care label orders customer routes
-	Route::get('care-label-orders', 'Customer\Tesco\CustomerCareLabelOrdersController@index');
-	Route::get('care-label-fiber-components', 'Customer\Tesco\CustomerCareLabelOrdersController@getFiberComponentsMeta');
-	Route::get('care-size-lists', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeListsBySizeCategoryID');
-	Route::post('submit-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@submitCareLabelOrder');
-	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
-	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
-	Route::put('update-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
-	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
+	Route::get('care-label-orders', 'Customer\Tesco\CareLabelOrdersCustomerController@index');
+	Route::get('care-label-fiber-components', 'Customer\Tesco\CareLabelOrdersCustomerController@getFiberComponentsMeta');
+	Route::get('care-size-lists', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeListsBySizeCategoryID');
+	Route::post('submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
+	Route::get('secondary-size-categories', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeCategoriesByPrimaryID');
+	Route::get('get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
+	Route::put('update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+	Route::post('po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
 
 	// Tesco TCL5 and TSL2 orders admin routes
-	Route::post('store-single-sticker-orders', 'Customer\Tesco\CustomerSingleStickerOrdersController@submitSingleStickerOrder');
+	Route::post('store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
 	
   });

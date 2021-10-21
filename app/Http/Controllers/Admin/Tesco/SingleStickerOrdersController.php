@@ -7,16 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TescoSingleStickerOrderRequest;
 use DB;
-
-use App\TescoTCL4Orders;
-use App\TescoTCL4OrdersQuantity;
-
-use App\TescoTHL3Orders;
-use App\TescoTHL3OrdersQuantity;
-
-use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
-
 use Carbon\Carbon;
 
 class SingleStickerOrdersController extends Controller

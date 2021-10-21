@@ -15,7 +15,7 @@ use App\Classes\TescoCareLabelParser;
 use App\TescoPrimarySize;
 use App\Http\Requests\TescoLabelOrderRequest;
 
-class CustomerCareLabelOrdersController extends Controller
+class CareLabelOrdersCustomerController extends Controller
 {
     private $storeorder;
     private $caremeta;

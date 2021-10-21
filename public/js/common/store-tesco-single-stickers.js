@@ -58,11 +58,13 @@ function storeSingleSticker(user_type) {
 		} else {
 			/** Function to store single template */
 			submitSingleSticker(user_type);
-			var set_po_number = $('#tesco_po_number').val();
-			var set_style = $('#tesco_'+zone+'_style').val();
-			template_data.forEach((element, index) => {
-				printDivTescoSet('tesco_svg'+index, element.template_name.replace(/\s/g, ''), set_po_number, set_style)
-			});
+			if (user_type === 'admin') {
+				var set_po_number = $('#tesco_po_number').val();
+				var set_style = $('#tesco_'+zone+'_style').val();
+				template_data.forEach((element, index) => {
+					printDivTescoSet('tesco_svg'+index, element.template_name.replace(/\s/g, ''), set_po_number, set_style)
+				});
+			}
 		}
 	}
 }

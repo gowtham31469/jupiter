@@ -3016,24 +3016,25 @@ try{
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
 
+         var a = [] 
+         /** [ Get data-id of add button ] */
+         var id = $(rem).attr("data-id"); 
+         var val = parseInt(id) + 1; 
+
          if ($.inArray(data[0].template_name, ean_barcode_stickers) != -1) {
              var barcode_component = `<div class="form-group has-feedback">
-									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
+									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
 									<div class="help-block with-errors"></div>
 									<div class="barcode-error"></div>
 								</div>`;
          } else {
              var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
 										<div class="help-block with-errors"></div>
 										<div class="barcode-error"></div>
 									</div>`;
          }
 
-         var a = [] 
-         /** [ Get data-id of add button ] */
-         var id = $(rem).attr("data-id"); 
-         var val = parseInt(id) + 1; 
          var html = '<tr>\
                         <td class="slno">'+val+'</td>\
                         <td>\
@@ -3098,24 +3099,25 @@ try{
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
 
+         var a = [] 
+         /** [ Get data-id of add button ] */
+         var id = $(rem).attr("data-id"); 
+         var val = parseInt(id) + 1; 
+
          if ($.inArray(data[0].template_name, ean_barcode_stickers) != -1) {
              var barcode_component = `<div class="form-group has-feedback">
-									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
+									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
 									<div class="help-block with-errors"></div>
 									<div class="barcode-error"></div>
 								</div>`;
          } else {
              var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
 										<div class="help-block with-errors"></div>
 										<div class="barcode-error"></div>
 									</div>`;
          }
 
-         var a = [] 
-         /** [ Get data-id of add button ] */
-         var id = $(rem).attr("data-id"); 
-         var val = parseInt(id) + 1; 
          var html = '<tr>\
                         <td class="slno">'+val+'</td>\
                         <td>\
@@ -3244,24 +3246,25 @@ try{
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
 
+     var a = [] 
+     /** [ Get data-id of add button ] */
+     var id = $(rem).attr("data-id"); 
+     var val = parseInt(id) + 1; 
+
      if ($.inArray(data[0].template_name, itf_barcode_stickers) != -1) {
          var barcode_component = `<div class="form-group has-feedback">
-                                    <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                    <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
                                     <div class="help-block with-errors"></div>
                                     <div class="barcode-error"></div>
                                 </div>`;
      } else {
          var barcode_component = `<div class="form-group has-feedback">
-                                    <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                    <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
                                     <div class="help-block with-errors"></div>
                                     <div class="barcode-error"></div>
                                 </div>`;
      }
     
-     var a = [] 
-     /** [ Get data-id of add button ] */
-     var id = $(rem).attr("data-id"); 
-     var val = parseInt(id) + 1; 
      var html = '<tr>\
                     <td class="slno">'+val+'</td>\
                     <td>\
@@ -3326,24 +3329,25 @@ try{
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
 
+     var a = [] 
+     /** [ Get data-id of add button ] */
+     var id = $(rem).attr("data-id"); 
+     var val = parseInt(id) + 1; 
+
      if ($.inArray(data[0].template_name, itf_barcode_stickers) != -1) {
          var barcode_component = `<div class="form-group has-feedback">
-                                    <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                    <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
                                     <div class="help-block with-errors"></div>
                                     <div class="barcode-error"></div>
                                 </div>`;
      } else {
          var barcode_component = `<div class="form-group has-feedback">
-                                    <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                    <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
                                     <div class="help-block with-errors"></div>
                                     <div class="barcode-error"></div>
                                 </div>`;
      }
 
-     var a = [] 
-     /** [ Get data-id of add button ] */
-     var id = $(rem).attr("data-id"); 
-     var val = parseInt(id) + 1; 
      var html = '<tr>\
                     <td class="slno">'+val+'</td>\
                     <td>\
@@ -4896,147 +4900,7 @@ function setTescoOrder()
             }
             else
             {
-               if(data[0].template_name === 'THL 3')
-                {
-                    /** [ Create array of ce single thl3 count ] */
-                    $('.count_THL3').each(function(i, item)
-                    {
-                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var empty_count = 0;
-                    var l           = count_THL3.length;
-                    for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_THL3 = count_THL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                            if (empty_count > 0)
-                            {
-                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store CE single THL3 template */
-                                storeCESingleTHL3();
-                            }
-                        }
-                    }
-                    
-                }
-                else if(data[0].template_name === 'TCL 4')
-                {
-                    /** [ Create array of ce single tcl4 count ] */
-                    $('.count_TCL4').each(function(i, item)
-                    {
-                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-
-                    /** [ Create array of ce single tsl3 count ] */
-                    $('.count_TSL3').each(function(i, item)
-                    {
-                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var templates_array = [];
-                    templates_array     = count_TCL4.concat(count_TSL3);
-                    var empty_count     = 0;
-                    var l               = templates_array.length;
-                    for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** Check If artwork count array contains atleast one '0' OR empty value **/
-                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_TSL3 = count_TSL3.join(',');
-                    count_TCL4 = count_TCL4.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                            if(empty_count > 0)
-                            {
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store CE single TCL4, TSL3 template */
-                                 storeCESingleTCL4TSL3();
-                            }
-                        }
-                    }
-                    
-                } else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
-					storeTCL5TSL2(data[0].template_name, 'Customer')
-				} 
+                storeSingleSticker('customer');  
             }
         }
         else
@@ -5198,148 +5062,7 @@ function setTescoOrder()
             }
             else
             {
-               if(data[0].template_name === 'THL 3')
-                {
-                    /** [ Create array of uk single thl3 count ] */
-                    $('.count_THL3').each(function(i, item)
-                    {
-                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var empty_count = 0;
-                    var l           = count_THL3.length;
-                    for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_THL3 = count_THL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                            if (empty_count > 0)
-                            {
-                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store UK single THL3 template */
-                                storeUKSingleTHL3();
-                            }
-                        }
-                    }
-                    
-                }
-                else if(data[0].template_name === 'TCL 4')
-                {
-                    /** [ Create array of uk single tcl4 count ] */
-                    $('.count_TCL4').each(function(i, item)
-                    {
-                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-
-                    /** [ Create array of uk single tsl3 count ] */
-                    $('.count_TSL3').each(function(i, item)
-                    {
-                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var templates_array = [];
-                    templates_array     = count_TCL4.concat(count_TSL3);
-                    var empty_count     = 0;
-                    var l               = templates_array.length;
-                    for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** Check If artwork count array contains atleast one '0' OR empty value **/
-                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_TCL4 = count_TCL4.join(',');
-                    count_TSL3 = count_TSL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                            if(empty_count > 0)
-                            {
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store UK single TCL4, TSL3 template */
-                                 storeUKSingleTCL4TSL3();
-                            }
-                        }
-                    }
-                    
-                } else if(data[0].template_name === 'TCL 5' || data[0].template_name === 'TSL 2') {
-					storeTCL5TSL2(data[0].template_name, 'Customer')
-				} 
+                storeSingleSticker('customer');  
             }
         }
         
@@ -8270,7 +7993,12 @@ function mapStoredValues(oDetails) {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
                     
-                    $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    if($.inArray(temp_data[0].template_name, ean_barcode_stickers) != -1 ){
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+					} else {
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+					}
+
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
                     $('#'+zone+'_single_size_'+index).val(j.size);  
                     if(ele.order_quantity.length !== (i+1)) {
@@ -8417,6 +8145,16 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                    case 'TCL 5':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
+                    case 'TSL 2':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
                     default:
                         jointWashcareLabels.push(templateInfo[1]);
                         jointWashcareLabelArtworks.push(templateInfo[0]);

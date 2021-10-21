@@ -61,7 +61,7 @@ function tescoOrders(callback) {
 				$(".loader").show();
 			},
 			success: function (data) {
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders)))))));
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders)))))))));
 				
 				newObj1.sort(function(obj1, obj2) {
 					var date1 =obj1.created_at;
@@ -3575,25 +3575,26 @@ function addUKSingle(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		
-		if($.inArray(data[0].template_name, ean_barcode_stickers) != -1 ){
-			var barcode_component = `<div class="form-group has-feedback">
-									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
-									<div class="help-block with-errors"></div>
-									<div class="barcode-error"></div>
-								</div>`;
-		} else {
-			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
-										<div class="help-block with-errors"></div>
-										<div class="barcode-error"></div>
-									</div>`;
-		}
 
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
+		
+		if($.inArray(data[0].template_name, ean_barcode_stickers) != -1 ){
+			var barcode_component = `<div class="form-group has-feedback">
+									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
+									<div class="help-block with-errors"></div>
+									<div class="barcode-error"></div>
+								</div>`;
+		} else {
+			var barcode_component = `<div class="form-group has-feedback">
+										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+										<div class="help-block with-errors"></div>
+										<div class="barcode-error"></div>
+									</div>`;
+		}
+
 		var html = '<tr>\
                         <td class="slno">' + val + '</td>\
                         <td>\
@@ -3658,25 +3659,26 @@ function addUKRatio(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
+
+		var a = []
+		/** [ Get data-id of add button ] */
+		var id = $(rem).attr("data-id");
+		var val = parseInt(id) + 1;
 			
 		if($.inArray(data[0].template_name, ean_barcode_stickers) != -1 ){
 			var barcode_component = `<div class="form-group has-feedback">
-									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
+									<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
 									<div class="help-block with-errors"></div>
 									<div class="barcode-error"></div>
 								</div>`;
 		} else {
 			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+										<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
 										<div class="help-block with-errors"></div>
 										<div class="barcode-error"></div>
 									</div>`;
 		}
 		
-		var a = []
-		/** [ Get data-id of add button ] */
-		var id = $(rem).attr("data-id");
-		var val = parseInt(id) + 1;
 		var html = '<tr>\
                         <td class="slno">' + val + '</td>\
                         <td>\
@@ -3735,11 +3737,6 @@ function addUKRatio(rem, e) {
  */
 function uploadPurchaseOrder(formData, zone) {
 	try {
-		// $.ajaxSetup({
-		// 	headers: {
-		// 		'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-		// 	}
-		// });
 		$.ajax({
 			url: base_url + "/admin/tesco/po-upload",
 			type: 'POST',
@@ -3803,25 +3800,26 @@ function addCESingle(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
-		
-		if($.inArray(data[0].template_name, itf_barcode_stickers) != -1 ){
-			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
-										<div class="help-block with-errors"></div>
-										<div class="barcode-error"></div>
-									</div>`;
-		} else {
-			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
-										<div class="help-block with-errors"></div>
-										<div class="barcode-error"></div>
-									</div>`;
-		}
 
 		var a = []
 		/** [ Get data-id of add button ] */
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
+		
+		if($.inArray(data[0].template_name, itf_barcode_stickers) != -1 ){
+			var barcode_component = `<div class="form-group has-feedback">
+										<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+										<div class="help-block with-errors"></div>
+										<div class="barcode-error"></div>
+									</div>`;
+		} else {
+			var barcode_component = `<div class="form-group has-feedback">
+										<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+										<div class="help-block with-errors"></div>
+										<div class="barcode-error"></div>
+									</div>`;
+		}
+
 		var html = '<tr>\
                     <td class="slno">' + val + '</td>\
                     <td>\
@@ -3886,25 +3884,26 @@ function addCERatio(rem, e) {
 		e.preventDefault();
 		/** [ Get template details from localstorage ] */
 		var data = JSON.parse(localStorage.getItem("data"));
+		
+		var a = []
+		/** [ Get data-id of add button ] */
+		var id = $(rem).attr("data-id");
+		var val = parseInt(id) + 1;
 
 		if($.inArray(data[0].template_name, itf_barcode_stickers) != -1 ){
 			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+										<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
 										<div class="help-block with-errors"></div>
 										<div class="barcode-error"></div>
 									</div>`;
 		} else {
 			var barcode_component = `<div class="form-group has-feedback">
-										<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+										<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
 										<div class="help-block with-errors"></div>
 										<div class="barcode-error"></div>
 									</div>`;
 		}
 
-		var a = []
-		/** [ Get data-id of add button ] */
-		var id = $(rem).attr("data-id");
-		var val = parseInt(id) + 1;
 		var html = '<tr>\
                     <td class="slno">' + val + '</td>\
                     <td>\
