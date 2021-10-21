@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoTCL5OrdersQuantity extends Model
 {
-    /**
+     /**
       * The table associated with the model.
       *
       * @var string

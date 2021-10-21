@@ -16,17 +16,16 @@ class CreateTescoTsl2OrdersQuantyTable extends Migration
         Schema::create('tesco_tsl2_orders_quanty', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('tsl2_order_id')->index();
-            $table->bigInteger('tpnd')->default('0');
-            $table->bigInteger('itf_barcode')->default('0');
+            $table->bigInteger('tpnd')->nullable(true);
+            $table->bigInteger('itf_barcode')->nullable(true);
             $table->integer('units_per_carton')->default('0');
             $table->integer('cases_per_carton')->default('0');
-            $table->bigInteger('ean_barcode')->default('0');
+            $table->bigInteger('ean_barcode')->nullable(true);
             $table->string('size');
             $table->integer('case_size')->default('0');
-            $table->string('orms_tpn');
+            $table->string('orms_tpn')->nullable(true);
             $table->integer('count')->default('0');
-            $table->string('ratio_pack_type');
-            $table->string('qr_code');
+            $table->string('qr_code')->nullable(true);
             $table->timestamps();
             $table->foreign('tsl2_order_id')->references('id')->on('tesco_tsl2_orders')->onDelete('cascade');
         });

@@ -150,7 +150,8 @@ function mapStoredValues(oDetails) {
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
-    $('.save-btn').data('insert','false');
+    $('.save-btn').data('insert','false'); /** [ Get template details from localstorage ] */
+    var temp_data = JSON.parse(localStorage.getItem("data"));
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -182,8 +183,13 @@ function mapStoredValues(oDetails) {
                     } else {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
+
+                    if($.inArray(temp_data[0].template_name, ean_barcode_stickers) != -1 ){
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+					} else {
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+					}
                     
-                    $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
                     $('#'+zone+'_single_size_'+index).val(j.size);  
                     if(ele.order_quantity.length !== (i+1)) {
@@ -258,8 +264,6 @@ function mapStoredValues(oDetails) {
         var templates = localStorage.getItem("templates");
         var buyer_id  = localStorage.getItem("buyer_id");
         var supplier_id = $('#tesco_supplier option:selected').val();
-        /** [ Get template details from localstorage ] */
-        var temp_data = JSON.parse(localStorage.getItem("data"));
         /** [ Dynamically change  svg supplier name ] */
         if (supplier_id != '') {
         /*
@@ -396,6 +400,16 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                    case 'TCL 5':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
+                    case 'TSL 2':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
                     default:
                         jointWashcareLabels.push(templateInfo[1]);
                         jointWashcareLabelArtworks.push(templateInfo[0]);
