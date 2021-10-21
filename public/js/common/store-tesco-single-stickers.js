@@ -133,7 +133,7 @@ function submitSingleSticker(user_type) {
 			size = size.join(',');
 
 		} else {
-			if ($.inArray(template_data[0].template_name, itf_barcode_stickers) != -1) {
+			if ($.inArray(template_data[0].template_name, ean_barcode_stickers) != -1) {
 				$('.uk_single_ean').each(function (i, item) {
 					barcode[i] = $(item).val();
 
