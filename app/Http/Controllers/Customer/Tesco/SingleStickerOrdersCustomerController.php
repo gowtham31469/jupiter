@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers\Customer\Tesco;
 
-use App\Classes\TescoOrders;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\TescoSingleStickerOrderRequest;
 use DB;
 use Carbon\Carbon;
+use App\Classes\TescoOrders;
+use Illuminate\Http\Request;
+use App\Classes\SaveTescoOrders;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\TescoSaveSingleStickerRequest;
+use App\Http\Requests\TescoSingleStickerOrderRequest;
 
 class SingleStickerOrdersCustomerController extends Controller
 {
     private $storeorder;
+    private $saveorder;
 
-    public function __construct(TescoOrders $storeorder)
+    public function __construct(TescoOrders $storeorder, SaveTescoOrders $saveorder)
     {
         $this->storeorder = $storeorder;
+        $this->saveorder = $saveorder;
 
     }
-
 
     public function submitSingleStickerOrder(TescoSingleStickerOrderRequest $request)
     {
@@ -153,5 +156,92 @@ class SingleStickerOrdersCustomerController extends Controller
             );
 
         }
+    }
+
+    public function saveSingleStickerOrder(TescoSaveSingleStickerRequest $request)
+    {
+      $request->validated();
+      $orms_tpn         = explode(',',$request['orms_tpn']);
+      $barcode          = explode(',',$request['barcode']);
+      $case_size        = explode(',',$request['case_size']);
+      $size             = explode(',',$request['size']);
+      $qr_code          = explode('|',$request['qr_code']);
+      $templates        = $request['templates'];
+      $zone             = $request['zone'];
+      $style_ref        = strtolower($request['zone']) . '_style_ref';
+      $style            = strtolower($request['zone']) . '_style';
+      $barcode_type     = strlen($barcode[0]) === 13?'ean_barcode':'itf_barcode';
+      $last_insertions  = [];
+      $already_exists   = [];
+      $created_by       = $request['created_by'];
+
+      foreach ($templates as $template) 
+      {
+          $template_id      = $template['id'];
+
+          $sticker_name   = str_replace(' ', '', $template['template_name']);
+          $orders_model_name     = 'App\\' . "Tesco" . $sticker_name . "Orders";
+          $order_qty_model_name     = 'App\\' . "Tesco" . $sticker_name . "OrdersQuantity";
+          $sticker_order_id = strtolower($sticker_name).'_order_id';
+
+          $quantity_array = $request['sticker_count'][$template['template_name']];
+          
+          /** [ Check if order already placed for this style ] */
+          $is_exists = $orders_model_name::select('id')
+          ->Where($style_ref, $request[$style])
+          ->where('po_number', $request['po_number'])
+          ->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+          ->exists();
+
+          if($is_exists)
+          {
+            return response()->json(['error'=> true,'message' =>'Order already exists'],409);
+          }
+          
+          /** [ Invoking saveTescoOrder function using class instance ] */
+          $tesco_order     = $this->saveorder->saveTescoOrder($request,$template_id,$created_by);
+
+          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
+          $tesco_order_id  = $tesco_order->id;
+          $order_qty_model_name::where($sticker_order_id,$tesco_order_id)
+              ->delete();
+
+          $templates_inserted = array($template['template_name'] => $tesco_order_id);
+
+          $i = 0;
+          if($zone === 'CE'){
+            foreach ($orms_tpn as $value) 
+            {
+              $order_qty_model_name::create([
+                  $sticker_order_id  => $tesco_order_id,
+                  'orms_tpn'         => $value,
+                  $barcode_type      => $barcode[$i],
+                  'size'             => $size[$i],
+                  'case_size'        => $case_size[$i],
+                  'count'            => $quantity_array[$i],
+                  'qr_code'          => $qr_code[$i]
+                ]);
+              $i++;
+            }
+          } else {
+            foreach ($orms_tpn as $value) 
+                {
+                  $order_qty_model_name::create([
+                      $sticker_order_id  => $tesco_order_id,
+                      'tpnd'             => $value,
+                      $barcode_type      => $barcode[$i],
+                      'size'             => $size[$i],
+                      'case_size'        => $case_size[$i],
+                      'count'            => $quantity_array[$i]
+                    ]);
+                  $i++;
+                }
+          }
+
+          /** [ Return array of inserted id ] */
+          $last_insertions = array_merge($last_insertions,$templates_inserted);
+      }
+      
+      return response()->json(['error'=> false,'message' =>'success','last_insertions' => $last_insertions,'already_exists' => $already_exists],200);
     }
 }

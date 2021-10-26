@@ -18,13 +18,13 @@ class CreateTescoTcl5OrdersQuantyTable extends Migration
             $table->unsignedInteger('tcl5_order_id')->index();
             $table->string('tpnd')->nullable(true);
             $table->string('itf_barcode')->nullable(true);
-            $table->integer('units_per_carton')->default('0');
-            $table->integer('cases_per_carton')->default('0');
+            $table->integer('units_per_carton')->nullable(true)->default('0');
+            $table->integer('cases_per_carton')->nullable(true)->default('0');
             $table->string('ean_barcode')->nullable(true);
-            $table->string('size');
-            $table->integer('case_size')->default('0');
+            $table->string('size')->nullable(true);
+            $table->integer('case_size')->nullable(true)->default('0');
             $table->string('orms_tpn')->nullable(true);
-            $table->integer('count')->default('0');
+            $table->integer('count')->nullable(true)->default('0');
             $table->string('qr_code')->nullable(true);
             $table->timestamps();
             $table->foreign('tcl5_order_id')->references('id')->on('tesco_tcl5_orders')->onDelete('cascade');

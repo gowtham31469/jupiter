@@ -1092,6 +1092,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
 <script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
+<script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>
