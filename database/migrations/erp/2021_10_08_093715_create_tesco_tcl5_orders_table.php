@@ -23,9 +23,9 @@ class CreateTescoTcl5OrdersTable extends Migration
             $table->string('uk_style_ref')->nullable(true);
             $table->string('ce_style_ref')->nullable(true);
             $table->string('season_code')->nullable(true);
-            $table->mediumText('short_description');
+            $table->mediumText('short_description')->nullable(true);
             $table->string('eqos_site_code')->nullable(true);
-            $table->string('manufacture_date');
+            $table->string('manufacture_date')->nullable(true);
             $table->date('delivery_date')->nullable(true);
             $table->unsignedInteger('tesco_department_id')->nullable(true)->index();
             $table->unsignedInteger('tesco_brand_id')->nullable(true)->index();

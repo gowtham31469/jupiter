@@ -1,4 +1,4 @@
-function storeSingleSticker(user_type) {
+storeSingleSticker = (user_type) => {
 
 	var sticker_zero_qty = [];
 	var sticker_qty = [];
@@ -60,9 +60,9 @@ function storeSingleSticker(user_type) {
 			submitSingleSticker(user_type);
 			if (user_type === 'admin') {
 				var set_po_number = $('#tesco_po_number').val();
-				var set_style = $('#tesco_'+zone+'_style').val();
+				var set_style = $('#tesco_' + zone + '_style').val();
 				template_data.forEach((element, index) => {
-					printDivTescoSet('tesco_svg'+index, element.template_name.replace(/\s/g, ''), set_po_number, set_style)
+					printDivTescoSet('tesco_svg' + index, element.template_name.replace(/\s/g, ''), set_po_number, set_style)
 				});
 			}
 		}
@@ -73,11 +73,11 @@ function storeSingleSticker(user_type) {
  * [submitSingleSticker for storing tesco single Templates manual orders]
  * @author <praveen>
  */
-function submitSingleSticker(user_type) {
+submitSingleSticker = (user_type) => {
 	try {
 
 		var template_data = JSON.parse(localStorage.getItem("data"));
-		
+
 		if (user_type === 'admin') {
 			tescoAdminOrderCommonData();
 		} else {
@@ -178,7 +178,7 @@ function submitSingleSticker(user_type) {
 		});
 
 		$.ajax({
-			url: base_url + "/"+user_type+"/tesco/store-single-sticker-orders",
+			url: base_url + "/" + user_type + "/tesco/store-single-sticker-orders",
 			type: 'POST',
 			data: {
 				_token: csrf_token,
@@ -243,7 +243,7 @@ function submitSingleSticker(user_type) {
 					$('.po-modal-content').hide();
 					$('.close-btn').attr('data-dismiss', 'modal')
 					$('#poUploadModal').modal('show');
-						/** [ Backdrop for bootstrap modal ] */
+					/** [ Backdrop for bootstrap modal ] */
 					$('#poUploadModal').modal({
 						backdrop: 'static',
 						keyboard: false

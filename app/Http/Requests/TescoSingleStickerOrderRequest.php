@@ -25,7 +25,7 @@ class TescoSingleStickerOrderRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'po_number'             => ['required', 'digits_between:7,10'],
+            'po_number'             => ['required', 'min:7', 'max:9'],
             'eqos'                  => ['required', 'max:7'],
             'uk_style'              => ['required', 'max:8'],
             'ce_style'              => ['required', 'max:8'],

@@ -1069,6 +1069,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 
 	// Tesco TCL5 and TSL2 orders admin routes
 	Route::post('store-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@submitSingleStickerOrder');
+	Route::post('save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
 
   });
 
@@ -1087,5 +1088,6 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 
 	// Tesco TCL5 and TSL2 orders admin routes
 	Route::post('store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
+	Route::post('save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
 	
   });
