@@ -16,7 +16,7 @@ class CreateTescoTcl5OrdersTable extends Migration
         Schema::create('tesco_tcl5_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('template_id')->nullable(true)->index();
-            $table->string('order_id')->nullable(true)->unique();
+            $table->string('order_id')->nullable(true);
             $table->string('zone')->nullable(true)->index();
             $table->string('template_type')->nullable(true);   
             $table->string('po_number')->nullable(true);

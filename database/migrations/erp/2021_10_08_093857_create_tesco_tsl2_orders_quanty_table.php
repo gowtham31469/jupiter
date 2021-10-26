@@ -16,11 +16,11 @@ class CreateTescoTsl2OrdersQuantyTable extends Migration
         Schema::create('tesco_tsl2_orders_quanty', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('tsl2_order_id')->index();
-            $table->bigInteger('tpnd')->nullable(true);
-            $table->bigInteger('itf_barcode')->nullable(true);
+            $table->string('tpnd')->nullable(true);
+            $table->string('itf_barcode')->nullable(true);
             $table->integer('units_per_carton')->default('0');
             $table->integer('cases_per_carton')->default('0');
-            $table->bigInteger('ean_barcode')->nullable(true);
+            $table->string('ean_barcode')->nullable(true);
             $table->string('size');
             $table->integer('case_size')->default('0');
             $table->string('orms_tpn')->nullable(true);

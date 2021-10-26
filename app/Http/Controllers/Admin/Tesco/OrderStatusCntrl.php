@@ -4172,10 +4172,20 @@ class OrderStatusCntrl extends Controller
 			$table_name="tesco_tcl4_orders";
 			$qty_table_name="tesco_tcl4_orders_quanty";
 		}
+		else if($template_name == "TCL5")
+		{
+			$table_name="tesco_tcl5_orders";
+			$qty_table_name="tesco_tcl5_orders_quanty";
+		}
 		else if($template_name == "TSL1")
 		{
 			$table_name="tesco_tsl1_orders";
 			$qty_table_name="tesco_tsl1_orders_quanty";
+		}
+		else if($template_name == "TSL2")
+		{
+			$table_name="tesco_tsl2_orders";
+			$qty_table_name="tesco_tsl2_orders_quanty";
 		}
 		else if($template_name == "TSL3")
 		{
