@@ -196,12 +196,13 @@ $(document).ready(function() {
   {
       var formdata = $("#frm-example").serialize();
       
-      var selected = [];
-      $('#frm-example input[type=checkbox]').each(function () {
-          if (this.checked) {
-              selected.push($(this).attr('id'));
-          }
+      var selected = new Array();
+      var oTable = $('.approved-orders').dataTable();
+      var rowcollection =  oTable.$("input[type='checkbox']:checked", {"page": "all"});
+      rowcollection.each(function(index,elem){
+        selected.push($(elem).val());
       });
+                                
       var formdata = selected.join(',');
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-approved",
@@ -239,7 +240,7 @@ $(document).ready(function() {
    */
   function displayApprovedTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
       var html = "";
       $(orders).each(function(index, value)
       {
@@ -312,6 +313,8 @@ $(document).ready(function() {
        // Handle click on "Select all" control
       $('#select-all-app').click(function () {
       // Check/uncheck all checkboxes in the table
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
         setSelectAll(this,"frm-example",table)
         
       });
@@ -367,12 +370,13 @@ $(document).ready(function() {
   {
       var formdata = $("#frm-pending").serialize();
       
-      var selected = [];
-      $('#frm-pending input[type=checkbox]').each(function () {
-          if (this.checked) {
-              selected.push($(this).attr('id'));
-          }
+      var selected = new Array();
+      var oTable = $('.pending-orders').dataTable();
+      var rowcollection =  oTable.$("input[type='checkbox']:checked", {"page": "all"});
+      rowcollection.each(function(index,elem){
+        selected.push($(elem).val());
       });
+                                
       var formdata = selected.join(',');
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-pending",
@@ -410,7 +414,7 @@ $(document).ready(function() {
    */
   function displayPendingTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
       var html = "";
       $(orders).each(function(index, value)
       {
@@ -469,7 +473,9 @@ $(document).ready(function() {
      $(".modal-body input").attr('placeholder', 'Data Search');
      $('#select-all-pen').click(function () {
       // Check/uncheck all checkboxes in the table
-        setSelectAll(this,"frm-pending",table)
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            setSelectAll(this,"frm-pending",table)
         
       });
       
@@ -486,7 +492,7 @@ $(document).ready(function() {
    */
   function displayCancelledTable(data)
   {
-    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'])))))));
+    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
                  
     var html = "";
     $(orders).each(function(index, value)
@@ -552,6 +558,8 @@ $(document).ready(function() {
       $('#cancelledOrdersModal').modal("show")
       $('#select-all-can').click(function () {
       // Check/uncheck all checkboxes in the table
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
         setSelectAll(this,"frm-cancelled",table)
         
       });
@@ -570,12 +578,13 @@ $(document).ready(function() {
   {
       var formdata = $("#frm-cancelled").serialize();
       
-      var selected = [];
-      $('#frm-cancelled input[type=checkbox]').each(function () {
-          if (this.checked) {
-              selected.push($(this).attr('id'));
-          }
+      var selected = new Array();
+      var oTable = $('.cancelled-orders').dataTable();
+      var rowcollection =  oTable.$("input[type='checkbox']:checked", {"page": "all"});
+      rowcollection.each(function(index,elem){
+        selected.push($(elem).val());
       });
+                                
       var formdata = selected.join(',');
       $.ajax({
           url: base_url + "/customer/tesco/order-management/viewed-selected-cancelled",
