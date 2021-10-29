@@ -6016,7 +6016,7 @@ function setEditOrderStatus() {
 
     /** [ Create array of ce ratio itf barcode ] */
     $('.ce_ratio_itf').each(function (i, item) {
-        if ((template_name == "TCL1" && zone == "CE") || (template_name == "TCL2" && zone == "CE") || (template_name == "TSL1" && zone == "CE") || (template_name == "THL1" && zone == "CE")) {
+        if ((template_name == "TCL1") || (template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1") || (template_name == "TCL5") || (template_name == "TSL2")) {
             var barcodecheck = checkjsbarcodeitf($(item).val());
             if (barcodecheck == "false") {
 
@@ -6026,28 +6026,8 @@ function setEditOrderStatus() {
             } else {
                 $(this).parent().find('.barcode_error').addClass('hidden')
             }
-        } else if ((template_name == "TCL4" && zone == "CE") || (template_name == "TSL3" && zone == "CE") || (template_name == "THL3" && zone == "CE")) {
+        } else if ((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3")) {
             var barcodecheck = checkjsbarcodeean($(item).val());
-            if (barcodecheck == "false") {
-
-                barcode_checks++;
-
-                $(this).parent().find('.barcode_error').removeClass('hidden')
-            } else {
-                $(this).parent().find('.barcode_error').addClass('hidden')
-            }
-        } else if ((template_name == "TCL4" && zone == "UK") || (template_name == "TSL3" && zone == "UK") || (template_name == "THL3" && zone == "UK")) {
-            var barcodecheck = checkjsbarcodeean($(item).val());
-            if (barcodecheck == "false") {
-
-                barcode_checks++;
-
-                $(this).parent().find('.barcode_error').removeClass('hidden')
-            } else {
-                $(this).parent().find('.barcode_error').addClass('hidden')
-            }
-        } else if ((template_name == "TCL1" && zone == "UK") || (template_name == "TCL2" && zone == "UK") || (template_name == "TSL1" && zone == "UK") || (template_name == "THL1" && zone == "UK")) {
-            var barcodecheck = checkjsbarcodeitf($(item).val());
             if (barcodecheck == "false") {
 
                 barcode_checks++;
@@ -6078,7 +6058,7 @@ function setEditOrderStatus() {
 
     if ((template_name == "TCL1") || (template_name == "TCL2") || (template_name == "TSL1") || (template_name == "THL1")) {
         single_size = "";
-    } else if ((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3")) {
+    } else if ((template_name == "TCL4") || (template_name == "TSL3") || (template_name == "THL3") || (template_name == "TCL5") || (template_name == "TSL2")) {
         /** [ Create array of ce ratio tcl1 count ] */
         $('.ce_single_size').each(function (i, item) {
             single_size[i] = $(item).val();
@@ -6172,13 +6152,13 @@ function addRowOs(obj, TemplateName, zone, moq) {
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "5";
-    } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE")) {
+    } else if ((TemplateName == "TCL4" && zone == "CE") || (TemplateName == "TSL3" && zone == "CE") || (TemplateName == "THL3" && zone == "CE") || (TemplateName == "TCL5" && zone == "CE") || (TemplateName == "TSL2" && zone == "CE")) {
         var qty = "Case Size";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter ORMS TPND";
         var tpn_len = "13";
         var unit_len = "6";
-    } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK")) {
+    } else if ((TemplateName == "TCL4" && zone == "UK") || (TemplateName == "TSL3" && zone == "UK") || (TemplateName == "THL3" && zone == "UK") || (TemplateName == "TCL5" && zone == "UK") || (TemplateName == "TSL2" && zone == "UK")) {
         var qty = "Case Size";
         var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="" placeholder="Enter Size" maxlength="9"><div class="help-block with-errors"></div></div></td>';
         var tpn_th = "Enter TPND";

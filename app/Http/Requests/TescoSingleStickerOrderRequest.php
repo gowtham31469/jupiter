@@ -46,10 +46,10 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'full_description'      => ['nullable', 'sometimes'],
             'qr_code'               => ['nullable', 'sometimes'],
 
-            'orms_tpn.*'            => ['required', 'numeric', 'digits:13'],
-            'barcode.*'             => ['required', 'numeric', 'min:13', 'max:14'],
-            'case_size.*'           => ['required', 'numeric', 'max:6'],
-            'size.*'                => ['nullable', 'sometimes', 'max:9'],
+            'orms_tpn.*'            => ['required', 'numeric'],
+            'barcode.*'             => ['required', 'numeric'],
+            'case_size.*'           => ['required', 'numeric'],
+            'size.*'                => ['nullable', 'sometimes'],
             'sticker_count.*'       => ['required', 'nullable'],
             
         ];

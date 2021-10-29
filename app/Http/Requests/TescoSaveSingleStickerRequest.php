@@ -35,10 +35,10 @@ class TescoSaveSingleStickerRequest extends FormRequest
             'brand'                 => ['nullable', 'sometimes', 'numeric', 'exists:tesco_brand,id'],
             'ocn_no'                => ['nullable', 'sometimes', 'numeric'],
 
-            'orms_tpn.*'            => ['nullable', 'sometimes', 'numeric', 'digits:13'],
-            'barcode.*'             => ['nullable', 'sometimes', 'numeric', 'min:13', 'max:14'],
-            'case_size.*'           => ['nullable', 'sometimes', 'numeric', 'max:6'],
-            'size.*'                => ['nullable', 'sometimes', 'max:9'],
+            'orms_tpn.*'            => ['nullable', 'sometimes', 'numeric'],
+            'barcode.*'             => ['nullable', 'sometimes', 'numeric'],
+            'case_size.*'           => ['nullable', 'sometimes', 'numeric'],
+            'size.*'                => ['nullable', 'sometimes'],
             
         ];
     }
