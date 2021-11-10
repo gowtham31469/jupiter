@@ -59,7 +59,7 @@ class TescoOrders
           $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
           // total order quantity calculation
-          $total_qty_array = explode(',',$request['count_'.str_replace(" ","",$template_data->item_name)]);
+          $total_qty_array = $request['sticker_count'][$template_data->item_name];
           $total_qty = array_sum($total_qty_array);
 
           /** [ Get orders table maximum id value for creating order id] */
