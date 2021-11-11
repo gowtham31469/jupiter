@@ -2035,14 +2035,24 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                                         }
                                         else if(name2 === "TCL5")
 										{
-                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2070,6 +2080,16 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
 										}
                                         else if(name2 === "TCL5")
 										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
                                             svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
                                             svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
                                             svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
@@ -2115,14 +2135,24 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                                         }
                                         else if(name2 === "TCL5")
 										{
-                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2150,6 +2180,16 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                                         }
                                         else if(name2 === "TCL5")
 										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
                                             svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
                                             svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
                                             svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
@@ -2217,14 +2257,24 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                                     }
                                     else if(name2 === "TCL5")
                                     {
-                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
                                         
                                     }
 									else
@@ -2252,14 +2302,24 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
                                     }
                                     else if(name2 === "TCL5")
                                     {
-                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
-                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
-                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
-                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
-                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
-                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
                                         
                                     }
 									else
@@ -3693,14 +3753,24 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                         }
                                         else if(name2 === "TCL5")
 										{
-                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -3728,6 +3798,16 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                         }
                                         else if(name2 === "TCL5")
 										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
                                             svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
                                             svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
                                             svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
@@ -3773,14 +3853,24 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                         }
                                         else if(name2 === "TCL5")
 										{
-                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -3808,6 +3898,16 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                         }
                                         else if(name2 === "TCL5")
 										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
                                             svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
                                             svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
                                             svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
@@ -3874,14 +3974,24 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                     }
                                     else if(name2 === "TCL5")
                                     {
-                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 114)");
-                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
-                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
-                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 114)");
-                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 126)");
-                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
                                         
                                     }
 									else
@@ -3909,14 +4019,24 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                     }
                                     else if(name2 === "TCL5")
                                     {
-                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
-                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
-                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
-                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
-                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
-                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
-                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
-                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
                                         
                                     }
 									else
