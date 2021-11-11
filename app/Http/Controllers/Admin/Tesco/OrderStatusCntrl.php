@@ -1794,6 +1794,10 @@ class OrderStatusCntrl extends Controller
                            {
                               PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                           }
+                          else if($name == "TCL5-sticker")
+                          {
+                            PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                          }
                           else
                           {
                               PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
