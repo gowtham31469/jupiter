@@ -31,7 +31,8 @@ class SingleStickerOrdersController extends Controller
           $request->validated();
 
           $orms_tpn    = explode(',',$request['orms_tpn']);
-          $barcode     = explode(',',$request['barcode']);
+          $ean_barcode = explode(',',$request['ean_barcode']);
+          $itf_barcode = explode(',',$request['itf_barcode']);
           $case_size   = explode(',',$request['case_size']);
           $size        = explode(',',$request['size']);
           $qr_code     = explode('|',$request['qr_code']);
@@ -39,7 +40,8 @@ class SingleStickerOrdersController extends Controller
           $zone        = $request['zone'];
           $style_ref   = strtolower($request['zone']) . '_style_ref';
           $style       = strtolower($request['zone']) . '_style';
-          $barcode_type= strlen($barcode[0]) === 13?'ean_barcode':'itf_barcode';
+          $qty_data_array = [];
+          // $barcode_type= strlen($barcode[0]) === 13?'ean_barcode':'itf_barcode';
 
           $last_insertions  = [];
           $zero_quantity    = [];
@@ -84,6 +86,7 @@ class SingleStickerOrdersController extends Controller
             $sticker_name   = str_replace(' ', '', $template['template_name']);
             $orders_model_name     = 'App\\' . "Tesco" . $sticker_name . "Orders";
             $order_qty_model_name     = 'App\\' . "Tesco" . $sticker_name . "OrdersQuantity";
+            $order_qty_table_name     = 'tesco_' . strtolower($sticker_name) . '_orders_quanty';
             $sticker_order_id = strtolower($sticker_name).'_order_id';
 
             $quantity_array = $request['sticker_count'][$template['template_name']];
@@ -116,33 +119,80 @@ class SingleStickerOrdersController extends Controller
             $i = 0;
 
             if($zone === 'CE'){
+              
               foreach ($orms_tpn as $value) 
               {
-                $order_qty_model_name::create([
+                 if (!empty($request['ean_barcode']) && !empty($request['itf_barcode'])) {
+                  $qty_data_array = [
                     $sticker_order_id  => $tesco_order_id,
                     'orms_tpn'         => $value,
-                    $barcode_type      => $barcode[$i],
+                    'ean_barcode'      => $ean_barcode[$i],
+                    'itf_barcode'      => $itf_barcode[$i],
                     'size'             => $size[$i],
                     'case_size'        => $case_size[$i],
                     'count'            => $quantity_array[$i],
                     'qr_code'          => $qr_code[$i]
-                  ]);
+                  ];
+                } else if (!empty($request['ean_barcode'])) {
+                  $qty_data_array = [
+                    $sticker_order_id  => $tesco_order_id,
+                    'orms_tpn'         => $value,
+                    'ean_barcode'      => $ean_barcode[$i],
+                    'size'             => $size[$i],
+                    'case_size'        => $case_size[$i],
+                    'count'            => $quantity_array[$i],
+                    'qr_code'          => $qr_code[$i]
+                  ];
+                } else if (!empty($request['itf_barcode'])) {
+                  $qty_data_array = [
+                    $sticker_order_id  => $tesco_order_id,
+                    'orms_tpn'         => $value,
+                    'itf_barcode'      => $itf_barcode[$i],
+                    'size'             => $size[$i],
+                    'case_size'        => $case_size[$i],
+                    'count'            => $quantity_array[$i],
+                    'qr_code'          => $qr_code[$i]
+                  ];
+                }
                 $i++;
               }
             } else {
               foreach ($orms_tpn as $value) 
-                  {
-                    $order_qty_model_name::create([
-                        $sticker_order_id  => $tesco_order_id,
-                        'tpnd'             => $value,
-                        $barcode_type      => $barcode[$i],
-                        'size'             => $size[$i],
-                        'case_size'        => $case_size[$i],
-                        'count'            => $quantity_array[$i]
-                      ]);
-                    $i++;
-                  }
+              {
+                if (!empty($request['ean_barcode']) && !empty($request['itf_barcode'])) {
+                  $qty_data_array = [
+                    $sticker_order_id  => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_barcode[$i],
+                    'itf_barcode'      => $itf_barcode[$i],
+                    'size'             => $size[$i],
+                    'case_size'        => $case_size[$i],
+                    'count'            => $quantity_array[$i]
+                  ];
+                } else if (!empty($request['ean_barcode'])) {
+                  $qty_data_array = [
+                    $sticker_order_id  => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'ean_barcode'      => $ean_barcode[$i],
+                    'size'             => $size[$i],
+                    'case_size'        => $case_size[$i],
+                    'count'            => $quantity_array[$i]
+                  ];
+                } else if (!empty($request['itf_barcode'])) {
+                  $qty_data_array = [
+                    $sticker_order_id  => $tesco_order_id,
+                    'tpnd'             => $value,
+                    'itf_barcode'      => $itf_barcode[$i],
+                    'size'             => $size[$i],
+                    'case_size'        => $case_size[$i],
+                    'count'            => $quantity_array[$i]
+                  ];
+                }
+                $i++;
+              }
             }
+
+            DB::table($order_qty_table_name)->insert($qty_data_array);
 
             /** [ last inserted tesco order id ] */
             $templates_inserted = array($template['template_name'] => $tesco_order_id);
