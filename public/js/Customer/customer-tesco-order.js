@@ -7552,7 +7552,7 @@ function mapStoredValues(oDetails) {
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     var temp_data = JSON.parse(localStorage.getItem("data"));
-    
+    const stickersList = temp_data.map(template => template.template_name);
     $('.page-header h4 strong').text(header);
     $('.save-btn').data('insert','false');
 
@@ -7588,11 +7588,14 @@ function mapStoredValues(oDetails) {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
                     
-                    if($.inArray(temp_data[0].template_name, ean_barcode_stickers) != -1 ){
-                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
-					} else {
+                    if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
                         $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
-					}
+                    } else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    } else {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    }
 
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
                     $('#'+zone+'_single_size_'+index).val(j.size);  

@@ -91,7 +91,6 @@ submitSingleSticker = (user_type) => {
 		var case_size = [];
 		var size = [];
 		var sticker_count = {};
-		var qr_code = [];
 		var barcode_array = [];
 
 		if (zone === 'CE') {
@@ -127,12 +126,8 @@ submitSingleSticker = (user_type) => {
 			$('.ce_single_orms_tpn').each(function (i, item) {
 				orms_tpn[i] = $(item).val();
 
-				// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
-				qr_code[i] = po_number + ',' + barcode_array[i] + '/' + ($(item).val().substr($(item).val().length - 3)) + ',' + $(item).val();
-
 			});
 			orms_tpn = orms_tpn.join(',');
-			qr_code = qr_code.join('|');
 
 			$('.ce_single_case_size').each(function (i, item) {
 				case_size[i] = $(item).val();
@@ -147,20 +142,29 @@ submitSingleSticker = (user_type) => {
 			size = size.join(',');
 
 		} else {
-
-			if ($('.uk_single_ean').length !== 0) {
-				$('.uk_single_ean').each(function (i, item) {
-					ean_barcode[i] = $(item).val();
-
-				});
-				ean_barcode = ean_barcode.join(',');
-			} 
-			if ($('.uk_ratio_itf').length !== 0) {
+			if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
 				$('.uk_ratio_itf').each(function (i, item) {
 					itf_barcode[i] = $(item).val();
 
 				});
 				itf_barcode = itf_barcode.join(',');
+			} else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+				$('.uk_single_ean').each(function (i, item) {
+					ean_barcode[i] = $(item).val();
+
+				});
+				ean_barcode = ean_barcode.join(',');
+			} else {
+				$('.uk_ratio_itf').each(function (i, item) {
+					itf_barcode[i] = $(item).val();
+				});
+				itf_barcode = itf_barcode.join(',');
+
+				$('.uk_single_ean').each(function (i, item) {
+					ean_barcode[i] = $(item).val();
+
+				});
+				ean_barcode = ean_barcode.join(',');
 			}
 
 			$('.uk_single_tpnd').each(function (i, item) {
@@ -221,7 +225,6 @@ submitSingleSticker = (user_type) => {
 				templates: data,
 				ocn_no: ocn_no,
 				full_description: full_description,
-				qr_code: qr_code,
 				created_by: created_by,
 			},
 			tryCount: 0,
@@ -230,6 +233,7 @@ submitSingleSticker = (user_type) => {
 			beforeSend: function () {
 				$(".loader").show();
 				$('.submit-btn').prop('disabled', true);
+				$('#result').html('');
 			},
 			statusCode: {
 				200: function (response) {
