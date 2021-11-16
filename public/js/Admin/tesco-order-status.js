@@ -4304,6 +4304,12 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
+
+
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 22.786, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 36.583, 257.0148)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 10.145, 264.3518)");
+
                             //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
 
                             var polish = "tiny baby"
@@ -4335,8 +4341,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
                             //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                             //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.9806, 257.061)");
-                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.9806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 31.5 257.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.9806, 257.061)");
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
@@ -4351,6 +4357,10 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21.3, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 34.8, 257.0148)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 4, 264.3518)");
 
                             //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
                             
@@ -4407,9 +4417,9 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
                             //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                             //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.786, 257.061)");
-                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 48.786, 257.061)");
-                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(1.0039 0 0 1 35.5806 264.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 28.3, 257.061)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(1.0039 0 0 1 3 264.061)");
                             
                             svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
                             svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
