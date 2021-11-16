@@ -6,6 +6,7 @@ saveSingleStickers = (user_type) => {
 	try {
 
         var template_data = JSON.parse(localStorage.getItem("data"));
+		const stickersList = template_data.map(template => template.template_name);
 
 		if (user_type === 'admin') {
 			tescoAdminOrderCommonData();
@@ -15,7 +16,8 @@ saveSingleStickers = (user_type) => {
 		
         var sticker_count = {};
 		var orms_tpn = [];
-		var barcode = [];
+		var ean_barcode = [];
+		var itf_barcode = [];
 		var case_size = [];
 		var size = [];
 		var is_insert = $('.save-btn').data('insert');
@@ -24,20 +26,32 @@ saveSingleStickers = (user_type) => {
 
         if (zone === 'CE') {
 
-            if ($.inArray(template_data[0].template_name, itf_barcode_stickers) != -1) {
+            if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
 				$('.ce_ratio_itf').each(function (i, item) {
-					barcode[i] = $(item).val();
+					itf_barcode[i] = $(item).val();
 					barcode_array.push($(item).val());
 
 				});
-				barcode = barcode.join(',');
-			} else {
+				itf_barcode = itf_barcode.join(',');
+			} else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
 				$('.ce_single_ean').each(function (i, item) {
-					barcode[i] = $(item).val();
+					ean_barcode[i] = $(item).val();
 					barcode_array.push($(item).val());
 
 				});
-				barcode = barcode.join(',');
+				ean_barcode = ean_barcode.join(',');
+			} else {
+				$('.ce_ratio_itf').each(function (i, item) {
+					itf_barcode[i] = $(item).val();
+				});
+				itf_barcode = itf_barcode.join(',');
+
+				$('.ce_single_ean').each(function (i, item) {
+					ean_barcode[i] = $(item).val();
+					barcode_array.push($(item).val());
+
+				});
+				ean_barcode = ean_barcode.join(',');
 			}
     
             $('.ce_single_orms_tpn').each(function (i, item) {
@@ -63,18 +77,29 @@ saveSingleStickers = (user_type) => {
             size = size.join(',');
         } else {
 
-            if ($.inArray(template_data[0].template_name, ean_barcode_stickers) != -1) {
-				$('.uk_single_ean').each(function (i, item) {
-					barcode[i] = $(item).val();
+            if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+				$('.uk_ratio_itf').each(function (i, item) {
+					itf_barcode[i] = $(item).val();
 
 				});
-				barcode = barcode.join(',');
+				itf_barcode = itf_barcode.join(',');
+			} else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+				$('.uk_single_ean').each(function (i, item) {
+					ean_barcode[i] = $(item).val();
+
+				});
+				ean_barcode = ean_barcode.join(',');
 			} else {
 				$('.uk_ratio_itf').each(function (i, item) {
-					barcode[i] = $(item).val();
+					itf_barcode[i] = $(item).val();
+				});
+				itf_barcode = itf_barcode.join(',');
+
+				$('.uk_single_ean').each(function (i, item) {
+					ean_barcode[i] = $(item).val();
 
 				});
-				barcode = barcode.join(',');
+				ean_barcode = ean_barcode.join(',');
 			}
 
             $('.uk_single_tpnd').each(function (i, item) {
@@ -127,7 +152,8 @@ saveSingleStickers = (user_type) => {
 				zone: zone,
 				type: type,
 				orms_tpn: orms_tpn,
-				barcode: barcode,
+				ean_barcode: ean_barcode,
+				itf_barcode:itf_barcode,
 				case_size: case_size,
 				size: size,
 				sticker_count: sticker_count,
