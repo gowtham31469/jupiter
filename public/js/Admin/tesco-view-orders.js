@@ -185,9 +185,9 @@ function mapStoredValues(oDetails) {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
 
-                    if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+                    if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
                         $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
-                    } else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+                    } else if ($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
                         $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
                     } else {
                         $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
