@@ -884,7 +884,7 @@ function createOrders(parsedObj = false, oType = false) {
 														<div class="help-block with-errors"></div>
 													</div>
 												</div>`;
-					if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+					if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 						var barcode_title = `<th rowspan="2">ITF Barcode</th>`;
 						var barcode_component = `<td>
 													<div class="form-group has-feedback">
@@ -894,7 +894,7 @@ function createOrders(parsedObj = false, oType = false) {
 													</div>
 												</td>`;
 						
-					} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+					} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 						var barcode_title = `<th rowspan="2">EAN Barcode</th>`;
 						var barcode_component = `<td>
 													<div class="form-group has-feedback">
@@ -930,7 +930,7 @@ function createOrders(parsedObj = false, oType = false) {
 														<div class="help-block with-errors"></div>
 													</div>
 												</div>`;
-					if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+					if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 						var barcode_title = `<th rowspan="2">ITF Barcode</th>`;
 						var barcode_component = `<td>
 													<div class="form-group has-feedback">
@@ -940,7 +940,7 @@ function createOrders(parsedObj = false, oType = false) {
 													</div>
 												</td>`;
 						
-					} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+					} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 						var barcode_title = `<th rowspan="2">EAN Barcode</th>`;
 						var barcode_component = `<td>
 													<div class="form-group has-feedback">
@@ -3625,7 +3625,7 @@ function addUKSingle(rem, e) {
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
 		
-		if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+		if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
@@ -3634,7 +3634,7 @@ function addUKSingle(rem, e) {
 										</div>
 									</td>`;
 			
-		} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
@@ -3730,7 +3730,7 @@ function addUKRatio(rem, e) {
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
 		
-		if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+		if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
@@ -3739,7 +3739,7 @@ function addUKRatio(rem, e) {
 										</div>
 									</td>`;
 			
-		} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
@@ -3892,7 +3892,7 @@ function addCESingle(rem, e) {
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
 
-		if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+		if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
@@ -3901,7 +3901,7 @@ function addCESingle(rem, e) {
 										</div>
 									</td>`;
 			
-		} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
@@ -3997,7 +3997,7 @@ function addCERatio(rem, e) {
 		var id = $(rem).attr("data-id");
 		var val = parseInt(id) + 1;
 
-		if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+		if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
@@ -4006,7 +4006,7 @@ function addCERatio(rem, e) {
 										</div>
 									</td>`;
 			
-		} else if($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 			var barcode_component = `<td>
 										<div class="form-group has-feedback">
 											<input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
