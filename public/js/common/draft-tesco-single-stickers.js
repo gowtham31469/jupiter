@@ -26,14 +26,14 @@ saveSingleStickers = (user_type) => {
 
         if (zone === 'CE') {
 
-            if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+            if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 				$('.ce_ratio_itf').each(function (i, item) {
 					itf_barcode[i] = $(item).val();
 					barcode_array.push($(item).val());
 
 				});
 				itf_barcode = itf_barcode.join(',');
-			} else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+			} else if ($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 				$('.ce_single_ean').each(function (i, item) {
 					ean_barcode[i] = $(item).val();
 					barcode_array.push($(item).val());
@@ -77,13 +77,13 @@ saveSingleStickers = (user_type) => {
             size = size.join(',');
         } else {
 
-            if ($.inArray(stickersList.at(-1), itf_barcode_stickers) != -1) {
+            if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
 				$('.uk_ratio_itf').each(function (i, item) {
 					itf_barcode[i] = $(item).val();
 
 				});
 				itf_barcode = itf_barcode.join(',');
-			} else if ($.inArray(stickersList.at(-1), ean_barcode_stickers) != -1) {
+			} else if ($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
 				$('.uk_single_ean').each(function (i, item) {
 					ean_barcode[i] = $(item).val();
 
