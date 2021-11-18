@@ -3935,11 +3935,11 @@ class OrderStatusCntrl extends Controller
             $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';
 		}
         // get quantity_table ids.
-        $quantity_table_ids = DB::table($qty_table_name)->select('id')->where($foreign_key,$template_id)->get();
+        $quantity_table_data = DB::table($qty_table_name)->orderBy('id')->where($foreign_key,$template_id) ->select('count','id', 'ean_barcode', 'itf_barcode')->get(); 
         
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
 
-        $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->first();
+        $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->value('customer_id');
 		
         $order_qnty = (array_sum($count)>0)?0:1 ;
         $order_status  = $order_qnty === 1?'Order Pending':'Order Placed';
@@ -3961,7 +3961,7 @@ class OrderStatusCntrl extends Controller
         else
         {
             if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1" && $template_name != "TCL5") {
-                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id->customer_id, $created_by, $barcode_type);
+                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id, $created_by, $barcode_type);
              } 
              DB::table($table_name)->where('id',$template_id)
                                    ->update([
@@ -3976,7 +3976,7 @@ class OrderStatusCntrl extends Controller
                                        'manufacture_date'     => $request['manufacture_date'],
                                        'tesco_department_id'  => $request['department'],
                                        'tesco_brand_id'       => $request['brand'],
-                                       'tesco_supplier_id'    => $customer_id->customer_id,
+                                       'tesco_supplier_id'    => $customer_id,
                                        'tesco_metadata_supplier_id'    => $request['supplier'],
                                        'rfid_compliant'       => $request['rfid'],
                                        'tag_at_source'        => $request['tag_at_source'],
@@ -3990,7 +3990,7 @@ class OrderStatusCntrl extends Controller
             // update order data in order management history table 
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
                 'season'                    => $request['season_code'],
-                'customer_id'               => $customer_id->customer_id,
+                'customer_id'               => $customer_id,
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
@@ -4003,6 +4003,9 @@ class OrderStatusCntrl extends Controller
              $i=0;
              foreach($tpnd as $value)
              {
+                $second_barcode_type = $barcode_type === 'itf_barcode'?'ean_barcode':'itf_barcode';
+                $old_barcode = isset($quantity_table_data[$i])?$quantity_table_data[$i]->$second_barcode_type:0;
+
                  if(($template_name == "TCL1") ||($template_name == "TCL2") || ($template_name == "TSL1") || ($template_name == "THL1"))
                  {					
                      DB::table($qty_table_name)->insert([
@@ -4021,6 +4024,7 @@ class OrderStatusCntrl extends Controller
                      DB::table($qty_table_name)->insert([
                          $tpnd_type         => $value,
                          $barcode_type      => $barcode[$i],
+                         $second_barcode_type => $old_barcode,
                          $foreign_key       => $template_id,
                          'case_size'        => $case_size[$i],
                          'count'         	=> $count[$i],
@@ -4034,7 +4038,7 @@ class OrderStatusCntrl extends Controller
             // fetch erp_order_details table details for each quantity_table ids.
             $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
             ->where('order_qnty_table_name', $table_name.'_quanty')
-            ->whereIn('order_qnty_table_id', $quantity_table_ids->pluck('id')->toArray())
+            ->whereIn('order_qnty_table_id', $quantity_table_data->pluck('id')->toArray())
             ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
             ->get();
 
