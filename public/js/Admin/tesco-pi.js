@@ -190,6 +190,11 @@ const genarateTescoPI = (id, tableName, pi_status, style_no, template_id, buyer_
             {
                $('.snackbar_span').html('Something went wrong');
                showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
+               showSnackbar();
             }
         },
         error: function (data)
