@@ -150,8 +150,6 @@ class TescoOrders
       $tpnd            = explode(',',$request['tpnd']);
       $barcode         = explode(',',$request['barcode']);
       $case_size       = explode(',',$request['size']);
-      $count           = explode(',',$request['count']);
-      $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
       $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';

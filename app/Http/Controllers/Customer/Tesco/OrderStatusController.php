@@ -2903,69 +2903,63 @@ class OrderStatusController extends Controller
             $pi_number = $pi_obj->piNumberGenerator();
 
             $erpOrders  =   [];
+            $rep_order_id = 0;
 
-            if ($data)
-            {
-                $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
-                if ($data['bank_details']->zone === "joint")
-                {
-                    $style_no = $data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref;
-                }
-                else
-                {
-                    $style_no = $data['bank_details']->$zone_style_no;
-                }
-
-                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
-                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
-                }
-                else{
-                    $rep_order_id = 0;
-                }
-                $pi_details = PI::create([
-                    'buyer_id'         => $buyer_id,
-                    'company_id'       => $data['company_details']->id,
-                    'customer_id'      => $data['bank_details']->id,
-                    // 'template_id'      => $data['bank_details']->template_id,
-                    'buyer_po_no'      => $data['bank_details']->po_number,
-                    'uvc_style_no'     => $style_no,
-                    'ref_no'           => $data['bank_details']->ref_no,
-                    'shipping_address' => $data['ship_to']->address,
-                    'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply,
-                    'template_type'  => $data['bank_details']->template_type,
-                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                    'rep_order_id'     => $rep_order_id,
-                    'pi_file'         => $attachment,
-                    'pi_number'       => $pi_number
-                    
-                ]);
-                foreach ($data['item_details'] as $key => $value)
-                {
-                    $unit_cost = $value->price;
-                    $tax = $value->tax;
-                    $total_qnty+= $value->quantity;
-                    $sub_total += $value->quantity *$unit_cost;
-                    ProfomaInvoiceItemDetails::create([
-                        'pi_id'     => $pi_details->id,
-                        'material'  => $value->material_name,
-                        'size'      => $value->size,
-                        'template_id' => $value->item_id,
-                        'ref_no'      => $value->ref_no,
-                        'style'     => $value->style,
-                        'quantity'  => $value->quantity,
-                        'unit_cost' => $unit_cost,
-                        'tax'       => $tax
-                    ]);
-                }
-                PI::where('id',$pi_details->id)
-                            ->update([
-                              'total_quantity'   => $total_qnty,
-                              'sub_total'        => $sub_total,
-                              // 'tax'              => $data['item_details'][0]->tax,
-                              'bill_amount'      => $billamnt
-                            ]);
+            if (!$data) {
+                return response()->json(['error' => true, 'message' => 'No content found', 'pi_status' => false], 204);
             }
+
+            $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
+
+            $style_no = $data['bank_details']->zone === "joint"?$data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref:$data['bank_details']->$zone_style_no;
+
+            if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
+                $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+            }
+           
+            $pi_details = PI::create([
+                'buyer_id'         => $buyer_id,
+                'company_id'       => $data['company_details']->id,
+                'customer_id'      => $data['bank_details']->id,
+                // 'template_id'      => $data['bank_details']->template_id,
+                'buyer_po_no'      => $data['bank_details']->po_number,
+                'uvc_style_no'     => $style_no,
+                'ref_no'           => $data['bank_details']->ref_no,
+                'shipping_address' => $data['ship_to']->address,
+                'billing_address'  => $data['bill_to']->address,
+                'place_of_supply'  => $data['bank_details']->place_of_supply,
+                'template_type'  => $data['bank_details']->template_type,
+                'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                'rep_order_id'     => $rep_order_id,
+                'pi_file'         => $attachment,
+                'pi_number'       => $pi_number
+                
+            ]);
+            foreach ($data['item_details'] as $key => $value)
+            {
+                $unit_cost = $value->price;
+                $tax = $value->tax;
+                $total_qnty+= $value->quantity;
+                $sub_total += $value->quantity *$unit_cost;
+                ProfomaInvoiceItemDetails::create([
+                    'pi_id'     => $pi_details->id,
+                    'material'  => $value->material_name,
+                    'size'      => $value->size,
+                    'template_id' => $value->item_id,
+                    'ref_no'      => $value->ref_no,
+                    'style'     => $value->style,
+                    'quantity'  => $value->quantity,
+                    'unit_cost' => $unit_cost,
+                    'tax'       => $tax
+                ]);
+            }
+            PI::where('id',$pi_details->id)
+                        ->update([
+                            'total_quantity'   => $total_qnty,
+                            'sub_total'        => $sub_total,
+                            // 'tax'              => $data['item_details'][0]->tax,
+                            'bill_amount'      => $billamnt
+                        ]);
             
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
