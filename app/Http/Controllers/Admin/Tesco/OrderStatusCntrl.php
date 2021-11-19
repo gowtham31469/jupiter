@@ -2949,69 +2949,63 @@ class OrderStatusCntrl extends Controller
             $pi_number = $pi_obj->piNumberGenerator();
 
             $erpOrders  =   [];
+            $rep_order_id = 0;
 
-            if ($data)
-            {
-                $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
-                if ($data['bank_details']->zone === "joint")
-                {
-                    $style_no = $data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref;
-                }
-                else
-                {
-                    $style_no = $data['bank_details']->$zone_style_no;
-                }
-
-                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
-                    $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
-                }
-                else{
-                    $rep_order_id = 0;
-                }
-                $pi_details = PI::create([
-                    'buyer_id'         => $buyer_id,
-                    'company_id'       => $data['company_details']->id,
-                    'customer_id'      => $data['bank_details']->id,
-                    // 'template_id'      => $data['bank_details']->template_id,
-                    'buyer_po_no'      => $data['bank_details']->po_number,
-                    'uvc_style_no'     => $style_no,
-                    'ref_no'           => $data['bank_details']->ref_no,
-                    'shipping_address' => $data['ship_to']->address,
-                    'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply,
-                    'template_type'  => $data['bank_details']->template_type,
-                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                    'rep_order_id'     => $rep_order_id,
-                    'pi_file'         => $attachment,
-                    'pi_number'       => $pi_number
-                    
-                ]);
-                foreach ($data['item_details'] as $key => $value)
-                {
-                    $unit_cost = $value->price;
-                    $tax = $value->tax;
-                    $total_qnty+= $value->quantity;
-                    $sub_total += $value->quantity *$unit_cost;
-                    ProfomaInvoiceItemDetails::create([
-                        'pi_id'     => $pi_details->id,
-                        'material'  => $value->material_name,
-                        'size'      => $value->size,
-                        'template_id' => $value->item_id,
-                        'ref_no'      => $value->ref_no,
-                        'style'     => $value->style,
-                        'quantity'  => $value->quantity,
-                        'unit_cost' => $unit_cost,
-                        'tax'       => $tax
-                    ]);
-                }
-                PI::where('id',$pi_details->id)
-                            ->update([
-                              'total_quantity'   => $total_qnty,
-                              'sub_total'        => $sub_total,
-                              // 'tax'              => $data['item_details'][0]->tax,
-                              'bill_amount'      => $billamnt
-                            ]);
+            if (!$data) {
+                return response()->json(['error' => true, 'message' => 'No content found', 'pi_status' => false], 204);
             }
+
+            $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
+            
+            $style_no = $data['bank_details']->zone === "joint"?$data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref:$data['bank_details']->$zone_style_no;
+
+            if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
+                $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+            }
+            
+            $pi_details = PI::create([
+                'buyer_id'         => $buyer_id,
+                'company_id'       => $data['company_details']->id,
+                'customer_id'      => $data['bank_details']->id,
+                // 'template_id'      => $data['bank_details']->template_id,
+                'buyer_po_no'      => $data['bank_details']->po_number,
+                'uvc_style_no'     => $style_no,
+                'ref_no'           => $data['bank_details']->ref_no,
+                'shipping_address' => $data['ship_to']->address,
+                'billing_address'  => $data['bill_to']->address,
+                'place_of_supply'  => $data['bank_details']->place_of_supply,
+                'template_type'  => $data['bank_details']->template_type,
+                'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                'rep_order_id'     => $rep_order_id,
+                'pi_file'         => $attachment,
+                'pi_number'       => $pi_number
+                
+            ]);
+            foreach ($data['item_details'] as $key => $value)
+            {
+                $unit_cost = $value->price;
+                $tax = $value->tax;
+                $total_qnty+= $value->quantity;
+                $sub_total += $value->quantity *$unit_cost;
+                ProfomaInvoiceItemDetails::create([
+                    'pi_id'     => $pi_details->id,
+                    'material'  => $value->material_name,
+                    'size'      => $value->size,
+                    'template_id' => $value->item_id,
+                    'ref_no'      => $value->ref_no,
+                    'style'     => $value->style,
+                    'quantity'  => $value->quantity,
+                    'unit_cost' => $unit_cost,
+                    'tax'       => $tax
+                ]);
+            }
+            PI::where('id',$pi_details->id)
+                        ->update([
+                            'total_quantity'   => $total_qnty,
+                            'sub_total'        => $sub_total,
+                            // 'tax'              => $data['item_details'][0]->tax,
+                            'bill_amount'      => $billamnt
+                        ]);
             
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
@@ -3144,10 +3138,10 @@ class OrderStatusCntrl extends Controller
                     $template_array = array_combine($table_array, $qnty_id_array);
                 }
 
-                if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+                if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders" || $table_name == "tesco_tsl2_orders") {
 
-                    $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders');
-                    $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty');
+                    $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders', 'tesco_tsl2_orders');
+                    $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty', 'tesco_tsl2_orders_quanty');
                     $template_array = array_combine($table_array, $qnty_id_array);
                 }
 
@@ -3155,6 +3149,13 @@ class OrderStatusCntrl extends Controller
 
                     $table_array = array('tesco_washcare_orders');
                     $qnty_id_array = array('tesco_washcare_orders_quanty');
+                    $template_array = array_combine($table_array, $qnty_id_array);
+                }
+
+                if ($table_name == "tesco_tcl5_orders") {
+
+                    $table_array = array('tesco_tcl5_orders');
+                    $qnty_id_array = array('tesco_tcl5_orders_quanty');
                     $template_array = array_combine($table_array, $qnty_id_array);
                 }
             }
@@ -3943,11 +3944,11 @@ class OrderStatusCntrl extends Controller
             $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';
 		}
         // get quantity_table ids.
-        $quantity_table_ids = DB::table($qty_table_name)->select('id')->where($foreign_key,$template_id)->get();
+        $quantity_table_data = DB::table($qty_table_name)->orderBy('id')->where($foreign_key,$template_id) ->select('count','id', 'ean_barcode', 'itf_barcode')->get(); 
         
         $temp_data =  DB::table($table_name)->where('id',$template_id)->first();
 
-        $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->select('*')->first();
+        $customer_id = DB::table('customer_metadata')->where('customer_metadata_id',$request['supplier'])->value('customer_id');
 		
         $order_qnty = (array_sum($count)>0)?0:1 ;
         $order_status  = $order_qnty === 1?'Order Pending':'Order Placed';
@@ -3969,7 +3970,7 @@ class OrderStatusCntrl extends Controller
         else
         {
             if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1" && $template_name != "TCL5") {
-                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id->customer_id, $created_by, $barcode_type);
+                $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id, $created_by, $barcode_type);
              } 
              DB::table($table_name)->where('id',$template_id)
                                    ->update([
@@ -3984,7 +3985,7 @@ class OrderStatusCntrl extends Controller
                                        'manufacture_date'     => $request['manufacture_date'],
                                        'tesco_department_id'  => $request['department'],
                                        'tesco_brand_id'       => $request['brand'],
-                                       'tesco_supplier_id'    => $customer_id->customer_id,
+                                       'tesco_supplier_id'    => $customer_id,
                                        'tesco_metadata_supplier_id'    => $request['supplier'],
                                        'rfid_compliant'       => $request['rfid'],
                                        'tag_at_source'        => $request['tag_at_source'],
@@ -3998,7 +3999,7 @@ class OrderStatusCntrl extends Controller
             // update order data in order management history table 
             OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $template_id]])->update([
                 'season'                    => $request['season_code'],
-                'customer_id'               => $customer_id->customer_id,
+                'customer_id'               => $customer_id,
                 'style'                     => $request[strtolower($request['zone']).'_style'],
                 'buyer_po'                  => $request['po_number'],
                 'ocn_number'                => $request['tesco_ocn'],
@@ -4011,6 +4012,9 @@ class OrderStatusCntrl extends Controller
              $i=0;
              foreach($tpnd as $value)
              {
+                $second_barcode_type = $barcode_type === 'itf_barcode'?'ean_barcode':'itf_barcode';
+                $old_barcode = isset($quantity_table_data[$i])?$quantity_table_data[$i]->$second_barcode_type:0;
+
                  if(($template_name == "TCL1") ||($template_name == "TCL2") || ($template_name == "TSL1") || ($template_name == "THL1"))
                  {					
                      DB::table($qty_table_name)->insert([
@@ -4029,6 +4033,7 @@ class OrderStatusCntrl extends Controller
                      DB::table($qty_table_name)->insert([
                          $tpnd_type         => $value,
                          $barcode_type      => $barcode[$i],
+                         $second_barcode_type => $old_barcode,
                          $foreign_key       => $template_id,
                          'case_size'        => $case_size[$i],
                          'count'         	=> $count[$i],
@@ -4042,7 +4047,7 @@ class OrderStatusCntrl extends Controller
             // fetch erp_order_details table details for each quantity_table ids.
             $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
             ->where('order_qnty_table_name', $table_name.'_quanty')
-            ->whereIn('order_qnty_table_id', $quantity_table_ids->pluck('id')->toArray())
+            ->whereIn('order_qnty_table_id', $quantity_table_data->pluck('id')->toArray())
             ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
             ->get();
 
