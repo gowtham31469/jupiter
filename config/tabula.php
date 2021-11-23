@@ -18,8 +18,8 @@ return [
     |
     |
     */
-   'tabula_jar' => '/home/robin/Desktop/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
-//    'tabula_jar' => '//var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
+//    'tabula_jar' => '/home/robin/Desktop/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
+   'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
 	
    
 	'bar_jar' => '/var/www/html/jupiter/BarcodeGenless8.jar',
@@ -158,7 +158,7 @@ return [
     |
     |
     */
-    'CE_single_quantity' => ' -p 2 -a 125,9,400,440  -f JSON ',
+    'CE_single_quantity' => ' -p 2 -a 125,9,450,440  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------
