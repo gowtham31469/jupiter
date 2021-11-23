@@ -486,6 +486,12 @@ class OrderManagementCntrl extends Controller
                   return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
+              
+              case 'TCL 5':
+                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
               default:
                 return response()->json(['error' => 'Unknown Template Name for CE'], 400);
                 break;
