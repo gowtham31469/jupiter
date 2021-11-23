@@ -1204,7 +1204,7 @@ function createOrders(parsedObj = false, oType = false) {
 												'+barcode_component+'\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return clearQuantity(this)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" max="999999" data-max-error="Max 6 digits allowed">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1217,7 +1217,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_1" name="uk_single_count_' + item.template_name.replace(' ', '') + '_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity" data-artwork="'+ item.template_name+'" data-lastid="" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"  onkeyup="return validateCaseSizeQty(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -1335,9 +1335,9 @@ function createOrders(parsedObj = false, oType = false) {
                                                     </div>\
                                                 </td>\
 												'+barcode_component+'\
-												<td>\
+												<td class="case_size_td">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="6">\
+                                                        <input type="number" class="form-control input-sm ce_single_case_size" onkeypress="return clearQuantity(this)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" max="999999" data-max-error="Max 6 digits allowed">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1350,7 +1350,7 @@ function createOrders(parsedObj = false, oType = false) {
 						$.each(data.templates, function (i, item) {
 							html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" data-artwork="'+ item.template_name+'">\
+                                        <input type="number" data-tname="' + item.template_name + '" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_1" name="ce_single_count_' + item.template_name.replace(' ', '') + '_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)" data-artwork="'+ item.template_name+'"   onkeyup="return validateCaseSizeQty(this)">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -3670,7 +3670,7 @@ function addUKSingle(rem, e) {
                         '+barcode_component+'\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_' + val + '" name="uk_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" maxlength="4">\
+                                <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeypress="return clearQuantity(this)" id="uk_single_case_size_' + val + '" name="uk_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" max="999999" data-max-error="Max 6 digits allowed">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -3683,7 +3683,7 @@ function addUKSingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                                <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" id="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="uk_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"  data-artwork="'+ item.template_name+'"   onkeyup="return validateCaseSizeQty(this)">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -3935,9 +3935,9 @@ function addCESingle(rem, e) {
                         </div>\
                     </td>\
                     '+barcode_component+'\
-                    <td>\
+                    <td class="case_size_td">\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" maxlength="4">\
+                            <input type="number" class="form-control input-sm ce_single_case_size" onkeypress="return clearQuantity(this)" id="ce_single_case_size_' + val + '" name="ce_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" max="999999" data-max-error="Max 6 digits allowed">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -3950,7 +3950,7 @@ function addCESingle(rem, e) {
 		$.each(data, function (i, item) {
 			html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)"  data-artwork="'+ item.template_name+'">\
+                            <input type="number" class="form-control input-sm quantity-field count_' + item.template_name.replace(' ', '') + '" data-tname="' + item.template_name + '" id="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" name="ce_single_count_' + item.template_name.replace(' ', '') + '_' + val + '" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"  data-artwork="'+ item.template_name+'"   onkeyup="return validateCaseSizeQty(this)">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
