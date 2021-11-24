@@ -324,7 +324,7 @@ function parseSingleType(data) {
         tabula[0].data.pop(); //Remove the total quantity row from the object
         $.each(tabula[0].data, function(index,element) {
             var row = {};
-            element.pop();//Remove the extra space element from the array
+            // element.pop();//Remove the extra space element from the array
             $.each(element, function(i, val) {
                 if(index === 0) {
                     header.push(val.text.replace(/ /g,"_"));
