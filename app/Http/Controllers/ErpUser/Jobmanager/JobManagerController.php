@@ -1557,6 +1557,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc =  "SINGLES BD STICKER";
 		  }
+			else if($request->name == "TCL5-sticker")
+			{
+					 $this->template_desc =  "SINGLES BD STICKER";
+			}
 		  else if($request->name == "THL1-sticker")
 		  {
 				$this->template_desc = "RATIO STICKER";
@@ -1782,6 +1786,10 @@ class JobManagerController extends Controller
 								$yy += 100; 
 							}
 						}
+						else if($name == "TCL5-sticker")
+						{
+							$yy += 77;
+						}
 						else
 						{
 							$yy += 100;  
@@ -1836,6 +1844,17 @@ class JobManagerController extends Controller
 					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
           if($qr_check == $qr_code[$qr_count])
           {
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					if($qr_check == $qr_code[$qr_count])
+					{
 						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
 					}
 				}
@@ -1915,6 +1934,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
 		  }
+			else if($request->name == "TSL2-sticker")
+			{
+					 $this->template_desc = "SINGLE POLYBAG STICKER "; 
+			}
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
@@ -2706,32 +2729,36 @@ class JobManagerController extends Controller
                  if($name != "THL3-sticker")
                  {
                      if($qr_flag == 1)
-					 {
-						 if($name == "THL1-sticker")
-                 		 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 else
-						 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 
-					 }
-					 else
-					 {
-						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					 }
+											{
+												if($name == "THL1-sticker")
+																{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else if($name == "TCL5-sticker")
+												{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else
+												{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												
+											}
+											else
+											{
+												PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+											}
                  }
                 else
                 {
                     if($qr_flag == 1)
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
-					else
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
+										{
+											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
+										else
+										{
+											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
                 }
             }
 			
@@ -2775,6 +2802,17 @@ class JobManagerController extends Controller
           {
 						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
 					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					 $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					 $lasttpn = substr($qr_code_check[3] , -3);
+					 $qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					 if($qr_check == $qr_code[$i])
+					 {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+					 }
 				}
 				else if($name == "THL1-sticker")
 				{

@@ -1335,6 +1335,10 @@ class OrderStatusCntrl extends Controller
                             $yy += 100; 
                         }
                       }
+                      else if($name == "TCL5-sticker")
+					  {
+							$yy += 77;
+					  }
                       else
                       {
                         $yy += 100;  
@@ -1790,6 +1794,10 @@ class OrderStatusCntrl extends Controller
                            {
                               PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                           }
+                          else if($name == "TCL5-sticker")
+                          {
+                            PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                          }
                           else
                           {
                               PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
@@ -2150,7 +2158,7 @@ class OrderStatusCntrl extends Controller
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x135mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x140mm</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
                       </g>
