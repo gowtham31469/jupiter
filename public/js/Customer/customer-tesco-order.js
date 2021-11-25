@@ -36,6 +36,9 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
+const itf_barcode_stickers  = ['TCL 1', 'TCL 2', 'TSL 1', 'THL 1', 'TCL 5'];
+const ean_barcode_stickers  = ['TCL 4', 'TSL 3', 'THL 3'];
+const ean_itf_barcode_stickers  = ['TCL 4', 'TSL 3', 'TSL 2'];
 function tescoOrders(callback) {
     if(localStorage.getItem("buyer") == "orchestra") 
 	{
@@ -75,7 +78,7 @@ function tescoOrders(callback) {
             
                 var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
 			
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders)))))));
+				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders)))))))));
 			
 				newObj1.sort(function(obj1, obj2) {
 						var date1 =obj1.created_at;
@@ -416,111 +419,134 @@ function tescoOrders(callback) {
                             "text": "Stickers",
                             "parent_id": 0,
                             "children": [{
-                                "id": 2,
-                                "text": "Carton & Polybag Stickers",
-                                "parent_id": 1,
-                                "children": [{
-                                    "id": 3,
-                                    "text": "CE",
-                                    "parent_id": 2,
+                                    "id": 2,
+                                    "text": "Carton & Polybag Stickers",
+                                    "parent_id": 1,
                                     "children": [{
-                                        "id": "26,27,21",
-                                        "text": "TCL 1 , TCL 2 & TSL 1 with QR",
-                                        "parent_id": "3",
-                                        "type": "ratio",
-                                        "zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+                                        "id": 3,
+                                        "text": "CE",
+                                        "parent_id": 2,
+                                        "children": [{
+                                            "id": "26,27,21",
+                                            "text": "TCL 1 , TCL 2 & TSL 1 with QR",
+                                            "parent_id": "3",
+                                            "type": "ratio",
+                                            "zone": "CE",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "28,23",
-                                        "text": "TCL 4 & TSL 3 with QR",
-                                        "parent_id": "3",
-                                        "type": "single",
-                                        "zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+                                            "id": "28,23",
+                                            "text": "TCL 4 & TSL 3 with QR",
+                                            "parent_id": "3",
+                                            "type": "single",
+                                            "zone": "CE",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "24",
-                                        "text": "THL 1 with QR",
-                                        "parent_id": "3",
-                                        "type": "ratio",
-                                        "zone": "CE",
-										"template_type": 'tesco_carton_stickers'
+                                            "id": "24",
+                                            "text": "THL 1 with QR",
+                                            "parent_id": "3",
+                                            "type": "ratio",
+                                            "zone": "CE",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "25",
-                                        "text": "THL 3 with QR",
-                                        "parent_id": "3",
-                                        "type": "single",
-                                        "zone": "CE",
-										"template_type": 'tesco_carton_stickers'
-                                        }]
+                                            "id": "25",
+                                            "text": "THL 3 with QR",
+                                            "parent_id": "3",
+                                            "type": "single",
+                                            "zone": "CE",
+                                            "template_type": 'tesco_carton_stickers'
+                                        }, {
+											"id": "38",
+											"text": "TCL 5",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "28,23,39",
+											"text": "TCL 4, TSL 3 with QR & TSL 2",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}]
                                     }, {
-                                    "id": 4,
-                                    "text": "UK",
-                                    "parent_id": 2,
-                                    "children": [{
-                                        "id": "29,30,14",
-                                        "text": "TCL 1 , TCL 2 & TSL 1",
-                                        "parent_id": 4,
-                                        "type":"ratio",
-                                        "zone": "UK",
-										"template_type": 'tesco_carton_stickers'
+                                        "id": 4,
+                                        "text": "UK",
+                                        "parent_id": 2,
+                                        "children": [{
+                                            "id": "29,30,14",
+                                            "text": "TCL 1 , TCL 2 & TSL 1",
+                                            "parent_id": 4,
+                                            "type": "ratio",
+                                            "zone": "UK",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "31,16",
-                                        "text": "TCL 4 & TSL 3",
-                                        "parent_id": 4,
-                                        "type":"single",
-                                        "zone": "UK",
-										"template_type": 'tesco_carton_stickers'
+                                            "id": "31,16",
+                                            "text": "TCL 4 & TSL 3",
+                                            "parent_id": 4,
+                                            "type": "single",
+                                            "zone": "UK",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "17",
-                                        "text": "THL 1",
-                                        "parent_id": 4,
-                                        "type":"ratio",
-                                        "zone": "UK",
-										"template_type": 'tesco_carton_stickers'
+                                            "id": "17",
+                                            "text": "THL 1",
+                                            "parent_id": 4,
+                                            "type": "ratio",
+                                            "zone": "UK",
+                                            "template_type": 'tesco_carton_stickers'
                                         }, {
-                                        "id": "18",
-                                        "text": "THL 3",
-                                        "parent_id": 4,
-                                        "type":"single",
-                                        "zone": "UK",
-										"template_type": 'tesco_carton_stickers'
-                                        }]
+                                            "id": "18",
+                                            "text": "THL 3",
+                                            "parent_id": 4,
+                                            "type": "single",
+                                            "zone": "UK",
+                                            "template_type": 'tesco_carton_stickers'
+                                        }, {
+											"id": "31,16,40",
+											"text": "TCL 4, TSL 3 & TSL 2",
+											"parent_id": "4",
+											"type": "single",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										}]
                                     }]
                                 },
                                 {
-                                "id": "32",
-                                "text": "Labels",
-                                "parent_id": "0",
-                                "children": [{
-                                    "id": "33",
-                                    "text": "Printed Labels",
-                                    "parent_id": "32",
+                                    "id": "32",
+                                    "text": "Labels",
+                                    "parent_id": "0",
                                     "children": [{
-                                        "id": "34",
-                                        "text": "GCL25W/M12723G",
-                                        "parent_id": "33",
-                                        "template_type": 'tesco_care_labels'
-                                        }, {
-                                        "id": "35",
-                                        "text": "GCL25W/M13220G",
-                                        "parent_id": "33",
-                                        "template_type": 'tesco_care_labels'
-                                        },
-                                        {
-                                        "id": "36",
-                                        "text": "GCL25W/M12723G",
-                                        "parent_id": "33",
-                                        "template_type": 'tesco_care_labels'
-                                        }, 
-                                        {
-                                        "id": "37",
-                                        "text": "GCL25W/M13220G",
-                                        "parent_id": "33",
-                                        "template_type": 'tesco_care_labels'
-                                        }, ]
+                                        "id": "33",
+                                        "text": "Printed Labels",
+                                        "parent_id": "32",
+                                        "children": [{
+                                                "id": "34",
+                                                "text": "GCL25W/M12723G",
+                                                "parent_id": "33",
+                                                "template_type": 'tesco_care_labels'
+                                            }, {
+                                                "id": "35",
+                                                "text": "GCL25W/M13220G",
+                                                "parent_id": "33",
+                                                "template_type": 'tesco_care_labels'
+                                            },
+                                            {
+                                                "id": "36",
+                                                "text": "GCL25W/M12723G",
+                                                "parent_id": "33",
+                                                "template_type": 'tesco_care_labels'
+                                            },
+                                            {
+                                                "id": "37",
+                                                "text": "GCL25W/M13220G",
+                                                "parent_id": "33",
+                                                "template_type": 'tesco_care_labels'
+                                            },
+                                        ]
                                     }]
-                                }]
-                            }]
+                                }
+                            ]
+                        }]
                     },
                     "types": {
                         "default": {
@@ -853,35 +879,113 @@ function createOrders(parsedObj = false, oType = false) {
                  },
                  success: function (data) {
                      localStorage.setItem("data", JSON.stringify(data.templates));
+
+                     const stickersList = data.templates.map(template => template.template_name);
+
+                     if (zone === "CE") {
+                         /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
+                         var po_number_component = `<div class="col-md-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="tesco_po_number">PO Number</label>
+                                                            <input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">
+                                                            <div class="help-block with-errors"></div>
+                                                        </div>
+                                                    </div>`;
+                        if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+                            var barcode_title = `<th rowspan="2">ITF Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>`;
+                            
+                        } else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+                            var barcode_title = `<th rowspan="2">EAN Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>`;	
+                        } else {
+                            var barcode_title = `<th rowspan="2">ITF Barcode</th><th rowspan="2">EAN Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>`;
+                        }
+
+                     } else {
+
+                         var po_number_component = `<div class="col-md-3">
+                                                        <div class="form-group has-feedback">
+                                                            <label for="tesco_po_number">PO Number</label>
+                                                            <input type="text" class="form-control" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">
+                                                            <div class="help-block with-errors"></div>
+                                                        </div>
+                                                    </div>`;
+
+                        if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+                            var barcode_title = `<th rowspan="2">ITF Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>`;
+                            
+                        } else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+                            var barcode_title = `<th rowspan="2">EAN Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>	
+                                                    </td>`;	
+                        } else {
+                            var barcode_title = `<th rowspan="2">ITF Barcode</th><th rowspan="2">EAN Barcode</th>`;
+                            var barcode_component = `<td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-group has-feedback">
+                                                            <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">
+                                                            <div class="help-block with-errors"></div>
+                                                            <div class="barcode-error"></div>
+                                                        </div>
+                                                    </td>`;
+                        }
+
+                     }
                      /** Store moq values for validation */
                      localStorage.setItem("moq_values", JSON.stringify(data.moq));
                      var html = '<div class="loader">\
                                     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>\
                                 </div>\
+                                <span id="result"></span>\
                                 <br>\
-                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><input type="hidden" id="qr_flag" value="'+data.templates[0].is_qrcode_required+'">';
-                        /** Buyer PO number length , for CE 7 digits and for UK 9 digits*/
-						if (zone === "CE") {
-							  html += '<div class="col-md-3">\
-																<div class="form-group has-feedback">\
-																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">\
-																	<div class="help-block with-errors"></div>\
-																</div>\
-															</div>';
-							}
-							else
-							{
-							  	html += '<div class="col-md-3">\
-																<div class="form-group has-feedback">\
-																	<label for="tesco_po_number">PO Number</label>\
-																	<input type="text" class="form-control" data-minlength="9" data-required-error="Mandatory Field." data-minlength-error="Enter 9 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="9">\
-																	<div class="help-block with-errors"></div>\
-																</div>\
-															</div>';
-								}
-                                  
-                                     html += '<div class="col-md-3">\
+                                <form method="POST" id="create_tesco_order_form" data-toggle="validator" role="form" novalidate="true"><input type="hidden" id="qr_flag" value="'+data.templates[0].is_qrcode_required+'">\
+                                '+po_number_component+'\
+                                <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
                                             <label for="tesco_uk_style">UK Style Ref.</label>\
                                             <input type="text" class="form-control" name="tesco_uk_style" id="tesco_uk_style" placeholder="Enter UK Style Ref." required="" onkeyup="dynamicSVGTemplates()" maxlength="8">\
@@ -1019,7 +1123,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <tr>\
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">TPND</th>\
-                                                    <th rowspan="2">ITF Barcode</th>\
+                                                    '+barcode_title+'\
                                                     <th rowspan="2">Units Per Carton</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
@@ -1042,13 +1146,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
-                                                <td>\
-                                                    <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_1" name="uk_ratio_itf_1" onkeyup="dynamicSVGTemplates()" placeholder="Enter ITF Barcode">\
-                                                        <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
-                                                    </div>\
-                                                </td>\
+                                                '+barcode_component+'\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_1" name="uk_ratio_upc_1" placeholder="Enter Units Per Carton" onkeyup="dynamicSVGTemplates()" maxlength="4">\
@@ -1093,7 +1191,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <tr>\
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">TPND</th>\
-                                                        <th rowspan="2">EAN Barcode</th>\
+                                                        '+barcode_title+'\
                                                         <th rowspan="2">Units Per Case</th>\
                                                         <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
@@ -1116,16 +1214,10 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
+                                                '+barcode_component+'\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" id="uk_single_ean_1" name="uk_single_ean_1" placeholder="Enter EAN Barcode">\
-                                                        <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
-                                                    </div>\
-                                                </td>\
-                                                <td>\
-                                                    <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return isNumber(event)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="4">\
+                                                        <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return clearQuantity(this)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" max="999999" data-max-error="Max 6 digits allowed">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1138,7 +1230,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -1174,7 +1266,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     <tr>\
                                                         <th rowspan="2">Line No.</th>\
                                                         <th rowspan="2">ORMS TPN</th>\
-                                                        <th rowspan="2">ITF Barcode</th>\
+                                                        '+barcode_title+'\
                                                         <th rowspan="2">No Of Pieces In Ratio</th>';
                              $.each(data.templates, function(i, item){
                                html += '<th colspan="1">'+item.template_name+'</th>';
@@ -1195,13 +1287,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
-                                                <td>\
-                                                    <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_1" onkeyup="dynamicSVGTemplates()" name="ce_ratio_itf_1" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">\
-                                                        <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
-                                                    </div>\
-                                                </td>\
+                                                '+barcode_component+'\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
                                                         <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_1" name="ce_ratio_cpc_1" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" onkeyup="dynamicSVGTemplates()" maxlength="5">\
@@ -1244,7 +1330,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <tr>\
                                                     <th rowspan="2">Line No.</th>\
                                                     <th rowspan="2">ORMS TPN</th>\
-                                                    <th rowspan="2">EAN Barcode</th>\
+                                                    '+barcode_title+'\
                                                     <th rowspan="2">Units Per Case</th>\
                                                     <th rowspan="2">Size</th>';
                              $.each(data.templates, function(i, item){
@@ -1267,16 +1353,10 @@ function createOrders(parsedObj = false, oType = false) {
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
-                                                <td>\
+                                                '+barcode_component+'\
+                                                <td  class="case_size_td">\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_1" name="ce_single_ean_1" onkeyup="dynamicSVGTemplates()" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">\
-                                                        <div class="help-block with-errors"></div>\
-                                                        <div class="barcode-error"></div>\
-                                                    </div>\
-                                                </td>\
-                                                <td>\
-                                                    <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" maxlength="6">\
+                                                        <input type="number" class="form-control input-sm ce_single_case_size" onkeypress="return clearQuantity(this)" id="ce_single_case_size_1" name="ce_single_case_size_1" required="" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" max="999999" data-max-error="Max 6 digits allowed">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -1289,7 +1369,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                        <input type="number" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -1309,14 +1389,21 @@ function createOrders(parsedObj = false, oType = false) {
                       $.each(data.templates, function(i, item){
 						if(data.templates.length > 1)
 						{
-							if(data.templates.length == i+1)
-							{
-								var style="width:226px";
-							}
-							else
-							{
-								var style="";
-							}
+							if(item.template_name != "TSL 2")
+                            {
+                                if(data.templates.length == i+1)
+                                {
+                                    var style="width:226px";
+                                }
+                                else
+                                {
+                                    var style="";
+                                }
+                            }
+                            else
+                            {
+                                var style="";
+                            }
 						}
 						else
 						{
@@ -2096,7 +2183,7 @@ function printDivTesco(data,name) {
 		var svgDoc = a.contentDocument;
 		var zone = localStorage.getItem("zone");
 		var name=name+"-sticker";
-	    if(name == "TSL1-sticker" || name == "TSL3-sticker")
+	    if(name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker")
 		{
 			var svgarr=[];
 			var ajax_count=0;
@@ -2106,12 +2193,20 @@ function printDivTesco(data,name) {
 				if((name == "TSL1-sticker" && zone=="CE"))
 				{
 					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_ratio_orms_tpn').val();
+                }
+				else if((name == "TSL2-sticker" && zone=="CE"))
+				{
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_single_orms_tpn').val();
 				}
 				else if((name == "TSL3-sticker" && zone=="CE"))
 				{
 					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: "+$(this).find('.ce_single_orms_tpn').val();
 				}
 				else if((name == "TSL3-sticker" && zone=="UK"))
+				{
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_single_tpnd').val();
+				}
+				else if((name == "TSL2-sticker" && zone=="UK"))
 				{
 					svgDoc.getElementById("tpnd").innerHTML = "TPND: "+$(this).find('.uk_single_tpnd').val();
 				}
@@ -2135,6 +2230,22 @@ function printDivTesco(data,name) {
 					
 					//svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 26 53.6)");
 					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 29.5 53.6014)");
+                }
+                else if((name== "TSL2-sticker"))
+				{
+					if(zone == "CE")
+					{
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					}
+					else
+					{
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+					
+					svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 27 53.6)");
+					
 				}
 				else
 				{
@@ -2165,7 +2276,7 @@ function printDivTesco(data,name) {
 					
 
 			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
-			if ((name == "TSL3-sticker")) {
+			if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/customer/tesco/get-tsl-size",
@@ -2402,7 +2513,7 @@ function printDivTesco(data,name) {
 						svgDoc.getElementById("tpnd_last_digit").innerHTML = $(this).find('.ce_ratio_orms_tpn').val().substr($(this).find('.ce_ratio_orms_tpn').val().length - 3);
 					}
 				}
-				else if((name == "TCL4-sticker" && zone=="CE") || (name == "THL3-sticker" && zone=="CE"))
+				else if((name == "TCL4-sticker" && zone=="CE") || (name == "TCL5-sticker" && zone=="CE") || (name == "THL3-sticker" && zone=="CE"))
 				{
 					svgDoc.getElementById("unit_per_case").innerHTML = $(this).find('.ce_single_case_size').val();
 					
@@ -2443,7 +2554,7 @@ function printDivTesco(data,name) {
 						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 68 204)");
 					}
 				}
-				else if((name == "TCL1-sticker")  || (name == "THL1-sticker"))
+				else if((name == "TCL1-sticker") || (name == "TCL5-sticker")  || (name == "THL1-sticker"))
 				{
 					if(zone == "CE")
 					{
@@ -2480,7 +2591,7 @@ function printDivTesco(data,name) {
 			}
 
 			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
-			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+			if ((name == "TCL4-sticker") || (name == "TCL5-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/customer/tesco/get-tsl-size",
@@ -2509,6 +2620,28 @@ function printDivTesco(data,name) {
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name === "TCL5-sticker")
+										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2530,6 +2663,28 @@ function printDivTesco(data,name) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+                                        else if(name === "TCL5-sticker")
+										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2565,6 +2720,28 @@ function printDivTesco(data,name) {
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name === "TCL5-sticker")
+										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                            svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                            
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2586,6 +2763,28 @@ function printDivTesco(data,name) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+                                        else if(name === "TCL5-sticker")
+										{
+                                            svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                            svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                            svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                            svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+					                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                            svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                            svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                            svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+                                            svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+                                            svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+                                            svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                            svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                            svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+                                            svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+                                            svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                            svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2657,6 +2856,28 @@ function printDivTesco(data,name) {
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 
 									}
+                                    else if(name === "TCL5-sticker")
+                                    {
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+                                        svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                        svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+                                        svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+                                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+                                        svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                        svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+                                        svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+                                        
+                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+                                        
+                                    }
 									else
 									{
 										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2680,6 +2901,28 @@ function printDivTesco(data,name) {
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 
 									}
+                                    else if(name === "TCL5-sticker")
+                                    {
+                                        svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+                                        svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+                                        svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                        svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+                                        svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+                                        svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+                                        svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                        svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+                                        svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+                                        svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+                                        svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+                                        svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+                                        svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+                                        svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+                                        svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+                                        svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+                                        
+                                    }
 									else
 									{
 										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
@@ -2818,6 +3061,11 @@ function PopupTesco(data,name,zone) {
 		var id = $('#TCL4_id').val();
 		var db = "tesco_tcl4_orders";
 	}
+	else if(name == "TCL5-sticker")
+	{
+		var id = $('#TCL5_id').val();
+		var db = "tesco_tcl5_orders";
+	}
 	else if(name == "THL1-sticker")
 	{
 		var id = $('#THL1_id').val();
@@ -2831,6 +3079,7 @@ function PopupTesco(data,name,zone) {
 	var tcl1_id = $('#TCL1_id').val();
 	var tcl2_id = $('#TCL2_id').val();
 	var tcl4_id = $('#TCL4_id').val();
+	var tcl5_id = $('#TCL5_id').val();
 	var thl1_id = $('#THL1_id').val();
 	var thl3_id = $('#THL3_id').val();
 	var qr_flag = $('#qr_flag').val();
@@ -2847,6 +3096,7 @@ function PopupTesco(data,name,zone) {
 			tcl1_id: tcl1_id,
 			tcl2_id: tcl2_id,
 			tcl4_id: tcl4_id,
+			tcl5_id: tcl5_id,
 			thl1_id: thl1_id,
 			thl3_id: thl3_id,
 			qr_flag: qr_flag,
@@ -2906,6 +3156,11 @@ function PopupTescoSmall(data,name,zone) {
 	{
 		var id = $('#TSL3_id').val();
 		var db = "tesco_tsl3_orders";
+	}
+	else if(name == "TSL2-sticker")
+	{
+		var id = $('#TSL2_id').val();
+		var db = "tesco_tsl2_orders";
 	}
 	var tesco_po_number = $('#tesco_po_number').val();
 	if(zone == "CE")
@@ -2980,10 +3235,47 @@ try{
          e.preventDefault(); 
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
+         const stickersList = data.map(template => template.template_name);
+
          var a = [] 
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
+
+         if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>
+									</td>`;
+			
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>	
+									</td>`;	
+		} else {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>
+									</td>
+									<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>	
+									</td>`;
+		}
+
          var html = '<tr>\
                         <td class="slno">'+val+'</td>\
                         <td>\
@@ -2992,16 +3284,10 @@ try{
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
+                        '+barcode_component+'\
                         <td>\
                             <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_ean" required="" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="uk_single_ean_' + val + '" name="uk_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode" onkeyup="return validateEanBarcode(this)">\
-                                <div class="barcode-error-ean"></div>\
-                                <div class="help-block with-errors"></div>\
-                            </div>\
-                        </td>\
-                        <td>\
-                            <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_single_case_size" required="" onkeypress="return isNumber(event)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" maxlength="4">\
+                                <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeypress="return clearQuantity(this)" id="uk_single_case_size_'+val+'" name="uk_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" max="999999" data-max-error="Max 6 digits allowed">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
@@ -3014,7 +3300,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -3053,10 +3339,47 @@ try{
          e.preventDefault(); 
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
+         const stickersList = data.map(template => template.template_name);
+
          var a = [] 
          /** [ Get data-id of add button ] */
          var id = $(rem).attr("data-id"); 
          var val = parseInt(id) + 1; 
+
+         if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>
+									</td>`;
+			
+		} else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>	
+									</td>`;	
+		} else {
+			var barcode_component = `<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_ratio_itf" data-minlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." maxlength="14" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_` + val + `" name="uk_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" placeholder="Enter ITF Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>
+									</td>
+									<td>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control input-sm uk_single_ean" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." required="" onkeypress="return isNumber(event)" onkeyup="return validateEanBarcode(this)" id="uk_single_ean_` + val + `" name="uk_single_ean_` + val + `" placeholder="Enter EAN Barcode">
+											<div class="help-block with-errors"></div>
+											<div class="barcode-error"></div>
+										</div>
+									</td>`;
+		}
+
          var html = '<tr>\
                         <td class="slno">'+val+'</td>\
                         <td>\
@@ -3065,13 +3388,7 @@ try{
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>\
-                        <td>\
-                            <div class="form-group has-feedback">\
-                                <input type="text" class="form-control input-sm uk_ratio_itf" required="" onkeypress="return isNumber(event)" id="uk_ratio_itf_' + val + '" name="uk_ratio_itf_' + val + '" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." placeholder="Enter ITF Barcode" onkeyup="return validateItfBarcode(this)">\
-                                 <div class="barcode-error-itf"></div>\
-                                <div class="help-block with-errors"></div>\
-                            </div>\
-                        </td>\
+                       '+barcode_component+'\
                         <td>\
                             <div class="form-group has-feedback">\
                                 <input type="text" class="form-control input-sm uk_ratio_upc" required="" onkeypress="return isNumber(event)" id="uk_ratio_upc_'+val+'" name="uk_ratio_upc_'+val+'" placeholder="Enter Units Per Carton" maxlength="4">\
@@ -3190,10 +3507,47 @@ try{
      e.preventDefault(); 
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
+     const stickersList = data.map(template => template.template_name);
+
      var a = [] 
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
+
+        if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+            var barcode_component = `<td>
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                            <div class="help-block with-errors"></div>
+                                            <div class="barcode-error"></div>
+                                        </div>
+                                    </td>`;
+            
+        } else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+            var barcode_component = `<td>
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                            <div class="help-block with-errors"></div>
+                                            <div class="barcode-error"></div>
+                                        </div>
+                                    </td>`;	
+        } else {
+            var barcode_component = `<td>
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                            <div class="help-block with-errors"></div>
+                                            <div class="barcode-error"></div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-group has-feedback">
+                                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                            <div class="help-block with-errors"></div>
+                                            <div class="barcode-error"></div>
+                                        </div>
+                                    </td>`;
+        }
+    
      var html = '<tr>\
                     <td class="slno">'+val+'</td>\
                     <td>\
@@ -3202,16 +3556,10 @@ try{
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
-                    <td>\
+                    '+barcode_component+'\
+                    <td  class="case_size_td">\
                         <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." id="ce_single_ean_' + val + '" name="ce_single_ean_' + val + '" required="" placeholder="Enter EAN Barcode" onkeyup="return validateEanBarcode(this)">\
-                            <div class="barcode-error-ean"></div>\
-                            <div class="help-block with-errors"></div>\
-                        </div>\
-                    </td>\
-                    <td>\
-                        <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_single_case_size" onkeypress="return isNumber(event)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" maxlength="4">\
+                            <input type="number" class="form-control input-sm ce_single_case_size" onkeypress="return clearQuantity(this)" id="ce_single_case_size_'+val+'" name="ce_single_case_size_'+val+'" required="" placeholder="Enter Units Per Case" max="999999" data-max-error="Max 6 digits allowed">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -3224,7 +3572,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)">\
+                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -3263,10 +3611,47 @@ try{
      e.preventDefault(); 
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
+     const stickersList = data.map(template => template.template_name);
+
      var a = [] 
      /** [ Get data-id of add button ] */
      var id = $(rem).attr("data-id"); 
      var val = parseInt(id) + 1; 
+
+     if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+        var barcode_component = `<td>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                        <div class="help-block with-errors"></div>
+                                        <div class="barcode-error"></div>
+                                    </div>
+                                </td>`;
+        
+    } else if($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+        var barcode_component = `<td>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                        <div class="help-block with-errors"></div>
+                                        <div class="barcode-error"></div>
+                                    </div>
+                                </td>`;	
+    } else {
+        var barcode_component = `<td>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." id="ce_ratio_itf_` + val + `" onkeyup="return validateItfBarcode(this)" name="ce_ratio_itf_` + val + `" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode">
+                                        <div class="help-block with-errors"></div>
+                                        <div class="barcode-error"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group has-feedback">
+                                        <input type="text" class="form-control input-sm ce_single_ean" onkeypress="return isNumber(event)" id="ce_single_ean_` + val + `" name="ce_single_ean_` + val + `" onkeyup="return validateEanBarcode(this)" required="" data-minlength="13" maxlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." placeholder="Enter EAN Barcode">
+                                        <div class="help-block with-errors"></div>
+                                        <div class="barcode-error"></div>
+                                    </div>
+                                </td>`;
+    }
+
      var html = '<tr>\
                     <td class="slno">'+val+'</td>\
                     <td>\
@@ -3275,13 +3660,7 @@ try{
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
-                    <td>\
-                        <div class="form-group has-feedback">\
-                            <input type="text" class="form-control input-sm ce_ratio_itf" data-minlength="14" maxlength="14" data-required-error="Mandatory Field." data-minlength-error="Enter 14 digits." required="" id="ce_ratio_itf_' + val + '" name="ce_ratio_itf_' + val + '" onkeypress="return isNumber(event)" placeholder="Enter ITF Barcode" onkeyup="return validateItfBarcode(this)">\
-                            <div class="barcode-error-itf"></div>\
-                            <div class="help-block with-errors"></div>\
-                        </div>\
-                    </td>\
+                    '+barcode_component+'\
                     <td>\
                         <div class="form-group has-feedback">\
                             <input type="text" class="form-control input-sm ce_ratio_cpc" required="" id="ce_ratio_cpc_'+val+'" name="ce_ratio_cpc_'+val+'" onkeypress="return isNumber(event)" placeholder="Enter No Of Pieces In Ratio" maxlength="4">\
@@ -3389,7 +3768,7 @@ function dynamicSVGTemplatescard(id,item)
         var mySVG = document.getElementById(id);
         var svgDoc = mySVG.contentDocument;
          /** [ separate conditions for TSL1,TSL3 and other stickers ] */
-        if(item.template_name === "TSL 1" || item.template_name === "TSL 3")
+        if(item.template_name === "TSL 1" || item.template_name === "TSL 2" || item.template_name === "TSL 3")
         {
            
            if(zone === "CE")
@@ -3486,6 +3865,7 @@ function dynamicSVGTemplatescard(id,item)
                  var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				  
 				 var ce_single_ean  = $('#ce_single_ean_1').val();
+                 var ce_ratio_itf = $('#ce_ratio_itf_1').val();
                  
                  /** [ Dynamically change svg CE single tpnd number ] */
                  if(orms_tpn != '')
@@ -3529,6 +3909,29 @@ function dynamicSVGTemplatescard(id,item)
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
+                 else if (item.template_name === "TSL 2") {
+                     /** [ Dynamically change svg barcode ] */
+                     if (ce_ratio_itf.length === 14) {
+                         var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                         if (barcodecheck == "false") {
+                             barcode_checks++;
+                             $('.barcode-error').html('');
+                             svgDoc.getElementById("barcode_number").innerHTML = '';
+                             /**  [ Show validation error message ] **/
+                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                         } else {
+                             barcode_checks = 0;
+                             $('.barcode-error').html('');
+                             jsbarcodetescotsl(ce_ratio_itf, 'barcode', svgDoc)
+                             svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
+                         }
+                     } else {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
+                     }
+                 }
                  var size  = $('#ce_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
@@ -3749,6 +4152,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#uk_single_tpnd_1').val();
                  var description  = $('#tesco_description').val().replace(/&/g,'&#038;');
 				 var uk_single_ean  = $('#uk_single_ean_1').val();
+                 var uk_ratio_itf = $('#uk_ratio_itf_1').val();
                  /** [ Dynamically change svg UK single tpnd number ] */
                  if(orms_tpn != '')
                  {
@@ -3790,6 +4194,30 @@ function dynamicSVGTemplatescard(id,item)
 						 svgDoc.getElementById("barcode").innerHTML = '';
 					  }
 				 }
+                 else if (item.template_name === "TSL 2") {
+                     /** [ Dynamically change svg barcode ] */
+                     if (uk_ratio_itf.length === 14) {
+                         var barcodecheck = checkjsbarcodeitf(uk_ratio_itf);
+                         if (barcodecheck == "false") {
+                             barcode_checks++;
+                             $('.barcode-error').html('');
+                             svgDoc.getElementById("barcode_number").innerHTML = '';
+                             /**  [ Show validation error message ] **/
+                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                         } else {
+                             barcode_checks = 0;
+                             $('.barcode-error').html('');
+                             jsbarcodetescotsl(uk_ratio_itf, 'barcode', svgDoc)
+                             svgDoc.getElementById("barcode_number").innerHTML = uk_ratio_itf;
+                         }
+ 
+                     } else {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
+                         svgDoc.getElementById("barcode").innerHTML = '';
+                     }
+                 }
                  var size  = $('#uk_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
@@ -4191,6 +4619,7 @@ function dynamicSVGTemplatescard(id,item)
                  var orms_tpn = $('#ce_single_orms_tpn_1').val();
                  var case_size = $('#ce_single_case_size_1').val();
 				 var ce_single_ean  = $('#ce_single_ean_1').val();
+                 var ce_ratio_itf  = $('#ce_ratio_itf_1').val();
                  var description      = $('#tesco_description').val().replace(/&/g,'&#038;');
                  /** [ Dynamically change svg CE single tpnd number ] */
                  if(orms_tpn != '')
@@ -4245,6 +4674,29 @@ function dynamicSVGTemplatescard(id,item)
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
+                 else if (item.template_name === "TCL 5") {
+                     /** [ Dynamically change svg barcode ] */
+                     if (ce_ratio_itf != '' && ce_ratio_itf.length === 14) {
+                         var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
+                         if (barcodecheck == "false") {
+                             barcode_checks++;
+                             $('.barcode-error').html('');
+                             svgDoc.getElementById("barcode_number").innerHTML = '';
+                             /**  [ Show validation error message ] **/
+                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                         } else {
+                             barcode_checks = 0;
+                             $('.barcode-error').html('');
+                             jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
+                             svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
+                         }
+                     } else {
+                         barcode_checks = 0;
+                         $('.barcode-error').html('');
+                         svgDoc.getElementById("barcode").innerHTML = '';
+                         svgDoc.getElementById("barcode_number").innerHTML = '';
+                     }
+                 }
                  var size  = $('#ce_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')
@@ -4273,6 +4725,28 @@ function dynamicSVGTemplatescard(id,item)
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(item.template_name === "TCL 5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 56)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 85)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 96)')
+		
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 56)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 85)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 96)')
+		
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 107)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 119)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 130)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 140)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 107)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 119)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 130)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 140)");
+																			
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -4294,6 +4768,29 @@ function dynamicSVGTemplatescard(id,item)
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(item.template_name === "TCL 5")
+										{
+											console.log("2")
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+		
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 52)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 70)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 103)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 103)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 126)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 136)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
 											
 										}
 										else
@@ -4330,6 +4827,28 @@ function dynamicSVGTemplatescard(id,item)
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(item.template_name === "TCL 5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 56)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 85)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 96)')
+		
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 56)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 85)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 96)')
+		
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 107)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 119)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 130)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 140)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 107)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 119)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 130)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 140)");
+																			
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -4351,6 +4870,29 @@ function dynamicSVGTemplatescard(id,item)
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(item.template_name === "TCL 5")
+										{
+											console.log("2")
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+		
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 52)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 70)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 103)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 103)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 126)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 136)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
 											
 										}
 										else
@@ -4410,6 +4952,28 @@ function dynamicSVGTemplatescard(id,item)
 									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 
 								}
+                                else if(item.template_name === "TCL 5")
+                                {
+                                    svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 56)')
+                                    svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+                                    svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 85)')
+                                    svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 96)')
+
+                                    svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 56)')
+                                    svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+                                    svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 85)')
+                                    svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 96)')
+
+                                    svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 107)");
+                                    svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 119)");
+                                    svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 130)");
+                                    svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 140)");
+                                    svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 107)");
+                                    svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 119)");
+                                    svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 130)");
+                                    svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 140)");
+                                                                    
+                                }
 								else
 								{
 									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -4433,6 +4997,29 @@ function dynamicSVGTemplatescard(id,item)
 									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 
 								}
+                                else if(item.template_name === "TCL 5")
+                                {
+                                    console.log("2")
+                                    svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
+                                    svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
+                                    svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+                                    svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+                                    svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 52)')
+                                    svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 70)')
+                                    svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+                                    svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+                                    
+                                    svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 103)");
+                                    svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 126)");
+                                    svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 136)");
+                                    svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 146)");
+                                    svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 103)");
+                                    svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 126)");
+                                    svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 136)");
+                                    svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 146)");
+                                    
+                                }
 								else
 								{
 									svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
@@ -4825,145 +5412,7 @@ function setTescoOrder()
             }
             else
             {
-               if(data[0].template_name === 'THL 3')
-                {
-                    /** [ Create array of ce single thl3 count ] */
-                    $('.count_THL3').each(function(i, item)
-                    {
-                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var empty_count = 0;
-                    var l           = count_THL3.length;
-                    for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_THL3 = count_THL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                            if (empty_count > 0)
-                            {
-                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeCESingleTHL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store CE single THL3 template */
-                                storeCESingleTHL3();
-                            }
-                        }
-                    }
-                    
-                }
-                else
-                {
-                    /** [ Create array of ce single tcl4 count ] */
-                    $('.count_TCL4').each(function(i, item)
-                    {
-                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-
-                    /** [ Create array of ce single tsl3 count ] */
-                    $('.count_TSL3').each(function(i, item)
-                    {
-                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var templates_array = [];
-                    templates_array     = count_TCL4.concat(count_TSL3);
-                    var empty_count     = 0;
-                    var l               = templates_array.length;
-                    for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** Check If artwork count array contains atleast one '0' OR empty value **/
-                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_TSL3 = count_TSL3.join(',');
-                    count_TCL4 = count_TCL4.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                            if(empty_count > 0)
-                            {
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeCESingleTCL4TSL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store CE single TCL4, TSL3 template */
-                                 storeCESingleTCL4TSL3();
-                            }
-                        }
-                    }
-                    
-                }
+                storeSingleSticker('customer');  
             }
         }
         else
@@ -5125,146 +5574,7 @@ function setTescoOrder()
             }
             else
             {
-               if(data[0].template_name === 'THL 3')
-                {
-                    /** [ Create array of uk single thl3 count ] */
-                    $('.count_THL3').each(function(i, item)
-                    {
-                        count_THL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var empty_count = 0;
-                    var l           = count_THL3.length;
-                    for(var i= 0; i< l; i++){
-                        if(count_THL3[i] === 0 || count_THL3[i] === '0' || count_THL3[i] === '00' || count_THL3[i] === '000' || count_THL3[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_THL3 = count_THL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-                            if (empty_count > 0)
-                            {
-                                msg += '<li style="margin-bottom: 10px;"><strong>THL 3</strong></li>';
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTHL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store UK single THL3 template */
-                                storeUKSingleTHL3();
-                            }
-                        }
-                    }
-                    
-                }
-                else
-                {
-                    /** [ Create array of uk single tcl4 count ] */
-                    $('.count_TCL4').each(function(i, item)
-                    {
-                        count_TCL4[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-
-                    /** [ Create array of uk single tsl3 count ] */
-                    $('.count_TSL3').each(function(i, item)
-                    {
-                        count_TSL3[i]    = $(item).val() === ''?0:$(item).val();
-                        
-                    });
-                    
-                    /** [ Create single array of atrworks, for validation ] */
-                    var templates_array = [];
-                    templates_array     = count_TCL4.concat(count_TSL3);
-                    var empty_count     = 0;
-                    var l               = templates_array.length;
-                    for(var i= 0; i< l; i++){
-                        if(templates_array[i] === 0 || templates_array[i] === '0' || templates_array[i] === '00' || templates_array[i] === '000' || templates_array[i] === '0000'){
-                            empty_count += 1;
-                        }
-                    }
-
-                    /** Check If artwork count array contains atleast one '0' OR empty value **/
-                    if (count_TCL4.includes('0') || count_TCL4.includes('00') || count_TCL4.includes('000') || count_TCL4.includes('0000') || count_TCL4.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TCL 4</strong></li>';
-                    }
-                    if (count_TSL3.includes('0') || count_TSL3.includes('00') || count_TSL3.includes('000') || count_TSL3.includes('0000') || count_TSL3.includes(0))
-                    {
-                       msg += '<li style="margin-bottom: 10px;"><strong>TSL 3</strong></li>';
-                    }
-
-                    /** [ Join artworks count array using ' , '] */
-                    count_TCL4 = count_TCL4.join(',');
-                    count_TSL3 = count_TSL3.join(',');
-
-                    /** [Check if valid barcode entered] */
-                    if(barcode_checks === 0)
-                    {
-                        /** [ Check if count of empty quantity in the array is equal to array length ] */
-                        if(empty_count === l)
-                        {
-                            /** All quantity value fields empty - Show custom validation message and functionality  */
-                            $('.quantity-feedback').addClass('has-error has-danger');
-                            $('.quantity-feedback-err-msg').css('display','block');
-                            $('.quantity-field').prop('required',true) 
-                        }
-                        else 
-                        {
-                            /** All quantity value fields empty - hide custom validation message and functionality */
-                             $('.quantity-feedback-err-msg').css('display','none');
-                             $('.quantity-field').prop('required',false) 
-                            /** If artwork count array contains atleast one '0' OR empty value , Show confirmation modal  **/
-
-                            if(empty_count > 0)
-                            {
-                                $('#body_msg').html(msg);
-                                /** [ Backdrop for bootstrap modal ] */
-                                 $('#confirmOrder').modal({
-                                      backdrop: 'static',
-                                      keyboard: false
-                                 })
-                                 $('#confirm_btn').attr('onclick', 'storeUKSingleTCL4TSL3(this);');
-                                 $('#confirmOrder').modal('show');
-                            }
-                            else
-                            {
-                                /** Function to store UK single TCL4, TSL3 template */
-                                 storeUKSingleTCL4TSL3();
-                            }
-                        }
-                    }
-                    
-                }
+                storeSingleSticker('customer');  
             }
         }
         
@@ -5571,282 +5881,6 @@ function storeCERatioTHL1()
 }
 
 /**
- * [storeCESingleTCL4TSL3 for storing tesco CE single TCL3 AND TSL3 Templates manual orders]
- * @author <praveen>
- */
-function storeCESingleTCL4TSL3()
-{
-    try {
-        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-        tescoOrderCommonData();
-        /** @type {Array} [ initializing empty arrays ] */
-        var orms_tpn          = [];
-        var ean_code          = [];
-        var case_size         = [];
-        var size              = [];
-        var count_TCL4        = [];
-        var count_TSL3        = [];
-        var is_insert         = $('.save-btn').data('insert');
-        var tcl4_last_id      = $('#TCL4_id').val();
-        var tsl3_last_id      = $('#TSL3_id').val();
-        var qr_code           = [];
-		var ean_code_array    = [];
-
-        /** [ Create array of ce single ean barcode ] */
-		$('.ce_single_ean').each(function (i, item) {
-			ean_code[i] = $(item).val();
-			ean_code_array.push($(item).val()); 
-
-		});
-		ean_code = ean_code.join(',');
-
-		/** [ Create array of ce single orms tpn and ce single qr code] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
-			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
-
-		});
-		orms_tpn = orms_tpn.join(',');
-		qr_code = qr_code.join('|');
-
-        /** [ Create array of ce single Units Per Case ] */
-        $('.ce_single_case_size').each(function(i, item)
-        {
-            case_size[i]    = $(item).val();
-            
-        });
-        case_size = case_size.join(',');
-
-        /** [ Create array of ce single tcl1 count ] */
-        $('.ce_single_size').each(function(i, item)
-        {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        size = size.join(',');
-
-        /** [ Create array of ce single tcl4 count ] */
-        $('.count_TCL4').each(function(i, item)
-        {
-            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_TCL4 = count_TCL4.join(',');
-
-        /** [ Create array of ce single tsl3 count ] */
-        $('.count_TSL3').each(function(i, item)
-        {
-            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_TSL3 = count_TSL3.join(',');
-
-        $.ajax({
-                 url: base_url + "/customer/tesco/set-ce-single-template-orders",
-                 type: 'POST',
-                 data: {
-                     _token: csrf_token,
-                     po_number:po_number,
-                     uk_style:uk_style,
-                     ce_style:ce_style,
-                     season_code:season_code,
-                     description:description,
-                     eqos:eqos,
-                     manufacture_date:manufacture_date,
-                     department:department,
-                     brand:brand,
-                     supplier:supplier,
-                     rfid:rfid,
-                     tag_at_source:tag_at_source,
-                     zone:zone,
-                     type:type,
-                     orms_tpn:orms_tpn,
-                     ean_code:ean_code,
-                     case_size:case_size,
-                     size:size,
-                     count_TCL4:count_TCL4,
-                     count_TSL3:count_TSL3,
-                     templates:data,
-                     is_insert:is_insert,
-                     tcl4_last_id:tcl4_last_id,
-                     tsl3_last_id:tsl3_last_id,
-                     created_by:created_by,
-                     ocn_no: ocn_no,
-                     full_description:full_description,
-                     qr_code:qr_code
-                 },
-                 tryCount : 0,
-                 retryLimit : 2,
-                 dataType:"json",
-                 beforeSend: function () {
-                     $(".loader").show();
-                     $('.submit-btn').prop('disabled', true);
-                 },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-                 },
-                 complete: function () {
-                    $(".loader").hide();
-                      /** [To make top menu active] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                 }
-             })
-    } catch(e) {
-        /** [error statements] */
-        console.log("Error:"+e)
-    }
-}
-
-/**
- * [storeCESingleTHL3 for storing tesco CE single THL3 Template manual orders]
- * @author <praveen>
- */
-function storeCESingleTHL3()
-{
-    try {
-        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-        tescoOrderCommonData();
-        /** @type {Array} [ initializing empty arrays ] */
-        var orms_tpn          = [];
-        var ean_code          = [];
-        var case_size         = [];
-        var size              = [];
-        var count_THL3        = [];
-        var is_insert         = $('.save-btn').data('insert');
-        var thl3_last_id      = $('#THL3_id').val();
-        var qr_code           = [];
-		var ean_code_array    = [];
-
-        /** [ Create array of ce single ean barcode ] */
-		$('.ce_single_ean').each(function (i, item) {
-			ean_code[i] = $(item).val();
-			ean_code_array.push($(item).val());
-
-		});
-		ean_code = ean_code.join(',');
-
-		/** [ Create array of ce single orms tpn and ce single qr code] */
-		$('.ce_single_orms_tpn').each(function (i, item) {
-			orms_tpn[i] = $(item).val();
-
-			// qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
-			qr_code[i] = po_number+','+ean_code_array[i]+'/'+($(item).val().substr($(item).val().length - 3))+','+$(item).val(); 
-
-		});
-		orms_tpn = orms_tpn.join(',');
-		qr_code = qr_code.join('|');
-
-        /** [ Create array of ce single Units Per Case ] */
-        $('.ce_single_case_size').each(function(i, item)
-        {
-            case_size[i]    = $(item).val();
-            
-        });
-        case_size = case_size.join(',');
-
-        /** [ Create array of ce single tcl1 count ] */
-        $('.ce_single_size').each(function(i, item)
-        {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        size = size.join(',');
-
-        /** [ Create array of ce single thl3 count ] */
-        $('.count_THL3').each(function(i, item)
-        {
-            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_THL3 = count_THL3.join(',');
-
-        $.ajax({
-                 url: base_url + "/customer/tesco/set-ce-single-template-orders",
-                 type: 'POST',
-                 data: {
-                     _token: csrf_token,
-                     po_number:po_number,
-                     uk_style:uk_style,
-                     ce_style:ce_style,
-                     season_code:season_code,
-                     description:description,
-                     eqos:eqos,
-                     manufacture_date:manufacture_date,
-                     department:department,
-                     brand:brand,
-                     supplier:supplier,
-                     rfid:rfid,
-                     tag_at_source:tag_at_source,
-                     zone:zone,
-                     type:type,
-                     orms_tpn:orms_tpn,
-                     ean_code:ean_code,
-                     case_size:case_size,
-                     size:size,
-                     count_THL3:count_THL3,
-                     templates:data,
-                     is_insert:is_insert,
-                     thl3_last_id:thl3_last_id,
-                     created_by:created_by,
-                     ocn_no: ocn_no,
-                     full_description:full_description,
-                     qr_code:qr_code
-                 },
-                 tryCount : 0,
-                 retryLimit : 2,
-                 dataType:"json",
-                 beforeSend: function () {
-                     $(".loader").show();
-                     $('.submit-btn').prop('disabled', true);
-                 },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-                 },
-                 complete: function () {
-                    $(".loader").hide();
-                      /** [To make top menu active] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                 }
-             })
-    } catch(e) {
-        /** [error statements] */
-        console.log("Error:"+e)
-    }
-}
-
-/**
  * [storeUKRatioTCL1TCL2TSL1 for storing tesco UK ratio TCL1,TCL2 AND TSL1 Templates manual orders]
  * @author <praveen>
  */
@@ -6013,218 +6047,6 @@ function storeUKRatioTHL1()
                  type: 'POST',
                  data: {
                      _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,itf_code:itf_code,units_per_carton:units_per_carton,count_THL1:count_THL1,templates:data,is_insert:is_insert,thl1_last_id:thl1_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
-                 },
-                 tryCount : 0,
-                 retryLimit : 2,
-                 dataType:"json",
-                 beforeSend: function () {
-                     $(".loader").show();
-                     $('.submit-btn').prop('disabled', true);
-                 },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-                 },
-                 complete: function () {
-                    $(".loader").hide();
-                      /** [To make top menu active] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                 }
-             })
-    } catch(e) {
-        /** [error statements] */
-        console.log("Error:"+e)
-    }
-}
-
-/**
- * [storeUKSingleTCL4TSL3 for storing tesco UK single TCL3 AND TSL3 Templates manual orders]
- * @author <praveen>
- */
-function storeUKSingleTCL4TSL3()
-{
-    try {
-        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-        tescoOrderCommonData();
-        /** @type {Array} [ initializing empty arrays ] */
-        var tpnd          = [];
-        var ean_code          = [];
-        var case_size         = [];
-        var size              = [];
-        var count_TCL4        = [];
-        var count_TSL3        = [];
-        var is_insert         = $('.save-btn').data('insert');
-        var tcl4_last_id      = $('#TCL4_id').val();
-        var tsl3_last_id      = $('#TSL3_id').val();
-
-        /** [ Create array of uk single orms tpn ] */
-        $('.uk_single_tpnd').each(function(i, item)
-        {
-            tpnd[i]    = $(item).val();
-            
-        });
-        tpnd   = tpnd.join(',');
-
-        /** [ Create array of uk single ean barcode ] */
-        $('.uk_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
-
-        /** [ Create array of uk single Units Per Case ] */
-        $('.uk_single_case_size').each(function(i, item)
-        {
-            case_size[i]    = $(item).val();
-            
-        });
-        case_size = case_size.join(',');
-
-        /** [ Create array of uk single tcl1 count ] */
-        $('.uk_single_size').each(function(i, item)
-        {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        size = size.join(',');
-
-        /** [ Create array of uk single tcl2 count ] */
-        $('.count_TCL4').each(function(i, item)
-        {
-            count_TCL4[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_TCL4 = count_TCL4.join(',');
-
-        /** [ Create array of uk single tsl1 count ] */
-        $('.count_TSL3').each(function(i, item)
-        {
-            count_TSL3[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_TSL3 = count_TSL3.join(',');
-
-        $.ajax({
-                 url: base_url + "/customer/tesco/set-uk-single-template-orders",
-                 type: 'POST',
-                 data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_TCL4:count_TCL4,count_TSL3:count_TSL3,templates:data,is_insert:is_insert,tcl4_last_id:tcl4_last_id,tsl3_last_id:tsl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
-                 },
-                 tryCount : 0,
-                 retryLimit : 2,
-                 dataType:"json",
-                 beforeSend: function () {
-                     $(".loader").show();
-                     $('.submit-btn').prop('disabled', true);
-                 },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
-                 error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
-                 },
-                 complete: function () {
-                    $(".loader").hide();
-                      /** [To make top menu active] */
-                      $(function () {
-                          var url = window.location;
-                          $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                          $('.dynamic-menu a').filter(function () {
-                              return this.href == url;
-                          }).parent('li').addClass('current-page').find('a').addClass('active');
-                      });
-                 }
-             })
-    } catch(e) {
-        /** [error statements] */
-        console.log("Error:"+e)
-    }
-}
-
-/**
- * [storeUKSingleTHL3 for storing tesco UK single THL3 Template manual orders]
- * @author <praveen>
- */
-function storeUKSingleTHL3()
-{
-    try {
-        /** Calling tescoOrderCommonData() function for getting common data(independent of zone and template type) */
-        tescoOrderCommonData();
-        /** @type {Array} [ initializing empty arrays ] */
-        var tpnd          = [];
-        var ean_code          = [];
-        var case_size         = [];
-        var size              = [];
-        var count_THL3        = [];
-        var is_insert         = $('.save-btn').data('insert');
-        var thl3_last_id      = $('#THL3_id').val();
-
-        /** [ Create array of uk single orms tpn ] */
-        $('.uk_single_tpnd').each(function(i, item)
-        {
-            tpnd[i]    = $(item).val();
-            
-        });
-        tpnd   = tpnd.join(',');
-
-        /** [ Create array of uk single ean barcode ] */
-        $('.uk_single_ean').each(function(i, item)
-        {
-            ean_code[i]    = $(item).val();
-            
-        });
-        ean_code = ean_code.join(',');
-
-        /** [ Create array of uk single Units Per Case ] */
-        $('.uk_single_case_size').each(function(i, item)
-        {
-            case_size[i]    = $(item).val();
-            
-        });
-        case_size = case_size.join(',');
-
-        /** [ Create array of uk single tcl1 count ] */
-        $('.uk_single_size').each(function(i, item)
-        {
-            size[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        size = size.join(',');
-
-        /** [ Create array of uk single tcl2 count ] */
-        $('.count_THL3').each(function(i, item)
-        {
-            count_THL3[i]    = $(item).val() === ''? 0 : $(item).val();
-            
-        });
-        count_THL3 = count_THL3.join(',');
-
-        $.ajax({
-                 url: base_url + "/customer/tesco/set-uk-single-template-orders",
-                 type: 'POST',
-                 data: {
-                     _token: csrf_token,po_number:po_number,uk_style:uk_style,ce_style:ce_style,season_code:season_code,description:description,eqos:eqos,manufacture_date:manufacture_date,department:department,brand:brand,supplier:supplier,rfid:rfid,tag_at_source:tag_at_source,zone:zone,type:type,tpnd:tpnd,ean_code:ean_code,case_size:case_size,size:size,count_THL3:count_THL3,templates:data,is_insert:is_insert,thl3_last_id:thl3_last_id,created_by:created_by,ocn_no: ocn_no,full_description:full_description
                  },
                  tryCount : 0,
                  retryLimit : 2,
@@ -6455,6 +6277,10 @@ try{
                                 break;
                 case 'THL3' : tabl_name = "tesco_thl3_orders";
                                 break;
+                case 'TCL5' : tabl_name = "tesco_tcl5_orders";
+								break;
+				case 'TSL2' : tabl_name = "tesco_tsl2_orders";
+								break;
             }
             genarateTescoPI(row_id,tabl_name,pi_status,stl_no,template_id,po_number,template_name,order_flag)
         }   
@@ -6955,106 +6781,60 @@ function checkjsbarcodeean(code) {
  * [saveTescoOrder for drafting tesco manual orders(Save order)]
  * @author <praveen>
  */
-function saveTescoOrder()
-{
-    try {
-        var zone       =  localStorage.getItem("zone");
-        var type       =  localStorage.getItem("template type");
-        var data       =  JSON.parse(localStorage.getItem("data"));
-        var po_number  =  $('#tesco_po_number').val();
-        /** [ Switch style number based on zone ] */
-        if(zone === 'UK')
-        {
-            var style  =  $('#tesco_uk_style').val();
-        }
-        else
-        {
-            var style  =  $('#tesco_ce_style').val();
-        }
-        /** Check if PO Number null or not */
-        if((po_number != '') && (po_number != 'null') && (po_number != 'Null') && (po_number != 'NULL'))
-        {
-            /** Check if Style number null or not */
-            if((style != '') && (style != 'null') && (style != 'Null') && (style != 'NULL'))
-            {
-                if(zone === "CE")
-                {
-                    if(type === "ratio")
-                    {
-                        if(data[0].template_name === 'THL 1')
-                        {
-                            /** Function to save CE ratio THL1 template */
-                            saveCERatioTHL1();
-                        }
-                        else
-                        {
-                            /** Function to save CE ratio TCL1, TCL2, TSL1 template */
-                            saveCERatioTCL1TCL2TSL1();
-                        }
-                        
-                    }
-                    else
-                    {
-                       if(data[0].template_name === 'THL 3')
-                        {
-                            /** Function to save CE single THL3 template */
-                            saveCESingleTHL3();
-                        }
-                        else
-                        {
-                            /** Function to save CE single TCL4, TSL3 template */
-                            saveCESingleTCL4TSL3();
-                        }
-                    }
-                }
-                else
-                {
-                    if(type === "ratio")
-                    {
-                        if(data[0].template_name === 'THL 1')
-                        {
-                            /** Function to save UK ratio THL1 template */
-                            saveUKRatioTHL1();
-                        }
-                        else
-                        {
-                            /** Function to save UK ratio TCL1, TCL2, TSL1 template */
-                            saveUKRatioTCL1TCL2TSL1();
-                        }
-                        
-                    }
-                    else
-                    {
-                       if(data[0].template_name === 'THL 3')
-                        {
-                            /** Function to save UK single THL3 template */
-                            saveUKSingleTHL3();
-                        }
-                        else
-                        {
-                            /** Function to save UK single TCL4, TSL3 template */
-                            saveUKSingleTCL4TSL3();
-                        }
-                    }
-                }
-            }
-            else
-            {
-               $('.snackbar_span').html('Please Enter '+zone+' Style Number !!');
-               showSnackbar();
-            }
-        }
-        else
-        {
-           $('.snackbar_span').html('Please Enter PO Number !!');
-           showSnackbar();
-        }
-        
-        
-    } catch(e) {
-        /** [error statements] */
-        console.error("Error:"+e)
-    }
+ function saveTescoOrder() {
+	try {
+		var zone = localStorage.getItem("zone").toLowerCase();
+		var type = localStorage.getItem("template type");
+		var data = JSON.parse(localStorage.getItem("data"));
+		var po_number = $('#tesco_po_number').val();
+		var style = $('#tesco_'+zone+'_style').val();
+		
+		/** Check if PO Number null or not */
+		if ((po_number === '' ) || (po_number.toLowerCase() === 'null')) {
+			$('.snackbar_span').html('Please Enter PO Number !!');
+			showSnackbar();
+
+			return false;
+		}
+
+		if ((style === '') || (style.toLowerCase() === 'null')) {
+			$('.snackbar_span').html('Please Enter ' + zone.toUpperCase() + ' Style Number !!');
+			showSnackbar();
+			return false;
+		}
+
+		if (zone === "ce") {
+			if (type === "ratio") {
+				if (data[0].template_name === 'THL 1') {
+					/** Function to save CE ratio THL1 template */
+					saveCERatioTHL1();
+				} else {
+					/** Function to save CE ratio TCL1, TCL2, TSL1 template */
+					saveCERatioTCL1TCL2TSL1();
+				}
+
+			} else {
+				saveSingleStickers('customer');
+			}
+		} else {
+			if (type === "ratio") {
+				if (data[0].template_name === 'THL 1') {
+					/** Function to save UK ratio THL1 template */
+					saveUKRatioTHL1();
+				} else {
+					/** Function to save UK ratio TCL1, TCL2, TSL1 template */
+					saveUKRatioTCL1TCL2TSL1();
+				}
+
+			} else {
+				saveSingleStickers('customer');
+			}
+		}
+
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
 }
 
 /**
@@ -8155,7 +7935,7 @@ function mapStoredValues(oDetails) {
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     var temp_data = JSON.parse(localStorage.getItem("data"));
-    
+    const stickersList = temp_data.map(template => template.template_name);
     $('.page-header h4 strong').text(header);
     $('.save-btn').data('insert','false');
 
@@ -8191,7 +7971,15 @@ function mapStoredValues(oDetails) {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
                     
-                    $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    } else if ($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    } else {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    }
+
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
                     $('#'+zone+'_single_size_'+index).val(j.size);  
                     if(ele.order_quantity.length !== (i+1)) {
@@ -8338,6 +8126,16 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                    case 'TCL 5':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
+                    case 'TSL 2':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
                     default:
                         jointWashcareLabels.push(templateInfo[1]);
                         jointWashcareLabelArtworks.push(templateInfo[0]);

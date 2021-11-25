@@ -28,6 +28,17 @@ $( () => {
                                             });
                                         metadata_select_div += `</select>
                                     </div>
+                                    <div class="form-group has-feedback">
+                                     <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_part_of_two_piece_set" name="tesco_care_part_of_two_piece_set">
+                                            <option value="">-- Part of Two Piece Set --</option>`;
+                                            $.each(order_data.metadata.part_of_two_piece_set, function (id, name) {
+
+                                                metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
+
+                                            });
+                                        metadata_select_div += `</select>
+                                    </div>
                                     <hr>
                                     <h4 class="text-center">Care Instructions</h4>
                                     <div class="form-group has-feedback">

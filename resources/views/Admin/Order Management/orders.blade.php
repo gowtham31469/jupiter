@@ -1158,6 +1158,8 @@ input[type="number"] {
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
     <!-- Financial year selection script -->
     <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+	<script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
+	<script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){

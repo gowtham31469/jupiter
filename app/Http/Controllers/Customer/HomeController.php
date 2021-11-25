@@ -21,9 +21,11 @@ class HomeController extends Controller
     private $tcl1;
     private $tcl2;
     private $tcl4;
+    private $tcl5;
     private $thl1;
     private $thl3;
     private $tsl1;
+    private $tsl2;
     private $tsl3;
     private $current_date;
     private $year;
@@ -41,9 +43,11 @@ class HomeController extends Controller
         $this->tcl1 = "TCL 1";
         $this->tcl2 = "TCL 2";
         $this->tcl4 = "TCL 4";
+        $this->tcl5 = "TCL 5";
         $this->thl1 = "THL 1";
         $this->thl3 = "THL 3";
         $this->tsl1 = "TSL 1";
+        $this->tsl2 = "TSL 2";
         $this->tsl3 = "TSL 3";
         // get the current time
        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
@@ -312,7 +316,7 @@ class HomeController extends Controller
           foreach ($formdata as $key => $value) {
             $table_name =   preg_replace( '/_[^_]*$/', '', $value );
             $row_id = substr($value, strrpos($value, '_') + 1);
-            if ($table_name!="select-all") {
+            if ($table_name!="select-all-app") {
               $data   = DB::table($table_name)->where('id',$row_id)
                             ->update([
                               'app_ord_flag' => 1,
@@ -414,7 +418,7 @@ class HomeController extends Controller
         foreach ($formdata as $key => $value) {
           $table_name =   preg_replace( '/_[^_]*$/', '', $value );
           $row_id = substr($value, strrpos($value, '_') + 1);
-          if ($table_name!="select-all") {
+          if ($table_name!="select-all-pen") {
             $data   = DB::table($table_name)->where('id',$row_id)
                           ->update([
                             'pen_ord_flag' => 1,
@@ -516,7 +520,7 @@ class HomeController extends Controller
           foreach ($formdata as $key => $value) {
             $table_name =   preg_replace( '/_[^_]*$/', '', $value );
             $row_id = substr($value, strrpos($value, '_') + 1);
-            if ($table_name!="select-all") {
+            if ($table_name!="select-all-can") {
               $data   = DB::table($table_name)->where('id',$row_id)
                             ->update([
                               'cancel_ord_flag' => 1,

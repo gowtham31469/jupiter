@@ -106,6 +106,7 @@ class StoreTescoLabelOrder
             'additional_care_text_2'         => $translation_texts['additional_text_2'],
             'additional_care_id_3'           => $request->tesco_care_additional_instruction_3,
             'additional_care_text_3'         => $translation_texts['additional_text_3'],
+            'potps_id'                       => $request->tesco_care_part_of_two_piece_set
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;

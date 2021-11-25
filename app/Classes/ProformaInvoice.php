@@ -382,10 +382,10 @@ class ProformaInvoice
           $template_array = array_combine($table_array, $qnty_id_array);
 
         }
-        if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
+        if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders" || $table_name === "tesco_tsl2_orders") {
 
-          $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders');
-          $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty');
+          $table_array = array('tesco_tcl4_orders', 'tesco_tsl3_orders', 'tesco_tsl2_orders');
+          $qnty_id_array = array('tesco_tcl4_orders_quanty', 'tesco_tsl3_orders_quanty', 'tesco_tsl2_orders_quanty');
           $template_array = array_combine($table_array, $qnty_id_array);
 
         }
@@ -407,6 +407,14 @@ class ProformaInvoice
 
           $table_array = array('tesco_washcare_orders');
           $qnty_id_array = array('tesco_washcare_orders_quanty');
+          $template_array = array_combine($table_array, $qnty_id_array);
+
+        }
+
+        if ($table_name == "tesco_tcl5_orders") {
+
+          $table_array = array('tesco_tcl5_orders');
+          $qnty_id_array = array('tesco_tcl5_orders_quanty');
           $template_array = array_combine($table_array, $qnty_id_array);
 
         }
