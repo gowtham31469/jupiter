@@ -2017,6 +2017,12 @@ class OrderController extends Controller
                 return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'po series' => $po_series, 'po type' => $po_type], 422);
               }
               break;
+            case 'TCL 4, TSL 3 & TSL 2':
+              if($po_type !== 'single' || $po_series !== '460') {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4, TSL 3 & TSL 2', 'po series' => $po_series, 'po type' => $po_type], 422);
+              }
+              break;
+  
             default:
               return response()->json(['error' => 'Unknown Template Name for UK'], 400);
               break;
@@ -2121,6 +2127,17 @@ class OrderController extends Controller
                   return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
+              case 'TCL 5':
+                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+              case 'TCL 4, TSL 3 & TSL 2':
+                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4, TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                }
+                break;
+  
               default:
                 return response()->json(['error' => 'Unknown Template Name for CE'], 400);
                 break;
