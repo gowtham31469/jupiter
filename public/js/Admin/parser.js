@@ -78,6 +78,7 @@ function parseSingleORMSTable(tabula) {
                     case 1: header.push('EAN_Barcode');
                         break;
                     case 2: header.push('Size');
+                            header.push('ITF_Barcode');
                         break;
                 }
                 
@@ -89,6 +90,7 @@ function parseSingleORMSTable(tabula) {
                     } else {
                         row[header[i]] = '-';
                     }
+                    row[header[3]] = val[0];
                    
                 } else {
                    row[header[i]] = val.text;
@@ -322,7 +324,7 @@ function parseSingleType(data) {
         tabula[0].data.pop(); //Remove the total quantity row from the object
         $.each(tabula[0].data, function(index,element) {
             var row = {};
-            element.pop();//Remove the extra space element from the array
+            // element.pop();//Remove the extra space element from the array
             $.each(element, function(i, val) {
                 if(index === 0) {
                     header.push(val.text.replace(/ /g,"_"));
@@ -497,6 +499,10 @@ function renderParsedValues(parsedObj) {
             }
             
             j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
+
+            // TCL5 special case start
+            j.ITF_Barcode != null?$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', false);
+            // TCL5 special case end
 
             j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', false);
 
