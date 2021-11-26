@@ -985,19 +985,67 @@ function contentdocument(data,name,zone)
                            /** [ Dynamically change svg short description ] */
                            if(description != '' && datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = (description.toUpperCase())+' '+datas.size_chart[0].size;
+								var str = (description.toUpperCase()) + ' ' + datas.size_chart[0].size;
+
+									
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc1.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc1.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc1.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc1.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc1.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc1.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+									svgDoc1.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc1.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc1.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc1.getElementById("description1").innerHTML = "";
+								}
                            }
                            else if(datas.size_chart.length != 0)
                            {
-                              svgDoc1.getElementById("description").innerHTML = datas.size_chart[0].size; 
+								svgDoc1.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								svgDoc1.getElementById("description").innerHTML = datas.size_chart[0].size;
+								svgDoc1.getElementById("description1").innerHTML = '';
                            }
                            else if(description != '')
                            {
-                              svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc1.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc1.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc1.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc1.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc1.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc1.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc1.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc1.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc1.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc1.getElementById("description1").innerHTML = "";
+								}
                            }
                            else
                            {
-                              svgDoc1.getElementById("description").innerHTML = '';
+								svgDoc1.getElementById("description").innerHTML = '';
+								svgDoc1.getElementById("description1").innerHTML = '';
                            }
                      },
                      error: function (datas) {
