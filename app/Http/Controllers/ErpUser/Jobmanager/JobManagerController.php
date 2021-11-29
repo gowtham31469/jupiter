@@ -1535,6 +1535,7 @@ class JobManagerController extends Controller
 						$order_details = DB::table("erp_order_details")
 						->select('*')
 						->where('erp_order_id',$company_id)
+						->where('buyer_po_number',$request->tesco_po_number)
 						->where('order_qnty_table_name','tesco_tcl4_orders_quanty')
 						->get();
 
