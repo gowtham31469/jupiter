@@ -4341,8 +4341,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
                             //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                             //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 31 257.061)");
-                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.4806, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 30.7 257.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.1806, 257.061)");
                             svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 9.9, 264.3518)");
                             
                             svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
@@ -4424,8 +4424,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                             svgDoc.getElementById("small_translation1").innerHTML = polish;
                             //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                             //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 19.1, 257.061)");
-                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 31.6, 257.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.8, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 31.3, 257.061)");
                             svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 7.3, 264.061)");
                             
                             svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
@@ -4444,8 +4444,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "3-6M";
-                                svgDoc.getElementById("ce_size").innerHTML = "3-6M";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
@@ -4467,8 +4467,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "6-9M";
-                                svgDoc.getElementById("ce_size").innerHTML = "6-9M";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
@@ -4490,8 +4490,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "9-12M";
-                                svgDoc.getElementById("ce_size").innerHTML = "9-12M";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
@@ -4513,8 +4513,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "12-18M";
-                                svgDoc.getElementById("ce_size").innerHTML = "12-18M";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
@@ -4536,8 +4536,8 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "18-24M";
-                                svgDoc.getElementById("ce_size").innerHTML = "18-24M";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
@@ -4547,7 +4547,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
     
                                 svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
                             }
-                            else if(val.uk_size == "1-2 years")
+                            else if(val.uk_size == "1-2 years" || val.uk_size == "2-3 years" || val.uk_size == "3-4 years" || val.uk_size == "4-5 years" || val.uk_size == "5-6 years" || val.uk_size == "6-7 years" || val.uk_size == "7-8 years" || val.uk_size == "8-9 years" || val.uk_size == "9-10 years")
                             {
                                 svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
                                 svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
@@ -4558,17 +4558,80 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                                 svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                                svgDoc.getElementById("uk_size").innerHTML = "1-2 years";
-                                svgDoc.getElementById("ce_size").innerHTML = "1-2 years";
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
     
                                 svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
     
                                 svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
     
-                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.6656, 259.591)");
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 19.8656, 259.591)");
     
-                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 52.1656, 259.591)");
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 259.591)");
                             }
+                            else if(val.uk_size == "10-11 years" || val.uk_size == "11-12 years" || val.uk_size == "12-13 years" || val.uk_size == "13-14 years" || val.uk_size == "14-15 years" || val.uk_size == "15-16 years")
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 19.8656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 52.3656, 259.591)");
+                            }
+                            else
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                            }
+                            // svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                            //     svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("uk_size").innerHTML = "9-10 years";
+                            //     svgDoc.getElementById("ce_size").innerHTML = "9-10 years";
+    
+                            //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                            //     svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                            //     svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 19.8656, 259.591)");
+    
+                            //     svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 52.3656, 259.591)");
                         }
                         svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
                         var country_of_origin_text = JSON.parse(val.country_of_origin_text)
@@ -4583,7 +4646,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                     })
 
                     var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan  x="1.3" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan   x="1.3" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="1.3" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.2" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
+                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
 
                     // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
                     // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
