@@ -1335,10 +1335,6 @@ class OrderStatusCntrl extends Controller
                             $yy += 100; 
                         }
                       }
-                      else if($name == "TCL5-sticker")
-					  {
-							$yy += 77;
-					  }
                       else
                       {
                         $yy += 100;  
