@@ -39,7 +39,6 @@ class SingleStickerOrdersController extends Controller
           $zone        = $request['zone'];
           $style_ref   = strtolower($request['zone']) . '_style_ref';
           $style       = strtolower($request['zone']) . '_style';
-          $qty_data_array = [];
           $tpnd_type   = $zone === 'CE'?'orms_tpn':'tpnd';
 
           $last_insertions  = [];
@@ -119,12 +118,11 @@ class SingleStickerOrdersController extends Controller
 
             foreach ($orms_tpn as $value) 
             {
-              // qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
-              $qr_code = $request['po_number'] . ',' . $ean_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+                // qr code format : {Buyer PO No,Barcode/last 3 digits of tpnd no,tpnd no}
                 if (!empty($request['ean_barcode']) && !empty($request['itf_barcode'])) {
-                $qr_code = $sticker_name === 'TSL2'?$request['po_number'] . ',' . $itf_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value:$qr_code;
+                $qr_code = $sticker_name === 'TSL2'?$request['po_number'] . ',' . $itf_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value:$request['po_number'] . ',' . $ean_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
                 
-                $qty_data_array = [
+                DB::table($order_qty_table_name)->insert([
                   $sticker_order_id  => $tesco_order_id,
                   $tpnd_type         => $value,
                   'ean_barcode'      => $ean_barcode[$i],
@@ -133,9 +131,11 @@ class SingleStickerOrdersController extends Controller
                   'case_size'        => $case_size[$i],
                   'count'            => $quantity_array[$i],
                   'qr_code'          => $qr_code
-                ];
+                ]);
               } else if (!empty($request['ean_barcode'])) {
-                $qty_data_array = [
+                $qr_code = $request['po_number'] . ',' . $ean_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+
+                DB::table($order_qty_table_name)->insert([
                   $sticker_order_id  => $tesco_order_id,
                   $tpnd_type         => $value,
                   'ean_barcode'      => $ean_barcode[$i],
@@ -143,9 +143,11 @@ class SingleStickerOrdersController extends Controller
                   'case_size'        => $case_size[$i],
                   'count'            => $quantity_array[$i],
                   'qr_code'          => $qr_code
-                ];
+                ]);
               } else if (!empty($request['itf_barcode'])) {
-                $qty_data_array = [
+                $qr_code = $request['po_number'] . ',' . $itf_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+
+                DB::table($order_qty_table_name)->insert([
                   $sticker_order_id  => $tesco_order_id,
                   $tpnd_type         => $value,
                   'itf_barcode'      => $itf_barcode[$i],
@@ -153,12 +155,10 @@ class SingleStickerOrdersController extends Controller
                   'case_size'        => $case_size[$i],
                   'count'            => $quantity_array[$i],
                   'qr_code'          => $qr_code
-                ];
+                ]);
               }
               $i++;
             }
-
-            DB::table($order_qty_table_name)->insert($qty_data_array);
 
             /** [ last inserted tesco order id ] */
             $templates_inserted = array($template['template_name'] => $tesco_order_id);
@@ -252,7 +252,10 @@ class SingleStickerOrdersController extends Controller
           $i = 0;
           foreach ($orms_tpn as $value) 
           {
-              $qty_data_array = [
+            if (!empty($request['ean_barcode']) && !empty($request['itf_barcode'])) {
+              $qr_code = $sticker_name === 'TSL2' ? $request['po_number'] . ',' . $itf_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value : $request['po_number'] . ',' . $ean_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+
+              DB::table($order_qty_table_name)->insert([
                 $sticker_order_id  => $tesco_order_id,
                 $tpnd_type         => $value,
                 'ean_barcode'      => $ean_barcode[$i],
@@ -260,13 +263,37 @@ class SingleStickerOrdersController extends Controller
                 'size'             => $size[$i],
                 'case_size'        => $case_size[$i],
                 'count'            => $quantity_array[$i],
-                'qr_code'          => $qr_code[$i]
-              ];
+                'qr_code'          => $qr_code
+              ]);
+            } else if (!empty($request['ean_barcode'])) {
+              $qr_code = $request['po_number'] . ',' . $ean_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+
+              DB::table($order_qty_table_name)->insert([
+                $sticker_order_id  => $tesco_order_id,
+                $tpnd_type         => $value,
+                'ean_barcode'      => $ean_barcode[$i],
+                'size'             => $size[$i],
+                'case_size'        => $case_size[$i],
+                'count'            => $quantity_array[$i],
+                'qr_code'          => $qr_code
+              ]);
+            } else if (!empty($request['itf_barcode'])) {
+              $qr_code = $request['po_number'] . ',' . $itf_barcode[$i] . '/' . (substr($value, -3)) . ',' . $value;
+
+              DB::table($order_qty_table_name)->insert([
+                $sticker_order_id  => $tesco_order_id,
+                $tpnd_type         => $value,
+                'itf_barcode'      => $itf_barcode[$i],
+                'size'             => $size[$i],
+                'case_size'        => $case_size[$i],
+                'count'            => $quantity_array[$i],
+                'qr_code'          => $qr_code
+              ]);
+            }
+
             $i++;
           }
         
-          DB::table($order_qty_table_name)->insert($qty_data_array);
-
           /** [ Return array of inserted id ] */
           $last_insertions = array_merge($last_insertions,$templates_inserted);
       }
