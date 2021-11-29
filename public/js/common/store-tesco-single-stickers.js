@@ -313,6 +313,11 @@ validateCaseSizeQty = (obj) => {
 		obj.value = ''
 	}
 
+	if ($(obj).data("artwork") === 'TSL 3' && $(obj).parents().eq(1).siblings('td.case_size_td').find('.ce_single_case_size').val() > '1') {
+		alert('You are not allowed to enter quantity of TSL 3 stickers. Because the Units Per Case value is greater than 1.');
+		obj.value = ''
+	}
+
 }
 
 clearQuantity = (obj) => {
