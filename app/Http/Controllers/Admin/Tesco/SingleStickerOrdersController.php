@@ -205,7 +205,6 @@ class SingleStickerOrdersController extends Controller
       $last_insertions  = [];
       $already_exists   = [];
       $created_by       = 0;
-      $qty_data_array   = [];
 
       /** Check if supplier value empty or not */
       if (isset($request['supplier'])) {
