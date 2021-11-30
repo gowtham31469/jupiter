@@ -2296,6 +2296,10 @@ class OrderStatusController extends Controller
                                 $yy += 100; 
                             }
                         }
+                        else if($name == "TCL5-sticker")
+                        {
+                              $yy += 77;
+                        }
                         else
                         {
                           $yy += 100;  
@@ -2360,7 +2364,7 @@ class OrderStatusController extends Controller
 					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
                     if($qr_check == $qr_code[$qr_count])
                     {
-                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
                     }
 				}
 				else if($name == "THL1-sticker")
