@@ -451,8 +451,16 @@ class OrderManagementCntrl extends Controller
             //Check the RETEK purchase order validation
             //Check the purchase order type whether it is Single or Ratio.
             $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
-            //Compare RETEK PO number from both the sheets
-            if($retek_data['retek_po_number'] !== $orms_data['retek_number']) {
+           
+            //Get last 3 digits from ORMS Retek PO number and Retek po number
+            $retek_po_number_short = (strlen($retek_data['retek_po_number'])>=3)?(substr($retek_data['retek_po_number'], -3)):($retek_data['retek_po_number']);
+            $orms_retekpo_number_short = (strlen($orms_data['retek_number'])>=3)?(substr($orms_data['retek_number'], -3)):($orms_data['retek_number']);
+            // print_r($retek_data['retek_po_number']);print("\n");
+            // print_r($orms_data['retek_number']);print("\n");
+            // print_r($retek_po_number_short);print("\n");
+            // print_r($orms_retekpo_number_short);
+             //Compare RETEK PO number from both the sheets also check for last 3 digit matching
+            if(($retek_data['retek_po_number'] !== $orms_data['retek_number']) && $retek_po_number_short !==  $orms_retekpo_number_short ) {
               return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
             }
             $po_type   = $this->checkPOType($retek_path);
