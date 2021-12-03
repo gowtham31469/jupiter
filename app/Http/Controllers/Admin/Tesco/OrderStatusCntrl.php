@@ -2892,25 +2892,26 @@ class OrderStatusCntrl extends Controller
             if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                 $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
             }
-            
+
             $pi_details = PI::create([
-                'buyer_id'         => $buyer_id,
-                'company_id'       => $data['company_details']->id,
-                'customer_id'      => $data['bank_details']->id,
-                // 'template_id'      => $data['bank_details']->template_id,
-                'buyer_po_no'      => $data['bank_details']->po_number,
-                'uvc_style_no'     => $style_no,
-                'ref_no'           => $data['bank_details']->ref_no,
-                'shipping_address' => $data['ship_to']->address,
-                'billing_address'  => $data['bill_to']->address,
-                'place_of_supply'  => $data['bank_details']->place_of_supply,
-                'template_type'  => $data['bank_details']->template_type,
-                'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                'rep_order_id'     => $rep_order_id,
-                'pi_file'         => $attachment,
-                'pi_number'       => $pi_number
+                    'buyer_id'         => $buyer_id,
+                    'company_id'       => $data['company_details']->id,
+                    'customer_id'      => $data['bank_details']->id,
+                    // 'template_id'      => $data['bank_details']->template_id,
+                    'buyer_po_no'      => $data['bank_details']->po_number,
+                    'uvc_style_no'     => $style_no,
+                    'ref_no'           => $data['bank_details']->ref_no,
+                    'shipping_address' => $data['ship_to']->address,
+                    'billing_address'  => $data['bill_to']->address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'template_type'  => $data['bank_details']->template_type,
+                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id,
+                    'pi_file'         => $attachment,
+                    'pi_number'       => $pi_number
+
+                ]);
                 
-            ]);
             foreach ($data['item_details'] as $key => $value)
             {
                 $unit_cost = $value->price;
@@ -2929,13 +2930,6 @@ class OrderStatusCntrl extends Controller
                     'tax'       => $tax
                 ]);
             }
-            PI::where('id',$pi_details->id)
-                        ->update([
-                            'total_quantity'   => $total_qnty,
-                            'sub_total'        => $sub_total,
-                            // 'tax'              => $data['item_details'][0]->tax,
-                            'bill_amount'      => $billamnt
-                        ]);
             
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
@@ -2943,46 +2937,49 @@ class OrderStatusCntrl extends Controller
                     
                     if ($data['bank_details']->zone === "joint") {
                         $tableID =  DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   =   DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)
-                                            ->update([
-                                               'pi_status' => "PI Approved",
-                                               'pi_id' => $pi_details->id,
-                                               'pi_file' => $attachment,
-                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                            ]);
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)->value('id');
+                        DB::table($table)
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)
+                            ->update([
+                                'pi_status' => "PI Approved",
+                                'pi_id' => $pi_details->id,
+                                'pi_file' => $attachment,
+                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                            ]);
                     } else {
                         $tableID =  DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   =   DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)
-                                            ->update([
-                                               'pi_status' => "PI Approved",
-                                               'pi_id' => $pi_details->id,
-                                               'pi_file' => $attachment,
-                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                            ]);
-                        
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)->value('id');
+
+
+                        DB::table($table)
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)
+                            ->update([
+                                'pi_status' => "PI Approved",
+                                'pi_id' => $pi_details->id,
+                                'pi_file' => $attachment,
+                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                            ]);
+                                            
                     }
+                    
                     /** @var array [Pass array of values to updateTescoErpOrders function] */
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
@@ -3001,16 +2998,15 @@ class OrderStatusCntrl extends Controller
                     'pi_status'   => 1
                     ]);
                 }
-            }
-            else{
-                $approved_data   = DB::table($table_name)
-                                    ->where('id',$row_id)
-                                    ->update([
-                                        'pi_status' => "PI Approved",
-                                        'pi_id' => $pi_details->id,
-                                        'pi_file' => $attachment, 
-                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                     ]);
+            } else {
+                DB::table($table_name)
+                    ->where('id', $row_id)
+                    ->update([
+                        'pi_status' => "PI Approved",
+                        'pi_id' => $pi_details->id,
+                        'pi_file' => $attachment,
+                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                    ]);
   
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $erpOrders['tableName'] = $table_name;
@@ -3030,7 +3026,16 @@ class OrderStatusCntrl extends Controller
                     'pi_status'   => 1
                 ]);
             }
-            if ($approved_data)
+
+            $pi_approved = PI::where('id', $pi_details->id)
+                ->update([
+                    'total_quantity'   => $total_qnty,
+                    'sub_total'        => $sub_total,
+                    // 'tax'              => $data['item_details'][0]->tax,
+                    'bill_amount'      => $billamnt
+                ]);
+
+            if ($pi_approved)
             {
                $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
             }
