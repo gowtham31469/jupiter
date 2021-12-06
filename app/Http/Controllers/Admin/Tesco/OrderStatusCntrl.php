@@ -69,8 +69,6 @@ class OrderStatusCntrl extends Controller
 			$ddmmyy="DD-MM-YYYY";
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                              ->join('customers','tesco_tcl1_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_tcl1_orders.is_order_count_empty',0)
-                            // ->where('tesco_tcl1_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_tcl1_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.po_number as BuyerPO','tesco_tcl1_orders.zone as Zone',DB::raw("'".$tcl1."'".' as "TemplateName"'),'tesco_tcl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl1_orders.order_status as Artwork Status','tesco_tcl1_orders.pi_status as PI Status','tesco_tcl1_orders.po_status as PO Status','tesco_tcl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl1_orders."'".' as "tableName"'),'tesco_tcl1_orders.id as tableID','tesco_tcl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl1_orders.template_id','tesco_tcl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -78,7 +76,6 @@ class OrderStatusCntrl extends Controller
 			$tesco_tcl2_orders = "tesco_tcl2_orders";
             $data['tcl2'] = DB::table('tesco_tcl2_orders')
                             ->join('customers','tesco_tcl2_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_tcl2_orders.is_order_count_empty',0)
                             ->whereNotIn('tesco_tcl2_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.po_number as BuyerPO','tesco_tcl2_orders.zone as Zone',DB::raw("'".$tcl2."'".' as "TemplateName"'),'tesco_tcl2_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl2_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl2_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl2_orders.order_status as Artwork Status','tesco_tcl2_orders.pi_status as PI Status','tesco_tcl2_orders.po_status as PO Status','tesco_tcl2_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl2_orders."'".' as "tableName"'),'tesco_tcl2_orders.id as tableID','tesco_tcl2_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl2_orders.template_id','tesco_tcl2_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -86,8 +83,6 @@ class OrderStatusCntrl extends Controller
 			$tesco_tcl4_orders = "tesco_tcl4_orders";
             $data['tcl4'] = DB::table('tesco_tcl4_orders')
                             ->join('customers','tesco_tcl4_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_tcl4_orders.is_order_count_empty',0)
-                            // ->where('tesco_tcl4_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_tcl4_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.po_number as BuyerPO','tesco_tcl4_orders.zone as Zone',DB::raw("'".$tcl4."'".' as "TemplateName"'),'tesco_tcl4_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tcl4_orders.created_at as OrderDate',DB::raw('to_char(tesco_tcl4_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tcl4_orders.order_status as Artwork Status','tesco_tcl4_orders.pi_status as PI Status','tesco_tcl4_orders.po_status as PO Status','tesco_tcl4_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tcl4_orders."'".' as "tableName"'),'tesco_tcl4_orders.id as tableID','tesco_tcl4_orders.po_file','customers.pi_required','customers.po_required','tesco_tcl4_orders.template_id','tesco_tcl4_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -96,7 +91,6 @@ class OrderStatusCntrl extends Controller
             $data['thl1'] = DB::table('tesco_thl1_orders')
                             ->join('customers','tesco_thl1_orders.tesco_supplier_id','=','customers.id')
                             ->where('tesco_thl1_orders.is_order_count_empty',0)
-                            // ->where('tesco_thl1_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_thl1_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.po_number as BuyerPO','tesco_thl1_orders.zone as Zone',DB::raw("'".$thl1."'".' as "TemplateName"'),'tesco_thl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl1_orders.order_status as Artwork Status','tesco_thl1_orders.pi_status as PI Status','tesco_thl1_orders.po_status as PO Status','tesco_thl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl1_orders."'".' as "tableName"'),'tesco_thl1_orders.id as tableID','tesco_thl1_orders.po_file','customers.pi_required','customers.po_required','tesco_thl1_orders.template_id','tesco_thl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                                 ->get();
@@ -104,8 +98,6 @@ class OrderStatusCntrl extends Controller
 			$tesco_thl3_orders = "tesco_thl3_orders";
             $data['thl3'] = DB::table('tesco_thl3_orders')
                             ->join('customers','tesco_thl3_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_thl3_orders.is_order_count_empty',0)
-                            // ->where('tesco_thl3_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_thl3_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.po_number as BuyerPO','tesco_thl3_orders.zone as Zone',DB::raw("'".$thl3."'".' as "TemplateName"'),'tesco_thl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_thl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_thl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_thl3_orders.order_status as Artwork Status','tesco_thl3_orders.pi_status as PI Status','tesco_thl3_orders.po_status as PO Status','tesco_thl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_thl3_orders."'".' as "tableName"'),'tesco_thl3_orders.id as tableID','tesco_thl3_orders.po_file','customers.pi_required','customers.po_required','tesco_thl3_orders.template_id','tesco_thl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -113,8 +105,6 @@ class OrderStatusCntrl extends Controller
 			$tesco_tsl1_orders = "tesco_tsl1_orders";
             $data['tsl1'] = DB::table('tesco_tsl1_orders')
                             ->join('customers','tesco_tsl1_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_tsl1_orders.is_order_count_empty',0)
-                            // ->where('tesco_tsl1_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_tsl1_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.po_number as BuyerPO','tesco_tsl1_orders.zone as Zone',DB::raw("'".$tsl1."'".' as "TemplateName"'),'tesco_tsl1_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl1_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl1_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl1_orders.order_status as Artwork Status','tesco_tsl1_orders.pi_status as PI Status','tesco_tsl1_orders.po_status as PO Status','tesco_tsl1_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl1_orders."'".' as "tableName"'),'tesco_tsl1_orders.id as tableID','tesco_tsl1_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl1_orders.template_id','tesco_tsl1_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -122,8 +112,6 @@ class OrderStatusCntrl extends Controller
 			$tesco_tsl3_orders = "tesco_tsl3_orders";
             $data['tsl3'] = DB::table('tesco_tsl3_orders')
                             ->join('customers','tesco_tsl3_orders.tesco_supplier_id','=','customers.id')
-                            // ->where('tesco_tsl3_orders.is_order_count_empty',0)
-                            // ->where('tesco_tsl3_orders.order_status', '!=', 'Saved')
                             ->whereNotIn('tesco_tsl3_orders.order_status',['Saved','Order Cancelled'])
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.po_number as BuyerPO','tesco_tsl3_orders.zone as Zone',DB::raw("'".$tsl3."'".' as "TemplateName"'),'tesco_tsl3_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_tsl3_orders.created_at as OrderDate',DB::raw('to_char(tesco_tsl3_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_tsl3_orders.order_status as Artwork Status','tesco_tsl3_orders.pi_status as PI Status','tesco_tsl3_orders.po_status as PO Status','tesco_tsl3_orders.purchase_order_no as PO Number',DB::raw("'".$actions."'".' as "Actions"'),DB::raw("'".$tesco_tsl3_orders."'".' as "tableName"'),'tesco_tsl3_orders.id as tableID','tesco_tsl3_orders.po_file','customers.pi_required','customers.po_required','tesco_tsl3_orders.template_id','tesco_tsl3_orders.order_flag','customers.delivery_day_count','is_order_count_empty')
                             ->get();
@@ -364,7 +352,6 @@ class OrderStatusCntrl extends Controller
                         ->union($thl1_style)
                         ->get();
 
-            //$data = json_decode($data);
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
             return $result;
         }
@@ -1649,8 +1636,6 @@ class OrderStatusCntrl extends Controller
           // Position at 15 mm from bottom
           $pdf->SetY(-50);
           $pdf->SetX(9.5);
-          // Set font
-          //$pdf->SetFont('frankgothcnbt');
           // Page number
           $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
                   <title>Qt Svg Document</title>
@@ -1709,9 +1694,8 @@ class OrderStatusCntrl extends Controller
       });
       $svgarr = explode(',_',$request->svg);
       $name=$request->name;
-  //$svg=urldecode($request->svg);
-  PDF::setImageScale(1);
-  PDF::SetFont('frankgothcnbt');	
+      PDF::setImageScale(1);
+      PDF::SetFont('frankgothcnbt');	
       PDF::AddPage();
       $i=0;
       $yy=0;
@@ -1719,7 +1703,6 @@ class OrderStatusCntrl extends Controller
       PDF::SetXY(10, 50);
       foreach($svgarr as $value)
       {
-          //$svg=urldecode($value);
           PDF::SetFillColor(255,255,255);
           if($i == 3 || $i == 6 || $i == 9 || $i == 15 || $i == 18)
           {
@@ -1916,33 +1899,6 @@ class OrderStatusCntrl extends Controller
          }
          PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
          print_r(url('/storage/app/template/'.$name.'.pdf'));
-         
-         
-         
- //		$svgarr = explode(',_',$request->svg);
- //		$name=$request->name;
- //        $svg=urldecode($request->svg);
- //        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
- //        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
- //        PDF::setPrintHeader(false);
- //        PDF::setPrintFooter(false);
- //        PDF::SetFont('frankgothcnbt');
- //		PDF::SetAutoPageBreak(TRUE);
- //		$j=0;
- //		foreach($svgarr as $value)
- //		{
- //			PDF::SetMargins(0, 0, 0, false);
- //			PDF::setImageScale(1);
- //			PDF::AddPage('L', array(80,127));
- //			$svg=urldecode($value);
- //			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
- //			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
- //			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
- //			$j++;
- //		}
- //		PDF::deletePage(1);
- //        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
- //        print_r(url('/storage/app/template/'.$name.'.pdf'));
      } 
 
      public function generateDivTescoLabelos(Request $request)
@@ -1970,8 +1926,6 @@ class OrderStatusCntrl extends Controller
 
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
-        // PDF::setPrintHeader(false);
-        // PDF::setPrintFooter(false);
         PDF::SetFont('arialuni');
 
         $this->tesco_po_number = $request->tesco_po_number;
@@ -2064,8 +2018,6 @@ class OrderStatusCntrl extends Controller
 
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
-        // PDF::setPrintHeader(false);
-        // PDF::setPrintFooter(false);
         PDF::SetFont('arialuni');
 
         $this->tesco_po_number = $request->tesco_po_number;
@@ -2174,8 +2126,6 @@ class OrderStatusCntrl extends Controller
               // Position at 15 mm from bottom
               $pdf->SetY(-50);
               $pdf->SetX(9.5);
-              // Set font
-              //$pdf->SetFont('frankgothcnbt');
               // Page number
               $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
                       <title>Qt Svg Document</title>
@@ -2252,7 +2202,6 @@ class OrderStatusCntrl extends Controller
             }
             
             $svgString=urldecode($value);
-            //print_r($svgString);
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
@@ -2285,8 +2234,6 @@ class OrderStatusCntrl extends Controller
 
         PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        //print_r($svgStringBack);
 
         PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
         print_r(url('/storage/app/template/label.pdf'));
@@ -2331,26 +2278,11 @@ class OrderStatusCntrl extends Controller
               }
               else
               {
- //				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
- //
- //				// now you are able to resize the instance
- //				$img->resize(150, 50);
- //
- //				// finally we save the image as a new file
- //				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
-                  
                   PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
              
                  PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
               }
-             
-             
-             
-             
- //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
- //			
- //			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
- //			
+		
              $i++;
          }
          $j=0;
@@ -2591,30 +2523,30 @@ class OrderStatusCntrl extends Controller
                     $value->part_name = "";
                 }
 
-                $value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
-                $value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
-                $value->internal_reference=$order_omp{0}->internal_reference;
-                $value->customer_name=$customer_name{0}->short_name;
-                $value->country_of_origin_text=$order_omp{0}->country_of_origin_text;
-                $value->wash_iso=$order_omp{0}->wash_iso;
-                $value->wash_astm=$order_omp{0}->wash_astm;
-                $value->whit_iso=$order_omp{0}->whit_iso;
-                $value->whit_astm=$order_omp{0}->whit_astm;
-                $value->dry_iso=$order_omp{0}->dry_iso;
-                $value->dry_astm=$order_omp{0}->dry_astm;
-                $value->iron_iso=$order_omp{0}->iron_iso;
-                $value->iron_astm=$order_omp{0}->iron_astm;
-                $value->clean_iso=$order_omp{0}->clean_iso;
-                $value->clean_astm=$order_omp{0}->clean_astm;
-                $value->degree=$order_omp{0}->degree;
-                $value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
-                $value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
-                $value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
-                $value->kids_warning_text=$order_omp{0}->kids_warning_text;
-                $value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
-                $value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
-                $value->part_of_set_text=$order_omp{0}->part_of_set_text;
-                $value->created_at=$order_omp{0}->created_at;
+                $value->baby_sleeping_bag_symbol=$order_omp[0]->baby_sleeping_bag_symbol;
+                $value->bs_en_declaration=$order_omp[0]->bs_en_declaration;
+                $value->internal_reference=$order_omp[0]->internal_reference;
+                $value->customer_name=$customer_name[0]->short_name;
+                $value->country_of_origin_text=$order_omp[0]->country_of_origin_text;
+                $value->wash_iso=$order_omp[0]->wash_iso;
+                $value->wash_astm=$order_omp[0]->wash_astm;
+                $value->whit_iso=$order_omp[0]->whit_iso;
+                $value->whit_astm=$order_omp[0]->whit_astm;
+                $value->dry_iso=$order_omp[0]->dry_iso;
+                $value->dry_astm=$order_omp[0]->dry_astm;
+                $value->iron_iso=$order_omp[0]->iron_iso;
+                $value->iron_astm=$order_omp[0]->iron_astm;
+                $value->clean_iso=$order_omp[0]->clean_iso;
+                $value->clean_astm=$order_omp[0]->clean_astm;
+                $value->degree=$order_omp[0]->degree;
+                $value->additional_care_text_1=$order_omp[0]->additional_care_text_1;
+                $value->additional_care_text_2=$order_omp[0]->additional_care_text_2;
+                $value->additional_care_text_3=$order_omp[0]->additional_care_text_3;
+                $value->kids_warning_text=$order_omp[0]->kids_warning_text;
+                $value->exclusive_trims_text=$order_omp[0]->exclusive_trims_text;
+                $value->contains_non_textile_part_text=$order_omp[0]->contains_non_textile_part_text;
+                $value->part_of_set_text=$order_omp[0]->part_of_set_text;
+                $value->created_at=$order_omp[0]->created_at;
                 
             }
             else
@@ -2634,19 +2566,19 @@ class OrderStatusCntrl extends Controller
                                 ->get();
 
 
-                $value->zone=$order_omp{0}->zone;
-                $value->po_number=$order_omp{0}->po_number;
-                $value->uk_style_ref=$order_omp{0}->uk_style_ref;
-                $value->ce_style_ref=$order_omp{0}->ce_style_ref;
-                $value->season_code=$order_omp{0}->season_code;
-                $value->short_description=$order_omp{0}->short_description;
-                $value->eqos_site_code=$order_omp{0}->eqos_site_code;
-                $value->manufacture_date=$order_omp{0}->manufacture_date;
-                $value->department=$order_omp{0}->department;
-                $value->brand=$order_omp{0}->brand;
-                $value->supplier_name=$order_omp{0}->supplier_name;
-                $value->rfid_compliant=$order_omp{0}->rfid_compliant;
-                $value->tag_at_source=$order_omp{0}->tag_at_source;
+                $value->zone=$order_omp[0]->zone;
+                $value->po_number=$order_omp[0]->po_number;
+                $value->uk_style_ref=$order_omp[0]->uk_style_ref;
+                $value->ce_style_ref=$order_omp[0]->ce_style_ref;
+                $value->season_code=$order_omp[0]->season_code;
+                $value->short_description=$order_omp[0]->short_description;
+                $value->eqos_site_code=$order_omp[0]->eqos_site_code;
+                $value->manufacture_date=$order_omp[0]->manufacture_date;
+                $value->department=$order_omp[0]->department;
+                $value->brand=$order_omp[0]->brand;
+                $value->supplier_name=$order_omp[0]->supplier_name;
+                $value->rfid_compliant=$order_omp[0]->rfid_compliant;
+                $value->tag_at_source=$order_omp[0]->tag_at_source;
             }
         }
         $tesco_tiny  = 	DB::table('tesco_translation')
@@ -2805,8 +2737,6 @@ class OrderStatusCntrl extends Controller
             $po_file->move($path,$filename);
             $destination_path_insert=$destination_path.$filename;
 
-            $po_details = DB::table($table_name)->where('id',$row_id)->select('purchase_order_no')->first();
-
             $data_array = [];
             $data_array['id'] = $row_id;
             $data_array['table_name'] = $table_name;
@@ -2962,25 +2892,26 @@ class OrderStatusCntrl extends Controller
             if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
                 $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
             }
-            
+
             $pi_details = PI::create([
-                'buyer_id'         => $buyer_id,
-                'company_id'       => $data['company_details']->id,
-                'customer_id'      => $data['bank_details']->id,
-                // 'template_id'      => $data['bank_details']->template_id,
-                'buyer_po_no'      => $data['bank_details']->po_number,
-                'uvc_style_no'     => $style_no,
-                'ref_no'           => $data['bank_details']->ref_no,
-                'shipping_address' => $data['ship_to']->address,
-                'billing_address'  => $data['bill_to']->address,
-                'place_of_supply'  => $data['bank_details']->place_of_supply,
-                'template_type'  => $data['bank_details']->template_type,
-                'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                'rep_order_id'     => $rep_order_id,
-                'pi_file'         => $attachment,
-                'pi_number'       => $pi_number
+                    'buyer_id'         => $buyer_id,
+                    'company_id'       => $data['company_details']->id,
+                    'customer_id'      => $data['bank_details']->id,
+                    // 'template_id'      => $data['bank_details']->template_id,
+                    'buyer_po_no'      => $data['bank_details']->po_number,
+                    'uvc_style_no'     => $style_no,
+                    'ref_no'           => $data['bank_details']->ref_no,
+                    'shipping_address' => $data['ship_to']->address,
+                    'billing_address'  => $data['bill_to']->address,
+                    'place_of_supply'  => $data['bank_details']->place_of_supply,
+                    'template_type'  => $data['bank_details']->template_type,
+                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                    'rep_order_id'     => $rep_order_id,
+                    'pi_file'         => $attachment,
+                    'pi_number'       => $pi_number
+
+                ]);
                 
-            ]);
             foreach ($data['item_details'] as $key => $value)
             {
                 $unit_cost = $value->price;
@@ -2999,13 +2930,6 @@ class OrderStatusCntrl extends Controller
                     'tax'       => $tax
                 ]);
             }
-            PI::where('id',$pi_details->id)
-                        ->update([
-                            'total_quantity'   => $total_qnty,
-                            'sub_total'        => $sub_total,
-                            // 'tax'              => $data['item_details'][0]->tax,
-                            'bill_amount'      => $billamnt
-                        ]);
             
             if ($data['item_details'][0]->order_flag == "newOrder") {
                 $tableID = 0;
@@ -3013,46 +2937,49 @@ class OrderStatusCntrl extends Controller
                     
                     if ($data['bank_details']->zone === "joint") {
                         $tableID =  DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   =   DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)
-                                            ->update([
-                                               'pi_status' => "PI Approved",
-                                               'pi_id' => $pi_details->id,
-                                               'pi_file' => $attachment,
-                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                            ]);
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)->value('id');
+                        DB::table($table)
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)
+                            ->update([
+                                'pi_status' => "PI Approved",
+                                'pi_id' => $pi_details->id,
+                                'pi_file' => $attachment,
+                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                            ]);
                     } else {
                         $tableID =  DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)->value('id');
-                        $approved_data   =   DB::table($table)
-                                            ->where($table.'.is_order_count_empty',0)
-                                            ->where(strtolower($data['bank_details']->zone).'_style_ref', $style_no)
-                                            ->where('order_flag',$data['item_details'][0]->order_flag)
-                                            ->where('pi_status',$data['item_details'][0]->pi_status)
-                                            ->where('po_number',$data['bank_details']->po_number)
-                                            ->update([
-                                               'pi_status' => "PI Approved",
-                                               'pi_id' => $pi_details->id,
-                                               'pi_file' => $attachment,
-                                               'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                            ]);
-                        
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)->value('id');
+
+
+                        DB::table($table)
+                            ->where($table . '.is_order_count_empty', 0)
+                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                            ->where('order_flag', $data['item_details'][0]->order_flag)
+                            ->where('pi_status', $data['item_details'][0]->pi_status)
+                            ->where('po_number', $data['bank_details']->po_number)
+                            ->update([
+                                'pi_status' => "PI Approved",
+                                'pi_id' => $pi_details->id,
+                                'pi_file' => $attachment,
+                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                            ]);
+                                            
                     }
+                    
                     /** @var array [Pass array of values to updateTescoErpOrders function] */
                     $erpOrders['tableName'] = $table;
                     $erpOrders['id']        = $tableID;
@@ -3071,16 +2998,15 @@ class OrderStatusCntrl extends Controller
                     'pi_status'   => 1
                     ]);
                 }
-            }
-            else{
-                $approved_data   = DB::table($table_name)
-                                    ->where('id',$row_id)
-                                    ->update([
-                                        'pi_status' => "PI Approved",
-                                        'pi_id' => $pi_details->id,
-                                        'pi_file' => $attachment, 
-                                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                                     ]);
+            } else {
+                DB::table($table_name)
+                    ->where('id', $row_id)
+                    ->update([
+                        'pi_status' => "PI Approved",
+                        'pi_id' => $pi_details->id,
+                        'pi_file' => $attachment,
+                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                    ]);
   
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $erpOrders['tableName'] = $table_name;
@@ -3100,7 +3026,16 @@ class OrderStatusCntrl extends Controller
                     'pi_status'   => 1
                 ]);
             }
-            if ($approved_data)
+
+            $pi_approved = PI::where('id', $pi_details->id)
+                ->update([
+                    'total_quantity'   => $total_qnty,
+                    'sub_total'        => $sub_total,
+                    // 'tax'              => $data['item_details'][0]->tax,
+                    'bill_amount'      => $billamnt
+                ]);
+
+            if ($pi_approved)
             {
                $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
             }
@@ -3751,7 +3686,6 @@ class OrderStatusCntrl extends Controller
             $row_id       =   $request->id;
             $table_name   =   $request->tableName; 
             $deliveryDate =   $request->deliveryDate; 
-            $date = str_replace('/', '-', $deliveryDate);
             $deliveryDt =  date('Y-m-d', strtotime($deliveryDate));
             DB::table($table_name)->where('id',$row_id)
                    ->update([
