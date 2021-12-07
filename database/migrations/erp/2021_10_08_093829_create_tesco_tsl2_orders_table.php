@@ -41,7 +41,7 @@ class CreateTescoTsl2OrdersTable extends Migration
             $table->string('po_status')->nullable(true)->index();
             $table->string('pi_status')->nullable(true)->index();
             $table->integer('pi_rev_no')->default(0)->nullable(true)->index();
-            $table->integer('order_placed_by')->default(null)->index();
+            $table->integer('order_placed_by')->default(0)->index();
             $table->integer('edit_permission')->default(0);
             $table->integer('cancel_ord_flag')->default(0);
             $table->integer('pen_ord_flag')->default(0);
