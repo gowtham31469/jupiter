@@ -77,46 +77,39 @@ $(function () {
         });
     }
 
-    // Method to Calculate total fiber percentage
-    calculateTotalFiberPercentage = () => {
+    // Calculate total fiber percentage
+    $(document).on('change', '.fiber-individual-percentage', function() {
 
-        var table = 1;
-        $('.component-div').each(function () {
+        var total_fiber_percentage = 0;
+        var component = $(this).attr("id").split('_')[3];
 
-            var total_fiber_percentage = 0;
+        for (let index = 1; index <= 6; index++) {
 
-            $(this).find('.fiber-individual-percentage-' + table).each(function () {
+            var individual_percentage = $('#fiber_individual_percentage_' + component + '_' + index).val();
 
-                var individual_percentage = $(this).val();
+            if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
 
-                if (!isNaN(individual_percentage) && individual_percentage.length !== 0) {
+                total_fiber_percentage += Number(individual_percentage);
 
-                    total_fiber_percentage += parseInt(individual_percentage);
-
-                }
-
-            });
-            $('#fiber_total_percentage_' + (table)).val(total_fiber_percentage).change();
-
-            // toggle min & max validation for total percentage
-            if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
-
-                $('#fiber_total_percentage_' + (table)).removeAttr("min");
-                $('#fiber_total_percentage_' + (table)).removeAttr("max");
-
-            } else {
-
-                $('#fiber_total_percentage_' + (table)).attr('min', 100);
-                $('#fiber_total_percentage_' + (table)).attr('max', 100);
-                
             }
+        }
 
-            table++;
-        });
+        $('#fiber_total_percentage_' + (component)).val(total_fiber_percentage).change();
 
-        $(".selectpicker").selectpicker("refresh");
-        $('#tesco_care_label_order_form').validator('update');
-    }
+        // toggle min & max validation for total percentage
+        if (total_fiber_percentage === 0 || total_fiber_percentage === 100) {
+
+            $('#fiber_total_percentage_' + (component)).removeAttr("min");
+            $('#fiber_total_percentage_' + (component)).removeAttr("max");
+
+        } else {
+
+            $('#fiber_total_percentage_' + (component)).attr('min', 100);
+            $('#fiber_total_percentage_' + (component)).attr('max', 100);
+
+        }
+
+    });
 
     // Method to add dynamic garment component
     addComponent = (obj, user, form_id) => {
@@ -151,9 +144,9 @@ $(function () {
                                                 </div>
                                             </div>`;
                     while (fiber_count <= 6) {
-                        garment_comp_div += `<div class="col-xs-9">
+                        garment_comp_div += `<div class="col-xs-8">
                                                         <div class="form-group has-feedback">
-                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber_` + component_count + `[]">
+                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
                             garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
@@ -161,10 +154,10 @@ $(function () {
                         garment_comp_div += `</select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xs-3">
+                                                <div class="col-xs-4">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage-` + component_count + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage_` + component_count + `[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
@@ -172,13 +165,13 @@ $(function () {
                                                 </div>`;
                         fiber_count++
                     }
-                    garment_comp_div += `<div class="col-xs-9">
+                    garment_comp_div += `<div class="col-xs-8">
                                                         <h5 class="text-right"><strong>Total</strong></h5>
                                                     </div>
-                                                    <div class="col-xs-3">
+                                                    <div class="col-xs-4">
                                                         <div class="form-group has-feedback">
                                                         <div class="input-group">
-                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage-` + component_count + `" id="fiber_total_percentage_` + component_count + `" name="fiber_total_percentage[]">
+                                                            <input type="number" class="form-control input-sm composition-percentage total-percentage" id="fiber_total_percentage_` + component_count + `" name="fiber_total_percentage[]">
                                                             <div class="input-group-addon">%</div>
                                                         </div>
                                                         <div class="help-block with-errors"></div>
@@ -271,15 +264,15 @@ $(function () {
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" type="number" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" required><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="number" required><div class="help-block with-errors"></div></div></td>
+                    quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
                                         </table>
-                                        </div>`;
+                                        </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
                 $('.teasco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
@@ -382,9 +375,8 @@ $(function () {
     submitCarelabelOrder = (user_type) => {
         var form_obj = [{
             "template_id": localStorage.getItem("templates")
-            // "template_id": 34
         }];
-       // alert("inside")
+       
         var formData = $('#tesco_care_label_order_form').serialize() + '&' + $.param(form_obj[0]);
         $.ajax({
             type: "post",
@@ -652,6 +644,56 @@ $(function () {
             }
         })
 
+    }
+
+    validateEanBarcodeValue = (obj) => {
+            
+            if (obj.value.length === 13) {
+                
+                var barcodecheck = generateEanBarcode(obj.value);
+
+                if (barcodecheck == "false") {
+                    barcode_checks++;
+                    $(obj).next('div').html('');
+
+                    /**  [ Show validation error message ] **/
+                    $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
+                    $('.label-order-submit-btn').prop('disabled', true);
+
+                } else {
+                    barcode_checks = 0;
+
+                    $(obj).next('div').html('');
+
+                    $('.label-order-submit-btn').prop('disabled', false);
+                }
+            } else {
+                barcode_checks = 0;
+
+                $(obj).next('div').html('');
+
+                $('.label-order-submit-btn').prop('disabled', false);
+            }
+
+    }
+
+    generateEanBarcode = (code) => {
+        var return_value = "";
+        JsBarcode("#barcode-ean-13", code, {
+            format: "ean13",
+            width: 3.45,
+            height: 125,
+            fontSize: 35,
+            flat: true,
+            valid:  (valid) => {
+                if (valid == false) {
+                    return_value = "false";
+                } else {
+                    return_value = "true";
+                }
+            }
+        });
+        return return_value;
     }
 
 });

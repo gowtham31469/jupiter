@@ -406,6 +406,24 @@ class TescoSettings extends Controller
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
+
+    /**
+     * Get Tesco Suppliers details by ID for editing.
+     * @param Tesco Suppliers id
+     * @author <Praveen>
+     * @return \Illuminate\Http\Response
+     */
+    public function getTescoSymbolDetails(Request $request)
+    {
+    try {
+          $tesco_symbols = TescoCareSymbols::select('*')->where('id', $request['id'])->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_symbols' => $tesco_symbols]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+
    /**
     * Update suppliers by id.
     * @param supplier id
@@ -446,6 +464,79 @@ class TescoSettings extends Controller
         }
         return $result;
     }
+
+    public function updateTescoSymbols(Request $request)
+    {
+    try {
+      $destination_path='images/WashCareSymbols/tesco/';
+      $destination_path_db='/images/WashCareSymbols/tesco/';
+      $iso_symbols= $request->file('iso_symbols');
+      $astms_symbol= $request->file('astms_symbol');
+      $care_degree = $request->input('care_degree');
+      $id = $request->input('id');
+
+      $iso_symbols_orname = $iso_symbols->getClientOriginalName();
+      $astms_symbol_orname = $astms_symbol->getClientOriginalName();
+
+      $iso_extension = $iso_symbols->getClientOriginalExtension();
+      $astms_extension = $astms_symbol->getClientOriginalExtension();
+
+      if($iso_extension === 'svg' && $astms_extension === 'svg')
+      {
+        $iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $iso_symbols_orname));
+        $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
+
+          switch($request->category_id){
+            case 1:
+              $upload_path = 'Washing/';
+              break;
+            case 2:
+              $upload_path = 'Whitening/';
+              break;
+            case 3:
+              $upload_path = 'Dryer/';
+              break;
+            case 4:
+              $upload_path = 'Ironing/';
+              break;
+            case 5:
+              $upload_path = 'Cleaning/';
+              break;
+            default:
+              $upload_path = 'Washing/';
+              break;
+          }
+
+          $iso_symbols->move($destination_path.$upload_path,$iso_symbols_filename);
+          $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+
+          $iso_path_insert=$destination_path_db.$upload_path.$iso_symbols_filename;
+          $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+
+          $updated = TescoCareSymbols::find($id)
+               ->update([
+                'category_id'     =>  $request->category_id,
+                'iso_symbols'     =>  $iso_path_insert,
+                'astms_symbol'    =>  $astms_path_insert,
+                'care_instruction'=>  $request->care_instruction,
+                'degree'          =>  $care_degree
+              ]);
+      }
+      else   
+      {
+        $updated = '';
+      }
+
+      $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Unprocessable Format'],422);
+        
+        } catch (\Exception $e)
+        {
+          $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+    
    /**
      * Make supplier enabled
      * @param supplier id
@@ -1117,7 +1208,7 @@ class TescoSettings extends Controller
         $iso_extension = $iso_symbols->getClientOriginalExtension();
         $astms_extension = $astms_symbol->getClientOriginalExtension();
 
-        if($iso_extension === 'png' && $astms_extension === 'png')
+        if($iso_extension === 'svg' && $astms_extension === 'svg')
         {
           $iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $iso_symbols_orname));
           $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));

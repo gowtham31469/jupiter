@@ -21,6 +21,6 @@ class TescoWashcareOrdersComponentMapping extends Model
 
     public function fibers()
     {
-        return $this->hasMany('App\TescoWashcareOrdersComponentFibreMapping', 'washcare_component_id');
+        return $this->hasMany('App\TescoWashcareOrdersComponentFibreMapping', 'washcare_component_id')->orderBy('id', 'asc');
     }
 }

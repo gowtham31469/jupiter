@@ -482,8 +482,10 @@ Route::get('admin/upload-csv', 'Admin\UploadCSV\UploadCsvController@index');
 Route::get('admin/upload-translation', 'Admin\UploadCSV\UploadCsvController@uploadTranslation');
 Route::post('admin/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController@uploadTranslationCsv');
 
-Route::post('admin/upload-orchestra-po-file-csv','Admin\UploadCSV\UploadCsvController@uploadPOCSVFile');
-Route::post('admin/upload-orchestra-price-file-csv','Admin\UploadCSV\UploadCsvController@uploadPriceCSVFile');
+Route::get('admin/upload-size-chart', 'Admin\UploadCSV\UploadCsvController@uploadSizeChart');
+Route::post('admin/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@uploadSizeChartCsv');
+
+Route::post('admin/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadCsvController@uploadOrchestraOrderCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
 Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
 Route::get('admin/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
@@ -581,7 +583,16 @@ Route::put('admin/tesco/make-departments-disabled', 'Admin\Settings\Tesco\TescoS
 Route::post('admin/tesco/settings/suppliers', 'Admin\Settings\Tesco\TescoSettings@tescoSuppliers');
 Route::post('admin/tesco/add-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@addTescoSuppliers');
 Route::get('/admin/tesco/get-tesco-suppliers-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSuppliersById');
+
+
+Route::get('/admin/tesco/get-tesco-symbol-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSymbolDetails');
+
+
 Route::put('/admin/tesco/update-tesco-suppliers', 'Admin\Settings\Tesco\TescoSettings@updateTescoSuppliersById');
+
+
+Route::post('/admin/tesco/update-tesco-symbols', 'Admin\Settings\Tesco\TescoSettings@updateTescoSymbols');
+
 Route::put('/admin/tesco/make-supplier-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierEnabled');
 Route::put('/admin/tesco/make-supplier-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSupplierDisabled');
 Route::post('admin/tesco/settings/sizechart', 'Admin\Settings\Tesco\TescoSettings@tescoSizeChart');
@@ -1044,9 +1055,10 @@ Route::post('jga/set-financial-year-session', function (Request $request) {
 	return response()->json(['message' => 'success'], 200);
 });
 
-# Tesco care label orders admin routes
+
 Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 
+	// Tesco care label orders admin routes
 	Route::get('care-label-orders', 'Admin\Tesco\CareLabelOrdersController@index')->name('tesco-care-label-order');
 	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
 	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
@@ -1054,19 +1066,28 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
 	Route::put('update-care-label-order',  'Admin\Tesco\CareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
+
+	// Tesco TCL5 and TSL2 orders admin routes
+	Route::post('store-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@submitSingleStickerOrder');
+	Route::post('save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
+
   });
 
 
-  # Tesco care label orders customer routes
 Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], function() {
-	
-	Route::get('care-label-orders', 'Customer\Tesco\CustomerCareLabelOrdersController@index');
-	Route::get('care-label-fiber-components', 'Customer\Tesco\CustomerCareLabelOrdersController@getFiberComponentsMeta');
-	Route::get('care-size-lists', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeListsBySizeCategoryID');
-	Route::post('submit-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@submitCareLabelOrder');
-	Route::get('secondary-size-categories', 'Customer\Tesco\CustomerCareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID');
-	Route::get('get-moq-value', 'Customer\Tesco\CustomerCareLabelOrdersController@getTescoTemplateMoq');
-	Route::put('update-care-label-order',  'Customer\Tesco\CustomerCareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
-	Route::post('po-upload-labels', 'Customer\Tesco\CustomerCareLabelOrdersController@createLabelOrders');
+ 	
+	// Tesco care label orders customer routes
+	Route::get('care-label-orders', 'Customer\Tesco\CareLabelOrdersCustomerController@index');
+	Route::get('care-label-fiber-components', 'Customer\Tesco\CareLabelOrdersCustomerController@getFiberComponentsMeta');
+	Route::get('care-size-lists', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeListsBySizeCategoryID');
+	Route::post('submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
+	Route::get('secondary-size-categories', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeCategoriesByPrimaryID');
+	Route::get('get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
+	Route::put('update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+	Route::post('po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
+
+	// Tesco TCL5 and TSL2 orders admin routes
+	Route::post('store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
+	Route::post('save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
 	
   });

@@ -641,6 +641,21 @@ class JobManagerController extends Controller
 																	$value->fabric_batch_code=$order_omp{0}->fabric_batch_code;
 																	$value->leather_suede_code=$order_omp{0}->leather_suede_code;
 																	$value->tog=$order_omp{0}->tog;
+																	$value->potps_id=$order_omp{0}->potps_id;
+
+																	if($order_omp{0}->potps_id != null)
+																	{
+																			$part_name  = 	DB::table('part_of_two_piece_set')
+																											->where('id',$order_omp{0}->potps_id)
+																											->select('*')
+																											->get();
+																			$value->part_name = $part_name{0}->name;
+																	}
+																	else
+																	{
+																			$value->part_name = "";
+																	}
+																	
 																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
 																	$value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
 																	$value->internal_reference=$order_omp{0}->internal_reference;
@@ -805,8 +820,6 @@ class JobManagerController extends Controller
 				$customer_po_array  = array();
 				$color_code         = array();
 				$tint_color         = array();
-
-				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
 
 				/** Get erp order details table ids from erp orders table id */
 				foreach ($erp_orders_ids as $row => $erp_orders_id) {
@@ -1522,6 +1535,7 @@ class JobManagerController extends Controller
 						$order_details = DB::table("erp_order_details")
 						->select('*')
 						->where('erp_order_id',$company_id)
+						->where('buyer_po_number',$request->tesco_po_number)
 						->where('order_qnty_table_name','tesco_tcl4_orders_quanty')
 						->get();
 
@@ -1544,6 +1558,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc =  "SINGLES BD STICKER";
 		  }
+			else if($request->name == "TCL5-sticker")
+			{
+					 $this->template_desc =  "SINGLES BD STICKER";
+			}
 		  else if($request->name == "THL1-sticker")
 		  {
 				$this->template_desc = "RATIO STICKER";
@@ -1769,6 +1787,10 @@ class JobManagerController extends Controller
 								$yy += 100; 
 							}
 						}
+						else if($name == "TCL5-sticker")
+						{
+							$yy += 77;
+						}
 						else
 						{
 							$yy += 100;  
@@ -1824,6 +1846,17 @@ class JobManagerController extends Controller
           if($qr_check == $qr_code[$qr_count])
           {
 						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					if($qr_check == $qr_code[$qr_count])
+					{
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
 					}
 				}
 				else if($name == "THL1-sticker")
@@ -1902,6 +1935,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
 		  }
+			else if($request->name == "TSL2-sticker")
+			{
+					 $this->template_desc = "SINGLE POLYBAG STICKER "; 
+			}
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
@@ -2693,32 +2730,36 @@ class JobManagerController extends Controller
                  if($name != "THL3-sticker")
                  {
                      if($qr_flag == 1)
-					 {
-						 if($name == "THL1-sticker")
-                 		 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 else
-						 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 
-					 }
-					 else
-					 {
-						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					 }
+											{
+												if($name == "THL1-sticker")
+																{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else if($name == "TCL5-sticker")
+												{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else
+												{
+													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												
+											}
+											else
+											{
+												PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+											}
                  }
                 else
                 {
                     if($qr_flag == 1)
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
-					else
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
+										{
+											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
+										else
+										{
+											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
                 }
             }
 			
@@ -2762,6 +2803,17 @@ class JobManagerController extends Controller
           {
 						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
 					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					 $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					 $lasttpn = substr($qr_code_check[3] , -3);
+					 $qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					 if($qr_check == $qr_code[$i])
+					 {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+					 }
 				}
 				else if($name == "THL1-sticker")
 				{
@@ -3040,7 +3092,7 @@ class JobManagerController extends Controller
 
  public function printPdfTable(Request $request)
 	{
-		 $name=$request->style_no."-STD-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-STD-PS-".$request->buyer_no;
 	 	 $id=$request->id;
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3084,9 +3136,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -3277,34 +3329,60 @@ class JobManagerController extends Controller
 		$index_arr=array();
 		foreach($size as $val)
 		{
-				$size_var = explode(' ',$size[0]);
+				$size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
 						{
 							if(count($size) > 7)
 							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:11px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:10px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						$td_col.="<td>".$sizebrk[$i]."</td>";
 					} 
 			  } 
@@ -3318,7 +3396,7 @@ class JobManagerController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
@@ -3398,6 +3476,9 @@ class JobManagerController extends Controller
     {
 		 
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3523,9 +3604,9 @@ class JobManagerController extends Controller
 			PDF::RoundedRect(214.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
 			PDF::ImageSVG('@' . $svg, $x=214.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		 $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+     PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		 $file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     }
 	
 	
@@ -3544,6 +3625,10 @@ class JobManagerController extends Controller
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
+
+
+$style_no=$request->style_no;
+$buyer_no=$request->buyer_no;
 		
 		$sticker = DB::table("orchestra_standard_poly_bag_sticker_orders")
 						->select('*')
@@ -3585,21 +3670,35 @@ class JobManagerController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-					$size_var = explode(' ',$size[0]);
+					$size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
-							if($size_var[1] == "MOIS")
+							array_push($index_arr,$val);
+							if(count($size_var) > 1)
 							{
-								if(count($size) > 6)
+								if($size_var[1] == "MOIS")
 								{
-									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									if(count($size) > 6)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 								else
 								{
-									$td_size.="<td><br><br>".$val."</td>";
+									if(count($size) > 7)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 							}
 							else
@@ -3610,9 +3709,21 @@ class JobManagerController extends Controller
 								}
 								else
 								{
-									$td_size.="<td><br><br>".$val."</td>";
+									if($val == "NAISSANCE")
+									{
+										$td_size.='<td style="font-size:18px;line-height:0.6"><br><br>'.$val.'</td>';
+									}
+									else if($val == "PREMATURE")
+									{
+										$td_size.='<td style="font-size:16px;line-height:0.7"><br><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 							}
+							
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
 			  } 
@@ -3713,9 +3824,10 @@ class JobManagerController extends Controller
 		PDF::writeHTMLCell(147, '', '309', '257.5', $tbl, '', 1, 1, true, '', true);
 		
         
-  $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+	$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
         
     }
 	
@@ -3730,6 +3842,8 @@ class JobManagerController extends Controller
     {
 		 $name=$request->name;
          $svg=urldecode($request->svg);
+				 $style_no=$request->style_no;
+				 $buyer_no=$request->buyer_no;
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
@@ -3798,10 +3912,11 @@ class JobManagerController extends Controller
 		
 		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
+
+				$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
 		
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     } 
 	
 	
@@ -3816,6 +3931,9 @@ class JobManagerController extends Controller
     public function proofPdfArr(Request $request)
     {
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3897,14 +4015,14 @@ class JobManagerController extends Controller
 			PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
 		 
-		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+		 PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
 		
     } 
 	public function printPdfArr(Request $request)
     {
-		 $name=$request->style_no."-SOL-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3925,9 +4043,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -4113,7 +4231,19 @@ class JobManagerController extends Controller
         {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			
+			if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=50;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
 				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
@@ -4121,20 +4251,9 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
-			}
-			else if($i == 0)
-			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
-				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				
-				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
 			}
 			else
 			{
@@ -4160,7 +4279,7 @@ class JobManagerController extends Controller
 
 	public function printPdf(Request $request)
 	{
-		 $name=$request->style_no."-STD-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-STD-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
 //		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -4179,9 +4298,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -4374,7 +4493,7 @@ class JobManagerController extends Controller
 	public function printPdfSmall(Request $request)
 	{
 		 
-		 $name=$request->style_no."-SOL-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-PS-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
 		 //$svg=urldecode($request->svg);
@@ -4392,9 +4511,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -6081,7 +6200,18 @@ class JobManagerController extends Controller
         $data_front_image=explode(',_',$request->data_front_image);
         $svgStringBack=urldecode($data_back[0]);
         $svgStringBackText=urldecode($data_back_text[0]);
-        $svgStringFrontImage=urldecode($data_front_image[0]);
+				$svgStringFrontImage=urldecode($data_front_image[0]);
+				
+				$wash_astm = $request->wash_astm;
+        $wash_iso = $request->wash_iso;
+        $whit_astm = $request->whit_astm;
+        $whit_iso = $request->whit_iso;
+        $dry_astm = $request->dry_astm;
+        $dry_iso = $request->dry_iso;
+        $iron_astm = $request->iron_astm;
+        $iron_iso = $request->iron_iso;
+        $clean_astm = $request->clean_astm;
+        $clean_iso = $request->clean_iso;
 
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
@@ -6278,12 +6408,35 @@ class JobManagerController extends Controller
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
+				}
+				
+				if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
         }
 
         PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         
 
-        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
 
         //print_r($svgStringBack);
 
@@ -6304,7 +6457,18 @@ class JobManagerController extends Controller
         $data_front_image=explode(',_',$request->data_front_image);
         $svgStringBack=urldecode($data_back[0]);
         $svgStringBackText=urldecode($data_back_text[0]);
-        $svgStringFrontImage=urldecode($data_front_image[0]);
+				$svgStringFrontImage=urldecode($data_front_image[0]);
+				
+				$wash_astm = $request->wash_astm;
+        $wash_iso = $request->wash_iso;
+        $whit_astm = $request->whit_astm;
+        $whit_iso = $request->whit_iso;
+        $dry_astm = $request->dry_astm;
+        $dry_iso = $request->dry_iso;
+        $iron_astm = $request->iron_astm;
+        $iron_iso = $request->iron_iso;
+        $clean_astm = $request->clean_astm;
+        $clean_iso = $request->clean_iso;
 
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
@@ -6334,12 +6498,35 @@ class JobManagerController extends Controller
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $i++;
+				}
+				
+				if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
         }
 
         PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         
 
-        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
 
         //print_r($svgStringBack);
 

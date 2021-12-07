@@ -71,6 +71,13 @@
         </div>
     </div>
     <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
+            {{  Form::select('tesco_care_part_of_two_piece_set',(['' => '-- Select Part of Two Piece Set --'] + $part_of_two_piece_set),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_part_of_two_piece_set', 'data-live-search' => 'true')) }}
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('tesco_care_button_space', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
         <div class="checkbox">
             <label>
@@ -107,29 +114,29 @@
             </div>
         </div>
         @for ($i = 1; $i <= 6; $i++)
-            <div class="col-xs-9">
+            <div class="col-xs-8">
                 <div class="form-group has-feedback">
-                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber_'.$j.'[]')) }}
+                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-4">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage()" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage_{{$j}}[]" data-max-error= "Value must be <= 100">
+                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>
                 </div>
             </div>
         @endfor
-        <div class="col-xs-9">
+        <div class="col-xs-8">
             <h5 class="text-right"><strong>Total</strong></h5>
         </div>
-        <div class="col-xs-3">
+        <div class="col-xs-4">
             <div class="form-group has-feedback">
             <div class="input-group">
-                <input type="number" class="form-control input-sm composition-percentage total-percentage-{{ $j }}" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}">
+                <input type="number" class="form-control input-sm composition-percentage total-percentage" name="fiber_total_percentage[]" id="fiber_total_percentage_{{ $j }}">
                 <div class="input-group-addon">%</div>
             </div>
             <div class="help-block with-errors"></div>
@@ -173,9 +180,9 @@
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_wash_instruction', 'Wash Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_wash_instruction', 'Wash Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction" required>
-                <option value="">-- Select Wash Instructions --</option>
+                <option value="">-- Select Wash Instruction --</option>
                 @if(!empty($symbols['Washing']))
                     @foreach($symbols['Washing'] as $key => $value)
                             <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
@@ -187,9 +194,9 @@
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction" required>
-                <option value="">-- Select Bleach Instructions --</option>
+                <option value="">-- Select Bleach Instruction --</option>
                 @if(!empty($symbols['Whitening']))
                     @foreach($symbols['Whitening'] as $key => $value)
                             <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
@@ -201,9 +208,9 @@
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_dry_instruction', 'Dry Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_dry_instruction', 'Dry Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction" required>
-                <option value="">-- Select Dry Instructions --</option>
+                <option value="">-- Select Dry Instruction --</option>
                 @if(!empty($symbols['Dryer']))
                     @foreach($symbols['Dryer'] as $key => $value)
                             <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
@@ -215,9 +222,9 @@
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_iron_instruction', 'Iron Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_iron_instruction', 'Iron Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction" required>
-                <option value="">-- Select Iron Instructions --</option>
+                <option value="">-- Select Iron Instruction --</option>
                 @if(!empty($symbols['Ironing']))
                     @foreach($symbols['Ironing'] as $key => $value)
                             <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
@@ -229,9 +236,9 @@
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instructions', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instruction', ['class' => 'form_label']) !!}
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction" required>
-                <option value="">-- Select Dry Clean Instructions --</option>
+                <option value="">-- Select Dry Clean Instruction --</option>
                 @if(!empty($symbols['Prof Cleaning']))
                     @foreach($symbols['Prof Cleaning'] as $key => $value)
                             <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>

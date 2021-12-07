@@ -448,16 +448,13 @@ p.terms {
 }
 
 .input-group-addon {
-    padding: 9px 15px;
+    padding-left: 10px;
     cursor: pointer;
+    line-height: 0;
 }
 
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width: 100% !important;
-}
-
-.input-group-addon {
-    line-height: 0;
 }
 
 .loader {

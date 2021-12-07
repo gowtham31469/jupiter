@@ -60,6 +60,8 @@
     <div id="svgdiv" style="position:absolute;visibility:hidden">\
         <svg id="ean-13"></svg>\
     </div>
+    <div id="objectDiv" style="position:absolute;visibility:hidden">
+    </div>
 </div>
 <div class="col-sm-12 col-md-12 main">
 
@@ -94,7 +96,6 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
-                            <input type="text" placeholder="Enter Revise PO Number" class="form-control" name="po_number_updation" id="po_number_updation">
                             <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
                             <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
@@ -153,7 +154,7 @@
                         <div class="form-group">
                             <label style='color:red' id='new_po_file_error' class='hidden'>Please upload Po File</label>
                             <label for="exampleInputFile">PO File</label>
-                            <input type="file" id="new_po_file">
+                            <input type="file" accept="application/pdf" id="new_po_file">
                             <p class="help-block"></p>
                         </div>
                     </div>
@@ -573,15 +574,17 @@
                 </div>
                 <div class="col-md-10">
                     <div class="scroll" style="height: calc(100vh - 40px);">
-                        <div class="row">
-                             <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
-                             <div class="teasco-care-quantity-div"></div>
-                        </div>
-                        <div class="row">
-                             <div class="garment-component-div"></div>
-                        </div>                        
-                       <div class="row">
-                            <div class="label-order-footer"></div>
+                       <div class="container-fluid">
+                            <div class="row">
+                                <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
+                                <div class="teasco-care-quantity-div"></div>
+                            </div>
+                            <div class="row">
+                                <div class="garment-component-div"></div>
+                            </div>                        
+                            <div class="row">
+                                    <div class="label-order-footer"></div>
+                            </div>
                        </div>
                     </div>
                 </div>

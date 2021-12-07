@@ -176,6 +176,11 @@ const genarateTescoPI = (id,tableName,pi_status,style_no,template_id,buyer_po,te
             {
                $('.snackbar_span').html('Something went wrong');
                showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
+               showSnackbar();
             }
         },
         error: function (data)
@@ -222,13 +227,17 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
             {
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
-               $('#profoma-invoice').modal("hide");
+
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
                var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
                // var attrbs = attrbs.replace("false", "true");
                $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               location.reload();
+               
+               if (data.pi_status === true)
+                {
+                    $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+template_id+'","'+id+'","'+table_name+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                }
             },
             400: function()
             {
@@ -280,7 +289,7 @@ function tescoRejectPI(id,table_name)
                $('#profoma-invoice').modal("hide")
                $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIRejected').text('PI Rejected');
                showSnackbar();    
-               location.reload();         
+               //location.reload();         
             },
             400: function()
             {

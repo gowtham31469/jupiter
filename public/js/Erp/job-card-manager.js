@@ -3422,16 +3422,16 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                     var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
                     svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan  x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan   x="2.53" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2.53" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="2" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
 
-                    svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
-                    svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
-                    svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
-                    svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
-                    svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
-                    svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
-                    svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
-                    svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
-                    svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
-                    svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
+                    // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
+                    // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
+                    // svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
+                    // svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
+                    // svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
+                    // svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
+                    // svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
+                    // svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
+                    // svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
+                    // svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
 
                     var additional_care_text_1 = JSON.parse(data.order_details[0].additional_care_text_1)
                     var additional_care_text_2 = JSON.parse(data.order_details[0].additional_care_text_2)
@@ -3749,7 +3749,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
                         var svg_fin_front = svgarr_front.join(',_');
-                        PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit);
+                        PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso);
                     }
 				
 				},
@@ -3770,7 +3770,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
 
 
-function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,isEdit) {
+function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,isEdit,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
 	
 	var url = "";
 	
@@ -3787,7 +3787,17 @@ function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front
             style:style,
             template_name:template_name,
             created_date:created_at,
-            customer_name:customer_name
+            customer_name:customer_name,
+            wash_astm:wash_astm,
+            wash_iso:wash_iso,
+            whit_astm:whit_astm,
+            whit_iso:whit_iso,
+            dry_astm:dry_astm,
+            dry_iso:dry_iso,
+            iron_astm:iron_astm,
+            iron_iso:iron_iso,
+            clean_astm:clean_astm,
+            clean_iso:clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -4730,7 +4740,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestraJCPreview(svgDoc,"STD-CARTON",isEdit,id,style_no,buyer_no,created_at); 
+							  PopupOrchestraJCPreview(svgDoc,"STD-CS",isEdit,id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -4739,8 +4749,22 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
-								console.log(value)
-								svgDoc.getElementById("round").style.fill = details.age_group
+                                console.log(value)
+                                
+                                if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+                                }
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
@@ -4752,21 +4776,43 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestraJCPreview(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
+							PopupTableOrchestraJCPreview(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
 
 						case "Solid Polybag Stickers":
 							$(details['solidpolystickerqty']).each(function(index,value){
-								svgDoc.getElementById("round").style.fill = details.age_group
-								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+
+                                if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+                                }
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
+                                svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -4776,7 +4822,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmallJCPreview(svg_fin, "SOLID-POLY",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmallJCPreview(svg_fin, "SOL-PS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -4784,7 +4830,15 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 							$(details['solidcartonstickerqty']).each(function(index,value){
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
-								svgDoc.getElementById("size").innerHTML = value.size
+                                svgDoc.getElementById("size").innerHTML = value.size
+                                if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -4825,7 +4879,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestraJCPreview(svg_fin, "SOLID-CARTON",svgDoc,isEdit,id,style_no,buyer_no,created_at);
+							PopupArrOrchestraJCPreview(svg_fin, "SOL-CS",svgDoc,isEdit,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block

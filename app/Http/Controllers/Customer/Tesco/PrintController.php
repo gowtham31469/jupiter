@@ -70,6 +70,10 @@ class PrintController extends Controller
 	      {
 			   $this->template_desc =  "SINGLES BD STICKER";
 		  }
+		  else if($request->name == "TCL5-sticker")
+		  {
+			   $this->template_desc =  "SINGLES BD STICKER";
+		  }
 		  else if($request->name == "THL1-sticker")
 	      {
 			    $this->template_desc = "RATIO STICKER";
@@ -273,13 +277,19 @@ class PrintController extends Controller
 					$qr_code = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 					$qr_code_details = DB::table('tesco_tcl2_orders')->where('id',$tcl2_id)->select('*')->orderBy('id', 'asc')->get();
 				}
-
 				else if($name == "TCL4-sticker")
 				{
 					$tcl4_id=$request->tcl4_id;
 
 					$qr_code = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
 					$qr_code_details = DB::table('tesco_tcl4_orders')->where('id',$tcl4_id)->select('*')->orderBy('id', 'asc')->get();
+				}
+				else if($name == "TCL5-sticker")
+				{
+					$tcl5_id=$request->tcl5_id;
+
+					$qr_code = DB::table('tesco_tcl5_orders_quanty')->where('tcl5_order_id',$tcl5_id)->select('*')->orderBy('id', 'asc')->get();
+					$qr_code_details = DB::table('tesco_tcl5_orders')->where('id',$tcl5_id)->select('*')->orderBy('id', 'asc')->get();
 				}
 				else if($name == "THL1-sticker")
 				{
@@ -325,6 +335,10 @@ class PrintController extends Controller
 							{
 								$yy += 100; 
 							}
+						}
+						else if($name == "TCL5-sticker")
+						{
+							$yy += 77;
 						}
 						else
 						{
@@ -373,6 +387,15 @@ class PrintController extends Controller
 					if($qr_check == $qr_code[$qr_count]->qr_code)
 					{
 						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					$lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
+					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+					if($qr_check == $qr_code[$qr_count]->qr_code)
+					{
+						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
 					}
 				}
 				else if($name == "THL1-sticker")
@@ -442,6 +465,10 @@ class PrintController extends Controller
 	      {
 			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
 		  }
+          else if($request->name == "TSL2-sticker")
+          {
+               $this->template_desc = "SINGLE POLYBAG STICKER "; 
+          }
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
@@ -675,6 +702,17 @@ class PrintController extends Controller
 	   $svgStringBackText=urldecode($data_back_text[0]);
 	   $svgStringFrontImage=urldecode($data_front_image[0]);
 
+	   $wash_astm = $request->wash_astm;
+	   $wash_iso = $request->wash_iso;
+	   $whit_astm = $request->whit_astm;
+	   $whit_iso = $request->whit_iso;
+	   $dry_astm = $request->dry_astm;
+	   $dry_iso = $request->dry_iso;
+	   $iron_astm = $request->iron_astm;
+	   $iron_iso = $request->iron_iso;
+	   $clean_astm = $request->clean_astm;
+	   $clean_iso = $request->clean_iso;
+
 	   define ('PDF_FONT_NAME_MAIN', 'arialuni');
 	   define ('PDF_FONT_NAME_DATA', 'arialuni');
 	   // PDF::setPrintHeader(false);
@@ -876,10 +914,37 @@ class PrintController extends Controller
 		   $i++;
 	   }
 
+	   if($i == 6)
+        {
+            $xx=15;
+			PDF::AddPage();
+			$img_file = public_path('/images/jgawat.png');
+
+				// Render the image
+				PDF::Image($img_file, 45, 80, 130, 130, '', '', '', false, 150, '', false, false, 0);
+        }
+
 	   PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 	   
 
 	   PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+	   PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+	   PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+	   PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+	   PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
 	   //print_r($svgStringBack);
 

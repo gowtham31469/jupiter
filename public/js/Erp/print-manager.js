@@ -824,7 +824,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  PopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							  PopupOrchestra(svgDoc,"STD-CS",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -834,7 +834,21 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
-								svgDoc.getElementById("round").style.fill = details.age_group
+
+								if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+								}
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								// svgDoc.getElementById("size").innerHTML = value.size
@@ -846,21 +860,45 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+							PopupTableOrchestra(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
 
 						case "Solid Polybag Stickers":
 							$(details['solidpolystickerqty']).each(function(index,value){
-								svgDoc.getElementById("round").style.fill = details.age_group
+
+								if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+								}
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
+
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
+								
 								svgDoc.getElementById("size").innerHTML = value.size
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -870,7 +908,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							PopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -879,6 +917,16 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
+								
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -919,7 +967,7 @@ function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,cre
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							PopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							PopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1019,7 +1067,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 							})
 							// var svg_fin = svgarr.join(',_');
 							 
-							  ProofPopupOrchestra(svgDoc,"STD-CARTON",id,style_no,buyer_no,created_at); 
+							  ProofPopupOrchestra(svgDoc,"STD-CS",id,style_no,buyer_no,created_at); 
 							
 							
 
@@ -1029,7 +1077,21 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
 								console.log(value)
-								svgDoc.getElementById("round").style.fill = details.age_group
+
+								if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+								}
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								svgDoc.getElementById("round").style.fill = "#FFFFFF"
@@ -1042,22 +1104,44 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupTableOrchestra(svgDoc, "STD-POLY",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
+							ProofPopupTableOrchestra(svgDoc, "STD-PS",details.sizeArr,details.qtyArr,details.sizBrkAr,id,style_no,buyer_no,created_at);
 						break;
 
 
 
 						case "Solid Polybag Stickers":
 							$(details['solidpolystickerqty']).each(function(index,value){
-								svgDoc.getElementById("round").style.fill = details.age_group
+
+								if(details.group_id != 6)
+								{
+									svgDoc.getElementById("round").style.fill = details.age_group
+									svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "";
+								}
+								else
+								{
+									svgDoc.getElementById("round").style.fill = "#FFFFFF"
+									svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+									svgDoc.getElementById("pmm").innerHTML = "PMM";
+								}
+
+								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "16px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "15.5px";
+								}
 								svgDoc.getElementById("round").style.fill = "#FFFFFF"
 								if(value.size == "TAILLE UNIQUE")
 								{
-									svgDoc.getElementById("size").style.fontSize = "15px"
-									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 168.625 28.7874)');
-									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 169.625 45.3324)');
+									svgDoc.getElementById("size").style.fontSize = "14px"
+									svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+									svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
 								}
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
@@ -1067,7 +1151,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupOrchestrasmall(svg_fin, "SOLID-POLY",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupOrchestrasmall(svg_fin, "SOL-PS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 
 
@@ -1076,6 +1160,14 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = value.uvc_tco
 								svgDoc.getElementById("size").innerHTML = value.size
+								if(value.size == "NAISSANCE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "8px";
+								}
+								else if(value.size == "PREMATURE")
+								{
+									svgDoc.getElementById("size").style.fontSize = "7px";
+								}
 								svgDoc.getElementById("theme").innerHTML = details.theme
 								
 
@@ -1116,7 +1208,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 								svgarr.push(str)
 							})
 							var svg_fin = svgarr.join(',_');
-							ProofPopupArrOrchestra(svg_fin, "SOLID-CARTON",svgDoc,id,style_no,buyer_no,created_at);
+							ProofPopupArrOrchestra(svg_fin, "SOL-CS",svgDoc,id,style_no,buyer_no,created_at);
 						break;
 						default:
 						// code block
@@ -1132,7 +1224,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 	var name2=name;
 	var zone = localStorage.getItem("zone");
 	var name = name + "-sticker";
-	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+	if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
 		var svgarr = [];
 		var ajax_count = 0;
 		var name_count=0;
@@ -1164,11 +1256,15 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 			if ((name == "TSL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+			} else if ((name == "TSL2-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
 			} else if ((name == "TSL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+			} else if ((name == "TSL2-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
 			}
 
@@ -1206,6 +1302,45 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 						}
 					})
+				//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+				
+				
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TSL2-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = val.itf_barcode
+				} else {
+					var barcode_change = val.itf_barcode
+				}
+				
+				//jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				
+				
+				
+	
+				$.ajax({
+					url: base_url + "/erp/job-manager/generatebarcodetsl1",
+					type: 'post',
+					data: {
+						barcode: barcode_change,
+						type: 2,
+						name:"barcode_"+name_count,
+						_token: csrf_token,
+					},
+					success: function (data) {
+						
+						ajax_count++;
+						if (ajax_count == generate_data.order_details.length) {
+							var svg_fin = svgarr.join(',_');
+							PopupTescoGenerateSmallPrintManager(svg_fin, name,svgDoc);
+						}
+					},
+					complete: function () {
+
+					}
+				})
 				//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
@@ -1260,7 +1395,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 			}
 
 			var description = val.short_description.replace(/&/g,'&#038;');
-			if ((name == "TSL3-sticker")) {
+			if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
@@ -1554,7 +1689,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				{
 					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
 				}
-			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "TCL5-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
 				svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
@@ -1611,7 +1746,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode
@@ -1657,7 +1792,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 			}
 
 			var description = val.short_description.replace(/&/g,'&#038;');
-			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+			if ((name == "TCL4-sticker") || (name == "TCL5-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
@@ -1686,6 +1821,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -1707,6 +1864,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -1742,6 +1921,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -1763,6 +1964,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -1820,6 +2043,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 
 									}
+									else if(name2 === "TCL5")
+									{
+										svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+										svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+										svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+										svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+										svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+										svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+										svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+										svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+										
+										svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+										
+									}
 									else
 									{
 										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -1842,6 +2087,28 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 
+									}
+									else if(name2 === "TCL5")
+									{
+										svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+										svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+										svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+										svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+										svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+										svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+										svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+										svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+										svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+										
 									}
 									else
 									{
@@ -1990,7 +2257,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 	var svgDoc = a.contentDocument;
 	var name2=name;
 	var name = name + "-sticker";
-	if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+	if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
 		var svgarr = [];
 		var ajax_count = 0;
 		var b = " ";
@@ -2023,11 +2290,15 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 			if ((name == "TSL1-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+			} else if ((name == "TSL2-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
 			} else if ((name == "TSL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
 			} else if ((name == "TSL3-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
 			} else if ((name == "TSL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+			} else if ((name == "TSL2-sticker" && zone == "UK")) {
 				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
 			}
 
@@ -2041,6 +2312,18 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				}
 				
 				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				
+				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+				
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TSL2-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = val.itf_barcode
+				} else {
+					var barcode_change = val.itf_barcode
+				}
+				
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				
@@ -2067,7 +2350,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			}
 
 			var description = val.short_description.replace(/&/g,'&#038;');
-			if ((name == "TSL3-sticker")) {
+			if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
@@ -2373,7 +2656,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				{
 					svgDoc.getElementById("tpnd_last_digit").innerHTML = val.orms_tpn.substr(val.orms_tpn.length - 3);
 				}
-			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
+			} else if ((name == "TCL4-sticker" && zone == "CE") || (name == "TCL5-sticker" && zone == "CE") || (name == "THL3-sticker" && zone == "CE")) {
 				svgDoc.getElementById("unit_per_case").innerHTML = val.case_size;
 
 				svgDoc.getElementById("tpnd").innerHTML =val.orms_tpn;
@@ -2401,7 +2684,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode
@@ -2422,7 +2705,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			}
 
 			var description = val.short_description.replace(/&/g,'&#038;');
-			if ((name == "TCL4-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
+			if ((name == "TCL4-sticker") || (name == "TCL5-sticker") || (name == "TSL3-sticker") || (name == "THL3-sticker")) {
 				if (size != '') {
 					$.ajax({
 						url: base_url + "/erp/job-manager/tesco/get-tsl-size",
@@ -2451,6 +2734,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2472,6 +2777,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2507,6 +2834,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 											
 										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+											
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+											
+										}
 										else
 										{
 											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2528,6 +2877,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 148)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
+											
+										}
+										else if(name2 === "TCL5")
+										{
+											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+											svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+											svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+											svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+											svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+											svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+											svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+											svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+											svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
 											
 										}
 										else
@@ -2584,6 +2955,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 136)");
 
 									}
+									else if(name2 === "TCL5")
+									{
+										svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 58)')
+										svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 74)')
+										svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 87)')
+										svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 98)')
+
+										svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 58)')
+										svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 74)')
+										svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 87)')
+										svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 98)')
+										
+										svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 110)");
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 122)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 110)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 122)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+										
+									}
 									else
 									{
 										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 138)");
@@ -2606,6 +2999,28 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 135)");
 										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 148)");
 
+									}
+									else if(name2 === "TCL5")
+									{
+										svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 55)')
+										svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 69)')
+										svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
+										svgDoc.getElementById("ce_style_text").setAttribute('transform','matrix(0.8259, 0, 0, 1, 5.4282, 92)')
+
+										svgDoc.getElementById("tpnd").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 55)')
+										svgDoc.getElementById("po_number").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 69)')
+										svgDoc.getElementById("uk_style").setAttribute('transform','matrix(0.9848, 0, 0, 1, 91.1543, 81)')
+										svgDoc.getElementById("ce_style").setAttribute('transform','matrix(1, 0, 0, 1, 91.1544, 92)')
+
+										svgDoc.getElementById("short_text").setAttribute('transform', "matrix(0.8616, 0, 0, 1, 5.4287, 102)");
+										svgDoc.getElementById("eqos_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 124)");
+										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 134)");
+										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 144)");
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 102)");
+										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 124)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 134)");
+										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 144)");
+										
 									}
 									else
 									{
@@ -4006,16 +4421,16 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                     var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
                     svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan  x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan   x="2.53" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2.53" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="2" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
 
-                    svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
-                    svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
-                    svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
-                    svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
-                    svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
-                    svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
-                    svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
-                    svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
-                    svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
-                    svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
+                    // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
+                    // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
+                    // svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
+                    // svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
+                    // svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
+                    // svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
+                    // svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
+                    // svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
+                    // svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
+                    // svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
 
                     var additional_care_text_1 = JSON.parse(data.order_details[0].additional_care_text_1)
                     var additional_care_text_2 = JSON.parse(data.order_details[0].additional_care_text_2)
@@ -4335,11 +4750,11 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
 						var svg_fin_front = svgarr_front.join(',_');
 						if(print_type == "print")
 						{
-							PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+							PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso);
 						}
 						else
 						{
-							PopupTescoLabelsGenerateProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+							PopupTescoLabelsGenerateProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso);
 						}
                     }
 				
@@ -4385,7 +4800,7 @@ function testWhite(x) {
 }
 
 
-function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name) {
+function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
 	
 	var url = "";
 	
@@ -4402,7 +4817,17 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
             style:style,
             template_name:template_name,
             created_date:created_at,
-            customer_name:customer_name
+            customer_name:customer_name,
+            wash_astm:wash_astm,
+            wash_iso:wash_iso,
+            whit_astm:whit_astm,
+            whit_iso:whit_iso,
+            dry_astm:dry_astm,
+            dry_iso:dry_iso,
+            iron_astm:iron_astm,
+            iron_iso:iron_iso,
+            clean_astm:clean_astm,
+            clean_iso:clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -4430,7 +4855,7 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
 	})
 }
 
-function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name) {
+function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
 	
 	var url = "";
 	
@@ -4447,7 +4872,17 @@ function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_tex
             style:style,
             template_name:template_name,
             created_date:created_at,
-            customer_name:customer_name
+            customer_name:customer_name,
+            wash_astm:wash_astm,
+            wash_iso:wash_iso,
+            whit_astm:whit_astm,
+            whit_iso:whit_iso,
+            dry_astm:dry_astm,
+            dry_iso:dry_iso,
+            iron_astm:iron_astm,
+            iron_iso:iron_iso,
+            clean_astm:clean_astm,
+            clean_iso:clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,

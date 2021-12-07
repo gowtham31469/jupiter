@@ -16,7 +16,6 @@ function parseUKPurchaseOrder(data, callback) {
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
-        console.log(parsedObj);
         callback(parsedObj);
     } catch(e) {
         // error statements
@@ -79,6 +78,7 @@ function parseSingleORMSTable(tabula) {
                     case 1: header.push('EAN_Barcode');
                         break;
                     case 2: header.push('Size');
+                            header.push('ITF_Barcode');
                         break;
                 }
                 
@@ -90,6 +90,7 @@ function parseSingleORMSTable(tabula) {
                     } else {
                         row[header[i]] = '-';
                     }
+                    row[header[3]] = val[0];
                    
                 } else {
                    row[header[i]] = val.text;
@@ -323,7 +324,7 @@ function parseSingleType(data) {
         tabula[0].data.pop(); //Remove the total quantity row from the object
         $.each(tabula[0].data, function(index,element) {
             var row = {};
-            element.pop();//Remove the extra space element from the array
+            // element.pop();//Remove the extra space element from the array
             $.each(element, function(i, val) {
                 if(index === 0) {
                     header.push(val.text.replace(/ /g,"_"));
@@ -470,15 +471,15 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
 
-    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('disabled', false);
+    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     if(zone === 'ce') {
-        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('disabled', false);
+        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', false);
      } else {
-        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('disabled', false);
+        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
      }
    
-   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('disabled', false);
+   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
 
     $('#tesco_description').val(parsedObj.shortDescription);
 	if(typeof parsedObj.originalDescription !== 'undefined') {
@@ -492,16 +493,20 @@ function renderParsedValues(parsedObj) {
             var index = i + 1;
 
             if(zone === 'ce') {
-                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('disabled', false);
+                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', false);
             } else {
-                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('disabled', false);
+                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', false);
             }
             
-            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
 
-            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('disabled', false);
+            // TCL5 special case start
+            j.ITF_Barcode != null?$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', false);
+            // TCL5 special case end
 
-            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('disabled', false);
+            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', false);
+
+            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', false);
 
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
@@ -511,16 +516,16 @@ function renderParsedValues(parsedObj) {
         $.each(parsedObj.orderQuantity, function(i, j) {
             var index = i + 1;
 
-            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('disabled', false);
+            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', false);
 
             if(zone === 'ce') {
-                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('disabled', false);
+                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', false);
 
-                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('disabled', false);
+                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', false);
             } else {
-                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('disabled', false);
+                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', false);
 
-                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('disabled', false);
+                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', false);
             }
             if(parsedObj.orderQuantity.length !== (i+1)) {
                 $('.add-row-btn').trigger('click');
@@ -751,28 +756,50 @@ function parseSingleXml(data) {
                                 $.each(response.data, function (indexInArray, valueOfElement) {
                                     meta_size_chart.push(valueOfElement);
                                 });
-                                
-                                let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
-                                    return order.Size;
-                                });
-
-                                let size_chart;
-                                if(po_zone == 'UK'){
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.uk_size;
+                                if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
+                                    let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
+                                        let po_updated_size = order.Size;
+                                        switch(order.Size) {
+                                            case 'TB':
+                                                po_updated_size = 'tiny baby';
+                                                break;
+                                            case 'NB':
+                                                po_updated_size = 'Newborn';
+                                                break;
+                                            case 'UP1M':
+                                                po_updated_size = 'up to 1M';
+                                                break;
+                                            case 'UP3M':
+                                                po_updated_size = 'up to 3M';
+                                                break;
+                                            default:
+                                                po_updated_size = order.Size;
+                                        }
+                                        po_updated_size = po_updated_size.replace("/", "-");
+                                        return po_updated_size;
                                     });
-                                } else {
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.ce_size;
-                                    });
-                                }
 
-                                // Intersection to find out atleast one size is common
-                                let intersection = po_size_chart.filter(x => size_chart.includes(x));
-                                if(intersection.length > 0) {
-                                    renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
-                                } else {
-                                    $('.snackbar_span').html("Size details mismatch!! Please check the file");
+                                    let size_chart;
+                                    if(po_zone == 'UK'){
+                                        size_chart =  meta_size_chart.map(function (sizes) {
+                                            return sizes.uk_size;
+                                        });
+                                    } else {
+                                        size_chart =  meta_size_chart.map(function (sizes) {
+                                            return sizes.ce_size;
+                                        });
+                                    }
+
+                                    // Intersection to find out atleast one size is common
+                                    let intersection = po_size_chart.filter(x => size_chart.includes(x));
+                                    if(intersection.length > 0) {
+                                        renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                    } else {
+                                        $('.snackbar_span').html("Size details mismatch!! Please check the file");
+                                        showSnackbar();
+                                    }
+                                } else{
+                                    $('.snackbar_span').html("Ratio PO not supported!!");
 					                showSnackbar();
                                 }
                             }
@@ -820,27 +847,43 @@ function parseSingleXml(data) {
     });
 
     // Purchase order
-    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', true):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('disabled', false);
+    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     // Style number
-    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', true):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('disabled', false);
+    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false);
 
     var zonal_size_index = {};
     $.each(size_chart, function (i, sizes) {    
         zonal_size_index[sizes[zone_size]] = sizes.id;
     });
-
     $.each(parsedObj.orderQuantity, function(i, j) {
-        if($.inArray(j.Size, zonal_size_chart) != -1) {
-            let index = zonal_size_index[j.Size];
-            console.log(index);
+        let po_updated_size = j.Size;
+        switch(j.Size) {
+            case 'TB':
+                po_updated_size = 'tiny baby';
+                break;
+            case 'NB':
+                po_updated_size = 'Newborn';
+                break;
+            case 'UP1M':
+                po_updated_size = 'up to 1M';
+                break;
+            case 'UP3M':
+                po_updated_size = 'up to 3M';
+                break;
+            default:
+                po_updated_size = j.Size;
+        }
+        po_updated_size = po_updated_size.replace("/", "-");
+        if($.inArray(po_updated_size, zonal_size_chart) != -1) {
+            let index = zonal_size_index[po_updated_size];
             // EAN Barcode for UK
-            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
 
             // EAN Barcode for CE
-            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('disabled', false);
+            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
             // Quantity
-            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false):$('#quantity_'+index).val(j.Single_Qty).attr('disabled', false);
+            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false):$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false);
         }
     });
  }

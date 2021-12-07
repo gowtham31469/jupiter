@@ -28,12 +28,23 @@ $( () => {
                                             });
                                         metadata_select_div += `</select>
                                     </div>
+                                    <div class="form-group has-feedback">
+                                     <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_part_of_two_piece_set" name="tesco_care_part_of_two_piece_set">
+                                            <option value="">-- Part of Two Piece Set --</option>`;
+                                            $.each(order_data.metadata.part_of_two_piece_set, function (id, name) {
+
+                                                metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
+
+                                            });
+                                        metadata_select_div += `</select>
+                                    </div>
                                     <hr>
                                     <h4 class="text-center">Care Instructions</h4>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_wash_instruction" class="component-label">Wash Instructions </label>
+                                     <label for="tesco_care_wash_instruction" class="component-label">Wash Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_wash_instruction" name="tesco_care_wash_instruction" required>
-                                            <option value="">-- Select Wash Instructions --</option>`;
+                                            <option value="">-- Select Wash Instruction --</option>`;
                                             $.each(order_data.metadata.symbols['Washing'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -42,9 +53,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_bleach_instruction" class="component-label">Bleach Instructions </label>
+                                     <label for="tesco_care_bleach_instruction" class="component-label">Bleach Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_bleach_instruction" name="tesco_care_bleach_instruction" required>
-                                            <option value="">-- Select Bleach Instructions --</option>`;
+                                            <option value="">-- Select Bleach Instruction --</option>`;
                                             $.each(order_data.metadata.symbols['Whitening'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -53,9 +64,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_dry_instruction" class="component-label">Dry Instructions </label>
+                                     <label for="tesco_care_dry_instruction" class="component-label">Dry Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_dry_instruction" name="tesco_care_dry_instruction" required>
-                                            <option value="">-- Select Dry Instructions --</option>`;
+                                            <option value="">-- Select Dry Instruction --</option>`;
                                             $.each(order_data.metadata.symbols['Dryer'], function (id, value) {
                                                 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -64,9 +75,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_iron_instruction" class="component-label">Iron Instructions </label>
+                                     <label for="tesco_care_iron_instruction" class="component-label">Iron Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_iron_instruction" name="tesco_care_iron_instruction" required>
-                                            <option value="">-- Select Iron Instructions --</option>`;
+                                            <option value="">-- Select Iron Instruction --</option>`;
                                             $.each(order_data.metadata.symbols['Ironing'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -75,9 +86,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_dry_clean_instruction" class="component-label">Dry Clean Instructions </label>
+                                     <label for="tesco_care_dry_clean_instruction" class="component-label">Dry Clean Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_dry_clean_instruction" name="tesco_care_dry_clean_instruction" required>
-                                            <option value="">-- Select Dry Clean Instructions --</option>`;
+                                            <option value="">-- Select Dry Clean Instruction --</option>`;
                                             $.each(order_data.metadata.symbols['Prof Cleaning'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -143,9 +154,9 @@ $( () => {
             </div>`;
 
             for (let fiber_index = 1; fiber_index <= 6; fiber_index++) {
-                fiber_component_div +=  `<div class="col-xs-9">
+                fiber_component_div +=  `<div class="col-xs-8">
                     <div class="form-group has-feedback">
-                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber_`+component_index+`[]">
+                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
                             <option value="">-- Select Select Fiber --</option>`;
                             $.each(order_data.metadata.fabriclists, function (id, name) {
 
@@ -156,10 +167,10 @@ $( () => {
                         <div class="help-block with-errors"></div>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-4">
                     <div class="form-group has-feedback">
                     <div class="input-group">
-                        <input type="number" class="form-control input-sm fiber-individual-percentage-`+component_index+`" onkeyup="return calculateTotalFiberPercentage()" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage_`+component_index+`[]" data-max-error= "Value must be <= 100">
+                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
                         <div class="input-group-addon">%</div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -168,13 +179,13 @@ $( () => {
                 
             }
             
-            fiber_component_div +=  `<div class="col-xs-9">
+            fiber_component_div +=  `<div class="col-xs-8">
                 <h5 class="text-right"><strong>Total</strong></h5>
             </div>
-            <div class="col-xs-3">
+            <div class="col-xs-4">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm composition-percentage total-percentage-`+component_index+`" name="fiber_total_percentage[]" id="fiber_total_percentage_`+component_index+`">
+                    <input type="number" class="form-control input-sm composition-percentage total-percentage" name="fiber_total_percentage[]" id="fiber_total_percentage_`+component_index+`">
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>

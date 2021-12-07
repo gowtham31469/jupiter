@@ -163,6 +163,25 @@
 								<td><label onclick="viewed({{ $value->id }},'tesco_tcl2_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
+
+							@foreach ($pendingproduction['tcl5'] as $value)
+							<tr>
+								<td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-{{ $value->id }}" class="checkbox"></td>
+								<td>{{ $value->company_name }}</td>
+								<td>Tesco</td>
+								@if($value->zone == "CE")
+									<td>{{ $value->ce_style_ref }}</td>
+								@else
+									<td>{{ $value->uk_style_ref }}</td>
+								@endif
+								
+								<td>TCL 5</td>
+								<td>{{ $value->zone }}</td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tcl5_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
+							</tr>
+							@endforeach
+
+
 							@foreach ($pendingproduction['tcl4'] as $value)
 							<tr>
 								<td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-{{ $value->id }}" class="checkbox"></td>
@@ -195,6 +214,26 @@
 								<td><label onclick="viewed({{ $value->id }},'tesco_tsl1_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
+
+
+							@foreach ($pendingproduction['tsl2'] as $value)
+							<tr>
+								<td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-{{ $value->id }}" class="checkbox"></td>
+								<td>{{ $value->company_name }}</td>
+								<td>Tesco</td>
+								@if($value->zone == "CE")
+									<td>{{ $value->ce_style_ref }}</td>
+								@else
+									<td>{{ $value->uk_style_ref }}</td>
+								@endif
+								
+								<td>TSL 2</td>
+								<td>{{ $value->zone }}</td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_tsl2_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
+							</tr>
+							@endforeach
+
+
 							@foreach ($pendingproduction['tsl3'] as $value)
 							<tr>
 								<td><input type="checkbox" name="checkbox" value="tesco_tsl3_orders-{{ $value->id }}" class="checkbox"></td>
@@ -381,9 +420,18 @@
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
+									className : 'mark-selected hidden',
 									action: function ( e, dt, node, config ) {
 										pendingproductionsubmit()
 									}
@@ -463,6 +511,21 @@
 													}
 													html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 												}); 
+
+												$(data.pendingproduction.tcl5).each(function(index, value)
+												{
+													if(value.zone == "CE")
+													{
+														var style_no = value.ce_style_ref;
+													}
+													else
+													{
+														var style_no = value.uk_style_ref;
+													}
+													html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 5</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+												}); 
+
+
 												$(data.pendingproduction.tsl1).each(function(index, value)
 												{
 													if(value.zone == "CE")
@@ -475,6 +538,20 @@
 													}
 													html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 												});  
+
+												$(data.pendingproduction.tsl2).each(function(index, value)
+												{
+													if(value.zone == "CE")
+													{
+														var style_no = value.ce_style_ref;
+													}
+													else
+													{
+														var style_no = value.uk_style_ref;
+													}
+													html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 2</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+												});  
+
 												$(data.pendingproduction.tsl3).each(function(index, value)
 												{
 													if(value.zone == "CE")
@@ -524,9 +601,18 @@
 													dom: 'Bfrtip',
 
 													buttons: [
-														'excelHtml5',
+														{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 														 {
 															text: 'Mark as viewed',
+															className : 'mark-selected hidden',
 															action: function ( e, dt, node, config ) {
 																pendingproductionsubmit()
 															}
@@ -550,7 +636,13 @@
 													$('#example-select-all').on('click', function(){
 													  // Check/uncheck all checkboxes in the table
 													  var rows = table.rows({ 'search': 'applied' }).nodes();
-													  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+														$('input[type="checkbox"]', rows).prop('checked', this.checked);
+														setSelectAll(this,"frm-example",table)
+													});
+
+													$('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+														setcheckBox(this,"frm-example",table)                           
 													});
 
 												 $("#penproductiondiv input[type=search]").addClass('form-control');
@@ -570,8 +662,14 @@
 	   $('#example-select-all').on('click', function(){
 		  // Check/uncheck all checkboxes in the table
 		  var rows = table.rows({ 'search': 'applied' }).nodes();
-		  $('input[type="checkbox"]', rows).prop('checked', this.checked);
-	   }); 
+			$('input[type="checkbox"]', rows).prop('checked', this.checked);
+			setSelectAll(this,"frm-example",table)
+		 }); 
+		 
+		 $('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+				setcheckBox(this,"frm-example",table)                           
+			});
 		
 	
 		function neworderssubmit()
@@ -899,6 +997,20 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
+
+						$(data.pendingproduction.tcl5).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 5</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+
 						$(data.pendingproduction.tsl1).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -911,6 +1023,21 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
+
+
+						$(data.pendingproduction.tsl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 2</td><td>'+value.zone+'</td><td><label onclick=viewed('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+
 						$(data.pendingproduction.tsl3).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -960,9 +1087,18 @@ function getCookie(cname) {
                             dom: 'Bfrtip',
                             
                             buttons: [
-                                'excelHtml5',
+															{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 								 {
 									text: 'Mark as viewed',
+									className : 'mark-selected hidden',
 									action: function ( e, dt, node, config ) {
 										pendingproductionsubmit()
 									}
@@ -986,7 +1122,13 @@ function getCookie(cname) {
 							$('#example-select-all').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example",table)
+							});
+
+							$('.pending_table tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example",table)                           
 							});
 						
 						$("#penproductiondiv input[type=search]").addClass('form-control');
@@ -1196,6 +1338,28 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
+
+						$(data.new_orders.tcl5).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.delivery_date != null && value.delivery_date!= "")
+							{
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
+							}
+							else
+							{
+								var delivery_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TCL 5</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+
 						$(data.new_orders.tsl1).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1216,6 +1380,28 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
+
+						$(data.new_orders.tsl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.delivery_date != null && value.delivery_date!= "")
+							{
+								var delivery_date = value.delivery_date.split('-').reverse().join('-')
+							}
+							else
+							{
+								var delivery_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>TSL 2</td><td>'+value.zone+'</td><td>'+value.sum+'</td><td>'+delivery_date+'</td><td><label onclick=viewedneworders('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+
 						$(data.new_orders.tsl3).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1299,9 +1485,19 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="E"]', sheet).attr('s', '50');
+												$('row c[r^="H"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											neworderssubmit()
 										}
@@ -1325,7 +1521,13 @@ function getCookie(cname) {
 							$('#example-select-all-new').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-new",table)
+							});
+
+							$('.new_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-new",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -1458,6 +1660,53 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
+
+
+
+
+						$(data.app_pipo.tcl5_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 5</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+						$(data.app_pipo.tcl5_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 5</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+
+
+
 						$(data.app_pipo.tsl1_1).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1498,6 +1747,51 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
+
+
+						$(data.app_pipo.tsl2_1).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+						$(data.app_pipo.tsl2_2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td><label onclick=viewedaowp('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+
+
+
 						$(data.app_pipo.tsl3_1).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1654,9 +1948,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											aowpsubmit()
 										}
@@ -1680,7 +1983,13 @@ function getCookie(cname) {
 							$('#example-select-all-aowp').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-aowp",table)
+							});
+
+							$('.aowp_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-aowp",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -1775,6 +2084,34 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td>'+pono+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
+						$(data.approved_orders.tcl5).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							if(value.purchase_order_no != null && value.purchase_order_no!= "")
+							{
+								var pono = value.purchase_order_no;
+							}
+							else
+							{
+								var pono = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 5</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td>'+pono+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
 						$(data.approved_orders.tsl1).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1803,6 +2140,36 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td>'+pono+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
+
+						$(data.approved_orders.tsl2).each(function(index, value)
+						{
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							if(value.order_approved_at != null)
+							{
+								var approved_date = value.order_approved_at.split(' ')[0].split('-').reverse().join('-');
+							}
+							else
+							{
+								var approved_date = "-";
+							}
+							if(value.purchase_order_no != null && value.purchase_order_no!= "")
+							{
+								var pono = value.purchase_order_no;
+							}
+							else
+							{
+								var pono = "-";
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+approved_date+'</td><td>'+pono+'</td><td><label onclick=viewedapporders('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+
 						$(data.approved_orders.tsl3).each(function(index, value)
 						{
 							if(value.zone == "CE")
@@ -1918,9 +2285,18 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											approvedorderssubmit()
 										}
@@ -1944,7 +2320,13 @@ function getCookie(cname) {
 							$('#example-select-all-app').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-app",table)
+							});
+
+							$('.approved_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-app",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
@@ -2005,6 +2387,27 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl4_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 4</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl4_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
+
+
+
+						$(data.pending_orders.tcl5).each(function(index, value)
+						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tcl5_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TCL 5</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tcl5_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						}); 
+
+
 						$(data.pending_orders.tsl1).each(function(index, value)
 						{
 							var date1 = new Date();
@@ -2021,6 +2424,25 @@ function getCookie(cname) {
 							}
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl1_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 1</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl1_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						});  
+
+
+						$(data.pending_orders.tsl2).each(function(index, value)
+						{
+							var date1 = new Date();
+							var date2 = new Date(value.created_at.split(' ')[0]);
+							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+							if(value.zone == "CE")
+							{
+								var style_no = value.ce_style_ref;
+							}
+							else
+							{
+								var style_no = value.uk_style_ref;
+							}
+							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_tsl2_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>TSL 2</td><td>'+value.zone+'</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_tsl2_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
+						});  
+
 						$(data.pending_orders.tsl3).each(function(index, value)
 						{
 							var date1 = new Date();
@@ -2090,9 +2512,19 @@ function getCookie(cname) {
 								dom: 'Bfrtip',
 
 								buttons: [
-									'excelHtml5',
+									{
+										 extend: 'excelHtml5',
+										 customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+												$('row c[r^="D"]', sheet).attr('s', '50');
+												$('row c[r^="I"]', sheet).attr('s', '50');
+												$('c[r=D2]', sheet).attr('s', '27');
+                    },
+									 },
 									 {
 										text: 'Mark as viewed',
+										className : 'mark-selected hidden',
 										action: function ( e, dt, node, config ) {
 											pendingorderssubmit()
 										}
@@ -2116,13 +2548,74 @@ function getCookie(cname) {
 							$('#example-select-all-pen').on('click', function(){
 							  // Check/uncheck all checkboxes in the table
 							  var rows = table.rows({ 'search': 'applied' }).nodes();
-							  $('input[type="checkbox"]', rows).prop('checked', this.checked);
+								$('input[type="checkbox"]', rows).prop('checked', this.checked);
+								setSelectAll(this,"frm-example-pen",table)
+							});
+
+							$('.pending_orders tbody').on('change', 'input[type="checkbox"]', function(){
+
+								setcheckBox(this,"frm-example-pen",table)                           
 							});
 			
 						  $(".modal-body input[type=search]").addClass('form-control');
 						  $('.dataTables_length select').addClass('form-control');
 						  $(".modal-body input[type=search]").attr('placeholder', 'Data Search');
 		}
+		
+  /**
+   * method to set all the check boxes by clicking select all button for the form formname
+   * @param {[type]} source   [checkbox]
+   * @param {[type]} formname [form name]
+   * @param {[type]} table    [data table]
+   */
+	 function setSelectAll(source,formname,table)
+  {
+      // var rows = table.rows({ 'search': 'applied' }).nodes();
+      // $('input[type="checkbox"]', rows).prop('checked');
+      var $checkboxes = $('#'+formname+' td input[type="checkbox"]');
+      for (var i = 0,n=$checkboxes.length;i<n;i++) {
+          $checkboxes[i].checked = source.checked;
+      }
+      var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+      if (countCheckedCheckboxes==0) {
+      $('#'+formname+' .mark-selected').addClass("hidden")
+      }
+      else{
+      $('#'+formname+' .mark-selected').removeClass("hidden")
+      }
+  }
+
+  /**
+   * method to set the checkbox
+   * @param  {[type]} obj      [checkbox]
+   * @param  {[type]} formname [form name]
+   * @param  {[type]} table    [data table]
+   */
+  function setcheckBox(obj,formname,table)
+  {
+      var $checkboxes = $('#'+formname+' td input[type="checkbox"]');
+      var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+    
+      var ischecked= $(obj).is(':checked');
+      if (ischecked) {
+          $('#'+formname+' .mark-selected').removeClass("hidden")
+
+      }
+      else if(countCheckedCheckboxes==0){
+          $('#'+formname+' .mark-selected').addClass("hidden")
+      }
+      
+      //If checkbox is not checked
+      if(!this.checked){
+         var el = $('#select-all').get(0);
+         // If "Select all" control is checked and has 'indeterminate' property
+         if(el && el.checked && ('indeterminate' in el)){
+            // Set visual state of "Select all" control 
+            // as 'indeterminate'
+            el.indeterminate = true;
+         }
+      }
+  }
 
 	</script>
 	<script src="{{ asset('js/dropzone.js') }}"></script>

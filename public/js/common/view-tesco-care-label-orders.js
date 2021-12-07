@@ -40,6 +40,7 @@ $( () => {
         $('#tesco_care_leather_id').val(order_data.order_details.leather_suede_code)
         $('#tesco_care_coo').val(order_data.order_details.country_of_origin_id)
         $('#tesco_care_supplier').val(order_data.order_details.tesco_metadata_supplier_id)
+        $('#tesco_care_part_of_two_piece_set').val(order_data.order_details.potps_id)
 
         $('#tesco_care_button_space').prop('checked', order_data.order_details.include_btn_sew_space);
         $('#tesco_care_exclusive_trim').prop('checked', order_data.order_details.exclusive_trims);
@@ -96,15 +97,17 @@ $( () => {
 
             }
 
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value=` + valueOfElement.uk_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value=` + valueOfElement.ce_ean + ` required disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." required disabled><div class="help-block with-errors"></div></div></td>
+            var ce_ean = valueOfElement.ce_ean != null?valueOfElement.ce_ean:"";
+            var uk_ean = valueOfElement.uk_ean != null?valueOfElement.uk_ean:"";
+            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
                                         </tr>`;
         });
         quantity_html += `</tbody>
                                         </table>
-                                        </div>`;
+                                        </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
         $('.teasco-care-quantity-div').html(quantity_html);
 
         // dynamic fiber component values mapping
@@ -123,7 +126,9 @@ $( () => {
                     statusCode: {
                         200: function (data) {
 
-                            var fiber_count = 0;
+                            var fiber_count = 1;
+                            let fiber_count_index = 0;
+
                             var garment_comp_div = `<div class="col-md-4 component-div">
                                                             <div class="row">
                                                                 <div class="col-xs-12">
@@ -140,13 +145,13 @@ $( () => {
                                                             </div>
                                                         </div>`;
 
-                            while (fiber_count < 6) {
-                                var fibre_composition_id = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_id : 0;
-                                var fibre_composition_percentage = component.fibers[fiber_count] != undefined ? component.fibers[fiber_count].fibre_composition_percentage : "";
+                            while (fiber_count <= 6) {
+                                var fibre_composition_id = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_id : 0;
+                                var fibre_composition_percentage = component.fibers[fiber_count_index] != undefined ? component.fibers[fiber_count_index].fibre_composition_percentage : "";
 
-                                garment_comp_div += `<div class="col-xs-9">
+                                garment_comp_div += `<div class="col-xs-8">
                                                                     <div class="form-group has-feedback">
-                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber_` + index + `[]" disabled>
+                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
                                                                     <option value="">-- Select Fiber --</option>`;
                                 $.each(data.data.fabriclists, function (fabric_index, item) {
 
@@ -157,24 +162,25 @@ $( () => {
                                 garment_comp_div += `</select><div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-xs-3">
+                                                            <div class="col-xs-4">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage-` + index + `" onkeyup="return calculateTotalFiberPercentage()" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage_` + index + `[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>
                                                                 </div>
                                                             </div>`;
-                                fiber_count++
+                                fiber_count++;
+                                fiber_count_index++;
                             }
-                            garment_comp_div += `<div class="col-xs-9">
+                            garment_comp_div += `<div class="col-xs-8">
                                                                     <h5 class="text-right"><strong>Total</strong></h5>
                                                                 </div>
-                                                                <div class="col-xs-3">
+                                                                <div class="col-xs-4">
                                                                     <div class="form-group has-feedback">
                                                                     <div class="input-group">
-                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage-` + index + `" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
+                                                                        <input type="number" class="form-control input-sm composition-percentage total-percentage" id="fiber_total_percentage_` + index + `" name="fiber_total_percentage[]" value="` + component.total_composition_percentage + `" disabled>
                                                                         <div class="input-group-addon">%</div>
                                                                     </div>
                                                                     <div class="help-block with-errors"></div>
