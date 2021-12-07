@@ -14,8 +14,8 @@ class CreateTescoTsl2OrdersTable extends Migration
     public function up()
     {
         Schema::create('tesco_tsl2_orders', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedInteger('template_id')->nullable(true)->index();
+            $table->increments('id');
+            $table->bigInteger('template_id')->nullable(true)->index();
             $table->string('order_id')->nullable(true);
             $table->string('zone')->nullable(true)->index();
             $table->string('template_type')->nullable(true);   
@@ -27,12 +27,12 @@ class CreateTescoTsl2OrdersTable extends Migration
             $table->string('eqos_site_code')->nullable(true);
             $table->string('manufacture_date')->nullable(true);
             $table->date('delivery_date')->nullable(true);
-            $table->unsignedInteger('tesco_department_id')->nullable(true)->index();
-            $table->unsignedInteger('tesco_brand_id')->nullable(true)->index();
-            $table->unsignedInteger('tesco_supplier_id')->nullable(true)->index();
-            $table->unsignedInteger('tesco_metadata_supplier_id')->nullable(true)->index();
-            $table->boolean('rfid_compliant')->default('0');
-            $table->boolean('tag_at_source')->default('0');
+            $table->bigInteger('tesco_department_id')->nullable(true)->index();
+            $table->bigInteger('tesco_brand_id')->nullable(true)->index();
+            $table->bigInteger('tesco_supplier_id')->nullable(true)->index();
+            $table->bigInteger('tesco_metadata_supplier_id')->nullable(true)->index();
+            $table->smallInteger('rfid_compliant')->default('0');
+            $table->smallInteger('tag_at_source')->default('0');
             $table->string('order_status')->nullable();
             $table->string('order_flag')->default('newOrder');
             $table->boolean('is_order_count_empty')->default(1);
@@ -40,15 +40,15 @@ class CreateTescoTsl2OrdersTable extends Migration
             $table->string('po_file')->nullable(true);
             $table->string('po_status')->nullable(true)->index();
             $table->string('pi_status')->nullable(true)->index();
-            $table->integer('pi_rev_no')->default(0);
-            $table->integer('order_placed_by')->default(null)->nullable(true)->index();
-            $table->boolean('edit_permission')->default(0);
-            $table->boolean('cancel_ord_flag')->default(0);
-            $table->boolean('pen_ord_flag')->default(0);
-            $table->boolean('new_ord_flag')->default(0);
-            $table->boolean('app_ord_flag')->default(0);
-            $table->boolean('app_pipo_flag')->default(0);
-            $table->boolean('pen_pro_flag')->default(0);
+            $table->integer('pi_rev_no')->default(0)->nullable(true)->index();
+            $table->integer('order_placed_by')->default(null)->index();
+            $table->integer('edit_permission')->default(0);
+            $table->integer('cancel_ord_flag')->default(0);
+            $table->integer('pen_ord_flag')->default(0);
+            $table->integer('new_ord_flag')->default(0);
+            $table->integer('app_ord_flag')->default(0);
+            $table->integer('app_pipo_flag')->default(0);
+            $table->integer('pen_pro_flag')->default(0);
             $table->timestamp('order_created_at')->nullable(true)->index();
             $table->timestamp('order_approved_at')->nullable(true)->index();
             $table->timestamp('order_cancelled_at')->nullable(true)->index();
