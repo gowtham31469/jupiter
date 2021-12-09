@@ -456,9 +456,9 @@ background: rgba(0,0,0,0.2);
                                 <p class="help-block"></p>
                             </div>
                             <div class="form-group has-feedback">
-                                    <label for="combined_delivery_date">Delivery Date</label>
+                                    <label for="new_combined_delivery_date">Delivery Date</label>
                                     <div class="input-group date" data-provide="datepicker" id="datePicker3">
-                                        <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">
+                                        <input value="" id="new_combined_delivery_date" required="" name="new_combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">
                                         <div class="input-group-addon">
                                             <span class="glyphicon glyphicon-th"></span >
                                         </div >
