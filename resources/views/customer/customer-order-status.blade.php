@@ -72,6 +72,7 @@
                     <div class="po_upload" id="po_upload">
                         <label>Upload Purchase Order</label>
                         <form method="post" class="dropzone" id="po-upload">
+                            <input type="text" placeholder="Enter Revise PO Number" class="form-control" name="po_number_updation" id="po_number_updation">
                             <input type="hidden" name="buyer_id" id="buyer_id" value="">
                             <input type="hidden" name="tableName" id="tableName" value="">
                             <input type="hidden" name="id" id="rowID" value=""> {{ csrf_field() }}
