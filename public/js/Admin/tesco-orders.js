@@ -5121,7 +5121,7 @@ function dynamicSVGTemplatescard(id, item) {
 		}
 		/** [ Dynamically change svg tag at source ] */
 		if (season_code != '') {
-			svgDoc.getElementById("season_code").innerHTML = season_code.toUpperCase();
+			svgDoc.getElementById("season_code").innerHTML = season_code.toUpperCase().trim();
 		} else {
 			svgDoc.getElementById("season_code").innerHTML = '';
 		}
