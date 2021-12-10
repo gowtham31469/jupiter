@@ -52,7 +52,7 @@ storeSingleSticker = (user_type) => {
 				backdrop: 'static',
 				keyboard: false
 			});
-			$('#confirm_btn').attr('onclick', 'submitSingleSticker(this, "' + user_type + '")');
+			$('#confirm_btn').attr('onclick', 'submitSingleSticker("' + user_type + '")');
 			$('#confirmOrder').modal('show');
 
 		} else {
