@@ -2457,7 +2457,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     var svgDoc = a.contentDocument;
     var name2=name;
     var name = name + "-sticker";
-    if (name == "TSL1-sticker" || name == "TSL3-sticker") {
+    if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker" ||) {
     var svgarr = [];
     var ajax_count = 0;
     var b = " ";
@@ -2490,11 +2490,15 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
                     if ((name == "TSL1-sticker" && zone == "CE")) {
                         svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
+                    } else if ((name == "TSL2-sticker" && zone == "CE")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
                     } else if ((name == "TSL3-sticker" && zone == "CE")) {
                         svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + val.orms_tpn;
                     } else if ((name == "TSL3-sticker" && zone == "UK")) {
                         svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
                     } else if ((name == "TSL1-sticker" && zone == "UK")) {
+                        svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
+                    } else if ((name == "TSL2-sticker" && zone == "UK")) {
                         svgDoc.getElementById("tpnd").innerHTML = "TPND: " + val.tpnd;
                     }
 
@@ -2506,6 +2510,15 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                         }
                         jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
                         svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+                    } else if ((name == "TSL2-sticker")) {
+                        if (zone == "CE") {
+                            var barcode_change = val.itf_barcode
+                        } else {
+                            var barcode_change = val.itf_barcode
+                        }
+                        jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+                        svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
                     } else {
                         if (zone == "CE") {
                             var barcode_change = val.itf_barcode
@@ -2524,7 +2537,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                     }
 
                     var description = val.short_description.replace(/&/g,'&#038;');
-                    if ((name == "TSL3-sticker")) {
+                    if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
                         if (size != '') {
                             $.ajax({
                                 url: base_url + "/erp/job-manager/tesco/get-tsl-size",
