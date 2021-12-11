@@ -1266,6 +1266,7 @@ class OrderManagementCntrl extends Controller
                        /** [ Invoking createTescoOrder function using class instance ] */
                        $tesco_order     = $tesco_order_obj->createTescoOrder($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission);
                        
+                       dd($tesco_order);
                          /** Insert quantity details first time. If data already exits, delete old values and insert new values**/
                          $tesco_order_id  = $tesco_order->id;
                           TescoTHL1OrdersQuantity::where('thl1_order_id',$tesco_order_id)
