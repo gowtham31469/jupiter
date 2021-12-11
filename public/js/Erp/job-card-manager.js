@@ -2457,7 +2457,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     var svgDoc = a.contentDocument;
     var name2=name;
     var name = name + "-sticker";
-    if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker" ||) {
+    if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
     var svgarr = [];
     var ajax_count = 0;
     var b = " ";
