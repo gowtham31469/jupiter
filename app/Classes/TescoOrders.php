@@ -131,7 +131,6 @@ class TescoOrders
 
           $order_history_obj->storeOrdersHistory($order_data);
 
-          dd($order_submitted);
           return $order_submitted;
             
         } catch (\Exception $e)
