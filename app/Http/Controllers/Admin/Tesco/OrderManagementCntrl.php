@@ -1620,6 +1620,14 @@ class OrderManagementCntrl extends Controller
             else if($name == "TCL5-sticker")
 					  {
 							$yy += 77;
+            }
+            else if($name == "TCL1-sticker")
+					  {
+							$yy += 77;
+            }
+            else if($name == "TCL2-sticker")
+					  {
+							$yy += 77;
 					  }
             else
             {
