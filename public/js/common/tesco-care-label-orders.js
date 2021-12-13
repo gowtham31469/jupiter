@@ -482,7 +482,7 @@ $(function () {
                         <div class="form-group has-feedback">\
                             <label for="combined_delivery_date">Delivery Date</label>\
                             <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-                                <input value="" id="combined_delivery_date" required="" name="combined_delivery_date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
+                                <input value="" id="combined_delivery_date" required="" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
                                 <div class="input-group-addon">\
                                     <span class="glyphicon glyphicon-th"></span >\
                                 </div >\
@@ -578,7 +578,7 @@ $(function () {
                     $('.template-error1').html('');
                     var templateName = [];
                     var formData = new FormData();
-                    var delivery_date = $('#combined_delivery_date').val();
+                    var delivery_date = $('input[name="combined-delivery-date"]').val();
                     var po_number = $('#po_number').val();
                     var po_file = $('#po_file').prop('files')[0];
                     template_id = [];

@@ -1321,7 +1321,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
 		$('#new_po_no').val("")
-		$('#combined_delivery_date').val("")
+		$('#new_combined_delivery_date').val("")
 		document.getElementById("new_po_file").value=null; 
 		$('#new_po_error').addClass('hidden')
 		$('#new_po_file_error').addClass('hidden')
@@ -1507,7 +1507,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
-						var combined_delivery_date = $('#combined_delivery_date').val();
+						var combined_delivery_date = $('#new_combined_delivery_date').val();
 						
 						var form_data = new FormData();
 						form_data.append('id', aa);
@@ -1681,7 +1681,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 		$('#new_po1').removeClass('hidden')
 		$('#map_po').removeClass('hidden')
 		$('#new_po_no').val("")
-		$('#combined_delivery_date').val("")
+		$('#new_combined_delivery_date').val("")
 		document.getElementById("new_po_file").value=null; 
 		$('#new_po_error').addClass('hidden')
 		$('#new_po_file_error').addClass('hidden')
@@ -1867,7 +1867,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 						var aa = a.join(',');
 						var new_po_file = $('#new_po_file').prop('files')[0];
 						var new_po_no = $('#new_po_no').val();
-						var combined_delivery_date = $('#combined_delivery_date').val();
+						var combined_delivery_date = $('#new_combined_delivery_date').val();
 						
 						var form_data = new FormData();
 						form_data.append('id', aa);
