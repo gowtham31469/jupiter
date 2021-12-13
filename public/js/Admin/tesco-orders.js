@@ -1202,7 +1202,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                     </div>\
                                                 </td>\
 												'+barcode_component+'\
-                                                <td>\
+                                                <td class="case_size_td">\
                                                     <div class="form-group has-feedback">\
                                                         <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeyup="dynamicSVGTemplates()" onkeypress="return clearQuantity(this)" id="uk_single_case_size_1" name="uk_single_case_size_1" placeholder="Enter Units Per Case" onkeyup="dynamicSVGTemplates()" max="999999" data-max-error="Max 6 digits allowed">\
                                                         <div class="help-block with-errors"></div>\
@@ -4021,7 +4021,7 @@ function addUKSingle(rem, e) {
                             </div>\
                         </td>\
                         '+barcode_component+'\
-                        <td>\
+                        <td class="case_size_td">\
                             <div class="form-group has-feedback">\
                                 <input type="number" class="form-control input-sm uk_single_case_size" required="" onkeypress="return clearQuantity(this)" id="uk_single_case_size_' + val + '" name="uk_single_case_size_' + val + '" required="" placeholder="Enter Units Per Case" max="999999" data-max-error="Max 6 digits allowed">\
                                 <div class="help-block with-errors"></div>\
