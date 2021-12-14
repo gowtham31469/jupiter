@@ -724,12 +724,29 @@ class JobManagerController extends Controller
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
+									$split_count=0;
 									if(sizeof($order_details) > 0)
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 			
 										foreach($order_details as $value)
 										{
+											if($ref_name == "TSL 2")
+											{
+													if($value->order_quantity > 0)
+													{
+															$split_count++;
+													}
+													
+											}
+											else if($ref_name == "TSL 3")
+											{
+													if($value->order_quantity > 0)
+													{
+															$split_count++;
+													}
+											}
+											
 											$order_details_omp  = 	DB::table($value->order_qnty_table_name)
 																	->where('id',$value->order_qnty_table_id)
 																	->select('*')
@@ -775,7 +792,7 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master = array();
 									}
-									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
+									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master,'split_count'=>$split_count],200);
 			}
 		}
 	
@@ -2728,6 +2745,37 @@ class JobManagerController extends Controller
 		 
 		foreach($svgarr as $value)
 		{
+			if($name == "TCL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL2-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL4-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+            }
+            else if($name == "TCL5-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL3-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+						}
+						
 			 PDF::SetMargins(0, 0, 0, false);
 			 PDF::AddPage('L', array(80,127));
 			 $svg=urldecode($value);
@@ -2741,32 +2789,32 @@ class JobManagerController extends Controller
 											{
 												if($name == "THL1-sticker")
 																{
-													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 												}
 												else if($name == "TCL5-sticker")
 												{
-													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 												}
 												else
 												{
-													PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 												}
 												
 											}
 											else
 											{
-												PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 											}
                  }
                 else
                 {
                     if($qr_flag == 1)
 										{
-											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+											PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 										}
 										else
 										{
-											PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+											PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 										}
                 }
             }
@@ -2858,7 +2906,37 @@ class JobManagerController extends Controller
 			{
 				foreach($svgarr as $value)
 				{
-					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					if($name == "TCL1-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "TCL2-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "TCL4-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[1];
+					}
+					else if($name == "TCL5-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "THL1-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "THL3-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[1];
+					}
+					unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
 					$j++;
 				}
 			}
@@ -2904,6 +2982,7 @@ class JobManagerController extends Controller
 	public function generateDivTescoSmall(Request $request)
 	{
 		$svgarr = explode(',_',$request->svg);
+		$bar_finarr = explode(',_',$request->bar_fin);
 		$name=$request->name;
 		$svg=urldecode($request->svg);
 		define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2929,9 +3008,9 @@ class JobManagerController extends Controller
 			
 			 if($name == "TSL3-sticker")
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			 else
 			 {
@@ -2943,9 +3022,9 @@ class JobManagerController extends Controller
 //				// finally we save the image as a new file
 //				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
 				 
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
@@ -2960,9 +3039,9 @@ class JobManagerController extends Controller
 		$j=0;
 		if(count($svgarr) == $i)
 		{
-			foreach($svgarr as $value)
+			foreach($bar_finarr as $value)
 			{
-				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				unlink(public_path('/storage/app/template/'.$value.'.png'));
 				$j++;
 			}
 		}
