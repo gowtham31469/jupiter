@@ -1395,11 +1395,11 @@ function tescoStatusTable(data, path) {
                         }
                         if(value.tableName == "tesco_washcare_orders")
                         {
-                            tr += '<td align="center"><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
                         else
                         {
-                            tr += '<td align="center"><a data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></a></td>';
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
                         
                     }
@@ -2946,7 +2946,7 @@ function setEditOrderStatus() {
 }
 
 function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id) {
-
+    $(obj).prop('disabled', true);
     var created_at = $(obj).parent().attr('data-orderdate');
     var status = $(obj).parent().attr('data-order_status');
     var template_id = $(obj).parent().attr('data-template_id');
@@ -3206,6 +3206,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
+                        $(obj).prop('disabled', false);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -3481,6 +3482,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
+                        $(obj).prop('disabled', false);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -3756,6 +3758,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
+                        $(obj).prop('disabled', false);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -4380,6 +4383,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                 ajax_count++;
             })
                 if (ajax_count == data.order_details.length) {
+                    $(obj).prop('disabled', false);
                     var svg_fin = svgarr.join(',_');
                     var qr_code_fin = qr_code_arr.join(',_');
                     var qr_code_check_fin = qr_code_check_arr.join(',_');
@@ -4959,6 +4963,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
+                        $(obj).prop('disabled', false);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
@@ -6518,6 +6523,7 @@ function genarateArtwork(data, id, name, zone, style_no, buyer_no, created_at) {
                     ajax_count++;
                 })
                 if (ajax_count == data.order_details.length) {
+                    $(obj).prop('disabled', false);
                     var svg_fin = svgarr.join(',_');
                     var zone = localStorage.getItem("zone");
                     PopupTescoSmall(svg_fin, name, zone, style_no, buyer_no, id, created_at);
@@ -6764,6 +6770,7 @@ function genarateArtwork(data, id, name, zone, style_no, buyer_no, created_at) {
                     ajax_count++;
                 })
                 if (ajax_count == data.order_details.length) {
+                    $(obj).prop('disabled', false);
                     var svg_fin = svgarr.join(',_');
                     var zone = localStorage.getItem("zone");
                     PopupTesco(svg_fin, name, zone, style_no, buyer_no, id, created_at);
