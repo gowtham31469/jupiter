@@ -1430,7 +1430,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                    <object style="border: 2px #333 solid;" id="tesco_svg_modal'+i+'" class="center-block tesco_svg'+i+'" data="' + item.template_file + '" type="image/svg+xml"></object>\
                                                  </div>\
                                                  <div class="modal-footer">\
-                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'") style="display:none;" id="print_' + item.template_name.replace(' ', '') + '_btn">Download</button>\
+                                                   <button type="button" class="btn btn-primary print-btn" onclick=printDivTesco("tesco_svg_modal'+i+'","'+item.template_name.replace(' ', '')+'",this) style="display:none;" id="print_' + item.template_name.replace(' ', '') + '_btn">Download</button>\
                                                  <div id="hiddenDiv" style="display:none" ><canvas id="hiddenCanvas"></canvas><a id="hiddenPng" /></div><div id="svgdiv" style="position:absolute;visibility:hidden">\
                                                      <svg id="ean-13"></svg>\
                                                    </div>\
@@ -2094,6 +2094,7 @@ function create_download_artwork(print_type)
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
+                        $(obj).prop('disabled', false);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
@@ -2178,7 +2179,8 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
  * @return Pdf
  */
 
-function printDivTesco(data,name) {
+function printDivTesco(data,name,obj) {
+        $(obj).prop('disabled', true);
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
 		var zone = localStorage.getItem("zone");
@@ -2479,6 +2481,7 @@ function printDivTesco(data,name) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
+                $(obj).prop('disabled', false);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -2798,6 +2801,7 @@ function printDivTesco(data,name) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
+                $(obj).prop('disabled', false);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -3117,6 +3121,7 @@ function printDivTesco(data,name) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
+                $(obj).prop('disabled', false);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -3633,6 +3638,7 @@ function printDivTesco(data,name) {
 			ajax_count++;
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
+                $(obj).prop('disabled', false);
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name,zone);
