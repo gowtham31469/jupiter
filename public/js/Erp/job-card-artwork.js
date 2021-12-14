@@ -2135,6 +2135,10 @@ function PopupTescoSmall(data, name,zone,style_no,buyer_no,id,created_at) {
 	{
 		var db = "tesco_tsl3_orders";
 	}
+	else if(name == "TSL2-sticker")
+	{
+		var db = "tesco_tsl2_orders";
+	}
 	
 	var url = "";
 	
