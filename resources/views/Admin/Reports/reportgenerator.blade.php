@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="{{ asset('css/Erp/report/buttons.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('css/Erp/report/reports.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style type="text/css">
 	.container-fluid {
@@ -61,14 +62,17 @@
 					</div>
 					<div class="modal-body model1">
 						<div class="row rowSep">
-							<div class="col-md-2" style="margin-right: 2%;">
+							<div class="col-md-4 ">
+								<input type="text" placeholder="Start Date - End Date" class="form-control startdateos" autocomplete="off" multiple style="width:100%" name="startdateos" />
+							</div>
+							<!-- <div class="col-md-2" style="margin-right: 2%;">
 								<input class="dateGap" type="text" id="txtFrom" placeholder="Start Date" autocomplete="off"/>
 							</div>
 							<div class="col-md-2" style="margin-right: 3.1%;">
 								<input class="dateGap" type="text" id="txtTo" placeholder="End Date" autocomplete="off"/>
-							</div>
+							</div> -->
 
-							<div class="col-md-3 movLft">
+							<div class="col-md-4 movLft" style="padding-left: 0;width: 26.5%;">
 								{{-- <select class="selectpicker roleSelection" name="roleSelection" title="Select Role">
 									@foreach($allActions as $key=> $action)
 									<option value="{{ $action_as_id[$key] }}"> {{ $action }}</option>
@@ -77,13 +81,13 @@
 									{!! Form::select('roleSelection', $allActions,null,['class' => 'selectpicker roleSelection','required','data-size'=>"10","title"=>'Select Role','id'=>'roleSelection']) !!}
 								</select>
 							</div>
-							<div class="col-md-3" style="padding-left: 0;width: 24%;">
+							<div class="col-md-4" style="padding-left: 0;width: 26.5%;">
 								<select class="selectpicker tempSelection" id="tempSelect" title="Select Status" disabled>
 								</select>
 
-								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders']) !!}
+								{!! Form::select('options_for_orders[]', $options_for_orders,null,['class' => 'selectpicker all_status options_for_orders hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Orders ]','id'=>'options_for_orders',"data-actions-box"=>'true',"data-done-button"=>'true']) !!}
 
-								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery']) !!}
+								{!! Form::select('options_for_delivery[]', $options_for_delivery,null,['class' => 'selectpicker all_status options_for_delivery hidden','required','data-size'=>"10",'multiple',"title"=>'Select Status [ Delivery ]','id'=>'options_for_delivery',"data-actions-box"=>'true',"data-done-button"=>'true']) !!}
 
 								{{-- {!! Form::select('role_Status[]', $order,null,['class' => 'selectpicker all_status _order hidden','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Status [ Order ]','id'=>'_order']) !!}
 
@@ -133,14 +137,15 @@
 								@endif
 								
 							</div>
-							<div class="col-md-2 filters">
-								<label>Select Material</label>
-								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
-								</select>
-							</div>
+							
 							<div class="col-md-2 filters">
 								<label>Select Style</label>
 								<select id="style" class="multiselect filterLevel2" 		data-actions-box="true" data-size="10" title="Select 	 Style" multiple data-live-search="true">
+								</select>
+							</div>
+							<div class="col-md-2 filters">
+								<label>Select Material</label>
+								<select id="material" class="multiselect filterLevel2" 	data-actions-box="true" data-size="10" title="Select 	 Material" multiple>
 								</select>
 							</div>
 							<div class="col-md-2 filters">
@@ -182,14 +187,27 @@
 								<button class="btn btn-default nxtBtn" id="filter3" disabled=""><span class="multiselect-selected-text">&nbsp;Done&nbsp;</span></button>
 							</div>
 						</div>
+						<div class="row rowSep">
+							<div class="col-md-3 filters">
+								<label>Select Sticker Type</label>
+								<select id="sticker_types" class="multiselect filterLevel3" 	data-actions-box="true" data-size="10" title="Select Sticker Type" multiple data-live-search="true">
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<div class="row ReportSection hidden" style="margin-bottom: 1%;">
+		<div class="col-md-12">
+			<h4 class="text-center" id="headerText">Consolidated Data</h4>
+		</div>
+	</div>
+
 	<div class="row ReportSection hidden reportSec">
-		<h4 class="text-center" id="reportTitle">Consolidated Data</h4>
+		<!-- <h4 class="text-center" id="reportTitle">Consolidated Data</h4> -->
 		<div class="row">
 			<div class="col-md-12">
 				<table class="table table-hover table-striped table-bordered dataTable no-footer" id="reportTable">
@@ -205,7 +223,8 @@
 		</div>
 	</div>
 </div>
-
+<input type="hidden" id="txtFrom">
+<input type="hidden" id="txtTo">
 @endsection 
 @section('jqueryIncludes')
 
@@ -217,10 +236,37 @@
 <script type="text/javascript" src="{{ asset('js/Erp/report/vfs_fonts.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/buttons.html5.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Erp/report/bootstrap-multiselect.min.js') }}"></script>
-
-
+<script src="{{ asset('js/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/daterangepicker.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/Admin/report.js') }}"></script>
 <script type="text/javascript">
+
+$(function() {
+  $('input[name="startdateos"]').daterangepicker({
+    // opens: 'left',
+    autoUpdateInput: false,
+    // "minDate": minDate,
+        // "startDate": minDate
+
+                //     "maxDate": maxDate,
+  }, function(start, end, label) {
+  
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  });
+});
+
+
+$('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        	$("#txtFrom").val(picker.startDate.format('YYYY-MM-DD'))
+				$("#txtTo").val(picker.endDate.format('YYYY-MM-DD'))
+    });
+
+    $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+
 
 	function triggerLevel1()
 	{	
@@ -421,6 +467,16 @@ function triggerLevel2()
 								.text(value)); 
 							}
 					});
+
+					$.each(data.Names, function(key, value)
+					{ 
+
+							if(value != null && value != ',')
+							{
+								$('#sticker_types').append($("<option></option>")
+								.text(value)); 
+							}
+					});
 				}
 				else{
 					$('.snackbar_span').html("No results could be fetched for this combination.");
@@ -459,9 +515,7 @@ function triggerLevel3()
 				// console.log($("#po").val().length && $("#po").val().length > 0)
 				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
-		
-					if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
-					{
+					
 						$status =[]
 						if($(".roleSelection option:selected").html() == "Orders")
 						{
@@ -471,32 +525,42 @@ function triggerLevel3()
 						{
 							$status = $("#options_for_delivery").val()
 						}
-						$.ajax({
-							type : 'post',
-							url: "{{ $get_table_fields_route }}",
-							data:{
-								'role' : $(".roleSelection option:selected").html(),
-								'status' : $status,
-								'_token': "{{ csrf_token() }}",	
-							},
-							success:function(data)
-							{	
-								if(data.Default.length > 0)
-								{
-									$("#_prefModal").modal('hide')
-									create_table(data.Default,data.Extra)
-								}
-								else{
-									$('.snackbar_span').html("No values found for this combination !!.");
-									showSnackbar();
-								}
+
+						var full_validation = 1 ;
+
+						$("#mat_sub option:selected").each(function (i,v) {
+							if($(this).val() == "Printed Labels")
+							{
+								full_validation = 0;
 							}
 						});
-					}
-					else
-					{
+						
+						if(full_validation == 0)
+						{	
+							sub_material = "label";
+
+							if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && 	 $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#buyer").val().length > 0 )
+									{
+										call_ajax($status)
+									}
+							else
+							{
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
+							}
+						}
+						if(full_validation == 1)
+						{
+						sub_material = "others";
+						if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+						{
+							call_ajax($status)
+						}
+						else
+						{
 						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
 						showSnackbar();
+						}
 					}
 				}
 				else{
@@ -509,6 +573,32 @@ function triggerLevel3()
 				showSnackbar();
 			}
 		}
+
+
+function call_ajax(stat,sub_mat)
+{
+	$.ajax({
+		type : 'post',
+		url: "{{ $get_table_fields_route }}",
+		data:{
+			'role' : $(".roleSelection option:selected").html(),
+			'status' : stat,
+			'_token': "{{ csrf_token() }}",	
+		},
+		success:function(data)
+		{	
+			if(data.Default.length > 0)
+			{
+				$("#_prefModal").modal('hide')
+				create_table(data.Default,data.Extra)
+			}
+		else{
+			$('.snackbar_span').html("No values found for this combination !!.");
+			showSnackbar();
+		}
+		}
+	});
+}
 
 function create_table(def,extra)
 { 
@@ -527,7 +617,8 @@ function create_table(def,extra)
 	buyer_po = [];
 	ocn = [];
 	$status =[]
-
+	report_names =[];
+	
 	if($(".roleSelection option:selected").html() == "Orders")
 	{
 		$status = $("#options_for_orders").val()
@@ -581,15 +672,35 @@ function create_table(def,extra)
 		ocn.push($(this).html());
 	});
 
+	$.each($("#sticker_types option:selected"), function(){            
+		report_names.push($(this).html());
+	});
+
 	allColoumns=[]
 	for (var i = 0; i < def.length ; i++)
 	{
 		heading+='<th>'+def[i]+'</th>'
 		$("#all_fields").html(heading)
 		$(".ReportSection").removeClass('hidden')
-		allColoumns.push({
-			data: def[i]
-		});
+		// allColoumns.push({
+		// 	data: def[i]
+		// });
+
+
+		if(def[i] == "DT_Row_Index")
+		{
+			allColoumns.push({
+			data: def[i],
+			title:"S_No"
+			});
+		}
+		else
+		{
+			allColoumns.push({
+			data: def[i],
+			title: def[i]
+			});	
+		}
 	}
 
 		reportTable = $('#reportTable').dataTable( {
@@ -648,13 +759,52 @@ function create_table(def,extra)
 				customers : $("#customer").val(),
 				season : seasons,
 				date_start : date1,
-				date_end : date2
+				date_end : date2,
+				names : report_names,
+				type : sub_material
 			}
 		},
 		"columns" :allColoumns
 	});
-		$('table tr:first th:first').text('S.No');
-		$("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
+		// $('table tr:first th:first').text('S.No');
+
+
+		var selections = "[ ";
+		    if($(".roleSelection option:selected").html() == "Orders")
+				{
+					$.each($("#options_for_orders option:selected"), function(i,v){     
+
+						if(i== $("#options_for_orders option:selected").length-1)
+							{
+								selections+=$(this).html()
+							}
+						else
+							{
+								selections+=$(this).html()+", "
+							}
+						
+					});
+
+				}
+			else
+				{
+					$.each($("#options_for_delivery option:selected"), function(i,v){            
+					
+						if(i== $("#options_for_delivery option:selected").length)
+							{
+								selections+=$(this).html()
+							}
+						else
+							{
+								selections+=$(this).html()+", "
+							}
+						});
+				}
+
+		$("#headerText").html(" Report of "+selections+" ]"+" - "+$("#buyer option:selected").text())
+
+
+		// $("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')
 

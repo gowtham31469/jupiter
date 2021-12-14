@@ -1770,6 +1770,36 @@ class OrderStatusCntrl extends Controller
           
          foreach($svgarr as $value)
          {
+            if($name == "TCL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL2-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL4-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+            }
+            else if($name == "TCL5-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL3-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+            }
               PDF::SetMargins(0, 0, 0, false);
               PDF::AddPage('L', array(80,127));
               $svg=urldecode($value);
@@ -1783,32 +1813,32 @@ class OrderStatusCntrl extends Controller
                       {
                           if($name == "THL1-sticker")
                            {
-                              PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                              PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                           }
                           else if($name == "TCL5-sticker")
                           {
-                            PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                            PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                           }
                           else
                           {
-                              PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                              PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                           }
                           
                       }
                       else
                       {
-                          PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                          PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                   }
                  else
                  {
                      if($qr_flag == 1)
                      {
-                         PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                         PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                      }
                      else
                      {
-                         PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                         PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                      }
                  }
              }
@@ -1900,7 +1930,37 @@ class OrderStatusCntrl extends Controller
              {
                  foreach($svgarr as $value)
                  {
-                     unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+                        if($name == "TCL1-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[2];
+                        }
+                        else if($name == "TCL2-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[2];
+                        }
+                        else if($name == "TCL4-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[1];
+                        }
+                        else if($name == "TCL5-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[2];
+                        }
+                        else if($name == "THL1-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[2];
+                        }
+                        else if($name == "THL3-sticker")
+                        {
+                        $qr_code_check=explode(',',$qr_code_check_fin[$j]);
+                        $barcode_unlink=$qr_code_check[1];
+                        }
+                     unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
                      $j++;
                  }
              }
@@ -2255,6 +2315,7 @@ class OrderStatusCntrl extends Controller
      public function generateDivTescoSmall(Request $request)
      {
          $svgarr = explode(',_',$request->svg);
+         $bar_finarr = explode(',_',$request->bar_fin);
          $name=$request->name;
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2280,15 +2341,15 @@ class OrderStatusCntrl extends Controller
              
               if($name == "TSL3-sticker")
               {
-                  PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                  PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
              
-                 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
               }
               else
               {
-                  PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                  PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
              
-                 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
               }
 		
              $i++;
@@ -2296,9 +2357,9 @@ class OrderStatusCntrl extends Controller
          $j=0;
          if(count($svgarr) == $i)
          {
-             foreach($svgarr as $value)
+             foreach($bar_finarr as $value)
              {
-                 unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+                 unlink(public_path('/storage/app/template/'.$value.'.png'));
                  $j++;
              }
          }
@@ -2484,7 +2545,8 @@ class OrderStatusCntrl extends Controller
             $component  = "";
             $degree_text  = "";
         }
-		
+        
+        $split_count =0;
 		foreach($order_details as $value)
 		{
             if($table_name_print == "tesco_washcare_orders")
@@ -2559,6 +2621,22 @@ class OrderStatusCntrl extends Controller
             }
             else
             {
+                if($table == "tesco_tsl2_orders")
+                {
+                    if($value->count > 0)
+                    {
+                        $split_count++;
+                    }
+                    
+                }
+                else if($table == "tesco_tsl3_orders")
+                {
+                    if($value->count > 0)
+                    {
+                        $split_count++;
+                    }
+                }
+
                 $odetails  = 	DB::table($table)
                                 ->where('id',$id)
                                 ->select('*')
@@ -2610,7 +2688,7 @@ class OrderStatusCntrl extends Controller
                                     ->select('*')
                                     ->get();
 		
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
+		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' => $tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize,'split_count'=>$split_count],200);
     }
     
     /**

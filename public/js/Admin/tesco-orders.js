@@ -1528,7 +1528,7 @@ function printDivTesco(data, name) {
 	var svgDoc = a.contentDocument;
 	var zone = localStorage.getItem("zone");
 	var name = name + "-sticker";
-	if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
+	if (name == "TSL1-sticker") {
 		var svgarr = [];
 		var ajax_count = 0;
 		$('#table_row tr').each(function (key, val) {
@@ -1739,6 +1739,456 @@ function printDivTesco(data, name) {
 				var svg = encodeURI(str)
 				svgarr.push(svg)
 			}
+			ajax_count++;
+		})
+
+		if (ajax_count == document.getElementById("table_row").rows.length) {
+			var svg_fin = svgarr.join(',_');
+			PopupTescoSmall(svg_fin, name,zone);
+		}
+
+
+	} else if (name == "TSL3-sticker") {
+		var svgarr = [];
+		var ajax_count = 0;
+		$('#table_row tr').each(function (key, val) {
+
+			if($(this).find('.count_TSL3').val() > 0)
+			{
+
+			var svgRoot = svgDoc.documentElement;
+
+			if ((name == "TSL1-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+			} else if ((name == "TSL2-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+			} else if ((name == "TSL3-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+			} else if ((name == "TSL3-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+			} else if ((name == "TSL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+			} else if ((name == "TSL2-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+			}
+
+
+
+			if ((name == "TSL3-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_single_ean').val()
+				} else {
+					var barcode_change = $(this).find('.uk_single_ean').val()
+				}
+				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TSL2-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
+				}
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			} else {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
+				}
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			}
+
+			if (zone == "CE") {
+				var size = $(this).find('.ce_single_size').val();
+			} else {
+				var size = $(this).find('.uk_single_size').val();
+			}
+
+			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+			if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/admin/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+								/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+								svgDoc.getElementById("description1").innerHTML = '';
+							} else if (description != '') {
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+								svgDoc.getElementById("description1").innerHTML = '';
+							}
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						
+							if (description.length > 24) {
+								if (/\S/.test(description.charAt(24))) {
+									//No Space
+									if (description.indexOf(" ") == "-1") {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									} else {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+									}
+
+								} else {
+									//Space
+									svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+								}
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = "";
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+							}
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+
+				}
+			} else {
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if (description.length > 24) {
+					if (/\S/.test(description.charAt(24))) {
+						//No Space
+						if (description.indexOf(" ") == "-1") {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						} else {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+						}
+
+					} else {
+						//Space
+						svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+					}
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+				} else {
+					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					svgDoc.getElementById("description1").innerHTML = "";
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+				}
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				var svg = encodeURI(str)
+				svgarr.push(svg)
+			}
+			}
+			ajax_count++;
+		})
+
+		if (ajax_count == document.getElementById("table_row").rows.length) {
+			var svg_fin = svgarr.join(',_');
+			PopupTescoSmall(svg_fin, name,zone);
+		}
+
+
+	} else if (name == "TSL2-sticker") {
+		var svgarr = [];
+		var ajax_count = 0;
+		$('#table_row tr').each(function (key, val) {
+			if($(this).find('.count_TSL2').val() > 0)
+			{
+
+				var svgRoot = svgDoc.documentElement;
+
+				if ((name == "TSL1-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+				} else if ((name == "TSL2-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				} else if ((name == "TSL1-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+				} else if ((name == "TSL2-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				}
+	
+	
+	
+				if ((name == "TSL3-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					} else {
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				} else if ((name == "TSL2-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				} else {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				}
+	
+				if (zone == "CE") {
+					var size = $(this).find('.ce_single_size').val();
+				} else {
+					var size = $(this).find('.uk_single_size').val();
+				}
+	
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+					if (size != '') {
+						$.ajax({
+							url: base_url + "/admin/tesco/get-tsl-size",
+							type: 'GET',
+							async: false,
+							data: {
+								size: size,
+								zone: zone
+							},
+							tryCount: 0,
+							retryLimit: 2,
+							success: function (data) {
+									/** [ Dynamically change svg short description ] */
+								if (description != '' && data.size_chart.length != 0) {
+									var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+	
+									
+									if (str.length > 24) {
+										if (/\S/.test(str.charAt(24))) {
+											//No Space
+											if (str.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else if (data.size_chart.length != 0) {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+									svgDoc.getElementById("description1").innerHTML = '';
+								} else if (description != '') {
+									if (description.length > 24) {
+										if (/\S/.test(description.charAt(24))) {
+											//No Space
+											if (description.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = '';
+									svgDoc.getElementById("description1").innerHTML = '';
+								}
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								var svg = encodeURI(str)
+								svgarr.push(svg)
+							},
+							error: function (errorXHR, errorStatus, errorThrown) {
+								this.tryCount++;
+								if (this.tryCount <= this.retryLimit) {
+									$.ajax(this);
+									return;
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					} else {
+						/** [ Dynamically change svg short description ] */
+						if (description != '') {
+							
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+	
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								}
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+	
+					}
+				} else {
+					var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+	
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+				}
+			}
+
 			ajax_count++;
 		})
 
@@ -2179,7 +2629,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 	var zone = localStorage.getItem("zone");
 	var name = name + "-sticker";
 	var nameset = set_po_number+'-'+set_style+'-'+name + "-sticker";
-	if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
+	if (name == "TSL1-sticker") {
 		
 		var svgarr = [];
 		var ajax_count = 0;
@@ -2392,6 +2842,459 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 				var svg = encodeURI(str)
 				svgarr.push(svg)
 			}
+			ajax_count++;
+		})
+
+		if (ajax_count == document.getElementById("table_row").rows.length) {
+			var svg_fin = svgarr.join(',_');
+			PopupTescoSmallSet(svg_fin, nameset);
+		}
+
+
+	} else if (name == "TSL3-sticker") {
+		
+		var svgarr = [];
+		var ajax_count = 0;
+		$('#table_row tr').each(function (key, val) {
+			
+			if($(this).find('.count_TSL3').val() > 0)
+			{
+
+				var svgRoot = svgDoc.documentElement;
+				if ((name == "TSL1-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+				} else if ((name == "TSL2-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				} else if ((name == "TSL1-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+				} else if ((name == "TSL2-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				}
+	
+	
+	
+				if ((name == "TSL3-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					} else {
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				} else if ((name == "TSL2-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				} else {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+					jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				}
+	
+				if (zone == "CE") {
+					var size = $(this).find('.ce_single_size').val();
+				} else {
+					var size = $(this).find('.uk_single_size').val();
+				}
+	
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+					if (size != '') {
+						$.ajax({
+							url: base_url + "/admin/tesco/get-tsl-size",
+							type: 'GET',
+							async: false,
+							data: {
+								size: size,
+								zone: zone
+							},
+							tryCount: 0,
+							retryLimit: 2,
+							success: function (data) {
+									/** [ Dynamically change svg short description ] */
+								if (description != '' && data.size_chart.length != 0) {
+									var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+	
+									
+									if (str.length > 24) {
+										if (/\S/.test(str.charAt(24))) {
+											//No Space
+											if (str.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else if (data.size_chart.length != 0) {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+									svgDoc.getElementById("description1").innerHTML = '';
+								} else if (description != '') {
+									if (description.length > 24) {
+										if (/\S/.test(description.charAt(24))) {
+											//No Space
+											if (description.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = '';
+									svgDoc.getElementById("description1").innerHTML = '';
+								}
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								var svg = encodeURI(str)
+								svgarr.push(svg)
+							},
+							error: function (errorXHR, errorStatus, errorThrown) {
+								this.tryCount++;
+								if (this.tryCount <= this.retryLimit) {
+									$.ajax(this);
+									return;
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					} else {
+						/** [ Dynamically change svg short description ] */
+						if (description != '') {
+							
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+	
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								}
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+	
+					}
+				} else {
+					var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+	
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+				}
+			}
+
+			
+			ajax_count++;
+		})
+
+		if (ajax_count == document.getElementById("table_row").rows.length) {
+			var svg_fin = svgarr.join(',_');
+			PopupTescoSmallSet(svg_fin, nameset);
+		}
+
+
+	} else if (name == "TSL2-sticker") {
+		
+		var svgarr = [];
+		var ajax_count = 0;
+		$('#table_row tr').each(function (key, val) {
+			
+			if($(this).find('.count_TSL2').val() > 0)
+			{
+
+			var svgRoot = svgDoc.documentElement;
+			if ((name == "TSL1-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+			} else if ((name == "TSL2-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+			} else if ((name == "TSL3-sticker" && zone == "CE")) {
+				svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+			} else if ((name == "TSL3-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+			} else if ((name == "TSL1-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+			} else if ((name == "TSL2-sticker" && zone == "UK")) {
+				svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+			}
+
+
+
+			if ((name == "TSL3-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_single_ean').val()
+				} else {
+					var barcode_change = $(this).find('.uk_single_ean').val()
+				}
+				jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+			} else if ((name == "TSL2-sticker")) {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
+				}
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			} else {
+				if (zone == "CE") {
+					var barcode_change = $(this).find('.ce_ratio_itf').val()
+				} else {
+					var barcode_change = $(this).find('.uk_ratio_itf').val()
+				}
+				jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+
+			}
+
+			if (zone == "CE") {
+				var size = $(this).find('.ce_single_size').val();
+			} else {
+				var size = $(this).find('.uk_single_size').val();
+			}
+
+			var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+			if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+				if (size != '') {
+					$.ajax({
+						url: base_url + "/admin/tesco/get-tsl-size",
+						type: 'GET',
+						async: false,
+						data: {
+							size: size,
+							zone: zone
+						},
+						tryCount: 0,
+						retryLimit: 2,
+						success: function (data) {
+								/** [ Dynamically change svg short description ] */
+							if (description != '' && data.size_chart.length != 0) {
+								var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+
+								
+								if (str.length > 24) {
+									if (/\S/.test(str.charAt(24))) {
+										//No Space
+										if (str.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else if (data.size_chart.length != 0) {
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+								svgDoc.getElementById("description1").innerHTML = '';
+							} else if (description != '') {
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+								}
+							} else {
+								svgDoc.getElementById("description").innerHTML = '';
+								svgDoc.getElementById("description1").innerHTML = '';
+							}
+							var s = new XMLSerializer();
+							var d = svgRoot;
+							var str = s.serializeToString(d);
+							var svg = encodeURI(str)
+							svgarr.push(svg)
+						},
+						error: function (errorXHR, errorStatus, errorThrown) {
+							this.tryCount++;
+							if (this.tryCount <= this.retryLimit) {
+								$.ajax(this);
+								return;
+							}
+						},
+						complete: function () {
+
+						}
+					})
+				} else {
+					/** [ Dynamically change svg short description ] */
+					if (description != '') {
+						
+							if (description.length > 24) {
+								if (/\S/.test(description.charAt(24))) {
+									//No Space
+									if (description.indexOf(" ") == "-1") {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									} else {
+										svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+									}
+
+								} else {
+									//Space
+									svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+								}
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = "";
+								svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+							}
+					} else {
+						svgDoc.getElementById("description").innerHTML = '';
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+
+				}
+			} else {
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if (description.length > 24) {
+					if (/\S/.test(description.charAt(24))) {
+						//No Space
+						if (description.indexOf(" ") == "-1") {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						} else {
+							svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+						}
+
+					} else {
+						//Space
+						svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+					}
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+				} else {
+					svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+					svgDoc.getElementById("description1").innerHTML = "";
+					svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+				}
+				var s = new XMLSerializer();
+				var d = svgRoot;
+				var str = s.serializeToString(d);
+				var svg = encodeURI(str)
+				svgarr.push(svg)
+			}
+			}
+			
 			ajax_count++;
 		})
 
@@ -2702,8 +3605,9 @@ function GenerateDivTesco(data, name) {
 	var svgDoc = a.contentDocument;
 	var zone = localStorage.getItem("zone");
 	var name = name + "-sticker";
-	if (name == "TSL1-sticker" || name == "TSL3-sticker" || name == "TSL2-sticker") {
+	if (name == "TSL1-sticker") {
 		var svgarr = [];
+        var barcode_final = [];
 		var ajax_count = 0;
 		var name_count=0;
 		$('#table_row tr').each(function (key, val) {
@@ -2741,14 +3645,15 @@ function GenerateDivTesco(data, name) {
 						data: {
 							barcode: barcode_change,
 							type: 1,
-							name:"barcode_"+name_count,
+							name:barcode_change,
 							_token: csrf_token,
 						},
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
 								var svg_fin = svgarr.join(',_');
-								PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+								var bar_fin = barcode_final.join(',_');
+								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
 							}
 						},
 						complete: function () {
@@ -2776,7 +3681,7 @@ function GenerateDivTesco(data, name) {
 						data: {
 							barcode: barcode_change,
 							type: 2,
-							name:"barcode_"+name_count,
+							name:barcode_change,
 							_token: csrf_token,
 						},
 						success: function (data) {
@@ -2784,7 +3689,8 @@ function GenerateDivTesco(data, name) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
 								var svg_fin = svgarr.join(',_');
-								PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+								var bar_fin = barcode_final.join(',_');
+								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
 							}
 						},
 						complete: function () {
@@ -2813,7 +3719,7 @@ function GenerateDivTesco(data, name) {
 						data: {
 							barcode: barcode_change,
 							type: 2,
-							name:"barcode_"+name_count,
+							name:barcode_change,
 							_token: csrf_token,
 						},
 						success: function (data) {
@@ -2821,7 +3727,8 @@ function GenerateDivTesco(data, name) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
 								var svg_fin = svgarr.join(',_');
-								PopupTescoGenerateSmall(svg_fin, name,svgDoc);
+								var bar_fin = barcode_final.join(',_');
+								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
 							}
 						},
 						complete: function () {
@@ -2919,6 +3826,7 @@ function GenerateDivTesco(data, name) {
 							var str = s.serializeToString(d);
 							var svg = encodeURI(str)
 							svgarr.push(svg)
+                            barcode_final.push(barcode_change)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
 							this.tryCount++;
@@ -2965,6 +3873,7 @@ function GenerateDivTesco(data, name) {
 					var str = s.serializeToString(d);
 					var svg = encodeURI(str)
 					svgarr.push(svg)
+					barcode_final.push(barcode_change)
 
 				}
 			} else {
@@ -2996,7 +3905,680 @@ function GenerateDivTesco(data, name) {
 				var str = s.serializeToString(d);
 				var svg = encodeURI(str)
 				svgarr.push(svg)
+				barcode_final.push(barcode_change)
 			}
+			
+			name_count++;
+		})
+
+		
+
+	} else if (name == "TSL3-sticker") {
+		var svgarr = [];
+        var barcode_final = [];
+		var ajax_count = 0;
+		var name_count=0;
+		$('#table_row tr').each(function (key, val) {
+
+			if($(this).find('.count_TSL3').val() > 0)
+			{
+
+			
+				var svgRoot = svgDoc.documentElement;
+
+				if ((name == "TSL1-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+				} else if ((name == "TSL2-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				} else if ((name == "TSL1-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+				} else if ((name == "TSL2-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				}
+	
+	
+	
+				if ((name == "TSL3-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					} else {
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					//jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl3",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 1,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								ajax_count++;
+
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL3').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+	
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				} else if ((name == "TSL2-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+			//		jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl1",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 2,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								
+								ajax_count++;
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL3').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+					
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				} else {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+			//		jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl1",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 2,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								
+								ajax_count++;
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL3').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+					
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				}
+	
+				if (zone == "CE") {
+					var size = $(this).find('.ce_single_size').val();
+				} else {
+					var size = $(this).find('.uk_single_size').val();
+				}
+	
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+					if (size != '') {
+						$.ajax({
+							url: base_url + "/admin/tesco/get-tsl-size",
+							type: 'GET',
+							async: false,
+							data: {
+								size: size,
+								zone: zone
+							},
+							tryCount: 0,
+							retryLimit: 2,
+							success: function (data) {
+									/** [ Dynamically change svg short description ] */
+								if (description != '' && data.size_chart.length != 0) {
+									var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+	
+									
+									if (str.length > 24) {
+										if (/\S/.test(str.charAt(24))) {
+											//No Space
+											if (str.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else if (data.size_chart.length != 0) {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+									svgDoc.getElementById("description1").innerHTML = '';
+								} else if (description != '') {
+									if (description.length > 24) {
+										if (/\S/.test(description.charAt(24))) {
+											//No Space
+											if (description.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = '';
+									svgDoc.getElementById("description1").innerHTML = '';
+								}
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								var svg = encodeURI(str)
+								svgarr.push(svg)
+								barcode_final.push(barcode_change)
+							},
+							error: function (errorXHR, errorStatus, errorThrown) {
+								this.tryCount++;
+								if (this.tryCount <= this.retryLimit) {
+									$.ajax(this);
+									return;
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					} else {
+						/** [ Dynamically change svg short description ] */
+						if (description != '') {
+							
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+	
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								}
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+						barcode_final.push(barcode_change)
+	
+					}
+				} else {
+					var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+	
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+					barcode_final.push(barcode_change)
+				}
+			}
+			
+			name_count++;
+		})
+
+		
+
+	} else if (name == "TSL2-sticker") {
+		var svgarr = [];
+        var barcode_final = [];
+		var ajax_count = 0;
+		var name_count=0;
+		$('#table_row tr').each(function (key, val) {
+
+
+			if($(this).find('.count_TSL2').val() > 0)
+			{
+
+				var svgRoot = svgDoc.documentElement;
+
+				if ((name == "TSL1-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_ratio_orms_tpn').val();
+				} else if ((name == "TSL2-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "CE")) {
+					svgDoc.getElementById("tpnd").innerHTML = "ORMS TPN: " + $(this).find('.ce_single_orms_tpn').val();
+				} else if ((name == "TSL3-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				} else if ((name == "TSL1-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_ratio_tpnd').val();
+				} else if ((name == "TSL2-sticker" && zone == "UK")) {
+					svgDoc.getElementById("tpnd").innerHTML = "TPND: " + $(this).find('.uk_single_tpnd').val();
+				}
+	
+	
+	
+				if ((name == "TSL3-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_single_ean').val()
+					} else {
+						var barcode_change = $(this).find('.uk_single_ean').val()
+					}
+					//jsbarcodetescotslean(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl3",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 1,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								ajax_count++;
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL2').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+	
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+				} else if ((name == "TSL2-sticker")) {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+			//		jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl1",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 2,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								
+								ajax_count++;
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL2').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+					
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				} else {
+					if (zone == "CE") {
+						var barcode_change = $(this).find('.ce_ratio_itf').val()
+					} else {
+						var barcode_change = $(this).find('.uk_ratio_itf').val()
+					}
+			//		jsbarcodetescotsl(barcode_change, 'barcode', svgDoc)
+					
+					
+		
+					$.ajax({
+							url: base_url + "/admin/tesco/generatebarcodetsl1",
+							type: 'post',
+							data: {
+								barcode: barcode_change,
+								type: 2,
+								name:barcode_change,
+								_token: csrf_token,
+							},
+							success: function (data) {
+								
+								ajax_count++;
+								var split_count = 0;
+								$('#table_row tr').each(function (key, val) {
+									if($(this).find('.count_TSL2').val() > 0)
+									{
+										split_count++;
+									}
+								})
+								if (ajax_count == split_count) {
+									var svg_fin = svgarr.join(',_');
+									var bar_fin = barcode_final.join(',_');
+									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					//svgDoc.getElementById("barcodeimage").setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',"storage/app/template/prince.png");
+					
+					svgDoc.getElementById("barcode").setAttribute("style", "visibility:hidden");
+					
+					svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
+	
+				}
+	
+				if (zone == "CE") {
+					var size = $(this).find('.ce_single_size').val();
+				} else {
+					var size = $(this).find('.uk_single_size').val();
+				}
+	
+				var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+				if ((name == "TSL3-sticker") || (name == "TSL2-sticker")) {
+					if (size != '') {
+						$.ajax({
+							url: base_url + "/admin/tesco/get-tsl-size",
+							type: 'GET',
+							async: false,
+							data: {
+								size: size,
+								zone: zone
+							},
+							tryCount: 0,
+							retryLimit: 2,
+							success: function (data) {
+									/** [ Dynamically change svg short description ] */
+								if (description != '' && data.size_chart.length != 0) {
+									var str = (description.toUpperCase()) + ' ' + data.size_chart[0].size;
+	
+									
+									if (str.length > 24) {
+										if (/\S/.test(str.charAt(24))) {
+											//No Space
+											if (str.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = str.substr(0, str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = str.substr(str.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = str.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = str.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").innerHTML = str.toUpperCase();
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else if (data.size_chart.length != 0) {
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+									svgDoc.getElementById("description").innerHTML = data.size_chart[0].size;
+									svgDoc.getElementById("description1").innerHTML = '';
+								} else if (description != '') {
+									if (description.length > 24) {
+										if (/\S/.test(description.charAt(24))) {
+											//No Space
+											if (description.indexOf(" ") == "-1") {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+											} else {
+												svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+												svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											}
+	
+										} else {
+											//Space
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										}
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+									} else {
+										svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+										svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = "";
+									}
+								} else {
+									svgDoc.getElementById("description").innerHTML = '';
+									svgDoc.getElementById("description1").innerHTML = '';
+								}
+								var s = new XMLSerializer();
+								var d = svgRoot;
+								var str = s.serializeToString(d);
+								var svg = encodeURI(str)
+								svgarr.push(svg)
+								barcode_final.push(barcode_change)
+							},
+							error: function (errorXHR, errorStatus, errorThrown) {
+								this.tryCount++;
+								if (this.tryCount <= this.retryLimit) {
+									$.ajax(this);
+									return;
+								}
+							},
+							complete: function () {
+	
+							}
+						})
+					} else {
+						/** [ Dynamically change svg short description ] */
+						if (description != '') {
+							
+								if (description.length > 24) {
+									if (/\S/.test(description.charAt(24))) {
+										//No Space
+										if (description.indexOf(" ") == "-1") {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+										} else {
+											svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+											svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+										}
+	
+									} else {
+										//Space
+										svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+										svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+									}
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+								} else {
+									svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+									svgDoc.getElementById("description1").innerHTML = "";
+									svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+								}
+						} else {
+							svgDoc.getElementById("description").innerHTML = '';
+						}
+						var s = new XMLSerializer();
+						var d = svgRoot;
+						var str = s.serializeToString(d);
+						var svg = encodeURI(str)
+						svgarr.push(svg)
+						barcode_final.push(barcode_change)
+	
+					}
+				} else {
+					var description = $('#tesco_description').val().replace(/&/g,'&#038;')
+					if (description.length > 24) {
+						if (/\S/.test(description.charAt(24))) {
+							//No Space
+							if (description.indexOf(" ") == "-1") {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+							} else {
+								svgDoc.getElementById("description").innerHTML = description.substr(0, description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+								svgDoc.getElementById("description1").innerHTML = description.substr(description.substr(0, 24).lastIndexOf(" ")).toUpperCase();
+							}
+	
+						} else {
+							//Space
+							svgDoc.getElementById("description").innerHTML = description.substr(0, 24).toUpperCase();
+							svgDoc.getElementById("description1").innerHTML = description.substr(24).toUpperCase();
+						}
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 63.6)");
+					} else {
+						svgDoc.getElementById("description").innerHTML = description.toUpperCase();
+						svgDoc.getElementById("description1").innerHTML = "";
+						svgDoc.getElementById("description").setAttribute('transform', "matrix(1, 0, 0, 1, 56.5, 64.8)");
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+                    barcode_final.push(barcode_change)
+				}
+			}
+			
 			
 			name_count++;
 		})
@@ -3058,7 +4640,7 @@ function GenerateDivTesco(data, name) {
 						data: {
 							barcode: barcode_change,
 							type: 1,
-							name:"barcode_"+name_count,
+							name:barcode_change,
 							_token: csrf_token,
 						},
 						success: function (data) {
@@ -3096,7 +4678,7 @@ function GenerateDivTesco(data, name) {
 						data: {
 							barcode: barcode_change,
 							type: 2,
-							name:"barcode_"+name_count,
+							name:barcode_change,
 							_token: csrf_token,
 						},
 						success: function (data) {
@@ -3874,7 +5456,7 @@ function PopupTescoGenerate(data, name,svgDoc,qr_tpnd_fin) {
  * @return Pdf
  */
 
-function PopupTescoGenerateSmall(data, name,svgDoc) {
+function PopupTescoGenerateSmall(data,bar_fin, name,svgDoc) {
 
 	var url = "";
 	
@@ -3884,6 +5466,7 @@ function PopupTescoGenerateSmall(data, name,svgDoc) {
 		data: {
 			_token: csrf_token,
 			svg: data,
+            bar_fin:bar_fin,
 			name: name
 		},
 		tryCount: 0,
