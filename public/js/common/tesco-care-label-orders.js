@@ -647,38 +647,22 @@ $(function () {
     }
 
     validateEanBarcodeValue = (obj) => {
-            
-            if (obj.value.length === 13) {
-                
-                var barcodecheck = generateEanBarcode(obj.value);
 
-                if (barcodecheck == "false") {
-                    barcode_checks++;
-                    $(obj).next('div').html('');
+        if (obj.value.length === 13) {
+            var barcodecheck = generateEanBarcode(obj.value);
 
-                    /**  [ Show validation error message ] **/
-                    $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
-                    $('.label-order-submit-btn').prop('disabled', true);
+            if (barcodecheck === false) {
+                /**  [ Show validation error message ] **/
+                obj.value = '';
+               alert('Enter a valid barcode.');
 
-                } else {
-                    barcode_checks = 0;
-
-                    $(obj).next('div').html('');
-
-                    $('.label-order-submit-btn').prop('disabled', false);
-                }
-            } else {
-                barcode_checks = 0;
-
-                $(obj).next('div').html('');
-
-                $('.label-order-submit-btn').prop('disabled', false);
             }
+        }
 
     }
 
     generateEanBarcode = (code) => {
-        var return_value = "";
+        var status = "";
         JsBarcode("#barcode-ean-13", code, {
             format: "ean13",
             width: 3.45,
@@ -686,14 +670,10 @@ $(function () {
             fontSize: 35,
             flat: true,
             valid:  (valid) => {
-                if (valid == false) {
-                    return_value = "false";
-                } else {
-                    return_value = "true";
-                }
+                status = valid;
             }
         });
-        return return_value;
+        return status;
     }
 
 });

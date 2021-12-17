@@ -365,7 +365,9 @@ function loadArtworkNames(artwork_collection_style) {
             var singleTHLArtworks = [];
             var jointWashcareLabels = [];
             var jointWashcareLabelArtworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId;
+            var singleTCL5 = [];
+            var singleTCL5Artworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId, singleTCL5Status;
 
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
@@ -404,10 +406,11 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                        break;
                     case 'TCL 5':
-                        singleTCL.push(templateInfo[1]);
-                        singleTCLArtworks.push(templateInfo[0]);
-                        singleTCLStatus = templateInfo[2];
+                        singleTCL5.push(templateInfo[1]);
+                        singleTCL5Artworks.push(templateInfo[0]);
+                        singleTCL5Status = templateInfo[2];
                         break;
                     case 'TSL 2':
                         singleTCL.push(templateInfo[1]);
@@ -443,6 +446,11 @@ function loadArtworkNames(artwork_collection_style) {
 
             if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
                 options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
+                
+            }
+
+            if (typeof singleTCL5 !== 'undefined' && singleTCL5.length > 0 && typeof singleTCL5Artworks !== 'undefined' && singleTCL5Artworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCL5Status+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCL5Artworks.join()+"'>"+singleTCL5.join()+"</option>";
                 
             }
         });
