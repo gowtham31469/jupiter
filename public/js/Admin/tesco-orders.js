@@ -10056,41 +10056,48 @@ function afterOrderSaved(data) {
  * [Validation for dynamic ean barcode fields]
  * @author <praveen>
  */
- function validateEanBarcode(obj)
- {
-	 $(obj).next('div').html('');
-	 $(obj).parent('div').removeClass('has-error has-danger');
-	 /** [ Dynamically change svg barcode ] */
-	 if (obj.value.length === 13) {
-		 var barcodecheck = checkjsbarcodeean(obj.value);
-		 if (barcodecheck == "false") {
-			 /**  [ Show validation error message ] **/
-			 $(obj).parent('div').addClass('has-error has-danger');
-			 $(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
-		 }
-	 }
-	 $('#create_tesco_order_form').validator('update');
- }	
+ function validateEanBarcode(obj) {
+ 	/** [ Dynamically change svg barcode ] */
+ 	if (obj.value.length === 13) {
+ 		var barcodecheck = checkjsbarcodeean(obj.value);
+ 		if (barcodecheck == "false") {
+ 			/**  [ Show validation error message ] **/
+ 			obj.value = '';
+ 			$(obj).parent('div').addClass('has-error has-danger');
+ 			$(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
+ 		} else {
+ 			$(obj).parent('div').removeClass('has-error has-danger');
+ 			$(obj).next('div').html('');
+ 		}
+ 	} else {
+ 		$(obj).parent('div').removeClass('has-error has-danger');
+ 		$(obj).next('div').html('');
+ 	}
+ }
  
  /**
   * [Validation for dynamic itf barcode fields]
   * @author <praveen>
   */
- function validateItfBarcode(obj)
- {
-	$(obj).next('div').html('');
-	$(obj).parent('div').removeClass('has-error has-danger');
-	 /** [ Dynamically change svg barcode ] */
-	 if (obj.value.length === 14) {
-		 var barcodecheck = checkjsbarcodeitf(obj.value);
-		 if (barcodecheck == "false") {
-			 /**  [ Show validation error message ] **/
-			 $(obj).parent('div').addClass('has-error has-danger');
-			 $(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
-		 }
-	 }
-	 $('#create_tesco_order_form').validator('update');
- }	
+ function validateItfBarcode(obj) {
+ 	/** [ Dynamically change svg barcode ] */
+ 	if (obj.value.length === 14) {
+ 		var barcodecheck = checkjsbarcodeitf(obj.value);
+ 		if (barcodecheck == "false") {
+ 			obj.value = '';
+ 			/**  [ Show validation error message ] **/
+ 			$(obj).parent('div').addClass('has-error has-danger');
+ 			$(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
+ 		} else {
+ 			$(obj).parent('div').removeClass('has-error has-danger');
+ 			$(obj).next('div').html('');
+ 		}
+ 	} else {
+ 		$(obj).parent('div').removeClass('has-error has-danger');
+ 		$(obj).next('div').html('');
+ 	}
+ }
+ 
 /**
  * [cancel tesco orders]
  * @author <praveen>
