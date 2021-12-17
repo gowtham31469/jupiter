@@ -8126,6 +8126,7 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                        break;
                     case 'TCL 5':
                         singleTCL.push(templateInfo[1]);
                         singleTCLArtworks.push(templateInfo[0]);
