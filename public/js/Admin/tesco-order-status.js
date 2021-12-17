@@ -59,18 +59,31 @@ function tescoOrderStatus() {
                     $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
                 })
 
+                var already_array = [];
                 $(data.style_no).each(function(index,value){
                     if(value.type == "stickers")
                     {
                         if (value.zone == "CE") {
-                            $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                            if(already_array.includes(value.ce_style_ref) != true)
+                            {
+                                $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                already_array.push(value.ce_style_ref)
+                            }
                         } else {
-                            $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                            if(already_array.includes(value.uk_style_ref) != true)
+                            {
+                                $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                already_array.push(value.uk_style_ref)
+                            }
                         }
                     }
                     else
                     {
-                        $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                        if(already_array.includes(value.uk_style_ref +"/"+ value.ce_style_ref) != true)
+                        {
+                            $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                            already_array.push(value.uk_style_ref +"/"+ value.ce_style_ref)
+                        }
                     }
                 })
                 
@@ -6749,18 +6762,28 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
                 var options = "<option>Select Style Number</option>";
+                var already_array = [];
                 $(data.style_no).each(function(index,value){
                     if(value.type == "stickers")
                     {
                         if (value.zone == "CE") {
-                            options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                            if(already_array.includes(value.ce_style_ref) != true)
+                            {
+                                options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                            }
                         } else {
-                            options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                            if(already_array.includes(value.uk_style_ref) != true)
+                            {
+                                options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                            }
                         }
                     }
                     else
                     {
-                        options += "<option data-zone='labels'>" + value.uk_style_ref+"/"+ value.ce_style_ref  + "</option>";
+                        if(already_array.includes(value.uk_style_ref +"/"+ value.ce_style_ref) != true)
+                        {
+                            options += "<option data-zone='labels'>" + value.uk_style_ref +"/"+ value.ce_style_ref  + "</option>";
+                        }
                     }
                 })
                 $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>')

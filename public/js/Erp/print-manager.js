@@ -685,11 +685,11 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 	  case "proof":
 			if(type == "stickers")
 			{
-				genarateArtworkProofManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id);
+				genarateArtworkProofManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,obj);
 			}
 			else
 			{
-				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"proof");
+				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"proof",obj);
 			}
 	    break;
 
@@ -718,11 +718,11 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 	  case "print":
 			if(type == "stickers")
 			{
-				genarateArtworkPrintManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id);
+				genarateArtworkPrintManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,obj);
 			}
 			else
 			{
-				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"print");
+				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"print",obj);
 			}
 	   		
 	    break;
@@ -1217,7 +1217,7 @@ function genarateArtworkOrchestraProof(data, name,style_no,buyer_no,id,order_typ
 			});
 }
 
-function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id) {
+function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id,obj) {
 
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
@@ -2973,7 +2973,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 }
 
-function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id) {
+function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id,obj) {
 
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
@@ -5462,7 +5462,7 @@ function oswordWrap(str, maxWidth) {
     return res + "<tspan style='fill:cmyk(0%, 0%, 0%, 100%); font-family:FranklinGothicBT-RomanCondensed, FrankGoth Cn BT; font-size:10.0001px;' x='0' y='12'>"+str+"</tspan>";
 }
 
-function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id,data_ba,data_bate,data_fr,print_type)
+function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer,template_id,data_ba,data_bate,data_fr,print_type,obj)
 {
 	var a = document.getElementById(data);
 	var svgDoc = a.contentDocument;
