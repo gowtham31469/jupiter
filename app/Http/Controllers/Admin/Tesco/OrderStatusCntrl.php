@@ -2540,6 +2540,7 @@ class OrderStatusCntrl extends Controller
         {
             $order_details  = 	DB::table($qty_table)
 									->where($table_id,$id)
+                                    ->orderBy('id', 'asc')
 									->select('*')
                                     ->get();
             $component  = "";
