@@ -8732,7 +8732,9 @@ function loadArtworkNames(artwork_collection_style) {
             var singleTHLArtworks = [];
             var jointWashcareLabels = [];
             var jointWashcareLabelArtworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId;
+            var singleTCL5 = [];
+            var singleTCL5Artworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId, singleTCL5Status;
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
@@ -8770,10 +8772,11 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                        break;
                     case 'TCL 5':
-                        singleTCL.push(templateInfo[1]);
-                        singleTCLArtworks.push(templateInfo[0]);
-                        singleTCLStatus = templateInfo[2];
+                        singleTCL5.push(templateInfo[1]);
+                        singleTCL5Artworks.push(templateInfo[0]);
+                        singleTCL5Status = templateInfo[2];
                         break;
                     case 'TSL 2':
                         singleTCL.push(templateInfo[1]);
@@ -8809,6 +8812,11 @@ function loadArtworkNames(artwork_collection_style) {
 
             if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
                 options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
+                
+            }
+
+            if (typeof singleTCL5 !== 'undefined' && singleTCL5.length > 0 && typeof singleTCL5Artworks !== 'undefined' && singleTCL5Artworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCL5Status+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCL5Artworks.join()+"'>"+singleTCL5.join()+"</option>";
                 
             }
         });
@@ -8863,55 +8871,45 @@ function afterOrderSaved(data)
  * [Validation for dynamic ean barcode fields]
  * @author <praveen>
  */
-function validateEanBarcode(obj)
-{
-    var barcode_checks = 0;
+ function validateEanBarcode(obj) {
     /** [ Dynamically change svg barcode ] */
     if (obj.value.length === 13) {
         var barcodecheck = checkjsbarcodeean(obj.value);
         if (barcodecheck == "false") {
-            barcode_checks++;
-            $(obj).next('div').html('');
             /**  [ Show validation error message ] **/
-            $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
-            $('.submit-btn').prop('disabled', true);
+            obj.value = '';
+            $(obj).parent('div').addClass('has-error has-danger');
+            $(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
         } else {
-            barcode_checks = 0;
+            $(obj).parent('div').removeClass('has-error has-danger');
             $(obj).next('div').html('');
-            $('.submit-btn').prop('disabled', false);
         }
     } else {
-        barcode_checks = 0;
+        $(obj).parent('div').removeClass('has-error has-danger');
         $(obj).next('div').html('');
-        $('.submit-btn').prop('disabled', false);
     }
-}   
+}
 
 /**
  * [Validation for dynamic itf barcode fields]
  * @author <praveen>
  */
-function validateItfBarcode(obj)
-{
-    var barcode_checks = 0;
+function validateItfBarcode(obj) {
     /** [ Dynamically change svg barcode ] */
     if (obj.value.length === 14) {
         var barcodecheck = checkjsbarcodeitf(obj.value);
         if (barcodecheck == "false") {
-            barcode_checks++;
-            $(obj).next('div').html('');
+            obj.value = '';
             /**  [ Show validation error message ] **/
-            $(obj).next('div').html('<span style="color:#F44336">Enter a valid barcode.</span>');
-            $('.submit-btn').prop('disabled', true);
+            $(obj).parent('div').addClass('has-error has-danger');
+            $(obj).next('div').html('<ul class="list-unstyled"><li>Enter a valid barcode.</li></ul>');
         } else {
-            barcode_checks = 0;
+            $(obj).parent('div').removeClass('has-error has-danger');
             $(obj).next('div').html('');
-            $('.submit-btn').prop('disabled', false);
         }
     } else {
-        barcode_checks = 0;
+        $(obj).parent('div').removeClass('has-error has-danger');
         $(obj).next('div').html('');
-        $('.submit-btn').prop('disabled', false);
     }
 }
 
