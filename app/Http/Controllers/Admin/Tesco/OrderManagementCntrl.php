@@ -1798,6 +1798,32 @@ class OrderManagementCntrl extends Controller
 		
         foreach($svgarr as $value)
         {
+
+          if($name == "TCL1-sticker")
+          {
+            $barcode=$qr_code[$i]->itf_barcode;
+          }
+          else if($name == "TCL2-sticker")
+          {
+            $barcode=$qr_code[$i]->itf_barcode;
+          }
+          else if($name == "TCL4-sticker")
+          {
+            $barcode=$qr_code[$i]->ean_barcode;
+          }
+          else if($name == "TCL5-sticker")
+          {
+            $barcode=$qr_code[$i]->itf_barcode;
+          }
+          else if($name == "THL1-sticker")
+          {
+            $barcode=$qr_code[$i]->itf_barcode;
+          }
+          else if($name == "THL3-sticker")
+          {
+            $barcode=$qr_code[$i]->ean_barcode;
+          }
+
              PDF::SetMargins(0, 0, 0, false);
              PDF::AddPage('L', array(80,127));
              $svg=urldecode($value);
@@ -1811,32 +1837,32 @@ class OrderManagementCntrl extends Controller
                     {
                       if($name == "THL1-sticker")
                               {
-                        PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                        PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                       else if($name == "TCL5-sticker")
                       {
-                        PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                        PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                       else
                       {
-                        PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                        PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                       
                     }
                     else
                     {
-                      PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                      PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                     }
                  }
                 else
                 {
                   if($qr_flag == 1)
                   {
-                    PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                    PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                   }
                   else
                   {
-                    PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+                    PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                   }
                      
                 }
@@ -1919,7 +1945,31 @@ class OrderManagementCntrl extends Controller
 			{
 				foreach($svgarr as $value)
 				{
-					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+            if($name == "TCL1-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->itf_barcode;
+            }
+            else if($name == "TCL2-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->itf_barcode;
+            }
+            else if($name == "TCL4-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->ean_barcode;
+            }
+            else if($name == "TCL5-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->itf_barcode;
+            }
+            else if($name == "THL1-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->itf_barcode;
+            }
+            else if($name == "THL3-sticker")
+            {
+              $barcode_unlink=$qr_code[$j]->ean_barcode;
+            }
+					unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
 					$j++;
 				}
 			}
@@ -2213,7 +2263,8 @@ class OrderManagementCntrl extends Controller
   
     public function generateDivTescoSmall(Request $request)
     {
-		$svgarr = explode(',_',$request->svg);
+    $svgarr = explode(',_',$request->svg);
+    $bar_finarr = explode(',_',$request->bar_fin);
     	$name=$request->name;
         $svg=urldecode($request->svg);
         define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2239,15 +2290,15 @@ class OrderManagementCntrl extends Controller
 			
 			 if($name == "TSL3-sticker")
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			 else
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			$i++;
@@ -2255,9 +2306,9 @@ class OrderManagementCntrl extends Controller
     $j=0;
 		if(count($svgarr) == $i)
 		{
-			foreach($svgarr as $value)
+			foreach($bar_finarr as $value)
 			{
-				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				unlink(public_path('/storage/app/template/'.$value.'.png'));
 				$j++;
 			}
 		}
