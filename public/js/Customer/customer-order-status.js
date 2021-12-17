@@ -1983,11 +1983,13 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                             if(already_array.includes(value.ce_style_ref) != true)
                             {
                                 options += "<option data-zone=" + value.zone + ">" + value.ce_style_ref + "</option>";
+                                already_array.push(value.ce_style_ref)
                             }
                         } else {
                             if(already_array.includes(value.uk_style_ref) != true)
                             {
                                 options += "<option data-zone=" + value.zone + ">" + value.uk_style_ref + "</option>";
+                                already_array.push(value.uk_style_ref)
                             }
                         }
                     }
@@ -1996,6 +1998,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                         if(already_array.includes(value.uk_style_ref +"/"+ value.ce_style_ref) != true)
                         {
                             options += "<option data-zone='labels'>" + value.uk_style_ref +"/"+ value.ce_style_ref  + "</option>";
+                            already_array.push(value.uk_style_ref +"/"+ value.ce_style_ref)
                         }
                     }
                 })
