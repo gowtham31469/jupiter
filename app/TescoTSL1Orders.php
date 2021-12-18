@@ -22,7 +22,7 @@ class TescoTSL1Orders extends Model
 
       public function quantities() {
 
-          return $this->hasMany('App\TescoTSL1OrdersQuantity','tsl1_order_id');
+          return $this->hasMany('App\TescoTSL1OrdersQuantity','tsl1_order_id')->orderBy('id');
 
       }
 
