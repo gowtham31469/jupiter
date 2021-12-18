@@ -1730,7 +1730,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -1956,7 +1956,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -2182,7 +2182,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -2604,7 +2604,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTesco(svg_fin, name,zone);
 		}
@@ -2837,7 +2837,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3065,7 +3065,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3292,7 +3292,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3581,7 +3581,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSet(svg_fin, nameset);
 		}
@@ -3647,7 +3647,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3685,7 +3685,7 @@ function GenerateDivTesco(data, name, obj) {
 							
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3724,7 +3724,7 @@ function GenerateDivTesco(data, name, obj) {
 							
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3971,7 +3971,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4016,7 +4016,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4062,7 +4062,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4309,7 +4309,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4354,7 +4354,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4400,7 +4400,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4651,7 +4651,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_tpnd_fin = qr_tpndarr.join(',_');
 								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -4690,7 +4690,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_tpnd_fin = qr_tpndarr.join(',_');
 								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -5081,7 +5081,7 @@ function GenerateDivTesco(data, name, obj) {
 			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
 			{
 				if (ajax_count == document.getElementById("table_row").rows.length) {
-					$(obj).prop('disabled', false);
+					setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 					var svg_fin = svgarr.join(',_');
 					var qr_tpnd_fin = qr_tpndarr.join(',_');
 					PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -10942,7 +10942,7 @@ function create_download_artwork(print_type)
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');

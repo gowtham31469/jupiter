@@ -1295,7 +1295,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == generate_data.order_details.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -1336,7 +1336,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 						
 						ajax_count++;
 						if (ajax_count == generate_data.order_details.length) {
-							$(obj).prop('disabled', false);
+							setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 							var svg_fin = svgarr.join(',_');
 							var bar_fin = barcode_final.join(',_');
 							PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -1376,7 +1376,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							
 							ajax_count++;
 							if (ajax_count == generate_data.order_details.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -1647,7 +1647,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							success: function (data) {
 								ajax_count++;
 								if (ajax_count == generate_data.split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -1688,7 +1688,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							
 							ajax_count++;
 							if (ajax_count == generate_data.split_count) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -1728,7 +1728,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								
 								ajax_count++;
 								if (ajax_count == generate_data.split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -2002,7 +2002,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							success: function (data) {
 								ajax_count++;
 								if (ajax_count == generate_data.split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -2043,7 +2043,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							
 							ajax_count++;
 							if (ajax_count == generate_data.split_count) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -2083,7 +2083,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								
 								ajax_count++;
 								if (ajax_count == generate_data.split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmallPrintManager(svg_fin, bar_fin, name,svgDoc);
@@ -2449,7 +2449,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == generate_data.order_details.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_code_fin = qr_code_arr.join(',_');
 								var qr_code_check_fin = qr_code_check_arr.join(',_');
@@ -2488,7 +2488,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == generate_data.order_details.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_code_fin = qr_code_arr.join(',_');
 								var qr_code_check_fin = qr_code_check_arr.join(',_');
@@ -2948,7 +2948,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
 			{
 				if (ajax_count == data.order_details.length) {
-					$(obj).prop('disabled', false);
+					setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 					var svg_fin = svgarr.join(',_');
 					var qr_code_fin = qr_code_arr.join(',_');
 					var qr_code_check_fin = qr_code_check_arr.join(',_');
@@ -3230,7 +3230,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -3509,7 +3509,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -3789,7 +3789,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			ajax_count++;
 		})
 					if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 						var svg_fin = svgarr.join(',_');
 						var zone = localStorage.getItem("zone");
 						
@@ -4415,7 +4415,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 			ajax_count++;
 		})
 			if (ajax_count == data.order_details.length) {
-				$(obj).prop('disabled', false);
+				setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 				var svg_fin = svgarr.join(',_');
 				var qr_code_fin = qr_code_arr.join(',_');
 				var qr_code_check_fin = qr_code_check_arr.join(',_');
@@ -6032,7 +6032,7 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
