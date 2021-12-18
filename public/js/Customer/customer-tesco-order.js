@@ -2094,7 +2094,7 @@ function create_download_artwork(print_type)
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
-                        $(obj).prop('disabled', false);
+                        setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
@@ -2481,7 +2481,7 @@ function printDivTesco(data,name,obj) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-                $(obj).prop('disabled', false);
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -2801,7 +2801,7 @@ function printDivTesco(data,name,obj) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-                $(obj).prop('disabled', false);
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -3121,7 +3121,7 @@ function printDivTesco(data,name,obj) {
 				
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-                $(obj).prop('disabled', false);
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 				var svg_fin = svgarr.join(',_');
 
 
@@ -3638,7 +3638,7 @@ function printDivTesco(data,name,obj) {
 			ajax_count++;
 			})
 			if (ajax_count == document.getElementById("table_row").rows.length) {
-                $(obj).prop('disabled', false);
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			
 			PopupTesco(svg_fin,name,zone);
