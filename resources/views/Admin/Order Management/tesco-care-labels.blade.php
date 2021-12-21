@@ -1,5 +1,6 @@
 <h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
 <hr>
+<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
 <input type="hidden" id="hidden_id" name="hidden_id">
