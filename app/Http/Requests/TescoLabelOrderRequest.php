@@ -40,7 +40,7 @@ class TescoLabelOrderRequest extends FormRequest
             'tesco_care_iron_instruction'      => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
             'tesco_care_dry_clean_instruction' => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
 
-            'tesco_care_garment_component.*'   => ['nullable', 'numeric', 'sometimes', 'exists:tesco_care_symbols,id'],
+            'tesco_care_garment_component.*'   => ['nullable', 'numeric', 'sometimes', 'exists:tesco_components,id'],
             'tesco_care_fiber.*'               => ['nullable', 'numeric', 'sometimes', 'exists:tesco_fabriclists,id'],
             'fiber_total_percentage.*'         => ['nullable', 'sometimes', 'numeric', 'min:100', 'max:100'],
             'fiber_individual_percentage.*'    => ['nullable', 'sometimes', 'digits_between:1,100'],
