@@ -2052,7 +2052,7 @@ class OrderStatusController extends Controller
 		 $customer_name = $order_details[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
-		 $this->created_date = $request->order_created_at;
+		 $this->created_date =$order_details[0]->order_created_at;
 		
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;
@@ -2496,7 +2496,7 @@ class OrderStatusController extends Controller
 		 $customer_name = $order_details[0]->short_name;
 		 $this->customer_name = $customer_name;
 		
-		 $this->created_date = $request->order_created_at;
+		 $this->created_date = $order_details[0]->order_created_at;
 		
 		 $this->template_name = $request->name;
 		 $this->template_zone = $request->zone;

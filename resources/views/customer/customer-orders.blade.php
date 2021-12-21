@@ -918,7 +918,7 @@ background: rgba(0,0,0,0.2);
 
 
                 <div class="buttons pull-right" style="margin-top:10px;">
-                    <button style="margin-left: 10px;" class="btn btn-primary pull-right" type="submit" onclick="validateTescoCareLabelOrder('admin')">Submit</button><button type="button" class="btn btn-danger remove pull-right">Close</button>
+                    <button style="margin-left: 10px;" class="btn btn-primary pull-right" type="submit" onclick="validateTescoCareLabelOrder('admin')">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button>
                 </div>
             </div>
         </div>
