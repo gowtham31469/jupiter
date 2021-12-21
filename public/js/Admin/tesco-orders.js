@@ -442,7 +442,7 @@ function tescoOrders(callback) {
 											"template_type": 'tesco_carton_stickers'
 										}, {
 											"id": "28,23,39",
-											"text": "TCL 4 (QR), TSL 3 (QR) & TSL 2",
+											"text": "TCL 4 (QR), TSL 3 & TSL 2",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
