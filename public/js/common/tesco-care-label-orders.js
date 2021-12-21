@@ -55,7 +55,6 @@ $(function () {
 
                 /** [ Show response status based on HTTP status code ] */
                 200: function (response) {
-                    $(".loader").hide();
                     size_category_options = ``;
                     $.each(response.size_categories, function (i, item) {
                         size_category_options += `<option value=` + item.id + `>` + item.category_name + `</option>`;
@@ -74,11 +73,15 @@ $(function () {
                     $('#create_order_form').validator('update');
                 },
                 400: function () {
-                    $(".loader").hide();
                     $('.snackbar_span').html('Something went wrong');
                     showSnackbar();
                 }
             },
+            complete: function () {
+                
+                $(".loader").hide();
+            }
+            
         });
     }
 
@@ -122,15 +125,14 @@ $(function () {
             url: base_url + "/" + user + "/tesco/care-label-fiber-components",
             type: "get",
             dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
             data: {
                 _token: csrf_token
             },
+            beforeSend: function () {
+                $(".loader").show();
+            },
             statusCode: {
                 200: function (data) {
-                    $(".loader").hide();
 
                     /** [ Get data-id of add button ] */
                     var button_count = $(obj).attr("data-id");
@@ -196,6 +198,10 @@ $(function () {
                     $(".selectpicker").selectpicker("refresh");
                     $('#'+form_id).validator('update');
                 }
+            },
+            complete: function () {
+                
+                $(".loader").hide();
             }
         });
     }
@@ -425,6 +431,10 @@ $(function () {
                         $('.label-order-submit-btn').prop('disabled', false);
                         $(window).scrollTop(0);
                     }
+            },
+            complete: function () {
+                
+                $(".loader").hide();
             }
         });
     }
