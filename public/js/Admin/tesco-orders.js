@@ -1730,7 +1730,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -1956,7 +1956,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -2182,7 +2182,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmall(svg_fin, name,zone);
 		}
@@ -2305,7 +2305,7 @@ function printDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -2350,7 +2350,7 @@ function printDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -2405,7 +2405,7 @@ function printDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -2450,7 +2450,7 @@ function printDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -2524,7 +2524,7 @@ function printDivTesco(data, name, obj) {
 										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 									}
 								}
@@ -2569,7 +2569,7 @@ function printDivTesco(data, name, obj) {
 										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 									}
 								}
@@ -2604,7 +2604,7 @@ function printDivTesco(data, name, obj) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTesco(svg_fin, name,zone);
 		}
@@ -2837,7 +2837,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3065,7 +3065,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3292,7 +3292,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSmallSet(svg_fin, nameset);
 		}
@@ -3392,7 +3392,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -3415,7 +3415,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -3448,7 +3448,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -3471,7 +3471,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -3523,7 +3523,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 								}
@@ -3546,7 +3546,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 								}
@@ -3581,7 +3581,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 		})
 
 		if (ajax_count == document.getElementById("table_row").rows.length) {
-			$(obj).prop('disabled', false);
+			setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 			var svg_fin = svgarr.join(',_');
 			PopupTescoSet(svg_fin, nameset);
 		}
@@ -3647,7 +3647,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3685,7 +3685,7 @@ function GenerateDivTesco(data, name, obj) {
 							
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3724,7 +3724,7 @@ function GenerateDivTesco(data, name, obj) {
 							
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var bar_fin = barcode_final.join(',_');
 								PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -3971,7 +3971,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4016,7 +4016,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4062,7 +4062,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4309,7 +4309,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4354,7 +4354,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4400,7 +4400,7 @@ function GenerateDivTesco(data, name, obj) {
 									}
 								})
 								if (ajax_count == split_count) {
-									$(obj).prop('disabled', false);
+									setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 									var svg_fin = svgarr.join(',_');
 									var bar_fin = barcode_final.join(',_');
 									PopupTescoGenerateSmall(svg_fin, bar_fin, name,svgDoc);
@@ -4651,7 +4651,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_tpnd_fin = qr_tpndarr.join(',_');
 								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -4690,7 +4690,7 @@ function GenerateDivTesco(data, name, obj) {
 						success: function (data) {
 							ajax_count++;
 							if (ajax_count == document.getElementById("table_row").rows.length) {
-								$(obj).prop('disabled', false);
+								setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 								var svg_fin = svgarr.join(',_');
 								var qr_tpnd_fin = qr_tpndarr.join(',_');
 								PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -4773,7 +4773,7 @@ function GenerateDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -4818,7 +4818,7 @@ function GenerateDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -4873,7 +4873,7 @@ function GenerateDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -4918,7 +4918,7 @@ function GenerateDivTesco(data, name, obj) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -4993,7 +4993,7 @@ function GenerateDivTesco(data, name, obj) {
 										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 									}
 								}
@@ -5038,7 +5038,7 @@ function GenerateDivTesco(data, name, obj) {
 										svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 										svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 										svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+										svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 										svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 									}
 								}
@@ -5081,7 +5081,7 @@ function GenerateDivTesco(data, name, obj) {
 			if((name == "TCL2-sticker") || (name == "TCL4-sticker"))
 			{
 				if (ajax_count == document.getElementById("table_row").rows.length) {
-					$(obj).prop('disabled', false);
+					setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
 					var svg_fin = svgarr.join(',_');
 					var qr_tpnd_fin = qr_tpndarr.join(',_');
 					PopupTescoGenerate(svg_fin, name,svgDoc,qr_tpnd_fin);
@@ -6795,7 +6795,7 @@ function dynamicSVGTemplatescard(id, item) {
 								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.87, 0, 0, 1, 91.1544, 150)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 							}
 							else if(item.template_name === "THL 1")
@@ -6824,7 +6824,7 @@ function dynamicSVGTemplatescard(id, item) {
 								svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 								svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 								svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.87, 0, 0, 1, 91.1544, 163)");
+								svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 								svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 							}
 							else if(item.template_name === "THL 1")
@@ -6971,7 +6971,7 @@ function dynamicSVGTemplatescard(id, item) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 										
@@ -7017,7 +7017,7 @@ function dynamicSVGTemplatescard(id, item) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 										
@@ -7073,7 +7073,7 @@ function dynamicSVGTemplatescard(id, item) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 										}
 									}
@@ -7119,7 +7119,7 @@ function dynamicSVGTemplatescard(id, item) {
 											svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 											svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 											svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+											svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 											svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 										}
 									}
@@ -7196,7 +7196,7 @@ function dynamicSVGTemplatescard(id, item) {
 									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 150)");
 									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 160)");
 									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 138)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 150)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 150)");
 									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 160)");
 								}
 							}
@@ -7242,7 +7242,7 @@ function dynamicSVGTemplatescard(id, item) {
 									svgDoc.getElementById("supplier_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 163)");
 									svgDoc.getElementById("packaging_text").setAttribute('transform', "matrix(1, 0, 0, 1, 5.4283, 176)");
 									svgDoc.getElementById("eqos").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 150)");
-									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.92, 0, 0, 1, 91.1544, 163)");
+									svgDoc.getElementById("supplier").setAttribute('transform', "matrix(0.84, 0, 0, 1, 91.1544, 163)");
 									svgDoc.getElementById("packaging_value").setAttribute('transform', "matrix(1, 0, 0, 1, 91.1544, 176)");
 								}
 							}
@@ -10942,7 +10942,7 @@ function create_download_artwork(print_type)
                     svgarr_back_text.push(svg_back_text)
                    
                     if (ajax_count == data.order_details.length) {
-						$(obj).prop('disabled', false);
+						setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
                         var svg_fin = svgarr.join(',_');
                         var svg_fin_back = svgarr_back.join(',_');
                         var svg_fin_back_text = svgarr_back_text.join(',_');
