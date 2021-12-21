@@ -1496,10 +1496,10 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
 
-                    if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    {
-                        svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    }
+                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
+                    // {
+                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
+                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -1525,13 +1525,13 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         else
                         {
                             svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.7049, 160.7462)");
+                            svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 4.8456, 160.7462)");
                             
                         }
                         
                         if(val.tog != "" && val.tog != null)
                         {
-                            svgDoc.getElementById("tog_value_1_").innerHTML = val.tog;
+                            svgDoc.getElementById("tog_value_1_").innerHTML = "TOG "+val.tog;
                         }
                         else
                         {
@@ -1547,7 +1547,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                             {
-                                selected_secondary_sizes_text += '<tspan x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
+                                selected_secondary_sizes_text += '<tspan text-anchor="middle" x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
                                 $size_y += 6;
                             }
                         })
@@ -1556,8 +1556,22 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         
 
 
-                        svgDoc.getElementById("uk_ean_barcode").innerHTML = val.uk_ean;
-                        svgDoc.getElementById("ce_ean_barcode").innerHTML = val.ce_ean;
+                        svgDoc.getElementById("uk_ean_barcode").innerHTML =  "UK EAN: " + val.uk_ean;
+                        svgDoc.getElementById("ce_ean_barcode").innerHTML =  "CE EAN: " + val.ce_ean;
+                        if(val.potps_id == null)
+                        {
+                            svgDoc.getElementById("part_of_two_piece_set").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("uk_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 302.3271)");
+                            svgDoc.getElementById("ce_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 312.2111)");
+                            svgDoc.getElementById("top_line").setAttribute('y1', "294.16");
+                            svgDoc.getElementById("top_line").setAttribute('y2', "294.16");
+                            svgDoc.getElementById("bottom_line").setAttribute('y1', "315.63");
+                            svgDoc.getElementById("bottom_line").setAttribute('y2', "315.63");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("part_of_two_piece_set").removeAttribute("visibility", "hidden");
+                        }
                         
                         if(val.uk_size == "tiny baby")
                         {
@@ -1566,18 +1580,26 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "tiny baby";
 
-                            var polish = data.tesco_tiny[0].polish
+
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 22.5, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 36.4, 257.0148)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 10.65, 264.3518)");
+
+                            //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
+
+                            var polish = "tiny baby"
                             var czech = data.tesco_tiny[0].czech
                             var slovak = data.tesco_tiny[0].slovak
                             var hungarian = data.tesco_tiny[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "Newborn")
                         {
@@ -1586,18 +1608,26 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "Newborn";
+                            //svgDoc.getElementById("small_english").innerHTML = "Newborn";
 
-                            var polish = data.tesco_nb[0].polish
+                            var polish = "newborn"
                             var czech = data.tesco_nb[0].czech
                             var slovak = data.tesco_nb[0].slovak
                             var hungarian = data.tesco_nb[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 30.7 257.061)");
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.1806, 257.061)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 9.9, 264.3518)");
+                            
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 1M")
                         {
@@ -1606,18 +1636,25 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 1M";
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21.5, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 257.0148)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 4.25, 264.3518)");
+
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
                             
-                            var polish = data.tesco_up1[0].polish
+                            var polish = "up to 1m"
                             var czech = data.tesco_up1[0].czech
                             var slovak = data.tesco_up1[0].slovak
                             var hungarian = data.tesco_up1[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "up to 3M")
                         {
@@ -1626,18 +1663,26 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "up to 3M";
+
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21.6, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35.1, 257.0148)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 3.1, 264.3518)");
+
+                            //svgDoc.getElementById("small_english").innerHTML = "up to 3M";
                             
-                            var polish = data.tesco_up3[0].polish
+                            var polish = "up to 3m"
                             var czech = data.tesco_up3[0].czech
                             var slovak = data.tesco_up3[0].slovak
                             var hungarian = data.tesco_up3[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech;
-                            svgDoc.getElementById("small_translation2").innerHTML =slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
+                            svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                         }
                         else if(val.uk_size == "One size")
                         {
@@ -1646,31 +1691,228 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
+                            //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                            svgDoc.getElementById("small_english").innerHTML = "One size";
+                            //svgDoc.getElementById("small_english").innerHTML = "One size";
                             
-                            var polish = data.tesco_onesize[0].polish
-                            var czech = data.tesco_onesize[0].czech.split(' ')
+                            var polish = "one size"
+                            var czech = data.tesco_onesize[0].czech
                             var slovak = data.tesco_onesize[0].slovak
                             var hungarian = data.tesco_onesize[0].hungarian
-                            svgDoc.getElementById("small_translation1").innerHTML = polish+" • "+czech[0];
-                            svgDoc.getElementById("small_translation2").innerHTML =czech[1]+ " • "+slovak+ " • "+hungarian;
+                            svgDoc.getElementById("small_translation1").innerHTML = polish;
+                            //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
+                            //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
+                            svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.8, 257.061)");
+                            svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 31.3, 257.061)");
+                            svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 7.3, 264.061)");
+                            
+                            svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
+                            svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
                         }
                         else
                         {
-                            svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                            svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                            svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                            svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+                            if(val.uk_size == "3-6M")
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                            }
+                            else if(val.uk_size == "6-9M")
+                            {
 
-                            svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                            svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                            svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                            svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                            svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                            }
+                            else if(val.uk_size == "9-12M")
+                            {
+
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                            }
+                            else if(val.uk_size == "12-18M")
+                            {
+
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
+                            }
+                            else if(val.uk_size == "18-24M")
+                            {
+
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
+                            }
+                            else if(val.uk_size == "1-2 years" || val.uk_size == "2-3 years" || val.uk_size == "3-4 years" || val.uk_size == "4-5 years" || val.uk_size == "5-6 years" || val.uk_size == "6-7 years" || val.uk_size == "7-8 years" || val.uk_size == "8-9 years" || val.uk_size == "9-10 years")
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 19.8656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 259.591)");
+                            }
+                            else if(val.uk_size == "10-11 years" || val.uk_size == "11-12 years" || val.uk_size == "12-13 years" || val.uk_size == "13-14 years" || val.uk_size == "14-15 years" || val.uk_size == "15-16 years")
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 19.8656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 52.3656, 259.591)");
+                            }
+                            else
+                            {
+                                svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                                svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                                svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                                svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+    
+                                svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                                svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                                svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+    
+                                svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                            }
+                            // svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+    
+                            //     svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+                            //     svgDoc.getElementById("uk_size").innerHTML = "9-10 years";
+                            //     svgDoc.getElementById("ce_size").innerHTML = "9-10 years";
+    
+                            //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+    
+                            //     svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+    
+                            //     svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 19.8656, 259.591)");
+    
+                            //     svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 52.3656, 259.591)");
                         }
                         svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
                         var country_of_origin_text = JSON.parse(val.country_of_origin_text)
@@ -1685,7 +1927,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     })
 
                     var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan  x="2" y="0">'+country_of_origin_text[0].polish+'</tspan><tspan   x="2.53" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2.53" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="2" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
+                    svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
 
                     // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
                     // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
@@ -1710,16 +1952,16 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        en_care_instructions += " / " + additional_care_text_2[0].english
+                        en_care_instructions += "/" + additional_care_text_2[0].english
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        en_care_instructions += " / " + additional_care_text_3[0].english
+                        en_care_instructions += "/" + additional_care_text_3[0].english
                     }
                     
                     if(degree >= 30)
                     {
-                        en_care_instructions += " / " + data.degree_text[0].english
+                        en_care_instructions += "/" + data.degree_text[0].english
                     }
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
@@ -1730,7 +1972,17 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     $ind=1;
                     console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
-                        chunks += '<tspan  x="12" y="'+$y+'">'+chunk_val+'</tspan>';
+                        if(chunk_val.charAt(0) == "/")
+                        {
+                            var new_chunk_val = chunk_val.replaceAll("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                            chunks += '<tspan>'+new_chunk_val+'</tspan>';
+                        }
+                        else
+                        {
+                            var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            chunks += '<tspan x="12" y="'+$y+'">'+new_chunk_val+'</tspan>';
+                        }
+                        //chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
                         if($chunk_str.length == $ind)
                         {
                             $y+=6;
@@ -1753,11 +2005,11 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         var garment_component_text = JSON.parse(comp_val.garment_component_text)
                         if(index != 0)
                         {
-                            en_garment_component += " / " +garment_component_text[0].english;
-                            pl_garment_component += " / " +garment_component_text[0].polish;
-                            cz_garment_component += " / " +garment_component_text[0].czech;
-                            sk_garment_component += " / " +garment_component_text[0].slovak;
-                            hu_garment_component += " / " +garment_component_text[0].hungarian;
+                            en_garment_component += "/" +garment_component_text[0].english;
+                            pl_garment_component += "/" +garment_component_text[0].polish;
+                            cz_garment_component += "/" +garment_component_text[0].czech;
+                            sk_garment_component += "/" +garment_component_text[0].slovak;
+                            hu_garment_component += "/" +garment_component_text[0].hungarian;
                         }
                         else
                         {
@@ -1770,15 +2022,15 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         
                         $(comp_val.fibre).each(function(index,fibre_val){
                             var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
-                            en_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].english;
+                            en_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].english;
 
-                            pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].polish;
+                            pl_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].polish;
 
-                            cz_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].czech;
+                            cz_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].czech;
 
-                            sk_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].slovak;
+                            sk_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].slovak;
 
-                            hu_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].hungarian;
+                            hu_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].hungarian;
                         });
                     })
 
@@ -1790,70 +2042,72 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                     if(exclusive_trims_text != "" && exclusive_trims_text != null)
                     {
-                        en_garment_component += " / " + exclusive_trims_text[0].english
-                        pl_garment_component += " / " + exclusive_trims_text[0].polish
-                        cz_garment_component += " / " + exclusive_trims_text[0].czech
-                        sk_garment_component += " / " + exclusive_trims_text[0].slovak
-                        hu_garment_component += " / " + exclusive_trims_text[0].hungarian
+                        en_garment_component += "/" + exclusive_trims_text[0].english
+                        pl_garment_component += "/" + exclusive_trims_text[0].polish
+                        cz_garment_component += "/" + exclusive_trims_text[0].czech
+                        sk_garment_component += "/" + exclusive_trims_text[0].slovak
+                        hu_garment_component += "/" + exclusive_trims_text[0].hungarian
                     }
 
                     if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
                     {
-                        en_garment_component += " / " + contains_non_textile_part_text[0].english
-                        pl_garment_component += " / " + contains_non_textile_part_text[0].polish
-                        cz_garment_component += " / " + contains_non_textile_part_text[0].czech
-                        sk_garment_component += " / " + contains_non_textile_part_text[0].slovak
-                        hu_garment_component += " / " + contains_non_textile_part_text[0].hungarian
+                        en_garment_component += "/" + contains_non_textile_part_text[0].english
+                        pl_garment_component += "/" + contains_non_textile_part_text[0].polish
+                        cz_garment_component += "/" + contains_non_textile_part_text[0].czech
+                        sk_garment_component += "/" + contains_non_textile_part_text[0].slovak
+                        hu_garment_component += "/" + contains_non_textile_part_text[0].hungarian
                     }
 
                     if(kids_warning_text != "" && kids_warning_text != null)
                     {
-                        en_garment_component += " / " + kids_warning_text[0].english
-                        pl_garment_component += " / " + kids_warning_text[0].polish
-                        cz_garment_component += " / " + kids_warning_text[0].czech
-                        sk_garment_component += " / " + kids_warning_text[0].slovak
-                        hu_garment_component += " / " + kids_warning_text[0].hungarian
+                        en_garment_component += "/" + kids_warning_text[0].english
+                        pl_garment_component += "/" + kids_warning_text[0].polish
+                        cz_garment_component += "/" + kids_warning_text[0].czech
+                        sk_garment_component += "/" + kids_warning_text[0].slovak
+                        hu_garment_component += "/" + kids_warning_text[0].hungarian
                     }
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
                         console.log("Polish : "+additional_care_text_1[0].polish)
-                        pl_garment_component += " / " + additional_care_text_1[0].polish
-                        cz_garment_component += " / " + additional_care_text_1[0].czech
-                        sk_garment_component += " / " + additional_care_text_1[0].slovak
-                        hu_garment_component += " / " + additional_care_text_1[0].hungarian
+                        pl_garment_component += "/" + additional_care_text_1[0].polish
+                        cz_garment_component += "/" + additional_care_text_1[0].czech
+                        sk_garment_component += "/" + additional_care_text_1[0].slovak
+                        hu_garment_component += "/" + additional_care_text_1[0].hungarian
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        pl_garment_component += " / " + additional_care_text_2[0].polish
-                        cz_garment_component += " / " + additional_care_text_2[0].czech
-                        sk_garment_component += " / " + additional_care_text_2[0].slovak
-                        hu_garment_component += " / " + additional_care_text_2[0].hungarian
+                        pl_garment_component += "/" + additional_care_text_2[0].polish
+                        cz_garment_component += "/" + additional_care_text_2[0].czech
+                        sk_garment_component += "/" + additional_care_text_2[0].slovak
+                        hu_garment_component += "/" + additional_care_text_2[0].hungarian
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        pl_garment_component += " / " + additional_care_text_3[0].polish
-                        cz_garment_component += " / " + additional_care_text_3[0].czech
-                        sk_garment_component += " / " + additional_care_text_3[0].slovak
-                        hu_garment_component += " / " + additional_care_text_3[0].hungarian
+                        pl_garment_component += "/" + additional_care_text_3[0].polish
+                        cz_garment_component += "/" + additional_care_text_3[0].czech
+                        sk_garment_component += "/" + additional_care_text_3[0].slovak
+                        hu_garment_component += "/" + additional_care_text_3[0].hungarian
+					}
+					
+					if(degree >= 30)
+                    {
+                        pl_garment_component += "/" + data.degree_text[0].polish
+                        cz_garment_component += "/" + data.degree_text[0].czech
+                        sk_garment_component += "/" + data.degree_text[0].slovak
+                        hu_garment_component += "/" + data.degree_text[0].hungarian
                     }
 
                     if(part_of_set_text != "" && part_of_set_text != null)
                     {
-                        en_garment_component += " / " + part_of_set_text[0].english
-                        pl_garment_component += " / " + part_of_set_text[0].polish
-                        cz_garment_component += " / " + part_of_set_text[0].czech
-                        sk_garment_component += " / " + part_of_set_text[0].slovak
-                        hu_garment_component += " / " + part_of_set_text[0].hungarian
+                        en_garment_component += "/" + part_of_set_text[0].english
+                        pl_garment_component += "/" + part_of_set_text[0].polish
+                        cz_garment_component += "/" + part_of_set_text[0].czech
+                        sk_garment_component += "/" + part_of_set_text[0].slovak
+                        hu_garment_component += "/" + part_of_set_text[0].hungarian
                     }
 
-                    if(degree >= 30)
-                    {
-                        pl_garment_component += " / " + data.degree_text[0].polish
-                        cz_garment_component += " / " + data.degree_text[0].czech
-                        sk_garment_component += " / " + data.degree_text[0].slovak
-                        hu_garment_component += " / " + data.degree_text[0].hungarian
-                    }
+                    
 
                     $garment_str = chunkSubstr(en_garment_component, 28).split(/\r?\n/);
                     $pl_garment_str = chunkSubstr(pl_garment_component, 28).split(/\r?\n/);
@@ -1866,7 +2120,17 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     $ind_en=1;
                     $z=0;
                     $($garment_str).each(function(index,garment_val){
-                        chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
+                        if(garment_val.charAt(0) == "/")
+                        {
+                            var new_garment_val = garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                            chunks += '<tspan>'+new_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            chunks += '<tspan x="12" y="'+$y+'">'+new_garment_val+'</tspan>';
+                        }
+                        //chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
                         if($garment_str.length == $ind_en)
                         {
                             $y+=6;
@@ -1878,26 +2142,26 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         $ind_en++;
                     })
 
-                    chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
-                    var new_chunks = '';
-                    $($pl_garment_str).each(function(index,pl_garment_val){
-                        if($y == 96)
-                        {
-                            $z=0;
-                        }
+                    // chunks += '<tspan x="0" y="'+$y+'">PL</tspan>';
+                     var new_chunks = '';
+                    // $($pl_garment_str).each(function(index,pl_garment_val){
+                    //     if($y == 96)
+                    //     {
+                    //         $z=0;
+                    //     }
 
-                        if($y > 96)
-                        {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
-                        }
-                        else
-                        {
-                            chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
-                        }
+                    //     if($y > 96)
+                    //     {
+                    //         new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
+                    //     }
+                    //     else
+                    //     {
+                    //         chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
+                    //     }
                         
-                        $y+=6;
-                        $z+=6;
-                    })
+                    //     $y+=6;
+                    //     $z+=6;
+                    // })
 
                     if($y > 96)
                     {
@@ -1916,11 +2180,31 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                         if($y > 96)
                         {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
+                            if(cz_garment_val.charAt(0) == "/")
+                            {
+                                var new_cz_garment_val = cz_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
+                                new_chunks += '<tspan>'+new_cz_garment_val+'</tspan>';
+                            }
+                            else
+                            {
+                                var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                new_chunks += '<tspan x="12" y="'+$z+'">'+new_cz_garment_val+'</tspan>';
+                            }
+                            //new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
                         }
                         else
                         {
-                            chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';   
+                            if(cz_garment_val.charAt(0) == "/")
+                            {
+                                var new_cz_garment_val = cz_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                                chunks += '<tspan>'+new_cz_garment_val+'</tspan>'; 
+                            }
+                            else
+                            {
+                                var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                chunks += '<tspan x="12" y="'+$y+'">'+new_cz_garment_val+'</tspan>'; 
+                            }
+                            //chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';     
                         }
                         
                         $y+=6;
@@ -1944,11 +2228,31 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                         if($y > 96)
                         {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
+							if(sk_garment_val.charAt(0) == "/")
+                            {
+                                var new_sk_garment_val = sk_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
+                                new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
+                            }
+                            else
+                            {
+                                var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
+                            }
+                            //new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
                         }
                         else
                         {
-                            chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';   
+							if(sk_garment_val.charAt(0) == "/")
+                            {
+                                var new_sk_garment_val = sk_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                                chunks += '<tspan>'+new_sk_garment_val+'</tspan>'; 
+                            }
+                            else
+                            {
+                                var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                chunks += '<tspan x="12" y="'+$y+'">'+new_sk_garment_val+'</tspan>'; 
+                            }
+                            //chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';     
                         }
                         
                         $y+=6;
@@ -1972,11 +2276,31 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                         if($y > 96)
                         {
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
+                            if(hu_garment_val.charAt(0) == "/")
+                            {
+                                var new_hu_garment_val = hu_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
+                                new_chunks += '<tspan>'+new_hu_garment_val+'</tspan>';
+                            }
+                            else
+                            {
+                                var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
+                            }
+                            //new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
                         }
                         else
                         {
-                            chunks += '<tspan x="12" y="'+$y+'">'+hu_garment_val+'</tspan>';   
+                            if(hu_garment_val.charAt(0) == "/")
+                            {
+                                var new_hu_garment_val = hu_garment_val.replaceAll("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                                chunks += '<tspan>'+new_hu_garment_val+'</tspan>'; 
+                            }
+                            else
+                            {
+                                var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                                chunks += '<tspan x="12" y="'+$y+'">'+new_hu_garment_val+'</tspan>'; 
+                            }
+                            //chunks += '<tspan x="12" y="'+$y+'">'+hu_garment_val+'</tspan>';      
                         }
                         
                         $y+=6;
