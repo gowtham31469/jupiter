@@ -505,9 +505,9 @@ class OrderManagementCntrl extends Controller
                   return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
-              case 'TCL 4 (QR), TSL 3 (QR) & TSL 2':
+              case 'TCL 4 (QR), TSL 3 & TSL 2':
                 if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 (QR), TSL 3 (QR) & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 (QR), TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
               default:
