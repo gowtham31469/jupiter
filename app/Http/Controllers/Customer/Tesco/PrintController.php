@@ -376,7 +376,7 @@ class PrintController extends Controller
 					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
 					if($qr_check == $qr_code[$qr_count]->qr_code)
 					{
-						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 88, 65, 17, 17, $style, 'N');
+						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 88, $qr_y-1.5, 17, 17, $style, 'N');
 		 			}
 				}
 				else if($name == "TCL2-sticker")
@@ -385,7 +385,7 @@ class PrintController extends Controller
 					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
 					if($qr_check == $qr_code[$qr_count]->qr_code)
 					{
-						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89.5, 69, 17, 17, $style, 'N');
+						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89.5, $qr_y+1.5, 17, 17, $style, 'N');
 					}
 				}
 				else if($name == "TCL4-sticker")
@@ -412,7 +412,7 @@ class PrintController extends Controller
 					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
 					if($qr_check == $qr_code[$qr_count]->qr_code)
 					{
-						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, 66, 17, 17, $style, 'N');
+						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
 					}
 				}
 				else if($name == "THL3-sticker")
