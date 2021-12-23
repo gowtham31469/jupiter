@@ -428,7 +428,7 @@ function tescoOrders(callback) {
                                         "parent_id": 2,
                                         "children": [{
                                             "id": "26,27,21",
-                                            "text": "TCL 1 (QR) , TCL 2 (QR) & TSL 1",
+                                            "text": "TCL 1 (QR), TCL 2 (QR) & TSL 1",
                                             "parent_id": "3",
                                             "type": "ratio",
                                             "zone": "CE",
