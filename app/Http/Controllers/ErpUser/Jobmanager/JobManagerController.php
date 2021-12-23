@@ -59,10 +59,10 @@ class JobManagerController extends Controller
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
 		// Get Erp status table id for 'Moved To JC Queue' status.
-		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Moved To JC Queue')->value('id');
+		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'Moved To JC Queue')->value('id');
 		 
 		// Get order status table id for 'Order Approved' status.
-		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'ilike', 'Order Approved')->value('id');
+		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'Order Approved')->value('id');
 
 		$this->tesco_material_obj = new TescoMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
@@ -88,7 +88,7 @@ class JobManagerController extends Controller
 			{
 				$company_id   = DB::table('company')
 								->select('company.*')
-								->where('company.id', '=', $companies[0]->company)
+								->where('company.id', $companies[0]->company)
 								->first();
 			}
 			else
@@ -138,7 +138,7 @@ class JobManagerController extends Controller
 				}
 				$i++;
 			}
-				// dd($new_orders);
+			
 			$orders_erp = array();
 			foreach($new_orders as $key => $values)
 			{
@@ -235,18 +235,37 @@ class JobManagerController extends Controller
 				}
 				
 			}
-			
-			/**
-			 * Dropdown values
-			 */
-			$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
-			$erp_finish_type = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
-			$erp_machines = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
-			$erp_teeth_no = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
+
+			$erp_dispatch_mode = DB::table('erp_dispatch_mode')
+			->where('is_enabled', true)
+			->pluck('disp_mode', 'id')
+			->all();
+			$erp_finish_type = DB::table('erp_finish_type')
+			->where('is_enabled', true)
+			->pluck('finish_type', 'id')
+			->all();
+			$erp_machines = DB::table('erp_machines')
+			->where('is_enabled', true)
+			->pluck('machine', 'id')
+			->all();
+			$erp_teeth_no = DB::table('erp_teeth_no')
+			->where('is_enabled', true)
+			->pluck('teeth_no', 'id')
+			->all();
 
 			asort($orders_erp);
-			
-			return view('erp.Jobmanager.jobmanager', ['orders' => $orders_erp, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);
+
+			return view(
+				'erp.Jobmanager.jobmanager',
+				[
+					'orders' => $orders_erp,
+					'companies' => $companies,
+					'disp_modes' => $erp_dispatch_mode,
+					'finish_types' => $erp_finish_type,
+					'machines' => $erp_machines,
+					'teeth_nos' => $erp_teeth_no
+				]
+			);
 		}
 		catch (\Exception $e)
 		{
@@ -262,13 +281,13 @@ class JobManagerController extends Controller
 	public function getOrderDetails(Request $request)
 	{
 
-
 		$ref_name = $request['ref_name'];
 		$style_no = $request['style_no'];
 		$buyer_no = $request['buyer_no'];
 		$id = $request['id'];
 		$order_type = $request['order_type'];
 		$created_at = $request['created_at'];
+		$table_name_print = $request['table_name_print'];
 
 		if($request->buyer=="orchestra")
 		{
@@ -292,7 +311,6 @@ class JobManagerController extends Controller
 							->select('*')
 							->get();
 
-							// dd($order_details);
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
 				
@@ -311,11 +329,6 @@ class JobManagerController extends Controller
 			{	
 
 				case 'orchestra_wash_care_label_orders' :
-
-					// $res= OrchestraWashCare::with(['washcarelabelQty' => function($type) use($parentTable_id){
-					// $type->where('orchestra_wash_care_label_orders_qty.owcl_id',$parentTable_id);
-					// }])
-					// ->get();
 
 						$res = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
 						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size')->select(DB::raw('distinct on ("orchestra_wash_care_label_orders_qty".uvc_tco) "uvc_tco"'),'orchestra_wash_care_label_orders_qty.*','osc.*');
@@ -340,23 +353,11 @@ class JobManagerController extends Controller
 						$res->cofreet_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->cofreet_symbols;
 						$res->astm_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->astms_symbol;
 
-
-						// $res->age_group = OrchestraAgeGroup::where('id',$res->group_id)->first()->color;
 						});
 
-					// dd($res);
 				break;
 
-
 				case 'orchestra_hang_tag_orders':
-							   
-					// $res  = OrchestraHangTag::with(array('hangtagqty' => function($query) 
-					// {
-					// $query->leftJoin('orchestra_size_chart as chart', 'chart.age', 'orchestra_hang_tag_orders_qty.size');
-					// }))
-					// ->where('orchestra_hang_tag_orders.id',$parentTable_id)
-					// ->get();
-
 
 					$res = OrchestraHangTag::with(array('hangtagqty' => function($query) {
 								$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_hang_tag_orders_qty.size')
@@ -552,12 +553,165 @@ class JobManagerController extends Controller
 				break;
 			}
 	
-			// dd($res);
 		return response()->json(['error'=> false,'order_details' =>$res],200);
 		}
 
 
 		else{
+			if($table_name_print == "tesco_washcare_orders")
+			{
+				$order_details  = 	DB::table('erp_order_details')
+									->where('erp_order_details.style_no',$style_no)
+									->where('erp_order_details.erp_order_id',$id)
+									->where('erp_order_details.reference_name',$ref_name)
+									->where('erp_order_details.buyer_po_number',$buyer_no)
+									->where('erp_order_details.order_type',$order_type)
+									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.order_status_id','!=',3)
+									->where('erp_order_details.deleted_at', null)
+									->orderBy('erp_order_details.order_qnty_table_id', 'asc')
+									->select('*')
+									->get();
+									if(sizeof($order_details) > 0)
+									{
+										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
+
+										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
+										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
+			
+										foreach($order_details as $value)
+										{
+											$order_details_omp  = 	DB::table($value->order_qnty_table_name)
+																	->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
+																	->where($value->order_qnty_table_name.'.id',$value->order_qnty_table_id)
+																	->select('*')
+																	->get();
+											
+											$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
+											$order_id  = "washcare_order_id";
+
+
+											$component  = 	DB::table('tesco_washcare_orders_component_mapping')
+																					->where('washcare_order_id',$order_details_omp{0}->washcare_order_id)
+																					->select('*')
+																					->get();
+											foreach($component as $comp_val)
+											{
+													$fibre =  DB::table('tesco_washcare_orders_component_fibre_mapping')
+																					->where('washcare_component_id',$comp_val->id)
+																					->select('*')
+																					->get();
+													$comp_val->fibre=$fibre;
+													
+											}
+
+											$degree_text  = DB::table('tesco_care_additional_instructions')
+																			->where('english','UNLESS IT’S DIRTY WASH AT 30º')
+																			->select('*')
+																			->get();
+
+
+
+								
+											$order_omp  = 	DB::table($order_table)
+																->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
+																->join('tesco_care_symbols as washing',$order_table.'.wash_symbol_id', 'washing.id')
+                                ->join('tesco_care_symbols as whitening',$order_table.'.bleach_symbol_id', 'whitening.id')
+                                ->join('tesco_care_symbols as dry',$order_table.'.dry_symbol_id', 'dry.id')
+                                ->join('tesco_care_symbols as iron',$order_table.'.ironing_symbol_id', 'iron.id')
+                                ->join('tesco_care_symbols as cleaning',$order_table.'.dryclean_symbol_id', 'cleaning.id')
+																	->where($order_table.'.id',$order_details_omp[0]->$order_id)
+																	->select($order_table.'.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+																	->get();
+
+																	$value->washcare_order_id=$order_details_omp{0}->washcare_order_id;
+																	$value->size_id=$order_details_omp{0}->size_id;
+																	$value->uk_ean=$order_details_omp{0}->uk_ean;
+																	$value->ce_ean=$order_details_omp{0}->ce_ean;
+																	$value->quantity=$order_details_omp{0}->quantity;
+																	$value->selected_secondary_sizes=$order_details_omp{0}->selected_secondary_sizes;
+																	$value->uk_size=$order_details_omp{0}->uk_size;
+																	$value->ce_size=$order_details_omp{0}->ce_size;
+
+											
+																	$value->po_number=$order_omp{0}->po_number;
+																	$value->uk_style_ref=$order_omp{0}->uk_style_ref;
+																	$value->ce_style_ref=$order_omp{0}->ce_style_ref;
+																	$value->eqos_site_code=$order_omp{0}->eqos_site_code;
+																	$value->fabric_batch_code=$order_omp{0}->fabric_batch_code;
+																	$value->leather_suede_code=$order_omp{0}->leather_suede_code;
+																	$value->tog=$order_omp{0}->tog;
+																	$value->potps_id=$order_omp{0}->potps_id;
+
+																	if($order_omp{0}->potps_id != null)
+																	{
+																			$part_name  = 	DB::table('part_of_two_piece_set')
+																											->where('id',$order_omp{0}->potps_id)
+																											->select('*')
+																											->get();
+																			$value->part_name = $part_name{0}->name;
+																	}
+																	else
+																	{
+																			$value->part_name = "";
+																	}
+																	
+																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
+																	$value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
+																	$value->internal_reference=$order_omp{0}->internal_reference;
+																	$value->customer_name=$customer_name{0}->short_name;
+																	$value->country_of_origin_text=$order_omp{0}->country_of_origin_text;
+																	$value->wash_iso=$order_omp{0}->wash_iso;
+																	$value->wash_astm=$order_omp{0}->wash_astm;
+																	$value->whit_iso=$order_omp{0}->whit_iso;
+																	$value->whit_astm=$order_omp{0}->whit_astm;
+																	$value->dry_iso=$order_omp{0}->dry_iso;
+																	$value->dry_astm=$order_omp{0}->dry_astm;
+																	$value->iron_iso=$order_omp{0}->iron_iso;
+																	$value->iron_astm=$order_omp{0}->iron_astm;
+																	$value->clean_iso=$order_omp{0}->clean_iso;
+																	$value->clean_astm=$order_omp{0}->clean_astm;
+																	$value->degree=$order_omp{0}->degree;
+																	$value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
+																	$value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
+																	$value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
+																	$value->kids_warning_text=$order_omp{0}->kids_warning_text;
+																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
+																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
+																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+											
+										}
+									}
+									else
+									{
+										$tesco_item_master = array();
+									}
+
+									$tesco_tiny  = 	DB::table('tesco_translation')
+																		->where('id',1)
+																		->select('*')
+																		->get();
+									$tesco_nb  = 	DB::table('tesco_translation')
+																		->where('id',2)
+																		->select('*')
+																		->get();
+									$tesco_up1  = 	DB::table('tesco_translation')
+																		->where('id',3)
+																		->select('*')
+																		->get();
+									$tesco_up3  = 	DB::table('tesco_translation')
+																		->where('id',4)
+																		->select('*')
+																		->get();
+									$tesco_onesize  = 	DB::table('tesco_translation')
+																		->where('id',5)
+																		->select('*')
+																		->get();
+																		
+									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master,'component'=>$component,'degree_text'=>$degree_text,'tesco_tiny'=>$tesco_tiny,'tesco_nb'=>$tesco_nb,'tesco_up1'=>$tesco_up1,'tesco_up3'=>$tesco_up3,'tesco_onesize'=>$tesco_onesize],200);
+			}
+			else
+			{
 				$order_details  = 	DB::table('erp_order_details')
 									->where('erp_order_details.style_no',$style_no)
 									->where('erp_order_details.erp_order_id',$id)
@@ -570,12 +724,29 @@ class JobManagerController extends Controller
 									->orderBy('erp_order_details.id', 'desc')
 									->select('*')
 									->get();
+									$split_count=0;
 									if(sizeof($order_details) > 0)
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 			
 										foreach($order_details as $value)
 										{
+											if($ref_name == "TSL 2")
+											{
+													if($value->order_quantity > 0)
+													{
+															$split_count++;
+													}
+													
+											}
+											else if($ref_name == "TSL 3")
+											{
+													if($value->order_quantity > 0)
+													{
+															$split_count++;
+													}
+											}
+											
 											$order_details_omp  = 	DB::table($value->order_qnty_table_name)
 																	->where('id',$value->order_qnty_table_id)
 																	->select('*')
@@ -621,8 +792,8 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master = array();
 									}
-	
-		return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master],200);
+									return response()->json(['error'=> true,'order_details' =>$order_details,'tesco_item_master' =>$tesco_item_master,'split_count'=>$split_count],200);
+			}
 		}
 	
 		
@@ -643,9 +814,6 @@ class JobManagerController extends Controller
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
 				$order_type         = explode(',', $request['order_type_array']);
 				$uuid               = explode(',', $request['uuid_array']);
-				$buyers_array       = array();
-				$customers_array    = array();
-				$company_array      = array();
 				$order_dt_array     = array();
 				$delivery_dt_array  = array();
 				$style_array        = array();
@@ -670,198 +838,177 @@ class JobManagerController extends Controller
 				$color_code         = array();
 				$tint_color         = array();
 
-				$item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
-
 				/** Get erp order details table ids from erp orders table id */
-				foreach($erp_orders_ids as $row => $erp_orders_id)
-				{
+				foreach ($erp_orders_ids as $row => $erp_orders_id) {
 					// buyer po number is not mandatory for orchestra.
 					// So splitting query using conditional statements.
-					$order_detail_id_array = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-											  ->where('erp_order_details.order_type', $order_type[$row])
-											  ->where('erp_order_details.uuid', $uuid[$row])
-											  ->where('erp_order_details.status', '=', $this->erp_jc_status_id)
-											  ->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
-											  ->where('erp_order_details.reference_name', $selected_ref_arrays[$row]);
-					if($buyer_pos[$row] != "") {
+					$order_detail_id_array = ErpOrderDetails::where([
+						'erp_order_details.erp_order_id' => $erp_orders_id,
+						'erp_order_details.order_type' => $order_type[$row],
+						'erp_order_details.uuid' => $uuid[$row],
+						'erp_order_details.status' => $this->erp_jc_status_id,
+						'erp_order_details.order_status_id' => $this->order_ap_status_id,
+						'erp_order_details.reference_name' => $selected_ref_arrays[$row]
+					]);
+					if ($buyer_pos[$row] != "") {
 						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
-									   ->pluck('erp_order_details.id')->all();
+							->pluck('erp_order_details.id')->all();
 					} else {
 						$order_detail_id_array = $order_detail_id_array->pluck('erp_order_details.id')->all();
 					}
-					
-					$order_detail_ids = array_unique(array_merge($order_detail_ids,$order_detail_id_array));
+
+					$order_detail_ids = array_unique(array_merge($order_detail_ids, $order_detail_id_array));
 				}
 				sort($order_detail_ids);
-				foreach($order_detail_ids as $key => $order_detail_id)
-				{
-					$order_details = Erp::select('erp_orders.*', 'erp_order_details.*')
-										->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-										->where('erp_order_details.id', '=', $order_detail_id)
-										->first();
-					$this->buyer_name = Buyer::where('id', '=', $order_details->buyer_id)->value('buyer_name');
-
-					!in_array($order_details->buyer_id, $buyers_array)?array_push($buyers_array,$order_details->buyer_id):$buyers_array;
-
-					!in_array($order_details->customer_id, $customers_array)?array_push($customers_array,$order_details->customer_id):$customers_array;
-
-					!in_array($order_details->company_id, $company_array)?array_push($company_array,$order_details->company_id):$company_array;
-
-					!in_array($order_details->created_at, $order_dt_array)?array_push($order_dt_array,$order_details->created_at):$order_dt_array;
-					
-					!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array)?array_push($delivery_dt_array,Carbon::parse($order_details->delivery_date)->format('d-m-Y')):$delivery_dt_array;
-
-					!in_array($order_details->style_no, $style_array)?array_push($style_array,$order_details->style_no):$style_array;
-
-					!in_array($order_details->order_type, $ordertype_array)?array_push($ordertype_array,$order_details->order_type):$ordertype_array;
-
-					!in_array($order_details->template_id, $temp_id_array)?array_push($temp_id_array,$order_details->template_id):$temp_id_array;
-
-					!in_array($order_details->reference_name, $distinct_ref_array)?array_push($distinct_ref_array,$order_details->reference_name):$distinct_ref_array;
-
-					!in_array($order_details->po_no, $customer_po_array)?array_push($customer_po_array,$order_details->po_no):$customer_po_array;
-
-					/** Create separate ratio/single templates array  */
-					if($order_details->template_type == "ratio")
-					{
-						if($this->buyer_name === "Tesco") {
-							$query_result = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.ratio_pack_type', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid');
-						} else {
-							$query_result = ErpOrderDetails::select('erp_order_details.order_quantity', $order_details->order_qnty_table_name.'.id as qty_table_id',  'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid');
-						}
-						$ratio_templates[$order_details->reference_name][] = $query_result->join($order_details->order_qnty_table_name, 'erp_order_details.order_qnty_table_id', $order_details->order_qnty_table_name.'.id')
-							->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
-							->where('erp_order_details.id', '=', $order_detail_id)
-							->first();
-					}
-					else
-					{
-						$single_temp_data = Erp::select('erp_order_details.ocn_number', 'erp_orders.erp_id', 'erp_order_details.id as erp_order_details_id', 'erp_orders.id as erp_table_id', 'erp_order_details.size', 'erp_order_details.order_quantity', 'erp_order_details.reference_name', 'erp_order_details.template_id', 'erp_order_details.buyer_po_number', 'erp_order_details.order_type', 'erp_order_details.uuid')
-									->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-									->where('erp_order_details.id', '=', $order_detail_id)
-									->first();
-
-						// to differenciate reorder and repeatorder having same values
-						$unique_id = $single_temp_data->uuid;
-
-						$erp_id_array[$single_temp_data->reference_name][] = $single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id;
-
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['ocn_number'] = $single_temp_data->ocn_number;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['erp_id'] = $single_temp_data->erp_id;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['buyer_po_number'] = $single_temp_data->buyer_po_number;
-						$single_templates[$single_temp_data->reference_name]['order_data'][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]['template_id'] = $single_temp_data->template_id;
-						$single_templates[$single_temp_data->reference_name]['size'][$single_temp_data->size][$single_temp_data->erp_id.'-'.$single_temp_data->buyer_po_number.'-'.$single_temp_data->order_type.'-'.$unique_id]= $single_temp_data->order_quantity;
-					}
-
-					// Add color code and age group pantone color as tint color for orchestra
-					if($this->buyer_name === "Orchestra") {
-						// parse orchestra orders table and table id from quantity table name
-						$main_table     = str_replace("_qty","",$order_details->order_qnty_table_name);
-						$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-						$qnty_id        = '';
-						foreach (explode(' ', $result_str) as $word)
-						{
-						   $qnty_id .= strtolower($word[0]);
-						}
-						
-						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
-						->select($main_table.'.color_code', 'orchestra_age_group.pantone_color')
-						->join($main_table, $main_table.'.id', $order_details->order_qnty_table_name.'.'.$qnty_id.'_id')
-						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table.'.group_id')
-						->where($order_details->order_qnty_table_name.'.id', '=', $order_details->order_qnty_table_id)
-						->first();
-						
-						!in_array($orchestra_color_details->color_code, $color_code)?array_push($color_code,$orchestra_color_details->color_code):$color_code;
-						!in_array($orchestra_color_details->pantone_color, $tint_color)?array_push($tint_color,$orchestra_color_details->pantone_color):$tint_color;
-
-					} 
-					
-				}
+				
+				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
+				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+				->whereIn('erp_order_details.id', $order_detail_ids)
+				->get();
 
 				/** Same buyer or not validation */
-				$buyer_first_val = current($buyers_array);
-				foreach ($buyers_array as $val) 
-				{
-					if ($buyer_first_val !== $val) {
-						return response()->json(['error'=> true,'message' =>'Different Buyers Not Acceptable'],406);
-					} else {
-						$buyer = DB::table('buyers')->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')->where('id', '=', $buyer_first_val)->first();
-						/** Dynamic artwork template table and item master table (Based on buyer) */
-						$template_table    = $buyer->template_table;
-						$item_master_table = $buyer->item_master_table;
-					}
+				$buyer_id_list = $order_details_collection->pluck('buyer_id')->toArray();
+
+				if (count(array_unique($buyer_id_list)) === 1) {
+					$buyer = DB::table('buyers')
+					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
+					->where('id', $buyer_id_list[0])
+						->first();
+
+					$this->buyer_name = $buyer->buyer_name;
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
 				}
 
-				/** Unset unwanted values from buyers array */
-				unset($buyer->template_table);
-				unset($buyer->item_master_table);
-
 				/** Same customer or not validation */
-				$customer_first_val = current($customers_array);
-				foreach ($customers_array as $val) 
-				{
-					if ($customer_first_val !== $val) {
-						return response()->json(['error'=> true,'message' =>'Different Customers Not Acceptable'],406);
-					} else {
-					$customer = DB::table('customers')->select('short_name as customer_name', 'id as customer_id')->where('id', '=', $customer_first_val)->first();
-					}
+				$customer_id_list = $order_details_collection->pluck('customer_id')->toArray();
+
+				if (count(array_unique($customer_id_list)) === 1) {
+					$customer = DB::table('customers')
+					->select('short_name as customer_name', 'id as customer_id')
+					->where('id', $customer_id_list[0])
+						->first();
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
 				}
 
 				/** Same company or not validation */
-				$company_first_val = current($company_array);
-				foreach ($company_array as $val) 
-				{
-					if ($company_first_val !== $val) {
-						return response()->json(['error'=> true,'message' =>'Different Companies Not Acceptable'],406);
+				$company_id_list = $order_details_collection->pluck('company_id')->toArray();
+
+				if (count(array_unique($company_id_list)) === 1) {
+					$company = DB::table('company')
+					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
+					->where('id', $company_id_list[0])
+						->first();
+				} else {
+					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
+				}
+
+				foreach ($order_details_collection as $key => $order_details) {
+
+					!in_array($order_details->created_at, $order_dt_array, true) ? array_push($order_dt_array, $order_details->created_at) : $order_dt_array;
+
+					!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array, true) ? array_push($delivery_dt_array, Carbon::parse($order_details->delivery_date)->format('d-m-Y')) : $delivery_dt_array;
+
+					!in_array($order_details->style_no, $style_array, true) ? array_push($style_array, $order_details->style_no) : $style_array;
+
+					!in_array($order_details->order_type, $ordertype_array, true) ? array_push($ordertype_array, $order_details->order_type) : $ordertype_array;
+
+					!in_array($order_details->template_id, $temp_id_array, true) ? array_push($temp_id_array, $order_details->template_id) : $temp_id_array;
+
+					!in_array($order_details->reference_name, $distinct_ref_array, true) ? array_push($distinct_ref_array, $order_details->reference_name) : $distinct_ref_array;
+
+					!in_array($order_details->po_no, $customer_po_array, true) ? array_push($customer_po_array, $order_details->po_no) : $customer_po_array;
+
+					/** Create separate ratio/single templates array  */
+					if ($order_details->template_type == "ratio") {
+						if ($this->buyer_name === "Tesco") {
+							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
+							->select($order_details->order_qnty_table_name . '.id as qty_table_id', $order_details->order_qnty_table_name . '.ratio_pack_type')
+							->first();
+
+							$order_details->ratio_pack_type = $order_main_table_data->ratio_pack_type;
+						} else {
+							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
+							->select($order_details->order_qnty_table_name . '.id as qty_table_id')
+							->first();
+						}
+
+						$order_details->qty_table_id = $order_main_table_data->qty_table_id;
+
+						$ratio_templates[$order_details->reference_name][] = $order_details;
 					} else {
-					$company = DB::table('company')->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_first_val)->first();
+						// to differenciate reorder and repeatorder having same values
+						$unique_id = $order_details->uuid;
+
+						$erp_id_array[$order_details->reference_name][] = $order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id;
+
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['ocn_number'] = $order_details->ocn_number;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['erp_id'] = $order_details->erp_id;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
+						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['template_id'] = $order_details->template_id;
+						$single_templates[$order_details->reference_name]['size'][$order_details->size][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id] = $order_details->order_quantity;
+					}
+
+					// Add color code and age group pantone color as tint color for orchestra
+					if ($this->buyer_name === "Orchestra") {
+						// parse orchestra orders table and table id from quantity table name
+						$main_table     = str_replace("_qty", "", $order_details->order_qnty_table_name);
+						$result_str     = str_replace("_", " ", str_replace("_orders", "", $main_table));
+						$qnty_id        = '';
+						foreach (explode(' ', $result_str) as $word) {
+							$qnty_id .= strtolower($word[0]);
+						}
+
+						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
+						->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
+						->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
+						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
+						->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
+						->first();
+
+						!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
+						!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
 					}
 				}
-				
+
 				/** Get templates metadata details */
-				foreach($temp_id_array as $template_id)
-				{
-					$template_details = DB::table($template_table)
-												->select($template_table.'.color', $template_table.'.dimension_height as length', $template_table.'.dimension_width as width', $item_master_table.'.item_name as article', 'raw_material_master.material_name_employee as material',  $template_table.'.material_id')
-												->join($item_master_table, $item_master_table.'.id', $template_table.'.hierarchy_id')
-												->join('raw_material_master', 'raw_material_master.id', $template_table.'.material_id')
-												->where($template_table.'.item_id', '=', $template_id)
-												->first();
+				if (!empty($temp_id_array)) {
+					$template_details = DB::table($buyer->template_table)
+						->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
+						->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
+						->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
+						->whereIn($buyer->template_table . '.item_id', $temp_id_array)
+						->orderBy($buyer->template_table . '.id')
+						->get();
 
-					if($template_details)
-					{
-						!in_array($template_details->color, $print_color_array)?array_push($print_color_array,$template_details->color):$print_color_array;
+					foreach ($template_details as $template_detail) {
+						!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
 
-						!in_array($template_details->material, $material_array)?array_push($material_array,$template_details->material):$material_array;
+						!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
 
-						!in_array($template_details->article, $article_array)?array_push($article_array,$template_details->article):$article_array;
+						!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
 
-						!in_array($template_details->length, $length_array)?array_push($length_array,$template_details->length):$length_array;
+						!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
 
-						!in_array($template_details->width, $width_array)?array_push($width_array,$template_details->width):$width_array;
+						!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
 					}
-					else 
-					{
-						return response()->json(['error'=> true,'message' =>'Template details are missing, contact your admin.'],404);
-					}
+				} else {
+					return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
 				}
 				
 				/** Different size breakup value handling */
-				foreach($single_templates as $template => $template_item)
-				{
+				foreach ($single_templates as $template => $template_item) {
 					ksort($template_item['order_data']);
 					$po_count = sizeof($template_item['order_data']);
 
-					foreach($template_item['size'] as $size => $qty)
-					{
+					foreach ($template_item['size'] as $size => $qty) {
 						$size_count = sizeof($qty);
 
-						if($size_count < $po_count)
-						{
+						if ($size_count < $po_count) {
 							/** push 0 qty value for missing/additional size-breakup  */
-							for($i = 0; $i < sizeof($erp_id_array[$template]); $i++)
-							{
-								$qty = !array_key_exists($erp_id_array[$template][$i], $qty)?array_merge($qty , [$erp_id_array[$template][$i] => 0]):$qty;
+							for ($i = 0; $i < sizeof($erp_id_array[$template]); $i++) {
+								$qty = !array_key_exists($erp_id_array[$template][$i], $qty) ? array_merge($qty, [$erp_id_array[$template][$i] => 0]) : $qty;
 							}
 						}
 						ksort($qty);
@@ -873,28 +1020,28 @@ class JobManagerController extends Controller
 					/** Split template data array into small chunks (3 elements in each chunks) */
 					/** common data chunk */
 					$common_data_chunk = array_chunk($template_item['order_data'], 3);
-					foreach($common_data_chunk as $key => $data)
-					{
-						$final_chunk[$template.'_'.$key]['order_data'] = $data;
+					foreach ($common_data_chunk as $key => $data) {
+						$final_chunk[$template . '_' . $key]['order_data'] = $data;
 					}
 
-					foreach($template_item['size'] as $size => $qty)
-					{
+					foreach ($template_item['size'] as $size => $qty) {
 						/** size-quantity chunk */
 						$size_chunk =  array_chunk($qty, 3, true);
-						foreach($size_chunk as $key2 => $value2)
-						{
+						foreach ($size_chunk as $key2 => $value2) {
 							/** check if all the size values are 0 or not
 							 * remove following if condition if client wants zero qty size in final table.
-							*/
-							$is_size_qty_empty = array_filter($value2) != NULL?0:1;
-							if($is_size_qty_empty != 1)
-							{
-								$final_chunk[$template.'_'.$key2]['size'][$size.'_'.$key2] = $value2;
+							 */
+							$is_size_qty_empty = array_filter($value2) != NULL ? 0 : 1;
+							if ($is_size_qty_empty != 1) {
+								$final_chunk[$template . '_' . $key2]['size'][$size . '_' . $key2] = $value2;
 							}
 						}
 					}
 				}
+
+				/** Unset unwanted values from buyers array */
+				unset($buyer->template_table);
+				unset($buyer->item_master_table);
 
 				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
 				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
@@ -918,7 +1065,7 @@ class JobManagerController extends Controller
 				$template_data['ratio']            = $ratio_templates;
 				$template_data['single']           = $final_chunk;
 				$template_data['order_detail_ids'] = $order_detail_ids;
-				$template_data['customer_po_array']= $customer_po_array;
+				$template_data['customer_po_array'] = $customer_po_array;
 				$template_data['color_code']       = $color_code;
 				$template_data['tint_color']       = $tint_color;
 			} else {
@@ -993,8 +1140,8 @@ class JobManagerController extends Controller
 
 				if(isset($company_id) && isset($jobcard_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
 				{
-					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
+					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
 
 					$article_array = explode(', ', $article);
 					
@@ -1002,7 +1149,7 @@ class JobManagerController extends Controller
 					$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
 
 					// Get Erp status table id for 'Jobcard Created' status.
-					$erp_status_id = DB::table('erp_status')->where('status_name', 'ilike', 'Jobcard Created')->value('id');
+					$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
 					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
 						'work_order_id'          => $workorder_id,
 						'company_id'             => $company_id,
@@ -1093,12 +1240,12 @@ class JobManagerController extends Controller
 							/** Get updated data and update in history table */
 							// buyer po is optional for orchestra orders 
 							$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-							->where('erp_order_details.order_type', 'ilike', $order_types[$row])
-							->where('erp_order_details.uuid', 'ilike', $uuid[$row])
-							->where('erp_order_details.reference_name', 'ilike', $selected_ref[$row]);
+							->where('erp_order_details.order_type', $order_types[$row])
+							->where('erp_order_details.uuid', $uuid[$row])
+							->where('erp_order_details.reference_name', $selected_ref[$row]);
 
 							if($buyer_pos[$row] != "") {
-								$update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])
+								$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
 								->update([
 									'status'  => $erp_status_id,
 									'jc_number' => $workorder_id,
@@ -1106,7 +1253,7 @@ class JobManagerController extends Controller
 									'jc_created_date' => $current_timestamp
 								]);
 
-								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', 'ilike', $buyer_pos[$row])->get();
+								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
 							} else {
 								$update_query->update([
 									'status'  => $erp_status_id,
@@ -1119,7 +1266,7 @@ class JobManagerController extends Controller
 							}
 
 							$template       = 'Available';
-							$action_id  = DB::table('actions')->where('action', 'ilike', 'JC Created')->value('id');
+							$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
 							
 							foreach($jobcard_data as $key => $data)
 							{
@@ -1138,7 +1285,9 @@ class JobManagerController extends Controller
 									$country        = $order_details->zone;
 									$style_zone     = strtolower($country).'_style_ref';
 									$template_id    = $order_details->template_id;
-									$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
+									$order_table_array = explode("_", $main_table);
+									$tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
+									$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
 									
 									$material_name  = $template_level->material;
 									$material_sub   = $template_level->material_sub;
@@ -1152,7 +1301,7 @@ class JobManagerController extends Controller
 									}
 
 									$buyer_po       = $order_details->po_number;
-									$style          = $order_details->$style_zone;
+									$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
 									$ocn_number     = $order_details->ocn_number;
 									
 
@@ -1175,8 +1324,8 @@ class JobManagerController extends Controller
 									$template_data = DB::table('orchestra_item_master')
 													->where('orchestra_item_master.id', $template_id)
 													->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-									$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-									$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
+									$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
+									$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
 									
 									$material_ref   = $template_data->item_name;
 
@@ -1248,12 +1397,12 @@ class JobManagerController extends Controller
 							}
 						}
 
-						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', '=', $company_id)->first();
+						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
 
-						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id','=', $disp_mode)->value('disp_mode');
-						$erp_finish_type   = DB::table('erp_finish_type')->where('id','=', $finish_type)->value('finish_type');
-						$erp_machine       = DB::table('erp_machines')->where('id','=', $machine)->value('machine');
-						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id','=', $teeth_no)->value('teeth_no');
+						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
+						$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
+						$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
+						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
 
 						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
 						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
@@ -1403,6 +1552,7 @@ class JobManagerController extends Controller
 						$order_details = DB::table("erp_order_details")
 						->select('*')
 						->where('erp_order_id',$company_id)
+						->where('buyer_po_number',$request->tesco_po_number)
 						->where('order_qnty_table_name','tesco_tcl4_orders_quanty')
 						->get();
 
@@ -1425,6 +1575,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc =  "SINGLES BD STICKER";
 		  }
+			else if($request->name == "TCL5-sticker")
+			{
+					 $this->template_desc =  "SINGLES BD STICKER";
+			}
 		  else if($request->name == "THL1-sticker")
 		  {
 				$this->template_desc = "RATIO STICKER";
@@ -1518,13 +1672,13 @@ class JobManagerController extends Controller
 
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO: '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE: '.$style.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE: '.$created_date.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 127x80mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION: '.$tesco_description.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
 					</g>
 					</g>
 					</svg>';
@@ -1580,15 +1734,15 @@ class JobManagerController extends Controller
 					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO No : '.$tesco_po_number.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER: '.$customer_name.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO: '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY: </text>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY:</text>
 					</g>
 					</g>
 					</svg>';
@@ -1650,6 +1804,18 @@ class JobManagerController extends Controller
 								$yy += 100; 
 							}
 						}
+						else if($name == "TCL5-sticker")
+						{
+							$yy += 77;
+						}
+						else if($name == "TCL1-sticker")
+					  {
+							$yy += 77;
+						}
+						else if($name == "TCL2-sticker")
+					  {
+							$yy += 77;
+					  }
 						else
 						{
 							$yy += 100;  
@@ -1705,6 +1871,17 @@ class JobManagerController extends Controller
           if($qr_check == $qr_code[$qr_count])
           {
 						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
+					}
+				}
+				else if($name == "TCL5-sticker")
+				{
+					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
+
+					$lasttpn = substr($qr_code_check[3] , -3);
+					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					if($qr_check == $qr_code[$qr_count])
+					{
+						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
 					}
 				}
 				else if($name == "THL1-sticker")
@@ -1783,6 +1960,10 @@ class JobManagerController extends Controller
 		  {
 			   $this->template_desc = "SINGLE POLYBAG STICKER "; 
 		  }
+			else if($request->name == "TSL2-sticker")
+			{
+					 $this->template_desc = "SINGLE POLYBAG STICKER "; 
+			}
 		  $this->tesco_po_number = $request->tesco_po_number;
 		  $this->style = $request->style;
 		  $this->tesco_description = $request->tesco_description;
@@ -1868,12 +2049,12 @@ class JobManagerController extends Controller
 
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.' - '.$zone.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO: '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE: '.$style.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE: '.$created_date.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION: '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
 					</g>
 					</g>
@@ -1930,15 +2111,15 @@ class JobManagerController extends Controller
 					<path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER: '.$customer_name.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO: '.$tesco_po_number.'</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY: </text>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
 					</g>
 					<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY:</text>
 					</g>
 					</g>
 					</svg>';
@@ -2564,6 +2745,37 @@ class JobManagerController extends Controller
 		 
 		foreach($svgarr as $value)
 		{
+			if($name == "TCL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL2-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "TCL4-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+            }
+            else if($name == "TCL5-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL1-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[2];
+            }
+            else if($name == "THL3-sticker")
+            {
+               $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+               $barcode=$qr_code_check[1];
+						}
+						
 			 PDF::SetMargins(0, 0, 0, false);
 			 PDF::AddPage('L', array(80,127));
 			 $svg=urldecode($value);
@@ -2574,32 +2786,36 @@ class JobManagerController extends Controller
                  if($name != "THL3-sticker")
                  {
                      if($qr_flag == 1)
-					 {
-						 if($name == "THL1-sticker")
-                 		 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 else
-						 {
-							 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-						 }
-						 
-					 }
-					 else
-					 {
-						 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					 }
+											{
+												if($name == "THL1-sticker")
+																{
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else if($name == "TCL5-sticker")
+												{
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												else
+												{
+													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+												}
+												
+											}
+											else
+											{
+												PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+											}
                  }
                 else
                 {
                     if($qr_flag == 1)
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
-					else
-					{
-						PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-					}
+										{
+											PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'),-4, 53.5, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
+										else
+										{
+											PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), -2, 52, 75, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+										}
                 }
             }
 			
@@ -2644,6 +2860,17 @@ class JobManagerController extends Controller
 						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 8.5, 17, 17, $style, 'N');
 					}
 				}
+				else if($name == "TCL5-sticker")
+				{
+					 $qr_code_check=explode(',',$qr_code_check_fin[$i]);
+
+					 $lasttpn = substr($qr_code_check[3] , -3);
+					 $qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					 if($qr_check == $qr_code[$i])
+					 {
+						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
+					 }
+				}
 				else if($name == "THL1-sticker")
 				{
 					$qr_code_check=explode(',',$qr_code_check_fin[$i]);
@@ -2679,7 +2906,37 @@ class JobManagerController extends Controller
 			{
 				foreach($svgarr as $value)
 				{
-					unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+					if($name == "TCL1-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "TCL2-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "TCL4-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[1];
+					}
+					else if($name == "TCL5-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "THL1-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[2];
+					}
+					else if($name == "THL3-sticker")
+					{
+					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
+					$barcode_unlink=$qr_code_check[1];
+					}
+					unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
 					$j++;
 				}
 			}
@@ -2725,6 +2982,7 @@ class JobManagerController extends Controller
 	public function generateDivTescoSmall(Request $request)
 	{
 		$svgarr = explode(',_',$request->svg);
+		$bar_finarr = explode(',_',$request->bar_fin);
 		$name=$request->name;
 		$svg=urldecode($request->svg);
 		define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
@@ -2750,9 +3008,9 @@ class JobManagerController extends Controller
 			
 			 if($name == "TSL3-sticker")
 			 {
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 0.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 40.9, 2, 36.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			 else
 			 {
@@ -2764,9 +3022,9 @@ class JobManagerController extends Controller
 //				// finally we save the image as a new file
 //				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
 				 
-				 PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
-				PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
 			
@@ -2781,9 +3039,9 @@ class JobManagerController extends Controller
 		$j=0;
 		if(count($svgarr) == $i)
 		{
-			foreach($svgarr as $value)
+			foreach($bar_finarr as $value)
 			{
-				unlink(public_path('/storage/app/template/barcode_'.$j.'.png'));
+				unlink(public_path('/storage/app/template/'.$value.'.png'));
 				$j++;
 			}
 		}
@@ -2921,7 +3179,7 @@ class JobManagerController extends Controller
 
  public function printPdfTable(Request $request)
 	{
-		 $name=$request->style_no."-STD-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-STD-PS-".$request->buyer_no;
 	 	 $id=$request->id;
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -2965,9 +3223,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -3158,34 +3416,60 @@ class JobManagerController extends Controller
 		$index_arr=array();
 		foreach($size as $val)
 		{
-				$size_var = explode(' ',$size[0]);
+				$size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
 						{
 							if(count($size) > 7)
 							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:11px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:10px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						$td_col.="<td>".$sizebrk[$i]."</td>";
 					} 
 			  } 
@@ -3199,7 +3483,7 @@ class JobManagerController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
@@ -3279,6 +3563,9 @@ class JobManagerController extends Controller
     {
 		 
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3404,9 +3691,9 @@ class JobManagerController extends Controller
 			PDF::RoundedRect(214.5, 363.5, 95, 65, 0.000001, '1111', null, $style6);
 			PDF::ImageSVG('@' . $svg, $x=214.5, $y=363.5, $w=95, $h=65, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		 $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+     PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		 $file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     }
 	
 	
@@ -3425,6 +3712,10 @@ class JobManagerController extends Controller
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
+
+
+$style_no=$request->style_no;
+$buyer_no=$request->buyer_no;
 		
 		$sticker = DB::table("orchestra_standard_poly_bag_sticker_orders")
 						->select('*')
@@ -3466,21 +3757,35 @@ class JobManagerController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-					$size_var = explode(' ',$size[0]);
+					$size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
-					    array_push($index_arr,$val);
-							if($size_var[1] == "MOIS")
+							array_push($index_arr,$val);
+							if(count($size_var) > 1)
 							{
-								if(count($size) > 6)
+								if($size_var[1] == "MOIS")
 								{
-									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									if(count($size) > 6)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 								else
 								{
-									$td_size.="<td><br><br>".$val."</td>";
+									if(count($size) > 7)
+									{
+										$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 							}
 							else
@@ -3491,9 +3796,21 @@ class JobManagerController extends Controller
 								}
 								else
 								{
-									$td_size.="<td><br><br>".$val."</td>";
+									if($val == "NAISSANCE")
+									{
+										$td_size.='<td style="font-size:18px;line-height:0.6"><br><br>'.$val.'</td>';
+									}
+									else if($val == "PREMATURE")
+									{
+										$td_size.='<td style="font-size:16px;line-height:0.7"><br><br>'.$val.'</td>';
+									}
+									else
+									{
+										$td_size.="<td><br><br>".$val."</td>";
+									}
 								}
 							}
+							
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
 			  } 
@@ -3594,9 +3911,10 @@ class JobManagerController extends Controller
 		PDF::writeHTMLCell(147, '', '309', '257.5', $tbl, '', 1, 1, true, '', true);
 		
         
-  $file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+	$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
         
     }
 	
@@ -3611,6 +3929,8 @@ class JobManagerController extends Controller
     {
 		 $name=$request->name;
          $svg=urldecode($request->svg);
+				 $style_no=$request->style_no;
+				 $buyer_no=$request->buyer_no;
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
 //          print_r($svg);
@@ -3679,10 +3999,11 @@ class JobManagerController extends Controller
 		
 		PDF::RoundedRect(310, 215, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		$file_path =  "/storage/app/template/".$name."."."pdf";	$file_path =  "/storage/app/template/".$name."."."pdf";	
+
+				$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
 		
-        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+        PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
     } 
 	
 	
@@ -3697,6 +4018,9 @@ class JobManagerController extends Controller
     public function proofPdfArr(Request $request)
     {
 		 $name=$request->name;
+		 $style_no=$request->style_no;
+		 $buyer_no=$request->buyer_no;
+		 
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -3778,14 +4102,14 @@ class JobManagerController extends Controller
 			PDF::ImageSVG('@' . $svg, $x=310, $y=215, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		 }
 		 
-		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		$file_path =  "/storage/app/template/".$name."."."pdf";	
-		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
+		 PDF::Output( public_path('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf'), 'F');
+		$file_path =  "/storage/app/template/".$style_no."-".$name."-".$buyer_no."."."pdf";	
+		 return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$style_no.'-'.$name.'-'.$buyer_no.'.pdf')],200);	
 		
     } 
 	public function printPdfArr(Request $request)
     {
-		 $name=$request->style_no."-SOL-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
          //$svg=urldecode($request->svg);
@@ -3806,9 +4130,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 //	   
@@ -3994,7 +4318,19 @@ class JobManagerController extends Controller
         {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			
+			if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=50;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
 				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
@@ -4002,20 +4338,9 @@ class JobManagerController extends Controller
 				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
-        		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+        PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
-			}
-			else if($i == 0)
-			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
-				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				
-				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
 			}
 			else
 			{
@@ -4041,7 +4366,7 @@ class JobManagerController extends Controller
 
 	public function printPdf(Request $request)
 	{
-		 $name=$request->style_no."-STD-CARTON-".$request->buyer_no;
+		 $name=$request->style_no."-STD-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
 //		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
@@ -4060,9 +4385,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	   $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -4255,7 +4580,7 @@ class JobManagerController extends Controller
 	public function printPdfSmall(Request $request)
 	{
 		 
-		 $name=$request->style_no."-SOL-POLY-".$request->buyer_no;
+		 $name=$request->style_no."-SOL-PS-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
 		 //$svg=urldecode($request->svg);
@@ -4273,9 +4598,9 @@ class JobManagerController extends Controller
 		
 		 $this->created_date = $request->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -5811,45 +6136,24 @@ class JobManagerController extends Controller
 					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		});
-	   
-		//$svg=urldecode($request->svg);
-		
-		// $made_in_select=$request->made_in_select;
 
 
 	
 		$selectedWashCare = OrchestraWashCare::where('id',$request->parentId)->first();
-		
-
-		// dd($selectedWashCare);
+	
 
 		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$selectedWashCare->made_in_id)->get();
 		
-				// dd($orchestra_countries);
-		// $care_instruction_select = explode(',',$request->care_instruction_select_fin); 
-		
 		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
 					->select('*')->whereIn('id',explode(',',$selectedWashCare->care_instruction_id))->get();
-		
-
-		// dd($orchestra_care_instruction);
-		//print_r($orchestra_countries);
-		
-		//print_r($orchestra_countries);
 		
 		$svg=urldecode($request->svg); 
 		$svg_back=urldecode($request->svg_back); 
 		$svg_middle=urldecode($request->svg_middle); 
 		
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('tahoma', '',  1.5, '', true);
 		PDF::AddPage();
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::SetFillColor(255, 255, 255);
-		//PDF::SetTextColor(0, 0, 0);
-		
 		
 	
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
@@ -5861,13 +6165,10 @@ class JobManagerController extends Controller
 			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
 		}
 		
-		//print_r($tbl2);
 		$tbl3="";
 		$orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')
 					->select('*')->where('owcl_id',$request->parentId)->get();
-					//print_r($orchestra_wash_care_composition);
 		$composition = json_decode($request->composition);
-		//print_r($composition);
 		$page_id = "";
 		foreach($orchestra_wash_care_composition as $key => $value)
 		{
@@ -5976,5 +6277,352 @@ class JobManagerController extends Controller
 			
 			return "uuid updated successfully !!!!";
 		}
+
+		public function proofDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+				$svgStringFrontImage=urldecode($data_front_image[0]);
+				
+				$wash_astm = $request->wash_astm;
+        $wash_iso = $request->wash_iso;
+        $whit_astm = $request->whit_astm;
+        $whit_iso = $request->whit_iso;
+        $dry_astm = $request->dry_astm;
+        $dry_iso = $request->dry_iso;
+        $iron_astm = $request->iron_astm;
+        $iron_iso = $request->iron_iso;
+        $clean_astm = $request->clean_astm;
+        $clean_iso = $request->clean_iso;
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        // PDF::setPrintHeader(false);
+        // PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        $this->template_name = $request->template_name;
+        $this->created_date = $request->created_date;
+        $this->customer_name = $request->customer_name;
+
+        PDF::setHeaderCallback(function($pdf) {
+            $name=$this->template_name;
+            $zone="";
+              $tesco_po_number=$this->tesco_po_number;
+              $style=$this->style;
+              $tesco_description="";
+              $date=date_create($this->created_date);
+              $created_date =  date_format($date,"d.m.Y");
+              $image_file= K_PATH_IMAGES.'logo_example.jpg';
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+                      </g>
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+                              <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+                      </svg>
+                      <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+    
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x135mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+              });
+                              
+              // Custom Footer
+              PDF::setFooterCallback(function($pdf) {
+              $tesco_po_number=$this->tesco_po_number;
+              $customer_name=$this->customer_name;
+              // Position at 15 mm from bottom
+              $pdf->SetY(-50);
+              $pdf->SetX(9.5);
+              // Set font
+              //$pdf->SetFont('frankgothcnbt');
+              // Page number
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      
+                       $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+          
+          });
+        
+        
+          
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+				}
+				
+				if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+				PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
+		 } 
+		 
+		 public function printDivTescoLabelos(Request $request)
+     {
+
+        $data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+				$svgStringFrontImage=urldecode($data_front_image[0]);
+				
+				$wash_astm = $request->wash_astm;
+        $wash_iso = $request->wash_iso;
+        $whit_astm = $request->whit_astm;
+        $whit_iso = $request->whit_iso;
+        $dry_astm = $request->dry_astm;
+        $dry_iso = $request->dry_iso;
+        $iron_astm = $request->iron_astm;
+        $iron_iso = $request->iron_iso;
+        $clean_astm = $request->clean_astm;
+        $clean_iso = $request->clean_iso;
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+        PDF::SetFont('arialuni');
+
+        $i=0;
+        $xx=15;
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+            }
+            
+            $svgString=urldecode($value);
+            //print_r($svgString);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            $xx+=30;
+            $i++;
+				}
+				
+				if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
+        }
+
+        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
+
+				PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=135, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        //print_r($svgStringBack);
+
+        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
+				//print_r(url('/storage/app/template/label.pdf'));
+				
+				$file_path =  "/storage/app/template/label.pdf";	
+				
+				return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/label.pdf')],200);	
+		 } 
 
 }

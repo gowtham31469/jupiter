@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoWashcareOrders extends Model
 {
+
+    protected $table = 'tesco_washcare_orders';
+
     protected $fillable = [
         'template_id',
         'order_id',
         'zone',
-        'template_type',   
+        'template_type',
         'po_number',
         'uk_style_ref',
         'ce_style_ref',
@@ -22,7 +25,6 @@ class TescoWashcareOrders extends Model
         'ocn_number',
         'fabric_batch_code',
         'leather_suede_code',
-        'kaff_id',
         'country_of_origin_id',
         'kids_warning_id',
         'primary_size_id',
@@ -62,11 +64,35 @@ class TescoWashcareOrders extends Model
         'order_cancelled_at',
         'po_uploaded_at',
         'pi_approved_at',
-    ]; 
+        'exclusive_trims_text',
+        'contains_non_textile_part_text',
+        'part_of_set_text',
+        'kids_warning_text',
+        'country_of_origin_text',
+        'additional_care_id_1',
+        'additional_care_text_1',
+        'additional_care_id_2',
+        'additional_care_text_2',
+        'additional_care_id_3',
+        'additional_care_text_3',
+        'potps_id'
+    ];
 
     protected $casts = [
-        'country_of_origin_text' => 'json',
-        'kids_warning_text' => 'json',
+        'country_of_origin_text'         => 'array',
+        'kids_warning_text'              => 'array',
+        'exclusive_trims_text'           => 'array',
+        'contains_non_textile_part_text' => 'array',
+        'part_of_set_text'               => 'array',
+        'additional_care_text_1'         => 'array',
+        'additional_care_text_2'         => 'array',
+        'additional_care_text_3'         => 'array',
+        'include_btn_sew_space'          => 'boolean',
+        'exclusive_trims'                => 'boolean',
+        'contains_non_textile_part'      => 'boolean',
+        'part_of_set'                    => 'boolean',
+        'bs_en_declaration'              => 'boolean',
+        'baby_sleeping_bag_symbol'       => 'boolean',
     ];
 
     /**
@@ -74,7 +100,12 @@ class TescoWashcareOrders extends Model
      */
     public function customer()
     {
-        return $this->hasOne('App\Customer', 'tesco_supplier_id');
+        return $this->belongsTo('App\Customer', 'tesco_supplier_id');
+    }
+
+    public function item_master() {
+
+        return $this->hasOne('App\TescoTemplate', 'item_id', 'template_id');
     }
 
     /**
@@ -82,7 +113,7 @@ class TescoWashcareOrders extends Model
      */
     public function template()
     {
-        return $this->hasOne('App\TescoItemMasterMdl', 'template_id');
+        return $this->belongsTo('App\TescoItemMasterMdl', 'template_id');
     }
 
     /**
@@ -90,22 +121,35 @@ class TescoWashcareOrders extends Model
      */
     public function pi()
     {
-        return $this->hasOne('App\ProfomaInvoice', 'pi_id');
+        return $this->belongsTo('App\ProfomaInvoice', 'pi_id');
     }
 
     /**
      * Get the size breakup and quantities for the order.
      */
-    public function quantity()
+    public function quantities()
     {
-        return $this->hasMany('App\TescoWashcareOrdersQuantity');
+        return $this->hasMany('App\TescoWashcareOrdersQuantity', 'washcare_order_id')
+            ->join('tesco_primary_size', 'tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
+            ->select([
+                'tesco_washcare_orders_quanty.id',
+                'washcare_order_id',
+                'uk_ean', 
+                'ce_ean',
+                'quantity as count',
+                'selected_secondary_sizes',
+                'uk_size as size',
+                'ce_size',
+                'department_title',
+                'tesco_primary_size.id as size_id'
+            ])->orderBy('tesco_washcare_orders_quanty.id', 'asc');
     }
 
-    // /**
-    //  * Get the additional care instructions for the order.
-    //  */
-    // public function additionalCare()
-    // {
-    //     return $this->hasMany('App\TescoWashcareOrdersAdditionalCareInstructions');
-    // }
+    /**
+     * Get the garment components and fiber compositions for the order.
+     */
+    public function garment_components()
+    {
+        return $this->hasMany('App\TescoWashcareOrdersComponentMapping', 'washcare_order_id')->with(['fibers'])->orderBy('id', 'asc');
+    }
 }

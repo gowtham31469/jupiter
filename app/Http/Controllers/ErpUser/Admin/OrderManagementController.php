@@ -119,7 +119,9 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
+					$order_table_array = explode("_", $main_table);
+				    $tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -133,7 +135,7 @@ class OrderManagementController extends Controller
 					}
 
 					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->$style_zone;
+					$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
 					$ocn_number     = $order_details->ocn_number;
 					
 
@@ -242,7 +244,9 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
+					$order_table_array = explode("_", $main_table);
+				    $tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -256,11 +260,15 @@ class OrderManagementController extends Controller
 					}
 
 					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->$style_zone;
+					$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
 					$ocn_number     = $order_details->ocn_number;
 
 					// update individual row quanity to 0 in artworks orders table.
-					DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['count' => 0]);
+					if($order_table_array[1] ===  'washcare'){
+						DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['quantity' => 0]);
+					} else {
+						DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['count' => 0]);
+					}
 
 				} else if($buyer->buyer_name === 'Orchestra') {
 
@@ -450,7 +458,9 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
+						$order_table_array = explode("_", $main_table);
+						$tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
@@ -464,7 +474,7 @@ class OrderManagementController extends Controller
 						}
 
 						$buyer_po       = $order_details->po_number;
-						$style          = $order_details->$style_zone;
+						$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
 						$ocn_number     = $order_details->ocn_number;
 						
 
@@ -589,7 +599,9 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id);
+						$order_table_array = explode("_", $main_table);
+						$tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
@@ -603,7 +615,7 @@ class OrderManagementController extends Controller
 						}
 
 						$buyer_po       = $order_details->po_number;
-						$style          = $order_details->$style_zone;
+						$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
 						$ocn_number     = $order_details->ocn_number;
 
 				    } else if($buyer->buyer_name === 'Orchestra') {

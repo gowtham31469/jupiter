@@ -14,15 +14,18 @@ use Auth;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
 use Session;
+use App\Classes\TescoCareMetadata;
 
 class HomeController extends Controller
 {
     private $tcl1;
     private $tcl2;
     private $tcl4;
+    private $tcl5;
     private $thl1;
     private $thl3;
     private $tsl1;
+    private $tsl2;
     private $tsl3;
     private $current_date;
     private $year;
@@ -40,9 +43,11 @@ class HomeController extends Controller
         $this->tcl1 = "TCL 1";
         $this->tcl2 = "TCL 2";
         $this->tcl4 = "TCL 4";
+        $this->tcl5 = "TCL 5";
         $this->thl1 = "THL 1";
         $this->thl3 = "THL 3";
         $this->tsl1 = "TSL 1";
+        $this->tsl2 = "TSL 2";
         $this->tsl3 = "TSL 3";
         // get the current time
        $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
@@ -264,15 +269,24 @@ class HomeController extends Controller
                           ->update([
                             'app_ord_flag' => 1,
                           ]);
+
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+        } else {
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
+        }
         
         if($customer_role_id->role_id == 1)
         {
           //invoke the CustomerDashboard class method to get all the  approved order list
-            $approved_orders = $customObj->getAllApprovedOrders();
+            $approved_orders = $customObj->getAllApprovedOrders($from_date, $to_date);
         }
         else{
           //invoke the CustomerDashboard class method to get the approved order list for the logged in user
-            $approved_orders = $customObj->getApprovedOrders();
+            $approved_orders = $customObj->getApprovedOrders($from_date, $to_date);
         }
         $approved_count  = $customObj->getApprovedOrdersCount($approved_orders);
         
@@ -302,22 +316,31 @@ class HomeController extends Controller
           foreach ($formdata as $key => $value) {
             $table_name =   preg_replace( '/_[^_]*$/', '', $value );
             $row_id = substr($value, strrpos($value, '_') + 1);
-            if ($table_name!="select-all") {
+            if ($table_name!="select-all-app") {
               $data   = DB::table($table_name)->where('id',$row_id)
                             ->update([
                               'app_ord_flag' => 1,
                             ]);
             }
           }
+
+          if(Session::get('fiscal-year') != null) {
+            $year = explode('-', Session::get('fiscal-year'));
+            $from_date = $year[0].'-'.$this->financial_year_date;
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          } else {
+            $from_date = $this->financial_year_start;
+            $to_date =$this->financial_year_end; 
+          }
                    
           if($customer_role_id->role_id == 1)
           { 
             //invoke the CustomerDashboard class method to get all the  approved order list
-              $approved_orders = $customObj->getAllApprovedOrders();
+              $approved_orders = $customObj->getAllApprovedOrders($from_date, $to_date);
           }
           else{
             //invoke the CustomerDashboard class method to get the approved order list for the logged in user
-              $approved_orders = $customObj->getApprovedOrders();
+              $approved_orders = $customObj->getApprovedOrders($from_date, $to_date);
           }
           $approved_count  = $customObj->getApprovedOrdersCount($approved_orders);
           
@@ -350,14 +373,22 @@ class HomeController extends Controller
                             'pen_ord_flag' => 1,
                           ]);
 
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+        } else {
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
+        }
         if($customer_role_id->role_id == 1)
         { 
           //invoke the CustomerDashboard class method to get all the  approval pending order list
-            $pending_orders = $customObj->getAllPendingOrders();
+            $pending_orders = $customObj->getAllPendingOrders($from_date, $to_date);
         }
         else{
           //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
-            $pending_orders = $customObj->getPendingOrders();
+            $pending_orders = $customObj->getPendingOrders($from_date, $to_date);
         }
         $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
             
@@ -387,22 +418,31 @@ class HomeController extends Controller
         foreach ($formdata as $key => $value) {
           $table_name =   preg_replace( '/_[^_]*$/', '', $value );
           $row_id = substr($value, strrpos($value, '_') + 1);
-          if ($table_name!="select-all") {
+          if ($table_name!="select-all-pen") {
             $data   = DB::table($table_name)->where('id',$row_id)
                           ->update([
                             'pen_ord_flag' => 1,
                           ]);
           }
         }
+
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+        } else {
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
+        }
                    
         if($customer_role_id->role_id == 1)
         {   
           //invoke the CustomerDashboard class method to get all the  approval pending order list
-            $pending_orders = $customObj->getAllPendingOrders();
+            $pending_orders = $customObj->getAllPendingOrders($from_date, $to_date);
         }
         else{
             //invoke the CustomerDashboard class method to get the approval pending order list for the logged in user
-            $pending_orders = $customObj->getPendingOrders();
+            $pending_orders = $customObj->getPendingOrders($from_date, $to_date);
         }
         $pending_count   = $customObj->getPendingOrdersCount($pending_orders);
             
@@ -434,15 +474,24 @@ class HomeController extends Controller
                           ->update([
                             'cancel_ord_flag' => 1
                           ]);
+
+        if(Session::get('fiscal-year') != null) {
+          $year = explode('-', Session::get('fiscal-year'));
+          $from_date = $year[0].'-'.$this->financial_year_date;
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+        } else {
+          $from_date = $this->financial_year_start;
+          $to_date =$this->financial_year_end; 
+        }
         
         if($customer_role_id->role_id == 1)
         {
            //invoke the CustomerDashboard class method to get all the cancelled order list
-           $cancelled_orders = $customObj->getAllCancelledOrders();
+           $cancelled_orders = $customObj->getAllCancelledOrders($from_date, $to_date);
         }
         else{
           //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
-            $cancelled_orders = $customObj->getCancelledOrders();
+            $cancelled_orders = $customObj->getCancelledOrders($from_date, $to_date);
         }
         $cancelled_count = $customObj->getCancelledOrdersCount($cancelled_orders);
         $result = response()->json(['error'=> false,'message' =>'success','data'=>$cancelled_orders,'cancelled_count'=>$cancelled_count],200);
@@ -471,22 +520,30 @@ class HomeController extends Controller
           foreach ($formdata as $key => $value) {
             $table_name =   preg_replace( '/_[^_]*$/', '', $value );
             $row_id = substr($value, strrpos($value, '_') + 1);
-            if ($table_name!="select-all") {
+            if ($table_name!="select-all-can") {
               $data   = DB::table($table_name)->where('id',$row_id)
                             ->update([
                               'cancel_ord_flag' => 1,
                             ]);
             }
           }
+          if(Session::get('fiscal-year') != null) {
+            $year = explode('-', Session::get('fiscal-year'));
+            $from_date = $year[0].'-'.$this->financial_year_date;
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          } else {
+            $from_date = $this->financial_year_start;
+            $to_date =$this->financial_year_end; 
+          }
                      
         if($customer_role_id->role_id == 1)
         {   
             //invoke the CustomerDashboard class method to get all the cancelled order list
-            $cancelled_orders = $customObj->getAllCancelledOrders();
+            $cancelled_orders = $customObj->getAllCancelledOrders($from_date, $to_date);
         }
         else{
            //invoke the CustomerDashboard class method to get the cancelled order list for the logged in user
-            $cancelled_orders = $customObj->getCancelledOrders();
+            $cancelled_orders = $customObj->getCancelledOrders($from_date, $to_date);
         }
         $cancelled_count = $customObj->getCancelledOrdersCount($cancelled_orders);
         $result = response()->json(['error'=> false,'message' =>'success','data'=>$cancelled_orders,'cancelled_count'=>$cancelled_count],200);
@@ -531,7 +588,7 @@ class HomeController extends Controller
      * Show the customer orders.
      * @return \Illuminate\Http\Response
      */
-    public function customerOrders()
+    public function customerOrders(TescoCareMetadata $caremeta)
     {
         try{
             $customer_id = Auth::guard('web_customer')->user()->id;
@@ -541,7 +598,29 @@ class HomeController extends Controller
                           ->where('customer_profile_buyer.customer_profile_id',$customer_id)
                           ->get();
             $buyer_count = count($buyers);
-            return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
+
+            $symbols = $caremeta->getCareMetadata()['symbols'];
+
+            $coo = $caremeta->getCareMetadata()['coo'];
+
+            $kids_warning = $caremeta->getCareMetadata()['kids_warning'];
+
+            $components = $caremeta->getCareMetadata()['components'];
+
+            $fabriclists = $caremeta->getCareMetadata()['fabriclists'];
+
+            $tesco_suppliers = $caremeta->getCareMetadata()['tesco_suppliers'];
+
+            $additional_instructions = $caremeta->getCareMetadata()['additional_instructions'];
+
+            return view('customer/customer-orders',['buyers' => $buyers,
+              'buyer_count' => $buyer_count,'symbols' => $symbols,
+              'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
+              'kids_warning' => $kids_warning,'components' => $components,
+              'fabriclists' => $fabriclists,
+                'additional_instructions' => $additional_instructions]);
+            
+            // return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
         } catch (\Exception $e) {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         

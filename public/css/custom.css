@@ -448,16 +448,13 @@ p.terms {
 }
 
 .input-group-addon {
-    padding: 9px 15px;
+    padding-left: 10px;
     cursor: pointer;
+    line-height: 0;
 }
 
 .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
     width: 100% !important;
-}
-
-.input-group-addon {
-    line-height: 0;
 }
 
 .loader {
@@ -604,6 +601,44 @@ span.navbar-brand.logo:hover {
 }
 
 .left-panel.active {
+    margin-right: 25%;
+    transition: 0.5s ease all;
+}
+
+
+.care_label_reorder {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.care_label_reorder.active {
+    margin-right: 25%;
+    transition: 0.5s ease all;
+}
+
+
+.care_label_repeatorder {
+    position: fixed;
+    right: 0px;
+    padding-right: 5px !important;
+    top: 0;
+    bottom: 0px;
+    height: 100vh !important;
+    z-index: 11;
+    transition: 0.5s ease all;
+    padding: 10px;
+    margin-right: -100%;
+}
+
+.care_label_repeatorder.active {
     margin-right: 25%;
     transition: 0.5s ease all;
 }
@@ -1573,4 +1608,28 @@ span.batch-additional {
 .table-btn-xs{
     font-size: 75%;
     font-weight: bold;
+}
+
+/*New CSS [custom.css]*/
+.checkbox label, .radio label {
+    font-weight: 800;
+}
+.align-items > .checkbox, .align-items > .form-group{
+  display:inline-block;
+  margin-right:40px;
+}
+
+.baby-sleep-bag-symbol{
+    height: 30px;
+    width: 50px;
+}
+
+i.remove-component-btn{
+    font-size: 16px;
+    color:rgb(244, 67, 54);
+}
+
+.tesco-care-symbols{
+    height: 30px !important;
+    width: 40px;
 }

@@ -18,6 +18,7 @@ return [
     |
     |
     */
+//    'tabula_jar' => '/home/robin/Desktop/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
    'tabula_jar' => '/var/www/html/jupiter/tabula-1.0.1-jar-with-dependencies.jar',
 	
    
@@ -77,7 +78,7 @@ return [
     |
     |
     */
-    'UK_single_quantity' => ' -p 2 -a 121,9,500,440  -f JSON ',
+    'UK_single_quantity' => ' -p 2 -a 121,9,500,510  -f JSON ',
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information of SINGLE type
@@ -157,7 +158,7 @@ return [
     |
     |
     */
-    'CE_single_quantity' => ' -p 2 -a 125,9,400,440  -f JSON ',
+    'CE_single_quantity' => ' -p 2 -a 125,9,450,440  -f JSON ',
 
     /*
     |--------------------------------------------------------------------------

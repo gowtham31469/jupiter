@@ -60,6 +60,20 @@ class Dashboard
 											->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tcl4_orders.*','customers.company_name')
 											->get();
+
+			$pendingproduction['tcl5'] = DB::table('tesco_tcl5_orders')
+			->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+										->whereIn('order_status',['Order Approved','Order Placed'])
+										->where(function ($query) {
+											$query->where('po_file',null)
+											->orWhere('purchase_order_no',null);
+										})
+										->where('pen_pro_flag',0)
+										->where('is_order_count_empty',0)
+										->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+										->select('tesco_tcl5_orders.*','customers.company_name')
+										->get();
+
 			$pendingproduction['tsl1'] = DB::table('tesco_tsl1_orders')
 				->join('customers','customers.id','=','tesco_tsl1_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
@@ -72,6 +86,20 @@ class Dashboard
 											->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 											->select('tesco_tsl1_orders.*','customers.company_name')
 											->get();
+
+			$pendingproduction['tsl2'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+											->whereIn('order_status',['Order Approved','Order Placed'])
+											->where(function ($query) {
+												$query->where('po_file',null)
+												->orWhere('purchase_order_no',null);
+											})
+											->where('pen_pro_flag',0)
+											->where('is_order_count_empty',0)
+											->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+											->select('tesco_tsl2_orders.*','customers.company_name')
+											->get();
+
 			$pendingproduction['tsl3'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
 											->whereIn('order_status',['Order Approved','Order Placed'])
@@ -108,6 +136,19 @@ class Dashboard
 											->whereBetween('tesco_thl3_orders.created_at', [$from_date, $to_date])
 											->select('tesco_thl3_orders.*','customers.company_name')
 											->get();
+			$pendingproduction['wcl'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+										->whereIn('order_status',['Order Approved','Order Placed'])
+										->where(function ($query) {
+											$query->where('po_file',null)
+											->orWhere('purchase_order_no',null);
+										})
+										->where('pen_pro_flag',0)
+										->where('is_order_count_empty',0)
+										->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+										->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+										->get();
       		return $pendingproduction;
    }
 	
@@ -150,6 +191,19 @@ class Dashboard
 									->select('tesco_tcl4_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tcl4_orders.id','customers.company_name')
 									->get();
+
+			$new_orders['tcl5'] = DB::table('tesco_tcl5_orders')
+			->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+			->join('tesco_tcl5_orders_quanty','tesco_tcl5_orders_quanty.tcl5_order_id','=','tesco_tcl5_orders.id')
+								->whereRaw('tesco_tcl5_orders.created_at > current_date - 1')
+								->where('new_ord_flag',0)
+								->where('order_status','!=','Order Cancelled')
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+								->select('tesco_tcl5_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
+								->groupBy('tesco_tcl5_orders.id','customers.company_name')
+								->get();
+
 			$new_orders['thl1'] = DB::table('tesco_thl1_orders')
 				->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')
 				->join('tesco_thl1_orders_quanty','tesco_thl1_orders_quanty.thl1_order_id','=','tesco_thl1_orders.id')
@@ -183,6 +237,19 @@ class Dashboard
 									->select('tesco_tsl1_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tsl1_orders.id','customers.company_name')
 									->get();
+
+			$new_orders['tsl2'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+				->join('tesco_tsl2_orders_quanty','tesco_tsl2_orders_quanty.tsl2_order_id','=','tesco_tsl2_orders.id')
+									->whereRaw('tesco_tsl2_orders.created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tsl2_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
+									->groupBy('tesco_tsl2_orders.id','customers.company_name')
+									->get();
+
 			$new_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
 				->join('tesco_tsl3_orders_quanty','tesco_tsl3_orders_quanty.tsl3_order_id','=','tesco_tsl3_orders.id')
@@ -194,6 +261,18 @@ class Dashboard
 									->select('tesco_tsl3_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
 									->groupBy('tesco_tsl3_orders.id','customers.company_name')
 									->get();
+			$new_orders['wcl'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_washcare_orders_quanty','tesco_washcare_orders_quanty.washcare_order_id','=','tesco_washcare_orders.id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+								->whereRaw('tesco_washcare_orders.created_at > current_date - 1')
+								->where('new_ord_flag',0)
+								->where('order_status','!=','Order Cancelled')
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name',DB::raw('sum(quantity) as sum'))
+								->groupBy('tesco_washcare_orders.id','tesco_template.template_name','customers.company_name')
+								->get();
 			return $new_orders;
 	}
 	
@@ -227,6 +306,16 @@ class Dashboard
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
+
+			$approved_orders['tcl5'] = DB::table('tesco_tcl5_orders')
+			->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+								->where('order_status','Order Approved')
+								->where('app_ord_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+								->select('tesco_tcl5_orders.*','customers.company_name')
+								->get();
+
 			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
 				->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')
 									->where('order_status','Order Approved')
@@ -251,6 +340,16 @@ class Dashboard
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
+
+			$approved_orders['tsl2'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tsl2_orders.*','customers.company_name')
+									->get();
+
 			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
 									->where('order_status','Order Approved')
@@ -259,6 +358,15 @@ class Dashboard
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
+			$approved_orders['wcl'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('app_ord_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
         	return $approved_orders;
 	}
 	
@@ -292,6 +400,16 @@ class Dashboard
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
+
+			$pending_orders['tcl5'] = DB::table('tesco_tcl5_orders')
+				->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+							->where('order_status','Order Placed')
+							->where('pen_ord_flag',0)
+							->where('is_order_count_empty',0)
+							->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+							->select('tesco_tcl5_orders.*','customers.company_name')
+							->get();
+
 			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
 				->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')
 									->where('order_status','Order Placed')
@@ -316,6 +434,16 @@ class Dashboard
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
+
+			$pending_orders['tsl2'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tsl2_orders.*','customers.company_name')
+									->get();
+
 			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
 									->where('order_status','Order Placed')
@@ -324,6 +452,15 @@ class Dashboard
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
+			$pending_orders['wcl'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Placed')
+								->where('pen_ord_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
 			return $pending_orders;
 	}
 	
@@ -398,6 +535,28 @@ class Dashboard
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tcl4_orders.*','customers.company_name')
 									->get();
+
+			$app_pipo['tcl5_1'] = DB::table('tesco_tcl5_orders')
+				->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tcl5_orders.*','customers.company_name')
+									->get();
+			
+			$app_pipo['tcl5_2'] = DB::table('tesco_tcl5_orders')
+				->join('customers','customers.id','=','tesco_tcl5_orders.tesco_supplier_id')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tcl5_orders.*','customers.company_name')
+									->get();
 			
 			$app_pipo['thl1_1'] = DB::table('tesco_thl1_orders')
 				->join('customers','customers.id','=','tesco_thl1_orders.tesco_supplier_id')
@@ -463,6 +622,29 @@ class Dashboard
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl1_orders.*','customers.company_name')
 									->get();
+
+
+			$app_pipo['tsl2_1'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tsl2_orders.*','customers.company_name')
+									->get();
+			
+			$app_pipo['tsl2_2'] = DB::table('tesco_tsl2_orders')
+				->join('customers','customers.id','=','tesco_tsl2_orders.tesco_supplier_id')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select('tesco_tsl2_orders.*','customers.company_name')
+									->get();
 			
 			$app_pipo['tsl3_1'] = DB::table('tesco_tsl3_orders')
 				->join('customers','customers.id','=','tesco_tsl3_orders.tesco_supplier_id')
@@ -485,6 +667,30 @@ class Dashboard
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select('tesco_tsl3_orders.*','customers.company_name')
 									->get();
+
+			$app_pipo['wcl_1'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('po_status','PO Pending')
+								->whereIn('pi_status',['PI Approval Pending',""])
+								->where('app_pipo_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
+		
+		$app_pipo['wcl_2'] = DB::table('tesco_washcare_orders')
+			->join('customers','customers.id','=','tesco_washcare_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_washcare_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('po_status','PO Uploaded')
+								->where('pi_status','PI Approval Pending')
+								->where('app_pipo_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
         	return $app_pipo;
 	}
 }

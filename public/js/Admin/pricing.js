@@ -105,30 +105,18 @@ function price_template_list() {
                             $('.viewDiv').html('');
                         },
                         success: function (data) {
-
-                            if (data.length > 0) {
-								
-								if(data[0].template_file != "")
-								{
-									$('.viewDiv').html('<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>')
-									$('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
-									$('.descriptionDiv').css('margin-top', '20px')
-									$('.viewDiv').css('margin-top', '0px');
-								}
-								else
-								{
-									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
-									$('.descriptionDiv').html('<b>Template Not Found</b>');
-									$('.descriptionDiv').css('margin-top', '0px')
-									$('.viewDiv').css('margin-top', '140px');
-								}
-                               
-                            } else {
-                                $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
-                                $('.descriptionDiv').html('<b>Template Not Found</b>');
-                                $('.descriptionDiv').css('margin-top', '0px')
-                                $('.viewDiv').css('margin-top', '140px');
+                            
+                            if(buyer === 'tesco') {
+                                tescoTemplateView(data)
                             }
+                            else if(buyer === 'orchestra') {
+                                orchestraTemplateView(data)
+                            }
+                            else{
+                                otherTemplateView(data)
+                            }
+
+                            
 
 
                         },
@@ -156,7 +144,7 @@ function price_template_list() {
  * Method to show the pricing details on a template click
  */
 function showPricing() {
-    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="form-group row has-feedback"> <label for="custom_name" class="col-sm-3 col-md-offset-1 col-form-label text-left">Name in Invoice</label><div class="col-md-8"> <input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name"> </div></div><div class="form-group row has-feedback"> <label for="moq" class="col-sm-3 col-md-offset-1 col-form-label text-left">MOQ</label> <div class="col-md-8"> <input type="number" class="form-control input-sm" id="moq" min=1  onkeypress="return isNumber(event)" oninput="baseMOQ()" placeholder="Minimum Order Quantity"> </div></div> <div class="col-md-offset-1"><button type="button" onclick="addVolume(this,event)" data-id="1" style="margin-bottom: 10px;" class="btn btn-default pull-left add-volume"><i class="fa fa-plus" aria-hidden="true"></i> Add Volume</button></div><div class="col-md-offset-1"><table class="table table-bordered text-center"> <thead> <tr> <th>Line No.</th> <th>Volume Begin</th> <th>Volume End</th> <th>Price (&#x20b9;)</th> <th>Actions</th> </tr></thead> <tbody id="table_row"> <tr> <td class="slno">1</td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_from_1" name="volume_from_1" placeholder="Volume From"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_to_1" name="volume_to_1" placeholder="Volume To"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="price_1"  min=0.01 data-min-error="Value should be > 0" name="price_1" placeholder="Price in INR" step="0.01"> <div class="help-block with-errors"></div></div></td><td></td></tr></tbody></table></div><button type="submit" style="margin-bottom:20px;" class="btn btn-primary pull-right">Save</button></form></div>');
+    $('.viewDiv').append('<hr><div class="template-form"><h4 style="margin-bottom:20px;">Artwork Configuration</h4><form role="form" data-toggle="validator" id="priceForm"><div class="form-group row has-feedback"> <label for="custom_name" class="col-sm-3 col-md-offset-1 col-form-label text-left">Name in Invoice</label><div class="col-md-8"> <input class="form-control input-sm " placeholder="Template Custom Name" required type="text" id="name"> </div></div><div class="form-group row has-feedback"> <label for="moq" class="col-sm-3 col-md-offset-1 col-form-label text-left">MOQ</label> <div class="col-md-8"> <input type="number" class="form-control input-sm" id="moq" min=1  onkeypress="return isNumber(event)" oninput="baseMOQ()" placeholder="Minimum Order Quantity"> </div></div> <div class="col-md-offset-1"><button type="button" onclick="addVolume(this,event)" data-id="1" style="margin-bottom: 10px;" class="btn btn-default pull-left add-volume"><i class="fa fa-plus" aria-hidden="true"></i> Add Volume</button></div><div class="col-md-offset-1"><table class="table table-bordered text-center"> <thead> <tr> <th>Line No.</th> <th>Volume Begin</th> <th>Volume End</th> <th>Price (&#x20b9;)</th> <th>Actions</th> </tr></thead> <tbody id="table_row"> <tr> <td class="slno">1</td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_from_1" name="volume_from_1" placeholder="Volume From"  max=10000000 data-max-error="Value should be <= 10000000"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input min=1 data-min-error="Value should be > 0" type="number" class="form-control input-sm" required="" id="volume_to_1" name="volume_to_1" placeholder="Volume To"  max=10000000 data-max-error="Value should be <= 10000000"> <div class="help-block with-errors"></div></div></td><td> <div class="form-group has-feedback"> <input type="number" class="form-control input-sm" required="" id="price_1"  min=0.01 data-min-error="Value should be > 0" name="price_1" placeholder="Price in INR" step="0.01"> <div class="help-block with-errors"></div></div></td><td></td></tr></tbody></table></div><button type="submit" style="margin-bottom:20px;" class="btn btn-primary pull-right">Save</button></form></div>');
 
     $('#priceForm').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -198,13 +186,13 @@ try{
                     <td class="slno">'+val+'</td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm" id="volume_from_'+val+'" name="volume_from_'+val+'" required="" placeholder="Volume From">\
+                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm" id="volume_from_'+val+'" name="volume_from_'+val+'" required="" placeholder="Volume From" max=10000000 data-max-error="Value should be <= 10000000">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
                     <td>\
                         <div class="form-group has-feedback">\
-                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm"  id="volume_to_'+val+'" name="volume_to_'+val+'" required="" placeholder="Volume To">\
+                            <input  min=1 type="number" data-min-error="Value should be > 0" class="form-control input-sm"  id="volume_to_'+val+'" name="volume_to_'+val+'" required="" placeholder="Volume To"  max=10000000 data-max-error="Value should be <= 10000000">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>\
@@ -383,3 +371,91 @@ $('.customer-select').on('click', 'li', function() {
     $('#tree1').jstree('refresh');
     $('.viewDiv').empty();
 })
+
+function tescoTemplateView(data)
+{
+    if (data.length > 0) {
+								
+        if(data[0].template_file != "")
+        {
+            if(data[0].type == "Labels")
+            {
+                //alert()
+                var object_ref = '<img src="/images/FRONT.png" style="height: 500px;"><img style="margin-left: 10px;height: 500px;" src="/images/BACK.png">';
+            }
+            else
+            {
+                var object_ref = '<object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object>';
+            }
+            $('.viewDiv').html(object_ref)
+            $('.descriptionDiv').html('<label>Template Name : </label><p>' + data[0].template_name + '</p><label>Reference Number : </label><p>' + data[0].ref_no + '</p><label>Company Name : </label><p>' + data[0].company_name + '</p>')
+            $('.descriptionDiv').css('margin-top', '20px')
+            $('.viewDiv').css('margin-top', '0px');
+        }
+        else
+        {
+            $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+            $('.descriptionDiv').html('<b>Template Not Found</b>');
+            $('.descriptionDiv').css('margin-top', '0px')
+            $('.viewDiv').css('margin-top', '140px');
+        }
+       
+    } else {
+        $('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover;margin-top: 122px; font-size: 100px;"></i>')
+        $('.descriptionDiv').html('<b>Template Not Found</b>');
+        $('.descriptionDiv').css('margin-top', '0px')
+        $('.viewDiv').css('margin-top', '140px');
+    }
+}
+
+function orchestraTemplateView(objdata)
+{
+    var data = objdata.treeviewData;
+    if (data.length > 0) {
+        if (data[0].template_file != "" && data[0].template_file != null) {
+            
+            if( data[0].template_file.substr(data[0].template_file.length - 3) == "svg")
+            {
+                if (data.length > 1) {
+                $('.viewDiv').html('<div class="row">');
+                $.each(data, function (index, value) {
+                    $('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+                });
+                $('.viewDiv').append('</div>');
+            } else {
+                $('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
+            }
+            }
+            else
+            {
+                $('.viewDiv').html('<img style="    width: 100px;margin-left: 50%;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
+            }
+        }
+    }
+}
+
+function otherTemplateView(data)
+{
+    var data = objdata.treeviewData;
+    if (data.length > 0) {
+        if (data[0].template_file != "" && data[0].template_file != null) {
+            
+            if( data[0].template_file.substr(data[0].template_file.length - 3) == "svg")
+            {
+                if (data.length > 1) {
+                $('.viewDiv').html('<div class="row">');
+                $.each(data, function (index, value) {
+                    $('.viewDiv').append('<object style="display:inline-block" id="svg2" class="center-block svg2" data="' + value.template_file + '" type="image/svg+xml"></object>')
+                });
+                $('.viewDiv').append('</div>');
+            } else {
+                $('.viewDiv').html('<div class="row"><object id="svg2" class="center-block svg2" data="' + data[0].template_file + '" type="image/svg+xml"></object></div>')
+            }
+            }
+            else
+            {
+                $('.viewDiv').html('<img style="    width: 100px;margin-left: 50%;object-fit:cover" src="' + data[0].template_file + '" class="img-responsive" alt="Template File">');
+            }
+        }
+    }
+}

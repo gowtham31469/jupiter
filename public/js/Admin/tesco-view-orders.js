@@ -24,7 +24,16 @@ function loadTemplatePreview() {
                         $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     } else {
-                        $('.templateDiv').append('<div class="col-md-4"><object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
+                        if(value[0].type == "Labels")
+                        {
+                            //alert()
+                            var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
+                        }
+                        else
+                        {
+                            var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
+                        }
+                        $('.templateDiv').append('<div class="col-md-4">'+object_ref+'<div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     }
                 });
@@ -54,8 +63,10 @@ function loadTemplatePreview() {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
-function viewOrder(pNumber,aWork, style_number, zone) {
+function viewOrder(pNumber,aWork, style_number, zone, orderid) {
     try {
+        is_joint_order = zone === "joint"?true:false;
+        
         $.ajax({
             url: base_url + "/admin/tesco/view-order",
             type: 'POST',
@@ -65,7 +76,7 @@ function viewOrder(pNumber,aWork, style_number, zone) {
             beforeSend: function () {
                 $(".loader").show();
             },
-            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone},
+            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, "orderid":orderid},
             tryCount: 0,
             retryLimit: 2,
             dataType: 'JSON',
@@ -100,7 +111,12 @@ function viewOrder(pNumber,aWork, style_number, zone) {
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
                     localStorage.setItem("template_group", group);
-                    createOrders(data.result, "viewOrder");
+                    
+                    if( !is_joint_order) {
+                        createOrders(data.result, "viewOrder");
+                    } else {
+                        renderLabelViewOrderPage(data.result, 'admin')
+                    }
                 },
                 400: function() {
                     $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
@@ -134,7 +150,9 @@ function mapStoredValues(oDetails) {
     var last_insertions = [];
     var header = 'Create Order For TESCO - '+localStorage.getItem('zone')+' - '+localStorage.getItem('template_group');
     $('.page-header h4 strong').text(header);
-    $('.save-btn').data('insert','false');
+    $('.save-btn').data('insert','false'); /** [ Get template details from localstorage ] */
+    var temp_data = JSON.parse(localStorage.getItem("data"));
+    const stickersList = temp_data.map(template => template.template_name);
     $.each(oDetails, function(ind,ele) {
         if(count === 0) {
             $('#tesco_po_number').val(ele.po_number);
@@ -166,8 +184,16 @@ function mapStoredValues(oDetails) {
                     } else {
                         $('#uk_single_tpnd_'+index).val(j.tpnd);
                     }
+
+                    if ($.inArray(stickersList[stickersList.length-1], itf_barcode_stickers) != -1) {
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    } else if ($.inArray(stickersList[stickersList.length-1], ean_barcode_stickers) != -1) {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                    } else {
+                        $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
+                        $('#'+zone+'_ratio_itf_'+index).val(j.itf_barcode);
+                    }
                     
-                    $('#'+zone+'_single_ean_'+index).val(j.ean_barcode);
                     $('#'+zone+'_single_case_size_'+index).val(j.case_size);
                     $('#'+zone+'_single_size_'+index).val(j.size);  
                     if(ele.order_quantity.length !== (i+1)) {
@@ -242,8 +268,6 @@ function mapStoredValues(oDetails) {
         var templates = localStorage.getItem("templates");
         var buyer_id  = localStorage.getItem("buyer_id");
         var supplier_id = $('#tesco_supplier option:selected').val();
-        /** [ Get template details from localstorage ] */
-        var temp_data = JSON.parse(localStorage.getItem("data"));
         /** [ Dynamically change  svg supplier name ] */
         if (supplier_id != '') {
         /*
@@ -325,6 +349,7 @@ function mapStoredValues(oDetails) {
  * @param  {object} artwork_collection Collection of all orders
  */
 function loadArtworkNames(artwork_collection_style) {
+    
     if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
         var options="<option value=''>Search Artwork</option>";
@@ -338,7 +363,12 @@ function loadArtworkNames(artwork_collection_style) {
             var ratioTHLArtworks = [];
             var singleTHL = [];
             var singleTHLArtworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus;
+            var jointWashcareLabels = [];
+            var jointWashcareLabelArtworks = [];
+            var singleTCL5 = [];
+            var singleTCL5Artworks = [];
+            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId, singleTCL5Status;
+
             for (i = 0; i < awArray.length; i++) { 
                 var templateInfo = awArray[i].split("__");
                 switch (templateInfo[1]) {
@@ -376,6 +406,22 @@ function loadArtworkNames(artwork_collection_style) {
                         singleTHL.push(templateInfo[1]);
                         singleTHLArtworks.push(templateInfo[0]);
                         singleTHLStatus = templateInfo[2];
+                        break;
+                    case 'TCL 5':
+                        singleTCL5.push(templateInfo[1]);
+                        singleTCL5Artworks.push(templateInfo[0]);
+                        singleTCL5Status = templateInfo[2];
+                        break;
+                    case 'TSL 2':
+                        singleTCL.push(templateInfo[1]);
+                        singleTCLArtworks.push(templateInfo[0]);
+                        singleTCLStatus = templateInfo[2];
+                        break;
+                    default:
+                        jointWashcareLabels.push(templateInfo[1]);
+                        jointWashcareLabelArtworks.push(templateInfo[0]);
+                        jointWashcareLabelsStatus = templateInfo[2];
+                        jointWashcareLabelsId = templateInfo[3];
                 }
             }
             if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
@@ -395,6 +441,16 @@ function loadArtworkNames(artwork_collection_style) {
 
             if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
                 options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
+                
+            }
+
+            if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
+                
+            }
+
+            if (typeof singleTCL5 !== 'undefined' && singleTCL5.length > 0 && typeof singleTCL5Artworks !== 'undefined' && singleTCL5Artworks.length > 0) {
+                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCL5Status+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCL5Artworks.join()+"'>"+singleTCL5.join()+"</option>";
                 
             }
         });

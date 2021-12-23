@@ -15,6 +15,7 @@ use App\Classes\Dashboard;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
 use Session;
+use App\Classes\TescoCareMetadata;
 
 class OrderController extends Controller
 {
@@ -113,6 +114,16 @@ class OrderController extends Controller
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$new_count['tcl5'] = DB::table('tesco_tcl5_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->where('order_status','!=','Order Cancelled')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$new_count['thl1'] = DB::table('tesco_thl1_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
@@ -137,6 +148,16 @@ class OrderController extends Controller
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$new_count['tsl2'] = DB::table('tesco_tsl2_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->where('order_status','!=','Order Cancelled')
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$new_count['tsl3'] = DB::table('tesco_tsl3_orders')
 									->whereRaw('created_at > current_date - 1')
 									->where('new_ord_flag',0)
@@ -145,8 +166,17 @@ class OrderController extends Controller
 									->where('order_status','!=','Order Cancelled')
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$new_count['wcl'] = DB::table('tesco_washcare_orders')
+									->whereRaw('created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+									->where('order_status','!=','Order Cancelled')
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
-			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl3']{0}->sum;
+			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['tcl5']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl2']{0}->sum + $new_count['tsl3']{0}->sum + $new_count['wcl']{0}->sum;
 			
 			
 			$approved_orders['tcl1'] = DB::table('tesco_tcl1_orders')
@@ -170,6 +200,15 @@ class OrderController extends Controller
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$approved_orders['tcl5'] = DB::table('tesco_tcl5_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$approved_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
@@ -191,6 +230,15 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$approved_orders['tsl2'] = DB::table('tesco_tsl2_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$approved_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Approved')
 									->where('app_ord_flag',0)
@@ -198,8 +246,16 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$approved_orders['wcl'] = DB::table('tesco_washcare_orders')
+									->where('order_status','Order Approved')
+									->where('app_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
-			$approve_count = $approved_orders['tcl1']{0}->sum + $approved_orders['tcl2']{0}->sum + $approved_orders['tcl4']{0}->sum + $approved_orders['thl1']{0}->sum + $approved_orders['thl3']{0}->sum + $approved_orders['tsl1']{0}->sum + $approved_orders['tsl3']{0}->sum;
+			$approve_count = $approved_orders['tcl1']{0}->sum + $approved_orders['tcl2']{0}->sum + $approved_orders['tcl4']{0}->sum + $approved_orders['tcl5']{0}->sum + $approved_orders['thl1']{0}->sum + $approved_orders['thl3']{0}->sum + $approved_orders['tsl1']{0}->sum + $approved_orders['tsl2']{0}->sum + $approved_orders['tsl3']{0}->sum + $approved_orders['wcl']{0}->sum;
 			
 			$pending_orders['tcl1'] = DB::table('tesco_tcl1_orders')
 									->where('order_status','Order Placed')
@@ -222,6 +278,15 @@ class OrderController extends Controller
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$pending_orders['tcl5'] = DB::table('tesco_tcl5_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$pending_orders['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
@@ -243,6 +308,15 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$pending_orders['tsl2'] = DB::table('tesco_tsl2_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+
 			$pending_orders['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Placed')
 									->where('pen_ord_flag',0)
@@ -250,8 +324,16 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$pending_orders['wcl'] = DB::table('tesco_washcare_orders')
+									->where('order_status','Order Placed')
+									->where('pen_ord_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
-			$pending_count = $pending_orders['tcl1']{0}->sum + $pending_orders['tcl2']{0}->sum + $pending_orders['tcl4']{0}->sum + $pending_orders['thl1']{0}->sum + $pending_orders['thl3']{0}->sum + $pending_orders['tsl1']{0}->sum + $pending_orders['tsl3']{0}->sum;
+			$pending_count = $pending_orders['tcl1']{0}->sum + $pending_orders['tcl2']{0}->sum + $pending_orders['tcl4']{0}->sum + $pending_orders['tcl5']{0}->sum + $pending_orders['thl1']{0}->sum + $pending_orders['thl3']{0}->sum + $pending_orders['tsl1']{0}->sum + $pending_orders['tsl2']{0}->sum + $pending_orders['tsl3']{0}->sum + $pending_orders['wcl']{0}->sum;
 			
 			
 			$app_pipo1['tcl1'] = DB::table('tesco_tcl1_orders')
@@ -313,6 +395,26 @@ class OrderController extends Controller
 									->whereBetween('tesco_tcl4_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$app_pipo1['tcl5'] = DB::table('tesco_tcl5_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tcl5'] = DB::table('tesco_tcl5_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tcl5_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
 			$app_pipo1['thl1'] = DB::table('tesco_thl1_orders')
 									->where('order_status','Order Approved')
@@ -372,6 +474,26 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl1_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$app_pipo1['tsl2'] = DB::table('tesco_tsl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['tsl2'] = DB::table('tesco_tsl2_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_tsl2_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
 			$app_pipo1['tsl3'] = DB::table('tesco_tsl3_orders')
 									->where('order_status','Order Approved')
@@ -392,9 +514,29 @@ class OrderController extends Controller
 									->whereBetween('tesco_tsl3_orders.created_at', [$from_date, $to_date])
 									->select(DB::raw('count(*) as sum'))
 									->get();
+
+			$app_pipo1['wcl'] = DB::table('tesco_washcare_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Pending')
+									->whereIn('pi_status',['PI Approval Pending',""])
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
+			
+			$app_pipo2['wcl'] = DB::table('tesco_washcare_orders')
+									->where('order_status','Order Approved')
+									->where('po_status','PO Uploaded')
+									->where('pi_status','PI Approval Pending')
+									->where('app_pipo_flag',0)
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
+									->select(DB::raw('count(*) as sum'))
+									->get();
 			
 			
-			$app_pipo = $app_pipo1['tcl1']{0}->sum + $app_pipo1['tcl2']{0}->sum + $app_pipo1['tcl4']{0}->sum + $app_pipo1['thl1']{0}->sum + $app_pipo1['thl3']{0}->sum + $app_pipo1['tsl1']{0}->sum + $app_pipo1['tsl3']{0}->sum + $app_pipo2['tcl1']{0}->sum + $app_pipo2['tcl2']{0}->sum + $app_pipo2['tcl4']{0}->sum + $app_pipo2['thl1']{0}->sum + $app_pipo2['thl3']{0}->sum + $app_pipo2['tsl1']{0}->sum + $app_pipo2['tsl3']{0}->sum;
+			$app_pipo = $app_pipo1['tcl1']{0}->sum + $app_pipo1['tcl2']{0}->sum + $app_pipo1['tcl4']{0}->sum + $app_pipo1['tcl5']{0}->sum + $app_pipo1['thl1']{0}->sum + $app_pipo1['thl3']{0}->sum + $app_pipo1['tsl1']{0}->sum + $app_pipo1['tsl2']{0}->sum + $app_pipo1['tsl3']{0}->sum + $app_pipo2['tcl1']{0}->sum + $app_pipo2['tcl2']{0}->sum + $app_pipo2['tcl4']{0}->sum + $app_pipo2['tcl5']{0}->sum + $app_pipo2['thl1']{0}->sum + $app_pipo2['thl3']{0}->sum + $app_pipo2['tsl1']{0}->sum + $app_pipo2['tsl2']{0}->sum + $app_pipo2['tsl3']{0}->sum + $app_pipo1['wcl']{0}->sum + $app_pipo2['wcl']{0}->sum;
 			
 			$pending_class    = new Dashboard();
 
@@ -420,7 +562,7 @@ class OrderController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	
-    public function orders()
+    public function orders(TescoCareMetadata $caremeta)
     {
         $module_var = new Modules();
         $is_allowed = $module_var->permittedModules();
@@ -434,7 +576,27 @@ class OrderController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('artwork_flag','=',1)->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Order Management/orders',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+
+            $symbols = $caremeta->getCareMetadata()['symbols'];
+
+            $coo = $caremeta->getCareMetadata()['coo'];
+
+            $kids_warning = $caremeta->getCareMetadata()['kids_warning'];
+
+            $components = $caremeta->getCareMetadata()['components'];
+
+            $fabriclists = $caremeta->getCareMetadata()['fabriclists'];
+
+            $tesco_suppliers = $caremeta->getCareMetadata()['tesco_suppliers'];
+
+            $additional_instructions = $caremeta->getCareMetadata()['additional_instructions'];
+
+            return view('Admin/Order Management/orders',['buyers' => $buyers,
+            	'buyer_count' => $buyer_count,'symbols' => $symbols,
+            	'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
+            	'kids_warning' => $kids_warning,'components' => $components,
+            	'fabriclists' => $fabriclists,
+                'additional_instructions' => $additional_instructions]);
         }
         else
         {
@@ -557,9 +719,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -848,9 +1010,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-CARTON";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -1037,7 +1199,19 @@ class OrderController extends Controller
         {
 			$svg=urldecode($value);
 			
-			if($i == 2)
+			
+			if($i == 0)
+			{
+				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
+				$yy=50;
+				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
+				
+				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
+        		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
+				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+			}
+			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
 				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
@@ -1048,17 +1222,6 @@ class OrderController extends Controller
         		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 				$i = 0;
-			}
-			else if($i == 0)
-			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
-				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
-				
-				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
-				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
-				PDF::ImageSVG('@' . $svg, $x=12.5, $y=$yy, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				
 			}
 			else
 			{
@@ -1637,9 +1800,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "STD-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -1842,34 +2005,60 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			  $size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
 						{
 							if(count($size) > 7)
 							{
-								$td_size.='<td style="font-size:11px;line-height:1.8"><br>'.$val.'</td>';
+								$td_size.='<td style="font-size:10px;line-height:1.8"><br>'.$val.'</td>';
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:11px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:10px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						
 						$td_col.="<td>".$size_break[$i]."</td>";
 					} 
@@ -1884,7 +2073,7 @@ class OrderController extends Controller
 			{
 				if($color_code == "BLEU FONCE" || $color_code == "BLEU CLAIR" || $color_code == "GRIS CLAIR" || $color_code == "GRIS FONCE" || $color_code == "ROSE CLAIR" || $color_code == "ROSE FONCE" || $color_code == "VERT FONCE" || $color_code == "VERT CLAIR" || $color_code == "BEIGE CLAIR")
 				{
-					$line_height = "2.5";
+					$line_height = "1.5";
 				}
 				else
 				{
@@ -1995,21 +2184,35 @@ class OrderController extends Controller
 		$index_arr=array();
         foreach($size as $val)
         {
-			  $size_var = explode(' ',$size[0]);
+			  $size_var = explode(' ',$val);
 			  if (!in_array($val, $index_arr)) 
 			  { 
 				   if($val != "")
 					{
 						array_push($index_arr,$val);
-						if($size_var[1] == "MOIS")
+						if(count($size_var) > 1)
 						{
-							if(count($size) > 6)
+							if($size_var[1] == "MOIS")
 							{
-								$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								if(count($size) > 6)
+								{
+									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if(count($size) > 7)
+								{
+									$td_size.='<td style="font-size:14px;line-height:2.3"><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
 						else
@@ -2020,9 +2223,21 @@ class OrderController extends Controller
 							}
 							else
 							{
-								$td_size.="<td><br><br>".$val."</td>";
+								if($val == "NAISSANCE")
+								{
+									$td_size.='<td style="font-size:18px;line-height:0.6"><br><br>'.$val.'</td>';
+								}
+								else if($val == "PREMATURE")
+								{
+									$td_size.='<td style="font-size:16px;line-height:0.7"><br><br>'.$val.'</td>';
+								}
+								else
+								{
+									$td_size.="<td><br><br>".$val."</td>";
+								}
 							}
 						}
+						
 						
 						$td_col.='<td style="line-height:1.5">'.$size_break[$i].'</td>';
 					} 
@@ -2154,9 +2369,9 @@ class OrderController extends Controller
 		
 		 $this->created_date = $customer{0}->created_at;
 		
-		 $this->template_name = "SOL-POLY";
+		 $this->template_name = "";
 		 $this->template_zone = "";
-	     $this->template_desc = "";
+	     $this->template_desc = "Solid Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
 	   
@@ -2248,7 +2463,7 @@ class OrderController extends Controller
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 150x100mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 100x70mm</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>

@@ -327,6 +327,93 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),
+            32 => 
+            array (
+                'id' => 32,
+                'company_id' => 1,
+                'parent_id' => 0,
+                'item_name' => 'Labels',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            33 => 
+            array (
+                'id' => 33,
+                'company_id' => 1,
+                'parent_id' => 32,
+                'item_name' => 'Printed Labels',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            34 => 
+            array (
+                'id' => 34,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCL25W/M12723G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            35 => 
+            array (
+                'id' => 35,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCL25W/M13220G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            36 => 
+            array (
+                'id' => 36,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCL25W/M12723G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            37 => 
+            array (
+                'id' => 37,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCL25W/M13220G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            array (
+                'id' => 38,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TCL 5',
+                'ref_no' => 'TCL 5',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            array (
+                'id' => 39,
+                'company_id' => 1,
+                'parent_id' => 3,
+                'item_name' => 'TSL 2',
+                'ref_no' => 'TSL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            array (
+                'id' => 40,
+                'company_id' => 1,
+                'parent_id' => 4,
+                'item_name' => 'TSL 2',
+                'ref_no' => 'TSL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
         ));
         
         

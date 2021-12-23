@@ -12,7 +12,9 @@ use App\Classes\SubmitTescoOrdersUpdateQuery;
 use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\StoreOrderManagementHistory;
+use App\ErpOrderDetails;
+
 /**
  * Class to store the tesco template orders
  * @author [Praveen] <[praveen@wizroots.com]>
@@ -42,7 +44,7 @@ class TescoOrders
 	public function createTescoOrder($request,$template_id,$pi_required,$is_order_count_empty,$customer_id,$created_by,$po_required, $order_status, $edit_permission)
 	{
 		try {
-          $tesco_material_obj = new TescoMaterialQuery();
+          $order_history_obj = new StoreOrderManagementHistory();
 
           /** [ pi_required for this customer or not. If required then pi_staus will be "PI Approval Pending"  ] */
           $pi_status = $pi_required == 1?"PI Approval Pending":null;
@@ -57,7 +59,11 @@ class TescoOrders
           $order_model = 'App\\'."Tesco".str_replace(" ","",$template_data->item_name)."Orders";
 
           // total order quantity calculation
-          $total_qty_array = explode(',',$request['count_'.str_replace(" ","",$template_data->item_name)]);
+          if ($request['type'] === 'single') {
+            $total_qty_array = $request['sticker_count'][$template_data->item_name];
+          } else {
+            $total_qty_array = explode(',',$request['count_'.str_replace(" ","",$template_data->item_name)]);
+          }
           $total_qty = array_sum($total_qty_array);
 
           /** [ Get orders table maximum id value for creating order id] */
@@ -97,33 +103,33 @@ class TescoOrders
                   ]);
 
           /** Insert order data into history table */
-          $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-          $template_level = $tesco_material_obj->tescoMaterialDetails($template_id);
-	
-          $material_name  = $template_level->material;
-          $material_sub   = $template_level->material_sub;
-          $material_ref   = $template_level->ref;
-          $order_table_name = "tesco_".strtolower(str_replace(" ","",$template_data->item_name))."_orders";
-          $po_upload_status = $po_status === null?null:0;
-          $pi_approve_status = $pi_required == 1?0:null;
-          $order_status_id  = $order_status === 'Order Pending'?6:2;
-                 
-          OrderManagementHistory::updateOrCreate(['order_table_name'  => $order_table_name, 'order_table_id'    => $order_submitted->id],[
-            'buyer_id'                  => $tesco_buyer_id->id,
-            'season'                    => $request['season_code'],
-            'customer_id'               => $customer_id,
-            'material'                  => $material_name,
-            'sub_material'              => $material_sub,
-            'style'                     => $request[strtolower($request['zone']).'_style'],
-            'reference'                 => $material_ref,
-            'buyer_po'                  => $request['po_number'],
-            'ocn_number'                => $request['ocn_no'],
-            'order_status'              => $order_status_id,
-            'pi_status'                 => $pi_approve_status,
-            'po_status'                 => $po_upload_status,
-            'name_in_reports'           => $template_data->name_in_reports,
-            'order_edit_enabled'        => $edit_permission
-          ]);
+          $order_data = [];
+
+          $order_data['season_code'] = $request['season_code'];
+
+          $order_data['po_number'] = $request['po_number'];
+
+          $order_data['ocn_no'] = $request['ocn_no'];
+
+          $order_data['style'] = $request[strtolower($request['zone']).'_style'];
+
+          $order_data['customer_id'] = $customer_id;
+
+          $order_data['template_id'] = $template_id;
+
+          $order_data['order_id'] = $order_submitted->id;
+
+          $order_data['po_status'] = $po_status;
+
+          $order_data['pi_status'] = $pi_status;
+
+          $order_data['order_status_id'] = $order_status === 'Order Pending'?6:2;
+
+          $order_data['edit_permission'] = $edit_permission;
+          
+          $order_data['tesco_label'] = false;
+
+          $order_history_obj->storeOrdersHistory($order_data);
 
           return $order_submitted;
             
@@ -140,7 +146,7 @@ class TescoOrders
    * @param  [$request]
    * @param  [customer id]
    */
-  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id, $created_by)
+  public function updateTescoOrders($table_name,$temp_data,$request,$customer_id, $created_by, $barcode_type)
   {
     try
     {
@@ -148,10 +154,10 @@ class TescoOrders
       $tpnd            = explode(',',$request['tpnd']);
       $barcode         = explode(',',$request['barcode']);
       $case_size       = explode(',',$request['size']);
-      $count           = explode(',',$request['count']);
-      $template_id     = $request['edit_id'];
       $template_name   = $request['template_name'];
       $zone            = $request['zone'];
+      $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';
+      $carton_unit_type = $zone === 'CE'?'cases_per_carton':'units_per_carton';
       $qr_code         = explode('|', $request['qr_code']);
      
       if ($table_name == "tesco_tcl1_orders" || $table_name == "tesco_tcl2_orders" || $table_name == "tesco_tsl1_orders") {
@@ -160,14 +166,13 @@ class TescoOrders
           $template_array = array_combine($table_array, $qnty_id_array);
           $single_size    = $request['single_size'];
       }
-      else if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders") {
-          $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders');
-          $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty');
+      else if ($table_name == "tesco_tcl4_orders" || $table_name == "tesco_tsl3_orders" || $table_name == "tesco_tsl2_orders") {
+          $table_array = array('tesco_tcl4_orders','tesco_tsl3_orders', 'tesco_tsl2_orders');
+          $qnty_id_array = array('tesco_tcl4_orders_quanty','tesco_tsl3_orders_quanty','tesco_tsl2_orders_quanty');
           $template_array = array_combine($table_array, $qnty_id_array);
           $single_size = explode(',',$request['single_size']);
       }
       unset($template_array[$table_name]);
-
       /* update tesco_templates quantity table.
        * ie, Update all references in the combination. While editing TSL1 details, Also update TCL1 and TCL2 details.
        */
@@ -209,35 +214,37 @@ class TescoOrders
        $quantity_data = DB::table($qunty_tbl)
                        ->where($qnty_id,$table_data->id)
 		   			   ->orderBy('id')
-                       ->select('count','id')->get(); 
+                       ->select('count','id', 'ean_barcode', 'itf_barcode')->get(); 
         
-       $old_data = DB::table($qunty_tbl)
-                      ->where($qnty_id,$table_data->id)->delete();
+       DB::table($qunty_tbl)->where($qnty_id,$table_data->id)->delete();
         
         // update quantity details(dynamic rows) for tempalate
         $i=0;              
         foreach($tpnd as $value)
         {
            $quantity = isset($quantity_data[$i])?$quantity_data[$i]->count:0;
+           $second_barcode_type = $barcode_type === 'itf_barcode'?'ean_barcode':'itf_barcode';
+           $old_barcode = isset($quantity_data[$i])?$quantity_data[$i]->$second_barcode_type:0;
 
-            if(($template_name == "TCL1" && $zone=="CE") ||($template_name == "TCL2" && $zone=="CE") || ($template_name == "TSL1" && $zone=="CE"))
+            if(($template_name == "TCL1") ||($template_name == "TCL2") || ($template_name == "TSL1"))
             {
                   DB::table($qunty_tbl)->insert([
-                    'orms_tpn'           => $value,
-                    'itf_barcode'        => $barcode[$i],
+                    $tpnd_type           => $value,
+                    $barcode_type        => $barcode[$i],
                     $qnty_id             => $table_data->id,
-                    'cases_per_carton'   => $case_size[$i],
+                    $carton_unit_type   => $case_size[$i],
                     'size'               => null,
                     'count'              => $quantity,
                     'ratio_pack_type'    => $this->ratio_pack_type[$i],
                     'qr_code'            => $qr_code[$i]
                   ]);
             }
-            else if(($template_name == "TCL4" && $zone=="CE") || ($template_name == "TSL3" && $zone=="CE"))
+            else if(($template_name == "TCL4") || ($template_name == "TSL3") || ($template_name == "TSL2"))
             {
                     DB::table($qunty_tbl)->insert([
-                      'orms_tpn'        => $value,
-                      'ean_barcode'     => $barcode[$i],
+                      $tpnd_type        => $value,
+                      $barcode_type     => $barcode[$i],
+                      $second_barcode_type => $old_barcode,
                       'case_size'       => $case_size[$i],
                       $qnty_id          => $table_data->id,
                       'size'            => $single_size[$i],
@@ -245,64 +252,34 @@ class TescoOrders
                       'qr_code'         => $qr_code[$i]
                     ]);
             }
-            else if(($template_name == "TCL4" && $zone=="UK") || ($template_name == "TSL3" && $zone=="UK"))
-            {
-                    DB::table($qunty_tbl)->insert([
-                      'tpnd'           => $value,
-                      'ean_barcode'    => $barcode[$i],
-                      'case_size'      => $case_size[$i],
-                      'size'           => $single_size[$i],
-                      $qnty_id         => $table_data->id,
-                      'count'          => $quantity
-                  ]);
-            }
-            else if(($template_name == "TCL1" && $zone=="UK") ||($template_name == "TCL2" && $zone=="UK") || ($template_name == "TSL1" && $zone=="UK"))
-            {
-                    DB::table($qunty_tbl)->insert([
-                      'tpnd'               => $value,
-                      'itf_barcode'        => $barcode[$i],
-                      'units_per_carton'   => $case_size[$i],
-                      'size'               => null,
-                      $qnty_id             => $table_data->id,
-                      'count'              => $quantity,
-                      'ratio_pack_type'    => $this->ratio_pack_type[$i]
-                  ]);
-            }
             $i++;
         }
 
         // fetch erp_order_details table details for each quantity_table ids.
-        foreach($quantity_data as $quantity_table_id)
-        {
-            $quantity_id = $quantity_table_id->id;
-            $erp_order_details[] = DB::table('erp_order_details')->where('order_qnty_table_name','ilike', $qunty_tbl)->join('erp_status', 'erp_status.id', 'erp_order_details.status')->where('order_qnty_table_id','=', $quantity_id)->select('erp_order_details.id','erp_status.status_name', 'erp_order_details.erp_order_id')->first();
-        } 
+        $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+        ->where('order_qnty_table_name', $qunty_tbl)
+        ->whereIn('order_qnty_table_id', $quantity_data->pluck('id')->toArray())
+        ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+        ->get();
 
-        if(!is_null($erp_order_details[0]))
+        if($erp_order_details->isNotEmpty())
         {
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
-            foreach($erp_order_details as $erp_order_detail){
-              // delete from history table and insert new rows.
-              $history_table_id =  DB::table('history')->where('erp_order_details_id',$erp_order_detail->id)->value('id');
-              DB::table('event_history')->where('history_id',$history_table_id)->delete();
-              DB::table('history')->where('id',$history_table_id)->delete();
-              // delete from erp_order_details table
-              DB::table('erp_order_details')->where('id',$erp_order_detail->id)->delete();
-          }
+            $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
+        
+            // delete from erp_order_details table
+            DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
             
-            /** @var array [Pass array of values to updateTescoErpOrderDetails function] */
             $data_array = [];   
-            $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
             $data_array['tableName'] = $table;
-            $data_array['buyer_id'] = $tesco_buyer_id->id;
+            $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
             $data_array['id'] = $table_data->id;
             $data_array['erp_details_status'] = $erp_details_status;
             $data_array['erp_order_id'] = $erp_order_id;
             $data_array['created_by'] = $created_by;
 
-            // pass $table_name, $buyer_id,  $table_data->id, $erp_details_status and $erp_order_id array
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);
         }
 

@@ -37,8 +37,9 @@
             <li id="6" onclick="tescoCountries()"><a>Countries</a></li>
             <li id="7" onclick="tescoComponents()"><a>Component</a></li>
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
-            <li id="8" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
-            <li id="9" onclick="tescoTranslations()"><a>Translation</a></li>
+            <li id="9" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
+            {{-- <li id="9" onclick="tescoTranslations()"><a>Translation</a></li> --}}
+            <li id="10" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
           </ul>
         </div>
         <div class="content">
@@ -52,6 +53,7 @@
     @include('Admin.Settings.includes.tesco-fabriclist')
     @include('Admin.Settings.includes.tesco-warnstatement')
     @include('Admin.Settings.includes.tesco-translation')
+    @include('Admin.Settings.includes.tesco-label-sizechart')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -1248,7 +1250,6 @@
                 <div class="modal-body">
                     <div class="hidden-error"></div>
                     <div class="form-group has-feedback">
-                     
                          {!! Form::label('symbol_category', 'Category', ['class' => 'form_label']) !!}
                          {{ Form::select('symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
                       <div class="help-block with-errors"></div>
@@ -2180,6 +2181,12 @@
         $('#edit-tesco-translation-form').trigger("reset");
         $("#translation_error").addClass('hidden')
         $("#translation_update_error").addClass('hidden')
+
+        $('#add-tesco-labelsize-chart-form').trigger("reset");
+        $('#edit-tesco-labelsize-chart-form').trigger("reset");
+        $("#labelsize_error").addClass('hidden');
+        $("#labelsize_update_error").addClass('hidden');
+        $(".removeLabelSizeItem").remove();
        })
 
       /** Add orchestra garment form validation **/
@@ -2640,6 +2647,32 @@
               disableTescoSymbol(id,csrf_token)
           });
 
+          $(document).on('click', '#edit_tesco_symbol', function(e) {
+              var id = $(this).closest('tr').attr('id');
+              
+              /* call makeTescoSymbolEnabled function from tesco-settings.js*/
+              editTescoSymbol(id)
+          });
+
+        /** submit edit tesco symbol form **/
+        $('#edit_tesco_symbols_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented()){
+         }else{
+            e.preventDefault();
+            /* call editTescoCountry function from tesco-settings.js*/
+
+            var id = $(this).find('#edit_tesco_symbol_id').val();
+
+            var iso_file = $(this).find("input[name='edit_iso_symbol']")[0].files[0];
+            var astms_file = $(this).find("input[name='edit_astms_symbol']")[0].files[0];
+            var symbol_category = $(this).find('#edit_symbol_category option:selected').val();
+            var care_instruction = $(this).find('#edit_care_instruction').val();
+            var care_degree = $(this).find('#edit_care_degree').val();
+
+            updateTescoSymbols(iso_file, astms_file, symbol_category, care_instruction, care_degree,id,csrf_token);
+         }
+       })
+
           /** Add tesco country form validation **/
         $('#add-tesco-countries-form').validator().on('submit', function (e) {
           if (e.isDefaultPrevented()){
@@ -2912,6 +2945,53 @@
           disableTescoTranslation(id,csrf_token)
       });
 
+      $('#addTescoLabelSizeChartModal').on('shown.bs.modal', function () {
+        $('#addTescoLabelSizeChartModal').focus()
+        getLabelSizeModalData()
+      })
+      
+       /** Add tesco size chart form validation **/
+      $('#add-tesco-labelsize-chart-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+            console.log("logged")
+        }else{
+            e.preventDefault();
+            addTescoLabelSizeChart();
+        }
+      })
+
+      $('#edit-tesco-labelsize-chart-form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()){
+            console.log("logged")
+        }else{
+            e.preventDefault();
+            updateTescoLabelSizeChart();
+        }
+      })
+
+      $(document).on('click', '#disableTescoPrimarySizeChart', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call disableTescoPrimarySizeChart function from tesco-settings.js*/
+          disableTescoPrimarySizeChart(id,csrf_token)
+      });
+
+      $(document).on('click', '#enableTescoPrimarySizeChart', function(e) {
+          var id = $(this).closest('tr').attr('id');
+          
+          /* call enableTescoPrimarySizeChart function from tesco-settings.js*/
+          enableTescoPrimarySizeChart(id,csrf_token)
+      });
+      
+       /** get edit tesco size chart details **/
+      $(document).on('click','.edit-tesco-size-chart',function(e){
+          // var id = $(this).closest('tr').attr('id');
+          var id = $(this).data('id');
+          // alert(id)
+          e.preventDefault();
+          /* call getTescoSizeChartById function from tesco-settings.js*/
+          getTescoSizeChartById(id);
+      });
 
 
     });
