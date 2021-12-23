@@ -434,6 +434,20 @@ function tescoOrders(callback) {
                                             "zone": "CE",
                                             "template_type": 'tesco_carton_stickers'
                                         }, {
+											"id": "28,23,39",
+											"text": "TCL 4 (QR), TSL 3 & TSL 2",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}, {
+											"id": "38",
+											"text": "TCL 5 (QR)",
+											"parent_id": "3",
+											"type": "single",
+											"zone": "CE",
+											"template_type": 'tesco_carton_stickers'
+										}, {
                                             "id": "24",
                                             "text": "THL 1 (QR)",
                                             "parent_id": "3",
@@ -447,21 +461,7 @@ function tescoOrders(callback) {
                                             "type": "single",
                                             "zone": "CE",
                                             "template_type": 'tesco_carton_stickers'
-                                        }, {
-											"id": "38",
-											"text": "TCL 5 (QR)",
-											"parent_id": "3",
-											"type": "single",
-											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
-										}, {
-											"id": "28,23,39",
-											"text": "TCL 4 (QR), TSL 3 & TSL 2",
-											"parent_id": "3",
-											"type": "single",
-											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
-										}]
+                                        }]
                                     }, {
                                         "id": 4,
                                         "text": "UK",
@@ -473,7 +473,14 @@ function tescoOrders(callback) {
                                             "type": "ratio",
                                             "zone": "UK",
                                             "template_type": 'tesco_carton_stickers'
-                                        },  {
+                                        }, {
+											"id": "31,16,40",
+											"text": "TCL 4, TSL 3 & TSL 2",
+											"parent_id": "4",
+											"type": "single",
+											"zone": "UK",
+											"template_type": 'tesco_carton_stickers'
+										},  {
                                             "id": "17",
                                             "text": "THL 1",
                                             "parent_id": 4,
@@ -487,14 +494,7 @@ function tescoOrders(callback) {
                                             "type": "single",
                                             "zone": "UK",
                                             "template_type": 'tesco_carton_stickers'
-                                        }, {
-											"id": "31,16,40",
-											"text": "TCL 4, TSL 3 & TSL 2",
-											"parent_id": "4",
-											"type": "single",
-											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
-										}]
+                                        }]
                                     }]
                                 },
                                 // {
