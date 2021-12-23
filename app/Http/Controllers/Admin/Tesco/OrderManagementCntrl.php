@@ -1451,7 +1451,7 @@ class OrderManagementCntrl extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Style: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Date: '.$created_date.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 127x80mm</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 127x80mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Description: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Rev.no:</text>
 </g>
@@ -2115,7 +2115,7 @@ class OrderManagementCntrl extends Controller
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE: '.$style.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF: '.$name.' - '.$zone.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE: '.$created_date.'</text>
-<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">Size: 40x30mm</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 40x30mm</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION: '.$tesco_description.'</text>
 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
 </g>
@@ -2369,7 +2369,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_tcl1_orders"."id") as id'),DB::raw('max("tesco_tcl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl1_orders.ce_style_ref','tesco_tcl1_orders.uk_style_ref','tesco_tcl1_orders.zone','tesco_tcl1_orders.po_number',DB::raw("'".$this->tcl1."'".' as "TemplateName"'),DB::raw("'".$this->tcl1_type."'".' as "type"'))->groupBy('tesco_tcl1_orders.uk_style_ref')->groupBy('tesco_tcl1_orders.ce_style_ref')->groupBy('tesco_tcl1_orders.zone')->groupBy('tesco_tcl1_orders.po_number')->get();
 	  
 	  
@@ -2378,7 +2378,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_tcl2_orders"."id") as id'),DB::raw('max("tesco_tcl2_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl2_orders.ce_style_ref','tesco_tcl2_orders.uk_style_ref','tesco_tcl2_orders.zone','tesco_tcl2_orders.po_number',DB::raw("'".$this->tcl2."'".' as "TemplateName"'),DB::raw("'".$this->tcl2_type."'".' as "type"'))->groupBy('tesco_tcl2_orders.uk_style_ref')->groupBy('tesco_tcl2_orders.ce_style_ref')->groupBy('tesco_tcl2_orders.zone')->groupBy('tesco_tcl2_orders.po_number')->get();
 	  
 	  
@@ -2387,7 +2387,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
                     ->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
                     
     $data['tesco_tcl5_orders'] = DB::table('tesco_tcl5_orders')
@@ -2395,7 +2395,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_tcl5_orders"."id") as id'),DB::raw('max("tesco_tcl5_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl5_orders.ce_style_ref','tesco_tcl5_orders.uk_style_ref','tesco_tcl5_orders.zone','tesco_tcl5_orders.po_number',DB::raw("'".$this->tcl5."'".' as "TemplateName"'),DB::raw("'".$this->tcl5_type."'".' as "type"'))->groupBy('tesco_tcl5_orders.uk_style_ref')->groupBy('tesco_tcl5_orders.ce_style_ref')->groupBy('tesco_tcl5_orders.zone')->groupBy('tesco_tcl5_orders.po_number')->get();
 	  
     $data['tesco_thl1_orders'] = DB::table('tesco_thl1_orders')
@@ -2403,7 +2403,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_thl1_orders"."id") as id'),DB::raw('max("tesco_thl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl1_orders.ce_style_ref','tesco_thl1_orders.uk_style_ref','tesco_thl1_orders.zone','tesco_thl1_orders.po_number',DB::raw("'".$this->thl1."'".' as "TemplateName"'),DB::raw("'".$this->thl1_type."'".' as "type"'))->groupBy('tesco_thl1_orders.uk_style_ref')->groupBy('tesco_thl1_orders.ce_style_ref')->groupBy('tesco_thl1_orders.zone')->groupBy('tesco_thl1_orders.po_number')->get();
 	  
 	  
@@ -2412,7 +2412,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 	  
 	  
@@ -2421,7 +2421,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
                     ->select(DB::raw('max("tesco_tsl1_orders"."id") as id'),DB::raw('max("tesco_tsl1_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl1_orders.ce_style_ref','tesco_tsl1_orders.uk_style_ref','tesco_tsl1_orders.zone','tesco_tsl1_orders.po_number',DB::raw("'".$this->tsl1."'".' as "TemplateName"'),DB::raw("'".$this->tsl1_type."'".' as "type"'))->groupBy('tesco_tsl1_orders.uk_style_ref')->groupBy('tesco_tsl1_orders.ce_style_ref')->groupBy('tesco_tsl1_orders.zone')->groupBy('tesco_tsl1_orders.po_number')->get();
                     
     $data['tesco_tsl2_orders'] = DB::table('tesco_tsl2_orders')
@@ -2429,7 +2429,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
 										->select(DB::raw('max("tesco_tsl2_orders"."id") as id'),DB::raw('max("tesco_tsl2_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl2_orders.ce_style_ref','tesco_tsl2_orders.uk_style_ref','tesco_tsl2_orders.zone','tesco_tsl2_orders.po_number',DB::raw("'".$this->tsl2."'".' as "TemplateName"'),DB::raw("'".$this->tsl2_type."'".' as "type"'))->groupBy('tesco_tsl2_orders.uk_style_ref')->groupBy('tesco_tsl2_orders.ce_style_ref')->groupBy('tesco_tsl2_orders.zone')->groupBy('tesco_tsl2_orders.po_number')->get();
 	  
 	  
@@ -2438,7 +2438,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
                     ->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
                     
     $data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
@@ -2451,7 +2451,7 @@ class OrderManagementCntrl extends Controller
                         ->where('ce_style_ref',$style_split[1]);
                       }
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled','Order Pending'])
                     ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
                     
 	  
@@ -2473,7 +2473,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
                     ->select(DB::raw('max("tesco_tcl4_orders"."id") as id'),DB::raw('max("tesco_tcl4_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl4_orders.ce_style_ref','tesco_tcl4_orders.uk_style_ref','tesco_tcl4_orders.zone','tesco_tcl4_orders.po_number',DB::raw("'".$this->tcl4."'".' as "TemplateName"'),DB::raw("'".$this->tcl4_type."'".' as "type"'))->groupBy('tesco_tcl4_orders.uk_style_ref')->groupBy('tesco_tcl4_orders.ce_style_ref')->groupBy('tesco_tcl4_orders.zone')->groupBy('tesco_tcl4_orders.po_number')->get();
                     
     $data['tesco_tcl5_orders'] = DB::table('tesco_tcl5_orders')
@@ -2481,7 +2481,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
 										->select(DB::raw('max("tesco_tcl5_orders"."id") as id'),DB::raw('max("tesco_tcl5_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tcl5_orders.ce_style_ref','tesco_tcl5_orders.uk_style_ref','tesco_tcl5_orders.zone','tesco_tcl5_orders.po_number',DB::raw("'".$this->tcl5."'".' as "TemplateName"'),DB::raw("'".$this->tcl5_type."'".' as "type"'))->groupBy('tesco_tcl5_orders.uk_style_ref')->groupBy('tesco_tcl5_orders.ce_style_ref')->groupBy('tesco_tcl5_orders.zone')->groupBy('tesco_tcl5_orders.po_number')->get();
 
 
@@ -2490,7 +2490,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
 										->select(DB::raw('max("tesco_thl3_orders"."id") as id'),DB::raw('max("tesco_thl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_thl3_orders.ce_style_ref','tesco_thl3_orders.uk_style_ref','tesco_thl3_orders.zone','tesco_thl3_orders.po_number',DB::raw("'".$this->thl3."'".' as "TemplateName"'),DB::raw("'".$this->thl3_type."'".' as "type"'))->groupBy('tesco_thl3_orders.uk_style_ref')->groupBy('tesco_thl3_orders.ce_style_ref')->groupBy('tesco_thl3_orders.zone')->groupBy('tesco_thl3_orders.po_number')->get();
 
 
@@ -2500,7 +2500,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
                     ->select(DB::raw('max("tesco_tsl3_orders"."id") as id'),DB::raw('max("tesco_tsl3_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl3_orders.ce_style_ref','tesco_tsl3_orders.uk_style_ref','tesco_tsl3_orders.zone','tesco_tsl3_orders.po_number',DB::raw("'".$this->tsl3."'".' as "TemplateName"'),DB::raw("'".$this->tsl3_type."'".' as "type"'))->groupBy('tesco_tsl3_orders.uk_style_ref')->groupBy('tesco_tsl3_orders.ce_style_ref')->groupBy('tesco_tsl3_orders.zone')->groupBy('tesco_tsl3_orders.po_number')->get();
 
     $data['tesco_tsl2_orders'] = DB::table('tesco_tsl2_orders')
@@ -2508,7 +2508,7 @@ class OrderManagementCntrl extends Controller
 											$query->where('uk_style_ref',$style)
 											->orWhere('ce_style_ref',$style);
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
                     ->select(DB::raw('max("tesco_tsl2_orders"."id") as id'),DB::raw('max("tesco_tsl2_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_tsl2_orders.ce_style_ref','tesco_tsl2_orders.uk_style_ref','tesco_tsl2_orders.zone','tesco_tsl2_orders.po_number',DB::raw("'".$this->tsl2."'".' as "TemplateName"'),DB::raw("'".$this->tsl2_type."'".' as "type"'))->groupBy('tesco_tsl2_orders.uk_style_ref')->groupBy('tesco_tsl2_orders.ce_style_ref')->groupBy('tesco_tsl2_orders.zone')->groupBy('tesco_tsl2_orders.po_number')->get();
                     
     $data['tesco_washcare_orders'] = DB::table('tesco_washcare_orders')
@@ -2521,7 +2521,7 @@ class OrderManagementCntrl extends Controller
                         ->where('ce_style_ref',$style_split[1]);
                       }
 										})
-										->whereNotIn('order_status', ['Saved', 'Order Cancelled'])
+										->whereNotIn('order_status', ['Saved', 'Order Cancelled', 'Order Pending'])
                     ->select(DB::raw('max("tesco_washcare_orders"."id") as id'),DB::raw('max("tesco_washcare_orders"."is_order_count_empty") as is_order_count_empty'),'tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.zone','tesco_washcare_orders.po_number',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->tesco_washcare_orders_type."'".' as "type"'))->groupBy('tesco_washcare_orders.uk_style_ref')->groupBy('tesco_washcare_orders.ce_style_ref')->groupBy('tesco_washcare_orders.zone')->groupBy('tesco_washcare_orders.po_number','tesco_template.template_name')->get();
 
 
