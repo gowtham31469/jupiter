@@ -473,14 +473,7 @@ function tescoOrders(callback) {
                                             "type": "ratio",
                                             "zone": "UK",
                                             "template_type": 'tesco_carton_stickers'
-                                        }, {
-                                            "id": "31,16",
-                                            "text": "TCL 4 & TSL 3",
-                                            "parent_id": 4,
-                                            "type": "single",
-                                            "zone": "UK",
-                                            "template_type": 'tesco_carton_stickers'
-                                        }, {
+                                        },  {
                                             "id": "17",
                                             "text": "THL 1",
                                             "parent_id": 4,
