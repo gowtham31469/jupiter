@@ -1409,9 +1409,9 @@ class OrderController extends Controller
             
             //Validate the Template and Packaging Method.
             switch ($request->template_name) {
-              case 'TCL 1 , TCL 2 & TSL 1':
+              case 'TCL 1 (QR), TCL 2 (QR) & TSL 1':
                 if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 , TCL 2 & TSL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 (QR), TCL 2 (QR) & TSL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
               case 'TCL 4 & TSL 3':
@@ -1419,24 +1419,24 @@ class OrderController extends Controller
                   return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
-              case 'THL 1':
+              case 'THL 1 (QR)':
                 if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'THL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
-              case 'THL 3':
+              case 'THL 3 (QR)':
                 if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'THL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
-              case 'TCL 5':
+              case 'TCL 5 (QR)':
                 if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
-              case 'TCL 4, TSL 3 & TSL 2':
+              case 'TCL 4 (QR), TSL 3 & TSL 2':
                 if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4, TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 (QR), TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
                 }
                 break;
   
