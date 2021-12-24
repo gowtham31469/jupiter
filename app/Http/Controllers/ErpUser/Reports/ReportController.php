@@ -87,7 +87,7 @@ public function index()
         array_push($allActions, 'Order');
         array_push($action_as_id, '_order');
     }
-    $buyerId = History::all()->pluck('buyer_id');
+    $buyerId = History::groupBy('buyer_id')->pluck('buyer_id');
     $buyers=Buyer::whereIn('id',$buyerId)->orderBy('buyer_name')->pluck('buyer_name','id')->toArray();
     $actions= Action::select('id','action','type')->get()->groupBy('type')->toArray();
     $po = Action::where('type','PO Manager')->pluck('action','id')->toArray();

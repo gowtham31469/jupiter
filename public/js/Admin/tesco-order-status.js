@@ -1224,7 +1224,7 @@ function tescoStatusTable(data, path) {
 
                 } else if (key == "Artwork") {
 
-                    if (value['order_status'] != 'Saved') {
+                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending') {
                         var zone = value.Zone
                         var style_no = "";
                         if(value.tableName == "tesco_washcare_orders")
@@ -1256,7 +1256,7 @@ function tescoStatusTable(data, path) {
                         
 
                 }else if (key == "Print Proof") {
-                    if (value['order_status'] != 'Saved') {
+                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending') {
                         var zone = value.Zone
                         var style_no = "";
                         if(value.tableName == "tesco_washcare_orders")
