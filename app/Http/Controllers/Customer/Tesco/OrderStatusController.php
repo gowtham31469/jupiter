@@ -4172,9 +4172,9 @@ class OrderStatusController extends Controller
         }
         else
         {
-            // if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1" && $template_name != "TCL5") {
-            //    $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id, $created_by, $barcode_type);
-            //  } 
+            if ($temp_data->order_flag === "newOrder" && $template_name != "THL3" && $template_name != "THL1" && $template_name != "TCL5") {
+               $orderObj->updateTescoOrders($table_name, $temp_data, $request, $customer_id, $created_by, $barcode_type);
+             } 
             
             DB::table($table_name)->where('id',$template_id)
                             ->update([

@@ -176,103 +176,98 @@ class TescoOrders
       /* update tesco_templates quantity table.
        * ie, Update all references in the combination. While editing TSL1 details, Also update TCL1 and TCL2 details.
        */
-      foreach ($template_array as $table => $qunty_tbl) 
-      {
-          $qnty_id =  str_replace("_orders","_order_id",str_replace("tesco_","",$table));
-          $erp_order_details = array();
-          $table_data = DB::table($table)->where('po_number',$temp_data->po_number)
-                        ->where('uk_style_ref',$temp_data->uk_style_ref)
-                        ->where('ce_style_ref',$temp_data->ce_style_ref)
-                        ->where('order_flag',$temp_data->order_flag)
-                        ->where('order_status', '<>', 'Order Cancelled')
-                        ->where('tesco_supplier_id',$temp_data->tesco_supplier_id)->first();
-                   
-            DB::table($table)->where('po_number',$temp_data->po_number)
-                ->where('uk_style_ref',$temp_data->uk_style_ref)
-                ->where('ce_style_ref',$temp_data->ce_style_ref)
-                ->where('order_flag',$temp_data->order_flag)
-                ->where('order_status', '<>', 'Order Cancelled')
-                ->update([
-                    'zone'                 => $request['zone'],
-                    'template_type'        => $request['type'],
-                    'po_number'            => $request['po_number'],
-                    'uk_style_ref'         => $request['uk_style'],
-                    'ce_style_ref'         => $request['ce_style'],
-                    'season_code'          => $request['season_code'],
-                    'short_description'    => $request['description'],
-                    'eqos_site_code'       => $request['eqos'],
-                    'manufacture_date'     => $request['manufacture_date'],
-                    'tesco_department_id'  => $request['department'],
-                    'tesco_brand_id'       => $request['brand'],
-                    'tesco_supplier_id'    => $customer_id,
-                    'tesco_metadata_supplier_id' => $request['supplier'],
-                    'rfid_compliant'       => $request['rfid'],
-                    'tag_at_source'        => $request['tag_at_source'],
-                    'ocn_number'           => $request['tesco_ocn'],
-                  ]);
-       // get quantity_table ids.
-       $quantity_data = DB::table($qunty_tbl)
-                       ->where($qnty_id,$table_data->id)
-		   			   ->orderBy('id')
-                       ->select('count','id', 'ean_barcode', 'itf_barcode')->get(); 
-        
-       DB::table($qunty_tbl)->where($qnty_id,$table_data->id)->delete();
-        
-        // update quantity details(dynamic rows) for tempalate
-        $i=0;              
-        foreach($tpnd as $value)
-        {
-           $quantity = isset($quantity_data[$i])?$quantity_data[$i]->count:0;
-           $second_barcode_type = $barcode_type === 'itf_barcode'?'ean_barcode':'itf_barcode';
-           $old_barcode = isset($quantity_data[$i])?$quantity_data[$i]->$second_barcode_type:0;
+      foreach ($template_array as $table => $qunty_tbl) {
+        $qnty_id =  str_replace("_orders", "_order_id", str_replace("tesco_", "", $table));
+        $erp_order_details = array();
+        $table_data = DB::table($table)->where('po_number', $temp_data->po_number)
+        ->where('uk_style_ref', $temp_data->uk_style_ref)
+        ->where('ce_style_ref', $temp_data->ce_style_ref)
+        ->where('order_flag', $temp_data->order_flag)
+        ->where('order_status', '<>', 'Order Cancelled')
+        ->where('tesco_supplier_id', $temp_data->tesco_supplier_id)->first();
 
-            if(($template_name == "TCL1") ||($template_name == "TCL2") || ($template_name == "TSL1"))
-            {
-                  DB::table($qunty_tbl)->insert([
-                    $tpnd_type           => $value,
-                    $barcode_type        => $barcode[$i],
-                    $qnty_id             => $table_data->id,
-                    $carton_unit_type   => $case_size[$i],
-                    'size'               => null,
-                    'count'              => $quantity,
-                    'ratio_pack_type'    => $this->ratio_pack_type[$i],
-                    'qr_code'            => $qr_code[$i]
-                  ]);
-            }
-            else if(($template_name == "TCL4") || ($template_name == "TSL3") || ($template_name == "TSL2"))
-            {
-                    DB::table($qunty_tbl)->insert([
-                      $tpnd_type        => $value,
-                      $barcode_type     => $barcode[$i],
-                      $second_barcode_type => $old_barcode,
-                      'case_size'       => $case_size[$i],
-                      $qnty_id          => $table_data->id,
-                      'size'            => $single_size[$i],
-                      'count'           => $quantity,
-                      'qr_code'         => $qr_code[$i]
-                    ]);
+        if ($table_data) {
+          DB::table($table)->where('po_number', $temp_data->po_number)
+          ->where('uk_style_ref', $temp_data->uk_style_ref)
+          ->where('ce_style_ref', $temp_data->ce_style_ref)
+          ->where('order_flag', $temp_data->order_flag)
+            ->where('order_status', '<>', 'Order Cancelled')
+            ->update([
+              'zone'                 => $request['zone'],
+              'template_type'        => $request['type'],
+              'po_number'            => $request['po_number'],
+              'uk_style_ref'         => $request['uk_style'],
+              'ce_style_ref'         => $request['ce_style'],
+              'season_code'          => $request['season_code'],
+              'short_description'    => $request['description'],
+              'eqos_site_code'       => $request['eqos'],
+              'manufacture_date'     => $request['manufacture_date'],
+              'tesco_department_id'  => $request['department'],
+              'tesco_brand_id'       => $request['brand'],
+              'tesco_supplier_id'    => $customer_id,
+              'tesco_metadata_supplier_id' => $request['supplier'],
+              'rfid_compliant'       => $request['rfid'],
+              'tag_at_source'        => $request['tag_at_source'],
+              'ocn_number'           => $request['tesco_ocn'],
+            ]);
+          // get quantity_table ids.
+          $quantity_data = DB::table($qunty_tbl)
+          ->where($qnty_id, $table_data->id)
+          ->orderBy('id')
+          ->select('count', 'id', 'ean_barcode', 'itf_barcode')->get();
+
+          DB::table($qunty_tbl)->where($qnty_id, $table_data->id)->delete();
+
+          // update quantity details(dynamic rows) for tempalate
+          $i = 0;
+          foreach ($tpnd as $value) {
+            $quantity = isset($quantity_data[$i]) ? $quantity_data[$i]->count : 0;
+            $second_barcode_type = $barcode_type === 'itf_barcode' ? 'ean_barcode' : 'itf_barcode';
+            $old_barcode = isset($quantity_data[$i]) ? $quantity_data[$i]->$second_barcode_type : 0;
+
+            if (($template_name == "TCL1") || ($template_name == "TCL2") || ($template_name == "TSL1")) {
+              DB::table($qunty_tbl)->insert([
+                $tpnd_type           => $value,
+                $barcode_type        => $barcode[$i],
+                $qnty_id             => $table_data->id,
+                $carton_unit_type   => $case_size[$i],
+                'size'               => null,
+                'count'              => $quantity,
+                'ratio_pack_type'    => $this->ratio_pack_type[$i],
+                'qr_code'            => $qr_code[$i]
+              ]);
+            } else if (($template_name == "TCL4") || ($template_name == "TSL3") || ($template_name == "TSL2")) {
+              DB::table($qunty_tbl)->insert([
+                $tpnd_type        => $value,
+                $barcode_type     => $barcode[$i],
+                $second_barcode_type => $old_barcode,
+                'case_size'       => $case_size[$i],
+                $qnty_id          => $table_data->id,
+                'size'            => $single_size[$i],
+                'count'           => $quantity,
+                'qr_code'         => $qr_code[$i]
+              ]);
             }
             $i++;
-        }
+          }
 
-        // fetch erp_order_details table details for each quantity_table ids.
-        $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
-        ->where('order_qnty_table_name', $qunty_tbl)
-        ->whereIn('order_qnty_table_id', $quantity_data->pluck('id')->toArray())
-        ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
-        ->get();
+          // fetch erp_order_details table details for each quantity_table ids.
+          $erp_order_details = ErpOrderDetails::join('erp_status', 'erp_status.id', 'erp_order_details.status')
+          ->where('order_qnty_table_name', $qunty_tbl)
+          ->whereIn('order_qnty_table_id', $quantity_data->pluck('id')->toArray())
+          ->select('erp_order_details.id', 'erp_status.status_name', 'erp_order_details.erp_order_id')
+          ->get();
 
-        if($erp_order_details->isNotEmpty())
-        {
+          if ($erp_order_details->isNotEmpty()) {
             $erp_details_status =  $erp_order_details[0]->status_name;
             $erp_order_id =  $erp_order_details[0]->erp_order_id;
 
             $erp_order_details_id_array = $erp_order_details->pluck('id')->toArray();
-        
+
             // delete from erp_order_details table
             DB::table('erp_order_details')->whereIn('id', $erp_order_details_id_array)->delete();
-            
-            $data_array = [];   
+
+            $data_array = [];
             $data_array['tableName'] = $table;
             $data_array['buyer_id'] = DB::table('buyers')->where('buyer_name', 'Tesco')->value('id');
             $data_array['id'] = $table_data->id;
@@ -281,16 +276,17 @@ class TescoOrders
             $data_array['created_by'] = $created_by;
 
             $edit_erp_obj->updateTescoErpOrderDetails($data_array);
-        }
+          }
 
-        // update order data in order management history table 
-        OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $table_data->id]])->update([
-          'season'                    => $request['season_code'],
-          'customer_id'               => $customer_id,
-          'style'                     => $request[strtolower($request['zone']).'_style'],
-          'buyer_po'                  => $request['po_number'],
-          'ocn_number'                => $request['tesco_ocn'],
-        ]);
+          // update order data in order management history table 
+          OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $table_data->id]])->update([
+            'season'                    => $request['season_code'],
+            'customer_id'               => $customer_id,
+            'style'                     => $request[strtolower($request['zone']) . '_style'],
+            'buyer_po'                  => $request['po_number'],
+            'ocn_number'                => $request['tesco_ocn'],
+          ]);
+        }
       }
     } 
     catch (Exception $e)
