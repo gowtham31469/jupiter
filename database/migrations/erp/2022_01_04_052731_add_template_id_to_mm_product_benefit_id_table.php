@@ -13,7 +13,7 @@ class AddTemplateIdToMmProductBenefitIdTable extends Migration
      */
     public function up()
     {
-        Schema::table('mm_product_benefit_id', function (Blueprint $table) {
+        Schema::table('tesco_mm_product_benefits', function (Blueprint $table) {
             $table->unsignedInteger('template_id')->nullable(true)->index();
             $table->foreign('template_id')->references('id')->on('tesco_item_master')->onDelete('cascade');
         });
