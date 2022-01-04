@@ -67,7 +67,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("customer", "create")')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "customer", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>

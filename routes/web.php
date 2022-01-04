@@ -1072,7 +1072,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::post('save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
 
 	// Tesco care label orders admin routes
-	Route::get('swing-ticket-orders/{size}', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-care-label-order');
+	Route::get('swing-ticket-orders/', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-care-label-order');
 
   });
 
