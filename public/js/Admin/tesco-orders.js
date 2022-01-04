@@ -246,7 +246,7 @@ function tescoOrders(callback) {
 
 																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
 																				<label for="tesco_care_size_chart">Size Chart</label>
-																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, 'admin')">
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" >
 																				`+size_options+`
 																				</select>	
 																				<div class="help-block with-errors"></div>
@@ -418,35 +418,35 @@ function tescoOrders(callback) {
 											"parent_id": "3",
 											"type": "ratio",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "28,23,39",
 											"text": "TCL 4 (QR), TSL 3 & TSL 2",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "24",
 											"text": "THL 1 (QR)",
 											"parent_id": "3",
 											"type": "ratio",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "25",
 											"text": "THL 3 (QR)",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "38",
 											"text": "TCL 5 (QR)",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}]
 									}, {
 										"id": "4",
@@ -458,28 +458,28 @@ function tescoOrders(callback) {
 											"parent_id": "4",
 											"type": "ratio",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "31,16,40",
 											"text": "TCL 4, TSL 3 & TSL 2",
 											"parent_id": "4",
 											"type": "single",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "17",
 											"text": "THL 1",
 											"parent_id": "4",
 											"type": "ratio",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "18",
 											"text": "THL 3",
 											"parent_id": "4",
 											"type": "single",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}]
 									}]
 								}]
@@ -496,24 +496,91 @@ function tescoOrders(callback) {
 											"id": "34",
 											"text": "GCL25W/M12723G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										}, {
 											"id": "35",
 											"text": "GCL25W/M13220G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										},
 										{
 											"id": "36",
 											"text": "GCL25W/M12723G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										},
 										{
 											"id": "37",
 											"text": "GCL25W/M13220G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
+										},
+									]
+								},{
+									"id": "41",
+									"text": "Swing Tickets",
+									"parent_id": "32",
+									"children": [{
+											"id": "42",
+											"text": "CE Non Rfid Swing Ticket",
+											"parent_id": "41",
+											"children": [{
+												"id": "43",
+												"text": "FFC/01/M13020C - CE F&F CORE NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											}, {
+												"id": "44",
+												"text": "FFK/01/M13021C - CE F&F KIDS, SCHOOL & KIDS DRESS UP NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "45",
+												"text": "FFC/01/M13022C - CE F&F CORE SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "46",
+												"text": "FFB/01/M13023C - CE FRED & FLO NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "47",
+												"text": "GE/01/M13114C - Opt 1 - Core Ladieswear & Menswear (excluding Socks & Gifting)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "48",
+												"text": "GE/01/M13114C - Opt 2 - Kids, School and Kids Dress Up (excluding Socks & Gifting)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "49",
+												"text": "GE/01/M13114C - Opt 3 - Socks & Gifting (Adults, Kids & Baby)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "50",
+												"text": "GE/01/M13114C - Opt 4 - Fred & Flo",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "51",
+												"text": "FFK/01/M13163C - CE F&F KIDS SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "52",
+												"text": "FFB/01/M13233C - CE FRED & FLO SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "53",
+												"text": "FFC/01/M13304C - CE F&F CORE CASHMERE LARGE NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											}
+										]
 										},
 									]
 								}]
@@ -641,7 +708,7 @@ function tescoOrders(callback) {
 						}
 
 						// toggle size chart select box for template_type = tesco_care_labels
-						if(template_type === 'tesco_care_labels'){
+						if($.inArray(template_type, ['tesco_care_labels', 'tesco_swing_tickets']) != -1){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
@@ -680,11 +747,17 @@ function tescoOrders(callback) {
 								$('input[type="radio"].pdf_parser_type').prop('required', false);
 							}
 
-
-
 						}
 						$(".selectpicker").selectpicker("refresh");
 					}
+				});
+
+				$('#tesco_care_size_chart').on('change', (e) => {
+					var valueSelected  = $(e.target).val();
+					if($('#jstree').jstree(true).get_selected('full', true)[0].original.template_type === 'tesco_care_labels') {
+						getSecondarySizeCategory(valueSelected, 'admin')
+					}
+					
 				});
 
 				/** [ bootstrap validator for create tesco order form ] **/
@@ -734,25 +807,21 @@ function tescoOrders(callback) {
 									formData.append('zone', localStorage.getItem("zone"));
 									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 								}
-							} else if (template_type === 'tesco_carton_stickers') {
-								createOrders();
-							} else if(template_type === 'tesco_care_labels') {
-								var size_id = $('#tesco_care_size_chart').val();
-								var size_category = [];
-								var size_category_text = [];
-
-								/** [ Create array of multi selected categories ] */
-								$.each($("#tesco_care_size_category option:selected"), function() {
-									size_category.push($(this).val());
-									// size_category_text.push($(this).text());
-								});
-
-								/** [ Create array of multiple categories ] */
-								$.each($("#tesco_care_size_category option"), function() {
-									size_category_text.push($(this).text());
-								});
+							} else {
+								switch (template_type) {
+									case 'tesco_carton_stickers':
+										createOrders();
+										break;
+									case 'tesco_care_labels':
+										renderTescoCareOrders(role="admin", template_id);
+										break;
+									case 'tesco_swing_tickets':
+										renderTescoSwingTicketOrders(role="admin", template_id);
+										break;
 								
-								renderTescoCareOrders(role="admin", size_id, size_category, size_category_text,template_id);
+									default:
+										break;
+								}	
 							}
 							
 								localStorage.setItem("back_flag","create");
@@ -11435,3 +11504,4 @@ function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
 }
+

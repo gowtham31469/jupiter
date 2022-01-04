@@ -15,8 +15,8 @@ class CreateTescoWoolmarkLogosTable extends Migration
     {
         Schema::create('tesco_woolmark_logos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('woolmark_log');
-            $table->string('woolmark_log_text');
+            $table->string('woolmark_logo');
+            $table->string('woolmark_logo_text');
             $table->boolean('is_enabled')->default('0');
             $table->timestamps();
         });

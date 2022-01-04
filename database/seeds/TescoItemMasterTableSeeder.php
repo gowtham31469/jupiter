@@ -442,7 +442,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 43,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFC/01/M13020C - CE F&F CORE NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFC/01/M13020C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -452,7 +452,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 44,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFK/01/M13021C - CE F&F KIDS, SCHOOL & KIDS DRESS UP NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFK/01/M13021C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -462,7 +462,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 45,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFC/01/M13022C - CE F&F CORE SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFC/01/M13022C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -472,7 +472,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 46,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFB/01/M13023C - CE FRED & FLO NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFB/01/M13023C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -482,7 +482,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 47,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 1 - Core Ladieswear & Menswear (excluding Socks & Gifting)',
+                'item_name' => 'GE/01/M13114C - Opt 1',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -492,7 +492,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 48,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 2 - Kids, School and Kids Dress Up (excluding Socks & Gifting)',
+                'item_name' => 'GE/01/M13114C - Opt 2',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -502,7 +502,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 49,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 3 - Socks & Gifting (Adults, Kids & Baby)',
+                'item_name' => 'GE/01/M13114C - Opt 3',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -512,7 +512,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 50,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 4 - Fred & Flo',
+                'item_name' => 'GE/01/M13114C - Opt 4',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -522,7 +522,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 51,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFK/01/M13163C - CE F&F KIDS SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFK/01/M13163C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -532,7 +532,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 52,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFB/01/M13233C - CE FRED & FLO SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFB/01/M13233C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -542,7 +542,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 53,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'FFC/01/M13304C - CE F&F CORE CASHMERE LARGE NON-RFID BRAND TICKET INC. BOP',
+                'item_name' => 'FFC/01/M13304C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0

@@ -38,19 +38,21 @@ class CareLabelOrdersCustomerController extends Controller
     {
         try {
             // fetch tesco care metadata from class
-            $symbols = $this->caremeta->getCareMetadata()['symbols'];
+            $symbols = $this->caremeta->getCareLabelSymbols();
 
-            $coo = $this->caremeta->getCareMetadata()['coo'];
+            $coo = $this->caremeta->getCountryOrigin();
 
-            $kids_warning = $this->caremeta->getCareMetadata()['kids_warning'];
+            $kids_warning = $this->caremeta->getKidsWarning();
 
-            $components = $this->caremeta->getCareMetadata()['components'];
+            $components = $this->caremeta->getCareLabelComponents();
 
-            $fabriclists = $this->caremeta->getCareMetadata()['fabriclists'];
+            $fabriclists = $this->caremeta->getCareLabelFabrics();
 
-            $additional_instructions = $this->caremeta->getCareMetadata()['additional_instructions'];
+            $tesco_suppliers = $this->caremeta->getTescoSuppliers();
 
-            $part_of_two_piece_set = $this->caremeta->getCareMetadata()['part_of_two_piece_set'];
+            $additional_instructions = $this->caremeta->getCareLabelInstructions();
+
+            $part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
 
             $customer = DB::table('customer_profile')
                 ->select('*')
@@ -87,15 +89,9 @@ class CareLabelOrdersCustomerController extends Controller
 
     public function getFiberComponentsMeta()
     {
-        $data['components'] = DB::table('tesco_components')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['components'] = $this->caremeta->getCareLabelComponents();
 
-        $data['fabriclists'] = DB::table('tesco_fabriclists')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['fabriclists'] = $this->caremeta->getCareLabelFabrics();
 
         return response()->json([
             'message' => 'success',
