@@ -6,8 +6,22 @@
 $(function () {
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (role, size_id, size_category, size_category_text,template_id, callback=null) => {
+    renderTescoCareOrders = (role, template_id, callback=null) => {
         var user_role = role.toLowerCase();
+        var size_id = $('#tesco_care_size_chart').val();
+        var size_category = [];
+        var size_category_text = [];
+
+        /** [ Create array of multi selected categories ] */
+        $.each($("#tesco_care_size_category option:selected"), function() {
+            size_category.push($(this).val());
+            // size_category_text.push($(this).text());
+        });
+
+        /** [ Create array of multiple categories ] */
+        $.each($("#tesco_care_size_category option"), function() {
+            size_category_text.push($(this).text());
+        });
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
@@ -45,7 +59,7 @@ $(function () {
             type: "get",
             url: base_url + "/" + user_type + "/tesco/secondary-size-categories",
             data: {
-                size: $(size).val()
+                size
             },
             dataType: "json",
             beforeSend: function () {
@@ -257,7 +271,7 @@ $(function () {
 
                         $.each(valueOfElement.sec_size_chart, function (index_1, category) {
 
-                            if ($.trim(size_category_text[index]) === $.trim(category['category_name'])) {
+                            if (size_category_text[index].trim() === category['category_name'].trim()) {
 
                                 category_value = category['secondary_size'];
                                 size_id = category['id'];
@@ -267,13 +281,13 @@ $(function () {
 
                         });
 
-                        quantity_html += `<strong class="text-justify">` + $.trim(size_category_text[index]) + `</strong> : ` + category_value + `<br>`;
+                        quantity_html += `<strong class="text-justify">` + size_category_text[index].trim() + `</strong> : ` + category_value + `<br>`;
 
                         size_value = category_value === '-' ? null : category_value;
 
                         secondary_sizes.push({
                             id: size_id,
-                            secondary_size: $.trim(size_category_text[index]),
+                            secondary_size: size_category_text[index].trim(),
                             value: size_value
                         });
 

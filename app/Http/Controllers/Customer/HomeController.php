@@ -599,19 +599,21 @@ class HomeController extends Controller
                           ->get();
             $buyer_count = count($buyers);
 
-            $symbols = $caremeta->getCareMetadata()['symbols'];
+            $symbols = $caremeta->getCareLabelSymbols();
 
-            $coo = $caremeta->getCareMetadata()['coo'];
+            $coo = $caremeta->getCountryOrigin();
 
-            $kids_warning = $caremeta->getCareMetadata()['kids_warning'];
+            $kids_warning = $caremeta->getKidsWarning();
 
-            $components = $caremeta->getCareMetadata()['components'];
+            $components = $caremeta->getCareLabelComponents();
 
-            $fabriclists = $caremeta->getCareMetadata()['fabriclists'];
+            $fabriclists = $caremeta->getCareLabelFabrics();
 
-            $tesco_suppliers = $caremeta->getCareMetadata()['tesco_suppliers'];
+            $tesco_suppliers = $caremeta->getTescoSuppliers();
 
-            $additional_instructions = $caremeta->getCareMetadata()['additional_instructions'];
+            $additional_instructions = $caremeta->getCareLabelInstructions();
+
+            $part_of_two_piece_set = $caremeta->getPartOfTwoPieceSet();
 
             return view('customer/customer-orders',['buyers' => $buyers,
               'buyer_count' => $buyer_count,'symbols' => $symbols,

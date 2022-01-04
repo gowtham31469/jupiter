@@ -3998,7 +3998,23 @@ class OrderStatusController extends Controller
                 ])
                 ->first();
                 
-            $care_label_metadata = $this->caremeta->getCareMetadata();
+            $care_label_metadata = [];
+
+            $care_label_metadata['symbols'] = $this->caremeta->getCareLabelSymbols();
+
+            $care_label_metadata['coo'] = $this->caremeta->getCountryOrigin();
+
+            $care_label_metadata['kids_warning'] = $this->caremeta->getKidsWarning();
+
+            $care_label_metadata['components'] = $this->caremeta->getCareLabelComponents();
+
+            $care_label_metadata['fabriclists'] = $this->caremeta->getCareLabelFabrics();
+
+            $care_label_metadata['tesco_suppliers'] = $this->caremeta->getTescoSuppliers();
+
+            $care_label_metadata['additional_instructions'] = $this->caremeta->getCareLabelInstructions();
+
+            $care_label_metadata['part_of_two_piece_set'] = $this->caremeta->getPartOfTwoPieceSet();
         } else {
             $order_details  = $model_name::with([
                 'quantities'
