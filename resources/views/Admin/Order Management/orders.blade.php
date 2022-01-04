@@ -1156,6 +1156,9 @@ input[type="number"] {
     <!-- Tesco care labels orders js -->
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+    <!-- Tesco swing tickets js -->
+    <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
+
     <!-- Financial year selection script -->
     <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
 	<script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
