@@ -495,7 +495,7 @@ $(function () {
                             <div class="help-block with-errors"></div>\
                         </div></div>\
                         <div class="col-md-8 Washcare-po-div po-number-div" style="display:none; margin-top: 5px;">\
-                        <strong><span id="Washcare-uploaded-po"></span></strong>\
+                        <strong><span id="washcare-uploaded-po"></span></strong>\
                         <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
                         </div></div>\
                         </div>\

@@ -1161,6 +1161,7 @@ input[type="number"] {
 
     <!-- Financial year selection script -->
     <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+    <!-- Tesco single sticker orders js -->
 	<script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
 	<script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>

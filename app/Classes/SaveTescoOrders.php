@@ -99,6 +99,8 @@ class SaveTescoOrders
           
           $order_data['tesco_label'] = false;
 
+          $order_data['order_table'] = "tesco_" . strtolower(str_replace(" ", "", $template_data->item_name)) . "_orders";
+
           $order_history_obj->storeOrdersHistory($order_data);
 
           return $saved_order;

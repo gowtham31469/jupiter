@@ -5,26 +5,31 @@ namespace App\Http\Controllers\Admin\Tesco;
 use DB;
 use View;
 use App\Classes\Modules;
+use App\TescoPrimarySize;
 use Illuminate\Http\Request;
 use App\Classes\TescoCareMetadata;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Classes\TescoSwingTicketMetadata;
-use App\TescoPrimarySize;
+use App\Classes\StoreTescoSwingTicketOrder;
+use App\Http\Requests\TescoSwingTicketOrderRequest;
 
 class SwingTicketOrdersController extends Controller
 {
     private $caremeta;
     private $swingTicketMetadata;
     private $module;
+    private $swingTicketOrder;
 
-    public function __construct(Modules $module, TescoSwingTicketMetadata $swingTicketMetadata, TescoCareMetadata $caremeta)
+    public function __construct(Modules $module, TescoSwingTicketMetadata $swingTicketMetadata, TescoCareMetadata $caremeta, StoreTescoSwingTicketOrder $swingTicketOrder)
     {
         $this->module = $module;
 
         $this->swingTicketMetadata = $swingTicketMetadata;
 
         $this->caremeta = $caremeta;
+
+        $this->swingTicketOrder = $swingTicketOrder;
     }
 
 
@@ -83,6 +88,18 @@ class SwingTicketOrdersController extends Controller
                 'Line' => $e->getLine(),
                 'File' => $e->getFile()
             ]);
+        }
+    }
+
+    public function submitSwingTicketOrder(TescoSwingTicketOrderRequest $request)
+    {
+        if ($request->ajax()) {
+
+            $request->validated();
+
+            $response = $this->swingTicketOrder->storeTescoSwingTicketOrder($request, 'admin');
+
+            return $response;
         }
     }
 }

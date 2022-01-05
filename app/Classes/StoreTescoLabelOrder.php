@@ -38,7 +38,7 @@ class StoreTescoLabelOrder
         
         $max_id = TescoWashcareOrders::max('id');
 
-        $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1);
+        $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1);
 
         $customer_data = $this->getCustomerDetails($request->tesco_care_supplier, $role);
 

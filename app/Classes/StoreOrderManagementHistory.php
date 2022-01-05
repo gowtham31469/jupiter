@@ -26,8 +26,6 @@ class StoreOrderManagementHistory
 
         $template_level = $tesco_material_obj->tescoMaterialDetails($order_data['template_id'], $order_data['tesco_label']);
 
-        $order_table_name = $order_data['tesco_label'] === false ? "tesco_" . strtolower(str_replace(" ", "", $template_level->ref)) . "_orders" : $order_data['order_table'];
-
         switch ($order_data['po_status']) {
             case 'PO Pending':
                 $po_upload_status = 0;
@@ -67,7 +65,7 @@ class StoreOrderManagementHistory
 
         OrderManagementHistory::updateOrCreate(
             [
-                'order_table_name'  => $order_table_name,
+                'order_table_name'  => $order_data['order_table'],
                 'order_table_id'    => $order_data['order_id']
             ],
             [

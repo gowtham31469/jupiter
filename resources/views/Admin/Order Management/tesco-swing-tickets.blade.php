@@ -5,6 +5,9 @@
 </div>
 {!! Form::open(['id' => 'tesco_swing_ticket_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
+<input type="hidden" id="hidden_id" name="hidden_id">
+<input type="hidden" id="hidden_name" name="hidden_name">
+<div class="swing-ticket-order-invisible-div"></div>
 <span id="result"></span>
 
 <div class="row">
@@ -28,6 +31,7 @@
                 <tbody>
                     @foreach ($size_data as $value)
                     <tr id="swing_size_{{$loop->iteration}}">
+                        <input type="hidden" id="secondary_size_id_{{ $value->id }}" name="secondary_size_id[]" value="{{ $value->id }}">
                         <td> {{ $value->uk_size }}</td>
                         <td>{{ $value->ce_size }}</td>
                         <td>
@@ -36,12 +40,12 @@
                             @endforeach
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="EAN Barcode" id="swing_ean_{{$loop->iteration}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
+                            <div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_{{$loop->iteration}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$loop->iteration}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$loop->iteration}}" name="swing_quantity[]">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
@@ -51,7 +55,7 @@
             </table>
         </div>
     </div>
-
+    <div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>
 </div>
 <hr>
 <div class="row">
@@ -101,7 +105,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'maxlength' => '')) !!}
+            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -109,7 +113,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'maxlength' => '')) !!}
+            {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -117,15 +121,15 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_hu_price', 'Hungarian Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'maxlength' => '')) !!}
+            {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'required')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
 
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_swing_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{ Form::select('tesco_swing_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_swing_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this,"admin", "create")')) }}
+            {!! Form::label('swing_tesco_supplier', 'Supplier', ['class' => 'form_label']) !!}
+            {{ Form::select('swing_tesco_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_tesco_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this,"admin", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -133,7 +137,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_eqos', 'EQOS Code', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code')) !!}
+            {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code','required')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -149,7 +153,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID')) !!}
+            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -257,20 +261,18 @@
     <div class="modal-footer">
         <span class="pagename pull-left hidden-xs">Please save or submit changes before closing
             page.</span>
-        <button class="btn btn-xs btn-warning label-order-submit-btn" type="submit" onclick="validateTescoSwingTicketOrder('admin')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>
-
-
+        <button class="btn btn-xs btn-warning swing-ticket-order-submit-btn" type="submit" onclick="validateTescoSwingTicketOrder('admin')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('print')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-xs btn-danger swing-ticket-order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
 
         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button>
     </div>
     {!! Form::close() !!}
 </div>
 
-<!-- Tesco care labels orders js -->
+<!-- Tesco care swing ticket orders js -->
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>

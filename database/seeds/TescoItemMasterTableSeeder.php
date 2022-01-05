@@ -482,7 +482,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 47,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 1',
+                'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -492,7 +492,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 48,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 2',
+                'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -502,7 +502,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 49,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 3',
+                'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -512,7 +512,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 50,
                 'company_id' => 1,
                 'parent_id' => 42,
-                'item_name' => 'GE/01/M13114C - Opt 4',
+                'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0

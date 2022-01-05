@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer\Tesco;
 
+use App\Classes\Customer\CustomersList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use View;
@@ -21,8 +22,9 @@ class CareLabelOrdersCustomerController extends Controller
     private $caremeta;
     private $updateLabelOrder;
     private $parselabel;
+    private $customers;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers)
     {
 
         $this->caremeta = $caremeta;
@@ -32,6 +34,8 @@ class CareLabelOrdersCustomerController extends Controller
         $this->updateLabelOrder = $updateLabelOrder;
 
         $this->parselabel = $parselabel;
+
+        $this->customers = $customers;
     }
 
     public function index()
@@ -48,24 +52,11 @@ class CareLabelOrdersCustomerController extends Controller
 
             $fabriclists = $this->caremeta->getCareLabelFabrics();
 
-            $tesco_suppliers = $this->caremeta->getTescoSuppliers();
-
             $additional_instructions = $this->caremeta->getCareLabelInstructions();
 
             $part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
 
-            $customer = DB::table('customer_profile')
-                ->select('*')
-                ->where('customer_profile.id', Auth::guard('web_customer')->id())
-                ->first();
-
-            $tesco_suppliers = DB::table('tesco_suppliers')
-                ->join('customer_metadata', 'customer_metadata.customer_metadata_id', 'tesco_suppliers.id')
-                ->where('customer_metadata.customer_id', $customer->company_id)
-                ->where('is_enabled', 1)
-                ->orderBy('tesco_suppliers.supplier_name')
-                ->pluck('tesco_suppliers.supplier_name', 'tesco_suppliers.id')
-                ->all();
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
 
             return View::make('customer/tesco-customer-care-labels')
                 ->with([

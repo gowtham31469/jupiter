@@ -3217,6 +3217,8 @@ class OrderManagementCntrl extends Controller
 
       $order_data['tesco_label'] = false;
 
+      $order_data['order_table'] = $type;
+
       $this->order_history_obj->storeOrdersHistory($order_data);
 
 		  echo true;
@@ -3745,6 +3747,8 @@ class OrderManagementCntrl extends Controller
       $order_data['edit_permission'] = 0;
       
       $order_data['tesco_label'] = false;
+
+      $order_data['order_table'] = $type;
 
       $this->order_history_obj->storeOrdersHistory($order_data);
 
@@ -4375,7 +4379,7 @@ class OrderManagementCntrl extends Controller
                          ->where('customer_id', $customer_id->customer_id)
                          ->where('buyer_id', $buyer_id)
                          ->first();
-                $moq_value[$temp_name->item_name] = $moq == null?0:$moq->moq;
+                $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq->moq : 0;
              }
              array_push($moq_array,$moq_value);
            

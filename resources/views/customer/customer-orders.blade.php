@@ -1089,10 +1089,14 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+<!-- Tesco care labels orders js -->
 <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+<!-- Tesco single sticker orders js -->
 <script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
 <script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
+<!-- Tesco swing tickets js -->
+<script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>
