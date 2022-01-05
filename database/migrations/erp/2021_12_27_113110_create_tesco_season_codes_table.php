@@ -15,11 +15,8 @@ class CreateTescoSeasonCodesTable extends Migration
     {
         Schema::create('tesco_season_codes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('english');
-            $table->string('polish')->nullable(true);
-            $table->string('czech')->nullable(true);
-            $table->string('slovak')->nullable(true);
-            $table->string('hungarian')->nullable(true);
+            $table->string('name');
+            $table->string('description')->nullable(true);
             $table->boolean('is_enabled')->default('0');
             $table->timestamps();
         });
