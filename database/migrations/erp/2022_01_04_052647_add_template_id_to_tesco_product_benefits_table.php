@@ -27,7 +27,7 @@ class AddTemplateIdToTescoProductBenefitsTable extends Migration
     public function down()
     {
         Schema::table('tesco_product_benefits', function (Blueprint $table) {
-            //
+            $table->dropColumn('template_id');
         });
     }
 }
