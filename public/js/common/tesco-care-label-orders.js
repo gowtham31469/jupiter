@@ -317,11 +317,13 @@ $(function () {
     }
 
     // Get MOQ value based on supplier value.
-    getMoq = (user_role, crud_type) => {
-        var supplier_id = $('#tesco_care_supplier option:selected').val();
+    getMoq = (obj, user_role, crud_type) => {
+        var supplier_id = $(obj).val();
         var buyer_id = localStorage.getItem("buyer_id");
         var template_id = crud_type === 'create'?localStorage.getItem("templates"):$('#label_template_id').val();
         var template_name = crud_type === 'create'?localStorage.getItem("template_group"):$('#label_template_name').val();
+        var template_splitted = template_name.split("-");
+        var template = template_splitted[0].trim();
 
         if (supplier_id != '') {
 
@@ -346,10 +348,11 @@ $(function () {
                     $('.label-quantity-field').prop('required', false);
                     $('.label-quantity-field').parent().removeClass('has-error')
                     $('.help-block').html('');
+
                     /** [ Dynamic moq value assignment on supplier change ] */
                     $('.label-quantity-field').each(function () {
-                        $(this).attr("min", data.moq[0][template_name]);
-                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template_name]);
+                        $(this).attr("min", data.moq[0][template]);
+                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template]);
                     });
 
                 },
@@ -492,7 +495,7 @@ $(function () {
                             <div class="help-block with-errors"></div>\
                         </div></div>\
                         <div class="col-md-8 Washcare-po-div po-number-div" style="display:none; margin-top: 5px;">\
-                        <strong><span id="Washcare-uploaded-po"></span></strong>\
+                        <strong><span id="washcare-uploaded-po"></span></strong>\
                         <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
                         </div></div>\
                         </div>\

@@ -717,7 +717,7 @@ background: rgba(0,0,0,0.2);
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("admin", "create")')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "admin", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -1089,10 +1089,14 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+<!-- Tesco care labels orders js -->
 <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+<!-- Tesco single sticker orders js -->
 <script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
 <script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
+<!-- Tesco swing tickets js -->
+<script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>
