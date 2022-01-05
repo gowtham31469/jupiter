@@ -770,7 +770,7 @@ input[type="number"] {
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("admin", "create")')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "admin", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -1161,6 +1161,7 @@ input[type="number"] {
 
     <!-- Financial year selection script -->
     <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
+    <!-- Tesco single sticker orders js -->
 	<script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
 	<script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>

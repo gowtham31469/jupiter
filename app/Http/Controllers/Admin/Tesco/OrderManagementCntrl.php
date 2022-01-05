@@ -3217,6 +3217,8 @@ class OrderManagementCntrl extends Controller
 
       $order_data['tesco_label'] = false;
 
+      $order_data['order_table'] = $type;
+
       $this->order_history_obj->storeOrdersHistory($order_data);
 
 		  echo true;
@@ -3745,6 +3747,8 @@ class OrderManagementCntrl extends Controller
       $order_data['edit_permission'] = 0;
       
       $order_data['tesco_label'] = false;
+
+      $order_data['order_table'] = $type;
 
       $this->order_history_obj->storeOrdersHistory($order_data);
 
@@ -4360,29 +4364,22 @@ class OrderManagementCntrl extends Controller
              $buyer_id  = $request['buyer_id'];
 
              /**  [Get parent customer id from tesco_suppliers metadata id] */
-             $customer_id = DB::table("customer_metadata")->where('customer_metadata_id','=',$request['supplier'])->select('customer_id')->first();
+             $customer_id = DB::table("customer_metadata")->where('customer_metadata_id', $request['supplier'])->select('customer_id')->first();
              $moq_array = array();
              $moq_value = array();
              foreach ($templates as $template_id) 
              {
                 $temp_name = DB::table('tesco_item_master')
                          ->select('tesco_item_master.item_name')
-                         ->where('id','=',$template_id)
+                         ->where('id', $template_id)
                          ->first();
                 $moq = DB::table('price_taxation')
                          ->select('price_taxation.moq')
-                         ->where('template_id','=',$template_id)
-                         ->where('customer_id','=',$customer_id->customer_id)
-                         ->where('buyer_id','=',$buyer_id)
+                         ->where('template_id', $template_id)
+                         ->where('customer_id', $customer_id->customer_id)
+                         ->where('buyer_id', $buyer_id)
                          ->first();
-                if($moq)
-                {
-                  $moq_value[$temp_name->item_name] = $moq->moq;
-                }
-                else
-                {
-                  $moq_value[$temp_name->item_name] = 0;
-                }
+                $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq->moq : 0;
              }
              array_push($moq_array,$moq_value);
            
