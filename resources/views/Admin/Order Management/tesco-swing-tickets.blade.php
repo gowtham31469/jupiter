@@ -65,7 +65,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_24_char_desc', '24 Character Description', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '24')) !!}
+            {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -81,7 +81,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_po_number', 'PO Number', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_po_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Number','required')) !!}
+            {!! Form::text('swing_po_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Number','required','maxlength' => '7')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -105,7 +105,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required')) !!}
+            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -113,7 +113,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required')) !!}
+            {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -121,7 +121,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_hu_price', 'Hungarian Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'required')) !!}
+            {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -137,7 +137,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_eqos', 'EQOS Code', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code','required')) !!}
+            {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code','required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '7')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -153,7 +153,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required')) !!}
+            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -232,7 +232,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_style_number', 'Style Number', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_style_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Style Number','required')) !!}
+            {!! Form::text('swing_style_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Style Number','required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
