@@ -68,7 +68,7 @@ class TescoSwingTicketMetadata
     return DB::table('tesco_season_codes')
       ->where('is_enabled', 1)
       ->orderBy('id')
-      ->pluck('english', 'id')
+      ->pluck('name', 'id')
       ->all();
   }
 }
