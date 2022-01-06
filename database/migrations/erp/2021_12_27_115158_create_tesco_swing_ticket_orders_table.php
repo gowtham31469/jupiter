@@ -13,7 +13,7 @@ class CreateTescoSwingTicketOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('tesco_swing_ticket_orders', function (Blueprint $table) {
+        Schema::create('tesco_swingticket_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('template_id')->index();
             $table->string('order_id')->nullable(true)->unique();
@@ -96,7 +96,7 @@ class CreateTescoSwingTicketOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tesco_swing_ticket_orders');
+        Schema::dropIfExists('tesco_swingticket_orders');
 
     }
 }
