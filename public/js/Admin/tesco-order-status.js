@@ -1162,6 +1162,11 @@ function tescoStatusTable(data, path) {
                 var temp_file = value.template_file.split(',');
                 $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_text_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_front_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object>')
             }
+            else if(value.tableName == "tesco_swing_ticket_orders")
+            {
+                var temp_file = value.template_file.split(',');
+                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object>')
+            }
             else
             {
                 $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + value.template_file+'" type="image/svg+xml"></object>')
@@ -1243,6 +1248,10 @@ function tescoStatusTable(data, path) {
                         {
                             tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
+                        else if(value.tableName == "tesco_swing_ticket_orders")
+                        {
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtworkTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                        }
                         else
                         {
                             tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtwork("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
@@ -1275,6 +1284,11 @@ function tescoStatusTable(data, path) {
                         {
                             var temp_file = value.template_file.split(',');
                             tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadPrint("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                        }
+                        else if(value.tableName == "tesco_swing_ticket_orders")
+                        {
+                            var temp_file = value.template_file.split(',');
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadPrintTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
                         else
                         {
@@ -4254,6 +4268,52 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 	})
 }
 
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/admin/tesco/proof-div-tescoticketos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+	})
+}
+
 /**
  * This Function is Sub Function of #printDivTesco.
  *  For print preview of small stickers
@@ -4301,6 +4361,79 @@ function PopupTescoGenerateSmallPrintManager(data,bar_fin, name,svgDoc) {
 			}
 		},
 	})
+}
+
+function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id) {
+    $(obj).prop('disabled', true);
+    var created_at = $(obj).parent().attr('data-orderdate');
+    var status = $(obj).parent().attr('data-order_status');
+    var template_id = $(obj).parent().attr('data-template_id');
+    var table_name_print = $(obj).attr('data-table1');
+    var buyer = "tesco";
+
+	var a = document.getElementById(data);
+    var svgDoc = a.contentDocument;
+    
+	var name2=name;
+    var name = name + "-sticker";
+    
+    var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
+    var svgDoc_back = a_back.contentDocument;
+
+    var svgarr = [];
+    var svgarr_back = [];
+    ajax_count=0;
+    $.ajax({
+        url: base_url + "/admin/tesco/get-order-details",
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            name: name,
+            id: id,
+            table_name_print
+        },
+        beforeSend: function() {
+
+        },
+        success: function(data) {
+
+            $(data.order_details).each(function (key, val) {
+                // svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
+                // svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
+                var svgRoot_back =svgDoc_back.documentElement;
+                var s_back = new XMLSerializer();
+                var d_back = svgRoot_back;
+                var str_back = s_back.serializeToString(d_back);
+                var svg_back = encodeURI(str_back)
+                svgarr_back.push(svg_back)
+                ajax_count++;
+            });
+
+            var svgRoot = svgDoc.documentElement;
+            var s = new XMLSerializer();
+            var d = svgRoot;
+            var str = s.serializeToString(d);
+            var svg = encodeURI(str)
+            svgarr.push(svg)
+
+            
+            if (ajax_count == data.order_details.length) {
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
+                var svg_fin = svgarr.join(',_');
+                var svg_fin_back = svgarr_back.join(',_');
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+            }
+
+        },
+        error: function(data) {
+
+        },
+        complete: function() {
+
+        }
+    });
+
 }
 
 function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id) {
