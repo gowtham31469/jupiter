@@ -13,15 +13,15 @@ class CreateTescoSwingTicketOrdersQuantyTable extends Migration
      */
     public function up()
     {
-        Schema::create('tesco_swing_ticket_orders_quanty', function (Blueprint $table) {
+        Schema::create('tesco_swingticket_orders_quanty', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('swing_ticket_order_id')->index();
+            $table->unsignedBigInteger('swingticket_order_id')->index();
             $table->unsignedInteger('size_id')->index();
             $table->string('ean_barcode')->nullable(true);
             $table->integer('quantity')->nullable(true);
             $table->timestamps();
 
-            $table->foreign('swing_ticket_order_id')->references('id')->on('tesco_swing_ticket_orders')->onDelete('cascade');
+            $table->foreign('swingticket_order_id')->references('id')->on('tesco_swingticket_orders')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('tesco_primary_size')->onDelete('cascade');
         });
     }
@@ -33,6 +33,6 @@ class CreateTescoSwingTicketOrdersQuantyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tesco_swing_ticket_orders_quanty');
+        Schema::dropIfExists('tesco_swingticket_orders_quanty');
     }
 }
