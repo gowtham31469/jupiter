@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoSwingTicketOrders extends Model
 {
-    protected $table = 'tesco_swing_ticket_orders';
+    protected $table = 'tesco_swingticket_orders';
 
     protected $fillable = [
             'template_id',
@@ -105,17 +105,17 @@ class TescoSwingTicketOrders extends Model
      */
     public function quantities()
     {
-        return $this->hasMany('App\TescoSwingTicketOrdersQuantity', 'swing_ticket_order_id')
-            ->join('tesco_primary_size', 'tesco_swing_ticket_orders_quanty.size_id', 'tesco_primary_size.id')
+        return $this->hasMany('App\TescoSwingTicketOrdersQuantity', 'swingticket_order_id')
+            ->join('tesco_primary_size', 'tesco_swingticket_orders_quanty.size_id', 'tesco_primary_size.id')
             ->select([
-                'tesco_swing_ticket_orders_quanty.id',
-                'swing_ticket_order_id',
+                'tesco_swingticket_orders_quanty.id',
+                'swingticket_order_id',
                 'ean_barcode',
                 'quantity as count',
                 'uk_size as size',
                 'ce_size',
                 'department_title',
                 'tesco_primary_size.id as size_id'
-            ])->orderBy('tesco_swing_ticket_orders_quanty.id', 'asc');
+            ])->orderBy('tesco_swingticket_orders_quanty.id', 'asc');
     }
 }

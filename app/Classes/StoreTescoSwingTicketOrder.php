@@ -103,7 +103,7 @@ class StoreTescoSwingTicketOrder
         for ($qty_index = 0; $qty_index < count($request->swing_ean); $qty_index++) {
 
             $qty_data[] = array(
-                'swing_ticket_order_id'    => $swing_ticket_order_id,
+                'swingticket_order_id'     => $swing_ticket_order_id,
                 'ean_barcode'              => $request->swing_ean[$qty_index],
                 'quantity'                 => $request->swing_quantity[$qty_index],
                 'size_id'                  => $request->secondary_size_id[$qty_index],
@@ -127,7 +127,7 @@ class StoreTescoSwingTicketOrder
         $order_data['order_status_id'] = $order_status === 'Order Pending' ? 6 : 2;
         $order_data['edit_permission'] = $edit_permission;
         $order_data['tesco_label'] = false;
-        $order_data['order_table'] = "tesco_swing_ticket_orders";
+        $order_data['order_table'] = "tesco_swingticket_orders";
 
         $order_history_obj->storeOrdersHistory($order_data);
 

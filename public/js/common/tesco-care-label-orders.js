@@ -487,7 +487,7 @@ $(function () {
                         <div class="template-error1"></div>\
                             <div class="col-md-12">\
                                 <br> <strong>Select Artwork :</strong>\
-                            <div class="row" id="Washcare_row">\
+                            <div class="row">\
                             <div class="col-md-4">\
                             <div class="form-check form-group has-feedback">\
                                 <label class="form-check-label">\

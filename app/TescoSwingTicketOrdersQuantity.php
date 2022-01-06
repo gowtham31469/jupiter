@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoSwingTicketOrdersQuantity extends Model
 {
-    protected $table = 'tesco_swing_ticket_orders_quanty';
+    protected $table = 'tesco_swingticket_orders_quanty';
 
     protected $fillable = [
-        'swing_ticket_order_id',
+        'swingticket_order_id',
         'size_id',
         'ean_barcode',
         'quantity',
@@ -20,6 +20,6 @@ class TescoSwingTicketOrdersQuantity extends Model
      */
     public function order()
     {
-        return $this->belongsTo('App\TescoSwingTicketOrders', 'swing_ticket_order_id');
+        return $this->belongsTo('App\TescoSwingTicketOrders', 'swingticket_order_id');
     }
 }
