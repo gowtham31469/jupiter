@@ -7167,70 +7167,27 @@ try{
         if(data.po_required === 1)
         { 
             /** Buyer Po upload modal for combined po upload modal */
-            var html = '<div class="container-fluid">\
-                     <div class="template-error1"></div>\
-                         <div class="col-md-12">\
-                             <br> <strong>Select Artworks :</strong>';
+            var html = `<strong>Select Artworks :</strong>`;
             $.each(data.last_insertions, function (index, value) {
-                html += '<div class="row" id="' + index.replace(' ', '') + '_row">\
+                html += `<div class="row" id="${index.replace(' ', '')}_row">\
                           <div class="col-md-4">\
                            <div class="form-check form-group has-feedback">\
                             <label class="form-check-label">\
-                             <input class="form-check-input template-checkbox1" type="checkbox" value="' + value + '" name="' + index.replace(' ', '') + '" id="' + index.replace(' ', '') + '" style="margin-right: 10px;" data-name="' + index.replace(' ', '') + '"> ' + index + ' </label>\
+                             <input class="form-check-input template-checkbox1" type="checkbox" value="${value}" name="${index.replace(' ', '')}" id="${index.replace(' ', '')}" style="margin-right: 10px;" data-name="${index.replace(' ', '')}"> ${index} </label>\
                          <div class="help-block with-errors"></div>\
                      </div></div>\
-                     <div class="col-md-8 '+index.replace(' ', '')+'-po-div po-number-div" style="display:none; margin-top: 5px;">\
-                     <strong><span id="'+index.replace(' ', '')+'-uploaded-po"></span></strong>\
+                     <div class="col-md-8 ${index.replace(' ', '')}-po-div po-number-div" style="display:none; margin-top: 5px;">\
+                     <strong><span id="${index.replace(' ', '')}-uploaded-po"></span></strong>\
                      <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
-                     </div></div>';
+                     </div></div>`;
             });
-            html += '</div>\
-                         <div class="row">\
-                             <div class="col-md-12 upload-po-form">\
-                                 <div class="col-md-6">\
-                                     <div class="form-group has-feedback">\
-                                         <label for="po_number" class="form_label">PO Number</label>\
-                                         <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">\
-                                         <div class="help-block with-errors"></div>\
-                                     </div>\
-                                 </div>\
-                                 <div class="col-md-6">\
-                                     <div class="form-group has-feedback">\
-                                         <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-                                         <div class="help-block with-errors"></div>\
-                                     </div>\
-                                 </div>\
-                                 <div class="col-md-6">';
-            /** [ Delivery Date mandatory or not for particular customer] */
-            if (delivery_date_req === 1) {
-                html += '<div class="form-group has-feedback">\
-                         <label for="combined_delivery_date">Delivery Date</label>\
-                         <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-                             <input value="" id="combined_delivery_date" required="" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                             <div class="input-group-addon">\
-                                <span class="glyphicon glyphicon-th"></span >\
-                             </div >\
-                         </div >\
-                         <div class="help-block with-errors"></div>\
-                     </div>\
-                     </div>';
-            } else {
-                html += '<div class="form-group has-feedback">\
-                         <label for="combined_delivery_date">Delivery Date</label>\
-                         <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-                             <input value="" id="combined_delivery_date" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                             <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
-                             </div>\
-                         </div>\
-                         <div class="help-block with-errors"></div>\
-                     </div>\
-                     </div>';
-            }
-            html += '        </div>\
-                           </div>\
-                        </div>';
             /** Dynamic content for po upload modal tab */
-            $('#po-upload-modal-content').html(html);
+            $('#template-checkbox-div').html(html);
+
+            if (data.delivery_date_req === 1) {
+                $('#combined_delivery_date').prop('required', true);
+            }
+
             /** [ Backdrop for bootstrap modal ] */
             $('#poUploadModal').modal({
                 backdrop: 'static',
@@ -7394,7 +7351,7 @@ try{
                 formData.append('po_number', po_number);
                 formData.append('po_file', po_file);
 
-                uploadCombinedPO(formData, templateName);
+                uploadCombinedPO('customer',  formData, templateName);
             }
         }
 
@@ -7672,78 +7629,6 @@ function openmodaltesco(modal,i)
 		
 	//}, false);
 	
-}
-
-/**
-* Function for uploading combined po files
-* @author    <praveen>
-*/
-function uploadCombinedPO(formdata,templateName) {
-try{
-
-    $.ajax({
-             url: base_url + "/customer/tesco/upload-tesco-combined-po-file",
-             type: 'POST',
-             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              },
-             data: formdata,
-             tryCount : 0,
-             retryLimit : 2,
-             dataType:'JSON',
-             async: true,
-             cache: false,
-             contentType: false,
-             processData: false,
-             beforeSend: function () {
-				$('.po-submit-btn').prop('disabled', true);
-			 },
-             statusCode: {
-                200: function (data) {
-                    // enable submit button after po upload
-                    $('.po-submit-btn').prop('disabled', false);
-
-                    /** [ Disable already uploaded templates checkbox] */
-                    $.each(templateName, function (index, value) {
-                        $('input[type="checkbox"]#' + value).prop('checked', false)
-                        $('input[type="checkbox"]#' + value).prop('disabled', true)
-                        $('.'+ value+'-po-div').show();
-                        $('#'+ value+'-uploaded-po').text("PO Number : " + data.po_number);
-                    });
-
-                    /** [ Rename button and hide form fields if Po uploaded for all templates ] */
-                    if($('.template-checkbox1').filter(':not(:disabled)').length === 0)
-                    {
-                        $('.po-submit-btn').text('Place Order');
-                        $('.po-submit-btn').attr('data-dismiss', 'modal')
-                        $('.upload-later').hide();
-                        $('.upload-po-form').hide();
-                    }
-                    /** [ Show success alert] */
-                    $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-                        $("#success-alert").slideUp(500);
-                    });
-                    /** Reset po upload form**/
-                    $('#upload_combined_po_form').trigger('reset');
-                },
-                400: function () {
-                    $('.snackbar_span').html("Something went wrong !. Try again");
-                    showSnackbar();
-                }
-             },
-             error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
-             },
-             complete: function () {
-             }
-         })
-  } catch (e) {
-   console.log("Error:"+e)
- }
 }
 
 /**

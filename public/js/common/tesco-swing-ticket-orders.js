@@ -53,7 +53,7 @@ submitSwingTicketOrder = (user_type) => {
 
                     $('.swing-ticket-order-cancel-btn').show();
                     $(window).scrollTop(0);
-                    postSwingTicketOrderSubmit(response.data);
+                    postSwingTicketOrderSubmit(user_type, response.data);
                 },
                 400: function (error) {
                     $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
@@ -76,7 +76,7 @@ submitSwingTicketOrder = (user_type) => {
     });
 }
 
-postSwingTicketOrderSubmit = (data) => {
+postSwingTicketOrderSubmit = (user_type, data) => {
 
     // Handle po upload modal button issue after page reloading
     $('.po-submit-btn').text('Save');
@@ -105,57 +105,23 @@ postSwingTicketOrderSubmit = (data) => {
             var template_splitted = template_name.split("-");
             var template = template_splitted[0].trim();
             /** Buyer Po upload modal for combined po upload modal */
-            var html = '<div class="container-fluid">\
-                    <div class="template-error1"></div>\
-                        <div class="col-md-12">\
-                            <br> <strong>Select Artwork :</strong>\
-                        <div class="row">\
-                        <div class="col-md-4">\
-                        <div class="form-check form-group has-feedback">\
-                            <label class="form-check-label">\
-                            <input class="form-check-input template-checkbox1" type="checkbox" value="' + data.last_insertion + '" name="SwingTicket" id="SwingTicket" style="margin-right: 10px;" data-name="SwingTicket"> ' + template + ' </label>\
-                        <div class="help-block with-errors"></div>\
-                    </div></div>\
-                    <div class="col-md-8 swing-ticket-po-div po-number-div" style="display:none; margin-top: 5px;">\
-                    <strong><span id="swing-ticket-uploaded-po"></span></strong>\
-                    <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
-                    </div></div>\
-                    </div>\
-                        <div class="row">\
-                            <div class="col-md-12 upload-po-form">\
-                                <div class="col-md-6">\
-                                    <div class="form-group has-feedback">\
-                                        <label for="po_number" class="form_label">PO Number</label>\
-                                        <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                </div>\
-                                <div class="col-md-6">\
-                                    <div class="form-group has-feedback">\
-                                        <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-                                        <div class="help-block with-errors"></div>\
-                                    </div>\
-                                </div>\
-                                <div class="col-md-6">\
-                    <div class="form-group has-feedback">\
-                        <label for="combined_delivery_date">Delivery Date</label>\
-                        <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-                            <input value="" id="combined_delivery_date" required="" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                            <div class="input-group-addon">\
-                                <span class="glyphicon glyphicon-th"></span >\
-                            </div >\
-                        </div >\
-                        <div class="help-block with-errors"></div>\
-                    </div>\
-                    </div>\
-                    </div>\
-                        </div>\
-                        </div>';
+            var html = `<strong>Select Artwork :</strong>
+                        <div class="row">
+                        <div class="col-md-4">
+                        <div class="form-check form-group has-feedback">
+                            <label class="form-check-label">
+                            <input class="form-check-input template-checkbox1" type="checkbox" value="${data.last_insertion}" name="SwingTicket" id="SwingTicket" style="margin-right: 10px;" data-name="SwingTicket"> ${template} </label>
+                        <div class="help-block with-errors"></div>
+                    </div></div>
+                    <div class="col-md-8 SwingTicket-po-div po-number-div" style="display:none; margin-top: 5px;">
+                    <strong><span id="SwingTicket-uploaded-po"></span></strong>
+                    <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>
+                    </div></div>`;
             /** Dynamic content for po upload modal tab */
-            $('#po-upload-modal-content').html(html);
+            $('#template-checkbox-div').html(html);
 
             if (data.delivery_date_req === 1) {
-                $('#combined_delivery_date').attr('required', true);
+                $('#combined_delivery_date').prop('required', true);
             }
 
             /** [ Backdrop for bootstrap modal ] */
@@ -257,7 +223,7 @@ postSwingTicketOrderSubmit = (data) => {
                 formData.append('po_number', po_number);
                 formData.append('po_file', po_file);
 
-                uploadCombinedPO(formData, templateName);
+                uploadCombinedPO(user_type, formData, templateName);
             }
         }
 

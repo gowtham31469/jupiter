@@ -2,52 +2,53 @@
 
 namespace App\Http\Controllers\Admin\Tesco;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use App\Classes\Modules;
-use Response;
-use View;
 use DB;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Config;
-use App\TescoTCL1Orders;
-use App\TescoTCL1OrdersQuantity;
-use App\TescoTCL2Orders;
-use App\TescoTCL2OrdersQuantity;
-use App\TescoTCL4Orders;
-use App\TescoTCL4OrdersQuantity;
-use App\TescoTCL5Orders;
-use App\TescoTCL5OrdersQuantity;
-use App\TescoTHL1Orders;
-use App\TescoTHL1OrdersQuantity;
-use App\TescoTHL3Orders;
-use App\TescoTHL3OrdersQuantity;
-use App\TescoTSL1Orders;
-use App\TescoTSL1OrdersQuantity;
-use App\TescoTSL2Orders;
-use App\TescoTSL2OrdersQuantity;
-use App\TescoTSL3Orders;
-use App\TescoTSL3OrdersQuantity;
-use App\TescoWashcareOrders;
-use App\TescoWashcareOrdersQuantity;
-use App\TescoWashcareOrdersComponentFibreMapping;
-use App\TescoWashcareOrdersComponentMapping;
-use App\Classes\TescoOrders;
-use App\Classes\SaveTescoOrders;
-use App\Classes\CancelTescoOrders;
-use App\TescoPrimarySize;
 use PDF;
 use Auth;
-use Carbon\Carbon;
-use App\Classes\ErpOrders;
-use Intervention\Image\ImageManagerStatic as Image;
-use App\OrderManagementHistory;
-use App\Classes\StoreOrderManagementHistory;
-use App\FinancialYearResetDate;
+use View;
+use Config;
 use Session;
+use Response;
+use Carbon\Carbon;
+use App\Classes\Modules;
+use App\TescoTCL1Orders;
+use App\TescoTCL2Orders;
+use App\TescoTCL4Orders;
+use App\TescoTCL5Orders;
+use App\TescoTHL1Orders;
+use App\TescoTHL3Orders;
+use App\TescoTSL1Orders;
+use App\TescoTSL2Orders;
+use App\TescoTSL3Orders;
+use App\TescoPrimarySize;
+use App\Classes\ErpOrders;
+use App\Classes\TescoOrders;
+use App\TescoWashcareOrders;
+use Illuminate\Http\Request;
+use App\FinancialYearResetDate;
+use App\OrderManagementHistory;
+use App\Classes\SaveTescoOrders;
+use App\TescoTCL1OrdersQuantity;
+use App\TescoTCL2OrdersQuantity;
+use App\TescoTCL4OrdersQuantity;
+use App\TescoTCL5OrdersQuantity;
+use App\TescoTHL1OrdersQuantity;
+use App\TescoTHL3OrdersQuantity;
+use App\TescoTSL1OrdersQuantity;
+use App\TescoTSL2OrdersQuantity;
+use App\TescoTSL3OrdersQuantity;
+use App\Classes\UploadCombinedPO;
+use App\Classes\CancelTescoOrders;
+use App\Http\Controllers\Controller;
+use App\TescoWashcareOrdersQuantity;
+use Illuminate\Support\Facades\Input;
+use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Validator;
+use App\Classes\StoreOrderManagementHistory;
+use App\TescoWashcareOrdersComponentMapping;
+use App\TescoWashcareOrdersComponentFibreMapping;
+use Intervention\Image\ImageManagerStatic as Image;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class OrderManagementCntrl extends Controller
 {
@@ -3761,70 +3762,9 @@ class OrderManagementCntrl extends Controller
      */
     public function uploadCombinedOrdersPO(Request $request)
     {
-      try {
-         $erp_obj        = new ErpOrders();
-         $updated_erp_table_array = [];
-         $template_ids  = explode(',',$request['template_id']);
-         $template      = explode(',',$request['templates']);
-        
-         $po_file = $request['po_file'];
-         $destination_path='/storage/app/public/po-files/';
-         $path='storage/app/public/po-files/';
-         $Orname = $po_file->getClientOriginalName();
-         $filename= 'TESCO_PO_'.time().'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $Orname));
-         $po_file->move($path,$filename);
-         $destination_path_insert=$destination_path.$filename;
-          foreach($template_ids as $key => $template_id)
-          {
-              if($template_id > 0)
-              {
-                //Dynamic function name and database model name for each templates
-                $model_name = 'App\\'."Tesco".$template[$key]."Orders";
-                $order_table_name = "tesco_".strtolower($template[$key])."_orders";
-                $response = $model_name::where('id',$template_id)
-                              ->update([
-                              'po_status'         => "PO Uploaded",
-                              'purchase_order_no' => $request['po_number'],
-                              'po_file'           => $destination_path_insert,
-                              'delivery_date'     => $request['delivery_date'],
-                              'po_uploaded_at'    => $this->current_date
-                            ]);
-                /** @var array [Pass array of values to updateTescoErpOrders function] */
-                $data_array = [];   
-                $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name','=','Tesco')->first();
-                $data_array['tableName'] = $order_table_name;
-                $data_array['buyer_id'] = $tesco_buyer_id->id;
-                $data_array['id'] = $template_id;
-                
-                $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
+      $uploadPO = new UploadCombinedPO();
 
-                $content = $jsonResponse->getContent();
-                
-                $updated_erp_table_array = json_decode($content, true);
-
-                // update po upload status as "PO Uploaded" in order history table
-                OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
-                  'po_status'   => 1,
-                  'customer_po' => $request['po_number'],
-                ]);
-              }
-          }
-          
-          $class_status = array_key_exists('message', $updated_erp_table_array)?$updated_erp_table_array['message']:'error';
-
-          if ($class_status === 'success') 
-          {
-            $result = response()->json(['error'=> false,'message' =>'success', 'po_number' => $request['po_number']],200);
-          }
-          else
-          {
-           $result = response()->json(['error'=> true,'message' =>'Failed'],400);
-          }
-           
-       } catch (\Exception $e) {
-           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-       }
-       return $result;
+      return $uploadPO->uploadCustomerPO($request);
     }
 
     /**

@@ -544,7 +544,48 @@ input[type="number"] {
                     PO uploaded successfully.
                 </div>
                 <form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
-                <div id="po-upload-modal-content"></div>
+                    <div id="po-upload-modal-content">
+                        <div class="container-fluid">
+                            <div class="template-error1"></div>
+                            <div class="col-md-12" id="template-checkbox-div">
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 upload-po-form">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="po_number" class="form_label">PO Number</label>
+                                            <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value=""
+                                                id="po_number" type="text" maxlength="11">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label
+                                                    for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file"
+                                                    class="po-file-upload form-control center-block" required="" accept="application/pdf">
+                                            </span>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="combined_delivery_date">Delivery Date</label>
+                                            <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">
+                                                <input value="" id="combined_delivery_date" required="" name="combined-delivery-date"
+                                                    type="text" class="form-control center-block" placeholder="Select Delivery Date">
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
@@ -1164,6 +1205,8 @@ input[type="number"] {
     <!-- Tesco single sticker orders js -->
 	<script src="{{ asset('js/common/store-tesco-single-stickers.js') }}"></script>
 	<script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
+
+	<script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script src="{{ asset('js/moment.min.js') }}"></script>
 	<script>
 	$(document).ready (function(){
