@@ -573,7 +573,7 @@ input[type="number"] {
                                         <div class="form-group has-feedback">
                                             <label for="combined_delivery_date">Delivery Date</label>
                                             <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">
-                                                <input value="" id="combined_delivery_date" required="" name="combined-delivery-date"
+                                                <input value="" id="combined_delivery_date" name="combined-delivery-date"
                                                     type="text" class="form-control center-block" placeholder="Select Delivery Date">
                                                 <div class="input-group-addon">
                                                     <span class="glyphicon glyphicon-th"></span>
