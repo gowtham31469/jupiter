@@ -498,7 +498,7 @@ $(function () {
                 /** Dynamic content for po upload modal tab */
                 $('#template-checkbox-div').html(html);
 
-                if (data.delivery_date_req === 1) {
+                if (data.delivery_date_required === 1) {
                     $('#combined_delivery_date').prop('required', true);
                 }
 
