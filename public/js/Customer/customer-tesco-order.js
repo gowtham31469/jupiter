@@ -330,6 +330,8 @@ function tescoOrders(callback) {
                     var currentNode = $('#jstree').jstree(true).get_selected('full',true);
                     var zone        = (currentNode.length > 0) ? currentNode[0].original.zone : false;
                     var temp_type   = currentNode[0].original.template_type;
+                    console.log(`currentNode : ${currentNode}`);
+                    console.log(`template_type : ${currentNode[0].original.template_type}`);
 
                     if(zone === 'UK' && globalOrderType === 1) {
                         $(".po-upload").removeClass("hidden");
@@ -387,6 +389,8 @@ function tescoOrders(callback) {
 				$('input[type="radio"].pdf_parser_type').click(function () {
 					var parserPOzone =  $(this).attr("value");
 					var currentNode = $('#jstree').jstree(true).get_selected('full', true);
+                    console.log(`currentNode : ${currentNode}`);
+
 					var zone = (currentNode.length > 0) ? currentNode[0].original.zone : false;
 					var temp_type = currentNode[0].original.template_type;
 					if (parserPOzone === 'UK' && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
@@ -1509,7 +1513,7 @@ function createOrders(parsedObj = false, oType = false) {
                                      <button class="btn btn-xs btn-success save-btn" type="button" onclick="saveTescoOrder()" data-insert="true"><i class="fa fa-edit" aria-hidden="true"></i> Save & Continue</button>\
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
 										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("proof")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>\
-                                        <button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+                                        <button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
@@ -1520,7 +1524,7 @@ function createOrders(parsedObj = false, oType = false) {
 					 {
 						 if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
 						 {
-							$('.cancel-btn').show();
+							$('.order-cancel-btn').show();
 						 }
 
 					 }
@@ -7152,7 +7156,7 @@ try{
         /** remove save & submit button */
         $('.submit-btn').remove();
         $('.save-btn').remove();
-        $('.cancel-btn').show();
+        $('.order-cancel-btn').show();
         $('.print-btn').show();
         var div_html = '';
         /** [ store last updated id as hidden input , for approve order functionality] */
@@ -8948,11 +8952,11 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         if(order_status === 'Order Placed')
         {
-            $('.cancel-btn').show();
+            $('.order-cancel-btn').show();
         }
         else 
         {
-            $('.cancel-btn').hide();
+            $('.order-cancel-btn').hide();
         }
     }
     /** [For MOQ validation after page load] */
@@ -9174,68 +9178,6 @@ function validateItfBarcode(obj) {
     } else {
         $(obj).parent('div').removeClass('has-error has-danger');
         $(obj).next('div').html('');
-    }
-}
-
-/**
- * [cancel tesco orders]
- * @author <praveen>
- */
-function cancelTescoOrder() {
-    try {
-        var array_list   = [];
-		$('.table-id-hidden').each(function (i, table_id) {
-			my_object    = new Object();
-			var table_names = table_id.id.split("_");
-			my_object.table = table_names[0];
-			my_object.table_id = table_id.value;
-			array_list.push(my_object);
-		});
-        
-
-        $.ajax({
-            url: base_url + "/customer/tesco/cancel-tesco-order",
-            type: 'PUT',
-            data: {
-                _token: csrf_token,
-                data_array:array_list
-            },
-            tryCount: 0,
-            retryLimit: 2,
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
-                $('.snackbar_span').html('Order Cancelled Successfully');
-                showSnackbar();
-
-                $('#cancelOrderModal').modal('hide');
-                $('.cancel-btn').remove();
-
-            },
-            error: function (errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
-            },
-            complete: function () {
-                $(".loader").hide();
-                /** [To make top menu active] */
-                $(function () {
-                    var url = window.location;
-                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                    $('.dynamic-menu a').filter(function () {
-                        return this.href == url;
-                    }).parent('li').addClass('current-page').find('a').addClass('active');
-                });
-            }
-        })
-    } catch (e) {
-        /** [error statements] */
-        console.error("Error:" + e)
     }
 }
 

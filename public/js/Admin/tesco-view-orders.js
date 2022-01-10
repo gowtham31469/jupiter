@@ -256,11 +256,11 @@ function mapStoredValues(oDetails) {
         $('.delete-row, .add-row-btn, .submit-btn, .save-btn').remove();
         if(order_status === 'Order Placed')
         {
-            $('.cancel-btn').show();
+            $('.order-cancel-btn').show();
         }
         else 
         {
-            $('.cancel-btn').hide();
+            $('.order-cancel-btn').hide();
         }
     }
 

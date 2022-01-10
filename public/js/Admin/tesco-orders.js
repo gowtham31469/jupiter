@@ -1490,7 +1490,7 @@ function createOrders(parsedObj = false, oType = false) {
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
 										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("print")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>\
 										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("proof")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>\
-										<button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+										<button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
@@ -1500,7 +1500,7 @@ function createOrders(parsedObj = false, oType = false) {
 					 {
 				if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
 				{
-					$('.cancel-btn').show();
+					$('.order-cancel-btn').show();
 				}
 					 }
 				$('.main-content').html(html).selectpicker('refresh');
@@ -8355,7 +8355,7 @@ function afterAdminOrderSubmitted(data,po_number,stl_no) {
 		/** remove save & submit button */
 		$('.submit-btn').remove();
 		$('.save-btn').remove();
-		$('.cancel-btn').show();
+		$('.order-cancel-btn').show();
 		$('.print-btn').show();
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve/cancel order functionality] */
@@ -10055,68 +10055,6 @@ function afterOrderSaved(data) {
  		$(obj).next('div').html('');
  	}
  }
- 
-/**
- * [cancel tesco orders]
- * @author <praveen>
- */
-function cancelTescoOrder() {
-	try {
-		var array_list   = [];
-		$('.table-id-hidden').each(function (i, table_id) {
-			my_object    = new Object();
-			var table_names = table_id.id.split("_");
-			my_object.table = table_names[0];
-			my_object.table_id = table_id.value;
-			array_list.push(my_object);
-		});
-		
-
-		$.ajax({
-			url: base_url + "/admin/tesco/cancel-tesco-order",
-			type: 'PUT',
-			data: {
-				_token: csrf_token,
-				data_array:array_list
-			},
-			tryCount: 0,
-			retryLimit: 2,
-			dataType: "json",
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$('.snackbar_span').html('Order Cancelled Successfully');
-				showSnackbar();
-
-				$('#cancelOrderModal').modal('hide');
-				$('.cancel-btn').remove();
-
-			},
-			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
-			},
-			complete: function () {
-				$(".loader").hide();
-				/** [To make top menu active] */
-				$(function () {
-					var url = window.location;
-					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-					$('.dynamic-menu a').filter(function () {
-						return this.href == url;
-					}).parent('li').addClass('current-page').find('a').addClass('active');
-				});
-			}
-		})
-	} catch (e) {
-		/** [error statements] */
-		console.error("Error:" + e)
-	}
-}
 
 
 /**

@@ -51,7 +51,7 @@ submitSwingTicketOrder = (user_type) => {
                     $('.create-download-artwork').css('display', 'inline-block')
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
-                    $('.swing-ticket-order-cancel-btn').show();
+                    $('.order-cancel-btn').show();
                     $(window).scrollTop(0);
                     postSwingTicketOrderSubmit(user_type, response.data);
                 },
@@ -94,7 +94,7 @@ postSwingTicketOrderSubmit = (user_type, data) => {
 
         /** [ store last updated id as hidden input , for cancel order functionality] */
 
-        var div_html = '<input class="swing-ticket-table-id-hidden" id="swingticket_order_id" name="swingticket_order_id" type="hidden" value="' + data.last_insertion + '">';
+        var div_html = '<input class="table-id-hidden" id="SwingTicket_order_id" name="swingticket_order_id" type="hidden" value="' + data.last_insertion + '">';
 
         $('.swing-ticket-order-invisible-div').html(div_html);
 
