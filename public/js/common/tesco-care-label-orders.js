@@ -429,7 +429,7 @@ $(function () {
                         $('.create-download-artwork').css('display', 'inline-block')
                         $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
-                        $('.label-order-cancel-btn').show();
+                        $('.order-cancel-btn').show();
 
                         postLabelOrderSubmit(user_type, response.data);
 
@@ -475,10 +475,9 @@ $(function () {
 
             /** [ store last updated id as hidden input , for cancel order functionality] */
 
-            var div_html = '<input class="washcare-table-id-hidden" id="washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
+            var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
 
             $('.label-order-invisible-div').html(div_html);
-
 
             // check if po upload is required or not.
             if (data.po_required === 1) {
@@ -605,47 +604,6 @@ $(function () {
             }
 
         });
-    }
-
-    cancelCareLabelOrder = (user_type) => {
-
-        var array_list = [];
-        my_object = new Object();
-
-        my_object.table = 'Washcare';
-        my_object.table_id = $('#washcare_order_id').val();
-
-        array_list.push(my_object);
-
-        $.ajax({
-            url: base_url + "/" + user_type + "/tesco/cancel-tesco-order",
-            type: 'PUT',
-            data: {
-                _token: csrf_token,
-                data_array: array_list
-            },
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            statusCode: {
-                200: function (response) {
-                    $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been cancelled successfully</div>');
-
-                    $('#cancelLabelOrderModal').modal('hide');
-                    $('.label-order-cancel-btn').remove();
-                    $(window).scrollTop(0);
-                },
-                400: function (error) {
-                    $('.snackbar_span').html("Something went wrong!!");
-                    showSnackbar();
-                }
-            },
-            complete: function () {
-                $(".loader").hide();
-            }
-        })
-
     }
 
     validateEanBarcodeValue = (obj) => {

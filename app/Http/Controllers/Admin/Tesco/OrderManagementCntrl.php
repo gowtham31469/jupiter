@@ -4338,13 +4338,9 @@ class OrderManagementCntrl extends Controller
     {
 
         $cancel_order_obj = new CancelTescoOrders();
-          
-        $table_array = $request->data_array;
 
-        if(sizeof($table_array) > 0) {
-        
-            $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($table_array, $this->buyer_id);
-
+        if (sizeof($request->data_array) > 0) {
+          $canceled_order = $cancel_order_obj->cancelTescoOrderMethod($request->data_array, $this->buyer_id);
         }
     
         $result = $canceled_order == "cancelled"?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);

@@ -66,3 +66,64 @@
          console.log("Error:" + e)
      }
  }
+
+ /**
+ * [cancel tesco orders]
+ * @author <praveen>
+ */
+const cancelTescoOrder= (user_type) => {
+	try {
+		var array_list   = [];
+		$('.table-id-hidden').each(function (i, table_id) {
+			my_object    = new Object();
+			var table_names = table_id.id.split("_");
+			my_object.table = table_names[0];
+			my_object.table_id = table_id.value;
+			array_list.push(my_object);
+		});
+
+		$.ajax({
+			url: base_url + `/${user_type}/tesco/cancel-tesco-order`,
+			type: 'PUT',
+			data: {
+				_token: csrf_token,
+				data_array:array_list
+			},
+			tryCount: 0,
+			retryLimit: 2,
+			dataType: "json",
+			beforeSend: function () {
+				$(".loader").show();
+			},
+			success: function (data) {
+				$('.snackbar_span').html('Order Cancelled Successfully');
+				showSnackbar();
+
+				$('#cancelOrderModal').modal('hide');
+				$('.order-cancel-btn').remove();
+
+			},
+			error: function (errorXHR, errorStatus, errorThrown) {
+				this.tryCount++;
+				if (this.tryCount <= this.retryLimit) {
+					$.ajax(this);
+					return;
+				}
+			},
+			complete: function () {
+				$(".loader").hide();
+				/** [To make top menu active] */
+				$(function () {
+					var url = window.location;
+					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+					$('.dynamic-menu a').filter(function () {
+						return this.href == url;
+					}).parent('li').addClass('current-page').find('a').addClass('active');
+				});
+			}
+		})
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
+}
