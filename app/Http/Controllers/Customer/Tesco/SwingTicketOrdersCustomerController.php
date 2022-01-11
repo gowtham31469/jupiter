@@ -90,7 +90,7 @@ class SwingTicketOrdersCustomerController extends Controller
 
             $request->validated();
 
-            $response = $this->swingTicketOrder->storeTescoSwingTicketOrder($request, 'admin');
+            $response = $this->swingTicketOrder->storeTescoSwingTicketOrder($request, 'customer');
 
             return $response;
         }

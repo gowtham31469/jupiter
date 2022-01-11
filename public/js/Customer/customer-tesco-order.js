@@ -75,10 +75,7 @@ function tescoOrders(callback) {
             $(".loader").show();
         },
         success: function (data) {
-            
-                var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders))))));
-			
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders)))))))));
+                var newObj1 = [...data.tesco_tcl1_orders, ...data.tesco_tcl2_orders, ...data.tesco_tcl4_orders, ...data.tesco_thl1_orders, ...data.tesco_thl3_orders, ...data.tesco_tsl1_orders, ...data.tesco_tsl3_orders, ...data.tesco_washcare_orders, ...data.tesco_tcl5_orders, ...data.tesco_tsl2_orders, ...data.tesco_swingticket_orders];
 			
 				newObj1.sort(function(obj1, obj2) {
 						var date1 =obj1.created_at;
@@ -91,6 +88,8 @@ function tescoOrders(callback) {
                 var UKUniqueNames = [];
                 var CEPOCollection = [];
                 var UKPOCollection = [];
+                var CEOrderIds = [];
+				var UKOrderIds = [];
                 var artwork_collection = {};
                 var JointUniqueNames = [];
 				var JointPOCollection = [];
@@ -99,32 +98,36 @@ function tescoOrders(callback) {
                     if(newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
                         if(CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
                             CEPOCollection.push(newObj1[i].po_number); 
+                            CEOrderIds.push(newObj1[i].id);
                             CEUniqueNames.push(newObj1[i].ce_style_ref);
                             artwork_collection[newObj1[i].ce_style_ref] = {};
-                            artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);  
+                            artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;  
                         } else {
                             if(CEPOCollection.indexOf(newObj1[i].po_number) === -1) {
                                 CEPOCollection.push(newObj1[i].po_number);
-                                artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+                                CEOrderIds.push(newObj1[i].id);
+                                artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
                             } else {
                                 var artwork_group = artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number];
-                                artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group+','+newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+                                artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group+','+newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
                             }
                         }
 
                     } else if(newObj1[i].zone === 'UK' && newObj1[i].uk_style_ref !== null) {
                         if(UKUniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
                             UKPOCollection.push(newObj1[i].po_number);
+                            UKOrderIds.push(newObj1[i].id);
                             UKUniqueNames.push(newObj1[i].uk_style_ref);
                             artwork_collection[newObj1[i].uk_style_ref] = {};
-                            artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+                            artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
                         } else {
                             if(UKPOCollection.indexOf(newObj1[i].po_number) === -1) {
                                 UKPOCollection.push(newObj1[i].po_number);
-                                artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+                                UKOrderIds.push(newObj1[i].id);
+                                artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
                             } else {
                                 var artwork_group = artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number];
-                                artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group+','+newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+                                artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group+','+newObj1[i].template_id+'__'+newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
                             }
                             
                         }
@@ -143,14 +146,14 @@ function tescoOrders(callback) {
                 if(CEUniqueNames.length > 0) {
                     options+="<optgroup label='CE'>";
                     for(i = 0; i< CEUniqueNames.length; i++) {    
-                        options+="<option data-zone='ce'>"+CEUniqueNames[i]+"</option>";
+                        options += "<option data-zone='ce' data-orderid ='"+CEOrderIds[i]+"'>" + CEUniqueNames[i] + "</option>";
                     }
                     options+="</optgroup>";
                 }
                 if(UKUniqueNames.length > 0) {
                     options+="<optgroup label='UK'>";
                     for(i = 0; i< UKUniqueNames.length; i++) { 
-                        options+="<option data-zone='uk'>"+UKUniqueNames[i]+"</option>";
+                        options += "<option data-zone='uk' data-orderid ='"+UKOrderIds[i]+"'>" + UKUniqueNames[i] + "</option>";
                     }
                     options+="</optgroup>";
                 }
@@ -875,7 +878,7 @@ function tescoOrders(callback) {
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-                        viewOrder(po_num, artwork, style_number, zone, orderid);
+                        viewOrder("customer", po_num, artwork, style_number, zone, orderid);
                     }
                 })
 				callback();
@@ -8755,86 +8758,6 @@ function loadTemplatePreview() {
         }
     })
 }
-/**
- * AJAX method to fetch the order details.
- * @return {[type]} [description]
- */
-function viewOrder(pNumber,aWork,style_number, zone, orderid) {
-    try {
-
-        is_joint_order = zone === "joint"?true:false;
-
-        $.ajax({
-            url: base_url + "/customer/tesco/view-order",
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            data: {'po_number':pNumber, 'artwork':aWork, 'style_number':style_number, "zone":zone, "is_joint_order":is_joint_order, "orderid":orderid},
-            tryCount: 0,
-            retryLimit: 2,
-            dataType: 'JSON',
-            statusCode: {
-                200: function(data) {
-                    var node_ids = [];
-                    var zone = [];
-                    var type = [];
-                    var group = [];
-                    var nodes;
-                    var template_zone;
-                    var template_type;
-                    $.each(data.result, function(index, object) {
-                        if( object && object !== "null" && object !== "undefined" ) {
-                            node_ids.push(object.template_id);
-                            zone.push(object.zone);
-                            type.push(object.template_type);
-                            group.push(object.TemplateName);
-                        }
-                    });
-                    if(node_ids.length > 0) {
-                        nodes = node_ids.toString();
-                    }
-                    if(zone.length > 0 && $.unique(zone).length === 1) {
-                        template_zone = zone[0];
-                    }
-                    if(type.length > 0 && $.unique(type).length === 1) {
-                        template_type = type[0];
-                    }
-                    group = group.toString();                  
-                    localStorage.setItem("templates", nodes);
-                    localStorage.setItem("zone", template_zone);
-                    localStorage.setItem("template type", template_type);
-                    localStorage.setItem("template_group", group);
-
-                    if( !is_joint_order) {
-                        createOrders(data.result, "viewOrder");
-                    } else {
-                        renderLabelViewOrderPage(data.result, 'customer');
-                    }
-                },
-                400: function() {
-                    $('.snackbar_span').html("Sorry!! Couldn't process your request. Please try again later.");
-                    showSnackbar();
-                }
-            },
-            error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
-            },
-            complete: function() {
-                 $(".loader").hide();
-            }
-        })
-    } catch (e) {
-        console.error("Error:" + e)
-    }
-}
 
 /**
  * Function to render the stored order details to the create order page.
@@ -8979,121 +8902,6 @@ function mapStoredValues(oDetails) {
     $(".selectpicker").selectpicker('refresh');
 }
 
-/**
- * Function to load the artworks for correspinding style number
- * @param  {string} style     Style Number of the order
- * @param  {object} artwork_collection Collection of all orders
- */
-function loadArtworkNames(artwork_collection_style) {
-    if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
-        $('.artwork_list').removeClass('hidden');
-        var options="<option value=''>Search Artwork</option>";
-        $.each(artwork_collection_style, function(po,templs) {
-            var awArray = templs.split(",");
-            var ratioTCL  = [];
-            var ratioTCLArtworks  = [];
-            var singleTCL = [];
-            var singleTCLArtworks = [];
-            var ratioTHL = [];
-            var ratioTHLArtworks = [];
-            var singleTHL = [];
-            var singleTHLArtworks = [];
-            var jointWashcareLabels = [];
-            var jointWashcareLabelArtworks = [];
-            var singleTCL5 = [];
-            var singleTCL5Artworks = [];
-            var ratioTCLStatus, singleTCLStatus, ratioTHLStatus, singleTHLStatus, jointWashcareLabelsStatus, jointWashcareLabelsId, singleTCL5Status;
-            for (i = 0; i < awArray.length; i++) { 
-                var templateInfo = awArray[i].split("__");
-                switch (templateInfo[1]) {
-                    case 'TCL 1':
-                        ratioTCL.push(templateInfo[1]);
-                        ratioTCLArtworks.push(templateInfo[0]);
-                        ratioTCLStatus = templateInfo[2];
-                        break;
-                    case 'TCL 2':
-                        ratioTCL.push(templateInfo[1]);
-                        ratioTCLArtworks.push(templateInfo[0]);
-                        ratioTCLStatus = templateInfo[2];
-                        break;
-                    case 'TCL 4':
-                        singleTCL.push(templateInfo[1]);
-                        singleTCLArtworks.push(templateInfo[0]);
-                        singleTCLStatus = templateInfo[2];
-                        break;
-                    case 'TSL 1':
-                        ratioTCL.push(templateInfo[1]);
-                        ratioTCLArtworks.push(templateInfo[0]);
-                        ratioTCLStatus = templateInfo[2];
-                        break;
-                    case 'TSL 3':
-                        singleTCL.push(templateInfo[1]);
-                        singleTCLArtworks.push(templateInfo[0]);
-                        singleTCLStatus = templateInfo[2];
-                        break;
-                    case 'THL 1':
-                        ratioTHL.push(templateInfo[1]);
-                        ratioTHLArtworks.push(templateInfo[0]);
-                        ratioTHLStatus = templateInfo[2];
-                        break;
-                    case 'THL 3':
-                        singleTHL.push(templateInfo[1]);
-                        singleTHLArtworks.push(templateInfo[0]);
-                        singleTHLStatus = templateInfo[2];
-                        break;
-                    case 'TCL 5':
-                        singleTCL5.push(templateInfo[1]);
-                        singleTCL5Artworks.push(templateInfo[0]);
-                        singleTCL5Status = templateInfo[2];
-                        break;
-                    case 'TSL 2':
-                        singleTCL.push(templateInfo[1]);
-                        singleTCLArtworks.push(templateInfo[0]);
-                        singleTCLStatus = templateInfo[2];
-                        break;
-                    default:
-                        jointWashcareLabels.push(templateInfo[1]);
-                        jointWashcareLabelArtworks.push(templateInfo[0]);
-                        jointWashcareLabelsStatus = templateInfo[2];
-                        jointWashcareLabelsId = templateInfo[3];
-                }
-            }
-            if (typeof ratioTCL !== 'undefined' && ratioTCL.length > 0 && typeof ratioTCLArtworks !== 'undefined' && ratioTCLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTCLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTCLArtworks.join()+"'>"+ratioTCL.join()+"</option>";
-                
-            }
-
-            if (typeof singleTCL !== 'undefined' && singleTCL.length > 0 && typeof singleTCLArtworks !== 'undefined' && singleTCLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCLArtworks.join()+"'>"+singleTCL.join()+"</option>";
-                
-            }
-
-            if (typeof ratioTHL !== 'undefined' && ratioTHL.length > 0 && typeof ratioTHLArtworks !== 'undefined' && ratioTHLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+ratioTHLStatus+"' value='"+po+"' data-subtext='"+po+"' data-tempid='"+ratioTHLArtworks.join()+"'>"+ratioTHL.join()+"</option>";
-                
-            }
-
-            if (typeof singleTHL !== 'undefined' && singleTHL.length > 0 && typeof singleTHLArtworks !== 'undefined' && singleTHLArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+singleTHLStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTHLArtworks.join()+"'>"+singleTHL.join()+"</option>";
-                
-            }
-
-            if (typeof jointWashcareLabels !== 'undefined' && jointWashcareLabels.length > 0 && typeof jointWashcareLabelArtworks !== 'undefined' && jointWashcareLabelArtworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+jointWashcareLabelsStatus+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+jointWashcareLabelArtworks.join()+"' data-orderid='"+jointWashcareLabelsId+"'>"+jointWashcareLabels.join()+"</option>";
-                
-            }
-
-            if (typeof singleTCL5 !== 'undefined' && singleTCL5.length > 0 && typeof singleTCL5Artworks !== 'undefined' && singleTCL5Artworks.length > 0) {
-                options+="<option data-icon='glyphicon glyphicon-stop "+singleTCL5Status+"'  value='"+po+"' data-subtext='"+po+"' data-tempid='"+singleTCL5Artworks.join()+"'>"+singleTCL5.join()+"</option>";
-                
-            }
-        });
-        $('#artwork_list').html(options);
-        $('#artwork_list').selectpicker('refresh');
-    } else {
-        throw "artwork_collection_empty";
-    }
-}
 /**
  * After order drafted/Saved callback function
  * @author <praveen>
