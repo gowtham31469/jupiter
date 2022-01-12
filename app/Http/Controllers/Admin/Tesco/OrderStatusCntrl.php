@@ -2140,17 +2140,31 @@ class OrderStatusCntrl extends Controller
         $i=0;
         $xx=15;
         $first_time=0;
+        $first_page=0;
         PDF::AddPage();
         PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
         
-        foreach($data_back as $value)
+        foreach($data_back as $key => $value)
         {
-            if($i == 3)
+            if($first_page == 0)
             {
-                $i=0;
-                PDF::AddPage();
+                if($i == 3)
+                {
+                    $i=0;
+                    PDF::AddPage();
+                    $first_page++;
+                }
             }
+            else
+            {
+                if($i == 4)
+                {
+                    $i=0;
+                    PDF::AddPage();
+                }
+            }
+            
 
             if($i == 0)
             {
@@ -2771,6 +2785,47 @@ class OrderStatusCntrl extends Controller
                                 ->select($table.'.*',$table.'.24_char_desc as twenty_four_char_desc','tesco_season_codes.name as season_code','tesco_wee_symbols.wee_symbol','tesco_woolmark_logos.woolmark_logo')
                                 ->get();
 
+
+                //print_r($value->size_id);
+                $tesco_primary_size  = 	DB::table('tesco_primary_size')
+                                        ->where('id',$value->size_id)
+                                        ->select('*')
+                                        ->get();
+
+                $tesco_month_under = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','months (1-4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_month_over = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','months (over 4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_und   = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (1- 1½)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_under = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (up to 4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_over = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (over 4)')
+                                    ->select('*')
+                                    ->get();
+
+
+                $tesco_secondary_size_chart  = 	DB::table('tesco_secondary_size_chart')
+                                                ->leftJoin('tesco_secondary_size_category','tesco_secondary_size_chart.tesco_secondary_size_category_id','=','tesco_secondary_size_category.id')
+                                                ->leftJoin('tesco_secondary_size_translation',DB::raw('LOWER(tesco_secondary_size_category.category_name)'),'=',DB::raw('LOWER(tesco_secondary_size_translation.english)'))
+                                                ->where('tesco_primary_size_id',$value->size_id)
+                                                ->orderBy('tesco_secondary_size_chart.id', 'asc')
+                                                ->select('tesco_secondary_size_chart.*','tesco_secondary_size_translation.english','tesco_secondary_size_translation.polish','tesco_secondary_size_translation.czech','tesco_secondary_size_translation.slovak','tesco_secondary_size_translation.hungarian')
+                                                ->get();
+
                 $value->zone=$order_omp[0]->zone;
                 $value->po_number=$order_omp[0]->po_number;
                 $value->customer_name=$customer_name[0]->short_name;
@@ -2779,15 +2834,25 @@ class OrderStatusCntrl extends Controller
                 $value->season_code=$order_omp[0]->season_code;
                 $value->twenty_four_char_desc=$order_omp[0]->twenty_four_char_desc;
                 $value->cz_selling_price=$order_omp[0]->cz_selling_price;
-                $value->cz_selling_price=$order_omp[0]->sk_selling_price;
+                $value->sk_selling_price=$order_omp[0]->sk_selling_price;
                 $value->hu_selling_price=$order_omp[0]->hu_selling_price;
                 $value->eqos_site_code=$order_omp[0]->eqos_site_code;
                 $value->wee_symbol=$order_omp[0]->wee_symbol;
                 $value->woolmark_logo=$order_omp[0]->woolmark_logo;
+                $value->ce_size_name=$tesco_primary_size[0]->ce_size;
+                $value->tesco_secondary_size_chart=$tesco_secondary_size_chart;
                 $value->product_desc_text=$order_omp[0]->product_desc_text;
+                $value->item_name=$tesco_item_master[0]->item_name;
                 $value->product_benefit_text=$order_omp[0]->product_benefit_text;
                 $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
+                $value->product_benefit_id=$order_omp[0]->product_benefit_id;
+                $value->mm_product_benefit_id=$order_omp[0]->mm_product_benefit_id;
                 $value->created_at=$order_omp[0]->created_at;
+                $value->tesco_month_under=$tesco_month_under;
+                $value->tesco_month_over=$tesco_month_over;
+                $value->tesco_year_und=$tesco_year_und;
+                $value->tesco_year_under=$tesco_year_under;
+                $value->tesco_year_over=$tesco_year_over;
             }
             else
             {

@@ -261,6 +261,13 @@ class UploadCsvController extends Controller
                         $kids_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
                       }
                     }
+                    else if($value->category == "AGE / SIZE")
+                    {
+                      if($value->english !=  null && $value->english !=  "" )
+                      {
+                        $size_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      }
+                    }
                     else if($value->english == "part of set")
                     {
                       $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
@@ -331,6 +338,11 @@ class UploadCsvController extends Controller
                   if(!empty($kids_arr)){
                     DB::statement('TRUNCATE TABLE tesco_kids_warning_statements RESTART IDENTITY CASCADE');
                     DB::table('tesco_kids_warning_statements')->insert($kids_arr);
+                  }
+
+                  if(!empty($size_arr)){
+                    DB::statement('TRUNCATE TABLE tesco_secondary_size_translation RESTART IDENTITY CASCADE');
+                    DB::table('tesco_secondary_size_translation')->insert($kids_arr);
                   }
                   $result = response()->json(['error' =>false,'message' => 'Translation File Uploaded Successfully'], 200);
               }
