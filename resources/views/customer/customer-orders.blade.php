@@ -1117,6 +1117,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <!-- Tesco swing tickets js -->
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
+<script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 
 <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>

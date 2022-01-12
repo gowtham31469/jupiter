@@ -67,7 +67,29 @@ submitSwingTicketOrder = (user_type) => {
                     $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
                     $('.swing-ticket-order-submit-btn').prop('disabled', false);
                     $(window).scrollTop(0);
-                }
+                },
+                409: function (response) {
+					var html_content = '<div class="alert alert-warning alert-dismissible" role="alert">\
+                             <strong class="alert-heading">Whoops! An order has been already placed using this PO number and Style number.</strong>\
+                              <button type="button" class="close close-btn" data-dismiss="alert" aria-label="Close">\
+                                <span aria-hidden="true">×</span>\
+                              </button>\
+							  </div>';
+
+					$('#order-exists-alert').html(html_content);
+
+					/** [ Show only alertbox if data already exists ] */
+					$('.po-modal-content').hide();
+					$('.close-btn').attr('data-dismiss', 'modal')
+					$('#poUploadModal').modal('show');
+					/** [ Backdrop for bootstrap modal ] */
+					$('#poUploadModal').modal({
+						backdrop: 'static',
+						keyboard: false
+					});
+					$('.swing-ticket-order-submit-btn').prop('disabled', false);
+
+				},
         },
         complete: function () {
             

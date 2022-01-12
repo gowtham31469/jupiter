@@ -62,7 +62,7 @@ function tescoOrders(callback) {
 				$(".loader").show();
 			},
 			success: function (data) {
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders)))))))));
+				var newObj1 = [...data.tesco_tcl1_orders, ...data.tesco_tcl2_orders, ...data.tesco_tcl4_orders, ...data.tesco_thl1_orders, ...data.tesco_thl3_orders, ...data.tesco_tsl1_orders, ...data.tesco_tsl3_orders, ...data.tesco_washcare_orders, ...data.tesco_tcl5_orders, ...data.tesco_tsl2_orders, ...data.tesco_swingticket_orders];
 				
 				newObj1.sort(function(obj1, obj2) {
 					var date1 =obj1.created_at;
@@ -76,6 +76,8 @@ function tescoOrders(callback) {
 				var UKUniqueNames = [];
 				var CEPOCollection = [];
 				var UKPOCollection = [];
+				var CEOrderIds = [];
+				var UKOrderIds = [];
 				var JointUniqueNames = [];
 				var JointPOCollection = [];
 				var artwork_collection = {};
@@ -84,33 +86,37 @@ function tescoOrders(callback) {
 					if (newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
 						if (CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
 							CEPOCollection.push(newObj1[i].po_number);
+							CEOrderIds.push(newObj1[i].id);
 							CEUniqueNames.push(newObj1[i].ce_style_ref);
 							artwork_collection[newObj1[i].ce_style_ref] = {};
-							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 						} else {
 							if (CEPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								CEPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								CEOrderIds.push(newObj1[i].id);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							}
 						}
 
 					} else if (newObj1[i].zone === 'UK' && newObj1[i].uk_style_ref !== null) {
 						if (UKUniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
 							UKPOCollection.push(newObj1[i].po_number);
+							UKOrderIds.push(newObj1[i].id);
 							UKUniqueNames.push(newObj1[i].uk_style_ref);
 							artwork_collection[newObj1[i].uk_style_ref] = {};
-							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 						} else {
 							if (UKPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								UKPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								UKOrderIds.push(newObj1[i].id);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							}
 
 						}
@@ -130,14 +136,14 @@ function tescoOrders(callback) {
 				if (CEUniqueNames.length > 0) {
 					options += "<optgroup label='CE'>";
 					for (i = 0; i < CEUniqueNames.length; i++) {
-						options += "<option data-zone='ce'>" + CEUniqueNames[i] + "</option>";
+						options += "<option data-zone='ce' data-orderid ='"+CEOrderIds[i]+"'>" + CEUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
 				if (UKUniqueNames.length > 0) {
 					options += "<optgroup label='UK'>";
 					for (i = 0; i < UKUniqueNames.length; i++) {
-						options += "<option data-zone='uk'>" + UKUniqueNames[i] + "</option>";
+						options += "<option data-zone='uk' data-orderid ='"+UKOrderIds[i]+"'>" + UKUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
@@ -856,7 +862,7 @@ function tescoOrders(callback) {
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-						viewOrder(po_num, artwork, style_number, zone, orderid);
+						viewOrder("admin", po_num, artwork, style_number, zone, orderid);
 					}
 				})
 				callback();
