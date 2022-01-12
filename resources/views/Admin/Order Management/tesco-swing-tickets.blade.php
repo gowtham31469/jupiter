@@ -89,7 +89,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_product_benefit', 'Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit', 'data-live-search' => 'true')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -97,7 +97,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_mm_product_benefit', 'MM Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit', 'data-live-search' => 'true')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -170,7 +170,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" >
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                     @foreach($wee_symbols as $key => $value)
