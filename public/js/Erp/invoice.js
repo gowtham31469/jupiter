@@ -420,7 +420,6 @@
             });
         }); 
 
-        console.log("+++++"+result[12])
         return result[12];
     }
     /**
@@ -553,7 +552,6 @@
         var totaltax = 0;
         var pending_qnty = 0;
         var arr = [].concat(data);
-		console.log(arr)
         $('.delivery-qnty').css('border-color', '');
         var delvryQnty = {};
         var count = 0 ;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer\Tesco;
 
+use App\Classes\Customer\CustomersList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use View;
@@ -21,8 +22,9 @@ class CareLabelOrdersCustomerController extends Controller
     private $caremeta;
     private $updateLabelOrder;
     private $parselabel;
+    private $customers;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers)
     {
 
         $this->caremeta = $caremeta;
@@ -32,38 +34,29 @@ class CareLabelOrdersCustomerController extends Controller
         $this->updateLabelOrder = $updateLabelOrder;
 
         $this->parselabel = $parselabel;
+
+        $this->customers = $customers;
     }
 
     public function index()
     {
         try {
             // fetch tesco care metadata from class
-            $symbols = $this->caremeta->getCareMetadata()['symbols'];
+            $symbols = $this->caremeta->getCareLabelSymbols();
 
-            $coo = $this->caremeta->getCareMetadata()['coo'];
+            $coo = $this->caremeta->getCountryOrigin();
 
-            $kids_warning = $this->caremeta->getCareMetadata()['kids_warning'];
+            $kids_warning = $this->caremeta->getKidsWarning();
 
-            $components = $this->caremeta->getCareMetadata()['components'];
+            $components = $this->caremeta->getCareLabelComponents();
 
-            $fabriclists = $this->caremeta->getCareMetadata()['fabriclists'];
+            $fabriclists = $this->caremeta->getCareLabelFabrics();
 
-            $additional_instructions = $this->caremeta->getCareMetadata()['additional_instructions'];
+            $additional_instructions = $this->caremeta->getCareLabelInstructions();
 
-            $part_of_two_piece_set = $this->caremeta->getCareMetadata()['part_of_two_piece_set'];
+            $part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
 
-            $customer = DB::table('customer_profile')
-                ->select('*')
-                ->where('customer_profile.id', Auth::guard('web_customer')->id())
-                ->first();
-
-            $tesco_suppliers = DB::table('tesco_suppliers')
-                ->join('customer_metadata', 'customer_metadata.customer_metadata_id', 'tesco_suppliers.id')
-                ->where('customer_metadata.customer_id', $customer->company_id)
-                ->where('is_enabled', 1)
-                ->orderBy('tesco_suppliers.supplier_name')
-                ->pluck('tesco_suppliers.supplier_name', 'tesco_suppliers.id')
-                ->all();
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
 
             return View::make('customer/tesco-customer-care-labels')
                 ->with([
@@ -87,15 +80,9 @@ class CareLabelOrdersCustomerController extends Controller
 
     public function getFiberComponentsMeta()
     {
-        $data['components'] = DB::table('tesco_components')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['components'] = $this->caremeta->getCareLabelComponents();
 
-        $data['fabriclists'] = DB::table('tesco_fabriclists')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['fabriclists'] = $this->caremeta->getCareLabelFabrics();
 
         return response()->json([
             'message' => 'success',

@@ -478,9 +478,6 @@ function extraQuantityLabelTescoRepeatOrderCustomer(type,id,name,zone,po_number,
 			
 		},
 		success: function (data) {
-			// alert('rt')
-			// console.log(data.composition.length)
-			console.log(data)
 			$("#primary_size_id").val(data.orders[0]['primary_size_id'])
 			localStorage.removeItem("templates");
 			localStorage.setItem("templates", data.orders[0]['template_id']);

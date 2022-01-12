@@ -35,9 +35,7 @@ function reOrderTesco()
 				});
 			
 				for(i = 0; i< newObj1.length; i++){
-					// if(newObj1[i].is_order_count_empty == 0)
-					// {
-						//console.log(data.tesco_washcare_orders);
+			
 						if(newObj1[i].type == "stickers")
 						{
 							if(newObj1[i].zone == "CE")
@@ -512,9 +510,6 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
 			
 		},
 		success: function (data) {
-			// alert('rt')
-			// console.log(data.composition.length)
-			console.log(data)
 			$("#primary_size_id").val(data.orders[0]['primary_size_id'])
 			localStorage.removeItem("templates");
 			localStorage.setItem("templates", data.orders[0]['template_id']);
@@ -534,7 +529,6 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
                                             <tbody>`;
 
                 size_array = [];
-                console.log(data.tesco_sizelists)
                 $.each(data.tesco_sizelists, function (indexInArray, valueOfElement) {
                     quantity_html += `<tr>
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
@@ -655,7 +649,6 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
 
 			for (var counter = 0; counter < data.composition.length; counter++) 
 			{
-				// console.log($("#tesco_care_garment_component_"+counter).val(data.composition[0]['garment_components'][counter].garment_component_id))
 				$temp = data.composition[counter]
 				$num = counter+1
 				$("#tesco_care_garment_component_"+$num).val($temp['garment_component_id'])

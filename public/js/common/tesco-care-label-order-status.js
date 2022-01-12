@@ -19,7 +19,7 @@ $( () => {
                                     </div>
                                     <div class="form-group has-feedback">
                                      <label for="tesco_care_supplier" class="component-label">Supplier </label>
-                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_supplier" name="tesco_care_supplier" onchange="getMoq('`+user_type+`', 'update')">
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_supplier" name="tesco_care_supplier" onchange="getMoq(this, '`+user_type+`', 'update')">
                                             <option value="">-- Select Supplier --</option>`;
                                             $.each(order_data.metadata.tesco_suppliers, function (id, name) {
 

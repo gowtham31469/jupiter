@@ -62,7 +62,7 @@ function tescoOrders(callback) {
 				$(".loader").show();
 			},
 			success: function (data) {
-				var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders)))))))));
+				var newObj1 = [...data.tesco_tcl1_orders, ...data.tesco_tcl2_orders, ...data.tesco_tcl4_orders, ...data.tesco_thl1_orders, ...data.tesco_thl3_orders, ...data.tesco_tsl1_orders, ...data.tesco_tsl3_orders, ...data.tesco_washcare_orders, ...data.tesco_tcl5_orders, ...data.tesco_tsl2_orders, ...data.tesco_swingticket_orders];
 				
 				newObj1.sort(function(obj1, obj2) {
 					var date1 =obj1.created_at;
@@ -76,6 +76,8 @@ function tescoOrders(callback) {
 				var UKUniqueNames = [];
 				var CEPOCollection = [];
 				var UKPOCollection = [];
+				var CEOrderIds = [];
+				var UKOrderIds = [];
 				var JointUniqueNames = [];
 				var JointPOCollection = [];
 				var artwork_collection = {};
@@ -84,33 +86,37 @@ function tescoOrders(callback) {
 					if (newObj1[i].zone === 'CE' && newObj1[i].ce_style_ref !== null) {
 						if (CEUniqueNames.indexOf(newObj1[i].ce_style_ref) === -1) {
 							CEPOCollection.push(newObj1[i].po_number);
+							CEOrderIds.push(newObj1[i].id);
 							CEUniqueNames.push(newObj1[i].ce_style_ref);
 							artwork_collection[newObj1[i].ce_style_ref] = {};
-							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+							artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 						} else {
 							if (CEPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								CEPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								CEOrderIds.push(newObj1[i].id);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								artwork_collection[newObj1[i].ce_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							}
 						}
 
 					} else if (newObj1[i].zone === 'UK' && newObj1[i].uk_style_ref !== null) {
 						if (UKUniqueNames.indexOf(newObj1[i].uk_style_ref) === -1) {
 							UKPOCollection.push(newObj1[i].po_number);
+							UKOrderIds.push(newObj1[i].id);
 							UKUniqueNames.push(newObj1[i].uk_style_ref);
 							artwork_collection[newObj1[i].uk_style_ref] = {};
-							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+							artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 						} else {
 							if (UKPOCollection.indexOf(newObj1[i].po_number) === -1) {
 								UKPOCollection.push(newObj1[i].po_number);
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								UKOrderIds.push(newObj1[i].id);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 
 							} else {
 								var artwork_group = artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number];
-								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status);
+								artwork_collection[newObj1[i].uk_style_ref][newObj1[i].po_number] = artwork_group + ',' + newObj1[i].template_id + '__' + newObj1[i].TemplateName + '__' + camelize(newObj1[i].order_status)+ '__' + newObj1[i].id;
 							}
 
 						}
@@ -130,14 +136,14 @@ function tescoOrders(callback) {
 				if (CEUniqueNames.length > 0) {
 					options += "<optgroup label='CE'>";
 					for (i = 0; i < CEUniqueNames.length; i++) {
-						options += "<option data-zone='ce'>" + CEUniqueNames[i] + "</option>";
+						options += "<option data-zone='ce' data-orderid ='"+CEOrderIds[i]+"'>" + CEUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
 				if (UKUniqueNames.length > 0) {
 					options += "<optgroup label='UK'>";
 					for (i = 0; i < UKUniqueNames.length; i++) {
-						options += "<option data-zone='uk'>" + UKUniqueNames[i] + "</option>";
+						options += "<option data-zone='uk' data-orderid ='"+UKOrderIds[i]+"'>" + UKUniqueNames[i] + "</option>";
 					}
 					options += "</optgroup>";
 				}
@@ -246,7 +252,7 @@ function tescoOrders(callback) {
 
 																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
 																				<label for="tesco_care_size_chart">Size Chart</label>
-																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" onchange="getSecondarySizeCategory(this, 'admin')">
+																				<select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_chart" name="tesco_care_size_chart" required="" >
 																				`+size_options+`
 																				</select>	
 																				<div class="help-block with-errors"></div>
@@ -418,35 +424,35 @@ function tescoOrders(callback) {
 											"parent_id": "3",
 											"type": "ratio",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "28,23,39",
 											"text": "TCL 4 (QR), TSL 3 & TSL 2",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "24",
 											"text": "THL 1 (QR)",
 											"parent_id": "3",
 											"type": "ratio",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "25",
 											"text": "THL 3 (QR)",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "38",
 											"text": "TCL 5 (QR)",
 											"parent_id": "3",
 											"type": "single",
 											"zone": "CE",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}]
 									}, {
 										"id": "4",
@@ -458,28 +464,28 @@ function tescoOrders(callback) {
 											"parent_id": "4",
 											"type": "ratio",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "31,16,40",
 											"text": "TCL 4, TSL 3 & TSL 2",
 											"parent_id": "4",
 											"type": "single",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "17",
 											"text": "THL 1",
 											"parent_id": "4",
 											"type": "ratio",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}, {
 											"id": "18",
 											"text": "THL 3",
 											"parent_id": "4",
 											"type": "single",
 											"zone": "UK",
-											"template_type": 'tesco_carton_stickers'
+											"template_type": "tesco_carton_stickers"
 										}]
 									}]
 								}]
@@ -496,24 +502,91 @@ function tescoOrders(callback) {
 											"id": "34",
 											"text": "GCL25W/M12723G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										}, {
 											"id": "35",
 											"text": "GCL25W/M13220G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										},
 										{
 											"id": "36",
 											"text": "GCL25W/M12723G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
 										},
 										{
 											"id": "37",
 											"text": "GCL25W/M13220G",
 											"parent_id": "33",
-											"template_type": 'tesco_care_labels'
+											"template_type": "tesco_care_labels"
+										},
+									]
+								},{
+									"id": "41",
+									"text": "Swing Tickets",
+									"parent_id": "32",
+									"children": [{
+											"id": "42",
+											"text": "CE Non Rfid Swing Ticket",
+											"parent_id": "41",
+											"children": [{
+												"id": "43",
+												"text": "FFC/01/M13020C - CE F&F CORE NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											}, {
+												"id": "44",
+												"text": "FFK/01/M13021C - CE F&F KIDS, SCHOOL & KIDS DRESS UP NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "45",
+												"text": "FFC/01/M13022C - CE F&F CORE SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "46",
+												"text": "FFB/01/M13023C - CE FRED & FLO NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "47",
+												"text": "GE/01/M13114C - Opt 1 - Core Ladieswear & Menswear (excluding Socks & Gifting)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "48",
+												"text": "GE/01/M13114C - Opt 2 - Kids, School and Kids Dress Up (excluding Socks & Gifting)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "49",
+												"text": "GE/01/M13114C - Opt 3 - Socks & Gifting (Adults, Kids & Baby)",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "50",
+												"text": "GE/01/M13114C - Opt 4 - Fred & Flo",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "51",
+												"text": "FFK/01/M13163C - CE F&F KIDS SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "52",
+												"text": "FFB/01/M13233C - CE FRED & FLO SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											},{
+												"id": "53",
+												"text": "FFC/01/M13304C - CE F&F CORE CASHMERE LARGE NON-RFID BRAND TICKET INC. BOP",
+												"parent_id": "42",
+												"template_type": "tesco_swing_tickets"
+											}
+										]
 										},
 									]
 								}]
@@ -580,10 +653,8 @@ function tescoOrders(callback) {
 											$('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										} else {
-											//console.log("type" + value[0].type);
 											if(value[0].type == "Labels")
 											{
-												//alert()
 												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
 											}
 											else
@@ -641,7 +712,7 @@ function tescoOrders(callback) {
 						}
 
 						// toggle size chart select box for template_type = tesco_care_labels
-						if(template_type === 'tesco_care_labels'){
+						if($.inArray(template_type, ['tesco_care_labels', 'tesco_swing_tickets']) != -1){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
@@ -680,11 +751,17 @@ function tescoOrders(callback) {
 								$('input[type="radio"].pdf_parser_type').prop('required', false);
 							}
 
-
-
 						}
 						$(".selectpicker").selectpicker("refresh");
 					}
+				});
+
+				$('#tesco_care_size_chart').on('change', (e) => {
+					var valueSelected  = $(e.target).val();
+					if($('#jstree').jstree(true).get_selected('full', true)[0].original.template_type === 'tesco_care_labels') {
+						getSecondarySizeCategory(valueSelected, 'admin')
+					}
+					
 				});
 
 				/** [ bootstrap validator for create tesco order form ] **/
@@ -734,25 +811,21 @@ function tescoOrders(callback) {
 									formData.append('zone', localStorage.getItem("zone"));
 									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
 								}
-							} else if (template_type === 'tesco_carton_stickers') {
-								createOrders();
-							} else if(template_type === 'tesco_care_labels') {
-								var size_id = $('#tesco_care_size_chart').val();
-								var size_category = [];
-								var size_category_text = [];
-
-								/** [ Create array of multi selected categories ] */
-								$.each($("#tesco_care_size_category option:selected"), function() {
-									size_category.push($(this).val());
-									// size_category_text.push($(this).text());
-								});
-
-								/** [ Create array of multiple categories ] */
-								$.each($("#tesco_care_size_category option"), function() {
-									size_category_text.push($(this).text());
-								});
+							} else {
+								switch (template_type) {
+									case 'tesco_carton_stickers':
+										createOrders();
+										break;
+									case 'tesco_care_labels':
+										renderTescoCareOrders(role="admin", template_id);
+										break;
+									case 'tesco_swing_tickets':
+										renderTescoSwingTicketOrders(role="admin", template_id);
+										break;
 								
-								renderTescoCareOrders(role="admin", size_id, size_category, size_category_text,template_id);
+									default:
+										break;
+								}	
 							}
 							
 								localStorage.setItem("back_flag","create");
@@ -787,7 +860,7 @@ function tescoOrders(callback) {
 						localStorage.setItem('artwork_back',artwork)
 						localStorage.setItem('po_num_back',po_num)
 						localStorage.setItem("back_flag","view");
-						viewOrder(po_num, artwork, style_number, zone, orderid);
+						viewOrder("admin", po_num, artwork, style_number, zone, orderid);
 					}
 				})
 				callback();
@@ -1421,7 +1494,7 @@ function createOrders(parsedObj = false, oType = false) {
                                         <button class="btn btn-xs btn-warning submit-btn" type="submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>\
 										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("print")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>\
 										<button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork("proof")" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>\
-										<button class="btn btn-xs btn-danger cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
+										<button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display:none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>\
                                         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick = "reload_back()""><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>\
                                     </div>\
                                 </div>\
@@ -1431,7 +1504,7 @@ function createOrders(parsedObj = false, oType = false) {
 					 {
 				if(parsedObj[Object.keys(parsedObj)[0]].order_status == "Order Placed")
 				{
-					$('.cancel-btn').show();
+					$('.order-cancel-btn').show();
 				}
 					 }
 				$('.main-content').html(html).selectpicker('refresh');
@@ -6990,7 +7063,6 @@ function dynamicSVGTemplatescard(id, item) {
 										}
 										else if(item.template_name === "TCL 5")
 										{
-											console.log("2")
 											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -7092,7 +7164,6 @@ function dynamicSVGTemplatescard(id, item) {
 										}
 										else if(item.template_name === "TCL 5")
 										{
-											console.log("2")
 											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -7215,7 +7286,6 @@ function dynamicSVGTemplatescard(id, item) {
 								}
 								else if(item.template_name === "TCL 5")
 								{
-									console.log("2")
 									svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 									svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 									svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -8286,7 +8356,7 @@ function afterAdminOrderSubmitted(data,po_number,stl_no) {
 		/** remove save & submit button */
 		$('.submit-btn').remove();
 		$('.save-btn').remove();
-		$('.cancel-btn').show();
+		$('.order-cancel-btn').show();
 		$('.print-btn').show();
 		var div_html = '';
 		/** [ store last updated id as hidden input , for approve/cancel order functionality] */
@@ -8302,70 +8372,27 @@ function afterAdminOrderSubmitted(data,po_number,stl_no) {
 		if(data.po_required === 1)
 		{ 
 			/** Buyer Po upload modal for combined po upload modal */
-			var html = '<div class="container-fluid">\
-	                 <div class="template-error1"></div>\
-	                     <div class="col-md-12">\
-	                         <br> <strong>Select Artworks :</strong>';
+			var html = `<br> <strong>Select Artworks :</strong>`;
 			$.each(data.last_insertions, function (index, value) {
-				html += '<div class="row" id="' + index.replace(' ', '') + '_row">\
-				          <div class="col-md-4">\
-				           <div class="form-check form-group has-feedback">\
-	                        <label class="form-check-label">\
-	                         <input class="form-check-input template-checkbox1" type="checkbox" value="' + value + '" name="' + index.replace(' ', '') + '" id="' + index.replace(' ', '') + '" style="margin-right: 10px;" data-name="' + index.replace(' ', '') + '"> ' + index + ' </label>\
-	                     <div class="help-block with-errors"></div>\
-	                 </div></div>\
-	                 <div class="col-md-8 '+index.replace(' ', '')+'-po-div po-number-div" style="display:none; margin-top: 5px;">\
-	                 <strong><span id="'+index.replace(' ', '')+'-uploaded-po"></span></strong>\
-	                 <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
-	                 </div></div>';
+				html += `<div class="row" id="${index.replace(' ', '')}_row">
+				          <div class="col-md-4">
+				           <div class="form-check form-group has-feedback">
+	                        <label class="form-check-label">
+	                         <input class="form-check-input template-checkbox1" type="checkbox" value="${value}" name="${index.replace(' ', '')}" id="${index.replace(' ', '')}" style="margin-right: 10px;" data-name="${index.replace(' ', '')}"> ${index.replace(' ', '')} </label>
+	                     <div class="help-block with-errors"></div>
+	                 </div></div>
+	                 <div class="col-md-8 ${index.replace(' ', '')}-po-div po-number-div" style="display:none; margin-top: 5px;">
+	                 <strong><span id="${index.replace(' ', '')}-uploaded-po"></span></strong>
+	                 <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>
+	                 </div></div>`;
 			});
-			html += '</div>\
-	                     <div class="row">\
-	                         <div class="col-md-12 upload-po-form">\
-	                             <div class="col-md-6">\
-	                                 <div class="form-group has-feedback">\
-	                                     <label for="po_number" class="form_label">PO Number</label>\
-	                                     <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">\
-	                                     <div class="help-block with-errors"></div>\
-	                                 </div>\
-	                             </div>\
-	                             <div class="col-md-6">\
-	                                 <div class="form-group has-feedback">\
-	                                     <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-	                                     <div class="help-block with-errors"></div>\
-	                                 </div>\
-	                             </div>\
-	                             <div class="col-md-6">';
-			/** [ Delivery Date mandatory or not for particular customer] */
-			if (delivery_date_req === 1) {
-				html += '<div class="form-group has-feedback">\
-	                     <label for="combined_delivery_date">Delivery Date</label>\
-	                     <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-	                         <input value="" id="combined_delivery_date" required="" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-	                         <div class="input-group-addon">\
-	                            <span class="glyphicon glyphicon-th"></span >\
-	                         </div >\
-	                     </div >\
-	                     <div class="help-block with-errors"></div>\
-	                 </div>\
-	                 </div>';
-			} else {
-				html += '<div class="form-group has-feedback">\
-	                     <label for="combined_delivery_date">Delivery Date</label>\
-	                     <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-	                         <input value="" id="combined_delivery_date" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-	                         <div class="input-group-addon"> <span class="glyphicon glyphicon-th"></span>\
-	                         </div>\
-	                     </div>\
-	                     <div class="help-block with-errors"></div>\
-	                 </div>\
-	                 </div>';
-			}
-			html += '        </div>\
-	                       </div>\
-	                    </div>';
 			/** Dynamic content for po upload modal tab */
-			$('#po-upload-modal-content').html(html);
+			$('#template-checkbox-div').html(html);
+
+			if (data.delivery_date_required === 1) {
+				$('#combined_delivery_date').prop('required', true);
+			}
+
 			/** [ Backdrop for bootstrap modal ] */
 			$('#poUploadModal').modal({
 				backdrop: 'static',
@@ -8530,7 +8557,7 @@ function afterAdminOrderSubmitted(data,po_number,stl_no) {
 				formData.append('po_number', po_number);
 				formData.append('po_file', po_file);
 
-				uploadCombinedPO(formData, templateName);
+				uploadCombinedPO('admin', formData, templateName);
 			}
 		}
 
@@ -8837,75 +8864,7 @@ function openmodaltesco(modal, i) {
 
 }
 
-/**
- * Function for uploading combined po files
- * @author    <praveen>
- */
-function uploadCombinedPO(formdata, templateName) {
-	try {
-		$.ajax({
-			url: base_url + "/admin/tesco/upload-tesco-combined-po-file",
-			type: 'POST',
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			data: formdata,
-			tryCount: 0,
-			retryLimit: 2,
-			dataType: 'JSON',
-			async: true,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$('.po-submit-btn').prop('disabled', true);
-			},
-			statusCode: {
-				200: function (data) {
-					// enable submit button after po upload
-					$('.po-submit-btn').prop('disabled', false);
-					
-					/** [ Disable already uploaded templates checkbox] */
-					$.each(templateName, function (index, value) {
-						$('input[type="checkbox"]#' + value).prop('checked', false)
-						$('input[type="checkbox"]#' + value).prop('disabled', true)
-						$('.'+ value+'-po-div').show();
-						$('#'+ value+'-uploaded-po').text("PO Number : " + data.po_number);
-					});
 
-					/** [ Rename button and hide form fields if Po uploaded for all templates ] */
-					if($('.template-checkbox1').filter(':not(:disabled)').length === 0)
-					{
-						$('.po-submit-btn').text('Place Order');
-						$('.po-submit-btn').attr('data-dismiss', 'modal')
-						$('.upload-later').hide();
-						$('.upload-po-form').hide();
-					}
-					/** [ Show success alert] */
-					$("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-						$("#success-alert").slideUp(500);
-					});
-					/** Reset po upload form**/
-					$('#upload_combined_po_form').trigger('reset');
-				},
-				400: function () {
-					$('.snackbar_span').html("Something went wrong !. Try again");
-					showSnackbar();
-				}
-			},
-			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
-			},
-			complete: function () {}
-		})
-	} catch (e) {
-		console.log("Error:" + e)
-	}
-}
 
 /**
  * This Function is used to check ITF barcode is valid or not.
@@ -10097,68 +10056,6 @@ function afterOrderSaved(data) {
  		$(obj).next('div').html('');
  	}
  }
- 
-/**
- * [cancel tesco orders]
- * @author <praveen>
- */
-function cancelTescoOrder() {
-	try {
-		var array_list   = [];
-		$('.table-id-hidden').each(function (i, table_id) {
-			my_object    = new Object();
-			var table_names = table_id.id.split("_");
-			my_object.table = table_names[0];
-			my_object.table_id = table_id.value;
-			array_list.push(my_object);
-		});
-		
-
-		$.ajax({
-			url: base_url + "/admin/tesco/cancel-tesco-order",
-			type: 'PUT',
-			data: {
-				_token: csrf_token,
-				data_array:array_list
-			},
-			tryCount: 0,
-			retryLimit: 2,
-			dataType: "json",
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$('.snackbar_span').html('Order Cancelled Successfully');
-				showSnackbar();
-
-				$('#cancelOrderModal').modal('hide');
-				$('.cancel-btn').remove();
-
-			},
-			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
-			},
-			complete: function () {
-				$(".loader").hide();
-				/** [To make top menu active] */
-				$(function () {
-					var url = window.location;
-					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-					$('.dynamic-menu a').filter(function () {
-						return this.href == url;
-					}).parent('li').addClass('current-page').find('a').addClass('active');
-				});
-			}
-		})
-	} catch (e) {
-		/** [error statements] */
-		console.error("Error:" + e)
-	}
-}
 
 
 /**
@@ -10417,7 +10314,6 @@ function create_download_artwork(print_type)
 
                     if(data.order_details[0].bs_en_declaration == 0)
                     {
-                        console.log("hai")
                         svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
                     }
 
@@ -10465,14 +10361,12 @@ function create_download_artwork(print_type)
                         }
                         else
                         {
-                            //console.log("hai")
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                         }
 
 
                         var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                         var selected_secondary_sizes_text = "";
-                        console.log(selected_secondary_sizes)
                         $size_y=0;
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
@@ -10897,11 +10791,9 @@ function create_download_artwork(print_type)
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
-                    //console.log($chunk_str);
                     var chunks='<tspan  x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
-                    console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
                         if(chunk_val.charAt(0) == "/")	
                         {	
@@ -11000,7 +10892,6 @@ function create_download_artwork(print_type)
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
                         pl_garment_component += "/" + additional_care_text_1[0].polish
                         cz_garment_component += "/" + additional_care_text_1[0].czech
                         sk_garment_component += "/" + additional_care_text_1[0].slovak
@@ -11239,11 +11130,6 @@ function create_download_artwork(print_type)
                     svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
                     svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
 
-
-                    
-                    // console.log(en_care_instructions)
-                    // console.log(en_care_instructions)
-
                     var s_front = new XMLSerializer();
                     var d_front = svgRoot_front_text;
                     var str_front = s_front.serializeToString(d_front);
@@ -11435,3 +11321,4 @@ function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
 }
+

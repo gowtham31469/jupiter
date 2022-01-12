@@ -67,7 +67,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("customer", "create")')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "customer", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -322,8 +322,8 @@
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times"
+        <button class="btn btn-xs btn-danger order-cancel-btn" type="button"
+        data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times"
             aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"

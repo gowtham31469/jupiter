@@ -398,7 +398,6 @@ function RsPaise(n) {
     if (nums[1].length == 1) nums[1] = nums[1] + '0';
     if (nums[1].length > 2) {
         nums[1] = nums[1].substring(2, length - 1)
-        console.log(nums[1])
     }
 
     if (nums.length == 2) {
@@ -450,7 +449,6 @@ function downloadPi(template_id,id,table_name){
             200: function(data)
             {
                 var resp = JSON.stringify(data);
-                    console.log( base_url+data.responseText)
                     $('.snackbar_span').html("Successfully send Invoice to the Customer !");
                     showSnackbar();
                 window.open(

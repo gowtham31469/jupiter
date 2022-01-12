@@ -1191,6 +1191,8 @@ class ReorderController extends Controller
 			$order_data['edit_permission'] = 0;
 	  
 			$order_data['tesco_label'] = false;
+
+			$order_data['order_table'] = $type;
 	  
 			$this->order_history_obj->storeOrdersHistory($order_data);
 
@@ -1732,6 +1734,8 @@ class ReorderController extends Controller
 			$order_data['edit_permission'] = 0;
 	  
 			$order_data['tesco_label'] = false;
+
+			$order_data['order_table'] = $type;
 	  
 			$this->order_history_obj->storeOrdersHistory($order_data);
 			

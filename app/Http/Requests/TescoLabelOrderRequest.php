@@ -33,6 +33,7 @@ class TescoLabelOrderRequest extends FormRequest
             'tesco_care_supplier'              => ['required', 'numeric', 'exists:tesco_suppliers,id'],
             'template_id'                      => ['required', 'numeric', 'exists:tesco_item_master,id'],
             'order_type'                       => ['nullable', 'sometimes', Rule::in(['newOrder', 'repeatOrder'])],
+            'primary_size_id'                  => ['required', 'numeric', 'exists:tesco_size_department,id'],
 
             'tesco_care_wash_instruction'      => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
             'tesco_care_bleach_instruction'    => ['required', 'numeric', 'exists:tesco_care_symbols,id'],

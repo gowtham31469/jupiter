@@ -74,7 +74,18 @@ class ErpOrders
 		try {
 			$qnty_table     = $request['tableName'] . '_quanty';
 			$order_table_array = explode("_", $request['tableName']);
-			$template_name = $order_table_array[1] !=  'washcare'?strtoupper($order_table_array[1]):title_case($order_table_array[1]);
+
+			switch ($order_table_array[1]) {
+				case 'washcare':
+					$template_name = title_case($order_table_array[1]);
+					break;
+				case 'swingticket':
+					$template_name = 'SwingTicket';
+					break;
+				default:
+					$template_name = strtoupper($order_table_array[1]);
+					break;
+			}
 
 			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
 
