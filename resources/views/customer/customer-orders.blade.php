@@ -477,7 +477,7 @@ background: rgba(0,0,0,0.2);
             </div>
         </div>
     </div>
-<div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="poUploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div id="order-exists-alert"></div>
         <div class="modal-content po-modal-content">
@@ -492,13 +492,50 @@ background: rgba(0,0,0,0.2);
                     PO uploaded successfully.
                 </div>
                 <form id="upload_combined_po_form" data-toggle="validator" role="form" method="post" enctype="multipart/form-data">
-                <div id="po-upload-modal-content"></div>
+                    <div id="po-upload-modal-content">
+                        <div class="container-fluid">
+                            <div class="template-error1"></div>
+                            <div class="col-md-12" id="template-checkbox-div">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 upload-po-form">
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="po_number" class="form_label">PO Number</label>
+                                            <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf">
+                                            </span>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group has-feedback">
+                                            <label for="combined_delivery_date">Delivery Date</label>
+                                            <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">
+                                                <input value="" id="combined_delivery_date" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">
+                                                <div class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-th"></span>
+                                                </div>
+                                            </div>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
+                        <button class="btn btn-primary btn-sm po-submit-btn" type="submit">Save</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm upload-later" data-dismiss="modal">Upload Later</button>
-                <button class="btn btn-primary btn-sm po-submit-btn" type="submit">Save</button>
-            </div>
-            </form>
         </div>
     </div>
 </div>
@@ -553,7 +590,7 @@ background: rgba(0,0,0,0.2);
                    </div>
                    <div class="modal-footer">
                        {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelTescoOrder()'] ) !!}
+                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelTescoOrder("customer")'] ) !!}
                    </div>
            </div>
        </div>
@@ -1059,23 +1096,6 @@ background: rgba(0,0,0,0.2);
             </div>
         </div>
     </div>
-    <div class="modal fade" id="cancelLabelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelLabelOrderModal">
-       <div class="modal-dialog" role="document">
-           <div class="modal-content">
-               <div class="modal-header">
-                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                   <h4 class="modal-title" id="cancelLabelOrderModal">Cancel Order</h4>
-               </div>
-                   <div class="modal-body">
-                         <p>You are about to cancel this order. Do you want to proceed ?</p>
-                   </div>
-                   <div class="modal-footer">
-                       {!! Form::button('No', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                       {!! Form::button('Yes', ['class' => 'btn btn-primary btn-sm', 'id' => 'cancel_btn','onclick' => 'cancelCareLabelOrder("customer")'] ) !!}
-                   </div>
-           </div>
-       </div>
-   </div>
 @endsection @else
 <script type="text/javascript">
     window.location = "{{ url('/customer') }}";
@@ -1097,6 +1117,9 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/draft-tesco-single-stickers.js') }}"></script>
 <!-- Tesco swing tickets js -->
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
+<script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+
+<script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>
   var logged_in_customer = {{ Auth::guard("web_customer")->user()->id }};
 </script>

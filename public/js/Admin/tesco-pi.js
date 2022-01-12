@@ -359,7 +359,6 @@ function downloadPi(template_id,id,table_name){
             200: function(data)
             {
                 var resp = JSON.stringify(data);
-                          console.log( base_url+data.responseText)
                           $('.snackbar_span').html("Successfully send Invoice to the Customer !");
                             showSnackbar();
                         window.open(

@@ -81,15 +81,6 @@ class CancelTescoOrders
           ->select('id', 'order_status', 'tesco_supplier_id', 'purchase_order_no', 'pi_id')
           ->first();
 
-        $order_qty_details  = $order_qty_model::where(strtolower($table) . '_order_id', $order_details->id)
-          ->select('id', DB::raw("'tesco_" . strtolower($table) . "_orders_quanty' as \"table_name\""))
-          ->get();
-
-        $order_status_id  = DB::table('orders_status')
-          ->select('id')
-          ->where('status_name', 'ilike', $order_details->order_status)
-          ->first();
-
         $customer_data  = DB::table('customers')
           ->select('pi_required', 'po_required')
           ->where('id', $order_details->tesco_supplier_id)
@@ -107,10 +98,18 @@ class CancelTescoOrders
           ->first();
 
         if ($erp_orders) {
+          $order_qty_details  = $order_qty_model::where(strtolower($table) . '_order_id', $order_details->id)
+          ->select('id', DB::raw("'tesco_" . strtolower($table) . "_orders_quanty' as \"table_name\""))
+          ->get();
 
+          $order_status_id  = DB::table('orders_status')
+            ->select('id')
+            ->where('status_name', 'ilike', $order_details->order_status)
+            ->first();
+            
           $erp_id = $erp_orders->id;
 
-          // Get Erp status table id for 'Moved To JC Queue' status.
+          // Get Erp status table id for 'cancelled' status.
           $erp_status_id = DB::table('erp_status')
             ->where('status_name', 'Cancelled')
             ->value('id');

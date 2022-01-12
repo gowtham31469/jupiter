@@ -21,6 +21,18 @@ class StoreTescoSwingTicketOrder
     public function storeTescoSwingTicketOrder($request, $role)
     {
 
+         /** [ Check if order already placed for this style ] */
+         $is_exists = TescoSwingTicketOrders::select('id')
+         ->Where('ce_style_ref', $request->swing_option_id)
+         ->where('po_number', $request->swing_po_number)
+         ->whereNotIn('order_status', ['Order Cancelled'])
+         ->exists();
+ 
+         if($is_exists)
+         {
+           return response()->json(['error'=> true,'message' =>'Order already exists'],409);
+         }
+
         $order_history_obj = new StoreOrderManagementHistory();
         $carelabel_obj = new StoreTescoLabelOrder();
 

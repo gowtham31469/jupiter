@@ -4287,7 +4287,6 @@ function washcarelabelsOs(data, dataid) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + "-" + $('select.made_in_select' + dataid).find(':selected').data('english') + "-" + $('select.made_in_select' + dataid).find(':selected').data('spanish') + "-" + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + dataid).find(':selected').data('italian') + "-" + $('select.made_in_select' + dataid).find(':selected').data('dutch') + "-" + $('select.made_in_select' + dataid).find(':selected').data('german') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
-				//console.log(text_for_mad_in);
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -4750,7 +4749,6 @@ function setSizeLabelStatusOs() {
 function setSizeLabelOs(id) {
   
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	
 	var tot_qty_tablesize = [];
@@ -5071,7 +5069,6 @@ function setheat_transferStatusOs() {
 function setHeatTransferOs(id) {
   
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	
 	var tot_qty_tableheat = [];
@@ -5175,9 +5172,6 @@ function setHangTagOs(id) {
 		}
 
 	})
-	console.log(tot_qty_tablehang)
-	console.log(uvc_tco)
-	console.log(size)
 	tot_qty_tablehang_fin = tot_qty_tablehang.join(',');
 	uvc_tco_fin = uvc_tco.join(',');
 	size_fin = size.join(',');

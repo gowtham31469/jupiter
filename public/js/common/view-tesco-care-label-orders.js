@@ -17,7 +17,7 @@ $( () => {
             mapLabelStoredValues(order_data, user_role);
 
             if (order_data.order_details.order_status === "Order Placed") {
-                $('.label-order-cancel-btn').show();
+                $('.order-cancel-btn').show();
             }
 
             $(".selectpicker").selectpicker("refresh");

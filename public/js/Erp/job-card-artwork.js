@@ -1445,8 +1445,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		}
 		else
 		{
-			console.log("start:"+id)
-            console.log(id)
             var a_back = document.getElementById(data_ba);
     var svgDoc_back = a_back.contentDocument;
 
@@ -1487,7 +1485,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                     if(data.order_details[0].bs_en_declaration == 0)
                     {
-                        console.log("hai")
                         svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
                     }
 
@@ -1495,11 +1492,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     {
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
-
-                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    // {
-                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -1535,14 +1527,12 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         }
                         else
                         {
-                            //console.log("hai")
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                         }
 
 
                         var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                         var selected_secondary_sizes_text = "";
-                        console.log(selected_secondary_sizes)
                         $size_y=0;
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
@@ -1966,11 +1956,9 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
-                    //console.log($chunk_str);
                     var chunks='<tspan  x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
-                    console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
                         if(chunk_val.charAt(0) == "/")
                         {
@@ -2069,7 +2057,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
                         pl_garment_component += "/" + additional_care_text_1[0].polish
                         cz_garment_component += "/" + additional_care_text_1[0].czech
                         sk_garment_component += "/" + additional_care_text_1[0].slovak
@@ -2309,11 +2296,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     
                     svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
                     svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
-
-
-                    
-                    // console.log(en_care_instructions)
-                    // console.log(en_care_instructions)
 
                     var s_front = new XMLSerializer();
                     var d_front = svgRoot_front_text;
@@ -2794,7 +2776,6 @@ function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,c
 	var a1 = document.getElementById(back)
 	var svgDoc1 = a1.contentDocument;
 	var svgRoot1 = svgDoc1.documentElement;
-	console.log(svgDoc1)
 	var index_arr=[];
 	var svgarr = [];
 	var svgarr_front = [];

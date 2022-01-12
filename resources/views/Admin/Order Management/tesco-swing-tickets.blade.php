@@ -40,12 +40,12 @@
                             @endforeach
                         </td>
                         <td>
-                            <div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_{{$loop->iteration}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
+                            <div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_{{$value->id}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$loop->iteration}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
@@ -267,7 +267,7 @@
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger swing-ticket-order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
 
         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button>
     </div>
