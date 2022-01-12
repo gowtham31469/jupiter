@@ -51,11 +51,10 @@ $( () => {
 
         $('#swing_ce_mark').prop('checked', order_data.order_details.is_ce_mark_required);
         $('#swing_machine_washable').prop('checked', order_data.order_details.is_machine_washable);
-
+console.log(order_data.order_details.quantities);
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => { 
-            indexInArray += 1;
-            $(`#swing_ean_${indexInArray}`).val(valueOfElement.ean_barcode);
-            $(`#swing_quantity_${indexInArray}`).val(valueOfElement.count);
+            $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
+            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.count);
         });
 
     }
