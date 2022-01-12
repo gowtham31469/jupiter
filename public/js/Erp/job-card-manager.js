@@ -1343,8 +1343,6 @@ function storeJobcard()
                                 var lastIndex = table.lastIndexOf("_");
 
                                 var template = table.substring(0, lastIndex).replace(',','_');
-                                console.log(template.replace(/ |\//g, '_'));
-                                //var template = table.split("_");
                                 
                                 single_table += '<table class="table table-bordered table-responsive edit-single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
                                         <tbody id="single_list_table_body">\
@@ -2230,9 +2228,6 @@ function getJobcardsList()
  */
 function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit,status,type,template_id,disney,refname) 
 {
-	console.log("start")
-	console.log(loop)
-	console.log("end")
 	switch(status) {
 	  case "print_orchestra":
 	    if(type == "hang_tag")
@@ -3837,8 +3832,6 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
     }
     else
 		{
-			console.log("start:"+id)
-            console.log(id)
             var a_back = document.getElementById(data_ba);
     var svgDoc_back = a_back.contentDocument;
 
@@ -3879,7 +3872,6 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
                     if(data.order_details[0].bs_en_declaration == 0)
                     {
-                        console.log("hai")
                         svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
                     }
 
@@ -3887,11 +3879,6 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                     {
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
-
-                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    // {
-                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -3927,14 +3914,12 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                         }
                         else
                         {
-                            //console.log("hai")
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                         }
 
 
                         var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                         var selected_secondary_sizes_text = "";
-                        console.log(selected_secondary_sizes)
                         $size_y=0;
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
@@ -4358,11 +4343,9 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
-                    //console.log($chunk_str);
                     var chunks='<tspan  x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
-                    console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
                         if(chunk_val.charAt(0) == "/")
                         {
@@ -4461,7 +4444,6 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
                         pl_garment_component += "/" + additional_care_text_1[0].polish
                         cz_garment_component += "/" + additional_care_text_1[0].czech
                         sk_garment_component += "/" + additional_care_text_1[0].slovak
@@ -4701,11 +4683,6 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                     
                     svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
                     svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
-
-
-                    
-                    // console.log(en_care_instructions)
-                    // console.log(en_care_instructions)
 
                     var s_front = new XMLSerializer();
                     var d_front = svgRoot_front_text;
@@ -5314,9 +5291,6 @@ function printHangDivJCPreview(front,back,disney,name,style_no,buyer_no,id,order
 
 				},
 				success: function(data) {
-					console.log("-------")
-					console.log(data)
-						console.log("-------")
 					details = data.order_details[0].hangtagqty;
 					var node = name;
 					$.each(details, function(index, val) {
@@ -5652,10 +5626,6 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 	var svgarr = [];
 	var ajax_count = 0;
 	var name_count=0;
-	// var b = " ";
-	// var position = 5;
-// console.log(name)
-		// var ref_name = [name2.slice(0, position), b, name2.slice(position)].join('').trim();
 		$.ajax({
 				url: base_url + "/erp/job-manager/get-order-details",
 				type: "Post",
@@ -5680,30 +5650,14 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 					localStorage.setItem("zone", zone);
 
 					details = data['order_details'][0];
-					// console.log(details)
 					switch(details.reference_name) 
 					{
-
-
-						// case "Orchestra WashCare":
-						
-						// 	printWashDivJC('washcare_svg_front1','washcare_svg_back1','washcare_svg_middle1',details['washcarelabel_qty']);
-
-						// break
-
 						case "Std Carton Stickers":
 							$(details['stdcartonstickerqty']).each(function(index,value){
 								svgDoc.getElementById("po").innerHTML = details.po;
 								svgDoc.getElementById("parcelcode").innerHTML = details.parcelCode
-								// svgDoc.getElementById("size").innerHTML = value.size
 								svgDoc.getElementById("theme").innerHTML = details.theme
-								
-
-								// if(details.age_group!=null)
-								// {
-								// 	svgDoc.getElementById("color").innerHTML = details.age_group
-								// }
-
+						
 								if(details.height != null )
 								{
 									var num = 600 * details.width * details.height
@@ -5726,12 +5680,7 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 								svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidcartonA(value.barcode, 'barcode1', svgDoc)
 								jsbarcodesolidcartonB(value.barcode, 'barcode2', svgDoc)
-								// var s = new XMLSerializer();
-								// var d = svgRoot;
-								// var str = s.serializeToString(d);
-								// svgarr.push(str)
 							})
-							// var svg_fin = svgarr.join(',_');
 							 
 							  PopupOrchestraJCPreview(svgDoc,"STD-CS",isEdit,id,style_no,buyer_no,created_at); 
 							
@@ -5742,7 +5691,6 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 
 						case "Std Poly Stickers":
 							$(details['stdpolystickerqty']).each(function(index,value){
-                                console.log(value)
                                 
                                 if(details.group_id != 6)
 								{
@@ -5757,11 +5705,8 @@ function genarateArtworkOrchestraJCPreview(data, name,style_no,buyer_no,id,order
 									svgDoc.getElementById("pmm").innerHTML = "PMM";
                                 }
 
-								//svgDoc.getElementById("round").style.fill = details.age_group
 								svgDoc.getElementById("parcel_code").innerHTML = details.parcelCode
 								svgDoc.getElementById("theme").innerHTML = details.theme
-								// svgDoc.getElementById("size").innerHTML = value.size
-								// svgDoc.getElementById("color").innerHTML = details.color_code
 								jsbarcodesolidpoly_orchestra(value.barcode, 'barcode', svgDoc)
 								var s = new XMLSerializer();
 								var d = svgRoot;

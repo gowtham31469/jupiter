@@ -51,7 +51,7 @@ $( () => {
 
         $('#swing_ce_mark').prop('checked', order_data.order_details.is_ce_mark_required);
         $('#swing_machine_washable').prop('checked', order_data.order_details.is_machine_washable);
-console.log(order_data.order_details.quantities);
+
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => { 
             $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
             $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.count);

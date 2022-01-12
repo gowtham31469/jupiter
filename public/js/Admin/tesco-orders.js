@@ -653,10 +653,8 @@ function tescoOrders(callback) {
 											$('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">' + value[0].template_name + '</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">' + value[0].ref_no + '</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">' + value[0].company_name + '</td></tr></tbody></table></div></div>')
 
 										} else {
-											//console.log("type" + value[0].type);
 											if(value[0].type == "Labels")
 											{
-												//alert()
 												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
 											}
 											else
@@ -7065,7 +7063,6 @@ function dynamicSVGTemplatescard(id, item) {
 										}
 										else if(item.template_name === "TCL 5")
 										{
-											console.log("2")
 											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -7167,7 +7164,6 @@ function dynamicSVGTemplatescard(id, item) {
 										}
 										else if(item.template_name === "TCL 5")
 										{
-											console.log("2")
 											svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 											svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 											svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -7290,7 +7286,6 @@ function dynamicSVGTemplatescard(id, item) {
 								}
 								else if(item.template_name === "TCL 5")
 								{
-									console.log("2")
 									svgDoc.getElementById("orms_tpnd_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 52)')
 									svgDoc.getElementById("orms_po_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 70)')
 									svgDoc.getElementById("uk_style_text").setAttribute('transform','matrix(1, 0, 0, 1, 5.4283, 81)')
@@ -10319,7 +10314,6 @@ function create_download_artwork(print_type)
 
                     if(data.order_details[0].bs_en_declaration == 0)
                     {
-                        console.log("hai")
                         svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
                     }
 
@@ -10367,14 +10361,12 @@ function create_download_artwork(print_type)
                         }
                         else
                         {
-                            //console.log("hai")
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                         }
 
 
                         var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                         var selected_secondary_sizes_text = "";
-                        console.log(selected_secondary_sizes)
                         $size_y=0;
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
@@ -10799,11 +10791,9 @@ function create_download_artwork(print_type)
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
-                    //console.log($chunk_str);
                     var chunks='<tspan  x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
-                    console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
                         if(chunk_val.charAt(0) == "/")	
                         {	
@@ -10902,7 +10892,6 @@ function create_download_artwork(print_type)
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
                         pl_garment_component += "/" + additional_care_text_1[0].polish
                         cz_garment_component += "/" + additional_care_text_1[0].czech
                         sk_garment_component += "/" + additional_care_text_1[0].slovak
@@ -11140,11 +11129,6 @@ function create_download_artwork(print_type)
                     
                     svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
                     svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
-
-
-                    
-                    // console.log(en_care_instructions)
-                    // console.log(en_care_instructions)
 
                     var s_front = new XMLSerializer();
                     var d_front = svgRoot_front_text;
