@@ -640,6 +640,9 @@ Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@ge
 Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
 Route::post('admin/tesco/proof-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoLabelos');
 
+Route::post('admin/tesco/proof-div-tescoticketos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoTicketos');
+Route::post('admin/tesco/generate-div-tescoticketos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoTicketos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
