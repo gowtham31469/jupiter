@@ -822,8 +822,8 @@ function tescoOrders(callback) {
 									case 'tesco_swing_tickets':
 										renderTescoSwingTicketOrders(role="admin", template_id);
 										break;
-								
 									default:
+										createOrders();
 										break;
 								}	
 							}
