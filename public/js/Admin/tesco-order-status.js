@@ -1137,19 +1137,6 @@ function tescoStatusTable(data, path) {
     var thfilter = "<td style='text-align: center;'></td><td style='text-align: center;display:none'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'>PO Number</td><td style='text-align: center;'></td>";
     var tr = "";
     var columnsIn = data[0];
-    // for (var key in columnsIn) {
-    //     if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "template_file") {
-    //         if (key == "TemplateName") {
-    //             th += "<th style='text-align: center;'>Reference No</th>";
-    //         } else if (key == "order_status") {
-    //             th += "<th style='text-align: center;'>Order Status</th>";
-    //         } else if (key == "artwork_status") {
-    //             th += "<th style='text-align: center;'>Artwork Status</th>";
-    //         } else {
-    //             th += "<th style='text-align: center;'>" + key + "</th>";
-    //         }
-    //     }
-    // }
 
     var template_array = [];
     $('#objectDiv').html("")
@@ -1160,12 +1147,16 @@ function tescoStatusTable(data, path) {
             if(value.tableName == "tesco_washcare_orders")
             {
                 var temp_file = value.template_file.split(',');
-                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_text_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_front_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object>')
+                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_text_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_front_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object>');
+
+                var updateArtworkMethod = 'updateWashcareLabel';
             }
             else if(value.tableName == "tesco_swingticket_orders")
             {
                 var temp_file = value.template_file.split(',');
-                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object>')
+                $('#objectDiv').append('<object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object>');
+
+                var updateArtworkMethod = 'updateSwingTicket';
             }
             else
             {
@@ -1386,7 +1377,7 @@ function tescoStatusTable(data, path) {
                     
 
                     if (value['order_status'] != 'Saved'){
-                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick=updateArtwork(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick='+updateArtworkMethod+'(this)>' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     } else {
                         tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     }
@@ -7598,60 +7589,6 @@ function tescoPOUploaded(obj, id, po_file, tableName,style_no,po_number) {
  * @return {[type]}     [description]
  */
 function tescoPOUpload(obj, id, po_file, tableName,style_no) {
-    
-    // $.ajax({
-    //     url: base_url + "/admin/tesco/get-erp-status",
-    //     type: 'get',
-    //     data: {
-    //         table_name: tableName,
-    //         id: id,
-    //         _token: csrf_token
-    //     },
-    //     beforeSend: function () {
-    //          $(".loader").show();
-    //     },
-    //     success: function (data) {
-    //         // erp_details array null , if order is not moved to erp tables
-    //         // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
-    //         if (data.erp_details[0] != null) {
-    //             if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
-    //                 $('.update-po-file').hide();
-
-    //                 $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
-    //             }
-    //             else{
-    //                 $('.update-po-file').show();
-    //                 $('#error_msg_span').html('');
-    //             }
-    //         }
-    //         else
-    //         {
-    //             $('.update-po-file').show();
-    //             $('#error_msg_span').html('');
-    //         }
-    //     },
-    //     error: function (data) {
-
-    //     },
-    //     complete: function () {
-    //         $(".loader").hide();
-    //         if (po_file == "null") {
-    //             $('#po_upload').removeClass('hidden')
-    //             $('.upload-po').removeClass('hidden')
-    //             $('#po_file').addClass('hidden')
-    //         } else {
-    //             $('#po_upload').addClass('hidden')
-    //             $('.upload-po').addClass('hidden')
-    //             $('#po_file').removeClass('hidden')
-    //         }
-    //         var po_link = base_url + po_file
-    //         $('#po_link').attr("href", po_link);
-    //         $('#rowID').val(id);
-    //         $('#tableName').val(tableName);
-    //         $('#buyer_id').val(localStorage.getItem("buyer_id"));
-    //         $('#po-file-upload').modal('show')
-    //     }
-    // })
     $.ajax({
         url: base_url + "/admin/tesco/tesco-orders-filter",
         type: "Post",
