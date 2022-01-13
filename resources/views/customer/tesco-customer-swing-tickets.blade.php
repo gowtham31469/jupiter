@@ -17,7 +17,25 @@
     <div class="col-md-12 teasco-care-quantity-div">
         <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id" value="{{$size_data[0]->tesco_size_department_id}}">
         <input type="hidden" id="swing_template_id" name="swing_template_id" value="{{ $template }}">
+        <input type="hidden" id="swing_template_name" name="swing_template_name" value="{{ $tesco_template_file[0]->template_name }}">
         <div class="table-responsive">
+        <?php 
+            $template_name = $tesco_template_file[0]->template_name;
+
+            $temp_id = str_replace(" ","", $template_name)."_".$template;
+
+            $temp_file = explode(",",$tesco_template_file[0]->template_file);
+
+
+        ?>
+        
+        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_modal" class="center-block tesco_svg" data="{{ $temp_file[0] }}" type="image/svg+xml"></object>
+
+        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_back_modal" class="center-block tesco_svg" data="{{ $temp_file[1] }}" type="image/svg+xml"></object>
+        <div id="svgdiv" style="position:absolute;visibility:hidden">
+                <svg id="ean-13"></svg>
+              </div>
+
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>

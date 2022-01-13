@@ -2130,6 +2130,9 @@ class OrderStatusCntrl extends Controller
      {
         $data_back=explode(',_',$request->data_back);
         $data_front=explode(',_',$request->data_front);
+        $size_category_fin=explode(',_',$request->size_category_fin);
+        $size_comp_fin=explode(',_',$request->size_comp_fin);
+        $product_desc_fin=explode(',_',$request->product_desc_fin);
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2138,6 +2141,8 @@ class OrderStatusCntrl extends Controller
         $svgStringFront=urldecode($data_front[0]);
 
         $i=0;
+        $j=0;
+        $wri_x=-39;
         $xx=15;
         $first_time=0;
         $first_page=0;
@@ -2152,6 +2157,7 @@ class OrderStatusCntrl extends Controller
                 if($i == 3)
                 {
                     $i=0;
+                    $wri_x=-129;
                     PDF::AddPage();
                     $first_page++;
                 }
@@ -2161,6 +2167,7 @@ class OrderStatusCntrl extends Controller
                 if($i == 4)
                 {
                     $i=0;
+                    $wri_x=-129;
                     PDF::AddPage();
                 }
             }
@@ -2180,10 +2187,82 @@ class OrderStatusCntrl extends Controller
                 $xx+=45;
             }
 
+            $siz_cat = explode(',',$size_category_fin[$j]);
+
+            $size_comp = explode(',',$size_comp_fin[$j]);
+
+            $wri_y=105;
+            if($size_category_fin[$j] != "null")
+            {
+                foreach($siz_cat as $val_cat)
+                {
+                    if (str_contains($val_cat, 'height')) {
+                        $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">height</label>',$val_cat);
+                    }
+                    
+                    if (str_contains($val_cat, 'weight')) {
+                        $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">weight</label>',$val_cat);
+                    }
+
+                    if (str_contains($val_cat, 'chest')) {
+                        $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">chest</label>',$val_cat);
+                    }
+
+
+                    foreach($size_comp as $string)
+                    {
+                        if(strpos($val_cat, $string) !== false) 
+                        {
+                            $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'</label>',$val_cat);
+                        }
+                    }
+
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+
+                  //  print_r($html);
+    
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    $wri_y+=2;
+                }
+            }
+
+            $par_pro = json_decode($product_desc_fin[0]);
+                
+            if($size_category_fin[$j] != "null")
+            {
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            }
+            else
+            {
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            }
+
             $svgString=urldecode($value);
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
             $i++;
+            $j++;
             $first_time++;
+            $wri_x+=90;
         }
 
         PDF::Output( public_path('/storage/app/template/swing_tickets.pdf'), 'F');
