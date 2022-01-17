@@ -174,13 +174,13 @@ class StoreTescoSwingTicketOrder
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get();
 
-        $translations['mm_product_benefits_translation'] = !is_null($request->swing_product_benefit) ? DB::table('tesco_mm_product_benefits')
-            ->where('id', $request->swing_product_benefit)
+        $translations['mm_product_benefits_translation'] = !is_null($request->swing_mm_product_benefit) ? DB::table('tesco_mm_product_benefits')
+            ->where('id', $request->swing_mm_product_benefit)
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 
-        $translations['product_benefits_translation'] = !is_null($request->swing_mm_product_benefit) ? DB::table('tesco_product_benefits')
-            ->where('id', $request->swing_mm_product_benefit)
+        $translations['product_benefits_translation'] = !is_null($request->swing_product_benefit) ? DB::table('tesco_product_benefits')
+            ->where('id', $request->swing_product_benefit)
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 
