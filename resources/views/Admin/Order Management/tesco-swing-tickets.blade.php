@@ -6,7 +6,6 @@
 {!! Form::open(['id' => 'tesco_swing_ticket_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
 <input type="hidden" id="hidden_id" name="hidden_id">
-<input type="hidden" id="hidden_name" name="hidden_name">
 <div class="swing-ticket-order-invisible-div"></div>
 <span id="result"></span>
 
@@ -28,6 +27,7 @@
 
 
         ?>
+        <input type="hidden" id="hidden_name" name="hidden_name" value="{{$template_name}}">
         
         <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_modal" class="center-block tesco_svg" data="{{ $temp_file[0] }}" type="image/svg+xml"></object>
 
