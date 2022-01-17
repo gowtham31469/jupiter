@@ -4266,7 +4266,7 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 	})
 }
 
-function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name) {
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin) {
 	
 	var url = "";
 	
@@ -4281,7 +4281,10 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
             style:style,
             template_name:template_name,
             created_date:created_at,
-            customer_name:customer_name
+            customer_name:customer_name,
+            size_category_fin:size_category_fin,
+            size_comp_fin:size_comp_fin,
+            product_desc_fin:product_desc_fin
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -4380,6 +4383,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
     var svgarr = [];
     var svgarr_back = [];
+    var size_category_arr = [];
+    var size_comp_arr = [];
+    var product_desc_arr = [];
     ajax_count=0;
     $.ajax({
         url: base_url + "/admin/tesco/get-order-details",
@@ -4420,6 +4426,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                     var size_category_translation = "";
 
+                    var size_comp = [];
+
                     $(val.tesco_secondary_size_chart).each(function (keys, vals) {
                         var sec_size = vals.secondary_size.split(':')
                         if(keys !=0 )
@@ -4434,29 +4442,31 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += vals.slovak+"•"
                         size_category_translation += vals.hungarian+": "
                         size_category_translation += sec_size[1].trim()
+
+                        size_comp.push(sec_size[1].trim())
                         
                     })
                     
                     $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
-                    $y_size = 0;
-                    var size_category_str_text = "";
-                    $($size_category_str).each(function(index,size_category_str_text_val){
-                        size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
-                        $y_size += 5.76;
-                    })
-                    console.log(size_category_str_text)
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
+                    // })
                     
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
                     var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
@@ -4477,6 +4487,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                     var size_category_translation = "";
 
+                    var size_comp = [];
+
                     $(val.tesco_secondary_size_chart).each(function (keys, vals) {
                         var sec_size = vals.secondary_size.split(':')
                         if(keys !=0 )
@@ -4491,29 +4503,30 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += vals.slovak+"•"
                         size_category_translation += vals.hungarian+": "
                         size_category_translation += sec_size[1].trim()
+                        size_comp.push(sec_size[1].trim())
                         
                     })
                     
                     $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
-                    $y_size = 0;
-                    var size_category_str_text = "";
-                    $($size_category_str).each(function(index,size_category_str_text_val){
-                        size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
-                        $y_size += 5.76;
-                    })
-                    console.log(size_category_str_text)
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
+                    // })
                     
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
                     var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
@@ -4533,6 +4546,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                     var size_category_translation = "";
 
+                    var size_comp = [];
+
                     $(val.tesco_secondary_size_chart).each(function (keys, vals) {
                         var sec_size = vals.secondary_size.split(':')
                         if(keys !=0 )
@@ -4547,29 +4562,30 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += vals.slovak+"•"
                         size_category_translation += vals.hungarian+": "
                         size_category_translation += sec_size[1].trim()
+                        size_comp.push(sec_size[1].trim())
                         
                     })
                     
                     $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
-                    $y_size = 0;
-                    var size_category_str_text = "";
-                    $($size_category_str).each(function(index,size_category_str_text_val){
-                        size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
-                        $y_size += 5.76;
-                    })
-                    console.log(size_category_str_text)
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
+                    // })
                     
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
                     var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
@@ -4589,6 +4605,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                     var size_category_translation = "";
 
+                    var size_comp = [];
+
                     $(val.tesco_secondary_size_chart).each(function (keys, vals) {
                         var sec_size = vals.secondary_size.split(':')
                         if(keys !=0 )
@@ -4603,29 +4621,30 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += vals.slovak+"•"
                         size_category_translation += vals.hungarian+": "
                         size_category_translation += sec_size[1].trim()
+                        size_comp.push(sec_size[1].trim())
                         
                     })
                     
                     $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
-                    $y_size = 0;
-                    var size_category_str_text = "";
-                    $($size_category_str).each(function(index,size_category_str_text_val){
-                        size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
-                        $y_size += 5.76;
-                    })
-                    console.log(size_category_str_text)
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
+                    // })
                     
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
                     var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
@@ -4643,17 +4662,21 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 {
                     svgDoc_back.getElementById("size_list").innerHTML = "";
 
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = "";
+                    $size_category_str = "null";
+
+                    var size_comp = [];
+
+                    //svgDoc_back.getElementById("size_category_translation").innerHTML = "";
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // })
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
                     svgDoc_back.getElementById("size_bold").innerHTML = ""
 
@@ -4673,6 +4696,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                     var size_category_translation = "";
 
+                    var size_comp = [];
+
                     $(val.tesco_secondary_size_chart).each(function (keys, vals) {
                         var sec_size = vals.secondary_size.split(':')
                         if(keys !=0 )
@@ -4687,29 +4712,30 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += vals.slovak+"•"
                         size_category_translation += vals.hungarian+": "
                         size_category_translation += sec_size[1].trim()
+                        size_comp.push(sec_size[1].trim())
                         
                     })
                     
                     $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
-                    $y_size = 0;
-                    var size_category_str_text = "";
-                    $($size_category_str).each(function(index,size_category_str_text_val){
-                        size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
-                        $y_size += 5.76;
-                    })
-                    console.log(size_category_str_text)
-                    svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
 
                     //Product Description
                     var product_desc_translation = "";
-                    var product_desc_text = JSON.parse(val.product_desc_text)
-                    $(product_desc_text).each(function (keys, vals) {
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
 
-                        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
                         
-                    })
+                    // })
                     
-                    svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
                     var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
@@ -4773,6 +4799,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var str_back = s_back.serializeToString(d_back);
                 var svg_back = encodeURI(str_back)
                 svgarr_back.push(svg_back)
+                size_category_arr.push($size_category_str)
+                size_comp_arr.push(size_comp)
+                product_desc_arr.push(product_desc_text)
                 ajax_count++;
             });
 
@@ -4850,7 +4879,10 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
                 var svg_fin = svgarr.join(',_');
                 var svg_fin_back = svgarr_back.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name);
+                var size_category_fin = size_category_arr.join(',_');
+                var size_comp_fin = size_comp_arr.join(',_');
+                var product_desc_fin = product_desc_arr.join(',_');
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin);
             }
 
         },

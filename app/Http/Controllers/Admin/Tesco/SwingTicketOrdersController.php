@@ -69,6 +69,8 @@ class SwingTicketOrdersController extends Controller
 
             $tesco_suppliers = $this->caremeta->getTescoSuppliers();
 
+            $tesco_template_file = $this->swingTicketMetadata->getTemplateFileSwingTickets($request['template']);
+
             return View::make('Admin/Order Management/tesco-swing-tickets')
                 ->with([
                     'product_benefits' => $product_benefits,
@@ -80,6 +82,7 @@ class SwingTicketOrdersController extends Controller
                     'woolmark_logos' => $woolmark_logos,
                     'size_data' => $size_data,
                     'template' => $request['template'],
+                    'tesco_template_file' => $tesco_template_file,
                     'season_codes' => $season_codes
                 ]);
         } catch (\Exception $e) {

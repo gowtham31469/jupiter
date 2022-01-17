@@ -71,4 +71,12 @@ class TescoSwingTicketMetadata
       ->pluck('name', 'id')
       ->all();
   }
+
+  public function getTemplateFileSwingTickets($template)
+  {
+    return DB::table('tesco_template')
+      ->orderBy('id')
+      ->where('item_id', $template)
+      ->get();
+  }
 }
