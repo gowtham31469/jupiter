@@ -13,7 +13,7 @@ $( () => {
             $('.swing-ticket-order-submit-btn').remove();
 
             // Map stored values 
-            mapSwingTicketStoredValues(order_data, user_role);
+            mapSwingTicketStoredValues(order_data);
 
             if (order_data.order_details.order_status === "Order Placed") {
                 $('.order-cancel-btn').show();
@@ -24,7 +24,7 @@ $( () => {
 
     }
 
-    mapSwingTicketStoredValues = (order_data, user_role) => {
+    mapSwingTicketStoredValues = (order_data) => {
         $('#hidden_id').val(order_data.order_details.id);
         $('#hidden_name').val(order_data.order_details.item_master.template_name);
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);

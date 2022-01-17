@@ -17,6 +17,30 @@ renderTescoSwingTicketOrders = (role, template_id, callback=null) => {
     }); 
 }
 
+$('#swing_product_benefit').on('change', (e) => {
+    if (e.target.value === "") {
+        $('#swing_mm_product_benefit').prop('required', true);
+        $('#swing_product_benefit').prop('required', false);
+    } else {
+        $('#swing_mm_product_benefit').prop('required', false);
+        $('#swing_product_benefit').prop('required', true);
+    }
+    $('#swing_mm_product_benefit').val('');
+    $(".selectpicker").selectpicker("refresh");
+})
+
+$('#swing_mm_product_benefit').on('change', (e) => {
+    if (e.target.value === "") {
+        $('#swing_product_benefit').prop('required', true);
+        $('#swing_mm_product_benefit').prop('required', false);
+    } else {
+        $('#swing_product_benefit').prop('required', false);
+        $('#swing_mm_product_benefit').prop('required', true);
+    }
+    $('#swing_product_benefit').val('');
+    $(".selectpicker").selectpicker("refresh");
+})
+
 // Method to validate and submit tesco swing ticket orders
 validateTescoSwingTicketOrder = (user_type) => {
     /** [ bootstrap validator for create tesco order form ] **/

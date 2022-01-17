@@ -1,7 +1,47 @@
 $( () => { 
     const table_name = 'tesco_washcare_orders';
+
+    getCareLabelDetails = (obj, user_type) => {
+
+    var id = $(obj).parent().attr('data-id');
+    var table_name = $(obj).parent().attr('data-table');
+
+    $.ajax({
+        url: base_url + `/${user_type}/tesco/get-care-label-order-details`,
+        type: "Post",
+        dataType: "json",
+        data: {
+            _token: csrf_token,
+            table_name: table_name,
+            id: id
+        },
+        beforeSend: function () {
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
+        },
+        statusCode: {
+            /** [Show response status based on HTTP status code] */
+            200: function (data) {
+               
+                loadCareLabelDetails(data, user_type)
+
+            },
+            400: function () {
+                $('.snackbar_span').html('Something went wrong!');
+                showSnackbar();
+            }
+        },
+        error: function (data) {
+        },
+        complete: function () {
+            $(".loader").hide();
+            $(".loader").css('margin-top', '0%');
+        }
+    })
+
+    }
     
-    viewOrderDetailsPanel = (order_data, user_role) => {
+    loadCareLabelDetails = (order_data, user_role) => {
         var user_type = user_role.toLowerCase();
         
         $('.garment-component-div, .label-metadata-select, .teasco-care-quantity-div').html('');
@@ -10,7 +50,7 @@ $( () => {
                                      <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_coo" name="tesco_care_coo">
                                             <option value="">-- Select Country Of Origin --</option>`;
-                                            $.each(order_data.metadata.coo, function (id, name) {
+                                            $.each(order_data.coo, function (id, name) {
 
                                                 metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -21,7 +61,7 @@ $( () => {
                                      <label for="tesco_care_supplier" class="component-label">Supplier </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_supplier" name="tesco_care_supplier" onchange="getMoq(this, '`+user_type+`', 'update')">
                                             <option value="">-- Select Supplier --</option>`;
-                                            $.each(order_data.metadata.tesco_suppliers, function (id, name) {
+                                            $.each(order_data.tesco_suppliers, function (id, name) {
 
                                                 metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -32,7 +72,7 @@ $( () => {
                                      <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_part_of_two_piece_set" name="tesco_care_part_of_two_piece_set">
                                             <option value="">-- Part of Two Piece Set --</option>`;
-                                            $.each(order_data.metadata.part_of_two_piece_set, function (id, name) {
+                                            $.each(order_data.part_of_two_piece_set, function (id, name) {
 
                                                 metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -45,7 +85,7 @@ $( () => {
                                      <label for="tesco_care_wash_instruction" class="component-label">Wash Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_wash_instruction" name="tesco_care_wash_instruction" required>
                                             <option value="">-- Select Wash Instruction --</option>`;
-                                            $.each(order_data.metadata.symbols['Washing'], function (id, value) {
+                                            $.each(order_data.symbols['Washing'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
@@ -56,7 +96,7 @@ $( () => {
                                      <label for="tesco_care_bleach_instruction" class="component-label">Bleach Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_bleach_instruction" name="tesco_care_bleach_instruction" required>
                                             <option value="">-- Select Bleach Instruction --</option>`;
-                                            $.each(order_data.metadata.symbols['Whitening'], function (id, value) {
+                                            $.each(order_data.symbols['Whitening'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
@@ -67,7 +107,7 @@ $( () => {
                                      <label for="tesco_care_dry_instruction" class="component-label">Dry Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_dry_instruction" name="tesco_care_dry_instruction" required>
                                             <option value="">-- Select Dry Instruction --</option>`;
-                                            $.each(order_data.metadata.symbols['Dryer'], function (id, value) {
+                                            $.each(order_data.symbols['Dryer'], function (id, value) {
                                                 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
@@ -78,7 +118,7 @@ $( () => {
                                      <label for="tesco_care_iron_instruction" class="component-label">Iron Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_iron_instruction" name="tesco_care_iron_instruction" required>
                                             <option value="">-- Select Iron Instruction --</option>`;
-                                            $.each(order_data.metadata.symbols['Ironing'], function (id, value) {
+                                            $.each(order_data.symbols['Ironing'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
@@ -89,7 +129,7 @@ $( () => {
                                      <label for="tesco_care_dry_clean_instruction" class="component-label">Dry Clean Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_dry_clean_instruction" name="tesco_care_dry_clean_instruction" required>
                                             <option value="">-- Select Dry Clean Instruction --</option>`;
-                                            $.each(order_data.metadata.symbols['Prof Cleaning'], function (id, value) {
+                                            $.each(order_data.symbols['Prof Cleaning'], function (id, value) {
 
                                                 metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
@@ -104,7 +144,7 @@ $( () => {
                                                                     <label for="tesco_care_additional_instruction_` + index + `" class="component-label">Additional Instruction </label>
                                                                     <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_additional_instruction_` + index + `" name="tesco_care_additional_instruction_` + index + `">
                                                                         <option value="">-- Select Additional Instruction --</option>`;
-                                                                        $.each(order_data.metadata.additional_instructions, function (id, name) {
+                                                                        $.each(order_data.additional_instructions, function (id, name) {
 
                                                                             metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -118,7 +158,7 @@ $( () => {
                                                                     <label for="tesco_care_kids_warning" class="component-label">Kids Warning Statement </label>
                                                                     <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_kids_warning" name="tesco_care_kids_warning">
                                                                         <option value="">-- Select Kids Warning Statement --</option>`;
-                                                                        $.each(order_data.metadata.kids_warning, function (id, name) {
+                                                                        $.each(order_data.kids_warning, function (id, name) {
 
                                                                             metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -143,7 +183,7 @@ $( () => {
                     <label for="tesco_care_garment_component_`+component_index+`" class="component-label">Garment Component </label>
                     <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_component_`+component_index+`"  name="tesco_care_garment_component[]">
                         <option value="">-- Select Garment Component --</option>`;
-                        $.each(order_data.metadata.components, function (id, name) {
+                        $.each(order_data.components, function (id, name) {
 
                             fiber_component_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -158,7 +198,7 @@ $( () => {
                     <div class="form-group has-feedback">
                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
                             <option value="">-- Select Select Fiber --</option>`;
-                            $.each(order_data.metadata.fabriclists, function (id, name) {
+                            $.each(order_data.fabriclists, function (id, name) {
 
                                 fiber_component_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -201,8 +241,8 @@ $( () => {
 
         $('#label_order_id').val(order_data.order_details.id);
         $('#label_template_id').val(order_data.order_details.template_id);
-        $('#label_template_name').val(order_data.tesco_item_master[0].item_name);
-        $('.label-order-details').text(" Order Details - " + order_data.tesco_item_master[0].item_name);
+        $('#label_template_name').val(order_data.order_details.item_master.template_name);
+        $('.label-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name);
 
         var footer_btn = `<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit_label_order_btn" type="submit" disabled="true" onclick="validateTescoLabelOrder('`+user_type+`')">Submit</button>
         <button class="btn btn-warning  pull-right input-sm" id="edit_label_order_btn" style="width: 55px;margin-left: 10px;" onclick="editLabelOrder()" type="button">Edit</button>

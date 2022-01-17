@@ -17,7 +17,24 @@
     <div class="col-md-12 teasco-care-quantity-div">
         <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id" value="{{$size_data[0]->tesco_size_department_id}}">
         <input type="hidden" id="swing_template_id" name="swing_template_id" value="{{ $template }}">
+        <input type="hidden" id="swing_template_name" name="swing_template_name" value="{{ $tesco_template_file[0]->template_name }}">
         <div class="table-responsive">
+        <?php 
+            $template_name = $tesco_template_file[0]->template_name;
+
+            $temp_id = str_replace(" ","", $template_name)."_".$template;
+
+            $temp_file = explode(",",$tesco_template_file[0]->template_file);
+
+
+        ?>
+        
+        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_modal" class="center-block tesco_svg" data="{{ $temp_file[0] }}" type="image/svg+xml"></object>
+
+        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_back_modal" class="center-block tesco_svg" data="{{ $temp_file[1] }}" type="image/svg+xml"></object>
+        <div id="svgdiv" style="position:absolute;visibility:hidden">
+                <svg id="ean-13"></svg>
+              </div>
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
@@ -89,7 +106,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_product_benefit', 'Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit', 'data-live-search' => 'true', 'required')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -97,7 +114,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_mm_product_benefit', 'MM Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit', 'data-live-search' => 'true', 'required')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -170,7 +187,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" >
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                     @foreach($wee_symbols as $key => $value)

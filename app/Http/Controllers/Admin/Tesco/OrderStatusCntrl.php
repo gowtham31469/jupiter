@@ -29,6 +29,7 @@ use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\CleanString;
 use App\OrderManagementHistory;
 use App\Classes\ApproveTescoOrders;
+use App\Classes\EditTescoOrders;
 use PDF;
 use App\Classes\TescoCareMetadata;
 
@@ -179,6 +180,11 @@ class OrderStatusCntrl extends Controller
             $tesco_washcare_orders = DB::table("tesco_washcare_orders")
             ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                     ->select("season_code");
+
+            $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+            ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("tesco_season_codes.name as season_code");
                 
             $data = DB::table("tesco_thl3_orders")
             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -193,6 +199,7 @@ class OrderStatusCntrl extends Controller
                 ->union($tsl3)
                 ->union($thl1)
                 ->union($tesco_washcare_orders)
+                ->union($tesco_swingticket_orders)
                 ->get();
 
             $tcl1_style = DB::table("tesco_tcl1_orders")
@@ -231,6 +238,10 @@ class OrderStatusCntrl extends Controller
             ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                     ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
 
+            $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                         ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
@@ -243,6 +254,7 @@ class OrderStatusCntrl extends Controller
                         ->union($tsl3_style)
                         ->union($thl1_style)
                         ->union($tesco_washcare_orders_style)
+                        ->union($tesco_swingticket_orders_style)
                         ->get();
 
             //$data = json_decode($data);
@@ -927,6 +939,58 @@ class OrderStatusCntrl extends Controller
                             })
                             ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_washcare_orders.season_code','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.po_number as BuyerPO','tesco_washcare_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_washcare_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_washcare_orders.created_at as OrderDate',DB::raw('to_char(tesco_washcare_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_washcare_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_washcare_orders.order_status as artwork_status','tesco_washcare_orders.pi_status as PI Status','tesco_washcare_orders.po_status as PO Status','tesco_washcare_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_washcare_orders.id as tableID','tesco_washcare_orders.po_file','customers.pi_required','customers.po_required','tesco_washcare_orders.template_id','tesco_washcare_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
 
+            $tesco_swingticket_orders = "tesco_swingticket_orders";
+            $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+            ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+            ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+            ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->where(function($query) use ($seasonos){
+                                if(count($seasonos))
+                                {
+                                    $query->orWhereIn('season_code', $seasonos);
+                                }
+                            })
+                            ->where(function($query) use ($stylenoos,$ukstylenoos){
+                                if(count($stylenoos))
+                                {
+                                    $query->orWhereIn('ce_style_ref', $stylenoos);
+                                    $query->where('zone', 'CE');
+                                }
+                                if(count($ukstylenoos))
+                                {
+                                    $query->orWhereIn('uk_style_ref', $ukstylenoos);
+                                    $query->where('zone', 'UK');
+                                }
+                            })
+                            ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){
+                                if(count($orderstatusosref))
+                                {
+                                    $query->orWhereIn('order_status', $orderstatusosref);
+                                }
+                                if(in_array("Pending", $orderstatusos))
+                                {
+                                    $query->orWhere('is_order_count_empty', 1);
+                                }
+                                if(count($artworkstatusos))
+                                {
+                                    $query->orWhereIn('order_status', $artworkstatusos);
+                                }
+                            })
+                            ->where(function($query) use ($postatusos){
+                                if(count($postatusos))
+                                {
+                                    $query->orWhereIn('po_status', $postatusos);
+                                }
+                            })
+                            ->where(function($query) use ($pistatusos){
+                                if(count($pistatusos))
+                                {
+                                    $query->orWhereIn('pi_status', $pistatusos);
+                                }
+                            })
+                            ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_season_codes.name as season_code','tesco_swingticket_orders.uk_style_ref','tesco_swingticket_orders.ce_style_ref','tesco_swingticket_orders.po_number as BuyerPO','tesco_swingticket_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_swingticket_orders.template_type as Template Type','customers.id as customer_id','customers.company_name as Company','tesco_swingticket_orders.created_at as OrderDate',DB::raw('to_char(tesco_swingticket_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_swingticket_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_swingticket_orders.order_status as artwork_status','tesco_swingticket_orders.pi_status as PI Status','tesco_swingticket_orders.po_status as PO Status','tesco_swingticket_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_swingticket_orders.id as tableID','tesco_swingticket_orders.po_file','customers.pi_required','customers.po_required','tesco_swingticket_orders.template_id','tesco_swingticket_orders.order_flag','customers.delivery_day_count','is_order_count_empty',DB::raw("'".$actions."'".' as "Print Proof"'));
+
 
 
 			$thl3 = "THL 3";
@@ -989,6 +1053,7 @@ class OrderStatusCntrl extends Controller
                         ->union($tesco_tsl3_orders)
                         ->union($tesco_thl1_orders)
                         ->union($tesco_washcare_orders)
+                        ->union($tesco_swingticket_orders)
                         ->get();
 
             //$data = json_decode($data);
@@ -2061,6 +2126,150 @@ class OrderStatusCntrl extends Controller
         PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
         print_r(url('/storage/app/template/label.pdf'));
      } 
+
+     public function proofDivTescoTicketos(Request $request)
+     {
+        $data_back=explode(',_',$request->data_back);
+        $data_front=explode(',_',$request->data_front);
+        $size_category_fin=explode(',_',$request->size_category_fin);
+        $size_comp_fin=explode(',_',$request->size_comp_fin);
+        $product_desc_fin=explode(',_',$request->product_desc_fin);
+        
+        PDF::SetFont('fandfsansb');
+        PDF::SetFont('fandfsans');
+        PDF::SetFont('fandfsanslight');
+
+        $svgStringFront=urldecode($data_front[0]);
+
+        $i=0;
+        $j=0;
+        $wri_x=-39;
+        $xx=15;
+        $first_time=0;
+        $first_page=0;
+        PDF::AddPage();
+        PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        
+        foreach($data_back as $key => $value)
+        {
+            if($first_page == 0)
+            {
+                if($i == 3)
+                {
+                    $i=0;
+                    $wri_x=-129;
+                    PDF::AddPage();
+                    $first_page++;
+                }
+            }
+            else
+            {
+                if($i == 4)
+                {
+                    $i=0;
+                    $wri_x=-129;
+                    PDF::AddPage();
+                }
+            }
+            
+
+            if($i == 0)
+            {
+                $xx=15;
+            }
+            else
+            {
+                $xx+=45;
+            }
+
+            if($first_time == 0)
+            {
+                $xx+=45;
+            }
+
+            $siz_cat = explode(',',$size_category_fin[$j]);
+
+            $size_comp = explode(',',$size_comp_fin[$j]);
+
+            $wri_y=105;
+            if($size_category_fin[$j] != "null")
+            {
+                foreach($siz_cat as $val_cat)
+                {
+                    if (str_contains($val_cat, 'height')) {
+                        $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">height</label>',$val_cat);
+                    }
+                    
+                    if (str_contains($val_cat, 'weight')) {
+                        $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">weight</label>',$val_cat);
+                    }
+
+                    if (str_contains($val_cat, 'chest')) {
+                        $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">chest</label>',$val_cat);
+                    }
+
+
+                    foreach($size_comp as $string)
+                    {
+                        if(strpos($val_cat, $string) !== false) 
+                        {
+                            $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'</label>',$val_cat);
+                        }
+                    }
+
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+
+                  //  print_r($html);
+    
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    $wri_y+=2;
+                }
+            }
+
+            $par_pro = json_decode($product_desc_fin[0]);
+                
+            if($size_category_fin[$j] != "null")
+            {
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            }
+            else
+            {
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                
+                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                //  print_r($html);
+
+                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            }
+
+            $svgString=urldecode($value);
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+            $i++;
+            $j++;
+            $first_time++;
+            $wri_x+=90;
+        }
+
+        PDF::Output( public_path('/storage/app/template/swing_tickets.pdf'), 'F');
+        print_r(url('/storage/app/template/swing_tickets.pdf'));
+        
+     }
      
      public function proofDivTescoLabelos(Request $request)
      {
@@ -2536,6 +2745,19 @@ class OrderStatusCntrl extends Controller
                             ->select('*')
                             ->get();
         }
+        else if($table_name_print == "tesco_swingticket_orders")
+        {
+            $table = "tesco_swingticket_orders";
+            $qty_table = "tesco_swingticket_orders_quanty";
+            $table_id = "swingticket_order_id";
+            $order_details  = 	DB::table($qty_table)
+                                ->where($table_id,$id)
+                                ->orderBy('id', 'asc')
+                                ->select('*')
+                                ->get();
+            $component  = "";
+            $degree_text  = "";
+        }
         else
         {
             $order_details  = 	DB::table($qty_table)
@@ -2619,6 +2841,98 @@ class OrderStatusCntrl extends Controller
                 $value->part_of_set_text=$order_omp[0]->part_of_set_text;
                 $value->created_at=$order_omp[0]->created_at;
                 
+            }
+            else if($table_name_print == "tesco_swingticket_orders")
+            {
+                $table = "tesco_swingticket_orders";
+                $qty_table = "tesco_swingticket_orders_quanty";
+                $table_id = "swingticket_order_id";
+            
+                $odetails  = 	DB::table($table)
+                                ->where('id',$id)
+                                ->select('*')
+                                ->get();
+
+                $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+
+                $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
+
+                $order_omp  = 	DB::table($table)
+                                ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                                ->leftJoin('tesco_wee_symbols','tesco_swingticket_orders.wee_symbol_id','=','tesco_wee_symbols.id')
+                                ->leftJoin('tesco_woolmark_logos','tesco_swingticket_orders.woolmark_logo_id','=','tesco_woolmark_logos.id')
+                                ->where($table.'.id',$value->$table_id)
+                                ->select($table.'.*',$table.'.24_char_desc as twenty_four_char_desc','tesco_season_codes.name as season_code','tesco_wee_symbols.wee_symbol','tesco_woolmark_logos.woolmark_logo')
+                                ->get();
+
+
+                //print_r($value->size_id);
+                $tesco_primary_size  = 	DB::table('tesco_primary_size')
+                                        ->where('id',$value->size_id)
+                                        ->select('*')
+                                        ->get();
+
+                $tesco_month_under = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','months (1-4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_month_over = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','months (over 4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_und   = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (1- 1½)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_under = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (up to 4)')
+                                    ->select('*')
+                                    ->get();
+
+                $tesco_year_over = DB::table('tesco_secondary_size_translation')
+                                    ->where('english','years (over 4)')
+                                    ->select('*')
+                                    ->get();
+
+
+                $tesco_secondary_size_chart  = 	DB::table('tesco_secondary_size_chart')
+                                                ->leftJoin('tesco_secondary_size_category','tesco_secondary_size_chart.tesco_secondary_size_category_id','=','tesco_secondary_size_category.id')
+                                                ->leftJoin('tesco_secondary_size_translation',DB::raw('LOWER(tesco_secondary_size_category.category_name)'),'=',DB::raw('LOWER(tesco_secondary_size_translation.english)'))
+                                                ->where('tesco_primary_size_id',$value->size_id)
+                                                ->orderBy('tesco_secondary_size_chart.id', 'asc')
+                                                ->select('tesco_secondary_size_chart.*','tesco_secondary_size_translation.english','tesco_secondary_size_translation.polish','tesco_secondary_size_translation.czech','tesco_secondary_size_translation.slovak','tesco_secondary_size_translation.hungarian')
+                                                ->get();
+
+                $value->zone=$order_omp[0]->zone;
+                $value->po_number=$order_omp[0]->po_number;
+                $value->customer_name=$customer_name[0]->short_name;
+                $value->uk_style_ref=$order_omp[0]->uk_style_ref;
+                $value->ce_style_ref=$order_omp[0]->ce_style_ref;
+                $value->season_code=$order_omp[0]->season_code;
+                $value->twenty_four_char_desc=$order_omp[0]->twenty_four_char_desc;
+                $value->cz_selling_price=$order_omp[0]->cz_selling_price;
+                $value->sk_selling_price=$order_omp[0]->sk_selling_price;
+                $value->hu_selling_price=$order_omp[0]->hu_selling_price;
+                $value->eqos_site_code=$order_omp[0]->eqos_site_code;
+                $value->wee_symbol=$order_omp[0]->wee_symbol;
+                $value->woolmark_logo=$order_omp[0]->woolmark_logo;
+                $value->ce_size_name=$tesco_primary_size[0]->ce_size;
+                $value->tesco_secondary_size_chart=$tesco_secondary_size_chart;
+                $value->product_desc_text=$order_omp[0]->product_desc_text;
+                $value->item_name=$tesco_item_master[0]->item_name;
+                $value->product_benefit_text=$order_omp[0]->product_benefit_text;
+                $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
+                $value->product_benefit_id=$order_omp[0]->product_benefit_id;
+                $value->mm_product_benefit_id=$order_omp[0]->mm_product_benefit_id;
+                $value->created_at=$order_omp[0]->created_at;
+                $value->tesco_month_under=$tesco_month_under;
+                $value->tesco_month_over=$tesco_month_over;
+                $value->tesco_year_und=$tesco_year_und;
+                $value->tesco_year_under=$tesco_year_under;
+                $value->tesco_year_over=$tesco_year_over;
             }
             else
             {
@@ -3794,92 +4108,8 @@ class OrderStatusCntrl extends Controller
      */
     public function editArtwork(Request $request)
     {
-        $table_name =   $request->table_name;
-        $erp_order_details = array();
-        $order_table_array = explode("_", $table_name);
-        switch ($order_table_array[1]) {
-            case 'washcare':
-                $template_name = title_case($order_table_array[1]);
-                break;
-            case 'swingticket':
-                $template_name = 'SwingTicket';
-                break;
-            default:
-                $template_name = strtoupper($order_table_array[1]);
-                break;
-        }
-
-        $model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
-        $care_label_metadata = [];
-
-        if ($order_table_array[1] ==  'washcare') {
-            $order_details  = $model_name::with([
-                'quantities',
-                'garment_components',
-                'item_master'
-            ])
-            ->where([
-                'id' => $request->id
-            ])
-            ->first();
-            
-            $care_label_metadata = [];
-
-            $care_label_metadata['symbols'] = $this->caremeta->getCareLabelSymbols();
-
-            $care_label_metadata['coo'] = $this->caremeta->getCountryOrigin();
-
-            $care_label_metadata['kids_warning'] = $this->caremeta->getKidsWarning();
-
-            $care_label_metadata['components'] = $this->caremeta->getCareLabelComponents();
-
-            $care_label_metadata['fabriclists'] = $this->caremeta->getCareLabelFabrics();
-
-            $care_label_metadata['tesco_suppliers'] = $this->caremeta->getTescoSuppliers();
-
-            $care_label_metadata['additional_instructions'] = $this->caremeta->getCareLabelInstructions();
-
-            $care_label_metadata['part_of_two_piece_set'] = $this->caremeta->getPartOfTwoPieceSet();
-        } else {
-            $order_details  = $model_name::with([
-                'quantities'
-            ])
-            ->where([
-                'id' => $request->id
-            ])
-            ->first();
-        }
-
-        $order_quantity_ids = $order_details->quantities->pluck('id');
-
-        $tesco_item_master = DB::table('tesco_template')
-        ->join('tesco_item_master', 'tesco_item_master.id', 'tesco_template.item_id')
-        ->where('tesco_template.item_id', $order_details->template_id)
-            ->select('tesco_template.template_file', 'tesco_item_master.is_qrcode_required', 'tesco_item_master.item_name')
-            ->get();
-
-        $moq     =    DB::table('price_taxation')
-        ->where([
-            'template_id' => $order_details->template_id,
-            'customer_id' => $order_details->tesco_supplier_id,
-            'buyer_id' => 2
-        ])
-            ->value('moq');
-
-        // fetch erp_order_details table status
-        $erp_order_details[] = DB::table('erp_order_details')
-        ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
-        ->where('order_qnty_table_name', $table_name . '_quanty')
-        ->whereIn('order_qnty_table_id', $order_quantity_ids)
-            ->select('erp_order_details.id', 'erp_status.status_name')
-            ->first();
-
-        if ($order_details) {
-            $result = response()->json(['error' => false, 'message' => 'success', 'order_details' => $order_details,  'tesco_item_master' => $tesco_item_master, 'moq' => $moq, 'erp_details' => $erp_order_details, 'metadata' => $care_label_metadata], 200);
-        } else {
-            $result = response()->json(['error' => true, 'message' => 'Error'], 400);
-        }
-        return $result;
+        $get_order_details = new EditTescoOrders();
+        return $get_order_details->getStickerOrderDetails($request);
     }
     
     /**
