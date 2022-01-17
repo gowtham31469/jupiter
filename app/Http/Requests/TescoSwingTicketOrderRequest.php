@@ -40,7 +40,7 @@ class TescoSwingTicketOrderRequest extends FormRequest
             'swing_eqos'              => ['required', 'numeric',  'digits_between:1,7'],
             'swing_season_code'       => ['sometimes', 'numeric', 'exists:tesco_season_codes,id'],
             'swing_option_id'         => ['required', 'max:8'],
-            'swing_wee_symbol'        => ['sometimes', 'numeric', 'exists:tesco_wee_symbols,id'],
+            'swing_wee_symbol'        => ['sometimes'],
             'swing_ce_mark'           => ['sometimes'],
             'swing_machine_washable'  => ['sometimes'],
             'swing_woolmark_logo'     => ['sometimes', 'numeric', 'exists:tesco_woolmark_logos,id'],
