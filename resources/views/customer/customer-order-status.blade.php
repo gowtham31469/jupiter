@@ -663,7 +663,7 @@
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
-    
+    <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script type="text/javascript">
 		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
