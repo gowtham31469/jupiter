@@ -689,6 +689,7 @@
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script>
         localStorage.removeItem("page_navigation");
         var buyer_count = $('#invisible__count_id').val();
