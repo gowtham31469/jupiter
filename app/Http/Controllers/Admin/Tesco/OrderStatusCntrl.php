@@ -2917,8 +2917,8 @@ class OrderStatusCntrl extends Controller
                 $value->sk_selling_price=$order_omp[0]->sk_selling_price;
                 $value->hu_selling_price=$order_omp[0]->hu_selling_price;
                 $value->eqos_site_code=$order_omp[0]->eqos_site_code;
-                $value->wee_symbol=$order_omp[0]->wee_symbol;
-                $value->woolmark_logo=$order_omp[0]->woolmark_logo;
+                $value->wee_symbol_file=$order_omp[0]->wee_symbol;
+                $value->woolmark_logo_file=$order_omp[0]->woolmark_logo;
                 $value->ce_size_name=$tesco_primary_size[0]->ce_size;
                 $value->tesco_secondary_size_chart=$tesco_secondary_size_chart;
                 $value->product_desc_text=$order_omp[0]->product_desc_text;
