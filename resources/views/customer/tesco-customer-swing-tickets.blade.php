@@ -182,8 +182,8 @@
 <hr>
 <div class="row">
 
-    <!-- FFK/01/M13021C  44-->
-    <!-- FFB/01/M13023C 46-->
+    {{-- FFK/01/M13021C  44 --}}
+    {{-- FFB/01/M13023C 46 --}}
     @if(in_array($template, [44, 46]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
@@ -201,7 +201,7 @@
     </div>
     @endif
 
-    <!-- FFB/01/M13023C 46-->
+    {{-- FFB/01/M13023C 46 --}}
     @if(in_array($template, [46]))
     <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
@@ -215,7 +215,7 @@
     </div>
     @endif
 
-    <!-- FFC/01/M13304C  53-->
+    {{-- FFC/01/M13304C  53 --}}
     @if(in_array($template, [53]))
     <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('swing_machine_washable', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
@@ -243,9 +243,9 @@
     </div>
     @endif
 
-    <!-- FFC/01/M13022C 45-->
-    <!-- FFK/01/M13163C 51-->
-    <!-- FFB/01/M13233C 52-->
+    {{-- FFC/01/M13022C 45 --}}
+    {{-- FFK/01/M13163C 51 --}}
+    {{-- FFB/01/M13233C 52 --}}
     @if(in_array($template, [45, 51, 52]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
@@ -274,6 +274,8 @@
 
 </div>
 @endif
+<hr>
+<br>
 
 <div class="bottom-bar">
     <div class="modal-footer">
@@ -292,5 +294,5 @@
     {!! Form::close() !!}
 </div>
 
-<!-- Tesco care swing ticket orders js -->
+{{-- Tesco care swing ticket orders js  --}}
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
