@@ -13,7 +13,7 @@
     <div class="col-md-12">
         <h4>Order Quantity</h4>
     </div>
-    <div class="col-md-12 teasco-care-quantity-div">
+    <div class="col-md-12 tesco-care-quantity-div">
         <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id" value="{{$size_data[0]->tesco_size_department_id}}">
         <input type="hidden" id="swing_template_id" name="swing_template_id" value="{{ $template }}">
         <input type="hidden" id="swing_template_name" name="swing_template_name" value="{{ $tesco_template_file[0]->template_name }}">

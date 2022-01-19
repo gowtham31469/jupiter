@@ -8,10 +8,9 @@ $( () => {
 
     $.ajax({
         url: base_url + `/${user_type}/tesco/get-care-label-order-details`,
-        type: "Post",
+        type: "get",
         dataType: "json",
         data: {
-            _token: csrf_token,
             table_name: table_name,
             id: id
         },
@@ -44,7 +43,7 @@ $( () => {
     loadCareLabelDetails = (order_data, user_role) => {
         var user_type = user_role.toLowerCase();
         
-        $('.garment-component-div, .label-metadata-select, .teasco-care-quantity-div').html('');
+        $('.garment-component-div, .label-metadata-select, .tesco-care-quantity-div').html('');
 
         var metadata_select_div = ` <div class="form-group has-feedback">
                                      <label for="tesco_care_coo" class="component-label">Country Of Origin </label>

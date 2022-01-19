@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\TescoSwingTicketMetadata;
 use App\Classes\StoreTescoSwingTicketOrder;
 use App\Http\Requests\TescoSwingTicketOrderRequest;
+use App\Classes\EditTescoOrders;
 
 class SwingTicketOrdersController extends Controller
 {
@@ -30,6 +31,18 @@ class SwingTicketOrdersController extends Controller
         $this->caremeta = $caremeta;
 
         $this->swingTicketOrder = $swingTicketOrder;
+
+        $this->product_description = $this->swingTicketMetadata->getProductDescription();
+
+        $this->wee_symbols = $this->swingTicketMetadata->getWeeSymbols();
+
+        $this->woolmark_logos = $this->swingTicketMetadata->getwoolmarkLogos();
+
+        $this->season_codes = $this->swingTicketMetadata->getSeasonCodes();
+
+        $this->coo = $this->caremeta->getCountryOrigin();
+
+        $this->tesco_suppliers = $this->caremeta->getTescoSuppliers();
     }
 
 
@@ -57,33 +70,21 @@ class SwingTicketOrdersController extends Controller
 
             $mm_product_benefits = $this->swingTicketMetadata->getMMProductBenefits($request['template']);
 
-            $product_description = $this->swingTicketMetadata->getProductDescription();
-
-            $wee_symbols = $this->swingTicketMetadata->getWeeSymbols();
-
-            $woolmark_logos = $this->swingTicketMetadata->getwoolmarkLogos();
-
-            $season_codes = $this->swingTicketMetadata->getSeasonCodes();
-
-            $coo = $this->caremeta->getCountryOrigin();
-
-            $tesco_suppliers = $this->caremeta->getTescoSuppliers();
-
             $tesco_template_file = $this->swingTicketMetadata->getTemplateFileSwingTickets($request['template']);
 
             return View::make('Admin/Order Management/tesco-swing-tickets')
                 ->with([
                     'product_benefits' => $product_benefits,
-                    'tesco_suppliers' => $tesco_suppliers,
-                    'coo' => $coo,
+                    'tesco_suppliers' => $this->tesco_suppliers,
+                    'coo' => $this->coo,
                     'mm_product_benefits' => $mm_product_benefits,
-                    'product_description' => $product_description,
-                    'wee_symbols' => $wee_symbols,
-                    'woolmark_logos' => $woolmark_logos,
+                    'product_description' => $this->product_description,
+                    'wee_symbols' => $this->wee_symbols,
+                    'woolmark_logos' => $this->woolmark_logos,
                     'size_data' => $size_data,
                     'template' => $request['template'],
                     'tesco_template_file' => $tesco_template_file,
-                    'season_codes' => $season_codes
+                    'season_codes' => $this->season_codes
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -105,4 +106,78 @@ class SwingTicketOrdersController extends Controller
             return $response;
         }
     }
+
+    public function getSwingTicketOrderDetail(Request $request)
+    {
+        if ($request->ajax()) {
+            $get_order_details = new EditTescoOrders();
+            $result = $get_order_details->getSwingTicketOrderDetails($request);
+
+            $product_benefits = $this->swingTicketMetadata->getProductBenefits($result['order_details']->template_id);
+
+            $mm_product_benefits = $this->swingTicketMetadata->getMMProductBenefits($result['order_details']->template_id);
+
+            $size_data = TescoPrimarySize::with('secSizeChart')
+            ->where(
+                [
+                    'tesco_primary_size.tesco_size_department_id' => $result['order_details']->primary_size_id,
+                    'tesco_primary_size.is_flag' => true
+                ]
+            )
+            ->orderBy('tesco_primary_size.id')
+            ->get();
+
+            if ($result) {
+                // return View::make('Admin/Order Management/swing-ticket-panel')
+                // ->with([
+                //     'order_details' => $result['order_details'],
+                //     'moq' => $result['moq'],
+                //     'erp_details' => $result['erp_details'],
+                //     'product_benefits' => $product_benefits,
+                //     'tesco_suppliers' => $this->tesco_suppliers,
+                //     'coo' => $this->coo,
+                //     'mm_product_benefits' => $mm_product_benefits,
+                //     'product_description' => $this->product_description,
+                //     'wee_symbols' => $this->wee_symbols,
+                //     'woolmark_logos' => $this->woolmark_logos,
+                //     'size_data' => $size_data,
+                //     'season_codes' => $this->season_codes
+                // ]);
+                return response()->json([
+                    'error' => false,
+                    'message' => 'success',
+                    'order_details' => $result['order_details'],
+                    'moq' => $result['moq'],
+                    'erp_details' => $result['erp_details'],
+                    'product_benefits' => $product_benefits,
+                    'tesco_suppliers' => $this->tesco_suppliers,
+                    'coo' => $this->coo,
+                    'mm_product_benefits' => $mm_product_benefits,
+                    'product_description' => $this->product_description,
+                    'wee_symbols' => $this->wee_symbols,
+                    'woolmark_logos' => $this->woolmark_logos,
+                    'size_data' => $size_data,
+                    'season_codes' => $this->season_codes
+                ], 200);
+            } else {
+                return response()->json(['error' => true, 'message' => 'Error'], 400);
+            }
+        }
+    }
+
+    // public function updateCareLabelOrder(TescoLabelOrderRequest $request)
+    // {
+
+    //     if ($request->ajax()) {
+
+    //         $request->validated();
+            
+    //         $response = $this->updateLabelOrder->updateTescoLabelOrder($request, 'admin');
+
+    //         return response()->json([
+    //             'message' => 'success',
+    //             'data' => $response
+    //         ], 200);
+    //     }
+    // }
 }

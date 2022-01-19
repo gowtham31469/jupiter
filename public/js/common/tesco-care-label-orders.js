@@ -302,7 +302,7 @@ $(function () {
                 quantity_html += `</tbody>
                                         </table>
                                         </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
-                $('.teasco-care-quantity-div').html(quantity_html);
+                $('.tesco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
                 if (size_id === '4') {
