@@ -6,7 +6,7 @@ $( () => {
     //     var table_name = $(obj).parent().attr('data-table');
         
     
-    //     $('.edit-swingticket-order-panel').load('/' + user_type + '/tesco/get-swingticket-order-details?table_name='+table_name+'&id='+id, ( response, status, xhr ) => {
+    //     $('.edit-swingticket-order-panel').load('/' + user_type + '/tesco/get-swing-ticket-order-details?table_name='+table_name+'&id='+id, ( response, status, xhr ) => {
     //         $('.edit-swingticket-order-panel').addClass('active');
     //         $(".selectpicker").selectpicker("refresh");
     //         $('.edit-swingticket-order-panel').show();
@@ -19,7 +19,7 @@ $( () => {
     var table_name = $(obj).parent().attr('data-table');
 
     $.ajax({
-        url: base_url + `/${user_type}/tesco/get-swingticket-order-details`,
+        url: base_url + `/${user_type}/tesco/get-swing-ticket-order-details`,
         type: "get",
         dataType: "json",
         data: {
@@ -124,19 +124,19 @@ $( () => {
 
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => {
             quantity_html += `<tr id="swing_size_${indexInArray}">
-                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
-                                            <td >` + valueOfElement.size + `</td>
-                                            <td >` + valueOfElement.ce_size + `</td>  <td >`;
+                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.size_id + `" name="secondary_size_id[]" value="` + valueOfElement.size_id + `">
+                                            <td >` + valueOfElement.sizes.uk_size + `</td>
+                                            <td >` + valueOfElement.sizes.ce_size + `</td>  <td >`;
 
-            $.each(valueOfElement.sec_size_chart, function (index, sec_size) {
+            $.each(valueOfElement.sizes.sec_size_chart, function (index, sec_size) {
 
                 quantity_html += `<strong class="text-justify">${sec_size.category_name}</strong> : ${sec_size.secondary_size} <br>`;
 
             });
 
             var ean_barcode = valueOfElement.ean_barcode != null?valueOfElement.ean_barcode:"";
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_` + valueOfElement.id + `" name="swing_ean[]" value="` + ean_barcode + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.id + `" name="swing_quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
+            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_` + valueOfElement.size_id + `" name="swing_ean[]" value="` + ean_barcode + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.size_id + `" name="swing_quantity[]" value="` + valueOfElement.quantity + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
         });
         
         $('#swing_ticket_qty_table').html(quantity_html);
@@ -149,6 +149,8 @@ $( () => {
         <button class="btn btn-default pull-right remove-panel input-sm" id="close_panel_btn" type="button">Close</button>`;
 
         $('.swingticket-order-footer').html(footer_btn);
+
+        templateDependentData(order_data.order_details.template_id, order_data);
 
         if (user_type === 'admin') {
             $('#submit_swingticket_order_btn').removeClass('hidden');
@@ -199,13 +201,88 @@ $( () => {
             $('#error_msg_alert').html('<strong>PI is approved so you are not allowed to edit this order.</strong>')
         }
 
-        // mapSwingTicketStoredValues(order_data, user_type);
+        mapSwingTicketStoredValues(order_data);
 
         $('.edit-swingticket-order-panel').addClass('active');
         $(".selectpicker").selectpicker("refresh");
         $('.edit-swingticket-order-panel').show();
         
     } 
+
+
+    templateDependentData = (template, order_data) => {
+        var contentHtml = '';
+
+        if([44, 46].find(data => data === template)){
+            contentHtml += `<div class="form-group has-feedback">
+            <label for="swing_wee_symbol" class="component-label">WEE Symbol </label>
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol">
+                   <option value="">-- Select WEE Symbol --</option>`;
+                   $.each(order_data.wee_symbols, function (id, value) {
+
+                       contentHtml += `<option title="`+value.wee_symbol_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-symbols' src='`+value.wee_symbol+`' /> `+value.wee_symbol_text+`" value="`+value.id+`">`+value.wee_symbol_text+`</option>`;
+
+                   });
+               contentHtml += `</select>
+           </div>`
+        }
+
+        if([46].find(data => data === template)){
+            contentHtml += `<div class="form-group has-feedback">
+                <label for="swing_ce_mark" class="form_label" style="visibility:hidden">Dont Show</label>
+                <div class="checkbox">
+                    <label>
+                        <input id="swing_ce_mark" name="swing_ce_mark" type="checkbox" disabled=""> CE mark
+                    </label>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>`;
+        }
+
+        if([53].find(data => data === template)){
+            contentHtml += `<div class="form-group has-feedback">
+                <label for="swing_machine_washable" class="form_label" style="visibility:hidden">Dont Show</label>
+                <div class="checkbox">
+                    <label>
+                        <input id="swing_machine_washable" name="swing_machine_washable" type="checkbox" disabled=""> Machine Washable
+                    </label>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group has-feedback">
+            <label for="swing_woolmark_logo" class="component-label">Woolmark Logo </label>
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_woolmark_logo" name="swing_woolmark_logo" required>
+                   <option value="">-- Select Woolmark Logo --</option>`;
+                   $.each(order_data.woolmark_logos, function (id, value) {
+
+                       contentHtml += `<option title="`+value.woolmark_logo_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-logos' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`">`+value.woolmark_logo_text+`</option>`;
+
+                   });
+               contentHtml += `</select>
+           </div>`;
+        }
+
+        if([45, 51, 52].find(data => data === template)){
+            contentHtml += `<div class="form-group has-feedback">
+                <label for="swing_style_number" class="form_label">Style Number</label>
+                <input type="text" class="form-control input-sm" placeholder="Style Number" id="swing_style_number" name="swing_style_number" maxlength="8" onkeypress="return isNumber(event)" required>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group has-feedback">
+            <label for="swing_coo" class="component-label">Country Of Origin </label>
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_coo" name="swing_coo" required>
+                   <option value="">-- Select Country Of Origin --</option>`;
+                   $.each(order_data.coo, function (id, name) {
+
+                    contentHtml += `<option value=` + id + `>` + name + `</option>`;
+
+                });
+               contentHtml += `</select>
+           </div>`;
+        }
+
+        $('#template_dependent_data').html(contentHtml);
+    }
 
     editSwingTicketOrder = () => {
         $("#update_tesco_swingticket_order_status_form :input").prop("disabled", false);
@@ -240,7 +317,7 @@ $( () => {
 
         $.ajax({
             type: "put",
-            url: base_url + "/" + user_role + "/tesco/update-care-swingticket-order",
+            url: base_url + "/" + user_role + "/tesco/update-swing-ticket-order",
             data: formData,
             headers: {
                 'X-CSRF-TOKEN': csrf_token

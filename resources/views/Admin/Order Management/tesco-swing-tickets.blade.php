@@ -233,7 +233,7 @@
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
                 @foreach($woolmark_logos as $key => $value)
-                <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}">{{ $value->woolmark_logo_text }}</option>
+                <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logos' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}">{{ $value->woolmark_logo_text }}</option>
                 @endforeach
                 @endif
             </select>

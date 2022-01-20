@@ -652,6 +652,7 @@
                     </div>
                     <hr>
                     <div id="swing_ticket_select"></div>
+                    <div id="template_dependent_data"></div>
                 </div>
             </div>
             <div class="col-md-10">
@@ -781,7 +782,10 @@
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+
     <script>
         localStorage.removeItem("page_navigation");
         var buyer_count = $('#invisible__count_id').val();

@@ -1078,7 +1078,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	// Tesco care label orders admin routes
 	Route::get('swing-ticket-orders/', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-swing-ticket-order');
 	Route::post('submit-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@submitSwingTicketOrder')->name('tesco-swing-ticket-order.submit');
-	Route::get('get-swingticket-order-details', 'Admin\Tesco\SwingTicketOrdersController@getSwingTicketOrderDetail');
+	Route::get('get-swing-ticket-order-details', 'Admin\Tesco\SwingTicketOrdersController@getSwingTicketOrderDetail');
+	Route::put('update-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@updateSwingTicketOrder');
   });
 
 
