@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\TescoSwingTicketOrders;
 use DB;
 use App\TescoWashcareOrders;
 
@@ -96,4 +97,43 @@ class EditTescoOrders
 
         return $data;
   }
+
+  public function getSwingTicketOrderDetails($request){
+    $erp_order_details = array();
+    $data = [];
+
+    $order_details  = TescoSwingTicketOrders::with([
+        'quantities',
+        'item_master'
+    ])
+    ->where([
+        'id' => $request->id
+    ])
+    ->first();
+
+    $order_quantity_ids = $order_details->quantities->pluck('id');
+
+    $moq     =    DB::table('price_taxation')
+    ->where([
+        'template_id' => $order_details->template_id,
+        'customer_id' => $order_details->tesco_supplier_id,
+        'buyer_id' => 2
+    ])
+    ->value('moq');
+
+    // fetch erp_order_details table status
+    $erp_order_details[] = DB::table('erp_order_details')
+    ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
+    ->where('order_qnty_table_name', 'tesco_washcare_orders_quanty')
+    ->whereIn('order_qnty_table_id', $order_quantity_ids)
+    ->select('erp_order_details.id', 'erp_status.status_name')
+    ->first();
+
+
+    $data['order_details'] = $order_details;
+    $data['moq'] = $moq;
+    $data['erp_details'] = $erp_order_details;
+
+    return $data;
+}
 }

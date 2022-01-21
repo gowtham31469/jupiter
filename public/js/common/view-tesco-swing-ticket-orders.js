@@ -54,7 +54,7 @@ $( () => {
 
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => { 
             $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
-            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.count);
+            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.quantity);
         });
 
     }

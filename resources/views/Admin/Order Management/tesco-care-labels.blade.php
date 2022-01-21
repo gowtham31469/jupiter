@@ -94,7 +94,7 @@
 <div class="col-md-12">
     <h4>Order Quantity</h4>
 </div>
-<div class="col-md-12 teasco-care-quantity-div"></div>
+<div class="col-md-12 tesco-care-quantity-div"></div>
                             
 </div>
 <hr>
