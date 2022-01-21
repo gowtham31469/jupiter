@@ -21,17 +21,17 @@ class StoreTescoSwingTicketOrder
     public function storeTescoSwingTicketOrder($request, $role)
     {
 
-         /** [ Check if order already placed for this style ] */
-         $is_exists = TescoSwingTicketOrders::select('id')
-         ->Where('ce_style_ref', $request->swing_option_id)
-         ->where('po_number', $request->swing_po_number)
-         ->whereNotIn('order_status', ['Order Cancelled'])
-         ->exists();
- 
-         if($is_exists)
-         {
-           return response()->json(['error'=> true,'message' =>'Order already exists'],409);
-         }
+        /** [ Check if order already placed for this style ] */
+        $is_exists = TescoSwingTicketOrders::select('id')
+        ->Where('ce_style_ref', $request->swing_option_id)
+        ->where('po_number', $request->swing_po_number)
+        ->whereNotIn('order_status', ['Order Cancelled'])
+        ->exists();
+
+        if($is_exists)
+        {
+        return response()->json(['error'=> true,'message' =>'Order already exists'],409);
+        }
 
         $order_history_obj = new StoreOrderManagementHistory();
         $carelabel_obj = new StoreTescoLabelOrder();
@@ -123,11 +123,12 @@ class StoreTescoSwingTicketOrder
         }
 
         TescoSwingTicketOrdersQuantity::insert($qty_data);
+        $season_code = DB::table('tesco_season_codes')->where('id', $request->swing_season_code)->value('name');
 
         /** Insert order data into history table */
         $order_data = [];
 
-        $order_data['season_code'] = null;
+        $order_data['season_code'] = $season_code;
         $order_data['po_number'] = $request->swing_po_number;
         $order_data['ocn_no'] = null;
         $order_data['style'] = $request->swing_option_id;

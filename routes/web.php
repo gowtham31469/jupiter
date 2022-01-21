@@ -1076,7 +1076,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::post('save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
 
 	// Tesco care label orders admin routes
-	Route::get('swing-ticket-orders/', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-swing-ticket-order');
+	Route::get('swing-ticket-orders', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-swing-ticket-order');
 	Route::post('submit-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@submitSwingTicketOrder')->name('tesco-swing-ticket-order.submit');
 	Route::get('get-swing-ticket-order-details', 'Admin\Tesco\SwingTicketOrdersController@getSwingTicketOrderDetail');
 	Route::put('update-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@updateSwingTicketOrder');
@@ -1092,7 +1092,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::post('submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
 	Route::get('secondary-size-categories', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeCategoriesByPrimaryID');
 	Route::get('get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
-	Route::post('get-care-label-order-details', 'Customer\Tesco\CareLabelOrdersCustomerController@getCareLabelOrderDetail');
+	Route::get('get-care-label-order-details', 'Customer\Tesco\CareLabelOrdersCustomerController@getCareLabelOrderDetail');
 	Route::put('update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
 
@@ -1101,7 +1101,9 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::post('save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
 
 	// Tesco care label orders admin routes
-	Route::get('swing-ticket-orders/', 'Customer\Tesco\SwingTicketOrdersCustomerController@index');
+	Route::get('swing-ticket-orders', 'Customer\Tesco\SwingTicketOrdersCustomerController@index');
 	Route::post('submit-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@submitSwingTicketOrder');
+	Route::get('get-swing-ticket-order-details', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingTicketOrderDetail');
+	Route::put('update-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@updateSwingTicketOrder');
 	
   });

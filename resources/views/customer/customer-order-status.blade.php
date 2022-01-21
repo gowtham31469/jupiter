@@ -575,6 +575,99 @@
         </div>
     </div>
 
+    <div class="left-panel col-md-12 edit-swingticket-order-panel" style="display: none;">
+        <div class="loader">
+            <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+        </div>
+        <div class="div-max">
+            {!! Form::open(['id' => 'update_tesco_swingticket_order_status_form','data-toggle' => 'validator','role' => 'form']) !!}
+            <span id="edit_swingticket_order_result"></span>
+            <div class="col-md-2">
+                <h4 class="text-center swingticket-order-details">Order Details</h4>
+                <div class="scroll" style="height: calc(100vh - 80px);">
+                    <input type="hidden" id="swingticket_order_id" name="order_id">
+                    <input type="hidden" id="swingticket_template_id" name="swing_template_id">
+                    <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_24_char_desc', '24 Character Description', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_po_number', 'PO Number', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_po_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Number','required','maxlength' => '7')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_hu_price', 'Hungarian Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_eqos', 'EQOS Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code','required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '7')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <hr>
+                    <div id="swing_ticket_select"></div>
+                    <div id="template_dependent_data"></div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="scroll" style="height: calc(100vh - 40px);">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>UK</th>
+                                        <th>EUR</th>
+                                        <th>Secondary Size</th>
+                                        <th>EAN Barcode</th>
+                                        <th>Quantity <small>(Units)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="swing_ticket_qty_table">
+                                    
+                                </tbody>
+                            </table>
+                            <div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>
+                        </div>
+                        <div class="row">
+                            <div class="swingticket-order-footer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {!! Form::close() !!}
+            <div class="loader">
+                <div class=" fa-3x">
+                    <i class="fa fa-spinner fa-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 <!-- Buyer selection Modal -->
@@ -663,7 +756,9 @@
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
     <script type="text/javascript">
 		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
