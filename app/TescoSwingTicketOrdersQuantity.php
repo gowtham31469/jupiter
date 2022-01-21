@@ -22,4 +22,16 @@ class TescoSwingTicketOrdersQuantity extends Model
     {
         return $this->belongsTo('App\TescoSwingTicketOrders', 'swingticket_order_id');
     }
+
+    /**
+     * Get the primary size details.
+     */
+    public function sizes()
+    {
+        return $this->hasOne('App\TescoPrimarySize', 'id', 'size_id')->with(['secSizeChart'])->where(
+            [
+                'tesco_primary_size.is_flag' => true
+            ]
+        );
+    }
 }

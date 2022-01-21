@@ -30,6 +30,7 @@ $('#swing_product_benefit').on('change', (e) => {
 })
 
 $('#swing_mm_product_benefit').on('change', (e) => {
+    alert()
     if (e.target.value === "") {
         $('#swing_product_benefit').prop('required', true);
         $('#swing_mm_product_benefit').prop('required', false);

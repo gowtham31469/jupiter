@@ -108,7 +108,7 @@ $( () => {
         quantity_html += `</tbody>
                                         </table>
                                         </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
-        $('.teasco-care-quantity-div').html(quantity_html);
+        $('.tesco-care-quantity-div').html(quantity_html);
 
         // dynamic fiber component values mapping
         $.each(order_data.order_details.garment_components, (i, component) => {

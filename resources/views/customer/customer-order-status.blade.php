@@ -555,7 +555,7 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
-                                <div class="teasco-care-quantity-div"></div>
+                                <div class="tesco-care-quantity-div"></div>
                             </div>
                             <div class="row">
                                 <div class="garment-component-div"></div>
