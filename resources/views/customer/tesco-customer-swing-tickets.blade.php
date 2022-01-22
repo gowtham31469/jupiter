@@ -121,7 +121,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+            {!! Form::number('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01', 'data-step-error' => 'Please enter a price with a max. of 2 decimals.')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>

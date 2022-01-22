@@ -33,7 +33,7 @@ class TescoSwingTicketOrderRequest extends FormRequest
             'swing_po_number'         => ['required',  'max:7'],
             'swing_product_benefit'   => ['sometimes'],
             'swing_mm_product_benefit'=> ['sometimes'],
-            'swing_cz_price'          => ['required', 'numeric',  'digits_between:1,6'],
+            'swing_cz_price'          => ['required', 'numeric',  'between:0.00,99999.99'],
             'swing_sk_price'          => ['required', 'numeric',  'digits_between:1,6'],
             'swing_hu_price'          => ['required', 'numeric',  'digits_between:1,6'],
             'swing_tesco_supplier'    => ['required', 'numeric', 'exists:tesco_suppliers,id'],
