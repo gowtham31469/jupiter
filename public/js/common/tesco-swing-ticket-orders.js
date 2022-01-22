@@ -276,3 +276,13 @@ postSwingTicketOrderSubmit = (user_type, data) => {
 
     });
 }
+
+addHyphen =  (element) => {
+    var input = document.getElementById(element.id);
+    var str = input.value;
+    str = str.replace("-","");
+    if (str.length > 3) {
+        str = str.substring(0,3) + "-" + str.substring(3);
+    }
+    input.value = str
+}

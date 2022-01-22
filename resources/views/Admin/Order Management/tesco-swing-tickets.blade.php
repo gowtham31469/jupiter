@@ -168,7 +168,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8', 'onkeyup' => 'addHyphen(this)')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
