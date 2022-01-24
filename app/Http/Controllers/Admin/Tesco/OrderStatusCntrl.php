@@ -2266,8 +2266,8 @@ class OrderStatusCntrl extends Controller
             $wri_x+=90;
         }
 
-        PDF::Output( public_path('/storage/app/template/'.$request->template_name.substring($request->template_name.lastIndexOf('/') + 1).'-ID-'.$request->style.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.$request->template_name.substring($request->template_name.lastIndexOf('/') + 1).'-ID-'.$request->style.'.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.$request->template_name.substring($request->template_name.lastIndexOf('/') + 1).'_ID_'.$request->style.'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.$request->template_name.substring($request->template_name.lastIndexOf('/') + 1).'_ID_'.$request->style.'.pdf'));
         
      }
      
