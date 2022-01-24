@@ -759,6 +759,7 @@
     <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
     <script type="text/javascript">
 		$('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
