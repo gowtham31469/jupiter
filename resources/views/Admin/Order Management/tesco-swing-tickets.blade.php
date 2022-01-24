@@ -294,4 +294,3 @@
 
 {{-- Tesco care swing ticket orders js --}}
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
-<script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
