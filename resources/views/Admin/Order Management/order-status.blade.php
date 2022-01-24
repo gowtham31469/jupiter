@@ -608,9 +608,9 @@
             <div class="col-md-2">
                 <h4 class="text-center swingticket-order-details">Order Details</h4>
                 <div class="scroll" style="height: calc(100vh - 80px);">
-                    <input type="hidden" id="swingticket_order_id">
-                    <input type="hidden" id="swingticket_template_id">
-                    <input type="hidden" id="swingticket_template_name">
+                    <input type="hidden" id="swingticket_order_id" name="order_id">
+                    <input type="hidden" id="swingticket_template_id" name="swing_template_id">
+                    <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id">
                     <div class="form-group has-feedback">
                         {!! Form::label('swing_24_char_desc', '24 Character Description', ['class' => 'form_label']) !!}
                         {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45')) !!}
@@ -625,7 +625,7 @@
 
                     <div class="form-group has-feedback">
                         {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
-                        {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        {!! Form::number('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
@@ -647,7 +647,7 @@
                     
                     <div class="form-group has-feedback">
                         {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+                        {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8', 'onkeyup' => 'addHyphen(this)')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                     <hr>

@@ -2266,8 +2266,8 @@ class OrderStatusCntrl extends Controller
             $wri_x+=90;
         }
 
-        PDF::Output( public_path('/storage/app/template/swing_tickets.pdf'), 'F');
-        print_r(url('/storage/app/template/swing_tickets.pdf'));
+        PDF::Output( public_path('/storage/app/template/M13021C_ID_452-8569.pdf'), 'F');
+        print_r(url('/storage/app/template/M13021C_ID_452-8569.pdf'));
         
      }
      

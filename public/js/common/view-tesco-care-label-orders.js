@@ -23,6 +23,7 @@ $( () => {
             $(".selectpicker").selectpicker("refresh");
             $('#add_garment_component_btn').remove();
             $('#remove_component_btn').remove();
+            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + '</strong></h4></div>');
         });
 
     }

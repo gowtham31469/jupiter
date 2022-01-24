@@ -22,6 +22,12 @@ class SwingTicketOrdersController extends Controller
     private $swingTicketMetadata;
     private $module;
     private $swingTicketOrder;
+    private $product_description;
+    private $wee_symbols;
+    private $woolmark_logos;
+    private $season_codes;
+    private $coo;
+    private $tesco_suppliers;
 
     public function __construct(Modules $module, TescoSwingTicketMetadata $swingTicketMetadata, TescoCareMetadata $caremeta, StoreTescoSwingTicketOrder $swingTicketOrder)
     {
