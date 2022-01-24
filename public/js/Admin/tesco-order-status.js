@@ -4440,9 +4440,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
 
                         size_comp.push(sec_size[1].trim())
@@ -4501,9 +4501,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4560,9 +4560,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4619,9 +4619,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4710,9 +4710,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
