@@ -11236,7 +11236,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
             table_name_print
         },
         beforeSend: function() {
-
+			$(".loader").show();
+            $(".loader").css('margin-top', '12%');
         },
         success: function(data) {
 
@@ -11988,5 +11989,9 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 				return;
 			}
 		},
+		complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
 	})
 }
