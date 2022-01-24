@@ -2218,7 +2218,7 @@ class OrderStatusCntrl extends Controller
                     {
                         if(strpos($val_cat, $string) !== false) 
                         {
-                            $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'</label>',$val_cat);
+                            $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
                         }
                     }
 
