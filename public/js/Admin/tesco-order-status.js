@@ -10675,3 +10675,12 @@ function approveTescoArtwork() {
 		console.error("Error:" + e)
 	}
 }
+
+
+addOptionIdHyphen = (option_id) => {
+    var opID = option_id.replace("-","");
+    if(option_id.toString().length > 3){
+        opID = opID.substring(0,3) + "-" + opID.substring(3);
+    }
+    return opID;
+}
