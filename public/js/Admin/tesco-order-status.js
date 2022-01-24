@@ -4782,7 +4782,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                 //Back Svg Price Details
                 var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
-                var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
+                var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
                 var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
@@ -4865,7 +4865,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
             //Front Svg Price Details
 
             var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
-            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
+            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
             var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
             var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
