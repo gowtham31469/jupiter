@@ -11240,7 +11240,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                 var month_ca = ( '0' + (created_at.getMonth()+1) ).slice( -2 ) +"/"+ twoDigitYear;
 
-                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+val.ce_style_ref+'</tspan>';
+				var optionID = addOptionIdHyphen(val.ce_style_ref);
+
+                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
                 svgDoc_back.getElementById("short_description").innerHTML = short_description;
 
