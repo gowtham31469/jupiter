@@ -20,9 +20,7 @@ addOptionIdHyphen = (option_id) => {
 }
 
 function toTitleCase(str) {
-    return str.replace(/(?:^|\s)\w/g, function(match) {
-        return match.toUpperCase();
-    });
+	return str[0].toUpperCase() + str.slice(1)
 }
 
 /**

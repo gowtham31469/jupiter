@@ -2222,7 +2222,7 @@ class OrderStatusCntrl extends Controller
                         }
                     }
 
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.ucfirst($val_cat).'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
 
                   //  print_r($html);
     
