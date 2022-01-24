@@ -2198,15 +2198,19 @@ class OrderStatusCntrl extends Controller
                 foreach($siz_cat as $val_cat)
                 {
                     if (str_contains($val_cat, 'height')) {
-                        $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">height</label>',$val_cat);
+                        $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
                     }
                     
                     if (str_contains($val_cat, 'weight')) {
-                        $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">weight</label>',$val_cat);
+                        $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
                     }
 
                     if (str_contains($val_cat, 'chest')) {
-                        $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">chest</label>',$val_cat);
+                        $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
+                    }
+
+                    if (str_contains($val_cat, 'waist')) {
+                        $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
                     }
 
 
@@ -2218,7 +2222,7 @@ class OrderStatusCntrl extends Controller
                         }
                     }
 
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.ucfirst($val_cat).'</p>';
 
                   //  print_r($html);
     
