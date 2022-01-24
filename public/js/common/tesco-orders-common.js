@@ -2,7 +2,7 @@
  * Function for uploading combined po files
  * @author    <praveen>
  */
- const uploadCombinedPO = (user_type, formdata, templateName) => {
+uploadCombinedPO = (user_type, formdata, templateName) => {
      try {
          $.ajax({
              url: base_url + `/${user_type}/tesco/upload-tesco-combined-po-file`,
@@ -133,7 +133,7 @@ const cancelTescoOrder= (user_type) => {
  * @param  {string} style     Style Number of the order
  * @param  {object} artwork_collection Collection of all orders
  */
- const loadArtworkNames = (artwork_collection_style) => {
+loadArtworkNames = (artwork_collection_style) => {
     if(Object.keys(artwork_collection_style).length !== 0 && artwork_collection_style.constructor === Object) {
         $('.artwork_list').removeClass('hidden');
         var options="<option value=''>Search Artwork</option>";
@@ -167,7 +167,7 @@ const cancelTescoOrder= (user_type) => {
  * AJAX method to fetch the order details.
  * @return {[type]} [description]
  */
- const viewOrder = (user_type, pNumber,aWork, style_number, zone, orderid) => {
+viewOrder = (user_type, pNumber,aWork, style_number, zone, orderid) => {
     try {
         $.ajax({
             url: base_url + `/${user_type}/tesco/view-order`,
@@ -247,7 +247,7 @@ const cancelTescoOrder= (user_type) => {
     }
 }
 
-const  addOptionIdHyphen = (option_id) => {
+addOptionIdHyphen = (option_id) => {
     var opID = option_id.replace("-","");
     if(option_id.toString().length > 3){
         opID = opID.substring(0,3) + "-" + opID.substring(3);
