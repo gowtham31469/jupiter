@@ -10684,3 +10684,7 @@ addOptionIdHyphen = (option_id) => {
     }
     return opID;
 }
+
+function toTitleCase(str) {
+	return str[0].toUpperCase() + str.slice(1)
+}
