@@ -8,7 +8,7 @@ $( () => {
             $('li.year-nav-menu, li.buyer-nav-menu').addClass('hidden');
 
             /** Make form as readonly */
-            $('#tesco_care_label_order_form input').prop('disabled', 'true');
+            $('#tesco_swing_ticket_order_form input').prop('disabled', 'true');
             $('.selectpicker').prop('disabled', true);
             $('.swing-ticket-order-submit-btn').remove();
 
