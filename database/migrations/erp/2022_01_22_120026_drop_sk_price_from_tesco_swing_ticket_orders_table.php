@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCzPriceToTescoSwingTicketOrdersTable extends Migration
+class DropSkPriceFromTescoSwingTicketOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddCzPriceToTescoSwingTicketOrdersTable extends Migration
     public function up()
     {
         Schema::table('tesco_swingticket_orders', function (Blueprint $table) {
-            $table->decimal('cz_selling_price', 7, 2)->nullable(true)->after('24_char_desc');
+            $table->dropColumn('sk_selling_price');
         });
     }
 
@@ -26,7 +26,7 @@ class AddCzPriceToTescoSwingTicketOrdersTable extends Migration
     public function down()
     {
         Schema::table('tesco_swingticket_orders', function (Blueprint $table) {
-            $table->dropColumn('cz_selling_price');
+            $table->bigInteger('sk_selling_price')->nullable(true)->after('24_char_desc');
         });
     }
 }
