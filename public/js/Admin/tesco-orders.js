@@ -522,74 +522,74 @@ function tescoOrders(callback) {
 											"template_type": "tesco_care_labels"
 										},
 									]
-								},{
-									"id": "41",
-									"text": "Swing Tickets",
-									"parent_id": "32",
-									"children": [{
-											"id": "42",
-											"text": "CE Non Rfid Swing Ticket",
-											"parent_id": "41",
-											"children": [{
-												"id": "43",
-												"text": "FFC/01/M13020C - CE F&F CORE NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											}, {
-												"id": "44",
-												"text": "FFK/01/M13021C - CE F&F KIDS, SCHOOL & KIDS DRESS UP NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "45",
-												"text": "FFC/01/M13022C - CE F&F CORE SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "46",
-												"text": "FFB/01/M13023C - CE FRED & FLO NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "47",
-												"text": "GE/01/M13114C - Opt 1 - Core Ladieswear & Menswear (excluding Socks & Gifting)",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "48",
-												"text": "GE/01/M13114C - Opt 2 - Kids, School and Kids Dress Up (excluding Socks & Gifting)",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "49",
-												"text": "GE/01/M13114C - Opt 3 - Socks & Gifting (Adults, Kids & Baby)",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "50",
-												"text": "GE/01/M13114C - Opt 4 - Fred & Flo",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "51",
-												"text": "FFK/01/M13163C - CE F&F KIDS SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "52",
-												"text": "FFB/01/M13233C - CE FRED & FLO SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											},{
-												"id": "53",
-												"text": "FFC/01/M13304C - CE F&F CORE CASHMERE LARGE NON-RFID BRAND TICKET INC. BOP",
-												"parent_id": "42",
-												"template_type": "tesco_swing_tickets"
-											}
-										]
-										},
-									]
 								}]
+							},{
+								"id": "41",
+								"text": "Swing Tickets",
+								"parent_id": "0",
+								"children": [{
+										"id": "42",
+										"text": "CE Non Rfid Swing Ticket",
+										"parent_id": "41",
+										"children": [{
+											"id": "43",
+											"text": "FFC/01/M13020C - CE F&F CORE NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										}, {
+											"id": "44",
+											"text": "FFK/01/M13021C - CE F&F KIDS, SCHOOL & KIDS DRESS UP NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "45",
+											"text": "FFC/01/M13022C - CE F&F CORE SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "46",
+											"text": "FFB/01/M13023C - CE FRED & FLO NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "47",
+											"text": "GE/01/M13114C - Opt 1 - Core Ladieswear & Menswear (excluding Socks & Gifting)",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "48",
+											"text": "GE/01/M13114C - Opt 2 - Kids, School and Kids Dress Up (excluding Socks & Gifting)",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "49",
+											"text": "GE/01/M13114C - Opt 3 - Socks & Gifting (Adults, Kids & Baby)",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "50",
+											"text": "GE/01/M13114C - Opt 4 - Fred & Flo",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "51",
+											"text": "FFK/01/M13163C - CE F&F KIDS SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "52",
+											"text": "FFB/01/M13233C - CE FRED & FLO SOCKS & GIFTING NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										},{
+											"id": "53",
+											"text": "FFC/01/M13304C - CE F&F CORE CASHMERE LARGE NON-RFID BRAND TICKET INC. BOP",
+											"parent_id": "42",
+											"template_type": "tesco_swing_tickets"
+										}
+									]
+									},
+								]
 							}
 						]
 					},
@@ -11238,7 +11238,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 // Add this line
                 var twoDigitYear = shortYear.toString().substr(-2);
 
-                var month_ca = (created_at.getMonth() + 1) +"/"+ twoDigitYear;
+                var month_ca = ( '0' + (created_at.getMonth()+1) ).slice( -2 ) +"/"+ twoDigitYear;
 
                 var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+val.ce_style_ref+'</tspan>';
 
@@ -11584,19 +11584,19 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     {
                         if(val.ce_size_name == "1- 1½Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "1-2Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "2-3Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
                         }
                     }
                     
@@ -11609,9 +11609,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 //Back Svg Price Details
                 var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
                 var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
-                svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].cz_selling_price+' Kč</tspan>';
+				var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+            	var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+                svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
                 svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
-                svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].hu_selling_price+' Ft</tspan>';
+                svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
                 var barcode_change = val.ean_barcode;
 
@@ -11689,9 +11692,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
             var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
             var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
-            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].cz_selling_price+' Kč</tspan>';
+			var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+            var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
             svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
-            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].hu_selling_price+' Ft</tspan>';
+            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
             
             var svgRoot = svgDoc.documentElement;
             var s = new XMLSerializer();

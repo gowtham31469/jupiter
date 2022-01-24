@@ -421,7 +421,7 @@ class TescoItemMasterTableSeeder extends Seeder
             array (
                 'id' => 41,
                 'company_id' => 1,
-                'parent_id' => 32,
+                'parent_id' => 0,
                 'item_name' => 'Swing Tickets',
                 'ref_no' => '',
                 'tag_name' => '',

@@ -81,7 +81,7 @@ $( () => {
                                     </div>
                                     <div class="form-group has-feedback">
                                      <label for="swing_product_benefit" class="component-label">Product Benefit </label>
-                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_product_benefit" name="swing_product_benefit" required>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_product_benefit" name="swing_product_benefit" >
                                             <option value="">-- Select Product Benefit --</option>`;
                                             $.each(order_data.product_benefits, function (id, name) {
 
@@ -92,7 +92,7 @@ $( () => {
                                     </div>
                                     <div class="form-group has-feedback">
                                      <label for="swing_mm_product_benefit" class="component-label">MM Product Benefit </label>
-                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_mm_product_benefit" name="swing_mm_product_benefit" required>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_mm_product_benefit" name="swing_mm_product_benefit" >
                                             <option value="">-- Select MM Product Benefit --</option>`;
                                             $.each(order_data.mm_product_benefits, function (id, name) {
 
@@ -124,7 +124,7 @@ $( () => {
 
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => {
             quantity_html += `<tr id="swing_size_${indexInArray}">
-                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.size_id + `" name="secondary_size_id[]" value="` + valueOfElement.size_id + `">
+                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.sizes.uk_size + `</td>
                                             <td >` + valueOfElement.sizes.ce_size + `</td>  <td >`;
 
@@ -287,13 +287,12 @@ $( () => {
     editSwingTicketOrder = () => {
         $("#update_tesco_swingticket_order_status_form :input").prop("disabled", false);
         $(".dropdown-toggle").css("background-color", "#fff");
-        $('#add_garment_component_btn').removeAttr('disabled');
         $('.selectpicker').prop('disabled', false);
         $(".selectpicker").selectpicker("refresh");
         $('#update_tesco_swingticket_order_status_form').validator('update');
     }
 
-    validateTescoLabelOrder = (user_role) => {
+    validateTescoSwingTicketOrder = (user_role) => {
 
         $('#update_tesco_swingticket_order_status_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
@@ -301,6 +300,7 @@ $( () => {
             } else {
                 e.preventDefault();
                 $('#submit_swingticket_order_btn').prop('disabled',true)
+                console.log("PKDDD");
                 updateSwingTicketOrder(user_role);
             }
         })
@@ -308,17 +308,10 @@ $( () => {
 
     updateSwingTicketOrder = (user_role) => {
 
-        var form_obj = [{
-            "order_id": $('#swingticket_order_id').val(),
-            "template_id": $('#swingticket_template_id').val(),
-        }];
-
-        var formData = $('#update_tesco_swingticket_order_status_form').serialize() + '&' + $.param(form_obj[0]);
-
         $.ajax({
             type: "put",
             url: base_url + "/" + user_role + "/tesco/update-swing-ticket-order",
-            data: formData,
+            data: $('#update_tesco_swingticket_order_status_form').serialize(),
             headers: {
                 'X-CSRF-TOKEN': csrf_token
             },

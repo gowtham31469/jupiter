@@ -27,7 +27,7 @@ $(function () {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
-
+            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
             getSizechart(size_id, size_category, size_category_text, user_role,template_id, callback);
             
         }); 

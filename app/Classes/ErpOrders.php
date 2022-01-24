@@ -131,7 +131,8 @@ class ErpOrders
 					$orders,
 					$erp_order,
 					$request['buyer_id'],
-					$po_no
+					$po_no,
+					$request['tableName']
 				);
 				
 			} else {
@@ -161,7 +162,8 @@ class ErpOrders
 					$orders,
 					$new_erp_order,
 					$request['buyer_id'],
-					$po_no
+					$po_no,
+					$request['tableName']
 				);
 			}
 
@@ -188,7 +190,7 @@ class ErpOrders
 	 * @param [type] $buyer_id
 	 * @return void
 	 */
-	function insertOrderDetails($qnty_table, $orders, $erp_order, $buyer_id, $customer_po_no)
+	function insertOrderDetails($qnty_table, $orders, $erp_order, $buyer_id, $customer_po_no, $order_table)
 	{
 
 		$order_status_id  = DB::table('orders_status')
@@ -198,7 +200,6 @@ class ErpOrders
 
 		$style_ref = strtolower($orders->zone) . '_style_ref';
 		$style_no  = $orders->zone === "joint" ? $orders->uk_style_ref . '/' . $orders->ce_style_ref : $orders->$style_ref;
-		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
 		$custom_ref_name = DB::table('price_taxation')
 		->where([
@@ -214,7 +215,7 @@ class ErpOrders
 		->where('action', 'PO Manager Verification Pending')
 		->value('id');
 
-		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $tesco_label_order);
+		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $order_table);
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype

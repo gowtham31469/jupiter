@@ -1,5 +1,3 @@
-<h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
-<hr>
 <div class="loader">
     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 </div>
@@ -122,7 +120,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+            {!! Form::number('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -170,7 +168,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8', 'onkeyup' => 'addHyphen(this)')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>

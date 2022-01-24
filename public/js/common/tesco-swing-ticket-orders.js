@@ -14,10 +14,11 @@ renderTescoSwingTicketOrders = (role, template_id, callback=null) => {
         $(".selectpicker").selectpicker("refresh");
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
+        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
     }); 
 }
 
-$('#swing_product_benefit').on('change', (e) => {
+$(document).on('change','#swing_product_benefit',function(e){
     if (e.target.value === "") {
         $('#swing_mm_product_benefit').prop('required', true);
         $('#swing_product_benefit').prop('required', false);
@@ -27,10 +28,9 @@ $('#swing_product_benefit').on('change', (e) => {
     }
     $('#swing_mm_product_benefit').val('');
     $(".selectpicker").selectpicker("refresh");
-})
+});
 
-$('#swing_mm_product_benefit').on('change', (e) => {
-    alert()
+$(document).on('change','#swing_mm_product_benefit',function(e){
     if (e.target.value === "") {
         $('#swing_product_benefit').prop('required', true);
         $('#swing_mm_product_benefit').prop('required', false);
@@ -40,7 +40,7 @@ $('#swing_mm_product_benefit').on('change', (e) => {
     }
     $('#swing_product_benefit').val('');
     $(".selectpicker").selectpicker("refresh");
-})
+});
 
 // Method to validate and submit tesco swing ticket orders
 validateTescoSwingTicketOrder = (user_type) => {
@@ -275,4 +275,14 @@ postSwingTicketOrderSubmit = (user_type, data) => {
         }
 
     });
+}
+
+addHyphen =  (element) => {
+    var input = document.getElementById(element.id);
+    var str = input.value;
+    str = str.replace("-","");
+    if (str.length > 3) {
+        str = str.substring(0,3) + "-" + str.substring(3);
+    }
+    input.value = str
 }
