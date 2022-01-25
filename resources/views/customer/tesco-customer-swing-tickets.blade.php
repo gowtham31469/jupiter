@@ -56,12 +56,12 @@
                             @endforeach
                         </td>
                         <td>
-                            <div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_{{$loop->iteration}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
+                            <div class="form-group has-feedback"><input class="form-control input-sm swing-ticket-ean" placeholder="EAN Barcode" id="swing_ean_{{$loop->iteration}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$loop->iteration}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$loop->iteration}}" name="swing_quantity[]">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
