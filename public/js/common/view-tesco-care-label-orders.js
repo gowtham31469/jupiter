@@ -67,6 +67,10 @@ $( () => {
             $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
             $('#tesco_care_tog').val(order_data.order_details.tog)
         }
+
+        var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + order_data.order_details.id + '">';
+
+        $('.label-order-invisible-div').html(div_html);
         
         var temp_file = order_data.order_details.item_master.template_file.split(',');
 
@@ -102,7 +106,7 @@ $( () => {
             var uk_ean = valueOfElement.uk_ean != null?valueOfElement.uk_ean:"";
             quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
                                         </tr>`;
         });
