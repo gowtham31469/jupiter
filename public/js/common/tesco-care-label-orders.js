@@ -295,7 +295,7 @@ $(function () {
 
                     quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
@@ -345,12 +345,12 @@ $(function () {
                     /** hide quantity missing error msgs */
                     $('.label-quantity-feedback').removeClass('has-error has-danger');
                     $('.label-quantity-feedback-err-msg').css('display', 'none');
-                    $('.label-quantity-field').prop('required', false);
-                    $('.label-quantity-field').parent().removeClass('has-error')
+                    $('.tesco-quantity-field').prop('required', false);
+                    $('.tesco-quantity-field').parent().removeClass('has-error')
                     $('.help-block').html('');
 
                     /** [ Dynamic moq value assignment on supplier change ] */
-                    $('.label-quantity-field').each(function () {
+                    $('.tesco-quantity-field').each(function () {
                         $(this).attr("min", data.moq[0][template]);
                         $(this).data("min-error", "Qty should be >= " + data.moq[0][template]);
                     });
@@ -376,12 +376,12 @@ $(function () {
             /** hide quantity missing error msgs */
             $('.label-quantity-feedback').removeClass('has-error has-danger');
             $('.label-quantity-feedback-err-msg').css('display', 'none');
-            $('.label-quantity-field').prop('required', false);
-            $('.label-quantity-field').parent().removeClass('has-error')
+            $('.tesco-quantity-field').prop('required', false);
+            $('.tesco-quantity-field').parent().removeClass('has-error')
             $('.help-block').html('');
 
             /** [ Remove MOQ values] */
-            $('.label-quantity-field').each(function () {
+            $('.tesco-quantity-field').each(function () {
                 $(this).removeAttr("min");
                 $(this).data("min-error", "");
             });

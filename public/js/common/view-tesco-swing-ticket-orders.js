@@ -31,7 +31,17 @@ $( () => {
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);
         $('#swing_template_id').val(order_data.order_details.template_id);
 
-        $('.create-download-artwork').css('display','inline-block')
+        $emptyQty = order_data.order_details.quantities.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
+
+        if($emptyQty.length > 0){
+            $('.create-download-artwork').remove();
+        } else  {
+            $('.create-download-artwork').css('display','inline-block');
+        }
+
+        var div_html = '<input class="table-id-hidden" id="SwingTicket_order_id" name="swingticket_order_id" type="hidden" value="' + order_data.order_details.id + '">';
+
+        $('.swing-ticket-order-invisible-div').html(div_html);
 
         $('#swing_24_char_desc').val(order_data.order_details['24_char_desc'])
         $('#swing_product_desc').val(order_data.order_details.product_desc_id)

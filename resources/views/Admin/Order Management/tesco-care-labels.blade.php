@@ -324,9 +324,7 @@
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger order-cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times"
-            aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"
         onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button> 

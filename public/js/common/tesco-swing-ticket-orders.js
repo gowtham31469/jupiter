@@ -72,8 +72,17 @@ submitSwingTicketOrder = (user_type) => {
         statusCode: {
             200: function (response) {
 
-                    $('#hidden_id').val(response.data.last_insertion)
-                    $('.create-download-artwork').css('display', 'inline-block')
+                    $('#hidden_id').val(response.data.last_insertion);
+
+                    $emptyQty = $('.tesco-quantity-field').filter((index, quantity) => quantity.value === '' );
+                    $emptyBarcode = $('.swing-ticket-ean').filter((index, ean) => ean.value === '');
+
+                    if($emptyQty.length > 0 || $emptyBarcode.length > 0){
+                        $('.create-download-artwork').remove();
+                    } else  {
+                        $('.create-download-artwork').css('display','inline-block');
+                    }
+
                     $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
                     $('.order-cancel-btn').show();
