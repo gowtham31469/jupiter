@@ -138,10 +138,6 @@ class OrderStatusCntrl extends Controller
     {
         try
 		{
-            $tcl1 = "TCL 1";
-			$tesco_tcl1_orders = "tesco_tcl1_orders";
-			$actions="-";
-            $ddmmyy="DD-MM-YYYY";
             $date_start = date("Y-m-d", strtotime(" -6 month"));
             $date_end = date("Y-m-d");
 
@@ -3604,8 +3600,8 @@ class OrderStatusCntrl extends Controller
 			$tesco_tsl2_orders = "tesco_tsl2_orders";							
 			$tsl3 = "TSL 3";
 			$tesco_tsl3_orders = "tesco_tsl3_orders";					
-			$wcl = "WCL";
-			$tesco_washcare_orders = "tesco_washcare_orders";			
+			$tesco_washcare_orders = "tesco_washcare_orders";	
+            $tesco_swingticket_orders = "tesco_swingticket_orders";			
 			
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
@@ -3705,6 +3701,15 @@ class OrderStatusCntrl extends Controller
 				            ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($uk_col,$uk_style)
+                            ->where($ce_col,$ce_style)
+                            ->get();
+            $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                            ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_swingticket_orders.is_order_count_empty',0)
+				            ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($ce_col,$ce_style)
                             ->get();
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
@@ -3807,8 +3812,8 @@ class OrderStatusCntrl extends Controller
 			$tesco_tsl2_orders = "tesco_tsl2_orders";							
 			$tsl3 = "TSL 3";
 			$tesco_tsl3_orders = "tesco_tsl3_orders";							
-			$wcl = "WCL";
 			$tesco_washcare_orders = "tesco_washcare_orders";		
+			$tesco_swingticket_orders = "tesco_swingticket_orders";	
 			
             $data['tcl1'] = DB::table('tesco_tcl1_orders')
                             ->join('tesco_item_master','tesco_tcl1_orders.template_id','=','tesco_item_master.id')
@@ -3908,6 +3913,15 @@ class OrderStatusCntrl extends Controller
                             ->whereNotIn('tesco_washcare_orders.order_status',['Saved','Order Cancelled'])
                             ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($uk_col,$uk_style)
+                            ->where($ce_col,$ce_style)
+                            ->get();
+            $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                            ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->where('tesco_swingticket_orders.is_order_count_empty',0)
+                            ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                            ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($ce_col,$ce_style)
                             ->get();
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
