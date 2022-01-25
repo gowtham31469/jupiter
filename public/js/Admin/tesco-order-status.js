@@ -222,7 +222,7 @@ function tescoOrderStatus() {
                                     200: function (data) {
                                         $('#exist_artwork_approve_div_status').removeClass('hidden')
                                         $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -494,7 +494,7 @@ function tescoOrderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -7623,6 +7623,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
+                console.log(data);
                 var options = "<option>Select Style Number</option>";
                 var already_array = [];
                 $(data.style_no).each(function(index,value){
@@ -7702,7 +7703,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
