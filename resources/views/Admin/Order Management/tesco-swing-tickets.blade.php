@@ -1,5 +1,3 @@
-<h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
-<hr>
 <div class="loader">
     <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
 </div>
@@ -13,28 +11,28 @@
     <div class="col-md-12">
         <h4>Order Quantity</h4>
     </div>
-    <div class="col-md-12 teasco-care-quantity-div">
+    <div class="col-md-12 tesco-care-quantity-div">
         <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id" value="{{$size_data[0]->tesco_size_department_id}}">
         <input type="hidden" id="swing_template_id" name="swing_template_id" value="{{ $template }}">
         <input type="hidden" id="swing_template_name" name="swing_template_name" value="{{ $tesco_template_file[0]->template_name }}">
         <div class="table-responsive">
-        <?php 
+            <?php
             $template_name = $tesco_template_file[0]->template_name;
 
-            $temp_id = str_replace(" ","", $template_name)."_".$template;
+            $temp_id = str_replace(" ", "", $template_name) . "_" . $template;
 
-            $temp_file = explode(",",$tesco_template_file[0]->template_file);
+            $temp_file = explode(",", $tesco_template_file[0]->template_file);
 
 
-        ?>
-        <input type="hidden" id="hidden_name" name="hidden_name" value="{{$template_name}}">
-        
-        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_modal" class="center-block tesco_svg" data="{{ $temp_file[0] }}" type="image/svg+xml"></object>
+            ?>
+            <input type="hidden" id="hidden_name" name="hidden_name" value="{{$template_name}}">
 
-        <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_back_modal" class="center-block tesco_svg" data="{{ $temp_file[1] }}" type="image/svg+xml"></object>
-        <div id="svgdiv" style="position:absolute;visibility:hidden">
+            <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_modal" class="center-block tesco_svg" data="{{ $temp_file[0] }}" type="image/svg+xml"></object>
+
+            <object style="opacity:0;width:0px;height:0px" id="{{ $temp_id }}_back_modal" class="center-block tesco_svg" data="{{ $temp_file[1] }}" type="image/svg+xml"></object>
+            <div id="svgdiv" style="position:absolute;visibility:hidden">
                 <svg id="ean-13"></svg>
-              </div>
+            </div>
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
@@ -57,12 +55,12 @@
                             @endforeach
                         </td>
                         <td>
-                            <div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_{{$value->id}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
+                            <div class="form-group has-feedback"><input class="form-control input-sm swing-ticket-ean" placeholder="EAN Barcode" id="swing_ean_{{$value->id}}" name="swing_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
@@ -123,6 +121,7 @@
         <div class="form-group has-feedback">
             {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
             {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+            
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -130,7 +129,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+            {!! Form::number('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -170,7 +169,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+            {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8', 'onkeyup' => 'addHyphen(this)')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -181,18 +180,18 @@
 <hr>
 <div class="row">
 
-    <!-- FFK/01/M13021C  44-->
-    <!-- FFB/01/M13023C 46-->
+    {{-- FFK/01/M13021C  44--}}
+    {{-- FFB/01/M13023C 46--}}
     @if(in_array($template, [44, 46]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" >
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol" id="swing_wee_symbol">
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
-                    @foreach($wee_symbols as $key => $value)
-                            <option title="{{ $value->wee_symbol_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}" >{{ $value->wee_symbol_text }}</option>
-                    @endforeach
+                @foreach($wee_symbols as $key => $value)
+                <option title="{{ $value->wee_symbol_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}">{{ $value->wee_symbol_text }}</option>
+                @endforeach
                 @endif
             </select>
             <div class="help-block with-errors"></div>
@@ -200,7 +199,7 @@
     </div>
     @endif
 
-    <!-- FFB/01/M13023C 46-->
+    {{-- FFB/01/M13023C 46--}}
     @if(in_array($template, [46]))
     <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
@@ -214,7 +213,7 @@
     </div>
     @endif
 
-    <!-- FFC/01/M13304C  53-->
+    {{-- FFC/01/M13304C  53--}}
     @if(in_array($template, [53]))
     <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('swing_machine_washable', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
@@ -229,12 +228,12 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_woolmark_logo', 'Woolmark Logo', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_woolmark_logo"  id="swing_woolmark_logo" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_woolmark_logo" id="swing_woolmark_logo" required>
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
-                    @foreach($woolmark_logos as $key => $value)
-                            <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}">{{ $value->woolmark_logo_text }}</option>
-                    @endforeach
+                @foreach($woolmark_logos as $key => $value)
+                <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logos' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}">{{ $value->woolmark_logo_text }}</option>
+                @endforeach
                 @endif
             </select>
             <div class="help-block with-errors"></div>
@@ -242,9 +241,9 @@
     </div>
     @endif
 
-    <!-- FFC/01/M13022C 45-->
-    <!-- FFK/01/M13163C 51-->
-    <!-- FFB/01/M13233C 52-->
+    {{-- FFC/01/M13022C 45--}}
+    {{-- FFK/01/M13163C 51--}}
+    {{-- FFB/01/M13233C 52--}}
     @if(in_array($template, [45, 51, 52]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
@@ -273,6 +272,8 @@
 
 </div>
 @endif
+<hr>
+<br>
 
 <div class="bottom-bar">
     <div class="modal-footer">
@@ -291,5 +292,5 @@
     {!! Form::close() !!}
 </div>
 
-<!-- Tesco care swing ticket orders js -->
+{{-- Tesco care swing ticket orders js --}}
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>

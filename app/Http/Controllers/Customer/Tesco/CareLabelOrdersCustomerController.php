@@ -15,7 +15,7 @@ use App\Classes\TescoCareLabelParser;
 
 use App\TescoPrimarySize;
 use App\Http\Requests\TescoLabelOrderRequest;
-use App\TescoWashcareOrders;
+use App\Classes\EditTescoOrders;
 
 class CareLabelOrdersCustomerController extends Controller
 {
@@ -29,7 +29,6 @@ class CareLabelOrdersCustomerController extends Controller
     private $kids_warning;
     private $components;
     private $fabriclists;
-    private $tesco_suppliers;
     private $additional_instructions;
     private $part_of_two_piece_set;
 
@@ -196,44 +195,18 @@ class CareLabelOrdersCustomerController extends Controller
     public function getCareLabelOrderDetail(Request $request)
     {
         if ($request->ajax()) {
-            $erp_order_details = array();
             $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
 
-            $order_details  = TescoWashcareOrders::with([
-                'quantities',
-                'garment_components',
-                'item_master'
-            ])
-            ->where([
-                'id' => $request->id
-            ])
-            ->first();
+            $get_order_details = new EditTescoOrders();
+            $result = $get_order_details->getCareLabelOrderDetails($request);
 
-            $order_quantity_ids = $order_details->quantities->pluck('id');
-
-            $moq     =    DB::table('price_taxation')
-            ->where([
-                'template_id' => $order_details->template_id,
-                'customer_id' => $order_details->tesco_supplier_id,
-                'buyer_id' => 2
-            ])
-            ->value('moq');
-
-            // fetch erp_order_details table status
-            $erp_order_details[] = DB::table('erp_order_details')
-            ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
-            ->where('order_qnty_table_name', 'tesco_washcare_orders_quanty')
-            ->whereIn('order_qnty_table_id', $order_quantity_ids)
-            ->select('erp_order_details.id', 'erp_status.status_name')
-            ->first();
-
-            if ($order_details) {
-                $result = response()->json([
+            if ($result) {
+                return response()->json([
                     'error' => false,
                     'message' => 'success',
-                    'order_details' => $order_details,
-                    'moq' => $moq,
-                    'erp_details' => $erp_order_details,
+                    'order_details' => $result['order_details'],
+                    'moq' => $result['moq'],
+                    'erp_details' => $result['erp_details'],
                     'symbols' => $this->symbols,
                     'tesco_suppliers' => $tesco_suppliers,
                     'coo' => $this->coo,
@@ -244,9 +217,8 @@ class CareLabelOrdersCustomerController extends Controller
                     'part_of_two_piece_set' => $this->part_of_two_piece_set
                 ], 200);
             } else {
-                $result = response()->json(['error' => true, 'message' => 'Error'], 400);
+                return response()->json(['error' => true, 'message' => 'Error'], 400);
             }
-            return $result;
         }
     }
 

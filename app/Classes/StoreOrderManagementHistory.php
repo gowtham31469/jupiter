@@ -24,7 +24,7 @@ class StoreOrderManagementHistory
             ->where('buyer_name', 'Tesco')
             ->first();
 
-        $template_level = $tesco_material_obj->tescoMaterialDetails($order_data['template_id'], $order_data['tesco_label']);
+        $template_level = $tesco_material_obj->tescoMaterialDetails($order_data['template_id'], $order_data['order_table']);
 
         switch ($order_data['po_status']) {
             case 'PO Pending':

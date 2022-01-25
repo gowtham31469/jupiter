@@ -233,7 +233,7 @@ function tescoOrders(callback) {
                                                                             <input class="search-input form-control" placeholder="Search for Awesomeness">
                                                                             <div class="template-error"></div>
                                                                         </div>
-                                                                        <div id="jstree"></div>
+                                                                        <div id="jstree" style="overflow:auto;"></div>
                                                                         <div class="form-group has-feedback hidden" id="tesco_care_parser_type_div">
 																		<label for="pdf_parser_type" class="form_label" style="margin-right: 5px;">Select PO Zone</label>
 																		<div>
@@ -538,7 +538,7 @@ function tescoOrders(callback) {
                                 {
 									"id": "41",
 									"text": "Swing Tickets",
-									"parent_id": "32",
+									"parent_id": "0",
 									"children": [{
 											"id": "42",
 											"text": "CE Non Rfid Swing Ticket",

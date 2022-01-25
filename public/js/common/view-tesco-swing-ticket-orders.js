@@ -8,7 +8,7 @@ $( () => {
             $('li.year-nav-menu, li.buyer-nav-menu').addClass('hidden');
 
             /** Make form as readonly */
-            $('#tesco_care_label_order_form input').prop('disabled', 'true');
+            $('#tesco_swing_ticket_order_form input').prop('disabled', 'true');
             $('.selectpicker').prop('disabled', true);
             $('.swing-ticket-order-submit-btn').remove();
 
@@ -20,6 +20,7 @@ $( () => {
             }
 
             $(".selectpicker").selectpicker("refresh");
+            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + '</strong></h4></div>');
         }); 
 
     }
@@ -30,7 +31,17 @@ $( () => {
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);
         $('#swing_template_id').val(order_data.order_details.template_id);
 
-        $('.create-download-artwork').css('display','inline-block')
+        $emptyQty = order_data.order_details.quantities.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
+
+        if($emptyQty.length > 0){
+            $('.create-download-artwork').remove();
+        } else  {
+            $('.create-download-artwork').css('display','inline-block');
+        }
+
+        var div_html = '<input class="table-id-hidden" id="SwingTicket_order_id" name="swingticket_order_id" type="hidden" value="' + order_data.order_details.id + '">';
+
+        $('.swing-ticket-order-invisible-div').html(div_html);
 
         $('#swing_24_char_desc').val(order_data.order_details['24_char_desc'])
         $('#swing_product_desc').val(order_data.order_details.product_desc_id)
@@ -54,7 +65,7 @@ $( () => {
 
         $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => { 
             $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
-            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.count);
+            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.quantity);
         });
 
     }

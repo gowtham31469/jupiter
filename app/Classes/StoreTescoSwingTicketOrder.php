@@ -21,17 +21,17 @@ class StoreTescoSwingTicketOrder
     public function storeTescoSwingTicketOrder($request, $role)
     {
 
-         /** [ Check if order already placed for this style ] */
-         $is_exists = TescoSwingTicketOrders::select('id')
-         ->Where('ce_style_ref', $request->swing_option_id)
-         ->where('po_number', $request->swing_po_number)
-         ->whereNotIn('order_status', ['Order Cancelled'])
-         ->exists();
- 
-         if($is_exists)
-         {
-           return response()->json(['error'=> true,'message' =>'Order already exists'],409);
-         }
+        /** [ Check if order already placed for this style ] */
+        $is_exists = TescoSwingTicketOrders::select('id')
+        ->Where('ce_style_ref', $request->swing_option_id)
+        ->where('po_number', $request->swing_po_number)
+        ->whereNotIn('order_status', ['Order Cancelled'])
+        ->exists();
+
+        if($is_exists)
+        {
+        return response()->json(['error'=> true,'message' =>'Order already exists'],409);
+        }
 
         $order_history_obj = new StoreOrderManagementHistory();
         $carelabel_obj = new StoreTescoLabelOrder();
@@ -96,7 +96,7 @@ class StoreTescoSwingTicketOrder
             'order_created_at'          => Carbon::now('Asia/Kolkata')->toDateTimeString(),
             '24_char_desc'              => $request->swing_24_char_desc,
             'cz_selling_price'          => $request->swing_cz_price,
-            'sk_selling_price'          => $request->swing_sk_price,
+            'sk_selling_price'          => sprintf('%0.2f', $request->swing_sk_price),
             'hu_selling_price'          => $request->swing_hu_price,
             'wee_symbol_id'             => $request->swing_wee_symbol,
             'woolmark_logo_id'          => $request->swing_woolmark_logo,
@@ -123,11 +123,12 @@ class StoreTescoSwingTicketOrder
         }
 
         TescoSwingTicketOrdersQuantity::insert($qty_data);
+        $season_code = DB::table('tesco_season_codes')->where('id', $request->swing_season_code)->value('name');
 
         /** Insert order data into history table */
         $order_data = [];
 
-        $order_data['season_code'] = null;
+        $order_data['season_code'] = $season_code;
         $order_data['po_number'] = $request->swing_po_number;
         $order_data['ocn_no'] = null;
         $order_data['style'] = $request->swing_option_id;
@@ -174,13 +175,13 @@ class StoreTescoSwingTicketOrder
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get();
 
-        $translations['mm_product_benefits_translation'] = !is_null($request->swing_product_benefit) ? DB::table('tesco_mm_product_benefits')
-            ->where('id', $request->swing_product_benefit)
+        $translations['mm_product_benefits_translation'] = !is_null($request->swing_mm_product_benefit) ? DB::table('tesco_mm_product_benefits')
+            ->where('id', $request->swing_mm_product_benefit)
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 
-        $translations['product_benefits_translation'] = !is_null($request->swing_mm_product_benefit) ? DB::table('tesco_product_benefits')
-            ->where('id', $request->swing_mm_product_benefit)
+        $translations['product_benefits_translation'] = !is_null($request->swing_product_benefit) ? DB::table('tesco_product_benefits')
+            ->where('id', $request->swing_product_benefit)
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 

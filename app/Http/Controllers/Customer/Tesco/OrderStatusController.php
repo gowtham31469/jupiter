@@ -279,6 +279,12 @@ class OrderStatusController extends Controller
                 ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                 ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
                         ->select("season_code");
+                
+                $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")	
+                ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->select("tesco_season_codes.name as season_code");
                     
                 $data = DB::table("tesco_thl3_orders")
                 ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -294,6 +300,7 @@ class OrderStatusController extends Controller
                     ->union($tsl3)
                     ->union($thl1)
                     ->union($tesco_washcare_orders)
+                    ->union($tesco_swingticket_orders)
                     ->get();
     
                 $tcl1_style = DB::table("tesco_tcl1_orders")
@@ -340,7 +347,12 @@ class OrderStatusController extends Controller
                 ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])	
                 ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
                         ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
-    
+
+                $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")	
+                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])	
+                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
                 $style_no = DB::table("tesco_thl3_orders")
                             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
@@ -354,6 +366,7 @@ class OrderStatusController extends Controller
                             ->union($tsl3_style)
                             ->union($thl1_style)
                             ->union($tesco_washcare_orders_style)
+                            ->union($tesco_swingticket_orders_style)
                             ->get();
                 
             }
@@ -419,6 +432,13 @@ class OrderStatusController extends Controller
                 ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                         ->select("season_code");
+                
+                $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")	
+                ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->where('tesco_swingticket_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                ->select("tesco_season_codes.name as season_code");
                     
                 $data = DB::table("tesco_thl3_orders")
                 ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -435,6 +455,7 @@ class OrderStatusController extends Controller
                     ->union($tsl3)
                     ->union($thl1)
                     ->union($tesco_washcare_orders)
+                    ->union($tesco_swingticket_orders)
                     ->get();
     
                 $tcl1_style = DB::table("tesco_tcl1_orders")
@@ -491,7 +512,13 @@ class OrderStatusController extends Controller
                 ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
                 ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                         ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
-    
+                
+                $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")	
+                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])	
+                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                ->where('tesco_swingticket_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+                        
                 $style_no = DB::table("tesco_thl3_orders")
                             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                             ->where('tesco_thl3_orders.tesco_supplier_id', $customer_role_id->company_id)
@@ -506,6 +533,7 @@ class OrderStatusController extends Controller
                             ->union($tsl3_style)
                             ->union($thl1_style)
                             ->union($tesco_washcare_orders_style)
+                            ->union($tesco_swingticket_orders_style)
                             ->get();
 
             }
@@ -1356,7 +1384,58 @@ class OrderStatusController extends Controller
                                     }
                                 })
                                 ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_washcare_orders.season_code','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.po_number as BuyerPO','tesco_washcare_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_washcare_orders.template_type as Template Type','customers.id as customer_id','tesco_washcare_orders.created_at as OrderDate',DB::raw('to_char(tesco_washcare_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_washcare_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_washcare_orders.order_status as artwork_status','tesco_washcare_orders.pi_status as PI Status','tesco_washcare_orders.po_status as PO Status','tesco_washcare_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_washcare_orders.id as tableID','tesco_washcare_orders.po_file','customers.pi_required','customers.po_required','tesco_washcare_orders.template_id','tesco_washcare_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
-    
+                $tesco_swingticket_orders = "tesco_swingticket_orders";
+                $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+                ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where(function($query) use ($seasonos){
+                                    if(count($seasonos))
+                                    {
+                                        $query->orWhereIn('season_code', $seasonos);
+                                    }
+                                })
+                                ->where(function($query) use ($stylenoos,$ukstylenoos){
+                                    if(count($stylenoos))
+                                    {
+                                        $query->orWhereIn('ce_style_ref', $stylenoos);
+                                        $query->where('zone', 'CE');
+                                    }
+                                    if(count($ukstylenoos))
+                                    {
+                                        $query->orWhereIn('uk_style_ref', $ukstylenoos);
+                                        $query->where('zone', 'UK');
+                                    }
+                                })
+                                ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){
+                                    if(count($orderstatusosref))
+                                    {
+                                        $query->orWhereIn('order_status', $orderstatusosref);
+                                    }
+                                    if(in_array("Pending", $orderstatusos))
+                                    {
+                                        $query->orWhere('is_order_count_empty', 1);
+                                    }
+                                    if(count($artworkstatusos))
+                                    {
+                                        $query->orWhereIn('order_status', $artworkstatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($postatusos){
+                                    if(count($postatusos))
+                                    {
+                                        $query->orWhereIn('po_status', $postatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($pistatusos){
+                                    if(count($pistatusos))
+                                    {
+                                        $query->orWhereIn('pi_status', $pistatusos);
+                                    }
+                                })
+                                ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_season_codes.name as season_code','tesco_swingticket_orders.uk_style_ref','tesco_swingticket_orders.ce_style_ref','tesco_swingticket_orders.po_number as BuyerPO','tesco_swingticket_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_swingticket_orders.template_type as Template Type','customers.id as customer_id','tesco_swingticket_orders.created_at as OrderDate',DB::raw('to_char(tesco_swingticket_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_swingticket_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_swingticket_orders.order_status as artwork_status','tesco_swingticket_orders.pi_status as PI Status','tesco_swingticket_orders.po_status as PO Status','tesco_swingticket_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_swingticket_orders.id as tableID','tesco_swingticket_orders.po_file','customers.pi_required','customers.po_required','tesco_swingticket_orders.template_id','tesco_swingticket_orders.order_flag','customers.delivery_day_count','is_order_count_empty');                
                 $thl3 = "THL 3";
                 $tesco_thl3_orders = "tesco_thl3_orders";
                 $orders = DB::table("tesco_thl3_orders")
@@ -1417,6 +1496,7 @@ class OrderStatusController extends Controller
                             ->union($tesco_tsl3_orders)
                             ->union($tesco_thl1_orders)
                             ->union($tesco_washcare_orders)
+                            ->union($tesco_swingticket_orders)
                             ->get();
             }
             else
@@ -1902,6 +1982,59 @@ class OrderStatusController extends Controller
                                     }
                                 })
                                 ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_washcare_orders.season_code','tesco_washcare_orders.uk_style_ref','tesco_washcare_orders.ce_style_ref','tesco_washcare_orders.po_number as BuyerPO','tesco_washcare_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_washcare_orders.template_type as Template Type','customers.id as customer_id','tesco_washcare_orders.created_at as OrderDate',DB::raw('to_char(tesco_washcare_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_washcare_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_washcare_orders.order_status as artwork_status','tesco_washcare_orders.pi_status as PI Status','tesco_washcare_orders.po_status as PO Status','tesco_washcare_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_washcare_orders.id as tableID','tesco_washcare_orders.po_file','customers.pi_required','customers.po_required','tesco_washcare_orders.template_id','tesco_washcare_orders.order_flag','customers.delivery_day_count','is_order_count_empty');
+                $tesco_swingticket_orders = "tesco_swingticket_orders";
+                $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+                ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+                                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->where('tesco_swingticket_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                                ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where(function($query) use ($seasonos){
+                                    if(count($seasonos))
+                                    {
+                                        $query->orWhereIn('season_code', $seasonos);
+                                    }
+                                })
+                                ->where(function($query) use ($stylenoos,$ukstylenoos){
+                                    if(count($stylenoos))
+                                    {
+                                        $query->orWhereIn('ce_style_ref', $stylenoos);
+                                        $query->where('zone', 'CE');
+                                    }
+                                    if(count($ukstylenoos))
+                                    {
+                                        $query->orWhereIn('uk_style_ref', $ukstylenoos);
+                                        $query->where('zone', 'UK');
+                                    }
+                                })
+                                ->where(function($query) use ($orderstatusos,$orderstatusosref,$artworkstatusos){
+                                    if(count($orderstatusosref))
+                                    {
+                                        $query->orWhereIn('order_status', $orderstatusosref);
+                                    }
+                                    if(in_array("Pending", $orderstatusos))
+                                    {
+                                        $query->orWhere('is_order_count_empty', 1);
+                                    }
+                                    if(count($artworkstatusos))
+                                    {
+                                        $query->orWhereIn('order_status', $artworkstatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($postatusos){
+                                    if(count($postatusos))
+                                    {
+                                        $query->orWhereIn('po_status', $postatusos);
+                                    }
+                                })
+                                ->where(function($query) use ($pistatusos){
+                                    if(count($pistatusos))
+                                    {
+                                        $query->orWhereIn('pi_status', $pistatusos);
+                                    }
+                                })
+                                ->select(DB::raw("'".$actions."'".' as "StyleNo"'),'ocn_number','tesco_season_codes.name as season_code','tesco_swingticket_orders.uk_style_ref','tesco_swingticket_orders.ce_style_ref','tesco_swingticket_orders.po_number as BuyerPO','tesco_swingticket_orders.zone as Zone',DB::raw('tesco_template.template_name as "TemplateName"'),'tesco_swingticket_orders.template_type as Template Type','customers.id as customer_id','tesco_swingticket_orders.created_at as OrderDate',DB::raw('to_char(tesco_swingticket_orders.delivery_date,'."'".$ddmmyy."'".') as "DeliveryDate"'),'tesco_swingticket_orders.order_status as order_status','tesco_template.template_file',DB::raw("'".$actions."'".' as "Artwork"'), 'tesco_swingticket_orders.order_status as artwork_status','tesco_swingticket_orders.pi_status as PI Status','tesco_swingticket_orders.po_status as PO Status','tesco_swingticket_orders.purchase_order_no as PO Number',DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_swingticket_orders.id as tableID','tesco_swingticket_orders.po_file','customers.pi_required','customers.po_required','tesco_swingticket_orders.template_id','tesco_swingticket_orders.order_flag','customers.delivery_day_count','is_order_count_empty');    
     
                 $thl3 = "THL 3";
                 $tesco_thl3_orders = "tesco_thl3_orders";
@@ -1964,6 +2097,7 @@ class OrderStatusController extends Controller
                             ->union($tesco_tsl3_orders)
                             ->union($tesco_thl1_orders)
                             ->union($tesco_washcare_orders)
+                            ->union($tesco_swingticket_orders)
                             ->get();
             }
             
@@ -3199,6 +3333,7 @@ class OrderStatusController extends Controller
 			$tesco_tsl3_orders = "tesco_tsl3_orders";				
 			$wcl = "WCL";
             $tesco_washcare_orders = "tesco_washcare_orders";	
+			$tesco_swingticket_orders = "tesco_swingticket_orders";	
             	
 	  		if($customer_role_id->role_id == 1)
 		    {
@@ -3311,6 +3446,16 @@ class OrderStatusController extends Controller
                             ->where('tesco_washcare_orders.is_order_count_empty',0)
                             ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($uk_col,$uk_style)
+                            ->where($ce_col,$ce_style)
+                            ->get();
+            $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                            ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                            ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                            ->where('tesco_swingticket_orders.is_order_count_empty',0)
+                            ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                             ->where($ce_col,$ce_style)
                             ->get();
 			}
@@ -3437,6 +3582,17 @@ class OrderStatusController extends Controller
                             ->where($uk_col,$uk_style)
                             ->where($ce_col,$ce_style)
                             ->get();
+            $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                            ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                            ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                            ->where('customers.po_required',1)
+                            ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                            ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+							->where('tesco_swingticket_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                            ->where('tesco_swingticket_orders.is_order_count_empty',0)
+                            ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
+                            ->where($ce_col,$ce_style)
+                            ->get();
 			}
             
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200); 
@@ -3541,6 +3697,7 @@ class OrderStatusController extends Controller
             $tesco_tsl3_orders = "tesco_tsl3_orders";			
 			$wcl = "WCL";
 			$tesco_washcare_orders = "tesco_washcare_orders";	
+			$tesco_swingticket_orders = "tesco_swingticket_orders";	
             
             $customer_id = Auth::guard('web_customer')->user()->id;
             $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
@@ -3655,6 +3812,16 @@ class OrderStatusController extends Controller
                                 ->where('tesco_washcare_orders.tesco_supplier_id', $customer_role_id->company_id)
                                 ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                                 ->where($uk_col,$uk_style)
+                                ->where($ce_col,$ce_style)
+                                ->get();
+                $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                                ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1)
+                                ->where('tesco_swingticket_orders.is_order_count_empty',0)
+                                ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                                ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                                 ->where($ce_col,$ce_style)
                                 ->get();
             }
@@ -3779,6 +3946,17 @@ class OrderStatusController extends Controller
 							    ->where('tesco_washcare_orders.order_placed_by','=',Auth::guard('web_customer')->id())
                                 ->select('tesco_washcare_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_washcare_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                                 ->where($uk_col,$uk_style)
+                                ->where($ce_col,$ce_style)
+                                ->get();
+                $data['swingtickets'] = DB::table('tesco_swingticket_orders')
+                                ->join('tesco_item_master','tesco_swingticket_orders.template_id','=','tesco_item_master.id')
+                                ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                                ->where('customers.po_required',1)
+                                ->where('tesco_swingticket_orders.is_order_count_empty',0)
+                                ->whereNotIn('tesco_swingticket_orders.order_status',['Saved','Order Cancelled'])
+                                ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+							    ->where('tesco_swingticket_orders.order_placed_by','=',Auth::guard('web_customer')->id())
+                                ->select('tesco_swingticket_orders.*',DB::raw('tesco_item_master.item_name as "TemplateName"'),DB::raw("'".$tesco_swingticket_orders."'".' as "tableName"'),'tesco_item_master.company_id')
                                 ->where($ce_col,$ce_style)
                                 ->get();
             }

@@ -139,7 +139,6 @@ class EditErpOrders
 
 		$style_ref = strtolower($orders->zone) . '_style_ref';
 		$style_no  = $orders->zone === "joint" ? $orders->uk_style_ref . '/' . $orders->ce_style_ref : $orders->$style_ref;
-		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
 		$custom_ref_name = DB::table('price_taxation')
 		->where([
@@ -155,7 +154,7 @@ class EditErpOrders
 		->where('action', 'PO Manager Verification Pending')
 		->value('id');
 
-		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $tesco_label_order);
+		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $data['tableName']);
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype

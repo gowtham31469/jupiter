@@ -1,5 +1,3 @@
-<h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
-<hr>
 <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
@@ -94,7 +92,7 @@
 <div class="col-md-12">
     <h4>Order Quantity</h4>
 </div>
-<div class="col-md-12 teasco-care-quantity-div"></div>
+<div class="col-md-12 tesco-care-quantity-div"></div>
                             
 </div>
 <hr>
@@ -326,9 +324,7 @@
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger order-cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times"
-            aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"
         onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button> 

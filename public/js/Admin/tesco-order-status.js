@@ -222,7 +222,7 @@ function tescoOrderStatus() {
                                     200: function (data) {
                                         $('#exist_artwork_approve_div_status').removeClass('hidden')
                                         $('#approve-upload-group').find('#exist_artwork_approve_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -494,7 +494,7 @@ function tescoOrderStatus() {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -4312,6 +4312,10 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 				return;
 			}
 		},
+        complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
 	})
 }
 
@@ -4398,7 +4402,8 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
             table_name_print
         },
         beforeSend: function() {
-
+            $(".loader").show();
+            $(".loader").css('margin-top', '12%');
         },
         success: function(data) {
 
@@ -4412,9 +4417,11 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 // Add this line
                 var twoDigitYear = shortYear.toString().substr(-2);
 
-                var month_ca = (created_at.getMonth() + 1) +"/"+ twoDigitYear;
+                var month_ca = ( '0' + (created_at.getMonth()+1) ).slice( -2 ) +"/"+ twoDigitYear;
 
-                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+val.ce_style_ref+'</tspan>';
+                var optionID = addOptionIdHyphen(val.ce_style_ref);
+
+                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
                 svgDoc_back.getElementById("short_description").innerHTML = short_description;
 
@@ -4438,9 +4445,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
 
                         size_comp.push(sec_size[1].trim())
@@ -4499,9 +4506,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4558,9 +4565,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4617,9 +4624,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4708,9 +4715,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         {
                             size_category_translation += vals.english+" "
                         }
-                        size_category_translation += vals.czech+"•"
-                        size_category_translation += vals.slovak+"•"
-                        size_category_translation += vals.hungarian+": "
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
                         size_category_translation += sec_size[1].trim()
                         size_comp.push(sec_size[1].trim())
                         
@@ -4758,19 +4765,19 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     {
                         if(val.ce_size_name == "1- 1½Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "1-2Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "2-3Y")
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else
                         {
-                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
                         }
                     }
                     
@@ -4782,10 +4789,13 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                 //Back Svg Price Details
                 var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
-                var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
-                svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].cz_selling_price+' Kč</tspan>';
+                var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
+                var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+                var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+                svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
                 svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
-                svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].hu_selling_price+' Ft</tspan>';
+                svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
                 var barcode_change = val.ean_barcode;
 
@@ -4862,10 +4872,13 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
             //Front Svg Price Details
 
             var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
-            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2);
-            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].cz_selling_price+' Kč</tspan>';
+            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
+            var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+            var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
             svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
-            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+data.order_details[0].hu_selling_price+' Ft</tspan>';
+            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
             
             var svgRoot = svgDoc.documentElement;
             var s = new XMLSerializer();
@@ -7610,6 +7623,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
+                console.log(data);
                 var options = "<option>Select Style Number</option>";
                 var already_array = [];
                 $(data.style_no).each(function(index,value){
@@ -7689,7 +7703,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         $('#new_po_file_error_status').addClass('hidden')
                                         $('#new_po_error_length_status').addClass('hidden');
                                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5'])))))))));
+                                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
                                         var coun = 0;
                                         var options = "<option>Select PO</option>";
                                         var unique_po = []
@@ -10666,4 +10680,17 @@ function approveTescoArtwork() {
 		/** [error statements] */
 		console.error("Error:" + e)
 	}
+}
+
+
+addOptionIdHyphen = (option_id) => {
+    var opID = option_id.replace("-","");
+    if(option_id.toString().length > 3){
+        opID = opID.substring(0,3) + "-" + opID.substring(3);
+    }
+    return opID;
+}
+
+function toTitleCase(str) {
+	return str[0].toUpperCase() + str.slice(1)
 }
