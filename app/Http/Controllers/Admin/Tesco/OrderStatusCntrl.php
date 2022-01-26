@@ -2188,7 +2188,19 @@ class OrderStatusCntrl extends Controller
 
             $size_comp = explode(',',$size_comp_fin[$j]);
 
-            $wri_y=105;
+            if(count($siz_cat) <= 3)
+            {
+                $wri_y=105;
+            }
+            else if(count($siz_cat) == 4)
+            {
+                $wri_y=103;
+            }
+            else if(count($siz_cat) == 5)
+            {
+                $wri_y=101.5;
+            }
+            
             if($size_category_fin[$j] != "null")
             {
                 foreach($siz_cat as $val_cat)
@@ -2752,6 +2764,7 @@ class OrderStatusCntrl extends Controller
             $table_id = "swingticket_order_id";
             $order_details  = 	DB::table($qty_table)
                                 ->where($table_id,$id)
+                                ->where('quantity','!=',null)
                                 ->orderBy('id', 'asc')
                                 ->select('*')
                                 ->get();
@@ -2917,8 +2930,8 @@ class OrderStatusCntrl extends Controller
                 $value->sk_selling_price=$order_omp[0]->sk_selling_price;
                 $value->hu_selling_price=$order_omp[0]->hu_selling_price;
                 $value->eqos_site_code=$order_omp[0]->eqos_site_code;
-                $value->wee_symbol=$order_omp[0]->wee_symbol;
-                $value->woolmark_logo=$order_omp[0]->woolmark_logo;
+                $value->wee_symbol_file=$order_omp[0]->wee_symbol;
+                $value->woolmark_logo_file=$order_omp[0]->woolmark_logo;
                 $value->ce_size_name=$tesco_primary_size[0]->ce_size;
                 $value->tesco_secondary_size_chart=$tesco_secondary_size_chart;
                 $value->product_desc_text=$order_omp[0]->product_desc_text;
