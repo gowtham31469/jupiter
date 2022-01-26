@@ -4448,13 +4448,13 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
 
-                        size_comp.push(sec_size[1].trim())
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -4485,7 +4485,27 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;         
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");           
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");           
+                    
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                     
                 }
                 else if(val.ce_size_name == "Newborn")
@@ -4509,12 +4529,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -4545,7 +4565,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 }
                 else if(val.ce_size_name == "up to 1M")
                 {
@@ -4568,12 +4607,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -4604,7 +4643,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 }
                 else if(val.ce_size_name == "up to 3M")
                 {
@@ -4627,12 +4685,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -4663,7 +4721,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
 
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 } 
                 else if(val.ce_size_name == "One size")
                 {
@@ -4718,12 +4795,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -4784,7 +4861,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
 
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.013)");
+                    }
                 }
 
                 //Back Svg Price Details

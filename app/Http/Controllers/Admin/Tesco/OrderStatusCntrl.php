@@ -2188,7 +2188,19 @@ class OrderStatusCntrl extends Controller
 
             $size_comp = explode(',',$size_comp_fin[$j]);
 
-            $wri_y=105;
+            if(count($siz_cat) <= 3)
+            {
+                $wri_y=105;
+            }
+            else if(count($siz_cat) == 4)
+            {
+                $wri_y=103;
+            }
+            else if(count($siz_cat) == 5)
+            {
+                $wri_y=101.5;
+            }
+            
             if($size_category_fin[$j] != "null")
             {
                 foreach($siz_cat as $val_cat)
@@ -2752,6 +2764,7 @@ class OrderStatusCntrl extends Controller
             $table_id = "swingticket_order_id";
             $order_details  = 	DB::table($qty_table)
                                 ->where($table_id,$id)
+                                ->where('quantity','!=',null)
                                 ->orderBy('id', 'asc')
                                 ->select('*')
                                 ->get();
