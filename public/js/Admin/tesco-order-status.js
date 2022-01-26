@@ -10397,6 +10397,7 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '50px');
     svg.setAttribute('font-family', 'fandfsansb');
+    svg.setAttribute('letter-spacing', '8px');
 
     svg.setAttribute('width', '83.93px');
     svg.setAttribute('height', '58.03px');
