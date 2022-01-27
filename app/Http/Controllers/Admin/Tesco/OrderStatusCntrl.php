@@ -2130,6 +2130,7 @@ class OrderStatusCntrl extends Controller
         $size_category_fin=explode(',_',$request->size_category_fin);
         $size_comp_fin=explode(',_',$request->size_comp_fin);
         $product_desc_fin=explode(',_',$request->product_desc_fin);
+        $wee_symbol_fin=explode(',_',$request->wee_symbol_fin);
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2272,6 +2273,9 @@ class OrderStatusCntrl extends Controller
 
             $svgString=urldecode($value);
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+
+
+            PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $i++;
             $j++;
             $first_time++;

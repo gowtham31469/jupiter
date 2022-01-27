@@ -4266,7 +4266,7 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 	})
 }
 
-function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin) {
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin) {
 	
 	var url = "";
 	
@@ -4284,7 +4284,8 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
             customer_name:customer_name,
             size_category_fin:size_category_fin,
             size_comp_fin:size_comp_fin,
-            product_desc_fin:product_desc_fin
+            product_desc_fin:product_desc_fin,
+            wee_symbol_fin:wee_symbol_fin
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -4387,6 +4388,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
     var svgarr = [];
     var svgarr_back = [];
+    var wee_symbol = [];
     var size_category_arr = [];
     var size_comp_arr = [];
     var product_desc_arr = [];
@@ -4906,6 +4908,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var svg_back = encodeURI(str_back)
                 svgarr_back.push(svg_back)
                 size_category_arr.push($size_category_str)
+                wee_symbol.push(val.wee_symbol_file)
                 size_comp_arr.push(size_comp)
                 product_desc_arr.push(product_desc_text)
                 ajax_count++;
@@ -4989,9 +4992,10 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var svg_fin = svgarr.join(',_');
                 var svg_fin_back = svgarr_back.join(',_');
                 var size_category_fin = size_category_arr.join(',_');
+                var wee_symbol_fin = wee_symbol.join(',_');
                 var size_comp_fin = size_comp_arr.join(',_');
                 var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin);
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin);
             }
 
         },
