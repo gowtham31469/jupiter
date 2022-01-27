@@ -4410,6 +4410,246 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
         success: function(data) {
 
             $(data.order_details).each(function (key, val) {
+                //console.log(name)
+                var sticker_name = name.trim();
+                if(sticker_name == "FFK/01/M13021C-sticker")
+                {
+                    var temp_data = M13021C(data,svgDoc_back,val)
+                }
+                else if(sticker_name == "FFC/01/M13022C-sticker")
+                {
+                    console.log(svgDoc_back)
+                    var temp_data = M13022C(data,svgDoc_back,val)
+                }
+                
+                //console.log(temp_data)
+
+                var svgRoot_back =svgDoc_back.documentElement;
+                var s_back = new XMLSerializer();
+                var d_back = svgRoot_back;
+                var str_back = s_back.serializeToString(d_back);
+                var svg_back = encodeURI(str_back)
+                svgarr_back.push(svg_back)
+                size_category_arr.push($size_category_str)
+                wee_symbol.push(val.wee_symbol_file)
+                size_comp_arr.push(temp_data[0])
+                product_desc_arr.push(temp_data[1])
+                ajax_count++;
+            });
+
+            if(data.order_details[0].mm_product_benefit_id != null)
+            {
+                var mm_benefit_json = JSON.parse(data.order_details[0].mm_product_benefit_text)
+
+                $mm_benefit_str = chunkSubstr(mm_benefit_json[0].czech, 36).split(/\r?\n/);
+                $y_ben = 0;
+                var mm_json_text = "";
+                $($mm_benefit_str).each(function(index,mm_benefit_val){
+                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+mm_benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+
+                $sl_mm_benefit_str = chunkSubstr(mm_benefit_json[0].slovak, 36).split(/\r?\n/);
+                $($sl_mm_benefit_str).each(function(index,sl_mm_benefit_val){
+                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_mm_benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+
+                $hu_mm_benefit_str = chunkSubstr(mm_benefit_json[0].hungarian, 36).split(/\r?\n/);
+                $($hu_mm_benefit_str).each(function(index,hu_mm_benefit_val){
+                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_mm_benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+                svgDoc.getElementById("mm_benefits").innerHTML = mm_json_text;
+
+                
+            }
+            else
+            {
+                svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
+                var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
+
+                $benefit_str = chunkSubstr(product_benefit_json[0].czech, 36).split(/\r?\n/);
+                $y_ben = 0;
+                var json_text = "";
+                $($benefit_str).each(function(index,benefit_val){
+                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+
+                $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
+                $($sl_benefit_str).each(function(index,sl_benefit_val){
+                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+
+                $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
+                $($hu_benefit_str).each(function(index,hu_benefit_val){
+                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val+'</tspan>';
+                    $y_ben += 7.8;
+                })
+                svgDoc.getElementById("mm_benefits").innerHTML = json_text;
+            }
+
+            //Front Svg Price Details
+
+            var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
+            var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+            var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
+            svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
+            
+            var svgRoot = svgDoc.documentElement;
+            var s = new XMLSerializer();
+            var d = svgRoot;
+            var str = s.serializeToString(d);
+            var svg = encodeURI(str)
+            svgarr.push(svg)
+
+            
+            if (ajax_count == data.order_details.length) {
+                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
+                var svg_fin = svgarr.join(',_');
+                var svg_fin_back = svgarr_back.join(',_');
+                var size_category_fin = size_category_arr.join(',_');
+                var wee_symbol_fin = wee_symbol.join(',_');
+                var size_comp_fin = size_comp_arr.join(',_');
+                var product_desc_fin = product_desc_arr.join(',_');
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin);
+            }
+
+        },
+        error: function(data) {
+
+        },
+        complete: function() {
+
+        }
+    });
+
+}
+
+function M13022C(data,svgDoc_back,val)
+{
+    var created_at = new Date(val.created_at);
+
+    var shortYear = created_at.getFullYear(); 
+    // Add this line
+    var twoDigitYear = shortYear.toString().substr(-2);
+
+    var month_ca = ( '0' + (created_at.getMonth()+1) ).slice( -2 ) +"/"+ twoDigitYear;
+
+    var optionID = addOptionIdHyphen(val.ce_style_ref);
+
+    var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2 • '+val.season_code+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.uk_style_ref+' • '+optionID+'</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan>';
+
+    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+
+    var country_of_origin_text = JSON.parse(val.country_of_origin_text);
+
+    var english_coo = country_of_origin_text[0].english;
+    var czech_coo = country_of_origin_text[0].czech;
+    var slovak_coo = country_of_origin_text[0].slovak;
+    var hungarian_coo = country_of_origin_text[0].hungarian;
+
+    var country_of_origin = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+english_coo+'</tspan><tspan x="0" y="5.5" style="font-family:FandFSans-Regular; font-size:4.5px;">'+czech_coo+'</tspan><tspan x="0" y="11" style="font-family:FandFSans-Regular; font-size:4.5px;">'+slovak_coo+'</tspan><tspan x="0" y="16.5" style="font-family:FandFSans-Regular; font-size:4.5px;">'+hungarian_coo+'</tspan>'
+
+    svgDoc_back.getElementById("made_in").innerHTML = country_of_origin;
+
+
+    var product_desc_text = JSON.parse(val.product_desc_text)
+    var product_desc_translation ="";
+    var product_desc_eng ="";
+    $(product_desc_text).each(function (keys, vals) {
+
+        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.czech+'</tspan><tspan x="0" y="6" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.slovak+'</tspan><tspan x="0" y="12" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.hungarian+'</tspan>';
+
+        product_desc_eng = vals.english;
+        
+    })
+    svgDoc_back.getElementById("prod_english").innerHTML = product_desc_eng;
+    svgDoc_back.getElementById("prod_trans").innerHTML = product_desc_translation;
+
+
+    if(val.ce_size_name == "tiny baby")
+    {
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+        svgDoc_back.getElementById("size_list").innerHTML = "";       
+    }
+    else if(val.ce_size_name == "Newborn")
+    {
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+        
+    }
+    else if(val.ce_size_name == "up to 1M")
+    {
+
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].slovak+" • "+data.tesco_up1[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+        
+    }
+    else if(val.ce_size_name == "up to 3M")
+    {
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].slovak+" • "+data.tesco_up3[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+    } 
+    else if(val.ce_size_name == "One size")
+    {
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].english +" • "+ data.tesco_onesize[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_onesize[0].slovak+" • "+data.tesco_onesize[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+    }
+    else
+    {
+        svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+        svgDoc_back.getElementById("size_list_translation").innerHTML = "";
+    }
+
+    //Back Svg Price Details
+    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
+    var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+    var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+    svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
+    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
+
+    $size_category_str = null;
+
+    var product_desc_text = val.product_desc_text;
+
+    var size_comp = null;
+
+
+    var barcode_change = val.ean_barcode;
+
+    jsbarcodetescoticketseanhoriz(barcode_change, 'barcode', svgDoc_back);
+
+    return [
+        size_comp,
+        product_desc_text
+       ];
+}
+
+function M13021C(data,svgDoc_back,val)
+{
+
                 // svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
                 // svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
 
@@ -4899,114 +5139,11 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
                 jsbarcodetescoticketsean(barcode_change, 'barcode', svgDoc_back);
 
-				
 
-                var svgRoot_back =svgDoc_back.documentElement;
-                var s_back = new XMLSerializer();
-                var d_back = svgRoot_back;
-                var str_back = s_back.serializeToString(d_back);
-                var svg_back = encodeURI(str_back)
-                svgarr_back.push(svg_back)
-                size_category_arr.push($size_category_str)
-                wee_symbol.push(val.wee_symbol_file)
-                size_comp_arr.push(size_comp)
-                product_desc_arr.push(product_desc_text)
-                ajax_count++;
-            });
-
-            if(data.order_details[0].mm_product_benefit_id != null)
-            {
-                var mm_benefit_json = JSON.parse(data.order_details[0].mm_product_benefit_text)
-
-                $mm_benefit_str = chunkSubstr(mm_benefit_json[0].czech, 36).split(/\r?\n/);
-                $y_ben = 0;
-                var mm_json_text = "";
-                $($mm_benefit_str).each(function(index,mm_benefit_val){
-                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+mm_benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-
-                $sl_mm_benefit_str = chunkSubstr(mm_benefit_json[0].slovak, 36).split(/\r?\n/);
-                $($sl_mm_benefit_str).each(function(index,sl_mm_benefit_val){
-                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_mm_benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-
-                $hu_mm_benefit_str = chunkSubstr(mm_benefit_json[0].hungarian, 36).split(/\r?\n/);
-                $($hu_mm_benefit_str).each(function(index,hu_mm_benefit_val){
-                    mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_mm_benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-                svgDoc.getElementById("mm_benefits").innerHTML = mm_json_text;
-
-                
-            }
-            else
-            {
-                svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
-                var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
-
-                $benefit_str = chunkSubstr(product_benefit_json[0].czech, 36).split(/\r?\n/);
-                $y_ben = 0;
-                var json_text = "";
-                $($benefit_str).each(function(index,benefit_val){
-                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-
-                $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
-                $($sl_benefit_str).each(function(index,sl_benefit_val){
-                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-
-                $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
-                $($hu_benefit_str).each(function(index,hu_benefit_val){
-                    json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val+'</tspan>';
-                    $y_ben += 7.8;
-                })
-                svgDoc.getElementById("mm_benefits").innerHTML = json_text;
-            }
-
-            //Front Svg Price Details
-
-            var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
-            var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
-            var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
-            var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
-
-            svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-            svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
-            svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
-            
-            var svgRoot = svgDoc.documentElement;
-            var s = new XMLSerializer();
-            var d = svgRoot;
-            var str = s.serializeToString(d);
-            var svg = encodeURI(str)
-            svgarr.push(svg)
-
-            
-            if (ajax_count == data.order_details.length) {
-                setTimeout(function() {     $(obj).prop('disabled', false); }, 5000);
-                var svg_fin = svgarr.join(',_');
-                var svg_fin_back = svgarr_back.join(',_');
-                var size_category_fin = size_category_arr.join(',_');
-                var wee_symbol_fin = wee_symbol.join(',_');
-                var size_comp_fin = size_comp_arr.join(',_');
-                var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin);
-            }
-
-        },
-        error: function(data) {
-
-        },
-        complete: function() {
-
-        }
-    });
-
+                return [
+                    size_comp,
+                    product_desc_text
+                   ];
 }
 
 function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id) {
@@ -10381,6 +10518,60 @@ function jsbarcodetescoean(code, id, svgDoc) {
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
 
+function jsbarcodetescoticketseanhoriz(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 236,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '50px');
+    svg.setAttribute('font-family', 'fandfsansb');
+    svg.setAttribute('letter-spacing', '8px');
+
+    svg.setAttribute('width', '76.93px');
+    svg.setAttribute('height', '58.03px');
+
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // img.src - contains base64 URI from svg
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    svgDoc.getElementById(id).innerHTML = svg_xml;
+}
 
 function jsbarcodetescoticketsean(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
