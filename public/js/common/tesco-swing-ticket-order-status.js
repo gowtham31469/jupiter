@@ -1,18 +1,6 @@
 $( () => { 
     const table_name = 'tesco_swingticket_orders';
 
-    // getSwingTicketDetails = (obj, user_type, callback=null) => {
-    //     var id = $(obj).parent().attr('data-id');
-    //     var table_name = $(obj).parent().attr('data-table');
-        
-    
-    //     $('.edit-swingticket-order-panel').load('/' + user_type + '/tesco/get-swing-ticket-order-details?table_name='+table_name+'&id='+id, ( response, status, xhr ) => {
-    //         $('.edit-swingticket-order-panel').addClass('active');
-    //         $(".selectpicker").selectpicker("refresh");
-    //         $('.edit-swingticket-order-panel').show();
-    //     }); 
-    // }
-
     getSwingTicketDetails = (obj, user_type) => {
 
     var id = $(obj).parent().attr('data-id');
