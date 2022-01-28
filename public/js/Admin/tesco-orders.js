@@ -11221,6 +11221,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
     var svgarr = [];
     var svgarr_back = [];
+    var wee_symbol = [];
     var size_category_arr = [];
     var size_comp_arr = [];
     var product_desc_arr = [];
@@ -11282,13 +11283,13 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
 
-                        size_comp.push(sec_size[1].trim())
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -11319,7 +11320,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;         
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");           
+					//svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");     
+					
+					if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                     
                 }
                 else if(val.ce_size_name == "Newborn")
@@ -11343,12 +11363,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -11379,7 +11399,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					//svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					
+					if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 }
                 else if(val.ce_size_name == "up to 1M")
                 {
@@ -11402,12 +11441,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -11438,7 +11477,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
                     
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					//svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					
+					if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 }
                 else if(val.ce_size_name == "up to 3M")
                 {
@@ -11461,12 +11519,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 						size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -11497,7 +11555,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
 
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					//svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+					
+					if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
                 } 
                 else if(val.ce_size_name == "One size")
                 {
@@ -11552,12 +11629,12 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         size_category_translation += toTitleCase(vals.czech)+"•"
                         size_category_translation += toTitleCase(vals.slovak)+"•"
                         size_category_translation += toTitleCase(vals.hungarian)+": "
-                        size_category_translation += sec_size[1].trim()
-                        size_comp.push(sec_size[1].trim())
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
                         
                     })
                     
-                    $size_category_str = chunkSubstr(size_category_translation, 45).split(/\r?\n/);
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
                     // $y_size = 0;
                     // var size_category_str_text = "";
                     // $($size_category_str).each(function(index,size_category_str_text_val){
@@ -11618,7 +11695,26 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
 
                     svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
-                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+					//svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+					
+					if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.013)");
+                    }
                 }
 
                 //Back Svg Price Details
@@ -11644,6 +11740,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var svg_back = encodeURI(str_back)
                 svgarr_back.push(svg_back)
                 size_category_arr.push($size_category_str)
+                wee_symbol.push(val.wee_symbol_file)
                 size_comp_arr.push(size_comp)
                 product_desc_arr.push(product_desc_text)
                 ajax_count++;
@@ -11727,9 +11824,10 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var svg_fin = svgarr.join(',_');
                 var svg_fin_back = svgarr_back.join(',_');
                 var size_category_fin = size_category_arr.join(',_');
+                var wee_symbol_fin = wee_symbol.join(',_');
                 var size_comp_fin = size_comp_arr.join(',_');
                 var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin);
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin);
             }
 
         },
@@ -11907,6 +12005,7 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '50px');
     svg.setAttribute('font-family', 'fandfsansb');
+    svg.setAttribute('letter-spacing', '8px');
 
     svg.setAttribute('width', '83.93px');
     svg.setAttribute('height', '58.03px');
@@ -11943,7 +12042,7 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
 }
 
 
-function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin) {
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin) {
 	
 	var url = "";
 	
@@ -11961,7 +12060,8 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
             customer_name:customer_name,
             size_category_fin:size_category_fin,
             size_comp_fin:size_comp_fin,
-            product_desc_fin:product_desc_fin
+			product_desc_fin:product_desc_fin,
+			wee_symbol_fin:wee_symbol_fin
 		},
 		tryCount: 0,
 		retryLimit: 2,
