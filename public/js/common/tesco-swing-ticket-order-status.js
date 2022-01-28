@@ -21,7 +21,7 @@ $( () => {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-               console.log(data);
+               
                 loadSwingTicketDetails(data, user_type)
 
             },
@@ -110,7 +110,7 @@ $( () => {
 
         var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">`;
 
-        $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => {
+        $.each(order_data.order_details.quantity_details, (indexInArray, valueOfElement) => {
             quantity_html += `<tr id="swing_size_${indexInArray}">
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.sizes.uk_size + `</td>

@@ -3865,7 +3865,7 @@ class OrderManagementCntrl extends Controller
       if (array_intersect(["FFC/01/M13020C", "FFK/01/M13021C", "FFC/01/M13022C", "FFB/01/M13023C", "GE/01/M13114C", "FFK/01/M13163C", "FFB/01/M13233C", "FFC/01/M13304C"], $artwork)) {
 
         $data['order_details']  = TescoSwingTicketOrders::with([
-          'quantities',
+          'quantity_details',
           'item_master'
         ])
           ->where([

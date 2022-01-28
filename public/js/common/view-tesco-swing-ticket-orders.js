@@ -31,7 +31,7 @@ $( () => {
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);
         $('#swing_template_id').val(order_data.order_details.template_id);
 
-        $emptyQty = order_data.order_details.quantities.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
+        $emptyQty = order_data.order_details.quantity_details.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
 
         if($emptyQty.length > 0){
             $('.create-download-artwork').remove();
@@ -63,7 +63,7 @@ $( () => {
         $('#swing_ce_mark').prop('checked', order_data.order_details.is_ce_mark_required);
         $('#swing_machine_washable').prop('checked', order_data.order_details.is_machine_washable);
 
-        $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => { 
+        $.each(order_data.order_details.quantity_details, (indexInArray, valueOfElement) => { 
             $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
             $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.quantity);
         });

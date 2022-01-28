@@ -103,7 +103,7 @@ class EditTescoOrders
     $data = [];
 
     $order_details  = TescoSwingTicketOrders::with([
-        'quantities',
+        'quantity_details',
         'item_master'
     ])
     ->where([
@@ -111,7 +111,7 @@ class EditTescoOrders
     ])
     ->first();
 
-    $order_quantity_ids = $order_details->quantities->pluck('id');
+    $order_quantity_ids = $order_details->quantity_details->pluck('id');
 
     $moq     =    DB::table('price_taxation')
     ->where([

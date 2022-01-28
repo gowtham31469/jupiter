@@ -103,9 +103,28 @@ class TescoSwingTicketOrders extends Model
     /**
      * Get the size breakup and quantities for the order.
      */
-    public function quantities()
+    public function quantity_details()
     {
         return $this->hasMany('App\TescoSwingTicketOrdersQuantity', 'swingticket_order_id')
             ->with(['sizes'])->orderBy('tesco_swingticket_orders_quanty.id', 'asc');
+    }
+
+     /**
+     * Get the size breakup and quantities for the order.
+     */
+    public function quantities()
+    {
+        return $this->hasMany('App\TescoSwingTicketOrdersQuantity', 'swingticket_order_id')
+            ->join('tesco_primary_size', 'tesco_swingticket_orders_quanty.size_id', 'tesco_primary_size.id')
+            ->select([
+                'tesco_swingticket_orders_quanty.id',
+                'swingticket_order_id',
+                'ean_barcode',
+                'quantity as count',
+                'uk_size as size',
+                'ce_size',
+                'department_title',
+                'tesco_primary_size.id as size_id'
+            ])->orderBy('tesco_swingticket_orders_quanty.id', 'asc');
     }
 }
