@@ -337,14 +337,14 @@ class ProformaInvoice
       ->where('tesco_template.item_id', $request->template_id)
       ->where($table_name . '_quanty.' . $qnty_id, $id);
 
-    if ($table_name != 'tesco_washcare_orders') {
-
-      $query->select('size', $table_name . '_quanty.count as quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'order_flag', 'tesco_template.template_name', 'pi_status', 'pi_rev_no');
-
-    } else {
-
+    if ($table_name == 'tesco_washcare_orders' || $table_name == 'tesco_swingticket_orders' ) {
+      
       $query->join('tesco_primary_size', $table_name . '_quanty.size_id', 'tesco_primary_size.id')
       ->select('uk_size as size', $table_name . '_quanty.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'order_flag', 'tesco_template.template_name', 'pi_status', 'pi_rev_no');
+
+    } else  {
+
+      $query->select('size', $table_name . '_quanty.count as quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'order_flag', 'tesco_template.template_name', 'pi_status', 'pi_rev_no');
 
     }
 
@@ -415,6 +415,14 @@ class ProformaInvoice
 
           $table_array = array('tesco_tcl5_orders');
           $qnty_id_array = array('tesco_tcl5_orders_quanty');
+          $template_array = array_combine($table_array, $qnty_id_array);
+
+        }
+
+        if ($table_name == "tesco_swingticket_orders") {
+
+          $table_array = array('tesco_swingticket_orders');
+          $qnty_id_array = array('tesco_swingticket_orders_quanty');
           $template_array = array_combine($table_array, $qnty_id_array);
 
         }
