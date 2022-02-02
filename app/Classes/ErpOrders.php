@@ -174,7 +174,7 @@ class ErpOrders
 				'customer_id' => $orders->tesco_supplier_id
 			], 200);
 		} catch (\Exception $e) {
-			throw new \Exception($e->getMessage());
+			throw new \Exception($e);
 		}
 	}
 	
