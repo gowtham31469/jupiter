@@ -40,6 +40,12 @@
             <li id="9" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
             {{-- <li id="9" onclick="tescoTranslations()"><a>Translation</a></li> --}}
             <li id="10" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
+            <li id="11" onclick="tescoSeasonCodes()"><a>Season Code</a></li>
+            <li id="12" onclick="tescoProductDescriptions()"><a>Product Description</a></li>
+            <li id="13" onclick="tescoProductBenefits()"><a>Product Benefits</a></li>
+            <li id="14" onclick="tescoMMProductBenefits()"><a>MM Product Benefits</a></li>
+            <li id="15" onclick="weeSymbols()"><a>Wee Symbols</a></li>
+            <li id="16" onclick="woolMarkLogos()"><a>Woolmark Logo</a></li>
           </ul>
         </div>
         <div class="content">
@@ -54,6 +60,11 @@
     @include('Admin.Settings.includes.tesco-warnstatement')
     @include('Admin.Settings.includes.tesco-translation')
     @include('Admin.Settings.includes.tesco-label-sizechart')
+    @include('Admin.Settings.includes.tesco-product-description')
+    @include('Admin.Settings.includes.tesco_product_benefits')
+    @include('Admin.Settings.includes.tesco_mm_product_benefits')
+    @include('Admin.Settings.includes.tesco_wee_symbols')
+    @include('Admin.Settings.includes.tesco_woolmark_logos')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -1477,7 +1488,76 @@
             </div>
         </div>
     </div>
+
+
+     {{-- Add Tesco Season Code Modal --}}
+   <div class="modal fade" id="addTescoSeasonCodeModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoBrandsLabel">Add Season Code</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_season_code_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="tesco_season_code_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('season_code', 'Season Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('season_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Season Code','required', 'maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                     
+                         {!! Form::label('season_code_description', 'Description', ['class' => 'form_label']) !!}
+                         
+                         {{ Form::textarea('season_code_description', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
     
+
+      {{-- Edit Tesco Season Code Modal --}}
+   <div class="modal fade" id="editTescoSeasonCodeModal" tabindex="-1" role="dialog" aria-labelledby="addTescoBrandsLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addTescoBrandsLabel">Add Season Code</h4>
+                </div>
+                {!! Form::open(['id' => 'edit_tesco_season_code_form','data-toggle' => 'validator','role' => 'form']) !!}
+                {!! Form::hidden('edit_tesco_season_code_id',$value = null, array('id'=>'edit_tesco_season_code_id','class' => 'form-control input-sm')) !!}
+                    <div class="modal-body">
+                      <div id="edit_tesco_season_code_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('season_code', 'Season Code', ['class' => 'form_label']) !!}
+                          {!! Form::text('edit_season_code',$value = '', array('class' => 'form-control input-sm ','id'=>'edit_season_code','placeholder' => 'Season Code','required', 'maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback">
+                     
+                         {!! Form::label('season_code_description', 'Description', ['class' => 'form_label']) !!}
+                         
+                         {{ Form::textarea('edit_season_code_description', null,  ['class' => 'form-control','id'=>'edit_season_code_description', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
     {{-- Edit Tesco Brands Modal --}}
     <div class="modal fade" id="editTescoBrandsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
@@ -1989,6 +2069,11 @@
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/orchestra-settings.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-settings.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco_product_benefits.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco_mm_product_benefits.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-settings-product-description.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco_wee_symbols.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco_woolmark_logos.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
@@ -2133,6 +2218,8 @@
         $('#add_orchestra_color_form').trigger("reset");
         $('#add_orchestra_size_chart_form').trigger("reset");
         $('#add_tesco_brands_form').trigger("reset");
+        $('#add_tesco_season_code_form').trigger("reset");
+        $('#edit_tesco_season_code_form').trigger("reset");
         $('#add_tesco_departments_form').trigger("reset");
         $('#add_tesco_suppliers_form').trigger("reset");
         $('#add_tesco_size_charts_form').trigger("reset");
@@ -2160,11 +2247,21 @@
         $('.hidden-error').html('');
         $('#add_tesco_symbols_form').trigger("reset");
         $('#edit_tesco_symbols_form').trigger("reset");
+        $('#add_wee_symbol_form').trigger("reset");
+        $('#edit_wee_symbol_form').trigger("reset");
+        $('#add_woolmark_logo_form').trigger("reset");
+        $('#edit_woolmark_logo_form').trigger("reset");
         $('#add-tesco-countries-form').trigger("reset");
         $('#edit-tesco-countries-form').trigger("reset");
         $("#country_error").addClass('hidden')
         $("#country_update_error").addClass('hidden')
         $('#add-tesco-components-form').trigger("reset");
+        $('#add-product-description-form').trigger("reset");
+        $('#edit-product-description-form').trigger("reset");
+        $('#add-mm-product-benefits-form').trigger("reset");
+        $('#edit-mm-product-benefits-form').trigger("reset");
+        $('#add-product-benefits-form').trigger("reset");
+        $('#edit-product-benefits-form').trigger("reset");
         $('#edit_tesco_components_form').trigger("reset");
         $('#add-tesco-fabric-form').trigger("reset");
         $('#edit-tesco-fabric-form').trigger("reset");
@@ -2776,6 +2873,16 @@
           }
         })
 
+       /** Add tesco components form validation **/
+       $('#add-product-description-form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented()){
+          }else{
+             e.preventDefault();
+             /* call addTescoComposition function from tesco-settings.js*/
+             addProductDescription();
+          }
+        })
+
         /** get edit tesco components details **/
        $(document).on('click','.edit-tesco-components',function(e){
            var id = $(this).closest('tr').attr('id');
@@ -3051,12 +3158,36 @@
           }
         })
 
+       /** Add Tesco Sesaon Code form validation **/
+       $('#add_tesco_season_code_form').validator().on('submit', function (e) {
+          if (e.isDefaultPrevented())
+          {
+
+          }
+          else
+          {
+             e.preventDefault();
+             /* call addSeasonCode function from tesco-settings.js*/
+             addSeasonCode();
+          }
+        })
+
         /** get edit orchestra garment details **/
        $(document).on('click','.edit-tesco-brands',function(e){
            var id = $(this).closest('tr').attr('id');
            e.preventDefault();
            /* call getTescoBrandById function from tesco-settings.js*/
            getTescoBrandById(id);
+       });
+
+        /** get edit orchestra garment details **/
+       $(document).on('click','.edit-tesco-season-codes',function(e){
+
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoSeasonCodeById function from tesco-settings.js*/
+
+           getTescoSeasonCodeById(id);
        });
 
        /** submit edit orchestra garment form **/
@@ -3070,6 +3201,20 @@
             e.preventDefault();
             /* call editTescoBrands function from tesco-settings.js*/
             editTescoBrands();
+         }
+       })
+
+       /** submit edit orchestra garment form **/
+       $('#edit_tesco_season_code_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoSeasonCode function from tesco-settings.js*/
+            editTescoSeasonCode();
          }
        })
 
@@ -3087,6 +3232,23 @@
         
         /* call makeBrandDisabled function from tesco-settings.js*/
         makeBrandDisabled(id,csrf_token)
+    });
+
+
+    /** To Enable  SeasonCode  on click **/
+    $(document).on('click', '#make_season_code_enabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        
+        /* call SeasonCode function from tesco-settings.js*/
+        makeSeasonCodeEnabled(id,csrf_token)
+    });
+
+    /** To disable SeasonCode  on click **/
+    $(document).on('click', '#make_season_code_disabled', function(e) {
+        var id = $(this).closest('tr').attr('id');
+        
+        /* call SeasonCode function from tesco-settings.js*/
+        makeSeasonCodeDisabled(id,csrf_token)
     });
 
     /** Add Tesco Department form validation **/

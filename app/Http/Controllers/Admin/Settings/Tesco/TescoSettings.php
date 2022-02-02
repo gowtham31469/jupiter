@@ -26,6 +26,8 @@ use App\TescoKidsWarningStatements;
 use App\TescoTranslation;
 use App\TescoPrimarySize;
 use App\TescoSecondarySizeChart;
+use App\TescoSeasonCode;
+use App\TescoProductDescription;
 
 class TescoSettings extends Controller
 {
@@ -48,6 +50,19 @@ class TescoSettings extends Controller
     {
       try {
             $tesco_brand = TescoBrand::select('id','brand','is_enabled')->orderBy('is_enabled','desc')->get();
+
+            return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
+          } catch (\Exception $e)
+          {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+          }
+    }
+
+
+    public function tescoSeasonCodes()
+    {
+      try {
+            $tesco_brand = DB::table('tesco_season_codes')->select('id','name','is_enabled')->orderBy('is_enabled','desc')->get();
 
             return response()->json(['error'=>'false','message' =>'success', 'tesco_brands' => $tesco_brand]);
           } catch (\Exception $e)
@@ -82,6 +97,104 @@ class TescoSettings extends Controller
         }
         return $result;
     }
+
+
+    public function addTescoSeasonCodes(Request $request)
+    {
+      // dd($request->all());
+      try {
+             if(TescoSeasonCode::where('name','ilike',$request['name'])->exists())
+             {
+               $result = response()->json(['error'=> true,'message' =>'Season Code Already Exists'],208);
+             }
+             else
+             {
+                $inserted = TescoSeasonCode::create([
+                        'name' => $request['name'],
+                        'description' => $request['description']
+                      ]);
+                $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+             }
+        } catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+    }
+
+
+    public function makeSeasonCodeEnabled(Request $request)
+    {
+      try {
+              TescoSeasonCode::find($request['id'])
+               ->update([
+                 'is_enabled'  => 1
+              ]);
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        
+    }
+
+    public function makeSeasonCodeDisabled(Request $request)
+    {
+      try {
+              TescoSeasonCode::find($request['id'])
+               ->update([
+                 'is_enabled'  => 0
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        
+    }
+
+    public function updateTescoSeasonCode(Request $request)
+    {
+      try {
+            if(TescoSeasonCode::where([['name','ilike',$request['name']], ['id','<>', $request['id']]])->exists())
+            {
+            $result = response()->json(['error'=> true,'message' =>'Season Code Already Exists'],208);
+            }
+            else
+            {
+            TescoSeasonCode::find($request['id'])
+               ->update([
+                 'name'  => $request['name'],
+                 'description'  => $request['description']
+              ]);
+
+            $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            }
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        
+    }
+
+    public function getTescoSeasonCodeDetails(Request $request)
+    {
+    try {
+          $tesco_brand = TescoSeasonCode::select('id','name','is_enabled','description')->where('id', $request['id'])->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_season_code' => $tesco_brand]);
+        } catch (\Exception $e)
+        {
+          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+
 
     /**
      * Get Tesco Brands details by ID for editing.

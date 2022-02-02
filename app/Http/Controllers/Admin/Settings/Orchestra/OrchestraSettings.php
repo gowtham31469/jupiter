@@ -17,6 +17,7 @@ use App\OrchestraParts;
 use App\OrchestraSizeCharts;
 use App\OrchestraCareSymbols;
 use App\OrchestraColorCode;
+use App\TescoItemMasterMdl;
 
 /**
  * Orchestra Age Group controller
@@ -59,8 +60,10 @@ class OrchestraSettings extends Controller
             $label_categories = DB::table('tesco_secondary_size_category')->pluck('category_name','id');
             $size_departments = DB::table('tesco_size_department')->pluck('department_name','id');
 
+            $templates = TescoItemMasterMdl::where('parent_id',42)->pluck('item_name','id');
+
             // dd($label_categories,$size_departments);
-            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company,'categories' => $label_categories,'departments'=>$size_departments]);
+            return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company,'categories' => $label_categories,'departments'=>$size_departments,'templates' => $templates]);
         }
         else
         {
