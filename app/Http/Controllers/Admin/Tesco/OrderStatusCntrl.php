@@ -2131,6 +2131,7 @@ class OrderStatusCntrl extends Controller
         $size_comp_fin=explode(',_',$request->size_comp_fin);
         $product_desc_fin=explode(',_',$request->product_desc_fin);
         $wee_symbol_fin=explode(',_',$request->wee_symbol_fin);
+        $ce_symbol_fin=explode(',_',$request->ce_symbol_fin);
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2203,7 +2204,7 @@ class OrderStatusCntrl extends Controller
             }
             
 
-            if($request->template_name == "FFC/01/M13021C")
+            if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
             {
                 if($size_category_fin[$j] != "null")
                 {
@@ -2283,6 +2284,17 @@ class OrderStatusCntrl extends Controller
 
 
             PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            if($request->template_name == "FFB/01/M13023C")
+            {
+                if($ce_symbol_fin[0] == "true")
+                {
+                    PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+            }
+           
+            
+
             $i++;
             $j++;
             $first_time++;
@@ -2930,6 +2942,19 @@ class OrderStatusCntrl extends Controller
                                                 ->select('tesco_secondary_size_chart.*','tesco_secondary_size_translation.english','tesco_secondary_size_translation.polish','tesco_secondary_size_translation.czech','tesco_secondary_size_translation.slovak','tesco_secondary_size_translation.hungarian')
                                                 ->get();
 
+                if($order_omp[0]->product_benefit_id != null)
+                {
+                    $tesco_product_benefits  = 	DB::table('tesco_product_benefits')
+                    ->where('id',$order_omp[0]->product_benefit_id)
+                    ->select('*')
+                    ->get();
+                    $value->is_lycra=$tesco_product_benefits[0]->is_lycra;
+                }
+                else
+                {
+                    $value->is_lycra=null;
+                }
+
                 $value->zone=$order_omp[0]->zone;
                 $value->po_number=$order_omp[0]->po_number;
                 $value->customer_name=$customer_name[0]->short_name;
@@ -2952,6 +2977,8 @@ class OrderStatusCntrl extends Controller
                 $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
                 $value->product_benefit_id=$order_omp[0]->product_benefit_id;
                 $value->mm_product_benefit_id=$order_omp[0]->mm_product_benefit_id;
+                $value->is_ce_mark_required=$order_omp[0]->is_ce_mark_required;
+                $value->is_machine_washable=$order_omp[0]->is_machine_washable;
                 $value->created_at=$order_omp[0]->created_at;
                 $value->tesco_month_under=$tesco_month_under;
                 $value->tesco_month_over=$tesco_month_over;
