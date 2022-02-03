@@ -177,7 +177,7 @@
 
 </div>
 
-@if(in_array($template, [44, 46, 53, 45, 51, 52]))
+@if(in_array($template, [44, 46, 53, 45, 51, 52, 48, 49, 50]))
 <hr>
 <div class="row">
 
