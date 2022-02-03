@@ -10288,7 +10288,7 @@ function testWhite(x) {
 
 function create_download_artwork(print_type,obj)
 {
-	if(($('#hidden_name').val() == "FFC/01/M13020C") || ($('#hidden_name').val() == "FFK/01/M13021C") || ($('#hidden_name').val() == "FFC/01/M13022C") || ($('#hidden_name').val() == "FFB/01/M13023C") || ($('#hidden_name').val() == "GE/01/M13114C") || ($('#hidden_name').val() == "FFK/01/M13163C") || ($('#hidden_name').val() == "FFB/01/M13233C") || ($('#hidden_name').val() == "FFC/01/M13304C"))
+	if(($('#hidden_name').val() == "FFC/01/M13020C") || ($('#hidden_name').val() == "FFK/01/M13021C") || ($('#hidden_name').val() == "FFC/01/M13022C") || ($('#hidden_name').val() == "FFB/01/M13023C") || ($('#hidden_name').val() == "GE/01/M13114C - Opt 1") || ($('#hidden_name').val() == "GE/01/M13114C - Opt 2") || ($('#hidden_name').val() == "GE/01/M13114C - Opt 3") || ($('#hidden_name').val() == "GE/01/M13114C - Opt 4") || ($('#hidden_name').val() == "FFK/01/M13163C") || ($('#hidden_name').val() == "FFB/01/M13233C") || ($('#hidden_name').val() == "FFC/01/M13304C"))
 	{
 		var data = $('#swing_template_name').val().replace(/ /g, "")+"_"+$('#swing_template_id').val()+"_modal";
 		var temp_name = $('#swing_template_name').val().replace(/ /g, "");
