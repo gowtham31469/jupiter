@@ -103,7 +103,7 @@ class EditTescoOrders
     $data = [];
 
     $order_details  = TescoSwingTicketOrders::with([
-        'quantities',
+        'quantity_details',
         'item_master'
     ])
     ->where([
@@ -111,7 +111,7 @@ class EditTescoOrders
     ])
     ->first();
 
-    $order_quantity_ids = $order_details->quantities->pluck('id');
+    $order_quantity_ids = $order_details->quantity_details->pluck('id');
 
     $moq     =    DB::table('price_taxation')
     ->where([
@@ -124,7 +124,7 @@ class EditTescoOrders
     // fetch erp_order_details table status
     $erp_order_details[] = DB::table('erp_order_details')
     ->join('erp_status', 'erp_status.id', 'erp_order_details.status')
-    ->where('order_qnty_table_name', 'tesco_washcare_orders_quanty')
+    ->where('order_qnty_table_name', 'tesco_swingticket_orders_quanty')
     ->whereIn('order_qnty_table_id', $order_quantity_ids)
     ->select('erp_order_details.id', 'erp_status.status_name')
     ->first();

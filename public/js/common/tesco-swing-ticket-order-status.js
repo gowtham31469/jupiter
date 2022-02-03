@@ -1,18 +1,6 @@
 $( () => { 
     const table_name = 'tesco_swingticket_orders';
 
-    // getSwingTicketDetails = (obj, user_type, callback=null) => {
-    //     var id = $(obj).parent().attr('data-id');
-    //     var table_name = $(obj).parent().attr('data-table');
-        
-    
-    //     $('.edit-swingticket-order-panel').load('/' + user_type + '/tesco/get-swing-ticket-order-details?table_name='+table_name+'&id='+id, ( response, status, xhr ) => {
-    //         $('.edit-swingticket-order-panel').addClass('active');
-    //         $(".selectpicker").selectpicker("refresh");
-    //         $('.edit-swingticket-order-panel').show();
-    //     }); 
-    // }
-
     getSwingTicketDetails = (obj, user_type) => {
 
     var id = $(obj).parent().attr('data-id');
@@ -33,7 +21,7 @@ $( () => {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-               console.log(data);
+               
                 loadSwingTicketDetails(data, user_type)
 
             },
@@ -122,7 +110,7 @@ $( () => {
 
         var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">`;
 
-        $.each(order_data.order_details.quantities, (indexInArray, valueOfElement) => {
+        $.each(order_data.order_details.quantity_details, (indexInArray, valueOfElement) => {
             quantity_html += `<tr id="swing_size_${indexInArray}">
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
                                             <td >` + valueOfElement.sizes.uk_size + `</td>
@@ -213,7 +201,7 @@ $( () => {
     templateDependentData = (template, order_data) => {
         var contentHtml = '';
 
-        if([44, 46].find(data => data === template)){
+        if([44, 46, 48].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
             <label for="swing_wee_symbol" class="component-label">WEE Symbol </label>
                <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol">
@@ -227,7 +215,7 @@ $( () => {
            </div>`
         }
 
-        if([46].find(data => data === template)){
+        if([46, 50].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
                 <label for="swing_ce_mark" class="form_label" style="visibility:hidden">Dont Show</label>
                 <div class="checkbox">
@@ -262,7 +250,7 @@ $( () => {
            </div>`;
         }
 
-        if([45, 51, 52].find(data => data === template)){
+        if([45, 51, 52, 49].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
                 <label for="swing_style_number" class="form_label">Style Number</label>
                 <input type="text" class="form-control input-sm" placeholder="Style Number" id="swing_style_number" name="swing_style_number" maxlength="8" onkeypress="return isNumber(event)" required>

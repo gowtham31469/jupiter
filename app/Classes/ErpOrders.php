@@ -167,18 +167,15 @@ class ErpOrders
 				);
 			}
 
-			$result = response()->json([
+			return response()->json([
 				'error' => false, 'message' => 'success',
 				'erp_id' => $erp_order_id,
 				'buyer_id' => (int)$request['buyer_id'],
 				'customer_id' => $orders->tesco_supplier_id
 			], 200);
 		} catch (\Exception $e) {
-
-			$result = response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+			throw new \Exception($e);
 		}
-
-		return $result;
 	}
 	
 	/**
