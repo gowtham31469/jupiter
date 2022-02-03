@@ -177,13 +177,14 @@
 
 </div>
 
-@if(in_array($template, [44, 46, 53, 45, 51, 52]))
+@if(in_array($template, [44, 46, 53, 45, 51, 52, 48, 49, 50]))
 <hr>
 <div class="row">
 
     {{-- FFK/01/M13021C  44 --}}
     {{-- FFB/01/M13023C 46 --}}
-    @if(in_array($template, [44, 46]))
+    {{-- GE/01/M13114C - Opt 2 48 --}}
+    @if(in_array($template, [44, 46, 48]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
@@ -201,7 +202,8 @@
     @endif
 
     {{-- FFB/01/M13023C 46 --}}
-    @if(in_array($template, [46]))
+    {{-- GE/01/M13114C - Opt 4 50 --}}
+    @if(in_array($template, [46, 50]))
     <div class="col-md-2">
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
             <div class="checkbox">
@@ -245,7 +247,8 @@
     {{-- FFC/01/M13022C 45 --}}
     {{-- FFK/01/M13163C 51 --}}
     {{-- FFB/01/M13233C 52 --}}
-    @if(in_array($template, [45, 51, 52]))
+    {{-- GE/01/M13114C - Opt 3 49 --}}
+    @if(in_array($template, [45, 51, 52, 49]))
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_style_number', 'Style Number', ['class' => 'form_label']) !!}
