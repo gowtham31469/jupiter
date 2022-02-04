@@ -110,17 +110,8 @@ submitSwingTicketOrder = (user_type) => {
                               </button>\
 							  </div>';
 
-					$('#order-exists-alert').html(html_content);
-
-					/** [ Show only alertbox if data already exists ] */
-					$('.po-modal-content').hide();
-					$('.close-btn').attr('data-dismiss', 'modal')
-					$('#poUploadModal').modal('show');
-					/** [ Backdrop for bootstrap modal ] */
-					$('#poUploadModal').modal({
-						backdrop: 'static',
-						keyboard: false
-					});
+                    $('#order-exists-msg').html(html_content);
+                    $('#warningModal').modal('show');
 					$('.swing-ticket-order-submit-btn').prop('disabled', false);
 
 				},
