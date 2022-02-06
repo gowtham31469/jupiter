@@ -2132,6 +2132,7 @@ class OrderStatusCntrl extends Controller
         $product_desc_fin=explode(',_',$request->product_desc_fin);
         $wee_symbol_fin=explode(',_',$request->wee_symbol_fin);
         $ce_symbol_fin=explode(',_',$request->ce_symbol_fin);
+        $woolmark_logo_file = $request->woolmark_logo_file;
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2284,6 +2285,8 @@ class OrderStatusCntrl extends Controller
 
 
             PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
             if($request->template_name == "FFB/01/M13023C")
             {
@@ -2933,6 +2936,11 @@ class OrderStatusCntrl extends Controller
                                     ->select('*')
                                     ->get();
 
+                $tesco_translation = DB::table('tesco_translation')
+                                    ->where('english','machine washable')
+                                    ->select('*')
+                                    ->get();
+
 
                 $tesco_secondary_size_chart  = 	DB::table('tesco_secondary_size_chart')
                                                 ->leftJoin('tesco_secondary_size_category','tesco_secondary_size_chart.tesco_secondary_size_category_id','=','tesco_secondary_size_category.id')
@@ -2976,6 +2984,7 @@ class OrderStatusCntrl extends Controller
                 $value->country_of_origin_text=$order_omp[0]->country_of_origin_text;
                 $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
                 $value->product_benefit_id=$order_omp[0]->product_benefit_id;
+                $value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
                 $value->mm_product_benefit_id=$order_omp[0]->mm_product_benefit_id;
                 $value->is_ce_mark_required=$order_omp[0]->is_ce_mark_required;
                 $value->is_machine_washable=$order_omp[0]->is_machine_washable;
@@ -2985,6 +2994,7 @@ class OrderStatusCntrl extends Controller
                 $value->tesco_year_und=$tesco_year_und;
                 $value->tesco_year_under=$tesco_year_under;
                 $value->tesco_year_over=$tesco_year_over;
+                $value->tesco_translation=$tesco_translation;
             }
             else
             {
