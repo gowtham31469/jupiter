@@ -13391,7 +13391,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var ce_symbol_fin = ce_symbol.join(',_');
                 var size_comp_fin = size_comp_arr.join(',_');
                 var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin);
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file);
             }
 
         },
