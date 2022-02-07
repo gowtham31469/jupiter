@@ -352,6 +352,4 @@ class TescoCareLabelParser
         $sup_info = shell_exec('java -jar '.$tabula.$sup_info.$file);
         return $sup_info;
       }
-  
-
 }

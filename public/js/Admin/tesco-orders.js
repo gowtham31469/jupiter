@@ -260,6 +260,13 @@ function tescoOrders(callback) {
                                                                                     <div class="help-block with-errors"></div>
                                                                                 </div>
                                                                             </div>
+																			<div class="orms-ce-po-upload hidden">
+                                                                                <div class="form-group files" id="orms_single_file ">
+                                                                                    <label>Upload CE ORMS PO</label>
+                                                                                    <input type="file" name="orms_purchase_order" id="orms_po_upload" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);"/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                            </div>
 																		</div>
 
 																			<div class="form-group has-feedback hidden" id="tesco_care_size_chart_div">
@@ -723,13 +730,14 @@ function tescoOrders(callback) {
 							$('#ce_retek').prop('required', false);
 						}
 
-						// toggle size chart select box for template_type = tesco_care_labels
+						// toggle size chart select box for template_type = tesco_care_labels or template_type = tesco_swing_tickets
 						if($.inArray(template_type, ['tesco_care_labels', 'tesco_swing_tickets']) != -1){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
 							// Label Parser
-							if(globalOrderType === 1) { // Show only for PO upload
+							if(globalOrderType === 1 && template_type === 'tesco_care_labels') { 
+								// Show only for tesco_care_labels PO upload
 								$("#tesco_care_parser_type_div").removeClass("hidden");
 								$('input[type="radio"].pdf_parser_type').prop('required', true);
 								if($('input[type="radio"].pdf_parser_type').is(':checked')){
@@ -740,7 +748,7 @@ function tescoOrders(callback) {
 										$(".ce-po-upload").addClass("hidden");
 										$('#ce_orms').prop('required', false);
 										$('#ce_retek').prop('required', false);
-									} else{
+									} else { 
 										$(".po-upload").addClass("hidden");
 										$('#po_upload').prop('required', false);
 										$(".ce-po-upload").removeClass("hidden");
@@ -748,6 +756,17 @@ function tescoOrders(callback) {
 										$('#ce_retek').prop('required', true);
 									} 
 								}
+							} else if(globalOrderType === 1 && template_type === 'tesco_swing_tickets') {
+								// For swing tickets upload CE ORMS PO only
+								$(".orms-ce-po-upload").removeClass("hidden");
+								$('#orms_po_upload').prop('required', true);
+								$(".ce-po-upload").addClass("hidden");
+								$(".po-upload").addClass("hidden");
+								$('#ce_orms').prop('required', false);
+								$('#ce_retek').prop('required', false);
+								$('#po_upload').prop('required', false);
+								localStorage.setItem("zone", 'CE');
+								localStorage.setItem("template type", 'tesco_swing_tickets');
 							}
 
 						} else {
@@ -819,6 +838,12 @@ function tescoOrders(callback) {
 										size_category_text.push($(this).text());
 									});
 									uploadPurchaseOrderForLabels(formData, poZone, role="admin", size_id, size_category, size_category_text,template_id);
+								} else if(template_type === 'tesco_swing_tickets') {
+									var size_id = $('#tesco_care_size_chart').val();
+									formData.append('zone', 'CE');
+									var orms_po_upload = $('#orms_po_upload')[0].files[0];
+									formData.append('orms_po_upload', orms_po_upload);
+									uploadPurchaseOrderForSwingTickets(formData, 'CE', role="admin", size_id, template_id);
 								} else {
 									formData.append('zone', localStorage.getItem("zone"));
 									uploadPurchaseOrder(formData, localStorage.getItem("zone"));
