@@ -2131,6 +2131,8 @@ class OrderStatusCntrl extends Controller
         $size_comp_fin=explode(',_',$request->size_comp_fin);
         $product_desc_fin=explode(',_',$request->product_desc_fin);
         $wee_symbol_fin=explode(',_',$request->wee_symbol_fin);
+        $ce_symbol_fin=explode(',_',$request->ce_symbol_fin);
+        $woolmark_logo_file = $request->woolmark_logo_file;
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2202,80 +2204,100 @@ class OrderStatusCntrl extends Controller
                 $wri_y=101.5;
             }
             
-            if($size_category_fin[$j] != "null")
+
+            if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
             {
-                foreach($siz_cat as $val_cat)
+                if($size_category_fin[$j] != "null")
                 {
-                    if (str_contains($val_cat, 'height')) {
-                        $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
-                    }
-                    
-                    if (str_contains($val_cat, 'weight')) {
-                        $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
-                    }
-
-                    if (str_contains($val_cat, 'chest')) {
-                        $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
-                    }
-
-                    if (str_contains($val_cat, 'waist')) {
-                        $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
-                    }
-
-
-                    foreach($size_comp as $string)
+                    foreach($siz_cat as $val_cat)
                     {
-                        if(strpos($val_cat, $string) !== false) 
-                        {
-                            $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                        if (str_contains($val_cat, 'height')) {
+                            $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
                         }
-                    }
-
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
-
-                  //  print_r($html);
+                        
+                        if (str_contains($val_cat, 'weight')) {
+                            $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
+                        }
     
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                    $wri_y+=2;
+                        if (str_contains($val_cat, 'chest')) {
+                            $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
+                        }
+    
+                        if (str_contains($val_cat, 'waist')) {
+                            $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
+                        }
+    
+    
+                        foreach($size_comp as $string)
+                        {
+                            if(strpos($val_cat, $string) !== false) 
+                            {
+                                $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                            }
+                        }
+    
+                        $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+    
+                      //  print_r($html);
+        
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                        $wri_y+=2;
+                    }
+                }
+
+
+                $par_pro = json_decode($product_desc_fin[0]);
+                
+                if($size_category_fin[$j] != "null")
+                {
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                    //  print_r($html);
+
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                    //  print_r($html);
+
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                }
+                else
+                {
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+
+                    //  print_r($html);
+
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+
+                    //  print_r($html);
+
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
             }
 
-            $par_pro = json_decode($product_desc_fin[0]);
-                
-            if($size_category_fin[$j] != "null")
-            {
-                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                //  print_r($html);
-
-                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-
-                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
-
-                //  print_r($html);
-
-                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-            }
-            else
-            {
-                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                //  print_r($html);
-
-                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                
-                $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
-
-                //  print_r($html);
-
-                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-            }
+            
 
             $svgString=urldecode($value);
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
 
 
             PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            if($request->template_name == "FFB/01/M13023C")
+            {
+                if($ce_symbol_fin[0] == "true")
+                {
+                    PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+            }
+           
+            
+
             $i++;
             $j++;
             $first_time++;
@@ -2914,6 +2936,11 @@ class OrderStatusCntrl extends Controller
                                     ->select('*')
                                     ->get();
 
+                $tesco_translation = DB::table('tesco_translation')
+                                    ->where('english','machine washable')
+                                    ->select('*')
+                                    ->get();
+
 
                 $tesco_secondary_size_chart  = 	DB::table('tesco_secondary_size_chart')
                                                 ->leftJoin('tesco_secondary_size_category','tesco_secondary_size_chart.tesco_secondary_size_category_id','=','tesco_secondary_size_category.id')
@@ -2922,6 +2949,19 @@ class OrderStatusCntrl extends Controller
                                                 ->orderBy('tesco_secondary_size_chart.id', 'asc')
                                                 ->select('tesco_secondary_size_chart.*','tesco_secondary_size_translation.english','tesco_secondary_size_translation.polish','tesco_secondary_size_translation.czech','tesco_secondary_size_translation.slovak','tesco_secondary_size_translation.hungarian')
                                                 ->get();
+
+                if($order_omp[0]->product_benefit_id != null)
+                {
+                    $tesco_product_benefits  = 	DB::table('tesco_product_benefits')
+                    ->where('id',$order_omp[0]->product_benefit_id)
+                    ->select('*')
+                    ->get();
+                    $value->is_lycra=$tesco_product_benefits[0]->is_lycra;
+                }
+                else
+                {
+                    $value->is_lycra=null;
+                }
 
                 $value->zone=$order_omp[0]->zone;
                 $value->po_number=$order_omp[0]->po_number;
@@ -2941,15 +2981,20 @@ class OrderStatusCntrl extends Controller
                 $value->product_desc_text=$order_omp[0]->product_desc_text;
                 $value->item_name=$tesco_item_master[0]->item_name;
                 $value->product_benefit_text=$order_omp[0]->product_benefit_text;
+                $value->country_of_origin_text=$order_omp[0]->country_of_origin_text;
                 $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
                 $value->product_benefit_id=$order_omp[0]->product_benefit_id;
+                $value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
                 $value->mm_product_benefit_id=$order_omp[0]->mm_product_benefit_id;
+                $value->is_ce_mark_required=$order_omp[0]->is_ce_mark_required;
+                $value->is_machine_washable=$order_omp[0]->is_machine_washable;
                 $value->created_at=$order_omp[0]->created_at;
                 $value->tesco_month_under=$tesco_month_under;
                 $value->tesco_month_over=$tesco_month_over;
                 $value->tesco_year_und=$tesco_year_und;
                 $value->tesco_year_under=$tesco_year_under;
                 $value->tesco_year_over=$tesco_year_over;
+                $value->tesco_translation=$tesco_translation;
             }
             else
             {

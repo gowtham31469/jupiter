@@ -201,7 +201,7 @@ $( () => {
     templateDependentData = (template, order_data) => {
         var contentHtml = '';
 
-        if([44, 46].find(data => data === template)){
+        if([44, 46, 48].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
             <label for="swing_wee_symbol" class="component-label">WEE Symbol </label>
                <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol">
@@ -215,7 +215,7 @@ $( () => {
            </div>`
         }
 
-        if([46].find(data => data === template)){
+        if([46, 50].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
                 <label for="swing_ce_mark" class="form_label" style="visibility:hidden">Dont Show</label>
                 <div class="checkbox">
@@ -250,7 +250,7 @@ $( () => {
            </div>`;
         }
 
-        if([45, 51, 52].find(data => data === template)){
+        if([45, 51, 52, 49].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
                 <label for="swing_style_number" class="form_label">Style Number</label>
                 <input type="text" class="form-control input-sm" placeholder="Style Number" id="swing_style_number" name="swing_style_number" maxlength="8" onkeypress="return isNumber(event)" required>
