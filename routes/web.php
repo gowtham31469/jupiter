@@ -1147,6 +1147,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::get('get-care-label-order-details', 'Admin\Tesco\CareLabelOrdersController@getCareLabelOrderDetail');
 	Route::put('update-care-label-order',  'Admin\Tesco\CareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
+	Route::post('po-upload-swing-tickets', 'Admin\Tesco\SwingTicketOrdersController@createSwingTicketOrders');
+	Route::get('swing-size-chart', 'Admin\Tesco\SwingTicketOrdersController@getSwingSizeChart');
 
 	// Tesco TCL5 and TSL2 orders admin routes
 	Route::post('store-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@submitSingleStickerOrder');

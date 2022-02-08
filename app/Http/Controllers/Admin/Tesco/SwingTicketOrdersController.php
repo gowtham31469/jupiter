@@ -15,6 +15,7 @@ use App\Classes\StoreTescoSwingTicketOrder;
 use App\Http\Requests\TescoSwingTicketOrderRequest;
 use App\Classes\EditTescoOrders;
 use App\Classes\UpdateTescoSwingTicketOrder;
+use App\Classes\TescoSwingTicketParser;
 
 class SwingTicketOrdersController extends Controller
 {
@@ -28,8 +29,9 @@ class SwingTicketOrdersController extends Controller
     private $season_codes;
     private $coo;
     private $tesco_suppliers;
+    private $parse_swing_tickets;
 
-    public function __construct(Modules $module, TescoSwingTicketMetadata $swingTicketMetadata, TescoCareMetadata $caremeta, StoreTescoSwingTicketOrder $swingTicketOrder)
+    public function __construct(Modules $module, TescoSwingTicketMetadata $swingTicketMetadata, TescoCareMetadata $caremeta, StoreTescoSwingTicketOrder $swingTicketOrder, TescoSwingTicketParser $parse_swing_tickets)
     {
         $this->module = $module;
 
@@ -50,6 +52,8 @@ class SwingTicketOrdersController extends Controller
         $this->coo = $this->caremeta->getCountryOrigin();
 
         $this->tesco_suppliers = $this->caremeta->getTescoSuppliers();
+
+        $this->parse_swing_tickets = $parse_swing_tickets;
     }
 
 
@@ -161,6 +165,51 @@ class SwingTicketOrdersController extends Controller
                 'message' => 'success',
                 'data' => $response
             ], 200);
+        }
+    }
+
+    /**
+     * Method to parse Tesco Label Orders using PO upload.
+     * @param  Request $request Formdata
+     * @param  $role either admin or customer
+     * @return [type] view
+     */
+    public function createSwingTicketOrders(Request $request) {
+        try {
+            if($request->zone === 'CE') {
+                return $this->parse_swing_tickets->createOrder($request);
+            } else {
+                return response()->json(['error' => 'Unknown Template Zone'], 400);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+
+
+    /**
+     * Method to get size chart for swing tickets
+     * @param  Request $request Formdata
+     * @param  $role either admin or customer
+     * @return [type] view
+     */
+    public function getSwingSizeChart(Request $request) {
+        try {
+            $size_data = TescoPrimarySize::with('secSizeChart')
+            ->where(
+                [
+                    'tesco_primary_size.tesco_size_department_id' => $request['size'],
+                    'tesco_primary_size.is_flag' => true
+                ]
+            )
+            ->orderBy('tesco_primary_size.id')
+            ->get();
+            return response()->json([
+                'message' => 'success',
+                'data' => $size_data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
     }
 }
