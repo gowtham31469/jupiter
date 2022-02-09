@@ -4502,7 +4502,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 
             if(sticker_name == "FFC/01/M13304C-sticker")
             {
-                var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+                var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
                 var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
                 var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -4628,7 +4628,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
     
                 //Front Svg Price Details
     
-                var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+                var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
                 var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
                 var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5018,7 +5018,7 @@ function M13304C(data,svgDoc_back,val)
     }
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5191,7 +5191,7 @@ function M13114COpt3(data,svgDoc_back,val)
     }
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5338,7 +5338,7 @@ function M13233C(data,svgDoc_back,val)
     }
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5514,7 +5514,7 @@ function M13114COpt1(data,svgDoc_back,val)
     svgDoc_back.getElementById("size_category_translation").innerHTML = sec_size;
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5690,7 +5690,7 @@ function M13020C(data,svgDoc_back,val)
     svgDoc_back.getElementById("size_category_translation").innerHTML = sec_size;
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5805,7 +5805,7 @@ function M13163C(data,svgDoc_back,val)
     }
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -5928,7 +5928,7 @@ function M13022C(data,svgDoc_back,val)
     }
 
     //Back Svg Price Details
-    var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+    var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
     var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
     var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -6467,7 +6467,7 @@ function M13114COpt2(data,svgDoc_back,val)
                 }
 
                 //Back Svg Price Details
-                var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+                var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
                 var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
                 var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
@@ -7001,7 +7001,7 @@ function M13021C(data,svgDoc_back,val)
                 }
 
                 //Back Svg Price Details
-                var sl_price2 = data.order_details[0].sk_selling_price.toString().slice(-2);
+                var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
                 var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
                 var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
