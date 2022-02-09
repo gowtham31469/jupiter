@@ -12504,6 +12504,19 @@ function jsbarcodetescoticketseanhoriz(code, id, svgDoc) {
     body.appendChild(canvas);
     canvasTmp = document.getElementById('canvas');
 
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '15')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
+
     /* Time to play ;) */
 
     // https://developer.mozilla.org/en/XMLSerializer
@@ -12558,6 +12571,19 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
 
     body.appendChild(canvas);
     canvasTmp = document.getElementById('canvas');
+
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '15')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
 
     /* Time to play ;) */
 
