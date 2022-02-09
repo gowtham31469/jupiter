@@ -75,10 +75,10 @@ submitSwingTicketOrder = (user_type) => {
 
                     $('#hidden_id').val(response.data.last_insertion);
 
-                    $emptyQty = $('.tesco-quantity-field').filter((index, quantity) => quantity.value === '' );
-                    $emptyBarcode = $('.swing-ticket-ean').filter((index, ean) => ean.value === '');
+                    $emptyQty = $('.tesco-quantity-field').filter((index, quantity) => quantity.value != '' );
+                    $emptyBarcode = $('.swing-ticket-ean').filter((index, ean) => ean.value != '');
 
-                    if($emptyQty.length  == $('.table >tbody >tr').length || $emptyBarcode.length  == $('.table >tbody >tr').length){
+                    if($emptyQty.length == 0 || $emptyBarcode.length == 0){
                         $('.create-download-artwork').remove();
                     } else  {
                         $('.create-download-artwork').css('display','inline-block');

@@ -94,7 +94,7 @@ class StoreTescoSwingTicketOrder
             'edit_permission'           => $edit_permission,
             'order_placed_by'           => $customer_data['created_by'],
             'order_created_at'          => Carbon::now('Asia/Kolkata')->toDateTimeString(),
-            '24_char_desc'              => $request->swing_24_char_desc,
+            '24_char_desc'              => strtoupper($request->swing_24_char_desc),
             'cz_selling_price'          => $request->swing_cz_price,
             'sk_selling_price'          => sprintf('%0.2f', $request->swing_sk_price),
             'hu_selling_price'          => $request->swing_hu_price,

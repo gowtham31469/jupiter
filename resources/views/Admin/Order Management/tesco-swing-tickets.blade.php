@@ -80,7 +80,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_24_char_desc', '24 Character Description', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45')) !!}
+            {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45', 'style' => 'text-transform: uppercase')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -251,7 +251,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_style_number', 'Style Number', ['class' => 'form_label']) !!}
-            {!! Form::text('swing_style_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Style Number','required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8')) !!}
+            {!! Form::text('swing_style_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Style Number','required', 'maxlength' => '8')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
