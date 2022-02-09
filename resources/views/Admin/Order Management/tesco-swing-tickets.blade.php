@@ -129,7 +129,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
-            {!! Form::number('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01')) !!}
+            {!! Form::number('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01', 'min' => '0')) !!}
             <div class="help-block with-errors"></div>
         </div>
     </div>
