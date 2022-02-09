@@ -956,41 +956,45 @@ function parseVPNDescription(tabula) {
                             if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
                                 let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
                                     let po_updated_size = order.Size;
-                                    switch(order.Size) {
-                                        case 'TB':
-                                            po_updated_size = 'tiny baby';
-                                            break;
-                                        case 'NB':
-                                            po_updated_size = 'Newborn';
-                                            break;
-                                        case 'UP1M':
-                                            po_updated_size = 'up to 1M';
-                                            break;
-                                        case 'UP3M':
-                                            po_updated_size = 'up to 3M';
-                                            break;
-                                        default:
-                                            po_updated_size = order.Size;
-                                    }
-                                    po_updated_size = po_updated_size.replace("/", "-");
+                                    // switch(order.Size) {
+                                    //     case 'TB':
+                                    //         po_updated_size = 'tiny baby';
+                                    //         break;
+                                    //     case 'NB':
+                                    //         po_updated_size = 'Newborn';
+                                    //         break;
+                                    //     case 'UP1M':
+                                    //         po_updated_size = 'up to 1M';
+                                    //         break;
+                                    //     case 'UP3M':
+                                    //         po_updated_size = 'up to 3M';
+                                    //         break;
+                                    //     default:
+                                    //         po_updated_size = order.Size;
+                                    // }
+                                    // po_updated_size = po_updated_size.replace("/", "-");
                                     return po_updated_size;
                                 });
 
-                                var size_chart;
-                                if(po_zone == 'UK'){
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.uk_size;
-                                    });
-                                } else {
-                                    size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.ce_size;
-                                    });
-                                }
+                                // var size_chart;
+                                // if(po_zone == 'UK'){
+                                //     size_chart =  meta_size_chart.map(function (sizes) {
+                                //         return sizes.uk_size;
+                                //     });
+                                // } else {
+                                //     size_chart =  meta_size_chart.map(function (sizes) {
+                                //         return sizes.ce_size;
+                                //     });
+                                // }
+
+                                var size_chart =  meta_size_chart.map(function (sizes) {
+                                    return sizes.po_size;
+                                });
 
                                 // Intersection to find out atleast one size is common
                                 let intersection = po_size_chart.filter(x => size_chart.includes(x));
                                 if(intersection.length > 0) {
-                                    renderTescoSwingTicketOrders(role="admin", template_id, renderParsedSwingTicketValues.bind(null,parsedObj, meta_size_chart));
+                                    renderTescoSwingTicketOrders(role="admin", template_id, renderParsedSwingTicketValues.bind(null,parsedObj, meta_size_chart, size_chart));
                                 } else {
                                     $('.snackbar_span').html("Size details mismatch!! Please check the file");
                                     showSnackbar();
@@ -1031,42 +1035,44 @@ function parseVPNDescription(tabula) {
 	}
 }
 
-function renderParsedSwingTicketValues(parsedObj, size_chart) {
-    console.log(parsedObj);
-    console.log(size_chart);
+function renderParsedSwingTicketValues(parsedObj, size_chart, zonal_size_chart) {
+    // console.log(parsedObj);
+    // console.log(size_chart);
+    // console.log(zonal_size_chart);
     // Render 24 charcter description
     parsedObj.vpn_desc["24_desc"] != null?$('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false):$('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false);
 
     // Render Option ID 
     parsedObj.vpn_desc["vpn"] != null?$('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', true):$('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', false);
 
-    var zone_size = 'ce_size';
-    let zonal_size_chart =  size_chart.map(function (sizes) {
-        return sizes[zone_size];
-    });
+    var zone_size = 'po_size';
+    // let zonal_size_chart =  size_chart.map(function (sizes) {
+    //     return sizes[zone_size];
+    // });
     var zonal_size_index = {};
     $.each(size_chart, function (i, sizes) {    
         zonal_size_index[sizes[zone_size]] = sizes.id;
     });
+    // console.log(zonal_size_index);
     $.each(parsedObj.orderQuantity, function(i, j) {
         let po_updated_size = j.Size;
-        switch(j.Size) {
-            case 'TB':
-                po_updated_size = 'tiny baby';
-                break;
-            case 'NB':
-                po_updated_size = 'Newborn';
-                break;
-            case 'UP1M':
-                po_updated_size = 'up to 1M';
-                break;
-            case 'UP3M':
-                po_updated_size = 'up to 3M';
-                break;
-            default:
-                po_updated_size = j.Size;
-        }
-        po_updated_size = po_updated_size.replace("/", "-");
+        // switch(j.Size) {
+        //     case 'TB':
+        //         po_updated_size = 'tiny baby';
+        //         break;
+        //     case 'NB':
+        //         po_updated_size = 'Newborn';
+        //         break;
+        //     case 'UP1M':
+        //         po_updated_size = 'up to 1M';
+        //         break;
+        //     case 'UP3M':
+        //         po_updated_size = 'up to 3M';
+        //         break;
+        //     default:
+        //         po_updated_size = j.Size;
+        // }
+        // po_updated_size = po_updated_size.replace("/", "-");
 
         if($.inArray(po_updated_size, zonal_size_chart) != -1) {
             let index = zonal_size_index[po_updated_size];
