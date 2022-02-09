@@ -33,7 +33,7 @@ $( () => {
 
         $emptyQty = order_data.order_details.quantity_details.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
 
-        if($emptyQty.length > 0){
+        if($emptyQty.length == $('.table >tbody >tr').length){
             $('.create-download-artwork').remove();
         } else  {
             $('.create-download-artwork').css('display','inline-block');
