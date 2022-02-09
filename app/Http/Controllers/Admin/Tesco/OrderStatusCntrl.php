@@ -2230,9 +2230,12 @@ class OrderStatusCntrl extends Controller
     
                         foreach($size_comp as $string)
                         {
-                            if(strpos($val_cat, $string) !== false) 
+                            if($val_cat != null && $string != null)
                             {
-                                $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                                if(strpos($val_cat, $string) !== false) 
+                                {
+                                    $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                                }
                             }
                         }
     
@@ -2284,7 +2287,7 @@ class OrderStatusCntrl extends Controller
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
 
 
-            PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+           // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
             PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
