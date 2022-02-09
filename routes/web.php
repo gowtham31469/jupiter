@@ -601,6 +601,9 @@ Route::get('admin/tesco/get-tesco-product-benfits', 'Admin\Settings\Tesco\Produc
 
 Route::put('admin/tesco/update-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@updateTescoProductBenefits');
 
+Route::post('admin/tesco/upload-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@uploadTescoProductBenefits');
+
+
 
 
 Route::post('admin/tesco/settings/tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@tescoMMProductBenefits');

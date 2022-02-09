@@ -161,12 +161,12 @@ class TescoSettings extends Controller
     public function updateTescoSeasonCode(Request $request)
     {
       try {
-            if(TescoSeasonCode::where([['name','ilike',$request['name']], ['id','<>', $request['id']]])->exists())
-            {
-            $result = response()->json(['error'=> true,'message' =>'Season Code Already Exists'],208);
-            }
-            else
-            {
+            // if(TescoSeasonCode::where([['name','ilike',$request['name']], ['id','<>', $request['id']]])->exists())
+            // {
+            // $result = response()->json(['error'=> true,'message' =>'Season Code Already Exists'],208);
+            // }
+            // else
+            // {
             TescoSeasonCode::find($request['id'])
                ->update([
                  'name'  => $request['name'],
@@ -174,7 +174,7 @@ class TescoSettings extends Controller
               ]);
 
             $result = response()->json(['error'=> false,'message' =>'Success'],200);
-            }
+            // }
             } 
             catch (\Exception $e)
             {
