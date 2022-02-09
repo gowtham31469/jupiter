@@ -71,9 +71,9 @@ class ProductBenefitsController extends Controller
    
       try {
           $id = $request['id'];
-          if(TescoProductBenefit::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
-                $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
-          } else {
+          // if(TescoProductBenefit::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+          //       $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
+          // } else {
               $updated = TescoProductBenefit::where('id',$id)->update([
                                         'english'   => $request['english'],
                                         'polish'    => $request['polish'],
@@ -83,7 +83,7 @@ class ProductBenefitsController extends Controller
                                         'template_id' => $request['template_id']
                         ]);
             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
-          }        
+          // }        
       } catch (\Exception $e) {
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }
@@ -124,4 +124,5 @@ class ProductBenefitsController extends Controller
           }
               return $result;
       }
+
 }
