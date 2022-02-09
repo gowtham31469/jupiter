@@ -6024,10 +6024,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
-
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+" • "+ data.tesco_tiny[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].hungarian+'</tspan>';
                     
@@ -6105,9 +6111,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+" • "+ data.tesco_nb[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].hungarian+'</tspan>';
                     
@@ -6183,9 +6196,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+" • "+ data.tesco_up1[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].hungarian+'</tspan>';
                     
@@ -6261,9 +6281,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+" • "+ data.tesco_up3[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].hungarian+'</tspan>';
                     
@@ -6371,9 +6398,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
 
                     if(val.ce_size_name.toString().slice(-1) == "M")
@@ -6524,9 +6558,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
                     
@@ -6604,9 +6645,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
                     
@@ -6682,9 +6730,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].slovak+" • "+data.tesco_up1[0].hungarian+'</tspan>';
                     
@@ -6760,9 +6815,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].slovak+" • "+data.tesco_up3[0].hungarian+'</tspan>';
                     
@@ -6870,9 +6932,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
 
                     if(val.ce_size_name.toString().slice(-1) == "M")
