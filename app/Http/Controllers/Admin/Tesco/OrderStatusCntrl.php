@@ -2256,7 +2256,7 @@ class OrderStatusCntrl extends Controller
 
                     PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
 
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
 
                     //  print_r($html);
 
@@ -2270,7 +2270,7 @@ class OrderStatusCntrl extends Controller
 
                     PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->english.'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
 
                     //  print_r($html);
 
