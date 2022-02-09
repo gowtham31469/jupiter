@@ -160,6 +160,10 @@ class UploadCsvController extends Controller
                         $tesco_primary_size_id = DB::table('tesco_primary_size')->insertGetId($tesco_primary_size);
 
                       }
+                      else
+                      {
+                        $tesco_primary_size_id = DB::table('tesco_primary_size')->insertGetId($tesco_primary_size);
+                      }
                       
                       if(count($tesco_secondary_size_category1) > 0)
                       {

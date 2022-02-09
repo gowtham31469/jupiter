@@ -4691,7 +4691,7 @@ function M13304C(data,svgDoc_back,val)
 
     
 
-    if(val.woolmark_logo_id == true)
+    if(val.woolmark_logo_id != null)
     {
 
         var product_desc_text = JSON.parse(val.product_desc_text)
