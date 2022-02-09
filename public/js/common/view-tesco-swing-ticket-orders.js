@@ -31,9 +31,9 @@ $( () => {
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);
         $('#swing_template_id').val(order_data.order_details.template_id);
 
-        $emptyQty = order_data.order_details.quantity_details.filter(quantity => quantity.ean_barcode === null || quantity.quantity === null);
+        $emptyQty = order_data.order_details.quantity_details.filter(quantity => quantity.ean_barcode != null || quantity.quantity != null);
 
-        if($emptyQty.length == $('.table >tbody >tr').length){
+        if($emptyQty.length == 0){
             $('.create-download-artwork').remove();
         } else  {
             $('.create-download-artwork').css('display','inline-block');
