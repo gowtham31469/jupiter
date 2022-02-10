@@ -13972,7 +13972,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 }
                 var mm_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
 
-                if(data.order_details[0].mm_product_benefit_id != null)
+                if(data.order_details[0].product_benefit_id != null)
                 {
                     svgDoc.getElementById("product_benefit").innerHTML = mm_benefit_json[0].english
                 }
