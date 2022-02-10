@@ -11287,14 +11287,20 @@ function M13114COpt3(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";       
+		svgDoc_back.getElementById("size_list").innerHTML = "";     
+		
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
     }
     else if(val.ce_size_name == "Newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
+		svgDoc_back.getElementById("size_list").innerHTML = "";
+		
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 1M")
@@ -11303,7 +11309,10 @@ function M13114COpt3(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].slovak+" • "+data.tesco_up1[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
+		svgDoc_back.getElementById("size_list").innerHTML = "";
+		
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 3M")
@@ -11311,7 +11320,10 @@ function M13114COpt3(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].slovak+" • "+data.tesco_up3[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
+		svgDoc_back.getElementById("size_list").innerHTML = "";
+		
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
 
     } 
     else if(val.ce_size_name == "One size")
@@ -11319,7 +11331,10 @@ function M13114COpt3(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].english +" • "+ data.tesco_onesize[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_onesize[0].slovak+" • "+data.tesco_onesize[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
+		svgDoc_back.getElementById("size_list").innerHTML = "";
+		
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
 
     }
     else
