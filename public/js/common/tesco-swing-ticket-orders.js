@@ -19,13 +19,39 @@ renderTescoSwingTicketOrders = (role, template_id, callback=null) => {
     }); 
 }
 
+// $(document).on('change','#swing_product_benefit',function(e){
+//     if (e.target.value === "") {
+//         $('#swing_mm_product_benefit').prop('required', true);
+//         $('#swing_product_benefit').prop('required', false);
+//     } else {
+//         $('#swing_mm_product_benefit').prop('required', false);
+//         $('#swing_product_benefit').prop('required', true);
+//     }
+//     $('#swing_mm_product_benefit').val('');
+//     $(".selectpicker").selectpicker("refresh");
+// });
+
+// $(document).on('change','#swing_mm_product_benefit',function(e){
+//     if (e.target.value === "") {
+//         $('#swing_product_benefit').prop('required', true);
+//         $('#swing_mm_product_benefit').prop('required', false);
+//     } else {
+//         $('#swing_product_benefit').prop('required', false);
+//         $('#swing_mm_product_benefit').prop('required', true);
+//     }
+//     $('#swing_product_benefit').val('');
+//     $(".selectpicker").selectpicker("refresh");
+// });
+
 $(document).on('change','#swing_product_benefit',function(e){
     if (e.target.value === "") {
         $('#swing_mm_product_benefit').prop('required', true);
         $('#swing_product_benefit').prop('required', false);
+        $('#swing_mm_product_benefit').prop('disabled', false);
     } else {
         $('#swing_mm_product_benefit').prop('required', false);
         $('#swing_product_benefit').prop('required', true);
+        $('#swing_mm_product_benefit').prop('disabled', true);
     }
     $('#swing_mm_product_benefit').val('');
     $(".selectpicker").selectpicker("refresh");
@@ -35,9 +61,11 @@ $(document).on('change','#swing_mm_product_benefit',function(e){
     if (e.target.value === "") {
         $('#swing_product_benefit').prop('required', true);
         $('#swing_mm_product_benefit').prop('required', false);
+        $('#swing_product_benefit').prop('disabled', false);
     } else {
         $('#swing_product_benefit').prop('required', false);
         $('#swing_mm_product_benefit').prop('required', true);
+        $('#swing_product_benefit').prop('disabled', true);
     }
     $('#swing_product_benefit').val('');
     $(".selectpicker").selectpicker("refresh");
