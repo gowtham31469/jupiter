@@ -363,6 +363,8 @@ function tescoOrders(callback) {
 						$(".ce-po-upload").addClass("hidden");
 						$('#ce_orms').prop('required', false);
 						$('#ce_retek').prop('required', false);
+						$(".orms-ce-po-upload").addClass("hidden");
+						$('#orms_po_upload').prop('required', false);
 					}
 
 					// Label Parser
@@ -389,6 +391,16 @@ function tescoOrders(callback) {
 						$("#tesco_care_parser_type_div").addClass("hidden");
 						$('input[type="radio"].pdf_parser_type').prop('required', false);
 						$('input[type="radio"].pdf_parser_type').prop('checked', false);
+					}
+
+					// Swing Ticket Parser
+					if(globalOrderType === 1 && temp_type === 'tesco_swing_tickets') { 
+						// Show only for PO upload
+						$(".orms-ce-po-upload").removeClass("hidden");
+						$('#orms_po_upload').prop('required', true);
+					} else if(globalOrderType === 0 && temp_type === 'tesco_swing_tickets') {
+						$(".orms-ce-po-upload").addClass("hidden");
+						$('#orms_po_upload').prop('required', false);
 					}
 				});
 
@@ -716,18 +728,24 @@ function tescoOrders(callback) {
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+							$(".orms-ce-po-upload").addClass("hidden");
+							$('#orms_po_upload').prop('required', false);
 						} else if (data.node.original.zone === 'CE' && globalOrderType === 1) {
 							$(".po-upload").addClass("hidden");
 							$('#po_upload').prop('required', false);
 							$(".ce-po-upload").removeClass("hidden");
 							$('#ce_orms').prop('required', true);
 							$('#ce_retek').prop('required', true);
+							$(".orms-ce-po-upload").addClass("hidden");
+							$('#orms_po_upload').prop('required', false);
 						} else {
 							$(".po-upload").addClass("hidden");
 							$('#po_upload').prop('required', false);
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+							$(".orms-ce-po-upload").addClass("hidden");
+							$('#orms_po_upload').prop('required', false);
 						}
 
 						// toggle size chart select box for template_type = tesco_care_labels or template_type = tesco_swing_tickets
@@ -740,6 +758,11 @@ function tescoOrders(callback) {
 								// Show only for tesco_care_labels PO upload
 								$("#tesco_care_parser_type_div").removeClass("hidden");
 								$('input[type="radio"].pdf_parser_type').prop('required', true);
+
+								// Hide Swing ticket upload
+								$(".orms-ce-po-upload").addClass("hidden");
+								$('#orms_po_upload').prop('required', false);
+
 								if($('input[type="radio"].pdf_parser_type').is(':checked')){
 									var parserPOzone =  $('input[type="radio"].pdf_parser_type:checked').val();
 									if (parserPOzone === 'UK') {
@@ -757,6 +780,11 @@ function tescoOrders(callback) {
 									} 
 								}
 							} else if(globalOrderType === 1 && template_type === 'tesco_swing_tickets') {
+								// Hide Zone selector div
+								$("#tesco_care_parser_type_div").addClass("hidden");
+								$('input[type="radio"].pdf_parser_type').prop('checked', false);
+								$('input[type="radio"].pdf_parser_type').prop('required', false);
+
 								// For swing tickets upload CE ORMS PO only
 								$(".orms-ce-po-upload").removeClass("hidden");
 								$('#orms_po_upload').prop('required', true);
@@ -765,6 +793,7 @@ function tescoOrders(callback) {
 								$('#ce_orms').prop('required', false);
 								$('#ce_retek').prop('required', false);
 								$('#po_upload').prop('required', false);
+
 								localStorage.setItem("zone", 'CE');
 								localStorage.setItem("template type", 'tesco_swing_tickets');
 							}
