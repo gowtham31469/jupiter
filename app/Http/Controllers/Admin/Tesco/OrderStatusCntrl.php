@@ -2152,7 +2152,17 @@ class OrderStatusCntrl extends Controller
             {
                 $name = "GE/01/M13114C";
             }
-            
+
+
+            if($name == "FFC/01/M13304C")
+            {
+                $siz = "78x108mm";
+            }
+            else
+            {
+                $siz= "41x115.5mm";
+            }
+
             $zone="";
               $tesco_po_number=$this->tesco_po_number;
               $style=$this->style;
@@ -2235,7 +2245,7 @@ class OrderStatusCntrl extends Controller
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 41x115.5mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$siz.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : </text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
                       </g>
