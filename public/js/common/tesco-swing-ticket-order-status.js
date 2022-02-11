@@ -239,7 +239,7 @@ $( () => {
             </div>
             <div class="form-group has-feedback">
             <label for="swing_woolmark_logo" class="component-label">Woolmark Logo </label>
-               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_woolmark_logo" name="swing_woolmark_logo" required>
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_woolmark_logo" name="swing_woolmark_logo">
                    <option value="">-- Select Woolmark Logo --</option>`;
                    $.each(order_data.woolmark_logos, function (id, value) {
 
