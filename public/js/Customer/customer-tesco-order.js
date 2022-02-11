@@ -729,6 +729,7 @@ function tescoOrders(callback) {
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
+                            $('#tesco_care_size_category_div').addClass('hidden');
                             // Label Parser
 							if(globalOrderType === 1) { // Show only for PO upload
 								$("#tesco_care_parser_type_div").removeClass("hidden");
