@@ -135,6 +135,7 @@ class UploadCsvController extends Controller
                     $department = $value['dept'];
                     $uk_size = $value['uk_primary_size'];
                     $ce_size = $value['ce_primary_size'];
+                    $po_size = $value['po_size'];
                     $category1 = preg_replace('/[^A-Za-z0-9\-]/', '', $value['name1']);
                     $category1_value = $value['secondary_sizing1'];
                     $category2 = preg_replace('/[^A-Za-z0-9\-]/', '', $value['name2']);
@@ -147,7 +148,7 @@ class UploadCsvController extends Controller
                     if(count($tesco_size_department) > 0)
                     {
                       $tesco_primary_size = array(
-                        'tesco_size_department_id' => $tesco_size_department{0}->id, 'department_title' => $tesco_size_department{0}->department_name, 'uk_size' => $uk_size, 'ce_size' => $ce_size, 'is_flag' => 1, 'created_at'=> Carbon::now()
+                        'tesco_size_department_id' => $tesco_size_department{0}->id, 'department_title' => $tesco_size_department{0}->department_name, 'uk_size' => $uk_size, 'ce_size' => $ce_size, 'po_size' => $po_size, 'is_flag' => 1, 'created_at'=> Carbon::now()
                       );
 
                       $tesco_secondary_size_category1 = DB::table('tesco_secondary_size_category')->select('*')->where('category_name',$category1)->get();

@@ -1286,7 +1286,7 @@ function tescoStatusTable(data, path) {
                         else if(value.tableName == "tesco_swingticket_orders")
                         {
                             var temp_file = value.template_file.split(',');
-                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadPrintTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtworkTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
                         else
                         {
@@ -4464,7 +4464,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 else if(sticker_name == "GE/01/M13114C-Opt4-sticker")
                 {
                     //console.log(svgDoc_back)
-                    var temp_data = M13114COpt2(data,svgDoc_back,val)
+                    var temp_data = M13114COpt4(data,svgDoc_back,val)
 
                     if(val.is_ce_mark_required == true)
                     {
@@ -4508,7 +4508,14 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
     
                 svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-                svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                if(sl_price2  != "")
+                {
+                    svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                }
+                else
+                {
+                    svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+                }
                 svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
                 if(data.order_details[0].is_machine_washable == true)
@@ -4523,7 +4530,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 }
                 var mm_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
 
-                if(data.order_details[0].mm_product_benefit_id != null)
+                if(data.order_details[0].product_benefit_id != null)
                 {
                     svgDoc.getElementById("product_benefit").innerHTML = mm_benefit_json[0].english
                 }
@@ -4634,7 +4641,15 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
     
                 svgDoc.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-                svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                
+                if(sl_price2  != "")
+                {
+                    svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                }
+                else
+                {
+                    svgDoc.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+                }
                 svgDoc.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
             }
             
@@ -5024,7 +5039,16 @@ function M13304C(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
+    
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
     
 
@@ -5102,7 +5126,10 @@ function M13114COpt3(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";       
+        svgDoc_back.getElementById("size_list").innerHTML = "";      
+        
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = ""; 
     }
     else if(val.ce_size_name == "Newborn")
     {
@@ -5110,6 +5137,9 @@ function M13114COpt3(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+        
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 1M")
@@ -5119,6 +5149,9 @@ function M13114COpt3(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 3M")
@@ -5128,6 +5161,9 @@ function M13114COpt3(data,svgDoc_back,val)
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
 
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
+
     } 
     else if(val.ce_size_name == "One size")
     {
@@ -5135,6 +5171,9 @@ function M13114COpt3(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+
+		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
+        svgDoc_back.getElementById("size_list_right_align2").innerHTML = "";
 
     }
     else
@@ -5197,7 +5236,14 @@ function M13114COpt3(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5262,7 +5308,9 @@ function M13233C(data,svgDoc_back,val)
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";       
+        svgDoc_back.getElementById("size_list").innerHTML = "";     
+        
+        svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
     }
     else if(val.ce_size_name == "Newborn")
     {
@@ -5270,6 +5318,8 @@ function M13233C(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 1M")
@@ -5279,6 +5329,8 @@ function M13233C(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
         
     }
     else if(val.ce_size_name == "up to 3M")
@@ -5288,6 +5340,8 @@ function M13233C(data,svgDoc_back,val)
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
 
+        svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
+
     } 
     else if(val.ce_size_name == "One size")
     {
@@ -5295,6 +5349,8 @@ function M13233C(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
 
     }
     else
@@ -5344,7 +5400,14 @@ function M13233C(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5520,7 +5583,14 @@ function M13114COpt1(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5696,7 +5766,14 @@ function M13020C(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5811,7 +5888,14 @@ function M13163C(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5934,7 +6018,14 @@ function M13022C(data,svgDoc_back,val)
     var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
     svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    if(sl_price2  != "")
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+    }
+    else
+    {
+        svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+    }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
     $size_category_str = null;
@@ -5954,7 +6045,7 @@ function M13022C(data,svgDoc_back,val)
        ];
 }
 
-function M13114COpt2(data,svgDoc_back,val)
+function M13114COpt4(data,svgDoc_back,val)
 {
 
                 // svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -5970,7 +6061,7 @@ function M13114COpt2(data,svgDoc_back,val)
 
                 var optionID = addOptionIdHyphen(val.ce_style_ref);
 
-                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 2/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
+                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 4/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
                 svgDoc_back.getElementById("short_description").innerHTML = short_description;
 
@@ -6024,10 +6115,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
-
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+" • "+ data.tesco_tiny[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].hungarian+'</tspan>';
                     
@@ -6045,7 +6142,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6105,9 +6202,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+" • "+ data.tesco_nb[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].hungarian+'</tspan>';
                     
@@ -6124,7 +6228,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6183,9 +6287,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+" • "+ data.tesco_up1[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].hungarian+'</tspan>';
                     
@@ -6202,7 +6313,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6261,9 +6372,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+" • "+ data.tesco_up3[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].hungarian+'</tspan>';
                     
@@ -6280,7 +6398,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6371,9 +6489,16 @@ function M13114COpt2(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
 
                     if(val.ce_size_name.toString().slice(-1) == "M")
@@ -6420,7 +6545,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.013)");
                     }
@@ -6439,7 +6564,554 @@ function M13114COpt2(data,svgDoc_back,val)
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
                 svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-                svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                if(sl_price2  != "")
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                }
+                else
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+                }
+                svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
+
+                var barcode_change = val.ean_barcode;
+
+                jsbarcodetescoticketsean(barcode_change, 'barcode', svgDoc_back);
+
+
+                return [
+                    size_comp,
+                    product_desc_text
+                   ];
+}
+
+function M13114COpt2(data,svgDoc_back,val)
+{
+
+                // svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
+                // svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
+
+                var created_at = new Date(val.created_at);
+
+                var shortYear = created_at.getFullYear(); 
+                // Add this line
+                var twoDigitYear = shortYear.toString().substr(-2);
+
+                var month_ca = ( '0' + (created_at.getMonth()+1) ).slice( -2 ) +"/"+ twoDigitYear;
+
+                var optionID = addOptionIdHyphen(val.ce_style_ref);
+
+                var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 2/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
+
+                svgDoc_back.getElementById("short_description").innerHTML = short_description;
+
+
+
+                if(val.ce_size_name == "tiny baby")
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+
+                    var size_category_translation = "";
+
+                    var size_comp = [];
+
+                    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+                        var sec_size = vals.secondary_size.split(':')
+                        if(keys !=0 )
+                        {
+                            size_category_translation += " " +vals.english+" "
+                        }
+                        else
+                        {
+                            size_category_translation += vals.english+" "
+                        }
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+                        
+                    })
+                    
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
+
+                    var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+" • "+ data.tesco_tiny[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].hungarian+'</tspan>';
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;         
+                    
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");           
+                    
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
+                    
+                }
+                else if(val.ce_size_name == "Newborn")
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+
+                    var size_category_translation = "";
+
+                    var size_comp = [];
+
+                    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+                        var sec_size = vals.secondary_size.split(':')
+                        if(keys !=0 )
+                        {
+                            size_category_translation += " " +vals.english+" "
+                        }
+                        else
+                        {
+                            size_category_translation += vals.english+" "
+                        }
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+                        
+                    })
+                    
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
+
+                    var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+" • "+ data.tesco_nb[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].hungarian+'</tspan>';
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+                    
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
+                }
+                else if(val.ce_size_name == "up to 1M")
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+
+                    var size_category_translation = "";
+
+                    var size_comp = [];
+
+                    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+                        var sec_size = vals.secondary_size.split(':')
+                        if(keys !=0 )
+                        {
+                            size_category_translation += " " +vals.english+" "
+                        }
+                        else
+                        {
+                            size_category_translation += vals.english+" "
+                        }
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+                        
+                    })
+                    
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
+
+                    var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+" • "+ data.tesco_up1[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].hungarian+'</tspan>';
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+                    
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
+                }
+                else if(val.ce_size_name == "up to 3M")
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+
+                    var size_category_translation = "";
+
+                    var size_comp = [];
+
+                    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+                        var sec_size = vals.secondary_size.split(':')
+                        if(keys !=0 )
+                        {
+                            size_category_translation += " " +vals.english+" "
+                        }
+                        else
+                        {
+                            size_category_translation += vals.english+" "
+                        }
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+                        
+                    })
+                    
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
+
+                    var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+" • "+ data.tesco_up3[0].slovak+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].hungarian+'</tspan>';
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46.013)");
+                    }
+                } 
+                else if(val.ce_size_name == "One size")
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = "";
+
+                    $size_category_str = "null";
+
+                    var size_comp = [];
+
+                    //svgDoc_back.getElementById("size_category_translation").innerHTML = "";
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+                    svgDoc_back.getElementById("size_bold").innerHTML = ""
+
+
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 78)");
+
+
+                    var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Bold;font-weight:700; font-size:6.5px;">'+data.tesco_onesize[0].english+'</tspan><tspan x="0" y="8" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].czech+'</tspan><tspan x="0" y="14" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].slovak+'</tspan><tspan x="0" y="20" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].hungarian+'</tspan>';
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+
+                    svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 40)");
+                }
+                else
+                {
+                    svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
+
+                    var size_category_translation = "";
+
+                    var size_comp = [];
+
+                    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+                        var sec_size = vals.secondary_size.split(':')
+                        if(keys !=0 )
+                        {
+                            size_category_translation += " " +vals.english+" "
+                        }
+                        else
+                        {
+                            size_category_translation += vals.english+" "
+                        }
+                        size_category_translation += toTitleCase(vals.czech)+"•"
+                        size_category_translation += toTitleCase(vals.slovak)+"•"
+                        size_category_translation += toTitleCase(vals.hungarian)+": "
+                        size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+                        size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+                        
+                    })
+                    
+                    $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+                    // $y_size = 0;
+                    // var size_category_str_text = "";
+                    // $($size_category_str).each(function(index,size_category_str_text_val){
+                    //     size_category_str_text += '<tspan x="0" y="'+$y_size+'" style="font-family:FandFSans-Regular; font-size:5px;">'+size_category_str_text_val+'</tspan>';
+                    //     $y_size += 5.76;
+                    // })
+                    // console.log(size_category_str_text)
+                    // svgDoc_back.getElementById("size_category_translation").innerHTML = size_category_str_text;
+
+                    //Product Description
+                    var product_desc_translation = "";
+                    var product_desc_text = val.product_desc_text
+                    // $(product_desc_text).each(function (keys, vals) {
+
+                    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.english+" • "+vals.czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+vals.slovak+" • "+vals.hungarian+'</tspan>';
+                        
+                    // })
+                    
+                    // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
+
+
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
+
+
+                    if(val.ce_size_name.toString().slice(-1) == "M")
+                    {
+                        if(val.ce_size_name == "0-3M")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_under[0].czech+" • "+ val.tesco_month_under[0].slovak+" • "+ val.tesco_month_under[0].hungarian+'</tspan>';
+                        }
+                        else
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_over[0].czech+" • "+ val.tesco_month_over[0].slovak+" • "+ val.tesco_month_over[0].hungarian+'</tspan>';
+                        }
+                    }
+                    else if(val.ce_size_name.toString().slice(-1) == "Y")
+                    {
+                        if(val.ce_size_name == "1- 1½Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
+                        }
+                        else if(val.ce_size_name == "1-2Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                        }
+                        else if(val.ce_size_name == "2-3Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                        }
+                        else
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
+                        }
+                    }
+                    
+                    svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+
+                    svgDoc_back.getElementById("product_description").setAttribute('transform', "matrix(1, 0, 0, 1.1111, 58.7577, 94.1046)");
+                    //svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+
+                    if($size_category_str.length <= 3)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.013)");
+                    }
+                    else if($size_category_str.length == 4)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.013)");
+                    }
+                    else if($size_category_str.length == 5)
+                    {
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58.7789)");
+
+                        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.013)");
+                    }
+                }
+
+                //Back Svg Price Details
+                var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
+                var sl_price1 = data.order_details[0].sk_selling_price.toString().slice(0,-2).replace('.','');
+                var hu_price = data.order_details[0].hu_selling_price.toString().length == 5?data.order_details[0].hu_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].hu_selling_price;
+                var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
+
+                svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
+                if(sl_price2  != "")
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                }
+                else
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+                }
                 svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
                 var barcode_change = val.ean_barcode;
@@ -6524,9 +7196,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
                     
@@ -6544,7 +7223,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6604,9 +7283,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
                     
@@ -6623,7 +7309,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6682,9 +7368,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].slovak+" • "+data.tesco_up1[0].hungarian+'</tspan>';
                     
@@ -6701,7 +7394,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6760,9 +7453,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].slovak+" • "+data.tesco_up3[0].hungarian+'</tspan>';
                     
@@ -6779,7 +7479,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48.013)");
                     }
@@ -6870,9 +7570,16 @@ function M13021C(data,svgDoc_back,val)
                     // svgDoc_back.getElementById("product_description").innerHTML = product_desc_translation;
 
 
-                    var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+                    if(val.tesco_secondary_size_chart.length > 0)
+                    {
+                        var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
 
-                    svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                        svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+                    }
+                    else
+                    {
+                        svgDoc_back.getElementById("size_bold").innerHTML = "";
+                    }
 
 
                     if(val.ce_size_name.toString().slice(-1) == "M")
@@ -6919,7 +7626,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     else if($size_category_str.length == 4)
                     {
-                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 62.7789)");
+                        svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 64)");
 
                         svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.013)");
                     }
@@ -6938,7 +7645,14 @@ function M13021C(data,svgDoc_back,val)
                 var cz_price = data.order_details[0].cz_selling_price.toString().length == 4?data.order_details[0].cz_selling_price.toString().replace(/.{3}$/,' $&'):data.order_details[0].cz_selling_price;
 
                 svgDoc_back.getElementById("cz_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+cz_price+' Kč</tspan>';
-                svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                if(sl_price2  != "")
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+',</tspan><tspan style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:4.664px;" y="-2.7">'+sl_price2+'</tspan><tspan y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;"> €</tspan>';
+                }
+                else
+                {
+                    svgDoc_back.getElementById("sl_price1").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+sl_price1+' €</tspan>';
+                }
                 svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
                 var barcode_change = val.ean_barcode;
@@ -12355,6 +13069,19 @@ function jsbarcodetescoticketseanhoriz(code, id, svgDoc) {
     body.appendChild(canvas);
     canvasTmp = document.getElementById('canvas');
 
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '15')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
+
     /* Time to play ;) */
 
     // https://developer.mozilla.org/en/XMLSerializer
@@ -12409,6 +13136,19 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
 
     body.appendChild(canvas);
     canvasTmp = document.getElementById('canvas');
+
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '15')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
 
     /* Time to play ;) */
 
