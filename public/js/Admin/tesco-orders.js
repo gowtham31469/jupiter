@@ -710,31 +710,32 @@ function tescoOrders(callback) {
 						localStorage.setItem("zone", data.node.original.zone);
 						localStorage.setItem("template type", data.node.original.type);
 						localStorage.setItem("template_group", data.node.text.trim());					
-						if (data.node.original.zone === 'UK' && globalOrderType === 1) {
-							$(".po-upload").removeClass("hidden");
-							$('#po_upload').prop('required', true);
-							$(".ce-po-upload").addClass("hidden");
-							$('#ce_orms').prop('required', false);
-							$('#ce_retek').prop('required', false);
-						} else if (data.node.original.zone === 'CE' && globalOrderType === 1) {
-							$(".po-upload").addClass("hidden");
-							$('#po_upload').prop('required', false);
-							$(".ce-po-upload").removeClass("hidden");
-							$('#ce_orms').prop('required', true);
-							$('#ce_retek').prop('required', true);
-						} else {
-							$(".po-upload").addClass("hidden");
-							$('#po_upload').prop('required', false);
-							$(".ce-po-upload").addClass("hidden");
-							$('#ce_orms').prop('required', false);
-							$('#ce_retek').prop('required', false);
-						}
+						// if (data.node.original.zone === 'UK' && globalOrderType === 1) {
+						// 	$(".po-upload").removeClass("hidden");
+						// 	$('#po_upload').prop('required', true);
+						// 	$(".ce-po-upload").addClass("hidden");
+						// 	$('#ce_orms').prop('required', false);
+						// 	$('#ce_retek').prop('required', false);
+						// } else if (data.node.original.zone === 'CE' && globalOrderType === 1) {
+						// 	$(".po-upload").addClass("hidden");
+						// 	$('#po_upload').prop('required', false);
+						// 	$(".ce-po-upload").removeClass("hidden");
+						// 	$('#ce_orms').prop('required', true);
+						// 	$('#ce_retek').prop('required', true);
+						// } else {
+						// 	$(".po-upload").addClass("hidden");
+						// 	$('#po_upload').prop('required', false);
+						// 	$(".ce-po-upload").addClass("hidden");
+						// 	$('#ce_orms').prop('required', false);
+						// 	$('#ce_retek').prop('required', false);
+						// }
 
 						// toggle size chart select box for template_type = tesco_care_labels or template_type = tesco_swing_tickets
 						if($.inArray(template_type, ['tesco_care_labels', 'tesco_swing_tickets']) != -1){
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
+							$('#tesco_care_size_category_div').addClass('hidden');
 							// Label Parser
 							if(globalOrderType === 1 && template_type === 'tesco_care_labels') { 
 								// Show only for tesco_care_labels PO upload
