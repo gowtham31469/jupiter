@@ -230,7 +230,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_woolmark_logo', 'Woolmark Logo', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_woolmark_logo" id="swing_woolmark_logo" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_woolmark_logo" id="swing_woolmark_logo">
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
                 @foreach($woolmark_logos as $key => $value)
