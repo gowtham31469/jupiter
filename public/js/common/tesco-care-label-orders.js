@@ -9,26 +9,13 @@ $(function () {
     renderTescoCareOrders = (role, template_id, callback=null) => {
         var user_role = role.toLowerCase();
         var size_id = $('#tesco_care_size_chart').val();
-        var size_category = [];
-        var size_category_text = [];
-
-        /** [ Create array of multi selected categories ] */
-        $.each($("#tesco_care_size_category option:selected"), function() {
-            size_category.push($(this).val());
-            // size_category_text.push($(this).text());
-        });
-
-        /** [ Create array of multiple categories ] */
-        $.each($("#tesco_care_size_category option"), function() {
-            size_category_text.push($(this).text());
-        });
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
-            getSizechart(size_id, size_category, size_category_text, user_role,template_id, callback);
+            getSizechart(size_id, user_role,template_id, callback);
             
         }); 
     }
@@ -51,53 +38,6 @@ $(function () {
     $("#alert_success").fadeTo(2000, 500).slideUp(500, function () {
         $("#alert_success").slideUp(500);
     });
-
-    // get all the secondary size categories based on primary size selection
-    getSecondarySizeCategory = (size, user_type) => {
-        $('#tesco_care_size_category_div').html('');
-        $.ajax({
-            type: "get",
-            url: base_url + "/" + user_type + "/tesco/secondary-size-categories",
-            data: {
-                size
-            },
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function (response) {
-                    size_category_options = ``;
-                    $.each(response.size_categories, function (i, item) {
-                        size_category_options += `<option value=` + item.id + `>` + item.category_name + `</option>`;
-                    });
-
-                    var size_category_html = `<label for="tesco_care_size_category">Size Category</label>
-                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_category" name="tesco_care_size_category" required="" data-actions-box="true" multiple="true" multiple title="Choose one of the following..." data-width="100%">
-                        ` + size_category_options + `
-                        </select>	
-                    <div class="help-block with-errors"></div>`;
-
-                    $('#tesco_care_size_category_div').append(size_category_html);
-
-                    $('#tesco_care_size_category_div').removeClass('hidden');
-                    $(".selectpicker").selectpicker("refresh");
-                    $('#create_order_form').validator('update');
-                },
-                400: function () {
-                    $('.snackbar_span').html('Something went wrong');
-                    showSnackbar();
-                }
-            },
-            complete: function () {
-                
-                $(".loader").hide();
-            }
-            
-        });
-    }
 
     // Calculate total fiber percentage
     $(document).on('change', '.fiber-individual-percentage', function() {
@@ -222,7 +162,7 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category, size_category_text, role,template_id, callback=null) => {
+    getSizechart = (size_id, role,template_id, callback=null) => {
         var size_chart = [];
         $.ajax({
             type: "get",
@@ -231,7 +171,6 @@ $(function () {
             data: {
                 _token: csrf_token,
                 size_id: size_id,
-                size_category: size_category,
                 template_id:template_id
             },
             success: function (response) {
@@ -264,34 +203,25 @@ $(function () {
 
                     secondary_sizes = [];
 
-                    for (var index = 0; index < size_category_text.length; index++) {
+                    var category_value = '-';
+                    var category_name = '-';
+                    var size_id = null;
 
-                        var category_value = '-';
-                        var size_id = null;
+                    $.each(valueOfElement.sec_size_chart, function (index_1, category) {
 
-                        $.each(valueOfElement.sec_size_chart, function (index_1, category) {
+                        category_value = category['secondary_size'];
+                        category_name = category['category_name'].trim();
+                        size_id = category['id'];
 
-                            if (size_category_text[index].trim() === category['category_name'].trim()) {
-
-                                category_value = category['secondary_size'];
-                                size_id = category['id'];
-                                return false;
-
-                            }
-
-                        });
-
-                        quantity_html += `<strong class="text-justify">` + size_category_text[index].trim() + `</strong> : ` + category_value + `<br>`;
-
+                        quantity_html += `<strong class="text-justify">` + category_name + `</strong> : ` + category_value + `<br>`;
                         size_value = category_value === '-' ? null : category_value;
 
                         secondary_sizes.push({
                             id: size_id,
-                            secondary_size: size_category_text[index].trim(),
+                            secondary_size: category_name,
                             value: size_value
                         });
-
-                    }
+                    });
 
                     quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
