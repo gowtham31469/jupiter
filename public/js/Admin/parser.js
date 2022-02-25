@@ -711,7 +711,7 @@ function parseVPNDescription(tabula) {
  * Render the the order form with autofilled fields which are parsed from the customer PDF.
  * @return {xml} XML from the parser. 
  */
- function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, size_category, size_category_text,template_id) {
+ function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, template_id) {
 	try {
 		$.ajax({
 			url: base_url + "/"+ role +"/tesco/po-upload-labels",
@@ -766,7 +766,6 @@ function parseVPNDescription(tabula) {
                             data: {
                                 _token: csrf_token,
                                 size_id: size_id,
-                                size_category: size_category
                             },
                             success: function (response) {
                                 var meta_size_chart = [];
