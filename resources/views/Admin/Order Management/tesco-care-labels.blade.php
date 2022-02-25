@@ -58,7 +58,14 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --'] + $coo),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
+            <select name="tesco_care_coo" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_coo" required>
+                <option>Select Country Of Origin</option>
+                @foreach ($coo as $key => $value)
+                <option value="{{ $key }}" {{ ( strtolower($value) === 'made in india') ? "selected" : "" }}>
+                    {{ $value }}
+                </option>
+                @endforeach
+            </select>
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -72,7 +79,16 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_part_of_two_piece_set',(['' => '-- Select Part of Two Piece Set --'] + $part_of_two_piece_set),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_part_of_two_piece_set', 'data-live-search' => 'true')) }}
+            <select name="tesco_care_part_of_two_piece_set" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_part_of_two_piece_set" required>
+            <optgroup label="Select Part of Two Piece Set">
+                <option value="">None</option>
+                @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
             <div class="help-block with-errors"></div>
         </div>
     </div>
