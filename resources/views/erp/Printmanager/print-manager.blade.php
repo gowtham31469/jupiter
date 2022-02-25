@@ -745,6 +745,19 @@ function getErpOrderList()
 									var object_ref = `<object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+temp_file[0]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[1]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[2]+`" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal`+i+`" class="center-block tesco_svg" data="`+temp_file[3]+`" type="image/svg+xml"></object>`;
 
 									var down_ref= "labels";
+
+									var data_modal = null;
+								}
+								else if( item.order_qnty_table_name == "tesco_swingticket_orders_quanty" )
+								{
+									var zone_ref = " - ";
+
+									var temp_file = item.template_file.split(',');
+									var object_ref = '<object style="opacity:0;width:0px;height:0px" id="'+item.reference_name.replace(/ /g, "")+"_"+item.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+item.reference_name.replace(/ /g, "")+"_"+item.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object>';
+
+									var data_modal = item.reference_name.replace(/ /g, "")+"_"+item.template_id+'_modal';
+
+									var down_ref= "swing_tickets";
 								}
 								else
 								{
@@ -753,6 +766,8 @@ function getErpOrderList()
 									var object_ref = `<object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal`+i+`" class="center-block tesco_svg`+i+`" data="`+item.template_file+`" type="image/svg+xml"></object>`;
 
 									var down_ref= "stickers";
+
+									var data_modal = null;
 								}
 
                             html += `<tr id="`+item.id+`">
@@ -764,7 +779,7 @@ function getErpOrderList()
 										<td>`+partial_status +`</td>
 										<td><span class="label `+status+`">`+item.status_name+`</span></td>
 										<td>`+item.created_date+`</td>
-										<td>`+object_ref+`<button class="print_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print','`+down_ref+`','`+item.template_id+`','',this)" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></button><button style="margin-left: 10px;" class="proof_download" href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof','`+down_ref+`','`+item.template_id+`','',this)"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></button>	</td>
+										<td>`+object_ref+`<button class="print_download" href="javascript:void(0)" data-tempname ='`+item.reference_name.replace(/ /g, "")+`' data-modal ='`+data_modal+`' onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','print','`+down_ref+`','`+item.template_id+`','',this)" ><i class="fa fa-edit"  title="Download Print" data-original-title="Download Print"></i></button><button style="margin-left: 10px;" class="proof_download"  data-tempname ='`+item.reference_name.replace(/ /g, "")+`' data-modal ='`+data_modal+`' href="javascript:void(0)" onclick="DownloadArtwork('`+$ref_name+`','`+i+`','`+item.template_file+`','`+item.style_no+`','`+item.buyer_po_number+`','`+item.erp_order_id+`','`+item.order_type+`','`+item.created_at+`','proof','`+down_ref+`','`+item.template_id+`','',this)"><i class="fa fa-edit"  title="Download Proof" data-original-title="Download Proof"></i></button>	</td>
 										</tr>`;
                             }
 							i++;
