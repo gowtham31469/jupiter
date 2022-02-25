@@ -2433,31 +2433,51 @@ class OrderStatusCntrl extends Controller
                 
                 if($size_category_fin[$j] != "null")
                 {
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                    {
+                        $fo_si = "4.5px";
+                        $let_spac = "-0.2px";
+                    }
+                    else
+                    {
+                        $fo_si = "5px";
+                        $let_spac = "0px";
+                    }
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
 
                     //  print_r($html);
 
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
 
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
 
                     //  print_r($html);
 
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
                 else
                 {
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                    {
+                        $fo_si = "4.5px";
+                        $let_spac = "-0.2px";
+                    }
+                    else
+                    {
+                        $fo_si = "5px";
+                        $let_spac = "0px";
+                    }
+                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
 
                     //  print_r($html);
 
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:5px;"><label  style="font-family:FandFSans-Regular; font-size:5px;">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
 
                     //  print_r($html);
 
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
             }
 
@@ -2943,6 +2963,7 @@ class OrderStatusCntrl extends Controller
             $order_details  = 	DB::table($qty_table)
                                     ->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
 									->where($table_id,$id)
+                                    ->where('quantity','!=',null)
                                     ->orderBy('tesco_washcare_orders_quanty.id', 'asc')
 									->select('*')
                                     ->get();

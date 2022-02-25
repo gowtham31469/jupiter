@@ -97,29 +97,10 @@ class CareLabelOrdersCustomerController extends Controller
         ], 200);
     }
 
-    public function getSecondarySizeCategoriesByPrimaryID(Request $request)
-    {
-        $size_categories = DB::table('tesco_primary_size')
-            ->select('tssc.id', 'tssc.category_name')
-            ->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', 'tesco_primary_size.id')
-            ->join('tesco_secondary_size_category as tssc', 'tssc.id', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
-            ->where('tesco_primary_size.tesco_size_department_id', $request['size'])
-            ->groupBy('tssc.id', 'tssc.category_name')
-            ->orderBy('tssc.id')
-            ->get();
-
-        return response()->json([
-            'message' => 'success',
-            'size_categories' => $size_categories
-        ], 200);
-    }
-
     public function getSecondarySizeListsBySizeCategoryID(Request $request)
     {
         $template_id = $request['template_id'];
-        $tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($request) {
-            $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $request['size_category']);
-        }])
+        $tesco_sizelists = TescoPrimarySize::with(['secSizeChart'])
             ->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])
             ->where('tesco_primary_size.is_flag', true)
             ->orderBy('tesco_primary_size.id')

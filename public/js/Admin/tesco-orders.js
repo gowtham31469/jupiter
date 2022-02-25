@@ -276,11 +276,6 @@ function tescoOrders(callback) {
 																				</select>	
 																				<div class="help-block with-errors"></div>
 																			</div>
-																			<div class="form-group has-feedback hidden" id="tesco_care_size_category_div">
-																				
-																			</div>
-
-																			
                                                                         <button class="btn btn-primary btn-block ">Create Order</button>
                                                                     </form>
                                                                 </div>
@@ -646,15 +641,6 @@ function tescoOrders(callback) {
 					}
 				})
 
-				/** [ Get tempalte preview based on template selection ]  */
-				$('#jstree').on('activate_node.jstree', function (e, data) {
-					$('.template-error').html('')
-					if (data.instance.is_leaf(data.node)) {
-						var template_id = data.node.id;
-
-					}
-				});
-
 				/** [ To get selected leaf node ] */
 				var template_id = 0;
 				var type;
@@ -753,7 +739,6 @@ function tescoOrders(callback) {
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
-							$('#tesco_care_size_category_div').addClass('hidden');
 							// Label Parser
 							if(globalOrderType === 1 && template_type === 'tesco_care_labels') { 
 								// Show only for tesco_care_labels PO upload
@@ -801,9 +786,7 @@ function tescoOrders(callback) {
 
 						} else {
 							$("#tesco_care_size_chart_div").addClass("hidden");
-							$('#tesco_care_size_category_div').html('');
 							$('#tesco_care_size_chart').prop('required', false);
-							$('#tesco_care_size_category').prop('required', false);
 							$('#tesco_care_size_chart').val('');
 							// Label Parser
 							if(globalOrderType === 1){
@@ -815,14 +798,6 @@ function tescoOrders(callback) {
 						}
 						$(".selectpicker").selectpicker("refresh");
 					}
-				});
-
-				$('#tesco_care_size_chart').on('change', (e) => {
-					var valueSelected  = $(e.target).val();
-					if($('#jstree').jstree(true).get_selected('full', true)[0].original.template_type === 'tesco_care_labels') {
-						getSecondarySizeCategory(valueSelected, 'admin')
-					}
-					
 				});
 
 				/** [ bootstrap validator for create tesco order form ] **/
@@ -854,20 +829,8 @@ function tescoOrders(callback) {
 									poZone = poZone == 'BOTH'?'CE':poZone;
 									formData.append('zone', poZone);
 									var size_id = $('#tesco_care_size_chart').val();
-									var size_category = [];
-									var size_category_text = [];
 
-									/** [ Create array of multi selected categories ] */
-									$.each($("#tesco_care_size_category option:selected"), function() {
-										size_category.push($(this).val());
-										// size_category_text.push($(this).text());
-									});
-
-									/** [ Create array of multiple categories ] */
-									$.each($("#tesco_care_size_category option"), function() {
-										size_category_text.push($(this).text());
-									});
-									uploadPurchaseOrderForLabels(formData, poZone, role="admin", size_id, size_category, size_category_text,template_id);
+									uploadPurchaseOrderForLabels(formData, poZone, role="admin", size_id, template_id);
 								} else if(template_type === 'tesco_swing_tickets') {
 									var size_id = $('#tesco_care_size_chart').val();
 									formData.append('zone', 'CE');
