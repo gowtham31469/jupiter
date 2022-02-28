@@ -188,7 +188,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" onchange="alert('WEEE symbols should be used only when the product requires batteries.')">
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                     @foreach($wee_symbols as $key => $value)
@@ -199,6 +199,47 @@
             <div class="help-block with-errors"></div>
         </div>
     </div>
+    <div class="col-md-1">
+        <i style="font-size:18px;padding-top:30px; position: absolute; padding-right:20px;" class="fa popup-window">&#xf05a;</i>
+    </div>
+    <div class="col-md-1 popup-content hidden">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.002% WEIGHT OF CADMIUM</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.004% WEIGHT OF LEAD</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.0005% WEIGHT OF MERCURY</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED WHERE THE GARMENT HAS A BATTERY BUT NONE OF THE ABOVE STATEMENTS APPLY</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     @endif
 
     {{-- FFB/01/M13023C 46 --}}
@@ -208,7 +249,7 @@
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark']) !!} CE Mark
+                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark', 'onchange' => 'alert("CE symbols should be used only when the product is tested against the toy standard.")']) !!} CE Mark
                 </label>
             </div>
             <div class="help-block with-errors"></div>

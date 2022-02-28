@@ -204,7 +204,7 @@ $( () => {
         if([44, 46, 48].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
             <label for="swing_wee_symbol" class="component-label">WEE Symbol </label>
-               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol">
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol" onchange="alert('WEEE symbols should be used only when the product requires batteries.')">
                    <option value="">-- Select WEE Symbol --</option>`;
                    $.each(order_data.wee_symbols, function (id, value) {
 
@@ -220,7 +220,7 @@ $( () => {
                 <label for="swing_ce_mark" class="form_label" style="visibility:hidden">Dont Show</label>
                 <div class="checkbox">
                     <label>
-                        <input id="swing_ce_mark" name="swing_ce_mark" type="checkbox" disabled=""> CE mark
+                        <input id="swing_ce_mark" name="swing_ce_mark" type="checkbox" disabled="" onchange="alert('CE symbols should be used only when the product is tested against the toy standard.')"> CE mark
                     </label>
                 </div>
                 <div class="help-block with-errors"></div>
