@@ -326,7 +326,7 @@
             page.</span>
         <button class="btn btn-xs btn-warning swing-ticket-order-submit-btn" type="submit" onclick="validateTescoSwingTicketOrder('customer')"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>
 
-        <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('print')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button>
+        {{-- <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('print')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Print</button> --}}
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick="create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
