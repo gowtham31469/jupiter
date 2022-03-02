@@ -188,16 +188,57 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol"  id="swing_wee_symbol" onchange="alert('WEEE symbols should be used only when the product requires batteries.')">
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                     @foreach($wee_symbols as $key => $value)
-                            <option title="{{ $value->wee_symbol_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}" >{{ $value->wee_symbol_text }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}" >{{ $value->wee_symbol_text }}</option>
                     @endforeach
                 @endif
             </select>
             <div class="help-block with-errors"></div>
         </div>
+    </div>
+    <div class="col-md-1">
+        <i style="font-size:18px;padding-top:30px; position: absolute; padding-right:20px;" class="fa popup-window">&#xf05a;</i>
+    </div>
+    <div class="col-md-1 popup-content hidden">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-1.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.002% WEIGHT OF CADMIUM</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-2.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.004% WEIGHT OF LEAD</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-4.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.0005% WEIGHT OF MERCURY</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="popover-content-td">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-3.png">
+                    </td>
+                    <td class="popover-content-td">
+                        <label class="form-group">TO BE USED WHERE THE GARMENT HAS A BATTERY BUT NONE OF THE ABOVE STATEMENTS APPLY</label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     @endif
 
@@ -208,7 +249,7 @@
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark']) !!} CE Mark
+                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark', 'onchange' => 'alert("CE symbols should be used only when the product is tested against the toy standard.")']) !!} CE Mark
                 </label>
             </div>
             <div class="help-block with-errors"></div>
@@ -235,7 +276,7 @@
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
                     @foreach($woolmark_logos as $key => $value)
-                            <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}" >{{ $value->woolmark_logo_text }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}" >{{ $value->woolmark_logo_text }}</option>
                     @endforeach
                 @endif
             </select>

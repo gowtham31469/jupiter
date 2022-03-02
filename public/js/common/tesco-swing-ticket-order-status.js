@@ -204,11 +204,11 @@ $( () => {
         if([44, 46, 48].find(data => data === template)){
             contentHtml += `<div class="form-group has-feedback">
             <label for="swing_wee_symbol" class="component-label">WEE Symbol </label>
-               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol">
+               <select class="selectpicker form-control input-sm " data-live-search="true" id="swing_wee_symbol" name="swing_wee_symbol" onchange="alert('WEEE symbols should be used only when the product requires batteries.')">
                    <option value="">-- Select WEE Symbol --</option>`;
                    $.each(order_data.wee_symbols, function (id, value) {
 
-                       contentHtml += `<option title="`+value.wee_symbol_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-symbols' src='`+value.wee_symbol+`' /> `+value.wee_symbol_text+`" value="`+value.id+`">`+value.wee_symbol_text+`</option>`;
+                       contentHtml += `<option data-id="`+value.id+`" data-content="<img class='tesco-swing-symbols' src='`+value.wee_symbol+`' /> `+value.wee_symbol_text+`" value="`+value.id+`">`+value.wee_symbol_text+`</option>`;
 
                    });
                contentHtml += `</select>
@@ -220,7 +220,7 @@ $( () => {
                 <label for="swing_ce_mark" class="form_label" style="visibility:hidden">Dont Show</label>
                 <div class="checkbox">
                     <label>
-                        <input id="swing_ce_mark" name="swing_ce_mark" type="checkbox" disabled=""> CE mark
+                        <input id="swing_ce_mark" name="swing_ce_mark" type="checkbox" disabled="" onchange="alert('CE symbols should be used only when the product is tested against the toy standard.')"> CE mark
                     </label>
                 </div>
                 <div class="help-block with-errors"></div>
@@ -243,7 +243,7 @@ $( () => {
                    <option value="">-- Select Woolmark Logo --</option>`;
                    $.each(order_data.woolmark_logos, function (id, value) {
 
-                       contentHtml += `<option title="`+value.woolmark_logo_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-logos' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`">`+value.woolmark_logo_text+`</option>`;
+                       contentHtml += `<option data-id="`+value.id+`" data-content="<img class='tesco-swing-logos' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`">`+value.woolmark_logo_text+`</option>`;
 
                    });
                contentHtml += `</select>

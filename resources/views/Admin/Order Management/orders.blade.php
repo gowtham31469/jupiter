@@ -942,7 +942,7 @@
                         <option value="">-- Select Wash Instruction --</option>
                         @if(!empty($symbols['Washing']))
                         @foreach($symbols['Washing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -956,7 +956,7 @@
                         <option value="">-- Select Bleach Instruction --</option>
                         @if(!empty($symbols['Whitening']))
                         @foreach($symbols['Whitening'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -970,7 +970,7 @@
                         <option value="">-- Select Dry Instruction --</option>
                         @if(!empty($symbols['Dryer']))
                         @foreach($symbols['Dryer'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -984,7 +984,7 @@
                         <option value="">-- Select Iron Instruction --</option>
                         @if(!empty($symbols['Ironing']))
                         @foreach($symbols['Ironing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                         @endforeach
                         @endif
                     </select>
@@ -998,7 +998,7 @@
                         <option value="">-- Select Dry Clean Instruction --</option>
                         @if(!empty($symbols['Prof Cleaning']))
                         @foreach($symbols['Prof Cleaning'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                         @endforeach
                         @endif
                     </select>

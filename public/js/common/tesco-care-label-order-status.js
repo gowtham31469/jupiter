@@ -86,7 +86,7 @@ $( () => {
                                             <option value="">-- Select Wash Instruction --</option>`;
                                             $.each(order_data.symbols['Washing'], function (id, value) {
 
-                                                metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
                                             });
                                         metadata_select_div += `</select>
@@ -97,7 +97,7 @@ $( () => {
                                             <option value="">-- Select Bleach Instruction --</option>`;
                                             $.each(order_data.symbols['Whitening'], function (id, value) {
 
-                                                metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
                                             });
                                         metadata_select_div += `</select>
@@ -108,7 +108,7 @@ $( () => {
                                             <option value="">-- Select Dry Instruction --</option>`;
                                             $.each(order_data.symbols['Dryer'], function (id, value) {
                                                 
-                                                metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
                                             });
                                         metadata_select_div += `</select>
@@ -119,7 +119,7 @@ $( () => {
                                             <option value="">-- Select Iron Instruction --</option>`;
                                             $.each(order_data.symbols['Ironing'], function (id, value) {
 
-                                                metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
                                             });
                                         metadata_select_div += `</select>
@@ -130,7 +130,7 @@ $( () => {
                                             <option value="">-- Select Dry Clean Instruction --</option>`;
                                             $.each(order_data.symbols['Prof Cleaning'], function (id, value) {
 
-                                                metadata_select_div += `<option title="`+value.degree+`" data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
 
                                             });
                                         metadata_select_div += `</select>
