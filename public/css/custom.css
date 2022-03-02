@@ -1633,3 +1633,39 @@ i.remove-component-btn{
     height: 30px !important;
     width: 40px;
 }
+
+/* tesco swingtickets popover css */
+.popup-window{
+    cursor: pointer;
+}
+
+.popup-window:hover,
+.popup-window:focus{
+    opacity: 0.85;
+}
+
+.popup-window:last-child {
+    margin-right: 0;
+}
+
+.popover-content{
+    width: 290px;
+    font-size: x-small;
+    padding: 20px;
+    color: red;
+}
+
+.popover-content .well {
+    background-color: transparent;
+    border-color: transparent;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    box-shadow: none;
+    margin: 0 10px 0 0;
+}
+
+.popover-content-td {
+    padding-right: 20px;
+    padding-top: 15px;
+}

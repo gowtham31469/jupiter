@@ -315,3 +315,14 @@ addHyphen =  (element) => {
     }
     input.value = str
 }
+
+$( () => { 
+
+    $('.popup-window').popover({
+        html: true,
+        trigger: 'hover',
+        content: function () {
+            return $(this).parent().next('.popup-content').html();
+        }
+    }); 
+}); 

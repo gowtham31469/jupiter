@@ -544,9 +544,13 @@ $(function () {
             if (barcodecheck === false) {
                 /**  [ Show validation error message ] **/
                 obj.value = '';
-               alert('Enter a valid barcode.');
-
+                alert('Enter a valid barcode.');
+                return  false;
             }
+
+            // copy uk barcode to ce barcode input and vice-versa
+            var zone = obj.id.split('_')[0] == 'ce'?'uk':'ce';
+            $(`#${zone}_ean_${obj.id.split('_')[2]}`).val(obj.value);
         }
 
     }
