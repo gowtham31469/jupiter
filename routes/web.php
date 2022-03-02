@@ -462,6 +462,7 @@ Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderMa
 Route::post('admin/tesco/order-management/repeatorder-artwork', 'Admin\Tesco\OrderManagementCntrl@repeatOrderArtwork');
 Route::post('admin/tesco/order-management/extra-quantity', 'Admin\Tesco\OrderManagementCntrl@extraQuantity');
 Route::post('admin/tesco/order-management/extra-quantity-label-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTesco');
+Route::post('admin/tesco/order-management/extra-quantity-st-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityStTesco');
 Route::post('admin/tesco/order-management/extra-quantity-reorder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityReorder');
 Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\OrderManagementCntrl@setTescoReorder');
 Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
