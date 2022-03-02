@@ -775,6 +775,9 @@ Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderControl
 Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
 Route::post('customer/tesco/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+
+Route::post('customer/tesco/extra-quantity-st-tesco', 'Customer\Tesco\ReorderController@extraQuantityStTesco');
+
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
 
