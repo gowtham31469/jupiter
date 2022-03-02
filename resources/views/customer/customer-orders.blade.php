@@ -860,7 +860,7 @@ background: rgba(0,0,0,0.2);
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction">
                 <option value="">-- Select Wash Instruction --</option>
                 @foreach($symbols['Washing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required >{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required >{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -872,7 +872,7 @@ background: rgba(0,0,0,0.2);
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction">
                 <option value="">-- Select Bleach Instruction --</option>
                 @foreach($symbols['Whitening'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -884,7 +884,7 @@ background: rgba(0,0,0,0.2);
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction">
                 <option value="">-- Select Dry Instruction --</option>
                 @foreach($symbols['Dryer'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -896,7 +896,7 @@ background: rgba(0,0,0,0.2);
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction">
                 <option value="">-- Select Iron Instruction --</option>
                 @foreach($symbols['Ironing'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>
@@ -908,7 +908,7 @@ background: rgba(0,0,0,0.2);
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction">
                 <option value="">-- Select Dry Clean Instruction --</option>
                 @foreach($symbols['Prof Cleaning'] as $key => $value)
-                        <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
+                        <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" required>{{ $value->degree }}</option>
                 @endforeach
             </select>
             <div class="help-block with-errors"></div>

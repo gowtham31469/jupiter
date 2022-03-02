@@ -192,7 +192,7 @@
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                     @foreach($wee_symbols as $key => $value)
-                            <option title="{{ $value->wee_symbol_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}" >{{ $value->wee_symbol_text }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-swing-symbols' src='{{ asset($value->wee_symbol ) }}' /> {{$value->wee_symbol_text}}" value="{{ $value->id }}" >{{ $value->wee_symbol_text }}</option>
                     @endforeach
                 @endif
             </select>
@@ -207,7 +207,7 @@
             <tbody>
                 <tr>
                     <td class="popover-content-td">
-                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-1.png">
                     </td>
                     <td class="popover-content-td">
                         <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.002% WEIGHT OF CADMIUM</label>
@@ -215,7 +215,7 @@
                 </tr>
                 <tr>
                     <td class="popover-content-td">
-                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-2.png">
                     </td>
                     <td class="popover-content-td">
                         <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.004% WEIGHT OF LEAD</label>
@@ -223,7 +223,7 @@
                 </tr>
                 <tr>
                     <td class="popover-content-td">
-                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-4.png">
                     </td>
                     <td class="popover-content-td">
                         <label class="form-group">TO BE USED FOR BATTERIES CONTAINING > 0.0005% WEIGHT OF MERCURY</label>
@@ -231,7 +231,7 @@
                 </tr>
                 <tr>
                     <td class="popover-content-td">
-                        <img style="height: 20px;" src="http://localhost:8000/images/WashCareSymbols/tesco/Washing/jrDzY3_Max-temp-95C.png">
+                        <img style="height: 50px; width:30px;" src="/images/wee-battery-icons/SYMBOL-3.png">
                     </td>
                     <td class="popover-content-td">
                         <label class="form-group">TO BE USED WHERE THE GARMENT HAS A BATTERY BUT NONE OF THE ABOVE STATEMENTS APPLY</label>
@@ -276,7 +276,7 @@
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
                     @foreach($woolmark_logos as $key => $value)
-                            <option title="{{ $value->woolmark_logo_text }}" data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}" >{{ $value->woolmark_logo_text }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-swing-logs' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}" >{{ $value->woolmark_logo_text }}</option>
                     @endforeach
                 @endif
             </select>

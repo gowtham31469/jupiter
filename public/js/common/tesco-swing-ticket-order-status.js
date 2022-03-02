@@ -208,7 +208,7 @@ $( () => {
                    <option value="">-- Select WEE Symbol --</option>`;
                    $.each(order_data.wee_symbols, function (id, value) {
 
-                       contentHtml += `<option title="`+value.wee_symbol_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-symbols' src='`+value.wee_symbol+`' /> `+value.wee_symbol_text+`" value="`+value.id+`">`+value.wee_symbol_text+`</option>`;
+                       contentHtml += `<option data-id="`+value.id+`" data-content="<img class='tesco-swing-symbols' src='`+value.wee_symbol+`' /> `+value.wee_symbol_text+`" value="`+value.id+`">`+value.wee_symbol_text+`</option>`;
 
                    });
                contentHtml += `</select>
@@ -243,7 +243,7 @@ $( () => {
                    <option value="">-- Select Woolmark Logo --</option>`;
                    $.each(order_data.woolmark_logos, function (id, value) {
 
-                       contentHtml += `<option title="`+value.woolmark_logo_text+`" data-id="`+value.id+`" data-content="<img class='tesco-swing-logos' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`">`+value.woolmark_logo_text+`</option>`;
+                       contentHtml += `<option data-id="`+value.id+`" data-content="<img class='tesco-swing-logos' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`">`+value.woolmark_logo_text+`</option>`;
 
                    });
                contentHtml += `</select>
