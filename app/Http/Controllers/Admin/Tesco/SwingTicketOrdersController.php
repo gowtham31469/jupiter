@@ -83,7 +83,7 @@ class SwingTicketOrdersController extends Controller
 
             $tesco_template_file = $this->swingTicketMetadata->getTemplateFileSwingTickets($request['template']);
 
-            return View::make('Admin/Order Management/tesco-swing-tickets')
+            return View::make('Admin/Order Management/swing-ticket-orders')
                 ->with([
                     'product_benefits' => $product_benefits,
                     'tesco_suppliers' => $this->tesco_suppliers,
