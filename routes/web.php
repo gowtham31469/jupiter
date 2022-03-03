@@ -462,6 +462,7 @@ Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderMa
 Route::post('admin/tesco/order-management/repeatorder-artwork', 'Admin\Tesco\OrderManagementCntrl@repeatOrderArtwork');
 Route::post('admin/tesco/order-management/extra-quantity', 'Admin\Tesco\OrderManagementCntrl@extraQuantity');
 Route::post('admin/tesco/order-management/extra-quantity-label-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTesco');
+Route::post('admin/tesco/order-management/extra-quantity-st-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityStTesco');
 Route::post('admin/tesco/order-management/extra-quantity-reorder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityReorder');
 Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\OrderManagementCntrl@setTescoReorder');
 Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
@@ -774,6 +775,9 @@ Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderControl
 Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
 Route::post('customer/tesco/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+
+Route::post('customer/tesco/extra-quantity-st-tesco', 'Customer\Tesco\ReorderController@extraQuantityStTesco');
+
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
 
