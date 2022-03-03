@@ -57,7 +57,7 @@ class RepeatOrderController extends Controller
       $id           =   $request->id;
       $type_id      =   explode('_',$type);
       
-      $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->select('*')->get();
+      $data['qty']=DB::table($type.'_quanty')->where($type_id[1].'_order_id',$id)->where('quantity','!=',null)->select('*')->get();
 
       $data['orders']=DB::table('tesco_washcare_orders')->where('id',$id)->select('*')->get();
     

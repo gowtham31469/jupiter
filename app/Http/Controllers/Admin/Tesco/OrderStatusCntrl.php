@@ -4980,15 +4980,34 @@ class OrderStatusCntrl extends Controller
 			$table_name="tesco_thl3_orders";
 			$qty_table_name="tesco_thl3_orders_quanty";
 		}
+		else if($template_name == "tesco_swingticket_orders")
+		{
+			$table_name="tesco_swingticket_orders";
+			$qty_table_name="tesco_swingticket_orders_quanty";
+		}
+		else if($template_name == "tesco_washcare_orders")
+		{
+			$table_name="tesco_swingticket_orders";
+			$qty_table_name="tesco_swingticket_orders_quanty";
+        }
+        
+        if($template_name == "tesco_washcare_orders")
+		{
+            $template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->select('*')->get();
+        }
+        else
+        {
+            if($zone == "CE")
+            {
+                $template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('order_flag','!=','reOrder')->select('*')->get();
+            }
+            else
+            {
+                $template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->select('*')->get();
+            }
+        }
 		
-		if($zone == "CE")
-		{
-			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('ce_style_ref',$ce_style)->where('order_flag','!=','reOrder')->select('*')->get();
-		}
-		else
-		{
-			$template_exists=DB::table($table_name)->where('po_number',$po_number)->where('uk_style_ref',$uk_style)->where('order_flag','!=','reOrder')->select('*')->get();
-		}
+		
 		
 		if(count($template_exists) > 0) 
 		{
