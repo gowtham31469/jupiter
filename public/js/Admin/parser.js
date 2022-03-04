@@ -775,42 +775,46 @@ function parseVPNDescription(tabula) {
                                 if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
                                     let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
                                         let po_updated_size = order.Size;
-                                        switch(order.Size) {
-                                            case 'TB':
-                                                po_updated_size = 'tiny baby';
-                                                break;
-                                            case 'NB':
-                                                po_updated_size = 'Newborn';
-                                                break;
-                                            case 'UP1M':
-                                                po_updated_size = 'up to 1M';
-                                                break;
-                                            case 'UP3M':
-                                                po_updated_size = 'up to 3M';
-                                                break;
-                                            default:
-                                                po_updated_size = order.Size;
-                                        }
-                                        po_updated_size = po_updated_size.replace("/", "-");
+                                        // switch(order.Size) {
+                                        //     case 'TB':
+                                        //         po_updated_size = 'tiny baby';
+                                        //         break;
+                                        //     case 'NB':
+                                        //         po_updated_size = 'Newborn';
+                                        //         break;
+                                        //     case 'UP1M':
+                                        //         po_updated_size = 'up to 1M';
+                                        //         break;
+                                        //     case 'UP3M':
+                                        //         po_updated_size = 'up to 3M';
+                                        //         break;
+                                        //     default:
+                                        //         po_updated_size = order.Size;
+                                        // }
+                                        // po_updated_size = po_updated_size.replace("/", "-");
                                         return po_updated_size;
                                     });
 
-                                    let size_chart;
-                                    if(po_zone == 'UK'){
-                                        size_chart =  meta_size_chart.map(function (sizes) {
-                                            return sizes.uk_size;
-                                        });
-                                    } else {
-                                        size_chart =  meta_size_chart.map(function (sizes) {
-                                            return sizes.ce_size;
-                                        });
-                                    }
+                                    // let size_chart;
+                                    // if(po_zone == 'UK'){
+                                    //     size_chart =  meta_size_chart.map(function (sizes) {
+                                    //         return sizes.uk_size;
+                                    //     });
+                                    // } else {
+                                    //     size_chart =  meta_size_chart.map(function (sizes) {
+                                    //         return sizes.ce_size;
+                                    //     });
+                                    // }
+
+                                    var size_chart =  meta_size_chart.map(function (sizes) {
+                                        return sizes.po_size;
+                                    });
 
                                     // Intersection to find out atleast one size is common
                                     let intersection = po_size_chart.filter(x => size_chart.includes(x));
                                     if(intersection.length > 0) {
                                         // renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
-                                        renderTescoCareOrders(role, template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                        renderTescoCareOrders(role, template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone, meta_size_chart, size_chart));
                                     } else {
                                         $('.snackbar_span').html("Size details mismatch!! Please check the file");
                                         showSnackbar();
@@ -856,12 +860,13 @@ function parseVPNDescription(tabula) {
  * @param  {[type]} parsedObj [description]
  * @return {[type]}           [description]
  */
- function renderParsedLabelValues(parsedObj, po_zone, size_chart) {
+ function renderParsedLabelValues(parsedObj, po_zone, size_chart, zonal_size_chart) {
     var zonal = po_zone.toLowerCase();
-    var zone_size = zonal+'_size';
-    let zonal_size_chart =  size_chart.map(function (sizes) {
-        return sizes[zone_size];
-    });
+    // var zone_size = zonal+'_size';
+    var zone_size = 'po_size';
+    // let zonal_size_chart =  size_chart.map(function (sizes) {
+    //     return sizes[zone_size];
+    // });
 
     // Purchase order
     parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
@@ -875,23 +880,23 @@ function parseVPNDescription(tabula) {
     });
     $.each(parsedObj.orderQuantity, function(i, j) {
         let po_updated_size = j.Size;
-        switch(j.Size) {
-            case 'TB':
-                po_updated_size = 'tiny baby';
-                break;
-            case 'NB':
-                po_updated_size = 'Newborn';
-                break;
-            case 'UP1M':
-                po_updated_size = 'up to 1M';
-                break;
-            case 'UP3M':
-                po_updated_size = 'up to 3M';
-                break;
-            default:
-                po_updated_size = j.Size;
-        }
-        po_updated_size = po_updated_size.replace("/", "-");
+        // switch(j.Size) {
+        //     case 'TB':
+        //         po_updated_size = 'tiny baby';
+        //         break;
+        //     case 'NB':
+        //         po_updated_size = 'Newborn';
+        //         break;
+        //     case 'UP1M':
+        //         po_updated_size = 'up to 1M';
+        //         break;
+        //     case 'UP3M':
+        //         po_updated_size = 'up to 3M';
+        //         break;
+        //     default:
+        //         po_updated_size = j.Size;
+        // }
+        // po_updated_size = po_updated_size.replace("/", "-");
         if($.inArray(po_updated_size, zonal_size_chart) != -1) {
             let index = zonal_size_index[po_updated_size];
             // EAN Barcode for UK
@@ -994,7 +999,7 @@ function parseVPNDescription(tabula) {
                                 // Intersection to find out atleast one size is common
                                 let intersection = po_size_chart.filter(x => size_chart.includes(x));
                                 if(intersection.length > 0) {
-                                    renderTescoSwingTicketOrders(role="admin", template_id, renderParsedSwingTicketValues.bind(null,parsedObj, meta_size_chart, size_chart));
+                                    renderTescoSwingTicketOrders(role, template_id, renderParsedSwingTicketValues.bind(null,parsedObj, meta_size_chart, size_chart));
                                 } else {
                                     $('.snackbar_span').html("Size details mismatch!! Please check the file");
                                     showSnackbar();
