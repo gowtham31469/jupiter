@@ -471,7 +471,7 @@
 
                         <div class="form-group has-feedback">
                             {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '')) !!}
+                            {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
 

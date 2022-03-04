@@ -187,7 +187,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_wee_symbol', 'WEE Symbol', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol" id="swing_wee_symbol" onchange="alert('WEEE symbols should be used only when the product requires batteries.')">
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="swing_wee_symbol" id="swing_wee_symbol" onchange="showSwingticketInfoModal('WEEE symbols should be used only when the product requires batteries.')">
                 <option value="">-- Select WEE Symbol --</option>
                 @if(!empty($wee_symbols))
                 @foreach($wee_symbols as $key => $value)
@@ -248,7 +248,7 @@
         <div class="form-group has-feedback">{!! Form::label('swing_ce_mark', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark', 'onchange' => 'alert("CE symbols should be used only when the product is tested against the toy standard.")']) !!} CE Mark
+                    {!! Form::checkbox('swing_ce_mark',null,null,['id' => 'swing_ce_mark', 'onchange' => 'showSwingticketInfoModal("CE symbols should be used only when the product is tested against the toy standard.")']) !!} CE Mark
                 </label>
             </div>
             <div class="help-block with-errors"></div>
@@ -334,6 +334,25 @@
         <button class="btn btn-xs btn-danger reload-btn" type="button" onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button>
     </div>
     {!! Form::close() !!}
+</div>
+
+{{-- Info Modal on selectbox change --}}
+<div id="dialog-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Info</h4>
+      </div>
+      <div class="modal-body swing-ticket-info-modal">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 {{-- Tesco care swing ticket orders js --}}
