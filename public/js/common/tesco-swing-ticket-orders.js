@@ -328,7 +328,6 @@ $( () => {
     });
 
     showSwingticketInfoModal = (modal_msg) => {
-        alert()
         $('.swing-ticket-info-modal').html(`<strong style="color: red;">${modal_msg}</strong>`);
         $('#dialog-modal').modal({
                 backdrop: 'static',
