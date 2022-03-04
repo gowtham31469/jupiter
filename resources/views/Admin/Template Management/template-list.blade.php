@@ -192,58 +192,6 @@
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/template.js') }}"></script>
     <script>
-
-
-      function showModal(node_id)
-      {
-      itemId =node_id
-      $.ajax({
-      type : 'get',
-      url : '/getTemplateDetails',
-      data:{
-      'id':node_id
-      },
-
-      success:function(data)
-      {
-        console.log(data.Msg)
-        if(data.Msg=="success")
-        {
-        $("#_path").val(data.Res.template_file)
-        $("#caption1").val(data.Res.template_name)
-        $("#caption2").val(data.Res.template_description)
-        $("#img_preview").html('');
-        $("#tempModal").modal('show')
-        }
-        else{
-          alert(data.Msg)
-        }
-      }
-      });
-      }
-
-
-      $(document).on('click', '#_update', function(event) {
-      event.preventDefault();
-      /* Act on the event */
-      $.ajax({
-      type : 'get',
-      url : '/updatePath',
-        data:{
-        'path':$("#_path").val(),
-        'item':itemId,
-        'c1':$("#caption1").val(),
-        'c2':$("#caption2").val(),
-        },
-
-      success:function(data)
-      {
-      $('.snackbar_span').html("Update Sucess.");
-      showSnackbar();
-      }
-      });
-      });
-
       $(document).on('click', '#preview', function(event) {
         event.preventDefault();
         /* Act on the event */
