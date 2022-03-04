@@ -1149,5 +1149,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::post('submit-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@submitSwingTicketOrder');
 	Route::get('get-swing-ticket-order-details', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingTicketOrderDetail');
 	Route::put('update-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@updateSwingTicketOrder');
+	Route::post('po-upload-swing-tickets', 'Customer\Tesco\SwingTicketOrdersCustomerController@createSwingTicketOrders');
+	Route::get('swing-size-chart', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingSizeChart');
 	
   });
