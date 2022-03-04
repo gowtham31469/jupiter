@@ -32,29 +32,6 @@ class TemplateController extends Controller
         return view('Admin/login');
     }
 
-    public function getTemplateDetails(Request $request)
-    {
-        $details=OrchestraTemplate::where('item_id',$request->id)->first();
-        if($details)
-        {
-           
-             return response()->json(['Msg'=>'success','Res'=>$details->toArray()]);
-        }
-        else{
-        
-            return response()->json(['Msg'=>'NotFound '.$request->id]);
-        }
-    }
-
-    function updatePath(Request $request)
-    {
-  
-        OrchestraTemplate::where('item_id', $request->item)
-        ->update(['template_file' => $request->path,'template_name' => $request->c1, 
-            'template_description' => $request->c2]);
-        return response()->json("success");
-    }
-
     public function templateList()
     {
         $module_var = new Modules();
@@ -300,17 +277,4 @@ class TemplateController extends Controller
         
     }
 
-//    public function base64ToJpeg(Request $request)
-//    {
-//            $output_file=  public_path('/storage/app/template/barcode.svg');
-//            $ifp = fopen($output_file , 'wb' ); 
-//
-//            $data = explode( ',', $request->src );
-//
-//            fwrite( $ifp, base64_decode( $data[ 1 ] ) );
-//
-//            fclose( $ifp ); 
-//            print_r(url('/storage/app/template/barcode.svg'));
-//          
-//    }
 }
