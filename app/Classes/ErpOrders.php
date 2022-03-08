@@ -228,7 +228,7 @@ class ErpOrders
 			])
 			->count();
 
-			try {
+			// try {
 
 				if ($dataExists == 0) {
 
@@ -260,6 +260,8 @@ class ErpOrders
 						'fiscal_year_end'       => $this->financial_year_end
 					])->id;
 
+					dd($erp_order_details_id);
+
 					/** Get updated data and update in history table */
 
 					$history_id = History::create([
@@ -288,13 +290,13 @@ class ErpOrders
 						'updated_at'  => $this->current_date,
 					]);
 				}
-			} catch (\Exception $e) {
+			// } catch (\Exception $e) {
 
-				$errorCode  = $e->errorInfo[1];
-				if ($errorCode === 1062) { // Duplicate Entry error code
-					return true;
-				}
-			}
+			// 	$errorCode  = $e->errorInfo[1];
+			// 	if ($errorCode === 1062) { // Duplicate Entry error code
+			// 		return true;
+			// 	}
+			// }
 
 			// remove erp_orders table row , if no FK relation exists in erp_order_details table
 			DB::table('erp_orders')->select('erp_orders.id')

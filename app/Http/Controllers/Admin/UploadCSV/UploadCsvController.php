@@ -347,7 +347,7 @@ class UploadCsvController extends Controller
 
                   if(!empty($size_arr)){
                     DB::statement('TRUNCATE TABLE tesco_secondary_size_translation RESTART IDENTITY CASCADE');
-                    DB::table('tesco_secondary_size_translation')->insert($kids_arr);
+                    DB::table('tesco_secondary_size_translation')->insert($size_arr);
                   }
                   $result = response()->json(['error' =>false,'message' => 'Translation File Uploaded Successfully'], 200);
               }
