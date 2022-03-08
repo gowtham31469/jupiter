@@ -214,8 +214,6 @@ function template_list() {
 				
 				/*The showModal method is a temporary method created and used to update the path of 
 				 the templates in the heirarchy */
-					//showModal(data.node.id)	
-					
 					if (data.instance.is_leaf(data.node)) {
 						var template_id = data.node.id;
 						

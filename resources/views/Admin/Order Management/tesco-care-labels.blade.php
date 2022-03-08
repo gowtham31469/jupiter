@@ -27,7 +27,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '')) !!}
+        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -79,7 +79,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
-            <select name="tesco_care_part_of_two_piece_set" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_part_of_two_piece_set" required>
+            <select name="tesco_care_part_of_two_piece_set" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_part_of_two_piece_set">
             <optgroup label="Select Part of Two Piece Set">
                 <option value="">None</option>
                 @foreach ($part_of_two_piece_set as $key => $value)

@@ -293,41 +293,6 @@ class OrderManagementCntrl extends Controller
       
     }
 
-    /**
-     * Method to create tesco order from purchase order
-     * @return \Illuminate\Http\Response
-     */
-    public function createOrderByPDFMiner(Request $request) {
-      try {
-
-        //Read the path variables from pdfminer config.
-        $python  = Config::get('pdfminer.python');
-        $script  = Config::get('pdfminer.script');
-        $command = Config::get('pdfminer.command');
-
-        //Check the file has been uploaded or not
-        if($request->hasFile('purchase_order')) {
-          $file = $request->file('purchase_order');
-          $name = $file->getClientOriginalName();
-          $path =  $file->move('storage/app/TESCO/purchaseOrder', $name);
-          $process = new Process($python.' '.$script.' '.$command.' '.$path);
-          $process->run();
-
-          // executes after the command finishes
-          if (!$process->isSuccessful()) {
-              throw new ProcessFailedException($process);
-          }
-          //Call the tabula method to extract the quantity table.
-          $table = $this->createOrderByTabula($path);
-          return response()->json(['xml' =>$process->getOutput(),'json' => $table]);
-        } else {
-          return "File not found!!";
-        }
-      } catch (\Exception $e) {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }
-      
-    }
 
     /**
      * Method to create Tesco Sticker Orders using PO upload.

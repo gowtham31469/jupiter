@@ -318,11 +318,21 @@ addHyphen =  (element) => {
 
 $( () => { 
 
+    // Wee symbols info icon popover
     $('.popup-window').popover({
         html: true,
         trigger: 'hover',
         content: function () {
             return $(this).parent().next('.popup-content').html();
         }
-    }); 
+    });
+
+    showSwingticketInfoModal = (modal_msg) => {
+        $('.swing-ticket-info-modal').html(`<strong style="color: red;">${modal_msg}</strong>`);
+        $('#dialog-modal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show:true
+        });
+    }
 }); 
