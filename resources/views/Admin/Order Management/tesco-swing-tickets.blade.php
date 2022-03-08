@@ -43,7 +43,7 @@
                         <th>Quantity <small>(Units)</small></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="swing_ticket_qty_table">
                     @foreach ($size_data as $value)
                     <tr id="swing_size_{{$loop->iteration}}">
                         <input type="hidden" id="secondary_size_id_{{ $value->id }}" name="secondary_size_id[]" value="{{ $value->id }}">

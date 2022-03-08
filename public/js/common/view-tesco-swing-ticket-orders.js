@@ -63,11 +63,32 @@ $( () => {
         $('#swing_ce_mark').prop('checked', order_data.order_details.is_ce_mark_required);
         $('#swing_machine_washable').prop('checked', order_data.order_details.is_machine_washable);
 
-        $.each(order_data.order_details.quantity_details, (indexInArray, valueOfElement) => { 
-            $(`#swing_ean_${valueOfElement.size_id}`).val(valueOfElement.ean_barcode);
-            $(`#swing_quantity_${valueOfElement.size_id}`).val(valueOfElement.quantity);
-        });
+        $('#swing_ticket_qty_table').html('');
 
+        renderQtyTableBody(order_data.order_details.quantity_details, order_data.moq)
+
+    }
+
+    renderQtyTableBody  = (quantity_details, moq) => {
+        var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">`;
+        $.each(quantity_details, (indexInArray, valueOfElement) => {
+            quantity_html += `<tr id="swing_size_${indexInArray+1}">
+                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
+                                            <td >` + valueOfElement.sizes.uk_size + `</td>
+                                            <td >` + valueOfElement.sizes.ce_size + `</td>  <td >`;
+
+            $.each(valueOfElement.sizes.sec_size_chart, function (index, sec_size) {
+
+                quantity_html += `<strong class="text-justify">${sec_size.category_name}</strong> : ${sec_size.secondary_size} <br>`;
+
+            });
+
+            var ean_barcode = valueOfElement.ean_barcode != null?valueOfElement.ean_barcode:"";
+            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_` + valueOfElement.size_id + `" name="swing_ean[]" value="` + ean_barcode + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.size_id + `" name="swing_quantity[]" value="` + valueOfElement.quantity + `" min="`+moq+`" data-min-error="Quantity Should be >= `+moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
+        });
+        
+        $('#swing_ticket_qty_table').html(quantity_html);
     }
 
 });
