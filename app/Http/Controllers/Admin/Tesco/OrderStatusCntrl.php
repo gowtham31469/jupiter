@@ -2327,15 +2327,6 @@ class OrderStatusCntrl extends Controller
         $first_time=0;
         $first_page=0;
         PDF::AddPage();
-
-        if($request->template_name == "FFC/01/M13304C")
-        {
-            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        }
-        else
-        {
-            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        }
         
 
         if($request->template_name == "FFC/01/M13304C")
