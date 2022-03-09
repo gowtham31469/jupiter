@@ -2351,9 +2351,9 @@ class JobManagerController extends Controller
                 
     
     
-               // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
     
-                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+45, $y=95, $w=27, $h=27, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+43, $y=97, $w=29, $h=29, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
                 $i++;
                 $j++;
@@ -2529,9 +2529,9 @@ class JobManagerController extends Controller
             	PDF::RoundedRect($xx, 80, 41, 115.5, 0.8, '1111', null, $style6);
 
 
-						// PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+						 PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-							PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+							PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+43, $y=97, $w=29, $h=29, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
 							if($request->template_name == "FFB/01/M13023C")
 							{
