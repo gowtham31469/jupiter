@@ -60,7 +60,7 @@
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]" min="0">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
