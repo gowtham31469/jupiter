@@ -109,11 +109,26 @@ class CareLabelOrdersCustomerController extends Controller
         $tesco_template = DB::table('tesco_template')
             ->where('item_id', $template_id)
             ->get();
+        
+        $customer = DB::table('customer_profile')
+                        ->where('customer_profile.id', Auth::guard('web_customer')->id())
+                        ->value('company_id');
+        
+        $moq = DB::table('price_taxation')
+        ->where([
+            'template_id' => $template_id,
+            'customer_id' => $customer,
+            'buyer_id' => 2
+        ])
+        ->value('price_taxation.moq');
+
+        $moq_value = !is_null($moq) ? $moq : 0;
 
         return response()->json([
             'message' => 'success',
             'data' => $tesco_sizelists,
-            'tesco_template' => $tesco_template 
+            'tesco_template' => $tesco_template,
+            'moq' => $moq_value
         ], 200);
     }
 

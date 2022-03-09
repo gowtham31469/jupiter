@@ -231,6 +231,13 @@ class ErpOrders
 			try {
 
 				if ($dataExists == 0) {
+					
+					DB::table('erp_order_details')
+					->where([
+						'order_qnty_table_name' => $qnty_table,
+						'order_qnty_table_id' => $value->id
+					])
+					->delete();
 
 					$erp_order_details_id = ErpOrderDetails::create([
 						'erp_order_id'     		=> $erp_order->id,

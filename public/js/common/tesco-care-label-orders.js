@@ -175,6 +175,12 @@ $(function () {
             },
             success: function (response) {
 
+                var moq = 0;
+
+                if (role == 'customer') {
+                    moq = response.moq;
+                }
+
                 var temp_file = response.tesco_template[0].template_file.split(',');
                 $('#hidden_name').val(response.tesco_template[0].template_name)
                 var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id" value="` + size_id + `">
@@ -225,7 +231,7 @@ $(function () {
 
                     quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" min=` + moq + `><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
