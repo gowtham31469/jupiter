@@ -1164,7 +1164,12 @@ class PrintController extends Controller
         $first_time=0;
         $first_page=0;
 		PDF::AddPage();
-		
+
+
+		$html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+		PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+
+
 		if($request->template_name == "FFC/01/M13304C")
         {
             PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
@@ -1175,7 +1180,9 @@ class PrintController extends Controller
                     if($i == 1)
                     {
                         $i=0;
-                        PDF::AddPage();
+						PDF::AddPage();
+						$html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                         $first_page++;
                     }
                 }
@@ -1184,7 +1191,9 @@ class PrintController extends Controller
                     if($i == 2)
                     {
                         $i=0;
-                        PDF::AddPage();
+						PDF::AddPage();
+						$html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                     }
                 }
                 
@@ -1244,6 +1253,8 @@ class PrintController extends Controller
 						$i=0;
 						$wri_x=-129;
 						PDF::AddPage();
+						$html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
 						$first_page++;
 					}
 				}
@@ -1254,6 +1265,8 @@ class PrintController extends Controller
 						$i=0;
 						$wri_x=-129;
 						PDF::AddPage();
+						$html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
 					}
 				}
 				
