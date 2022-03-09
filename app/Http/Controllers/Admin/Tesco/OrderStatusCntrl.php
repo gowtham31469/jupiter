@@ -2327,185 +2327,269 @@ class OrderStatusCntrl extends Controller
         $first_time=0;
         $first_page=0;
         PDF::AddPage();
-        PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-        
-        foreach($data_back as $key => $value)
+        if($request->template_name == "FFC/01/M13304C")
         {
-            if($first_page == 0)
-            {
-                if($i == 3)
-                {
-                    $i=0;
-                    $wri_x=-129;
-                    PDF::AddPage();
-                    $first_page++;
-                }
-            }
-            else
-            {
-                if($i == 4)
-                {
-                    $i=0;
-                    $wri_x=-129;
-                    PDF::AddPage();
-                }
-            }
-            
-
-            if($i == 0)
-            {
-                $xx=15;
-            }
-            else
-            {
-                $xx+=45;
-            }
-
-            if($first_time == 0)
-            {
-                $xx+=45;
-            }
-
-            $siz_cat = explode(',',$size_category_fin[$j]);
-
-            $size_comp = explode(',',$size_comp_fin[$j]);
-
-            if(count($siz_cat) <= 3)
-            {
-                $wri_y=105;
-            }
-            else if(count($siz_cat) == 4)
-            {
-                $wri_y=103;
-            }
-            else if(count($siz_cat) == 5)
-            {
-                $wri_y=101.5;
-            }
-            
-
-            if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
-            {
-                if($size_category_fin[$j] != "null")
-                {
-                    foreach($siz_cat as $val_cat)
-                    {
-                        if (str_contains($val_cat, 'height')) {
-                            $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
-                        }
-                        
-                        if (str_contains($val_cat, 'weight')) {
-                            $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
-                        }
-    
-                        if (str_contains($val_cat, 'chest')) {
-                            $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
-                        }
-    
-                        if (str_contains($val_cat, 'waist')) {
-                            $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
-                        }
-    
-    
-                        foreach($size_comp as $string)
-                        {
-                            if($val_cat != null && $string != null)
-                            {
-                                if(strpos($val_cat, $string) !== false) 
-                                {
-                                    $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
-                                }
-                            }
-                        }
-    
-                        $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
-    
-                      //  print_r($html);
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else
+        {
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
         
-                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                        $wri_y+=2;
-                    }
-                }
 
-
-                $par_pro = json_decode($product_desc_fin[0]);
-                
-                if($size_category_fin[$j] != "null")
+        if($request->template_name == "FFC/01/M13304C")
+        {
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            foreach($data_back as $key => $value)
+            {
+                if($first_page == 0)
                 {
-                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                    if($i == 1)
                     {
-                        $fo_si = "4.5px";
-                        $let_spac = "-0.2px";
+                        $i=0;
+                        PDF::AddPage();
+                        $first_page++;
                     }
-                    else
-                    {
-                        $fo_si = "5px";
-                        $let_spac = "0px";
-                    }
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-
-                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
                 else
                 {
-                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                    if($i == 2)
                     {
-                        $fo_si = "4.5px";
-                        $let_spac = "-0.2px";
+                        $i=0;
+                        PDF::AddPage();
+                    }
+                }
+                
+    
+                if($i == 0)
+                {
+                    $xx=15;
+                }
+                else
+                {
+                    $xx+=90;
+                }
+    
+                if($first_time == 0)
+                {
+                    $xx+=90;
+                }
+                
+    
+                $svgString=urldecode($value);
+    
+                if($request->template_name == "FFC/01/M13304C")
+                {
+                    PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+                }
+                else
+                {
+                    PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+                }
+                
+    
+    
+               // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+45, $y=95, $w=27, $h=27, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                $i++;
+                $j++;
+                $first_time++;
+            }
+        }
+        else
+        {
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            $style6 = array('width' => '0.25', 'cap' => '', 'join' => '', 'dash' => '', 'color' => array(0.67,99, 0.56, 0));
+
+            PDF::RoundedRect($xx, 80, 41, 115.5, 0.8, '1111', null, $style6);
+
+        
+            foreach($data_back as $key => $value)
+            {
+                if($first_page == 0)
+                {
+                    if($i == 3)
+                    {
+                        $i=0;
+                        $wri_x=-129;
+                        PDF::AddPage();
+                        $first_page++;
+                    }
+                }
+                else
+                {
+                    if($i == 4)
+                    {
+                        $i=0;
+                        $wri_x=-129;
+                        PDF::AddPage();
+                    }
+                }
+                
+    
+                if($i == 0)
+                {
+                    $xx=15;
+                }
+                else
+                {
+                    $xx+=45;
+                }
+    
+                if($first_time == 0)
+                {
+                    $xx+=45;
+                }
+    
+                $siz_cat = explode(',',$size_category_fin[$j]);
+    
+                $size_comp = explode(',',$size_comp_fin[$j]);
+    
+                if(count($siz_cat) <= 3)
+                {
+                    $wri_y=105;
+                }
+                else if(count($siz_cat) == 4)
+                {
+                    $wri_y=103;
+                }
+                else if(count($siz_cat) == 5)
+                {
+                    $wri_y=101.5;
+                }
+                
+    
+                if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
+                {
+                    if($size_category_fin[$j] != "null")
+                    {
+                        foreach($siz_cat as $val_cat)
+                        {
+                            if (str_contains($val_cat, 'height')) {
+                                $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
+                            }
+                            
+                            if (str_contains($val_cat, 'weight')) {
+                                $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
+                            }
+        
+                            if (str_contains($val_cat, 'chest')) {
+                                $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
+                            }
+        
+                            if (str_contains($val_cat, 'waist')) {
+                                $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
+                            }
+        
+        
+                            foreach($size_comp as $string)
+                            {
+                                if($val_cat != null && $string != null)
+                                {
+                                    if(strpos($val_cat, $string) !== false) 
+                                    {
+                                        $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                                    }
+                                }
+                            }
+        
+                            $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+        
+                          //  print_r($html);
+            
+                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                            $wri_y+=2;
+                        }
+                    }
+    
+    
+                    $par_pro = json_decode($product_desc_fin[0]);
+                    
+                    if($size_category_fin[$j] != "null")
+                    {
+                        if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                        {
+                            $fo_si = "4.5px";
+                            $let_spac = "-0.2px";
+                        }
+                        else
+                        {
+                            $fo_si = "5px";
+                            $let_spac = "0px";
+                        }
+                        $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+    
+                        $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     }
                     else
                     {
-                        $fo_si = "5px";
-                        $let_spac = "0px";
+                        if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                        {
+                            $fo_si = "4.5px";
+                            $let_spac = "-0.2px";
+                        }
+                        else
+                        {
+                            $fo_si = "5px";
+                            $let_spac = "0px";
+                        }
+                        $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                        
+                        $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     }
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                    
-                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
-            }
+    
+                
+    
+                $svgString=urldecode($value);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
 
-            
+                $style6 = array('width' => '0.25', 'cap' => '', 'join' => '', 'dash' => '', 'color' => array(0.67,99, 0.56, 0));
 
-            $svgString=urldecode($value);
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
-
-
-           // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-            PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-            if($request->template_name == "FFB/01/M13023C")
-            {
-                if($ce_symbol_fin[0] == "true")
+                PDF::RoundedRect($xx, 80, 41, 115.5, 0.8, '1111', null, $style6);
+    
+    
+               // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                if($request->template_name == "FFB/01/M13023C")
                 {
-                    PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    if($ce_symbol_fin[0] == "true")
+                    {
+                        PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    }
                 }
+               
+                
+    
+                $i++;
+                $j++;
+                $first_time++;
+                $wri_x+=90;
             }
-           
-            
-
-            $i++;
-            $j++;
-            $first_time++;
-            $wri_x+=90;
         }
+        
 
         PDF::Output( public_path('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'));
@@ -2538,185 +2622,258 @@ class OrderStatusCntrl extends Controller
         $first_time=0;
         $first_page=0;
         PDF::AddPage();
-        PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        
-        foreach($data_back as $key => $value)
+        if($request->template_name == "FFC/01/M13304C")
         {
-            if($first_page == 0)
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            foreach($data_back as $key => $value)
             {
-                if($i == 3)
+                if($first_page == 0)
                 {
-                    $i=0;
-                    $wri_x=-129;
-                    PDF::AddPage();
-                    $first_page++;
-                }
-            }
-            else
-            {
-                if($i == 4)
-                {
-                    $i=0;
-                    $wri_x=-129;
-                    PDF::AddPage();
-                }
-            }
-            
-
-            if($i == 0)
-            {
-                $xx=15;
-            }
-            else
-            {
-                $xx+=45;
-            }
-
-            if($first_time == 0)
-            {
-                $xx+=45;
-            }
-
-            $siz_cat = explode(',',$size_category_fin[$j]);
-
-            $size_comp = explode(',',$size_comp_fin[$j]);
-
-            if(count($siz_cat) <= 3)
-            {
-                $wri_y=105;
-            }
-            else if(count($siz_cat) == 4)
-            {
-                $wri_y=103;
-            }
-            else if(count($siz_cat) == 5)
-            {
-                $wri_y=101.5;
-            }
-            
-
-            if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
-            {
-                if($size_category_fin[$j] != "null")
-                {
-                    foreach($siz_cat as $val_cat)
+                    if($i == 1)
                     {
-                        if (str_contains($val_cat, 'height')) {
-                            $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
-                        }
-                        
-                        if (str_contains($val_cat, 'weight')) {
-                            $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
-                        }
-    
-                        if (str_contains($val_cat, 'chest')) {
-                            $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
-                        }
-    
-                        if (str_contains($val_cat, 'waist')) {
-                            $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
-                        }
-    
-    
-                        foreach($size_comp as $string)
-                        {
-                            if($val_cat != null && $string != null)
-                            {
-                                if(strpos($val_cat, $string) !== false) 
-                                {
-                                    $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
-                                }
-                            }
-                        }
-    
-                        $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
-    
-                      //  print_r($html);
-        
-                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                        $wri_y+=2;
+                        $i=0;
+                        PDF::AddPage();
+                        $first_page++;
                     }
-                }
-
-
-                $par_pro = json_decode($product_desc_fin[0]);
-                
-                if($size_category_fin[$j] != "null")
-                {
-                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
-                    {
-                        $fo_si = "4.5px";
-                        $let_spac = "-0.2px";
-                    }
-                    else
-                    {
-                        $fo_si = "5px";
-                        $let_spac = "0px";
-                    }
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-
-                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
                 else
                 {
-                    if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                    if($i == 2)
                     {
-                        $fo_si = "4.5px";
-                        $let_spac = "-0.2px";
+                        $i=0;
+                        PDF::AddPage();
+                    }
+                }
+                
+    
+                if($i == 0)
+                {
+                    $xx=15;
+                }
+                else
+                {
+                    $xx+=90;
+                }
+    
+                if($first_time == 0)
+                {
+                    $xx+=90;
+                }
+                
+    
+                $svgString=urldecode($value);
+    
+                if($request->template_name == "FFC/01/M13304C")
+                {
+                    PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+                }
+                else
+                {
+                    PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
+                }
+                
+    
+    
+               // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+45, $y=95, $w=27, $h=27, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                $i++;
+                $j++;
+                $first_time++;
+            }
+        }
+        else
+        {
+            PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            $style6 = array('width' => '0.25', 'cap' => '', 'join' => '', 'dash' => '', 'color' => array(0.67,99, 0.56, 0));
+
+            PDF::RoundedRect($xx, 80, 41, 115.5, 0.8, '1111', null, $style6);
+
+        
+            foreach($data_back as $key => $value)
+            {
+                if($first_page == 0)
+                {
+                    if($i == 3)
+                    {
+                        $i=0;
+                        $wri_x=-129;
+                        PDF::AddPage();
+                        $first_page++;
+                    }
+                }
+                else
+                {
+                    if($i == 4)
+                    {
+                        $i=0;
+                        $wri_x=-129;
+                        PDF::AddPage();
+                    }
+                }
+                
+    
+                if($i == 0)
+                {
+                    $xx=15;
+                }
+                else
+                {
+                    $xx+=45;
+                }
+    
+                if($first_time == 0)
+                {
+                    $xx+=45;
+                }
+    
+                $siz_cat = explode(',',$size_category_fin[$j]);
+    
+                $size_comp = explode(',',$size_comp_fin[$j]);
+    
+                if(count($siz_cat) <= 3)
+                {
+                    $wri_y=105;
+                }
+                else if(count($siz_cat) == 4)
+                {
+                    $wri_y=103;
+                }
+                else if(count($siz_cat) == 5)
+                {
+                    $wri_y=101.5;
+                }
+                
+    
+                if($request->template_name == "FFK/01/M13021C" || $request->template_name == "FFB/01/M13023C" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 4")
+                {
+                    if($size_category_fin[$j] != "null")
+                    {
+                        foreach($siz_cat as $val_cat)
+                        {
+                            if (str_contains($val_cat, 'height')) {
+                                $val_cat = str_replace('height','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Height</label>',$val_cat);
+                            }
+                            
+                            if (str_contains($val_cat, 'weight')) {
+                                $val_cat = str_replace('weight','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Weight</label>',$val_cat);
+                            }
+        
+                            if (str_contains($val_cat, 'chest')) {
+                                $val_cat = str_replace('chest','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Chest</label>',$val_cat);
+                            }
+        
+                            if (str_contains($val_cat, 'waist')) {
+                                $val_cat = str_replace('waist','<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">Waist</label>',$val_cat);
+                            }
+        
+        
+                            foreach($size_comp as $string)
+                            {
+                                if($val_cat != null && $string != null)
+                                {
+                                    if(strpos($val_cat, $string) !== false) 
+                                    {
+                                        $val_cat = str_replace($string,'<label style="font-family:FandFSans-Bold;font-weight:700; font-size:5px;">'.$string.'.</label>',$val_cat);
+                                    }
+                                }
+                            }
+        
+                            $html = '<p style="font-family:FandFSans-Regular; font-size:5px;">'.$val_cat.'</p>';
+        
+                          //  print_r($html);
+            
+                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x, $y=$wri_y, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                            $wri_y+=2;
+                        }
+                    }
+    
+    
+                    $par_pro = json_decode($product_desc_fin[0]);
+                    
+                    if($size_category_fin[$j] != "null")
+                    {
+                        if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                        {
+                            $fo_si = "4.5px";
+                            $let_spac = "-0.2px";
+                        }
+                        else
+                        {
+                            $fo_si = "5px";
+                            $let_spac = "0px";
+                        }
+                        $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+    
+                        $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     }
                     else
                     {
-                        $fo_si = "5px";
-                        $let_spac = "0px";
+                        if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                        {
+                            $fo_si = "4.5px";
+                            $let_spac = "-0.2px";
+                        }
+                        else
+                        {
+                            $fo_si = "5px";
+                            $let_spac = "0px";
+                        }
+                        $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                        
+                        $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+    
+                        //  print_r($html);
+    
+                        PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                     }
-                    $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                    
-                    $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-
-                    //  print_r($html);
-
-                    PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                 }
-            }
+    
+                
+    
+                $svgString=urldecode($value);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
 
-            
+                $style6 = array('width' => '0.25', 'cap' => '', 'join' => '', 'dash' => '', 'color' => array(0.67,99, 0.56, 0));
 
-            $svgString=urldecode($value);
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=41, $h=115.5, $link='', $align='', $palign='', $border=0, $fitonpage=false); 
-
-
-           // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-            PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-            if($request->template_name == "FFB/01/M13023C")
-            {
-                if($ce_symbol_fin[0] == "true")
+                PDF::RoundedRect($xx, 80, 41, 115.5, 0.8, '1111', null, $style6);
+    
+    
+               // PDF::ImageSVG($file=public_path($wee_symbol_fin[0]), $x=$xx+30, $y=81, $w=11, $h=11, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$xx+22, $y=117, $w=17, $h=17, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+                if($request->template_name == "FFB/01/M13023C")
                 {
-                    PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    if($ce_symbol_fin[0] == "true")
+                    {
+                        PDF::ImageSVG($file=public_path('/images/CE.svg'), $x=$xx+3, $y=83, $w=7, $h=7, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    }
                 }
+               
+                
+    
+                $i++;
+                $j++;
+                $first_time++;
+                $wri_x+=90;
             }
-           
-            
-
-            $i++;
-            $j++;
-            $first_time++;
-            $wri_x+=90;
         }
+        
 
         PDF::Output( public_path('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'), 'F');
         print_r(url('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'));
