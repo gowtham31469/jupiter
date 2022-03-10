@@ -127,8 +127,8 @@ class UploadCsvController extends Controller
           {
             $data = \Excel::load($path, function($reader){})->skip(3)->get();
 
-            DB::statement('TRUNCATE TABLE tesco_primary_size RESTART IDENTITY CASCADE');
-            DB::statement('TRUNCATE TABLE tesco_secondary_size_chart RESTART IDENTITY CASCADE');
+            //DB::statement('TRUNCATE TABLE tesco_primary_size RESTART IDENTITY CASCADE');
+            //DB::statement('TRUNCATE TABLE tesco_secondary_size_chart RESTART IDENTITY CASCADE');
 
             if($data->count()){
                 foreach ($data as $key => $value) {
@@ -321,32 +321,32 @@ class UploadCsvController extends Controller
 
                  //print_r($arr);
                   if(!empty($country_arr)){
-                      DB::statement('TRUNCATE TABLE tesco_countries RESTART IDENTITY CASCADE');
+                      //DB::statement('TRUNCATE TABLE tesco_countries RESTART IDENTITY CASCADE');
                       DB::table('tesco_countries')->insert($country_arr);
                   }
 
                   if(!empty($comp_arr)){
-                    DB::statement('TRUNCATE TABLE tesco_components RESTART IDENTITY CASCADE');
+                    //DB::statement('TRUNCATE TABLE tesco_components RESTART IDENTITY CASCADE');
                     DB::table('tesco_components')->insert($comp_arr);
                   }
 
                   if(!empty($fibre_arr)){
-                    DB::statement('TRUNCATE TABLE tesco_fabriclists RESTART IDENTITY CASCADE');
+                    //DB::statement('TRUNCATE TABLE tesco_fabriclists RESTART IDENTITY CASCADE');
                     DB::table('tesco_fabriclists')->insert($fibre_arr);
                   }
 
                   if(!empty($care_arr)){
-                    DB::statement('TRUNCATE TABLE tesco_care_additional_instructions RESTART IDENTITY CASCADE');
+                    //DB::statement('TRUNCATE TABLE tesco_care_additional_instructions RESTART IDENTITY CASCADE');
                     DB::table('tesco_care_additional_instructions')->insert($care_arr);
                   }
 
                   if(!empty($kids_arr)){
-                    DB::statement('TRUNCATE TABLE tesco_kids_warning_statements RESTART IDENTITY CASCADE');
+                    //DB::statement('TRUNCATE TABLE tesco_kids_warning_statements RESTART IDENTITY CASCADE');
                     DB::table('tesco_kids_warning_statements')->insert($kids_arr);
                   }
 
                   if(!empty($size_arr)){
-                    DB::statement('TRUNCATE TABLE tesco_secondary_size_translation RESTART IDENTITY CASCADE');
+                    //DB::statement('TRUNCATE TABLE tesco_secondary_size_translation RESTART IDENTITY CASCADE');
                     DB::table('tesco_secondary_size_translation')->insert($size_arr);
                   }
                   $result = response()->json(['error' =>false,'message' => 'Translation File Uploaded Successfully'], 200);
