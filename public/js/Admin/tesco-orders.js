@@ -14076,19 +14076,19 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         $y_ben = 0;
                         var json_text = "";
                         $($benefit_str).each(function(index,benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
         
                         $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
                         $($sl_benefit_str).each(function(index,sl_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
         
                         $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
                         $($hu_benefit_str).each(function(index,hu_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
                         svgDoc.getElementById("mm_benefits").innerHTML = json_text;
