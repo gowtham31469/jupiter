@@ -43,7 +43,7 @@ class StoreTescoSwingTicketOrder
             ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
             ->first();
 
-        if(count($template_data) === 0){
+        if(!$template_data){
             $errors = ["tesco_template" => "Template details are missing"];
             return response()->json(['errors' => $errors, 'message' => 'Template details are missing'], 422);
         }
@@ -117,7 +117,7 @@ class StoreTescoSwingTicketOrder
             $qty_data[] = array(
                 'swingticket_order_id'     => $swing_ticket_order_id,
                 'ean_barcode'              => $request->swing_ean[$qty_index],
-                'quantity'                 => $request->swing_quantity[$qty_index],
+                'quantity'                 => !is_null($request->swing_quantity[$qty_index]) ? $request->swing_quantity[$qty_index] : 0,
                 'size_id'                  => $request->secondary_size_id[$qty_index],
             );
         }
