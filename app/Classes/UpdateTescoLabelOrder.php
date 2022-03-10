@@ -87,7 +87,7 @@ class UpdateTescoLabelOrder
             $qty_data = array(
                 'uk_ean'                   => $request->uk_ean[$qty_index],
                 'ce_ean'                   => $request->ce_ean[$qty_index],
-                'quantity'                 => $request->quantity[$qty_index],
+                'quantity'                 => !is_null($request->quantity[$qty_index]) ? $request->quantity[$qty_index] : 0,
             );
 
             TescoWashcareOrdersQuantity::where([

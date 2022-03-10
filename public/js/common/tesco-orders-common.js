@@ -213,17 +213,22 @@ viewOrder = (user_type, pNumber,aWork, style_number, zone, orderid) => {
                     localStorage.setItem("zone", template_zone);
                     localStorage.setItem("template type", template_type);
                     localStorage.setItem("template_group", group);
-
-                    switch (data.result.order_details.type) {
-                        case "tesco_washcare_orders":
-                            renderLabelViewOrderPage(data.result, user_type);
-                            break;
-                        case "tesco_swingticket_orders":
-                            renderSwingTicketViewOrderPage(data.result, user_type);
-                            break;
-                        default:
-                            createOrders(data.result, "viewOrder");
+                    
+                    if(data.result.hasOwnProperty('order_details')){
+                        switch (data.result.order_details.type) {
+                            case "tesco_washcare_orders":
+                                renderLabelViewOrderPage(data.result, user_type);
+                                break;
+                            case "tesco_swingticket_orders":
+                                renderSwingTicketViewOrderPage(data.result, user_type);
+                                break;
+                            default:
+                                createOrders(data.result, "viewOrder");
+                        } 
+                    } else {
+                        createOrders(data.result, "viewOrder");
                     }
+                   
                     
                 },
                 400: function() {

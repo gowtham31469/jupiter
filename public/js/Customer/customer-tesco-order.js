@@ -1250,7 +1250,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="0">\
+                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="'+data.moq[0][item.template_name]+'">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -1323,7 +1323,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                             <div class="form-group has-feedback quantity-feedback">\
-                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="0">\
+                                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_1" name="uk_single_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity"  data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="'+data.moq[0][item.template_name]+'">\
                                                 <div class="help-block with-errors"></div>\
                                             </div>\
                                         </td>';
@@ -1390,7 +1390,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'"  id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="0">\
+                                        <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'"  id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_1" max = "999999" data-max-error= "Max 6 digits allowed" placeholder="Enter Quantity" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="'+data.moq[0][item.template_name]+'">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -1462,7 +1462,7 @@ function createOrders(parsedObj = false, oType = false) {
                               $.each(data.templates, function(i, item){
                                html += '<td>\
                                         <div class="form-group has-feedback quantity-feedback"> \
-                                        <input type="number" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="0">\
+                                        <input type="number" data-tname="'+item.template_name+'" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_1" name="ce_single_count_'+item.template_name.replace(' ', '')+'_1" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="'+data.moq[0][item.template_name]+'">\
                                         <div class="help-block with-errors"></div>\
                                         </div>\
                                         </td>';
@@ -7165,20 +7165,6 @@ function printDivTesco(data,name,obj) {
 								svgDoc.getElementById("description").innerHTML = '';
 							}
 							
-//				var s = new XMLSerializer();
-//				var d = svgRoot;
-//				var str = s.serializeToString(d);
-//				
-//
-//				var svg = str;
-//				var canvas = document.getElementById('hiddenCanvas');
-//				var ctx = canvas.getContext('2d');
-//				canvg(canvas, svg);
-//
-//				var theImage = canvas.toDataURL('image/png');
-//				
-//				svgarr.push(theImage)
-							
 							var s = new XMLSerializer();
 							var d = svgRoot;
 							var str = s.serializeToString(d);
@@ -7444,7 +7430,6 @@ function PopupTesco(data,name,zone) {
 	var qr_flag = $('#qr_flag').val();
 	
 	var tesco_description = $('#tesco_description').val();
-	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
 	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco",
@@ -7471,9 +7456,6 @@ function PopupTesco(data,name,zone) {
         retryLimit : 2,
 		async: false,
 		success: function (data) {
-			//window.location.href=data;
-//			success = true;
-//			url = data;
 			
 			  var element = document.createElement('a');
 			  element.setAttribute('href', data);
@@ -7495,9 +7477,7 @@ function PopupTesco(data,name,zone) {
           }
         },
 	})
-//	if (success) { //AND THIS CHANGED
-//		window.open(url)
-//	}
+
 }
 /**
  * This Function is Sub Function of #printDivTesco.
@@ -7533,9 +7513,6 @@ function PopupTescoSmall(data,name,zone) {
 	
 	
 	var tesco_description = $('#tesco_description').val();
-	//var success = false;
-	var url = "";
-	// window.open(base_url + "/customer/order-management/print-pdf?svg="+svg);
 	
 	$.ajax({
 		url: base_url + "/customer/tesco/print-div-tesco-small",
@@ -7555,10 +7532,6 @@ function PopupTescoSmall(data,name,zone) {
         retryLimit : 2,
 		async: false,
 		success: function (data) {
-			//window.location.href=data;
-//			success = true;
-//			url = data;
-			
 			 var element = document.createElement('a');
 			  element.setAttribute('href', data);
 			  element.setAttribute('download', name);
@@ -7579,9 +7552,6 @@ function PopupTescoSmall(data,name,zone) {
           }
         },
 	})
-//	if (success) { //AND THIS CHANGED
-//		window.open(url)
-//	}
 }
 
 /**
@@ -7594,6 +7564,7 @@ try{
          e.preventDefault(); 
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
+         var moq = JSON.parse(localStorage.getItem("moq_values"));
          const stickersList = data.map(template => template.template_name);
 
          var a = [] 
@@ -7659,7 +7630,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="0">\
+                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="'+moq[0][item.template_name]+'">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -7698,6 +7669,7 @@ try{
          e.preventDefault(); 
          /** [ Get template details from localstorage ] */
          var data = JSON.parse(localStorage.getItem("data"));
+         var moq = JSON.parse(localStorage.getItem("moq_values"));
          const stickersList = data.map(template => template.template_name);
 
          var a = [] 
@@ -7757,7 +7729,7 @@ try{
              $.each(data, function(i, item){
                html += '<td>\
                             <div class="form-group has-feedback quantity-feedback">\
-                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="0">\
+                                <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="uk_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="'+moq[0][item.template_name]+'">\
                                 <div class="help-block with-errors"></div>\
                             </div>\
                         </td>';
@@ -7866,6 +7838,7 @@ try{
      e.preventDefault(); 
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
+     var moq = JSON.parse(localStorage.getItem("moq_values"));
      const stickersList = data.map(template => template.template_name);
 
      var a = [] 
@@ -7931,7 +7904,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="0">\
+                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" data-tname="'+item.template_name+'" id="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_single_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeypress="return validateMOQ(this)"   onkeyup="return validateCaseSizeQty(this)" min="'+moq[0][item.template_name]+'">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
@@ -7970,6 +7943,7 @@ try{
      e.preventDefault(); 
      /** [ Get template details from localstorage ] */
      var data = JSON.parse(localStorage.getItem("data"));
+     var moq = JSON.parse(localStorage.getItem("moq_values"));
      const stickersList = data.map(template => template.template_name);
 
      var a = [] 
@@ -8029,7 +8003,7 @@ try{
          $.each(data, function(i, item){
            html += '<td>\
                         <div class="form-group has-feedback quantity-feedback">\
-                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="0">\
+                            <input type="number" class="form-control input-sm quantity-field count_'+item.template_name.replace(' ', '')+'" id="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" name="ce_ratio_count_'+item.template_name.replace(' ', '')+'_'+val+'" placeholder="Enter Quantity" max = "999999" data-max-error= "Max 6 digits allowed" data-lastid="" data-artwork="'+ item.template_name+'" onfocus="return checkMOQ(this)" onkeyup="return validateMOQ(this)" min="'+moq[0][item.template_name]+'">\
                             <div class="help-block with-errors"></div>\
                         </div>\
                     </td>';
