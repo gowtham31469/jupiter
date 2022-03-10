@@ -117,7 +117,7 @@ class StoreTescoLabelOrder
                 'washcare_order_id'        => $washcare_order_id,
                 'uk_ean'                   => $request->uk_ean[$qty_index],
                 'ce_ean'                   => $request->ce_ean[$qty_index],
-                'quantity'                 => $request->quantity[$qty_index],
+                'quantity'                 => !is_null($request->quantity[$qty_index]) ? $request->quantity[$qty_index] : 0,
                 'size_id'                  => $request->secondary_size_id[$qty_index],
                 'selected_secondary_sizes' => json_decode(json_encode($request->secondary_size_data[$qty_index]), true)
             );
