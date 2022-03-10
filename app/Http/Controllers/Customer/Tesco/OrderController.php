@@ -286,53 +286,39 @@ class OrderController extends Controller
       {
          try {
              $templates = explode(',',$request['template_id']);
-             $id = Auth::guard('web_customer')->id();
-             $buyer_id = $request['buyer_id'];
-             $customer = DB::table('customer_profile')
-                          ->select('*')
-                          ->where('customer_profile.id','=',$id)
-                          ->first();
+             
              $moq_array = array();
              $moq_value = array();
              /* Fetch all template details by id */
-             foreach ($templates as $template_id) 
+             foreach ($templates as $key => $template_id) 
              {
                  $template_details[] = DB::table('tesco_template')
-                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company')
-                             ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
-                             ->join('company','company.id','=','tesco_item_master.company_id')
-                             ->where('tesco_item_master.id','=',$template_id)
+                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company', 'tesco_item_master.item_name')
+                             ->join('tesco_item_master','tesco_template.item_id', 'tesco_item_master.id')
+                             ->join('company','company.id', 'tesco_item_master.company_id')
+                             ->where('tesco_item_master.id', $template_id)
                              ->first();
-                 
-                    $temp_name = DB::table('tesco_item_master')
-                             ->select('tesco_item_master.item_name')
-                             ->where('id','=',$template_id)
-                             ->first();
+                    
                     $moq = DB::table('price_taxation')
-                             ->select('price_taxation.moq')
-                             ->where('template_id','=',$template_id)
-                             ->where('customer_id','=',$customer->company_id)
-                             ->where('buyer_id','=',$buyer_id)
-                             ->first();
-                    if($moq)
-                    {
-                      $moq_value[$temp_name->item_name] = $moq->moq;
-                    }
-                    else
-                    {
-                      $moq_value[$temp_name->item_name] = 0;
-                    }
+                              ->where([
+                                'template_id' => $template_id,
+                                'customer_id' => Auth::guard('web_customer')->user()->company_id,
+                                'buyer_id' => $request['buyer_id']
+                              ])
+                             ->value('price_taxation.moq');
+                    
+                    $moq_value[$template_details[$key]->item_name] = !is_null($moq) ? $moq : 0;
              }
              array_push($moq_array,$moq_value);
 
              /* Fetch tesco brands,departments and suppliers details */
-             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=',1)->get();
-             $tesco_department = DB::table('tesco_department')->select('department','id')->where('is_enabled','=',1)->get();
+             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled', 1)->get();
+             $tesco_department = DB::table('tesco_department')->select('department','id')->where('is_enabled', 1)->get();
              $tesco_suppliers = DB::table('tesco_suppliers')
                                       ->select('tesco_suppliers.supplier_name','tesco_suppliers.id')
-                                      ->where('is_enabled','=',1)
+                                      ->where('is_enabled', 1)
                                       ->join('customer_metadata','customer_metadata.customer_metadata_id','tesco_suppliers.id')
-                                      ->where('customer_metadata.customer_id','=',$customer->company_id)
+                                      ->where('customer_metadata.customer_id', Auth::guard('web_customer')->user()->company_id)
                                       ->get();
              
              return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'moq' => $moq_array]);
@@ -1702,32 +1688,32 @@ class OrderController extends Controller
         if (in_array("TCL 1", $artwork)) {
           $tesco_tcl1_orders = DB::table('tesco_tcl1_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tcl1 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tcl1_type . "'" . ' as "type"'))->first();
           if ($tesco_tcl1_orders) {
-            $data['order_details'] = $tesco_tcl1_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id', $tesco_tcl1_orders->id)->select('*')->orderBy('tesco_tcl1_orders_quanty.id')->get();
+            $data['tesco_tcl1_orders'] = $tesco_tcl1_orders;
+            $data['tesco_tcl1_orders']->order_quantity = DB::table('tesco_tcl1_orders_quanty')->where('tcl1_order_id', $tesco_tcl1_orders->id)->select('*')->orderBy('tesco_tcl1_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TCL 2", $artwork)) {
           $tesco_tcl2_orders = DB::table('tesco_tcl2_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tcl2 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tcl2_type . "'" . ' as "type"'))->first();
           if ($tesco_tcl2_orders) {
-            $data['order_details'] = $tesco_tcl2_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id', $tesco_tcl2_orders->id)->select('*')->orderBy('tesco_tcl2_orders_quanty.id')->get();
+            $data['tesco_tcl2_orders'] = $tesco_tcl2_orders;
+            $data['tesco_tcl2_orders']->order_quantity = DB::table('tesco_tcl2_orders_quanty')->where('tcl2_order_id', $tesco_tcl2_orders->id)->select('*')->orderBy('tesco_tcl2_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TCL 4", $artwork)) {
           $tesco_tcl4_orders = DB::table('tesco_tcl4_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tcl4 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tcl4_type . "'" . ' as "type"'))->first();
           if ($tesco_tcl4_orders) {
-            $data['order_details'] = $tesco_tcl4_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id', $tesco_tcl4_orders->id)->select('*')->orderBy('tesco_tcl4_orders_quanty.id')->get();
+            $data['tesco_tcl4_orders'] = $tesco_tcl4_orders;
+            $data['tesco_tcl4_orders']->order_quantity = DB::table('tesco_tcl4_orders_quanty')->where('tcl4_order_id', $tesco_tcl4_orders->id)->select('*')->orderBy('tesco_tcl4_orders_quanty.id')->get();
           }
         }
 
         if (in_array("THL 1", $artwork)) {
           $tesco_thl1_orders = DB::table('tesco_thl1_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->thl1 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->thl1_type . "'" . ' as "type"'))->first();
           if ($tesco_thl1_orders) {
-            $data['order_details'] = $tesco_thl1_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id', $tesco_thl1_orders->id)->select('*')->orderBy('tesco_thl1_orders_quanty.id')->get();
+            $data['tesco_thl1_orders'] = $tesco_thl1_orders;
+            $data['tesco_thl1_orders']->order_quantity = DB::table('tesco_thl1_orders_quanty')->where('thl1_order_id', $tesco_thl1_orders->id)->select('*')->orderBy('tesco_thl1_orders_quanty.id')->get();
           }
         }
 
@@ -1735,40 +1721,40 @@ class OrderController extends Controller
         if (in_array("THL 3", $artwork)) {
           $tesco_thl3_orders = DB::table('tesco_thl3_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->thl3 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->thl3_type . "'" . ' as "type"'))->first();
           if ($tesco_thl3_orders) {
-            $data['order_details'] = $tesco_thl3_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id', $tesco_thl3_orders->id)->select('*')->orderBy('tesco_thl3_orders_quanty.id')->get();
+            $data['tesco_thl3_orders'] = $tesco_thl3_orders;
+            $data['tesco_thl3_orders']->order_quantity = DB::table('tesco_thl3_orders_quanty')->where('thl3_order_id', $tesco_thl3_orders->id)->select('*')->orderBy('tesco_thl3_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TSL 1", $artwork)) {
           $tesco_tsl1_orders = DB::table('tesco_tsl1_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tsl1 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tsl1_type . "'" . ' as "type"'))->first();
           if ($tesco_tsl1_orders) {
-            $data['order_details'] = $tesco_tsl1_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id', $tesco_tsl1_orders->id)->select('*')->orderBy('tesco_tsl1_orders_quanty.id')->get();
+            $data['tesco_tsl1_orders'] = $tesco_tsl1_orders;
+            $data['tesco_tsl1_orders']->order_quantity = DB::table('tesco_tsl1_orders_quanty')->where('tsl1_order_id', $tesco_tsl1_orders->id)->select('*')->orderBy('tesco_tsl1_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TSL 3", $artwork)) {
           $tesco_tsl3_orders = DB::table('tesco_tsl3_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tsl3 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tsl3_type . "'" . ' as "type"'))->first();
           if ($tesco_tsl3_orders) {
-            $data['order_details'] = $tesco_tsl3_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id', $tesco_tsl3_orders->id)->select('*')->orderBy('tesco_tsl3_orders_quanty.id')->get();
+            $data['tesco_tsl3_orders'] = $tesco_tsl3_orders;
+            $data['tesco_tsl3_orders']->order_quantity = DB::table('tesco_tsl3_orders_quanty')->where('tsl3_order_id', $tesco_tsl3_orders->id)->select('*')->orderBy('tesco_tsl3_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TCL 5", $artwork)) {
           $tesco_tcl5_orders = DB::table('tesco_tcl5_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tcl5 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tcl5_type . "'" . ' as "type"'))->first();
           if ($tesco_tcl5_orders) {
-            $data['order_details'] = $tesco_tcl5_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tcl5_orders_quanty')->where('tcl5_order_id', $tesco_tcl5_orders->id)->select('*')->orderBy('tesco_tcl5_orders_quanty.id')->get();
+            $data['tesco_tcl5_orders'] = $tesco_tcl5_orders;
+            $data['tesco_tcl5_orders']->order_quantity = DB::table('tesco_tcl5_orders_quanty')->where('tcl5_order_id', $tesco_tcl5_orders->id)->select('*')->orderBy('tesco_tcl5_orders_quanty.id')->get();
           }
         }
 
         if (in_array("TSL 2", $artwork)) {
           $tesco_tsl2_orders = DB::table('tesco_tsl2_orders')->where('po_number', $request->po_number)->where($request->zone . '_style_ref', $request->style_number)->where('order_flag', 'newOrder')->where('order_status', '!=', 'Order Cancelled')->select('*', DB::raw("'" . $this->tsl2 . "'" . ' as "TemplateName"'), DB::raw("'" . $this->tsl2_type . "'" . ' as "type"'))->first();
           if ($tesco_tsl2_orders) {
-            $data['order_details'] = $tesco_tsl2_orders;
-            $data['order_details']->order_quantity = DB::table('tesco_tsl2_orders_quanty')->where('tsl2_order_id', $tesco_tsl2_orders->id)->select('*')->orderBy('tesco_tsl2_orders_quanty.id')->get();
+            $data['tesco_tsl2_orders'] = $tesco_tsl2_orders;
+            $data['tesco_tsl2_orders']->order_quantity = DB::table('tesco_tsl2_orders_quanty')->where('tsl2_order_id', $tesco_tsl2_orders->id)->select('*')->orderBy('tesco_tsl2_orders_quanty.id')->get();
           }
         }
 
