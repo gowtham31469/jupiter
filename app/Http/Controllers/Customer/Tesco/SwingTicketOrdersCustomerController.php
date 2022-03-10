@@ -67,9 +67,19 @@ class SwingTicketOrdersCustomerController extends Controller
 
             $mm_product_benefits = $this->swingTicketMetadata->getMMProductBenefits($request['template']);
 
-            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
 
             $tesco_template_file = $this->swingTicketMetadata->getTemplateFileSwingTickets($request['template']);
+
+            $moq = DB::table('price_taxation')
+            ->where([
+                'template_id' => $request['template'],
+                'customer_id' => Auth::guard('web_customer')->user()->company_id,
+                'buyer_id' => 2
+            ])
+            ->value('price_taxation.moq');
+
+            $moq_value = !is_null($moq) ? $moq : 0;
 
             return View::make('customer/tesco-customer-swing-tickets')
                 ->with([
@@ -83,7 +93,8 @@ class SwingTicketOrdersCustomerController extends Controller
                     'size_data' => $size_data,
                     'template' => $request['template'],
                     'tesco_template_file' => $tesco_template_file,
-                    'season_codes' => $this->season_codes
+                    'season_codes' => $this->season_codes,
+                    'moq'  => $moq_value
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -116,7 +127,7 @@ class SwingTicketOrdersCustomerController extends Controller
 
             $mm_product_benefits = $this->swingTicketMetadata->getMMProductBenefits($result['order_details']->template_id);
 
-            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
 
             if ($result) {
                 return response()->json([
