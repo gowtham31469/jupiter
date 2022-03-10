@@ -43,7 +43,7 @@ class StoreTescoSwingTicketOrder
             ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
             ->first();
 
-        if(count($template_data) === 0){
+        if(!$template_data){
             $errors = ["tesco_template" => "Template details are missing"];
             return response()->json(['errors' => $errors, 'message' => 'Template details are missing'], 422);
         }
