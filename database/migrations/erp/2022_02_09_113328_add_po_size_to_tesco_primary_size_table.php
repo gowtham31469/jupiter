@@ -14,7 +14,7 @@ class AddPoSizeToTescoPrimarySizeTable extends Migration
     public function up()
     {
         Schema::table('tesco_primary_size', function (Blueprint $table) {
-            $table->string('po_size');
+            $table->string('po_size')->nullable(true);
         });
     }
 
@@ -26,7 +26,7 @@ class AddPoSizeToTescoPrimarySizeTable extends Migration
     public function down()
     {
         Schema::table('tesco_primary_size', function (Blueprint $table) {
-            $table->string('po_size');
+            $table->dropColumn('po_size');
         });
     }
 }

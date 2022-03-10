@@ -117,7 +117,7 @@ class StoreTescoSwingTicketOrder
             $qty_data[] = array(
                 'swingticket_order_id'     => $swing_ticket_order_id,
                 'ean_barcode'              => $request->swing_ean[$qty_index],
-                'quantity'                 => $request->swing_quantity[$qty_index],
+                'quantity'                 => !is_null($request->swing_quantity[$qty_index]) ? $request->swing_quantity[$qty_index] : 0,
                 'size_id'                  => $request->secondary_size_id[$qty_index],
             );
         }
