@@ -286,53 +286,39 @@ class OrderController extends Controller
       {
          try {
              $templates = explode(',',$request['template_id']);
-             $id = Auth::guard('web_customer')->id();
-             $buyer_id = $request['buyer_id'];
-             $customer = DB::table('customer_profile')
-                          ->select('*')
-                          ->where('customer_profile.id','=',$id)
-                          ->first();
+             
              $moq_array = array();
              $moq_value = array();
              /* Fetch all template details by id */
-             foreach ($templates as $template_id) 
+             foreach ($templates as $key => $template_id) 
              {
                  $template_details[] = DB::table('tesco_template')
-                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company')
-                             ->join('tesco_item_master','tesco_template.item_id','=','tesco_item_master.id')
-                             ->join('company','company.id','=','tesco_item_master.company_id')
-                             ->where('tesco_item_master.id','=',$template_id)
+                             ->select('tesco_item_master.id','tesco_template.template_name','tesco_template.template_file','tesco_item_master.is_qrcode_required','company.name as company', 'tesco_item_master.item_name')
+                             ->join('tesco_item_master','tesco_template.item_id', 'tesco_item_master.id')
+                             ->join('company','company.id', 'tesco_item_master.company_id')
+                             ->where('tesco_item_master.id', $template_id)
                              ->first();
-                 
-                    $temp_name = DB::table('tesco_item_master')
-                             ->select('tesco_item_master.item_name')
-                             ->where('id','=',$template_id)
-                             ->first();
+                    
                     $moq = DB::table('price_taxation')
-                             ->select('price_taxation.moq')
-                             ->where('template_id','=',$template_id)
-                             ->where('customer_id','=',$customer->company_id)
-                             ->where('buyer_id','=',$buyer_id)
-                             ->first();
-                    if($moq)
-                    {
-                      $moq_value[$temp_name->item_name] = $moq->moq;
-                    }
-                    else
-                    {
-                      $moq_value[$temp_name->item_name] = 0;
-                    }
+                              ->where([
+                                'template_id' => $template_id,
+                                'customer_id' => Auth::guard('web_customer')->user()->company_id,
+                                'buyer_id' => $request['buyer_id']
+                              ])
+                             ->value('price_taxation.moq');
+                    
+                    $moq_value[$template_details[$key]->item_name] = !is_null($moq) ? $moq : 0;
              }
              array_push($moq_array,$moq_value);
 
              /* Fetch tesco brands,departments and suppliers details */
-             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled','=',1)->get();
-             $tesco_department = DB::table('tesco_department')->select('department','id')->where('is_enabled','=',1)->get();
+             $tesco_brand = DB::table('tesco_brand')->select('brand','id')->where('is_enabled', 1)->get();
+             $tesco_department = DB::table('tesco_department')->select('department','id')->where('is_enabled', 1)->get();
              $tesco_suppliers = DB::table('tesco_suppliers')
                                       ->select('tesco_suppliers.supplier_name','tesco_suppliers.id')
-                                      ->where('is_enabled','=',1)
+                                      ->where('is_enabled', 1)
                                       ->join('customer_metadata','customer_metadata.customer_metadata_id','tesco_suppliers.id')
-                                      ->where('customer_metadata.customer_id','=',$customer->company_id)
+                                      ->where('customer_metadata.customer_id', Auth::guard('web_customer')->user()->company_id)
                                       ->get();
              
              return response()->json(['templates' => $template_details,'tesco_brand' => $tesco_brand,'tesco_department' => $tesco_department,'tesco_suppliers' => $tesco_suppliers,'moq' => $moq_array]);
