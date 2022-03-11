@@ -2656,13 +2656,18 @@ function M13114COpt3(data,svgDoc_back,val)
         {
             if(val.ce_size_name == "0-3M")
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">months · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_under[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_under[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">months  · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_under[0].czech+'  · </tspan><tspan x="35" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_under[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_under[0].hungarian+'</tspan>';
             }
+            else if(val.ce_size_name == "M")
+            {
+                var size_list_right_align1 = "";
+                var size_list_right_align2 = "";
+            }
             else
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">months · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_over[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_over[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">months  · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_over[0].czech+'  · </tspan><tspan x="35" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_over[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_month_over[0].hungarian+'</tspan>';
             }
@@ -2671,28 +2676,33 @@ function M13114COpt3(data,svgDoc_back,val)
         {
             if(val.ce_size_name == "1- 1½Y")
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].czech+' · </tspan><tspan x="26" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].hungarian+'</tspan>';
             }
             else if(val.ce_size_name == "1-2Y")
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].czech+'  · </tspan><tspan x="27" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].hungarian+'</tspan>';
             }
             else if(val.ce_size_name == "2-3Y")
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].czech+'  · </tspan><tspan x="27" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].hungarian+'</tspan>';
             }
             else
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years · </tspan><tspan x="17.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].czech+' · </tspan><tspan x="38.43" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].czech+'  · </tspan><tspan x="24" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].hungarian+'</tspan>';
             }
+        }
+        else
+        {
+            var size_list_right_align1 = "";
+            var size_list_right_align2 = "";
         }
 
         svgDoc_back.getElementById("size_list_right_align1").innerHTML = size_list_right_align1;
@@ -2835,6 +2845,11 @@ function M13233C(data,svgDoc_back,val)
             {
                 var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_under[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_under[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_under[0].hungarian+'</tspan>';
             }
+            else if(val.ce_size_name == "M")
+            {
+                var size_list_right_align1 = "";
+                var size_list_right_align2 = "";
+            }
             else
             {
                 var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_over[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_over[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_month_over[0].hungarian+'</tspan>';
@@ -2858,6 +2873,11 @@ function M13233C(data,svgDoc_back,val)
             {
                 var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_over[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_over[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_over[0].hungarian+'</tspan>';
             }
+        }
+        else
+        {
+            var size_list_right_align1 = "";
+            var size_list_right_align2 = "";
         }
 
         svgDoc_back.getElementById("size_list_right_align").innerHTML = size_list_right_align;
@@ -3977,6 +3997,10 @@ function M13114COpt4(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_under[0].czech+" • "+ val.tesco_month_under[0].slovak+" • "+ val.tesco_month_under[0].hungarian+'</tspan>';
                         }
+                        else if(val.ce_size_name == "M")
+                        {
+                            var size_list_translation = "";
+                        }
                         else
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_over[0].czech+" • "+ val.tesco_month_over[0].slovak+" • "+ val.tesco_month_over[0].hungarian+'</tspan>';
@@ -4000,6 +4024,10 @@ function M13114COpt4(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
                         }
+                    }
+                    else
+                    {
+                        var size_list_translation = "";
                     }
                     
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
@@ -4518,6 +4546,10 @@ function M13114COpt2(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_under[0].czech+" • "+ val.tesco_month_under[0].slovak+" • "+ val.tesco_month_under[0].hungarian+'</tspan>';
                         }
+                        else if(val.ce_size_name == "M")
+                        {
+                            var size_list_translation = "";
+                        }
                         else
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_over[0].czech+" • "+ val.tesco_month_over[0].slovak+" • "+ val.tesco_month_over[0].hungarian+'</tspan>';
@@ -4541,6 +4573,10 @@ function M13114COpt2(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
                         }
+                    }
+                    else
+                    {
+                        var size_list_translation = "";
                     }
                     
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
@@ -5059,6 +5095,10 @@ function M13021C(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_under[0].czech+" • "+ val.tesco_month_under[0].slovak+" • "+ val.tesco_month_under[0].hungarian+'</tspan>';
                         }
+                        else if(val.ce_size_name == "M")
+                        {
+                            var size_list_translation = "";
+                        }
                         else
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_over[0].czech+" • "+ val.tesco_month_over[0].slovak+" • "+ val.tesco_month_over[0].hungarian+'</tspan>';
@@ -5082,6 +5122,10 @@ function M13021C(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
                         }
+                    }
+                    else
+                    {
+                        var size_list_translation = "";
                     }
                     
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
