@@ -2133,6 +2133,7 @@ class OrderStatusCntrl extends Controller
         $wee_symbol_fin=explode(',_',$request->wee_symbol_fin);
         $ce_symbol_fin=explode(',_',$request->ce_symbol_fin);
         $woolmark_logo_file = $request->woolmark_logo_file;
+        $tesco_size_department = $request->tesco_size_department;
         
         PDF::SetFont('fandfsansb');
         PDF::SetFont('fandfsans');
@@ -2327,6 +2328,12 @@ class OrderStatusCntrl extends Controller
         $first_time=0;
         $first_page=0;
         PDF::AddPage();
+
+        $html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
+		PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+        $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+		PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         
 
         if($request->template_name == "FFC/01/M13304C")
@@ -3459,6 +3466,8 @@ class OrderStatusCntrl extends Controller
 
                 $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
 
+                $tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+
                 $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
 
                 $order_omp  = 	DB::table($table)
@@ -3560,6 +3569,7 @@ class OrderStatusCntrl extends Controller
                 $value->tesco_year_under=$tesco_year_under;
                 $value->tesco_year_over=$tesco_year_over;
                 $value->tesco_translation=$tesco_translation;
+                $value->tesco_size_department=$tesco_size_department[0]->department_name;
             }
             else
             {
