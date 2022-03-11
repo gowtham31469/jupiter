@@ -4678,6 +4678,7 @@ class OrderStatusController extends Controller
                                     ->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
                                     ->where($table_id,$id)
                                     ->where('quantity','!=',null)
+                                    ->where('quantity','!=',0)
                                     ->orderBy('tesco_washcare_orders_quanty.id', 'asc')
 									->select('*')
                                     ->get();
@@ -4709,6 +4710,7 @@ class OrderStatusController extends Controller
             $order_details  = 	DB::table($qty_table)
                                 ->where($table_id,$id)
                                 ->where('quantity','!=',null)
+                                ->where('quantity','!=',0)
                                 ->orderBy('id', 'asc')
                                 ->select('*')
                                 ->get();
