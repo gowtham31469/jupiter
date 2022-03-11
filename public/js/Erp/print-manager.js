@@ -693,7 +693,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var temp_name = $(obj).data('tempname');
 				var table_name_print = "tesco_swingticket_orders";
 
-				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print)
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof")
 			}
 			else
 			{
@@ -734,7 +734,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var temp_name = $(obj).data('tempname');
 				var table_name_print = "tesco_swingticket_orders";
 
-				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print)
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print")
 			}
 			else
 			{
@@ -3348,7 +3348,7 @@ function M13021C(data,svgDoc_back,val)
                    ];
 }
 
-function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,table_name_print) {
+function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,table_name_print,art_type) {
     $(obj).prop('disabled', true);
     var buyer = "tesco";
 
@@ -3672,8 +3672,17 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var wee_symbol_fin = wee_symbol.join(',_');
                 var ce_symbol_fin = ce_symbol.join(',_');
                 var size_comp_fin = size_comp_arr.join(',_');
-                var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file);
+				var product_desc_fin = product_desc_arr.join(',_');
+				
+				if(art_type == "print")
+                {
+                    PopupTescoTicketsPrintManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file);
+                }
+                else
+                {
+                    PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file,data.order_details[0].tesco_size_department);
+				}
+				
             }
 
         },
@@ -8399,9 +8408,14 @@ function jsbarcodetescoticketseanhoriz(code, id, svgDoc) {
     svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
     svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
 
-    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Bold')
+
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[2].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[4].setAttribute('font-weight', '700')
 
     svg.getElementsByTagName('text')[0].setAttribute('x', '15')
 
@@ -8462,21 +8476,25 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
     canvas.height = svg.getBoundingClientRect().height;
 
     body.appendChild(canvas);
-	canvasTmp = document.getElementById('canvas');
-	
+    canvasTmp = document.getElementById('canvas');
 
-    // svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
-    // svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
 
-    // svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
-    // svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
-    // svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Bold')
 
-    // svg.getElementsByTagName('text')[0].setAttribute('x', '15')
 
-    // svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
-    // svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
-    // svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[0].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[2].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[4].setAttribute('font-weight', '700')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '20')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
 
     /* Time to play ;) */
 
@@ -8497,9 +8515,7 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
 
 
     //remove temporary canvas
-	canvasTmp.remove();
-	
-	console.log(svg_xml)
+    canvasTmp.remove();
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
 }
@@ -10032,8 +10048,63 @@ function toTitleCase(str) {
 	return str[0].toUpperCase() + str.slice(1)
 }
 
+function PopupTescoTicketsPrintManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/tesco/generate-div-tescoticketos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name,
+            size_category_fin:size_category_fin,
+            size_comp_fin:size_comp_fin,
+            product_desc_fin:product_desc_fin,
+            wee_symbol_fin:wee_symbol_fin,
+            ce_symbol_fin:ce_symbol_fin,
+            woolmark_logo_file:woolmark_logo_file
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
 
-function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file) {
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+        complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
+	})
+}
+
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file,tesco_size_department) {
 	
 	var url = "";
 	
@@ -10054,7 +10125,8 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 			product_desc_fin:product_desc_fin,
 			wee_symbol_fin:wee_symbol_fin,
             ce_symbol_fin:ce_symbol_fin,
-            woolmark_logo_file:woolmark_logo_file
+			woolmark_logo_file:woolmark_logo_file,
+			tesco_size_department:tesco_size_department
 		},
 		tryCount: 0,
 		retryLimit: 2,

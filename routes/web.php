@@ -854,6 +854,8 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::post('job-manager/tesco/proof-div-tescoticketos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoTicketos');
 
+	Route::post('job-manager/tesco/generate-div-tescoticketos', 'ErpUser\Jobmanager\JobManagerController@generateDivTescoTicketos');
+
 
 	Route::post('job-manager/tesco/proof-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoLabelos');
 
