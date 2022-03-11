@@ -5291,7 +5291,7 @@ function M13114COpt3(data,svgDoc_back,val)
         {
             if(val.ce_size_name == "1- 1½Y")
             {
-                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].czech+'  · </tspan><tspan x="26" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].slovak+'</tspan>';
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].czech+' · </tspan><tspan x="26" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].slovak+'</tspan>';
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_und[0].hungarian+'</tspan>';
             }
