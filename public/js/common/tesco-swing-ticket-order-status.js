@@ -106,7 +106,7 @@ $( () => {
         $('#swingticket_order_id').val(order_data.order_details.id);
         $('#swingticket_template_id').val(order_data.order_details.template_id);
         $('#swingticket_template_name').val(order_data.order_details.item_master.template_name);
-        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name);
+        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name + " (" + order_data.order_details.quantity_details[0].sizes.department_title +")");
         
         renderQtyTableBody(order_data.order_details.quantity_details, order_data.moq)
 

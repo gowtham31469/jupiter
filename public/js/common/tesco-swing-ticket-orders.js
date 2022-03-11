@@ -7,14 +7,14 @@
 // Method to render tesco swing ticket orders page
 renderTescoSwingTicketOrders = (role, template_id, callback=null) => {
     var user_role = role.toLowerCase();
-    var size_id = $('#tesco_care_size_chart').val();
-    
+    var size_id = $('#tesco_care_size_chart option:selected').val();
+    var size_department = $('#tesco_care_size_chart option:selected').text();
 
     $('.main-content').load('/' + user_role + '/tesco/swing-ticket-orders?size='+size_id+'&template='+template_id, ( response, status, xhr ) => {
         $(".selectpicker").selectpicker("refresh");
         $('li.year-nav-menu').addClass('hidden');
         $('li.buyer-nav-menu').addClass('hidden');
-        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
+        $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + ' ('+ size_department +')</strong></h4></div>');
         callback();
     }); 
 }
