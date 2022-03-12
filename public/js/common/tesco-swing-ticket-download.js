@@ -761,7 +761,7 @@ function M13114COpt3(data,svgDoc_back,val)
     }
     else
     {
-        svgDoc_back.getElementById("lycra_text").setAttribute('style', "visibility:hidden");
+        svgDoc_back.getElementById("lycra_text").setAttribute('visibility','hidden');
     }
     
     var created_at = new Date(val.created_at);
@@ -1136,7 +1136,7 @@ function M13114COpt1(data,svgDoc_back,val)
     }
     else
     {
-        svgDoc_back.getElementById("lycra_text").setAttribute('style', "visibility:hidden");
+        svgDoc_back.getElementById("lycra_text").setAttribute('visibility','hidden');
     }
     var created_at = new Date(val.created_at);
 
@@ -1319,7 +1319,7 @@ function M13020C(data,svgDoc_back,val)
     }
     else
     {
-        svgDoc_back.getElementById("lycra_text").setAttribute('style', "visibility:hidden");
+        svgDoc_back.getElementById("lycra_text").setAttribute('visibility','hidden');
     }
     var created_at = new Date(val.created_at);
 
@@ -1624,7 +1624,7 @@ function M13022C(data,svgDoc_back,val)
     }
     else
     {
-        svgDoc_back.getElementById("lycra_text").setAttribute('style', "visibility:hidden");
+        svgDoc_back.getElementById("lycra_text").setAttribute('visibility','hidden');
     }
     var created_at = new Date(val.created_at);
 
