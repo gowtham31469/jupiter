@@ -49,8 +49,16 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 	var a = document.getElementById(data);
     var svgDoc = a.contentDocument;
     
-	var name2=name;
-    var name = name + "-sticker";
+    var name2=name;
+    if(buyer_type == "erp")
+    {
+        var name = name2 + "-sticker";
+    }
+    else
+    {
+        var name = name + "-sticker";
+    }
+    
     
     var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
     var svgDoc_back = a_back.contentDocument;
