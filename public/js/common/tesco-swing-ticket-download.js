@@ -1,5 +1,19 @@
 
-function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,art_type) {
+function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,art_type,buyer_type) {
+
+    if(buyer_type == "admin")
+    {
+        var buyer_url = base_url + "/admin/tesco/get-order-details";
+    }
+    else if(buyer_type == "customer")
+    {
+        var buyer_url = base_url + "/customer/tesco/get-order-details";
+    }
+    else if(buyer_type == "erp")
+    {
+        var buyer_url = base_url + "/erp/job-manager/get-order-details";
+    }
+
     $(obj).prop('disabled', true);
     var created_at = $(obj).parent().attr('data-orderdate');
     var status = $(obj).parent().attr('data-order_status');
@@ -25,7 +39,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
     var product_desc_arr = [];
     ajax_count=0;
     $.ajax({
-        url: base_url + "/admin/tesco/get-order-details",
+        url: buyer_url,
         type: "Post",
         dataType: "json",
         data: {
@@ -256,6 +270,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                             json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
+                        console.log(svgDoc)
                         svgDoc.getElementById("mm_benefits").innerHTML = json_text;
                     }
                     
