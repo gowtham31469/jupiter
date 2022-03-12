@@ -1415,7 +1415,7 @@ function tescoStatusTable(data, path) {
                         }
                         else if(value.tableName == "tesco_swingticket_orders")
                         {
-                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtworkTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                            tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value.order_status + '" class="" href="javascript:void(0)" onclick=downloadArtworkTickets("' + value.TemplateName.replace(/ /g, "") +"_"+value.template_id+'_modal","'+value.TemplateName.replace(/ /g, "")+'","'+style_no+'","'+value.BuyerPO+'","' + value.tableID + '","' + value.order_flag + '",this,"'+value.template_id+'","tesco_swingticket_orders","proof","customer")><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                         }
                         else
                         {

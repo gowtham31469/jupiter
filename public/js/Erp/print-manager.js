@@ -693,7 +693,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var temp_name = $(obj).data('tempname');
 				var table_name_print = "tesco_swingticket_orders";
 
-				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof")
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof","erp")
 			}
 			else
 			{
@@ -734,7 +734,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var temp_name = $(obj).data('tempname');
 				var table_name_print = "tesco_swingticket_orders";
 
-				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print")
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print","erp")
 			}
 			else
 			{
