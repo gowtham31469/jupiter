@@ -4,13 +4,13 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
     if(buyer_type == "admin")
     {
         var buyer_url = base_url + "/admin/tesco/get-order-details";
-        var name2=name
+        var name2=name;
         var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
     }
     else if(buyer_type == "customer")
     {
         var buyer_url = base_url + "/customer/tesco/get-order-details";
-        var name2=name
+        var name2=name;
         var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
     }
     else if(buyer_type == "erp")
@@ -49,10 +49,9 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
 	var a = document.getElementById(data);
     var svgDoc = a.contentDocument;
     
-	var name2=name;
     var name = name + "-sticker";
     
-    var a_back = document.getElementById(name2+"_"+art_temp_id+"_back_modal");
+    
     var svgDoc_back = a_back.contentDocument;
 
     var svgarr = [];
