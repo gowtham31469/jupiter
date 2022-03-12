@@ -10307,7 +10307,7 @@ function create_download_artwork(print_type,obj)
 		var table_name_print = "tesco_swingticket_orders"
 
 
-		downloadArtworkTickets(data,temp_name,style_no,BuyerPO,tableID,order_flag,obj,template_id,table_name_print,print_type)
+		downloadArtworkTickets(data,temp_name,style_no,BuyerPO,tableID,order_flag,obj,template_id,table_name_print,print_type,"admin")
 	}
 	else
 	{
