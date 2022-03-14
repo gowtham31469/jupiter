@@ -143,7 +143,7 @@ class UploadCsvController extends Controller
                     $category3 = preg_replace('/[^A-Za-z0-9\-]/', '', $value['name3']);
                     $category3_value = $value['secondary_sizing3'];
 
-                    $tesco_size_department = DB::table('tesco_size_department')->select('*')->where('department_name',$department)->get();
+                    $tesco_size_department = DB::table('tesco_size_department')->select('*')->where('department_name',trim($department))->get();
 
                     if(count($tesco_size_department) > 0)
                     {
@@ -225,14 +225,14 @@ class UploadCsvController extends Controller
                     {
                       if($value->english !=  null && $value->english !=  "" )
                       {
-                        $country_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        $country_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                       }
                     }
                     else if($value->category == "PRODUCT DESCRIPTION")
                     {
                       if($value->english !=  null && $value->english !=  "" )
                       {
-                        $comp_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        $comp_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                       }
                     }
                     else if($value->category == "FIBRE NAMES")
@@ -241,14 +241,14 @@ class UploadCsvController extends Controller
                       {
                         if($value->english !=  null && $value->english !=  "" )
                         {
-                          $comp_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                          $comp_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                         }
                       }
                       else
                       {
                         if($value->english !=  null && $value->english !=  "" )
                         {
-                          $fibre_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                          $fibre_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                         }
                       }
                     }
@@ -256,30 +256,30 @@ class UploadCsvController extends Controller
                     {
                       if($value->english !=  null && $value->english !=  "" )
                       {
-                        $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                       }
                     }
                     else if($value->category == "EN17 WARNINGS")
                     {
                       if($value->english !=  null && $value->english !=  "" )
                       {
-                        $kids_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        $kids_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                       }
                     }
                     else if($value->category == "AGE / SIZE")
                     {
                       if($value->english !=  null && $value->english !=  "" )
                       {
-                        $size_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                        $size_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                       }
                     }
                     else if($value->english == "part of set")
                     {
-                      $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $care_arr[] = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
                     }
                     else if($value->english == "tiny baby")
                     {
-                      $tiny = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $tiny = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
 
                       DB::table('tesco_translation')
                           ->where('id', 1)
@@ -287,7 +287,7 @@ class UploadCsvController extends Controller
                     }
                     else if($value->english == "newborn")
                     {
-                      $newborn = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $newborn = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
 
                       DB::table('tesco_translation')
                           ->where('id', 2)
@@ -295,7 +295,7 @@ class UploadCsvController extends Controller
                     }
                     else if($value->english == "up to 1 mth")
                     {
-                      $up1m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $up1m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
 
                       DB::table('tesco_translation')
                           ->where('id', 3)
@@ -303,7 +303,7 @@ class UploadCsvController extends Controller
                     }
                     else if($value->english == "up to 3 mths")
                     {
-                      $up3m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $up3m = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
 
                       DB::table('tesco_translation')
                           ->where('id', 4)
@@ -311,7 +311,7 @@ class UploadCsvController extends Controller
                     }
                     else if($value->english == "one size")
                     {
-                      $onesize = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now()];
+                      $onesize = ['english' => $value->english, 'polish' => $value->polish, 'czech' => $value->czech, 'slovak' => $value->slovak, 'hungarian' => $value->hungarian,'is_enabled' => 1, 'created_at'=> Carbon::now(),'id' => $value->id];
 
                       DB::table('tesco_translation')
                           ->where('id', 5)
