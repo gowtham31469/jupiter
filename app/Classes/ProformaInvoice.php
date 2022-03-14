@@ -339,8 +339,7 @@ class ProformaInvoice
 
     if ($table_name == 'tesco_washcare_orders' || $table_name == 'tesco_swingticket_orders' ) {
       
-      $query->join('tesco_primary_size', $table_name . '_quanty.size_id', 'tesco_primary_size.id')
-      ->select('uk_size as size', $table_name . '_quanty.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'order_flag', 'tesco_template.template_name', 'pi_status', 'pi_rev_no');
+      $query->select('uk_size as size', $table_name . '_quanty.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'order_flag', 'tesco_template.template_name', 'pi_status', 'pi_rev_no');
 
     } else  {
 
@@ -457,8 +456,7 @@ class ProformaInvoice
 
               $style_array = explode("/", $item_details[0]->style);
 
-              $query2->join('tesco_primary_size', $table_name . '_quanty.size_id', 'tesco_primary_size.id')
-                ->where('uk_style_ref', $style_array[0])
+              $query2->where('uk_style_ref', $style_array[0])
                 ->where('ce_style_ref', $style_array[1])
                 ->select($key . '.id', $key . '.order_flag', 'uk_size as size', $qunty_tbl . '.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $key . '.pi_rev_no', 'tesco_template.template_name', 'pi_rev_no');
 
@@ -518,8 +516,7 @@ class ProformaInvoice
 
           $style_array = explode("/", $item_details[0]->style);
 
-          $query->join('tesco_primary_size', $table_name . '_quanty.size_id', 'tesco_primary_size.id')
-            ->where('uk_style_ref', $style_array[0])
+          $query->where('uk_style_ref', $style_array[0])
             ->where('ce_style_ref', $style_array[1])
             ->select($table_name . '.id', $table_name . '.order_flag', 'uk_size as size', $table_name . '_quanty.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'tesco_template.template_name', 'pi_rev_no');
 
@@ -567,8 +564,7 @@ class ProformaInvoice
 
           $style_array = explode("/", $item_details[0]->style);
 
-          $query->join('tesco_primary_size', $table_name . '_quanty.size_id', 'tesco_primary_size.id')
-          ->where('uk_style_ref', $style_array[0])
+          $query->where('uk_style_ref', $style_array[0])
             ->where('ce_style_ref', $style_array[1])
             ->where($table_name . '.order_flag', "repeatOrder")
             ->select($table_name . '.id', $table_name . '.order_flag', 'uk_size as size', $table_name . '_quanty.quantity', 'uk_style_ref', 'ce_style_ref', 'price_taxation.custom_name as material_name', 'po_number as po_no', 'zone', 'tesco_item_master.item_name as ref_no', 'tesco_template.item_id', $table_name . '.pi_rev_no', 'tesco_template.template_name', 'pi_rev_no');
@@ -710,7 +706,7 @@ class ProformaInvoice
           {
            $customer_details->freight_terms =  DB::table('nominated_forwarders')->pluck('forwarder')->first();
           }
-        }                        
+        }                      
         $data['bank_details']   = $customer_details;
         $data['bank_details']->template_type = $pi_details->template_type;
         $data['bill_to']        = DB::table('customer_bill_address')

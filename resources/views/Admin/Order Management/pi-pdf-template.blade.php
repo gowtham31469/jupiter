@@ -61,7 +61,7 @@
             </tr>
         </table>
         <p><strong>ITEM DESCRIPTION & DETAILS :</strong></p>
-        @if($bank_details->template_type == "single")
+        @if($bank_details->template_type == "single" || $bank_details->template_type == "joint")
              <table cellpadding="1" cellspacing="0" border="0.2" class="thead-design" ><thead><tr><th><strong>S.No.</strong></th><th><strong>Style</strong></th><th><strong>Po.No.</strong></th><th><strong>Ref</strong></th><th><strong>Size</strong></th><th><strong>Quantity</strong></th><th><strong>Unit Cost</strong></th><th><strong>Tax</strong></th><th><strong>Total</strong></th></tr></thead><tbody>
         @else
             <table cellpadding="1" cellspacing="0" border="0.2" class="thead-design" ><thead><tr><th><strong>S.No.</strong></th><th><strong>Style</strong></th><th><strong>Po.No.</strong></th><th><strong>Ref</strong></th><th><strong>Quantity</strong></th><th><strong>Unit Cost</strong></th><th><strong>Tax</strong></th><th><strong>Total</strong></th></tr></thead><tbody>
@@ -92,7 +92,7 @@
                     $taxamnt = ($data->quantity*$unit_price)*($tax/100);
                     $amnt =  ($data->quantity*$unit_price) + $taxamnt ;
                 @endphp
-            @if($bank_details->template_type == "single")
+            @if($bank_details->template_type == "single" || $bank_details->template_type == "joint")
                 <tr>                    
                     <td>{{++$i}}</td>
                     <td>{{$data->style}}</td> 
