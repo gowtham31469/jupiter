@@ -20,7 +20,7 @@ $( () => {
             }
 
             $(".selectpicker").selectpicker("refresh");
-            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + ' ('+ order_data.order_details.quantity_details[0].sizes.department_title+')</strong></h4></div>');
+            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + ' ('+ order_data.order_details.size_department_text+')</strong></h4></div>');
         }); 
 
     }
@@ -31,7 +31,7 @@ $( () => {
         $('#swing_primary_size_id').val(order_data.order_details.primary_size_id);
         $('#swing_template_id').val(order_data.order_details.template_id);
 
-        $emptyQty = order_data.order_details.quantity_details.filter(quantity => quantity.ean_barcode != null || quantity.quantity != null);
+        $emptyQty = order_data.order_details.quantities.filter(quantity => quantity.ean_barcode != null || quantity.count != null);
 
         if($emptyQty.length == 0){
             $('.create-download-artwork').remove();
@@ -65,7 +65,7 @@ $( () => {
 
         $('#swing_ticket_qty_table').html('');
 
-        renderQtyTableBody(order_data.order_details.quantity_details, order_data.moq)
+        renderQtyTableBody(order_data.order_details.quantities, order_data.moq)
 
     }
 
@@ -74,18 +74,18 @@ $( () => {
         $.each(quantity_details, (indexInArray, valueOfElement) => {
             quantity_html += `<tr id="swing_size_${indexInArray+1}">
                                             <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
-                                            <td >` + valueOfElement.sizes.uk_size + `</td>
-                                            <td >` + valueOfElement.sizes.ce_size + `</td>  <td >`;
+                                            <td >` + valueOfElement.size + `</td>
+                                            <td >` + valueOfElement.ce_size + `</td>  <td >`;
 
-            $.each(valueOfElement.sizes.sec_size_chart, function (index, sec_size) {
+            for (var index = 0; index < JSON.parse(valueOfElement.selected_secondary_sizes).length; index++) {
 
-                quantity_html += `<strong class="text-justify">${sec_size.category_name}</strong> : ${sec_size.secondary_size} <br>`;
+                quantity_html += `<strong class="text-justify">` + $.trim(JSON.parse(valueOfElement.selected_secondary_sizes)[index].secondary_size) + `</strong> : ` + $.trim(JSON.parse(valueOfElement.selected_secondary_sizes)[index].value) + `<br>`;
 
-            });
+            }
 
             var ean_barcode = valueOfElement.ean_barcode != null?valueOfElement.ean_barcode:"";
             quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_` + valueOfElement.size_id + `" name="swing_ean[]" value="` + ean_barcode + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.size_id + `" name="swing_quantity[]" value="` + valueOfElement.quantity + `" min="`+moq+`" data-min-error="Quantity Should be >= `+moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
+                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.size_id + `" name="swing_quantity[]" value="` + valueOfElement.count + `" min="`+moq+`" data-min-error="Quantity Should be >= `+moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
         });
         
         $('#swing_ticket_qty_table').html(quantity_html);

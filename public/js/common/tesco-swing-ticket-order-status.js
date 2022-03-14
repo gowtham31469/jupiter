@@ -106,9 +106,9 @@ $( () => {
         $('#swingticket_order_id').val(order_data.order_details.id);
         $('#swingticket_template_id').val(order_data.order_details.template_id);
         $('#swingticket_template_name').val(order_data.order_details.item_master.template_name);
-        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name + " (" + order_data.order_details.quantity_details[0].sizes.department_title +")");
+        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name + " (" + order_data.order_details.size_department_text +")");
         
-        renderQtyTableBody(order_data.order_details.quantity_details, order_data.moq)
+        renderQtyTableBody(order_data.order_details.quantities, order_data.moq)
 
         var footer_btn = `<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit_swingticket_order_btn" type="submit" disabled="true" onclick="validateTescoSwingTicketOrder('`+user_type+`')">Submit</button>
         <button class="btn btn-warning  pull-right input-sm" id="edit_swingticket_order_btn" style="width: 55px;margin-left: 10px;" onclick="editSwingTicketOrder()" type="button">Edit</button>
@@ -269,7 +269,6 @@ $( () => {
             } else {
                 e.preventDefault();
                 $('#submit_swingticket_order_btn').prop('disabled',true)
-                console.log("PKDDD");
                 updateSwingTicketOrder(user_role);
             }
         })

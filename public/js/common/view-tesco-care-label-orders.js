@@ -60,7 +60,7 @@ $( () => {
 
         $('#tesco_care_kids_warning').val(order_data.order_details.kids_warning_id)
 
-        if (order_data.order_details.primary_size_id === 4) {
+        if (order_data.order_details.size_department_text === 'Baby Sleeping Bags') {
             $('#baby_sleeping_bag_div').removeClass("hidden");
 
             $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
