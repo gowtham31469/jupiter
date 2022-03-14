@@ -106,15 +106,16 @@ class PoManagerController extends Controller
 		 
 		 foreach($new_orders as $key => $values)
 		 {
-			
+			$split_key = explode('-', $key);
+			$buyer_id = $split_key[0];
 			foreach($values as $valuess)
 			{
-				$buyer_id = explode("-",$key);
+				//$buyer_id = explode("-",$key);
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
 										 ->where('erp_order_details.template_id',$valuess)
-										 ->whereIn('erp_orders.buyer_id', $buyers)
+										 ->where('erp_orders.buyer_id', $buyer_id)
 										 ->where(function($q) {
 											$q->where('erp_orders.status',1)
 											->orWhere('erp_orders.status',2);
@@ -334,8 +335,19 @@ class PoManagerController extends Controller
 							->select('erp_orders.*','customers.company_name')
 							->get();   
 
+			$company_id = DB::table('company')
+							->select('company.*')
+							->first();
+
+			if(session()->get('company') == "" && session()->get('company') == null)
+			{
+				session()->put('company', $company_id->id);
+				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
+			}
+
 			$orderlist   = ErpOrderDetails::select('erp_order_details.*',$arr_template->template_table.'.template_name','erp_status.status_name')
-			                ->join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
+							->join($arr_template->template_table,'erp_order_details.template_id',$arr_template->template_table.'.item_id')
+							->where('erp_order_details.company_id',session()->get('company'))
 							->where('erp_order_details.order_quantity', '!=' ,0)
 							->join('erp_status','erp_order_details.status','erp_status.id')
 							->where('erp_order_details.erp_order_id',$id)
@@ -592,9 +604,7 @@ class PoManagerController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$order_table_array = explode("_", $main_table);
-				    $tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;

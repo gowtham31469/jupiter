@@ -11,6 +11,8 @@ class TescoWashcareOrdersQuantity extends Model
     protected $fillable = [
         'washcare_order_id',
         'size_id',
+        'ce_size',
+        'uk_size',
         'uk_ean',
         'ce_ean',
         'quantity',

@@ -1,5 +1,3 @@
-<h3><i class="ion-ios-browsers-outline"></i>Create Order</h3>
-<hr>
 <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
 {!! Form::open(['id' => 'tesco_care_label_order_form','data-toggle' => 'validator','role' => 'form']) !!}
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
@@ -29,7 +27,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '')) !!}
+        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -60,21 +58,37 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_coo',(['' => '-- Select Country Of Origin --'] + $coo),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_coo','required', 'data-live-search' => 'true')) }}
+            <select name="tesco_care_coo" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_coo" required>
+                <option>Select Country Of Origin</option>
+                @foreach ($coo as $key => $value)
+                <option value="{{ $key }}" {{ ( strtolower($value) === 'made in india') ? "selected" : "" }}>
+                    {{ $value }}
+                </option>
+                @endforeach
+            </select>
             <div class="help-block with-errors"></div>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq("admin", "create")')) }}
+            {{  Form::select('tesco_care_supplier',(['' => '-- Select Supplier --'] + $tesco_suppliers),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "admin", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
-            {{  Form::select('tesco_care_part_of_two_piece_set',(['' => '-- Select Part of Two Piece Set --'] + $part_of_two_piece_set),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_part_of_two_piece_set', 'data-live-search' => 'true')) }}
+            <select name="tesco_care_part_of_two_piece_set" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_part_of_two_piece_set">
+            <optgroup label="Select Part of Two Piece Set">
+                <option value="">None</option>
+                @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -94,7 +108,7 @@
 <div class="col-md-12">
     <h4>Order Quantity</h4>
 </div>
-<div class="col-md-12 teasco-care-quantity-div"></div>
+<div class="col-md-12 tesco-care-quantity-div"></div>
                             
 </div>
 <hr>
@@ -186,7 +200,7 @@
                 <option value="">-- Select Wash Instruction --</option>
                 @if(!empty($symbols['Washing']))
                     @foreach($symbols['Washing'] as $key => $value)
-                            <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
                     @endforeach
                 @endif
             </select>
@@ -200,7 +214,7 @@
                 <option value="">-- Select Bleach Instruction --</option>
                 @if(!empty($symbols['Whitening']))
                     @foreach($symbols['Whitening'] as $key => $value)
-                            <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
                     @endforeach
                 @endif
             </select>
@@ -214,7 +228,7 @@
                 <option value="">-- Select Dry Instruction --</option>
                 @if(!empty($symbols['Dryer']))
                     @foreach($symbols['Dryer'] as $key => $value)
-                            <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
                     @endforeach
                 @endif
             </select>
@@ -228,7 +242,7 @@
                 <option value="">-- Select Iron Instruction --</option>
                 @if(!empty($symbols['Ironing']))
                     @foreach($symbols['Ironing'] as $key => $value)
-                            <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
                     @endforeach
                 @endif
             </select>
@@ -242,7 +256,7 @@
                 <option value="">-- Select Dry Clean Instruction --</option>
                 @if(!empty($symbols['Prof Cleaning']))
                     @foreach($symbols['Prof Cleaning'] as $key => $value)
-                            <option title="{{ $value->degree }}" data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
                     @endforeach
                 @endif
             </select>
@@ -326,9 +340,7 @@
 
         <button class="btn btn-xs btn-default create-download-artwork" onclick = "create_download_artwork('proof')" type="button" style="display: none;"><i class="fa fa-download" aria-hidden="true"></i> Download Artwork</button>
 
-        <button class="btn btn-xs btn-danger label-order-cancel-btn" type="button"
-        data-toggle="modal" data-target="#cancelLabelOrderModal" style="display: none;"><i class="fa fa-times"
-            aria-hidden="true"></i> Cancel</button>
+        <button class="btn btn-xs btn-danger order-cancel-btn" type="button" data-toggle="modal" data-target="#cancelOrderModal" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
     
         <button class="btn btn-xs btn-danger reload-btn" type="button"
         onclick="reload_back()"><i class=" fa fa-refresh" aria-hidden="true"></i> Reload</button> 

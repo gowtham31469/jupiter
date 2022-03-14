@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\TescoPrimarySize;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,41 +16,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('ostatusT', function () {
-    return view('orderStatus_T');
-});
-Route::get('ostatusO', function () {
-    return view('orderStatus_O');
-});
-Route::get('getOrderStatusesTesco', ['as'=>'getOrderStatusesTesco','uses'=>'ApiTest@getOrderStatusesTesco']);
-Route::get('getOrderStatusesOrch', ['as'=>'getOrderStatusesOrch','uses'=>'ApiTest@getOrderStatusesOrch']);
-
-
-Route::get('testApi', 'ApiTest@testApi')->name('testApi');
-
-
-Route::get('getTemplateDetails', 'Admin\TemplateManagement\TemplateController@getTemplateDetails')->name('getTemplateDetails');
-
-Route::get('updatePath', 'Admin\TemplateManagement\TemplateController@updatePath')->name('updatePath');
-
-Route::get('delete_now', function () {
-    // App\OrchestraTemplate::truncate();
-    // App\OrchestraTemplate::where('id','>',0)
-    //     ->update(['template_file' => '/storage/app/template/Orchestra/Labels/WOVEN_LABELS/WBB1_WOVEN_DISNEYBABY@DISNEY_M.L.png']);
-    dd(App\OrchestraTemplate::where('item_id',60)->first());
-});
-
-Route::view('test','test_blade');
-
-// Auth::routes();
-
 $this->get('admin', 'Auth\LoginController@showLoginForm')->name('login');
 $this->post('admin', 'Auth\LoginController@login');
 $this->post('admin/logout', 'Auth\LoginController@logout')->name('logout');
-
-$this->get('admin/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-$this->post('admin/register', 'Auth\RegisterController@register');
 
 // Password Reset Routes for Admin...
 $this->get('admin/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -60,9 +27,6 @@ $this->get('admin/password/reset/{token}', 'Auth\ResetPasswordController@showRes
 $this->post('admin/password/reset', 'Auth\ResetPasswordController@reset');
 
 Route::get('admin/dashboard', 'HomeController@index')->name('admin');
-
-
-
 
 Route::get('admin/order-management', 'Admin\OrderManagement\OrderController@dashboard');
 
@@ -77,8 +41,6 @@ Route::post('admin/order-management/viewed_pen_production_all', 'Admin\OrderMana
 Route::post('admin/order-management/viewedneworders', 'Admin\OrderManagement\DashboardController@viewedNewOrders');
 
 Route::post('admin/order-management/viewedneworders_all', 'Admin\OrderManagement\DashboardController@viewedNewOrdersAll');
-
-
 
 Route::post('admin/order-management/viewedpenorders', 'Admin\OrderManagement\DashboardController@viewedPenOrders');
 
@@ -187,9 +149,6 @@ Route::get('admin/buyer-management/merchandisers', 'Admin\BuyerManagement\BuyerM
 
 Route::group(['middleware' => 'customer_guest'], function()
 {
-	Route::get('customer/register', 'CustomerAuth\RegisterController@showRegistrationForm');
-	Route::post('customer/register', 'CustomerAuth\RegisterController@register');
-
 	Route::get('customer', 'CustomerAuth\LoginController@showLoginForm')->name('customer.login');
 	Route::post('customer', 'CustomerAuth\LoginController@login');
 	// Password Reset Routes for customer...
@@ -324,8 +283,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 Route::group(['middleware' => 'merchandiser_guest'], function()
 {
-	Route::get('merchandiser/register', 'MerchandiserAuth\RegisterController@showRegistrationForm');
-	Route::post('merchandiser/register', 'MerchandiserAuth\RegisterController@register');
 	Route::get('merchandiser', 'MerchandiserAuth\LoginController@showLoginForm')->name('merchandiser.login');
 	Route::post('merchandiser', 'MerchandiserAuth\LoginController@login');
 
@@ -462,6 +419,7 @@ Route::post('admin/tesco/order-management/reorder-artwork', 'Admin\Tesco\OrderMa
 Route::post('admin/tesco/order-management/repeatorder-artwork', 'Admin\Tesco\OrderManagementCntrl@repeatOrderArtwork');
 Route::post('admin/tesco/order-management/extra-quantity', 'Admin\Tesco\OrderManagementCntrl@extraQuantity');
 Route::post('admin/tesco/order-management/extra-quantity-label-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityLabelTesco');
+Route::post('admin/tesco/order-management/extra-quantity-st-tesco', 'Admin\Tesco\OrderManagementCntrl@extraQuantityStTesco');
 Route::post('admin/tesco/order-management/extra-quantity-reorder', 'Admin\Tesco\OrderManagementCntrl@extraQuantityReorder');
 Route::post('admin/tesco/order-management/set-tesco-reorder', 'Admin\Tesco\OrderManagementCntrl@setTescoReorder');
 Route::post('admin/tesco/order-management/set-tesco-repeat-order', 'Admin\Tesco\OrderManagementCntrl@setTescoRepeatorder');
@@ -568,6 +526,86 @@ Route::put('admin/orchestra/make-symbol-enabled', 'Admin\Settings\Orchestra\Orch
 Route::put('admin/orchestra/make-symbol-disabled', 'Admin\Settings\Orchestra\OrchestraSettings@makeSymbolDisabled');
 
 /**tesco Settings Page**/
+Route::post('admin/tesco/settings/season-codes', 'Admin\Settings\Tesco\TescoSettings@tescoSeasonCodes');
+Route::post('admin/tesco/add-season-codes', 'Admin\Settings\Tesco\TescoSettings@addTescoSeasonCodes');
+Route::put('admin/tesco/make-season-code-enabled', 'Admin\Settings\Tesco\TescoSettings@makeSeasonCodeEnabled');
+Route::put('admin/tesco/make-season-code-disabled', 'Admin\Settings\Tesco\TescoSettings@makeSeasonCodeDisabled');
+Route::get('admin/tesco/get-tesco-season-code-details', 'Admin\Settings\Tesco\TescoSettings@getTescoSeasonCodeDetails');
+Route::put('admin/tesco/update-tesco-season-code', 'Admin\Settings\Tesco\TescoSettings@updateTescoSeasonCode');
+
+
+Route::post('admin/tesco/settings/tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@tescoProductDescriptions');
+
+Route::post('admin/tesco/add-tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@addTescoProductDescription');
+
+Route::put('admin/tesco/make-tesco-product-description-enabled', 'Admin\Settings\Tesco\ProductDescriptionController@enableProductDescription');
+
+Route::put('admin/tesco/make-tesco-product-description-disabled', 'Admin\Settings\Tesco\ProductDescriptionController@disableProductDescription');
+
+Route::get('admin/tesco/get-tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@getTescoProductDescription');
+
+Route::put('admin/tesco/update-tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@updateTescoProductDescription');
+
+
+Route::post('admin/tesco/settings/tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@tescoProductBenefits');
+
+Route::post('admin/tesco/add-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@addTescoProductBenefits');
+
+Route::put('admin/tesco/make-tesco-product-benfits-enabled', 'Admin\Settings\Tesco\ProductBenefitsController@enableProductBenefits');
+
+Route::put('admin/tesco/make-tesco-product-benfits-disabled', 'Admin\Settings\Tesco\ProductBenefitsController@disableProductBenefits');
+
+Route::get('admin/tesco/get-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@getTescoProductBenefits');
+
+Route::put('admin/tesco/update-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@updateTescoProductBenefits');
+
+Route::post('admin/tesco/upload-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@uploadTescoProductBenefits');
+
+
+
+
+Route::post('admin/tesco/settings/tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@tescoMMProductBenefits');
+
+Route::post('admin/tesco/add-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@addTescoMMProductBenefits');
+
+Route::put('admin/tesco/make-tesco-mm-product-benfits-enabled', 'Admin\Settings\Tesco\MMProductBenefitsController@enableMMProductBenefits');
+
+Route::put('admin/tesco/make-tesco-mm-product-benfits-disabled', 'Admin\Settings\Tesco\MMProductBenefitsController@disableMMProductBenefits');
+
+Route::get('admin/tesco/get-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@getTescoMMProductBenefits');
+
+Route::put('admin/tesco/update-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@updateTescoMMProductBenefits');
+
+
+Route::post('admin/tesco/settings/tesco-wee-symbols', 'Admin\Settings\Tesco\WeeSymbolsController@tescoWeeSymbols');
+
+Route::post('admin/tesco/settings/add-tesco-wee-symbols', 'Admin\Settings\Tesco\WeeSymbolsController@addTescoWeeSymbols');
+
+Route::put('admin/tesco/settings/make-tesco-wee-symbol-enabled', 'Admin\Settings\Tesco\WeeSymbolsController@enableWeeSymbol');
+
+Route::put('admin/tesco/settings/make-tesco-wee-symbol-disabled', 'Admin\Settings\Tesco\WeeSymbolsController@disableWeeSymbol');
+
+Route::get('admin/tesco/settings/get-tesco-wee-symbol', 'Admin\Settings\Tesco\WeeSymbolsController@getTescoWeeSymbol');
+
+Route::post('admin/tesco/settings/update-tesco-wee-symbol', 'Admin\Settings\Tesco\WeeSymbolsController@updateTescoWeeSymbol');
+
+
+
+Route::post('admin/tesco/settings/tesco-woolmark-logos', 'Admin\Settings\Tesco\WoolMarkLogoController@tescoWoolmarkLogo');
+
+Route::post('admin/tesco/settings/add-tesco-woolmark-logo', 'Admin\Settings\Tesco\WoolMarkLogoController@addTescoWoolmarkLogo');
+
+Route::put('admin/tesco/settings/make-tesco-woolmark-logo-enabled', 'Admin\Settings\Tesco\WoolMarkLogoController@enableTescoWoolmarkLogo');
+
+Route::put('admin/tesco/settings/make-tesco-woolmark-logo-disabled', 'Admin\Settings\Tesco\WoolMarkLogoController@disableTescoWoolmarkLogo');
+
+Route::get('admin/tesco/settings/get-tesco-woolmark-logo', 'Admin\Settings\Tesco\WoolMarkLogoController@getTescoWoolmarkLogo');
+
+Route::post('admin/tesco/settings/update-tesco-woolmark-logo', 'Admin\Settings\Tesco\WoolMarkLogoController@updateTescoWoolmarkLogo');
+
+
+
+
 Route::post('admin/tesco/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
 Route::post('admin/tesco/add-tesco-brands', 'Admin\Settings\Tesco\TescoSettings@addTescoBrands');
 Route::get('admin/tesco/get-tesco-brands-details', 'Admin\Settings\Tesco\TescoSettings@getTescoBrandsById');
@@ -640,6 +678,9 @@ Route::post('admin/tesco/generate-div-tescoos', 'Admin\Tesco\OrderStatusCntrl@ge
 Route::post('admin/tesco/generate-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoLabelos');
 Route::post('admin/tesco/proof-div-tescolabelos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoLabelos');
 
+Route::post('admin/tesco/proof-div-tescoticketos', 'Admin\Tesco\OrderStatusCntrl@proofDivTescoTicketos');
+Route::post('admin/tesco/generate-div-tescoticketos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoTicketos');
+
 Route::post('admin/tesco/generate-div-tesco-smallos', 'Admin\Tesco\OrderStatusCntrl@generateDivTescoSmall');
 
 Route::post('admin/tesco/generatebarcodetsl1', 'Admin\Tesco\OrderStatusCntrl@generateBarcodeTsl1');
@@ -691,6 +732,9 @@ Route::post('customer/tesco/repeatorder-artwork', 'Customer\Tesco\ReorderControl
 Route::post('customer/tesco/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
 Route::post('customer/tesco/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
 Route::post('customer/tesco/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+
+Route::post('customer/tesco/extra-quantity-st-tesco', 'Customer\Tesco\ReorderController@extraQuantityStTesco');
+
 Route::post('customer/tesco/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
 Route::post('customer/tesco/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
 
@@ -710,7 +754,7 @@ Route::post('customer/tesco/print-div-tesco-small', 'Customer\Tesco\PrintControl
 
 Route::post('customer/tesco/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
 
-//Route::get('admin/tesco/PDFMiner', 'Admin\Tesco\OrderManagementCntrl@createOrderByPDFMiner');
+Route::post('customer/tesco/proof-div-tescoticketos', 'Customer\Tesco\PrintController@proofDivTescoTicketos');
 
 // Email related routes
 Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');
@@ -806,6 +850,11 @@ Route::group(['prefix' => 'erp'], function () {
 	
 	Route::post('job-manager/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 	Route::post('job-manager/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
+
+
+	Route::post('job-manager/tesco/proof-div-tescoticketos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoTicketos');
+
+	Route::post('job-manager/tesco/generate-div-tescoticketos', 'ErpUser\Jobmanager\JobManagerController@generateDivTescoTicketos');
 
 
 	Route::post('job-manager/tesco/proof-div-tescolabelos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoLabelos');
@@ -1063,14 +1112,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin/tesco/'], function() {
 	Route::get('care-label-fiber-components', 'Admin\Tesco\CareLabelOrdersController@getFiberComponentsMeta')->name('tesco-care-label-order.components');
 	Route::get('care-size-lists', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeListsBySizeCategoryID')->name('tesco-care-label-order.care-size-lists');
 	Route::post('submit-care-label-order',  'Admin\Tesco\CareLabelOrdersController@submitCareLabelOrder')->name('tesco-care-label-order.submit');
-	Route::get('secondary-size-categories', 'Admin\Tesco\CareLabelOrdersController@getSecondarySizeCategoriesByPrimaryID')->name('tesco-care-label-order.size-categories');
+	Route::get('get-care-label-order-details', 'Admin\Tesco\CareLabelOrdersController@getCareLabelOrderDetail');
 	Route::put('update-care-label-order',  'Admin\Tesco\CareLabelOrdersController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
+	Route::post('po-upload-swing-tickets', 'Admin\Tesco\SwingTicketOrdersController@createSwingTicketOrders');
+	Route::get('swing-size-chart', 'Admin\Tesco\SwingTicketOrdersController@getSwingSizeChart');
 
 	// Tesco TCL5 and TSL2 orders admin routes
 	Route::post('store-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@submitSingleStickerOrder');
 	Route::post('save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
 
+	// Tesco care label orders admin routes
+	Route::get('swing-ticket-orders', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-swing-ticket-order');
+	Route::post('submit-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@submitSwingTicketOrder')->name('tesco-swing-ticket-order.submit');
+	Route::get('get-swing-ticket-order-details', 'Admin\Tesco\SwingTicketOrdersController@getSwingTicketOrderDetail');
+	Route::put('update-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@updateSwingTicketOrder');
   });
 
 
@@ -1081,13 +1137,21 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer/tesco/'], f
 	Route::get('care-label-fiber-components', 'Customer\Tesco\CareLabelOrdersCustomerController@getFiberComponentsMeta');
 	Route::get('care-size-lists', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeListsBySizeCategoryID');
 	Route::post('submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
-	Route::get('secondary-size-categories', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeCategoriesByPrimaryID');
 	Route::get('get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
+	Route::get('get-care-label-order-details', 'Customer\Tesco\CareLabelOrdersCustomerController@getCareLabelOrderDetail');
 	Route::put('update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
 	Route::post('po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
 
 	// Tesco TCL5 and TSL2 orders admin routes
 	Route::post('store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
 	Route::post('save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
+
+	// Tesco care label orders admin routes
+	Route::get('swing-ticket-orders', 'Customer\Tesco\SwingTicketOrdersCustomerController@index');
+	Route::post('submit-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@submitSwingTicketOrder');
+	Route::get('get-swing-ticket-order-details', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingTicketOrderDetail');
+	Route::put('update-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@updateSwingTicketOrder');
+	Route::post('po-upload-swing-tickets', 'Customer\Tesco\SwingTicketOrdersCustomerController@createSwingTicketOrders');
+	Route::get('swing-size-chart', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingSizeChart');
 	
   });

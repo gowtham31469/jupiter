@@ -67,7 +67,17 @@ class EditErpOrders
 		try {
 			
 			$order_table_array = explode("_", $data_array['tableName']);
-			$template_name = $order_table_array[1] !=  'washcare' ? strtoupper($order_table_array[1]) : title_case($order_table_array[1]);
+			switch ($order_table_array[1]) {
+				case 'washcare':
+					$template_name = title_case($order_table_array[1]);
+					break;
+				case 'swingticket':
+					$template_name = 'SwingTicket';
+					break;
+				default:
+					$template_name = strtoupper($order_table_array[1]);
+					break;
+			}
 
 			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
 
@@ -129,7 +139,6 @@ class EditErpOrders
 
 		$style_ref = strtolower($orders->zone) . '_style_ref';
 		$style_no  = $orders->zone === "joint" ? $orders->uk_style_ref . '/' . $orders->ce_style_ref : $orders->$style_ref;
-		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
 		$custom_ref_name = DB::table('price_taxation')
 		->where([
@@ -145,7 +154,7 @@ class EditErpOrders
 		->where('action', 'PO Manager Verification Pending')
 		->value('id');
 
-		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $tesco_label_order);
+		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $data['tableName']);
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype
@@ -165,6 +174,13 @@ class EditErpOrders
 
 				if ($dataExists == 0) {
 					
+					DB::table('erp_order_details')
+					->where([
+						'order_qnty_table_name' => $qnty_table,
+						'order_qnty_table_id' => $value->id
+					])
+					->delete();
+
 					$erp_order_details_id = ErpOrderDetails::create([
 						'erp_order_id'     		=> $data['erp_order_id'],
 						'style_no'         		=> $style_no,

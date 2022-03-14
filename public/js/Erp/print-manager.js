@@ -687,6 +687,14 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 			{
 				genarateArtworkProofManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,obj);
 			}
+			else if(type == "swing_tickets")
+			{
+				var data = $(obj).data('modal');
+				var temp_name = $(obj).data('tempname');
+				var table_name_print = "tesco_swingticket_orders";
+
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof","erp")
+			}
 			else
 			{
 				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"proof",obj);
@@ -720,6 +728,14 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 			{
 				genarateArtworkPrintManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,obj);
 			}
+			else if(type == "swing_tickets")
+			{
+				var data = $(obj).data('modal');
+				var temp_name = $(obj).data('tempname');
+				var table_name_print = "tesco_swingticket_orders";
+
+				downloadArtworkTickets(data,temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print","erp")
+			}
 			else
 			{
 				genarateArtworkLabelManager("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,"print",obj);
@@ -732,7 +748,6 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 	}
 	
 }
-
 
 function genarateArtworkOrchestra(data, name,style_no,buyer_no,id,order_type,created_at,status,buyer)
 {
@@ -5968,20 +5983,20 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                     var en_care_instructions = "";
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        en_care_instructions += additional_care_text_1[0].english
+                        en_care_instructions += toTitleCase(additional_care_text_1[0].english)
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        en_care_instructions += "/" + additional_care_text_2[0].english
+                        en_care_instructions += "/" + toTitleCase(additional_care_text_2[0].english)
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        en_care_instructions += "/" + additional_care_text_3[0].english
+                        en_care_instructions += "/" + toTitleCase(additional_care_text_3[0].english)
                     }
                     
                     if(degree >= 30)
                     {
-                        en_care_instructions += "/" + data.degree_text[0].english
+                        en_care_instructions += "/" + toTitleCase(data.degree_text[0].english)
                     }
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
@@ -6005,7 +6020,7 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                         //chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
                         if($chunk_str.length == $ind)
                         {
-                            $y+=6;
+                            $y+=8;
                         }
                         else
                         {
@@ -6025,32 +6040,32 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                         var garment_component_text = JSON.parse(comp_val.garment_component_text)
                         if(index != 0)
                         {
-                            en_garment_component += "/" +garment_component_text[0].english;
-                            pl_garment_component += "/" +garment_component_text[0].polish;
-                            cz_garment_component += "/" +garment_component_text[0].czech;
-                            sk_garment_component += "/" +garment_component_text[0].slovak;
-                            hu_garment_component += "/" +garment_component_text[0].hungarian;
+                            en_garment_component += "/" + toTitleCase(garment_component_text[0].english);
+                            pl_garment_component += "/" + toTitleCase(garment_component_text[0].polish);
+                            cz_garment_component += "/" + toTitleCase(garment_component_text[0].czech);
+                            sk_garment_component += "/" + toTitleCase(garment_component_text[0].slovak);
+                            hu_garment_component += "/" + toTitleCase(garment_component_text[0].hungarian);
                         }
                         else
                         {
-                            en_garment_component += garment_component_text[0].english;
-                            pl_garment_component += garment_component_text[0].polish;
-                            cz_garment_component += garment_component_text[0].czech;
-                            sk_garment_component += garment_component_text[0].slovak;
-                            hu_garment_component += garment_component_text[0].hungarian;
+                            en_garment_component += toTitleCase(garment_component_text[0].english);
+                            pl_garment_component += toTitleCase(garment_component_text[0].polish);
+                            cz_garment_component += toTitleCase(garment_component_text[0].czech);
+                            sk_garment_component += toTitleCase(garment_component_text[0].slovak);
+                            hu_garment_component += toTitleCase(garment_component_text[0].hungarian);
                         }
                         
                         $(comp_val.fibre).each(function(index,fibre_val){
                             var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
-                            en_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].english;
+                            en_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
 
-                            pl_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].polish;
+                            pl_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
 
-                            cz_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].czech;
+                            cz_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
 
-                            sk_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].slovak;
+                            sk_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].slovak);
 
-                            hu_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].hungarian;
+                            hu_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].hungarian);
                         });
                     })
 
@@ -6062,69 +6077,69 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
 
                     if(exclusive_trims_text != "" && exclusive_trims_text != null)
                     {
-                        en_garment_component += "/" + exclusive_trims_text[0].english
-                        pl_garment_component += "/" + exclusive_trims_text[0].polish
-                        cz_garment_component += "/" + exclusive_trims_text[0].czech
-                        sk_garment_component += "/" + exclusive_trims_text[0].slovak
-                        hu_garment_component += "/" + exclusive_trims_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(exclusive_trims_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(exclusive_trims_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(exclusive_trims_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(exclusive_trims_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(exclusive_trims_text[0].hungarian)
                     }
 
                     if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
                     {
-                        en_garment_component += "/" + contains_non_textile_part_text[0].english
-                        pl_garment_component += "/" + contains_non_textile_part_text[0].polish
-                        cz_garment_component += "/" + contains_non_textile_part_text[0].czech
-                        sk_garment_component += "/" + contains_non_textile_part_text[0].slovak
-                        hu_garment_component += "/" + contains_non_textile_part_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].hungarian)
                     }
 
                     if(kids_warning_text != "" && kids_warning_text != null)
                     {
-                        en_garment_component += "/" + kids_warning_text[0].english
-                        pl_garment_component += "/" + kids_warning_text[0].polish
-                        cz_garment_component += "/" + kids_warning_text[0].czech
-                        sk_garment_component += "/" + kids_warning_text[0].slovak
-                        hu_garment_component += "/" + kids_warning_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(kids_warning_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(kids_warning_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(kids_warning_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(kids_warning_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(kids_warning_text[0].hungarian)
                     }
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
-                        pl_garment_component += "/" + additional_care_text_1[0].polish
-                        cz_garment_component += "/" + additional_care_text_1[0].czech
-                        sk_garment_component += "/" + additional_care_text_1[0].slovak
-                        hu_garment_component += "/" + additional_care_text_1[0].hungarian
+                        //console.log("Polish : "+additional_care_text_1[0].polish)
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_1[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_1[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_1[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_1[0].hungarian)
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        pl_garment_component += "/" + additional_care_text_2[0].polish
-                        cz_garment_component += "/" + additional_care_text_2[0].czech
-                        sk_garment_component += "/" + additional_care_text_2[0].slovak
-                        hu_garment_component += "/" + additional_care_text_2[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_2[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_2[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_2[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_2[0].hungarian)
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        pl_garment_component += "/" + additional_care_text_3[0].polish
-                        cz_garment_component += "/" + additional_care_text_3[0].czech
-                        sk_garment_component += "/" + additional_care_text_3[0].slovak
-                        hu_garment_component += "/" + additional_care_text_3[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_3[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_3[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_3[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_3[0].hungarian)
                     }
 
 					if(degree >= 30)
                     {
-                        pl_garment_component += "/" + data.degree_text[0].polish
-                        cz_garment_component += "/" + data.degree_text[0].czech
-                        sk_garment_component += "/" + data.degree_text[0].slovak
-                        hu_garment_component += "/" + data.degree_text[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(data.degree_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(data.degree_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(data.degree_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(data.degree_text[0].hungarian)
 					}
 					
                     if(part_of_set_text != "" && part_of_set_text != null)
                     {
-                        en_garment_component += "/" + part_of_set_text[0].english
-                        pl_garment_component += "/" + part_of_set_text[0].polish
-                        cz_garment_component += "/" + part_of_set_text[0].czech
-                        sk_garment_component += "/" + part_of_set_text[0].slovak
-                        hu_garment_component += "/" + part_of_set_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(part_of_set_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(part_of_set_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(part_of_set_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(part_of_set_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(part_of_set_text[0].hungarian)
                     }
 
                     
@@ -6153,7 +6168,7 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                         //chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
                         if($garment_str.length == $ind_en)
                         {
-                            $y+=6;
+                            $y+=8;
                         }
                         else
                         {
@@ -6191,7 +6206,7 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                     {
                         chunks += '<tspan x="0" y="'+$y+'">CZ</tspan>';
                     }
-
+					$ind_cz=1;
                     $($cz_garment_str).each(function(index,cz_garment_val){
                         if($y == 96)
                         {
@@ -6227,8 +6242,17 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                             //chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';   
                         }
                         
-                        $y+=6;
-                        $z+=6;
+                        if($cz_garment_str.length == $ind_cz)	
+						{	
+							$y+=8;	
+							$z+=8;	
+						}	
+						else	
+						{	
+							$y+=6;	
+							$z+=6;	
+						}	
+						$ind_cz++;
                     })
 
                     if($y > 96)
@@ -6239,7 +6263,7 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                     {
                         chunks += '<tspan x="0" y="'+$y+'">SK</tspan>';
                     }
-
+					$ind_sk=1;
                     $($sk_garment_str).each(function(index,sk_garment_val){
                         if($y == 96)
                         {
@@ -6275,8 +6299,17 @@ function genarateArtworkLabelManager(data, name,style_no,buyer_no,id,order_type,
                             //chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';  
                         }
                         
-                        $y+=6;
-                        $z+=6;
+                        if($sk_garment_str.length == $ind_sk)	
+						{	
+							$y+=8;	
+							$z+=8;	
+						}	
+						else	
+						{	
+							$y+=6;	
+							$z+=6;	
+						}	
+						$ind_sk++;
                     })
 
                     if($y > 96)
@@ -6518,5 +6551,118 @@ function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_tex
 				return;
 			}
 		},
+	})
+}
+
+function PopupTescoTicketsPrintManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/tesco/generate-div-tescoticketos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name,
+            size_category_fin:size_category_fin,
+            size_comp_fin:size_comp_fin,
+            product_desc_fin:product_desc_fin,
+            wee_symbol_fin:wee_symbol_fin,
+            ce_symbol_fin:ce_symbol_fin,
+            woolmark_logo_file:woolmark_logo_file
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+        complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
+	})
+}
+
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file,tesco_size_department) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/tesco/proof-div-tescoticketos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name,
+            size_category_fin:size_category_fin,
+            size_comp_fin:size_comp_fin,
+			product_desc_fin:product_desc_fin,
+			wee_symbol_fin:wee_symbol_fin,
+            ce_symbol_fin:ce_symbol_fin,
+			woolmark_logo_file:woolmark_logo_file,
+			tesco_size_department:tesco_size_department
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			var element = document.createElement('a');
+			element.setAttribute('href', data);
+			element.setAttribute('download', name);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+			
+			//svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			this.tryCount++;
+			if (this.tryCount <= this.retryLimit) {
+				$.ajax(this);
+				return;
+			}
+		},
+		complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
 	})
 }

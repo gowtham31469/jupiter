@@ -37,8 +37,9 @@ class StoreTescoLabelOrder
         }
         
         $max_id = TescoWashcareOrders::max('id');
+        $size_department_text = DB::table('tesco_size_department')->where('id', $request->primary_size_id)->value('department_name');
 
-        $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", $template_data->item_name) . "00" . ($max_id + 1);
+        $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1);
 
         $customer_data = $this->getCustomerDetails($request->tesco_care_supplier, $role);
 
@@ -106,20 +107,24 @@ class StoreTescoLabelOrder
             'additional_care_text_2'         => $translation_texts['additional_text_2'],
             'additional_care_id_3'           => $request->tesco_care_additional_instruction_3,
             'additional_care_text_3'         => $translation_texts['additional_text_3'],
-            'potps_id'                       => $request->tesco_care_part_of_two_piece_set
+            'potps_id'                       => $request->tesco_care_part_of_two_piece_set,
+            'size_department_text'           => $size_department_text
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;
 
         for ($qty_index = 0; $qty_index < count($request->uk_ean); $qty_index++) {
 
+            $primary_size = DB::table('tesco_primary_size')->where('id', $request->secondary_size_id[$qty_index])->select('uk_size', 'ce_size')->first();
             $qty_data[] = array(
                 'washcare_order_id'        => $washcare_order_id,
                 'uk_ean'                   => $request->uk_ean[$qty_index],
                 'ce_ean'                   => $request->ce_ean[$qty_index],
-                'quantity'                 => $request->quantity[$qty_index],
+                'quantity'                 => !is_null($request->quantity[$qty_index]) ? $request->quantity[$qty_index] : 0,
                 'size_id'                  => $request->secondary_size_id[$qty_index],
-                'selected_secondary_sizes' => json_decode(json_encode($request->secondary_size_data[$qty_index]), true)
+                'selected_secondary_sizes' => json_decode(json_encode($request->secondary_size_data[$qty_index]), true),
+                'uk_size'                  => $primary_size->uk_size,
+                'ce_size'                  => $primary_size->ce_size,
             );
         }
 

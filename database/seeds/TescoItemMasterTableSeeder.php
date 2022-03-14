@@ -387,6 +387,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),
+            38 =>
             array (
                 'id' => 38,
                 'company_id' => 1,
@@ -396,6 +397,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),
+            39 =>
             array (
                 'id' => 39,
                 'company_id' => 1,
@@ -405,12 +407,143 @@ class TescoItemMasterTableSeeder extends Seeder
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),
+            40 =>
             array (
                 'id' => 40,
                 'company_id' => 1,
                 'parent_id' => 4,
                 'item_name' => 'TSL 2',
                 'ref_no' => 'TSL 2',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            41 => 
+            array (
+                'id' => 41,
+                'company_id' => 1,
+                'parent_id' => 0,
+                'item_name' => 'Swing Tickets',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            42 => 
+            array (
+                'id' => 42,
+                'company_id' => 1,
+                'parent_id' => 41,
+                'item_name' => 'CE Non Rfid Swing Ticket',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            43 => 
+            array (
+                'id' => 43,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFC/01/M13020C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            44 => 
+            array (
+                'id' => 44,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFK/01/M13021C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            45 => 
+            array (
+                'id' => 45,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFC/01/M13022C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            46 => 
+            array (
+                'id' => 46,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFB/01/M13023C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            47 => 
+            array (
+                'id' => 47,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'GE/01/M13114C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            48 => 
+            array (
+                'id' => 48,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'GE/01/M13114C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            49 => 
+            array (
+                'id' => 49,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'GE/01/M13114C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            50 => 
+            array (
+                'id' => 50,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'GE/01/M13114C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            51 => 
+            array (
+                'id' => 51,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFK/01/M13163C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            52 => 
+            array (
+                'id' => 52,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFB/01/M13233C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            53 => 
+            array (
+                'id' => 53,
+                'company_id' => 1,
+                'parent_id' => 42,
+                'item_name' => 'FFC/01/M13304C',
+                'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
             ),

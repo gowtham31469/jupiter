@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Customer\Tesco;
 
+use App\Classes\Customer\CustomersList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use View;
@@ -14,6 +15,7 @@ use App\Classes\TescoCareLabelParser;
 
 use App\TescoPrimarySize;
 use App\Http\Requests\TescoLabelOrderRequest;
+use App\Classes\EditTescoOrders;
 
 class CareLabelOrdersCustomerController extends Controller
 {
@@ -21,8 +23,16 @@ class CareLabelOrdersCustomerController extends Controller
     private $caremeta;
     private $updateLabelOrder;
     private $parselabel;
+    private $customers;
+    private $symbols;
+    private $coo;
+    private $kids_warning;
+    private $components;
+    private $fabriclists;
+    private $additional_instructions;
+    private $part_of_two_piece_set;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers)
     {
 
         $this->caremeta = $caremeta;
@@ -32,49 +42,39 @@ class CareLabelOrdersCustomerController extends Controller
         $this->updateLabelOrder = $updateLabelOrder;
 
         $this->parselabel = $parselabel;
+
+        $this->customers = $customers;
+
+        // fetch tesco care metadata from class
+        $this->symbols = $this->caremeta->getCareLabelSymbols();
+
+        $this->coo = $this->caremeta->getCountryOrigin();
+
+        $this->kids_warning = $this->caremeta->getKidsWarning();
+
+        $this->components = $this->caremeta->getCareLabelComponents();
+
+        $this->fabriclists = $this->caremeta->getCareLabelFabrics();
+
+        $this->additional_instructions = $this->caremeta->getCareLabelInstructions();
+
+        $this->part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
     }
 
     public function index()
     {
         try {
-            // fetch tesco care metadata from class
-            $symbols = $this->caremeta->getCareMetadata()['symbols'];
-
-            $coo = $this->caremeta->getCareMetadata()['coo'];
-
-            $kids_warning = $this->caremeta->getCareMetadata()['kids_warning'];
-
-            $components = $this->caremeta->getCareMetadata()['components'];
-
-            $fabriclists = $this->caremeta->getCareMetadata()['fabriclists'];
-
-            $additional_instructions = $this->caremeta->getCareMetadata()['additional_instructions'];
-
-            $part_of_two_piece_set = $this->caremeta->getCareMetadata()['part_of_two_piece_set'];
-
-            $customer = DB::table('customer_profile')
-                ->select('*')
-                ->where('customer_profile.id', Auth::guard('web_customer')->id())
-                ->first();
-
-            $tesco_suppliers = DB::table('tesco_suppliers')
-                ->join('customer_metadata', 'customer_metadata.customer_metadata_id', 'tesco_suppliers.id')
-                ->where('customer_metadata.customer_id', $customer->company_id)
-                ->where('is_enabled', 1)
-                ->orderBy('tesco_suppliers.supplier_name')
-                ->pluck('tesco_suppliers.supplier_name', 'tesco_suppliers.id')
-                ->all();
-
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
             return View::make('customer/tesco-customer-care-labels')
                 ->with([
-                    'symbols' => $symbols,
+                    'symbols' => $this->symbols,
                     'tesco_suppliers' => $tesco_suppliers,
-                    'coo' => $coo,
-                    'kids_warning' => $kids_warning,
-                    'components' => $components,
-                    'fabriclists' => $fabriclists,
-                    'additional_instructions' => $additional_instructions,
-                    'part_of_two_piece_set' => $part_of_two_piece_set
+                    'coo' => $this->coo,
+                    'kids_warning' => $this->kids_warning,
+                    'components' => $this->components,
+                    'fabriclists' => $this->fabriclists,
+                    'additional_instructions' => $this->additional_instructions,
+                    'part_of_two_piece_set' => $this->part_of_two_piece_set
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -87,15 +87,9 @@ class CareLabelOrdersCustomerController extends Controller
 
     public function getFiberComponentsMeta()
     {
-        $data['components'] = DB::table('tesco_components')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['components'] = $this->caremeta->getCareLabelComponents();
 
-        $data['fabriclists'] = DB::table('tesco_fabriclists')
-            ->where('is_enabled', 1)
-            ->pluck('english', 'id')
-            ->all();
+        $data['fabriclists'] = $this->caremeta->getCareLabelFabrics();
 
         return response()->json([
             'message' => 'success',
@@ -103,29 +97,10 @@ class CareLabelOrdersCustomerController extends Controller
         ], 200);
     }
 
-    public function getSecondarySizeCategoriesByPrimaryID(Request $request)
-    {
-        $size_categories = DB::table('tesco_primary_size')
-            ->select('tssc.id', 'tssc.category_name')
-            ->join('tesco_secondary_size_chart', 'tesco_secondary_size_chart.tesco_primary_size_id', 'tesco_primary_size.id')
-            ->join('tesco_secondary_size_category as tssc', 'tssc.id', 'tesco_secondary_size_chart.tesco_secondary_size_category_id')
-            ->where('tesco_primary_size.tesco_size_department_id', $request['size'])
-            ->groupBy('tssc.id', 'tssc.category_name')
-            ->orderBy('tssc.id')
-            ->get();
-
-        return response()->json([
-            'message' => 'success',
-            'size_categories' => $size_categories
-        ], 200);
-    }
-
     public function getSecondarySizeListsBySizeCategoryID(Request $request)
     {
         $template_id = $request['template_id'];
-        $tesco_sizelists = TescoPrimarySize::with(['secSizeChart' => function ($query) use ($request) {
-            $query->whereIn('tesco_secondary_size_chart.tesco_secondary_size_category_id', $request['size_category']);
-        }])
+        $tesco_sizelists = TescoPrimarySize::with(['secSizeChart'])
             ->where('tesco_primary_size.tesco_size_department_id', $request['size_id'])
             ->where('tesco_primary_size.is_flag', true)
             ->orderBy('tesco_primary_size.id')
@@ -134,26 +109,28 @@ class CareLabelOrdersCustomerController extends Controller
         $tesco_template = DB::table('tesco_template')
             ->where('item_id', $template_id)
             ->get();
+        
+        $moq = DB::table('price_taxation')
+        ->where([
+            'template_id' => $template_id,
+            'customer_id' => Auth::guard('web_customer')->user()->company_id,
+            'buyer_id' => 2
+        ])
+        ->value('price_taxation.moq');
+
+        $moq_value = !is_null($moq) ? $moq : 0;
 
         return response()->json([
             'message' => 'success',
             'data' => $tesco_sizelists,
-            'tesco_template' => $tesco_template 
+            'tesco_template' => $tesco_template,
+            'moq' => $moq_value
         ], 200);
     }
 
     public function getTescoTemplateMoq(Request $request)
     {
         $templates = explode(',', $request['templates']);
-
-        $buyer_id  = $request['buyer_id'];
-
-        /**  [Get parent customer id from tesco_suppliers metadata id] */
-        $customer_id = DB::table("customer_metadata")
-            ->where('customer_metadata_id', $request['supplier'])
-            ->select('customer_id')
-            ->first();
-
         $moq_array = array();
         $moq_value = array();
 
@@ -167,13 +144,12 @@ class CareLabelOrdersCustomerController extends Controller
             $moq = DB::table('price_taxation')
                 ->where([
                     'template_id' => $template_id,
-                    'customer_id' => $customer_id->customer_id,
-                    'buyer_id' => $buyer_id
+                    'customer_id' => Auth::guard('web_customer')->user()->company_id,
+                    'buyer_id' => $request['buyer_id']
                 ])
-                ->select('price_taxation.moq')
-                ->first();
+                ->value('price_taxation.moq');
 
-            $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq->moq : 0;
+            $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq : 0;
         }
 
         array_push($moq_array, $moq_value);
@@ -195,6 +171,36 @@ class CareLabelOrdersCustomerController extends Controller
             $response = $this->storeorder->storeTescoLabelOrder($request, 'customer');
 
             return $response;
+        }
+    }
+
+    public function getCareLabelOrderDetail(Request $request)
+    {
+        if ($request->ajax()) {
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
+
+            $get_order_details = new EditTescoOrders();
+            $result = $get_order_details->getCareLabelOrderDetails($request);
+
+            if ($result) {
+                return response()->json([
+                    'error' => false,
+                    'message' => 'success',
+                    'order_details' => $result['order_details'],
+                    'moq' => $result['moq'],
+                    'erp_details' => $result['erp_details'],
+                    'symbols' => $this->symbols,
+                    'tesco_suppliers' => $tesco_suppliers,
+                    'coo' => $this->coo,
+                    'kids_warning' => $this->kids_warning,
+                    'components' => $this->components,
+                    'fabriclists' => $this->fabriclists,
+                    'additional_instructions' => $this->additional_instructions,
+                    'part_of_two_piece_set' => $this->part_of_two_piece_set
+                ], 200);
+            } else {
+                return response()->json(['error' => true, 'message' => 'Error'], 400);
+            }
         }
     }
 

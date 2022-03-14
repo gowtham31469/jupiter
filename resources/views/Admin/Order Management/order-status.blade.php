@@ -474,122 +474,215 @@
         <div class="div-max">
             {!! Form::open(['id' => 'update_tesco_label_order_status_form','data-toggle' => 'validator','role' => 'form']) !!}
             <span id="edit_label_order_result"></span>
-                <div class="col-md-2">
-                    <h4 class="text-center label-order-details">Order Details</h4>
-                    <div class="scroll" style="height: calc(100vh - 80px);">
-                        <input type="hidden" id="label_order_id">
-                        <input type="hidden" id="label_template_id">
-                        <input type="hidden" id="label_template_name">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
+            <div class="col-md-2">
+                <h4 class="text-center label-order-details">Order Details</h4>
+                <div class="scroll" style="height: calc(100vh - 80px);">
+                    <input type="hidden" id="label_order_id">
+                    <input type="hidden" id="label_template_id">
+                    <input type="hidden" id="label_template_name">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
 
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
 
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
 
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
 
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
 
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-                            {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '')) !!}
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_button_space', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('tesco_care_button_space',null,null,['id' => 'tesco_care_button_space']) !!} Include Button Sew Space
+                            </label>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="align-items form-group has-feedback">
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
+                            </label>
                             <div class="help-block with-errors"></div>
                         </div>
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tesco_care_button_space', 'Dont Show', ['class' => 'form_label', 'style' => 'visibility:hidden']) !!}
-                            <div class="checkbox">
-                                <label>
-                                    {!! Form::checkbox('tesco_care_button_space',null,null,['id' => 'tesco_care_button_space']) !!} Include Button Sew Space
-                                </label>
-                            </div>
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
+                            </label>
                             <div class="help-block with-errors"></div>
                         </div>
-                        <div class="align-items form-group has-feedback">
-                            <div class="checkbox">
-                                <label>
-                                    {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
-                                </label>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
-                                </label>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
-                                </label>
-                                <div class="help-block with-errors"></div>
-                            </div>
+                        <div class="checkbox">
+                            <label>
+                                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
+                            </label>
+                            <div class="help-block with-errors"></div>
                         </div>
-                        <div class="label-metadata-select"></div>
-                        <hr>
-                        <div class="row hidden" id="baby_sleeping_bag_div">
-                            <div class="col-md-12">
-                                <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="align-items form-group0 has-feedback">
-                                    <div class="checkbox">
-                                        <label>
-                                            {!! Form::checkbox('tesco_care_bs_en',null,null,['id' => 'tesco_care_bs_en']) !!} Conforms to BS EN 16781:2018
-                                        </label>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="checkbox form-group has-feedback">
-                                        <label>
-                                            {!! Form::checkbox('tesco_care_sleep_bag_symbol',null,null,['id' => 'tesco_care_sleep_bag_symbol']) !!} <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
-                                        </label>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group has-feedback form-inline">
-                                        {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
-                                        {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG')) !!}
-                                    </div>
+                    </div>
+                    <div class="label-metadata-select"></div>
+                    <hr>
+                    <div class="row hidden" id="baby_sleeping_bag_div">
+                        <div class="col-md-12">
+                            <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="align-items form-group0 has-feedback">
+                                <div class="checkbox">
+                                    <label>
+                                        {!! Form::checkbox('tesco_care_bs_en',null,null,['id' => 'tesco_care_bs_en']) !!} Conforms to BS EN 16781:2018
+                                    </label>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="checkbox form-group has-feedback">
+                                    <label>
+                                        {!! Form::checkbox('tesco_care_sleep_bag_symbol',null,null,['id' => 'tesco_care_sleep_bag_symbol']) !!} <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
+                                    </label>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback form-inline">
+                                    {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
+                                    {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG')) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10">
-                    <div class="scroll" style="height: calc(100vh - 40px);">
-                       <div class="container-fluid">
-                            <div class="row">
-                                <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
-                                <div class="teasco-care-quantity-div"></div>
-                            </div>
-                            <div class="row">
-                                <div class="garment-component-div"></div>
-                            </div>                        
-                            <div class="row">
-                                    <div class="label-order-footer"></div>
-                            </div>
-                       </div>
+            </div>
+            <div class="col-md-10">
+                <div class="scroll" style="height: calc(100vh - 40px);">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
+                            <div class="tesco-care-quantity-div"></div>
+                        </div>
+                        <div class="row">
+                            <div class="garment-component-div"></div>
+                        </div>
+                        <div class="row">
+                            <div class="label-order-footer"></div>
+                        </div>
                     </div>
                 </div>
-                {!! Form::close() !!}
+            </div>
+            {!! Form::close() !!}
+            <div class="loader">
+                <div class=" fa-3x">
+                    <i class="fa fa-spinner fa-pulse"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="left-panel col-md-12 edit-swingticket-order-panel" style="display: none;">
+        <div class="loader">
+            <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
+        </div>
+        <div class="div-max">
+            {!! Form::open(['id' => 'update_tesco_swingticket_order_status_form','data-toggle' => 'validator','role' => 'form']) !!}
+            <span id="edit_swingticket_order_result"></span>
+            <div class="col-md-2">
+                <h4 class="text-center swingticket-order-details">Order Details</h4>
+                <div class="scroll" style="height: calc(100vh - 80px);">
+                    <input type="hidden" id="swingticket_order_id" name="order_id">
+                    <input type="hidden" id="swingticket_template_id" name="swing_template_id">
+                    <input type="hidden" id="swing_primary_size_id" name="swing_primary_size_id">
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_24_char_desc', '24 Character Description', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_24_char_desc',$value = '', array('class' => 'form-control input-sm ','placeholder' => '24 Character Description','required','maxlength' => '45')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_po_number', 'PO Number', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_po_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PO Number','required','maxlength' => '7')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_cz_price', 'Czech Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_cz_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Czech Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_sk_price', 'Slovak Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::number('swing_sk_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Slovak Selling Price', 'required',  'max' => '99999.99', 'data-max-error' => 'Value must be less than or equal to 99999.99', 'step' => '0.01')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_hu_price', 'Hungarian Selling Price', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_hu_price',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Hungarian Selling Price', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '6')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_eqos', 'EQOS Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Code','required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '7')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    
+                    <div class="form-group has-feedback">
+                        {!! Form::label('swing_option_id', 'Option ID', ['class' => 'form_label']) !!}
+                        {!! Form::text('swing_option_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID', 'required', 'onkeypress' => 'return isNumber(event)', 'maxlength' => '8', 'onkeyup' => 'addHyphen(this)')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <hr>
+                    <div id="swing_ticket_select"></div>
+                    <div id="template_dependent_data"></div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="scroll" style="height: calc(100vh - 40px);">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h4 class="text-center" style="padding-left: 164px;">Order Quantity</h4>
+                            <table class="table table-bordered table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>UK</th>
+                                        <th>EUR</th>
+                                        <th>Secondary Size</th>
+                                        <th>EAN Barcode</th>
+                                        <th>Quantity <small>(Units)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="swing_ticket_qty_table">
+                                    
+                                </tbody>
+                            </table>
+                            <div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>
+                        </div>
+                        <div class="row">
+                            <div class="swingticket-order-footer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {!! Form::close() !!}
             <div class="loader">
                 <div class=" fa-3x">
                     <i class="fa fa-spinner fa-pulse"></i>
@@ -684,11 +777,16 @@
     <script src="{{ asset('js/Admin/order.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-order-status.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-care-label-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+
     <script>
         localStorage.removeItem("page_navigation");
         var buyer_count = $('#invisible__count_id').val();

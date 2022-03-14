@@ -1445,8 +1445,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 		}
 		else
 		{
-			console.log("start:"+id)
-            console.log(id)
             var a_back = document.getElementById(data_ba);
     var svgDoc_back = a_back.contentDocument;
 
@@ -1487,7 +1485,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                     if(data.order_details[0].bs_en_declaration == 0)
                     {
-                        console.log("hai")
                         svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
                     }
 
@@ -1495,11 +1492,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     {
                         svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
                     }
-
-                    // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-                    // {
-                    //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-                    // }
 
                     $(data.order_details).each(function (key, val) {
                         svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
@@ -1535,14 +1527,12 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         }
                         else
                         {
-                            //console.log("hai")
                             svgDoc.getElementById("tog_value_1_").innerHTML = "";
                         }
 
 
                         var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                         var selected_secondary_sizes_text = "";
-                        console.log(selected_secondary_sizes)
                         $size_y=0;
                         $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                             if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
@@ -1948,29 +1938,27 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     var en_care_instructions = "";
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        en_care_instructions += additional_care_text_1[0].english
+                        en_care_instructions += toTitleCase(additional_care_text_1[0].english)
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        en_care_instructions += "/" + additional_care_text_2[0].english
+                        en_care_instructions += "/" + toTitleCase(additional_care_text_2[0].english)
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        en_care_instructions += "/" + additional_care_text_3[0].english
+                        en_care_instructions += "/" + toTitleCase(additional_care_text_3[0].english)
                     }
                     
                     if(degree >= 30)
                     {
-                        en_care_instructions += "/" + data.degree_text[0].english
+                        en_care_instructions += "/" + toTitleCase(data.degree_text[0].english)
                     }
                     
                     $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
 
-                    //console.log($chunk_str);
                     var chunks='<tspan  x="0" y="0">EN</tspan>';
                     $y=0;
                     $ind=1;
-                    console.log("gy:"+$chunk_str.length)
                     $($chunk_str).each(function(index,chunk_val){
                         if(chunk_val.charAt(0) == "/")
                         {
@@ -1985,7 +1973,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         //chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
                         if($chunk_str.length == $ind)
                         {
-                            $y+=6;
+                            $y+=8;
                         }
                         else
                         {
@@ -2005,32 +1993,32 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         var garment_component_text = JSON.parse(comp_val.garment_component_text)
                         if(index != 0)
                         {
-                            en_garment_component += "/" +garment_component_text[0].english;
-                            pl_garment_component += "/" +garment_component_text[0].polish;
-                            cz_garment_component += "/" +garment_component_text[0].czech;
-                            sk_garment_component += "/" +garment_component_text[0].slovak;
-                            hu_garment_component += "/" +garment_component_text[0].hungarian;
+                            en_garment_component += "/" + toTitleCase(garment_component_text[0].english);
+                            pl_garment_component += "/" + toTitleCase(garment_component_text[0].polish);
+                            cz_garment_component += "/" + toTitleCase(garment_component_text[0].czech);
+                            sk_garment_component += "/" + toTitleCase(garment_component_text[0].slovak);
+                            hu_garment_component += "/" + toTitleCase(garment_component_text[0].hungarian);
                         }
                         else
                         {
-                            en_garment_component += garment_component_text[0].english;
-                            pl_garment_component += garment_component_text[0].polish;
-                            cz_garment_component += garment_component_text[0].czech;
-                            sk_garment_component += garment_component_text[0].slovak;
-                            hu_garment_component += garment_component_text[0].hungarian;
+                            en_garment_component += toTitleCase(garment_component_text[0].english);
+                            pl_garment_component += toTitleCase(garment_component_text[0].polish);
+                            cz_garment_component += toTitleCase(garment_component_text[0].czech);
+                            sk_garment_component += toTitleCase(garment_component_text[0].slovak);
+                            hu_garment_component += toTitleCase(garment_component_text[0].hungarian);
                         }
                         
                         $(comp_val.fibre).each(function(index,fibre_val){
                             var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
-                            en_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].english;
+                            en_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
 
-                            pl_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].polish;
+                            pl_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
 
-                            cz_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].czech;
+                            cz_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
 
-                            sk_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].slovak;
+                            sk_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].slovak);
 
-                            hu_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + fibre_text[0].hungarian;
+                            hu_garment_component += "/" + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].hungarian);
                         });
                     })
 
@@ -2042,69 +2030,68 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
 
                     if(exclusive_trims_text != "" && exclusive_trims_text != null)
                     {
-                        en_garment_component += "/" + exclusive_trims_text[0].english
-                        pl_garment_component += "/" + exclusive_trims_text[0].polish
-                        cz_garment_component += "/" + exclusive_trims_text[0].czech
-                        sk_garment_component += "/" + exclusive_trims_text[0].slovak
-                        hu_garment_component += "/" + exclusive_trims_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(exclusive_trims_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(exclusive_trims_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(exclusive_trims_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(exclusive_trims_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(exclusive_trims_text[0].hungarian)
                     }
 
                     if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
                     {
-                        en_garment_component += "/" + contains_non_textile_part_text[0].english
-                        pl_garment_component += "/" + contains_non_textile_part_text[0].polish
-                        cz_garment_component += "/" + contains_non_textile_part_text[0].czech
-                        sk_garment_component += "/" + contains_non_textile_part_text[0].slovak
-                        hu_garment_component += "/" + contains_non_textile_part_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(contains_non_textile_part_text[0].hungarian)
                     }
 
                     if(kids_warning_text != "" && kids_warning_text != null)
                     {
-                        en_garment_component += "/" + kids_warning_text[0].english
-                        pl_garment_component += "/" + kids_warning_text[0].polish
-                        cz_garment_component += "/" + kids_warning_text[0].czech
-                        sk_garment_component += "/" + kids_warning_text[0].slovak
-                        hu_garment_component += "/" + kids_warning_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(kids_warning_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(kids_warning_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(kids_warning_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(kids_warning_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(kids_warning_text[0].hungarian)
                     }
 
                     if(additional_care_text_1 != "" && additional_care_text_1 != null)
                     {
-                        console.log("Polish : "+additional_care_text_1[0].polish)
-                        pl_garment_component += "/" + additional_care_text_1[0].polish
-                        cz_garment_component += "/" + additional_care_text_1[0].czech
-                        sk_garment_component += "/" + additional_care_text_1[0].slovak
-                        hu_garment_component += "/" + additional_care_text_1[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_1[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_1[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_1[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_1[0].hungarian)
                     }
                     if(additional_care_text_2 != "" && additional_care_text_2 != null)
                     {
-                        pl_garment_component += "/" + additional_care_text_2[0].polish
-                        cz_garment_component += "/" + additional_care_text_2[0].czech
-                        sk_garment_component += "/" + additional_care_text_2[0].slovak
-                        hu_garment_component += "/" + additional_care_text_2[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_2[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_2[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_2[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_2[0].hungarian)
                     }
                     if(additional_care_text_3 != "" && additional_care_text_3 != null)
                     {
-                        pl_garment_component += "/" + additional_care_text_3[0].polish
-                        cz_garment_component += "/" + additional_care_text_3[0].czech
-                        sk_garment_component += "/" + additional_care_text_3[0].slovak
-                        hu_garment_component += "/" + additional_care_text_3[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(additional_care_text_3[0].polish)
+                        cz_garment_component += "/" + toTitleCase(additional_care_text_3[0].czech)
+                        sk_garment_component += "/" + toTitleCase(additional_care_text_3[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(additional_care_text_3[0].hungarian)
 					}
 					
 					if(degree >= 30)
                     {
-                        pl_garment_component += "/" + data.degree_text[0].polish
-                        cz_garment_component += "/" + data.degree_text[0].czech
-                        sk_garment_component += "/" + data.degree_text[0].slovak
-                        hu_garment_component += "/" + data.degree_text[0].hungarian
+                        pl_garment_component += "/" + toTitleCase(data.degree_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(data.degree_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(data.degree_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(data.degree_text[0].hungarian)
                     }
 
                     if(part_of_set_text != "" && part_of_set_text != null)
                     {
-                        en_garment_component += "/" + part_of_set_text[0].english
-                        pl_garment_component += "/" + part_of_set_text[0].polish
-                        cz_garment_component += "/" + part_of_set_text[0].czech
-                        sk_garment_component += "/" + part_of_set_text[0].slovak
-                        hu_garment_component += "/" + part_of_set_text[0].hungarian
+                        en_garment_component += "/" + toTitleCase(part_of_set_text[0].english)
+                        pl_garment_component += "/" + toTitleCase(part_of_set_text[0].polish)
+                        cz_garment_component += "/" + toTitleCase(part_of_set_text[0].czech)
+                        sk_garment_component += "/" + toTitleCase(part_of_set_text[0].slovak)
+                        hu_garment_component += "/" + toTitleCase(part_of_set_text[0].hungarian)
                     }
 
                     
@@ -2133,7 +2120,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                         //chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
                         if($garment_str.length == $ind_en)
                         {
-                            $y+=6;
+                            $y+=8;
                         }
                         else
                         {
@@ -2171,7 +2158,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     {
                         chunks += '<tspan x="0" y="'+$y+'">CZ</tspan>';
                     }
-
+					$ind_cz=1;
                     $($cz_garment_str).each(function(index,cz_garment_val){
                         if($y == 96)
                         {
@@ -2207,8 +2194,17 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             //chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';     
                         }
                         
-                        $y+=6;
-                        $z+=6;
+                        if($cz_garment_str.length == $ind_cz)	
+						{	
+							$y+=8;	
+							$z+=8;	
+						}	
+						else	
+						{	
+							$y+=6;	
+							$z+=6;	
+						}	
+						$ind_cz++;
                     })
 
                     if($y > 96)
@@ -2219,7 +2215,7 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     {
                         chunks += '<tspan x="0" y="'+$y+'">SK</tspan>';
                     }
-
+					$ind_sk=1;
                     $($sk_garment_str).each(function(index,sk_garment_val){
                         if($y == 96)
                         {
@@ -2255,8 +2251,17 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                             //chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';     
                         }
                         
-                        $y+=6;
-                        $z+=6;
+                        if($sk_garment_str.length == $ind_sk)	
+						{	
+							$y+=8;	
+							$z+=8;	
+						}	
+						else	
+						{	
+							$y+=6;	
+							$z+=6;	
+						}	
+						$ind_sk++;
                     })
 
                     if($y > 96)
@@ -2309,11 +2314,6 @@ function genarateArtwork(data, name,style_no,buyer_no,id,order_type,created_at,s
                     
                     svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
                     svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
-
-
-                    
-                    // console.log(en_care_instructions)
-                    // console.log(en_care_instructions)
 
                     var s_front = new XMLSerializer();
                     var d_front = svgRoot_front_text;
@@ -2794,7 +2794,6 @@ function printHangDivJC(front,back,disney,name,style_no,buyer_no,id,order_type,c
 	var a1 = document.getElementById(back)
 	var svgDoc1 = a1.contentDocument;
 	var svgRoot1 = svgDoc1.documentElement;
-	console.log(svgDoc1)
 	var index_arr=[];
 	var svgarr = [];
 	var svgarr_front = [];

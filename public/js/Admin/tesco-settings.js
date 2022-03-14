@@ -132,6 +132,58 @@ function tescoBrands() {
    }
   }
 
+
+
+function addSeasonCode()
+ {
+    try{
+         var name       = $('#season_code').val();
+         var description       = $('#season_code_description').val();
+         
+
+         $.ajax({
+             url: base_url + "/admin/tesco/add-season-codes",
+             method: 'POST',
+             data: {_token:csrf_token,name:name,description:description},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             statusCode: {
+                  200: function() {
+                       $('.snackbar_span').html("Season Code Added Successfully");
+                       showSnackbar();
+                       $('#addTescoSeasonCodeModal').modal('hide');
+                       tescoSeasonCodes()
+                  },
+                  208: function() {
+                       $('#tesco_season_code_result').removeAttr('style');
+                       $('#tesco_season_code_result').html('Season Code exists.')
+                       $("#tesco_season_code_result").addClass("alert alert-warning");
+                  },
+                  400: function() {
+                       $('.snackbar_span').html("Something went wrong!!");
+                       showSnackbar();
+                  }
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+             complete: function () {
+                       $(".loader").hide();
+             }
+         })
+     } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
+
   /**
    * Function for get tesco brands details for editing
    * @param id
@@ -182,6 +234,53 @@ function tescoBrands() {
    }
   }
 
+
+  function getTescoSeasonCodeById(id)
+  {
+    try{
+         if(isSubmitting) {
+              return;
+          }
+          isSubmitting = true;
+         $.ajax({
+             url:base_url + "/admin/tesco/get-tesco-season-code-details",
+             dataType:"json",
+             method:"get",
+             data:{id:id},
+             tryCount : 0,
+             retryLimit : 2,
+             beforeSend: function () {
+               $(".loader").show();
+             },
+             success: function(data){
+                console.log(data.tesco_season_code[0].name)
+                 isSubmitting = false;
+                 $('#edit_tesco_season_code_id').val(id);
+                 $('#edit_season_code').val(data.tesco_season_code[0].name);
+                 $('#edit_season_code_description').val(data.tesco_season_code[0].description);
+                 $('#editTescoSeasonCodeModal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                 })
+                 $('#edit_tesco_season_code_form').validator('validate');
+                 $('#editTescoSeasonCodeModal').modal('show');
+             },
+             error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+             },
+             complete: function () {
+                 $(".loader").hide();
+             }
+         })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+  }
+
   /**
   * Function for edit tesco brands details
   * @author <Sumanth>
@@ -213,6 +312,53 @@ function tescoBrands() {
                      $('#edit_tesco_brand_result').removeAttr('style');
                      $('#edit_tesco_brand_result').html('Brand already exists.')
                      $("#edit_tesco_brand_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
+
+
+  function editTescoSeasonCode()
+ {
+  try{
+       var id         = $('#edit_tesco_season_code_id').val();
+       var name       = $('#edit_season_code').val();
+       var description       = $('#edit_season_code_description').val();
+       
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-season-code",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data:{_token:csrf_token,id:id,name:name,description:description},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Brand Updated Successfully");
+                       showSnackbar();
+                       $('#editTescoSeasonCodeModal').modal('hide');
+                       tescoSeasonCodes()
+                  },
+                208: function() {
+                     $('#edit_tesco_season_code_result').removeAttr('style');
+                     $('#edit_tesco_season_code_result').html('Season code already exists.')
+                     $("#edit_tesco_season_code_result").addClass("alert alert-warning");
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
@@ -332,6 +478,93 @@ function tescoBrands() {
    }
   }
 
+
+
+function makeSeasonCodeEnabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/tesco/make-season-code-enabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                       isSubmitting = false; 
+                       $('.snackbar_span').html('Season code is enabled ');
+                       showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                tescoSeasonCodes();
+                $(".loader").hide();
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
+
+  function makeSeasonCodeDisabled(id,csrf_token)
+  {
+   try{
+         if(isSubmitting) 
+         {
+             return;
+         }
+         isSubmitting = true;
+         $.ajax({
+              url:base_url + "/admin/tesco/make-season-code-disabled",
+              dataType:"json",
+              beforeSend: function () {
+                $(".loader").show();
+              },
+              method:"put",
+              data:{_token:csrf_token,id:id},
+              tryCount : 0,
+              retryLimit : 2,
+              statusCode: {
+                   /** [Show response status based on HTTP status code] */
+                   200: function() {
+                       isSubmitting = false; 
+                       $('.snackbar_span').html('Season code is disabled ');
+                       showSnackbar();
+                   }
+              },
+              error: function(errorXHR, errorStatus, errorThrown) {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    $.ajax(this);
+                    return;
+                }
+              },
+              complete: function () {
+                tescoSeasonCodes();
+                $(".loader").hide();
+              }
+          })
+   } catch (e) {
+    console.log("Error:"+e)
+   }
+  }
   /**
   * Function to Tesco Department home page
   * @author <Sumanth>
@@ -4324,7 +4557,6 @@ function tescoLabelSizeChart() {
       },
       success: function(data) {
 
-        console.log(data)
         var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>'+
         '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoLabelSizeChartModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Label Size </a></div></div>'+
         '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Label Size Chart </h3></div>'+
@@ -4332,27 +4564,6 @@ function tescoLabelSizeChart() {
         '<tr><th>Sl. No</th><th>Department Title</th><th>UK Size</th><th>CE Size</th>'+
         '<th>Height</th><th>Weight</th><th>Chest</th><th>Bust</th><th>Waist</th>'+
         '<th>Status</th><th>Actions</th></tr></thead><tbody>';
-        // $.each(data.tesco_translationlist, function(i, item) {
-        //   var index = i + 1;
-        //   tesco_metadata += '<tr id="' + item.id + '">'+
-        //   '<td>' + index + '</td>'+
-        //   '<td>' + item.department_title + '</td>'+
-        //   '<td>' + item.uk_size + '</td>'+
-        //   '<td>' + item.ce_size + '</td>';
-          
-
-        //   if (item.is_flag) {
-        //     tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
-        //   } else {
-        //     tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
-        //   }
-        //   if (item.is_flag) {
-        //     tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="disableTescoSizeChart" data-placement="left"></i></a>';
-        //   } else {
-        //     tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="enableTescoSizeChart" data-placement="left"></i></a>';
-        //   }
-        //   tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-size-chart filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
-        // })
 
         tesco_metadata += data.table_data+'</tbody></table></div>';
         $('.content').html(tesco_metadata)
@@ -4654,7 +4865,6 @@ function updateTescoLabelSizeChart() {
           },
           success: function(data) {
               isSubmitting = false;
-              console.log(data)
               $('#edit_tesco_primary_id').val(id);
               $('#edit_size_department').val();
               $('#edit_labelsize_dept_title').val();
@@ -4734,3 +4944,79 @@ $(document).on('click', '.update_status', function(event) {
       })
 
 });
+
+
+function tescoSeasonCodes()
+{
+    try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').show();
+    $('.orchestra-sidebar').hide();
+    
+    
+    $.ajax({
+        url: base_url + "/admin/tesco/settings/season-codes",
+        type: "POST",
+        dataType: "json",
+        data: {
+            _token: csrf_token
+        },
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+                var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTescoSeasonCodeModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Season Code</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Season Codes</h3></div><table id="tesco-brands-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Name</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+               $.each(data.tesco_brands, function(i, item){
+                var index = i+1;
+                tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.name+'</td>';
+                 if(item.is_enabled)
+                 {
+                  tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
+                 }
+                 else
+                 {
+                  tesco_metadata += '<td><span class="label label-danger">Disabled</span></td>';
+                 }
+                 if(item.is_enabled)
+                 {
+                  tesco_metadata += '<td><a href="#"><i class="fa fa-ban filterbtn options fa-button status" aria-hidden="true" title="Make Disabled" id="make_season_code_disabled" data-placement="left"></i></a>';
+                 }
+                 else
+                 {
+                  tesco_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_season_code_enabled" data-placement="left"></i></a>';
+                 }
+
+
+                tesco_metadata += '<a href="#"><i class="fa fa-pencil fa-button edit-tesco-season-codes filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+               });
+               tesco_metadata += '</tbody></table></div>';
+                $('.content').html(tesco_metadata)
+                $('.edit-tesco-season_codes').tooltip('show')
+                $('.edit-tesco-season_codes').tooltip('toggle')
+                $('.status').tooltip('show')
+                $('.status').tooltip('toggle')
+                $('#tesco-brands-list-table').DataTable();
+                $("#tesco-brands-list-table_filter input").addClass('form-control input-sm');
+                $("#tesco-brands-list-table_filter input").attr('placeholder', 'Data Search');
+                $('#tesco-brands-list-table_length select').addClass('form-control input-sm');
+
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+}
+
+

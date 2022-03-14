@@ -119,9 +119,7 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$order_table_array = explode("_", $main_table);
-				    $tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -244,9 +242,7 @@ class OrderManagementController extends Controller
 					$country        = $order_details->zone;
 					$style_zone     = strtolower($country).'_style_ref';
 					$template_id    = $order_details->template_id;
-					$order_table_array = explode("_", $main_table);
-				    $tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
+					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
 					
 					$material_name  = $template_level->material;
 					$material_sub   = $template_level->material_sub;
@@ -264,7 +260,7 @@ class OrderManagementController extends Controller
 					$ocn_number     = $order_details->ocn_number;
 
 					// update individual row quanity to 0 in artworks orders table.
-					if($order_table_array[1] ===  'washcare'){
+					if($main_table ===  'tesco_washcare_orders'){
 						DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['quantity' => 0]);
 					} else {
 						DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['count' => 0]);
@@ -458,9 +454,7 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$order_table_array = explode("_", $main_table);
-						$tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;
@@ -599,9 +593,7 @@ class OrderManagementController extends Controller
 						$country        = $order_details->zone;
 						$style_zone     = strtolower($country).'_style_ref';
 						$template_id    = $order_details->template_id;
-						$order_table_array = explode("_", $main_table);
-						$tesco_label_flag = $order_table_array[1] !=  'washcare'?false:true;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $tesco_label_flag);
+						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
 						
 						$material_name  = $template_level->material;
 						$material_sub   = $template_level->material_sub;

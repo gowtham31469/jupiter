@@ -6,15 +6,17 @@
 $(function () {
 
     // Method to render tesco care label orders page
-    renderTescoCareOrders = (role, size_id, size_category, size_category_text,template_id, callback=null) => {
+    renderTescoCareOrders = (role, template_id, callback=null) => {
         var user_role = role.toLowerCase();
+        var size_id = $('#tesco_care_size_chart').val();
+        var size_department = $('#tesco_care_size_chart option:selected').text();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
-
-            getSizechart(size_id, size_category, size_category_text, user_role,template_id, callback);
+            $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
+            getSizechart(size_id, size_department, user_role,template_id, callback);
             
         }); 
     }
@@ -37,53 +39,6 @@ $(function () {
     $("#alert_success").fadeTo(2000, 500).slideUp(500, function () {
         $("#alert_success").slideUp(500);
     });
-
-    // get all the secondary size categories based on primary size selection
-    getSecondarySizeCategory = (size, user_type) => {
-        $('#tesco_care_size_category_div').html('');
-        $.ajax({
-            type: "get",
-            url: base_url + "/" + user_type + "/tesco/secondary-size-categories",
-            data: {
-                size: $(size).val()
-            },
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            statusCode: {
-
-                /** [ Show response status based on HTTP status code ] */
-                200: function (response) {
-                    size_category_options = ``;
-                    $.each(response.size_categories, function (i, item) {
-                        size_category_options += `<option value=` + item.id + `>` + item.category_name + `</option>`;
-                    });
-
-                    var size_category_html = `<label for="tesco_care_size_category">Size Category</label>
-                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_size_category" name="tesco_care_size_category" required="" data-actions-box="true" multiple="true" multiple title="Choose one of the following..." data-width="100%">
-                        ` + size_category_options + `
-                        </select>	
-                    <div class="help-block with-errors"></div>`;
-
-                    $('#tesco_care_size_category_div').append(size_category_html);
-
-                    $('#tesco_care_size_category_div').removeClass('hidden');
-                    $(".selectpicker").selectpicker("refresh");
-                    $('#create_order_form').validator('update');
-                },
-                400: function () {
-                    $('.snackbar_span').html('Something went wrong');
-                    showSnackbar();
-                }
-            },
-            complete: function () {
-                
-                $(".loader").hide();
-            }
-            
-        });
-    }
 
     // Calculate total fiber percentage
     $(document).on('change', '.fiber-individual-percentage', function() {
@@ -208,7 +163,7 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, size_category, size_category_text, role,template_id, callback=null) => {
+    getSizechart = (size_id, size_department, role,template_id, callback=null) => {
         var size_chart = [];
         $.ajax({
             type: "get",
@@ -217,10 +172,15 @@ $(function () {
             data: {
                 _token: csrf_token,
                 size_id: size_id,
-                size_category: size_category,
                 template_id:template_id
             },
             success: function (response) {
+
+                var moq = 0;
+
+                if (role == 'customer') {
+                    moq = response.moq;
+                }
 
                 var temp_file = response.tesco_template[0].template_file.split(',');
                 $('#hidden_name').val(response.tesco_template[0].template_name)
@@ -250,48 +210,39 @@ $(function () {
 
                     secondary_sizes = [];
 
-                    for (var index = 0; index < size_category_text.length; index++) {
+                    var category_value = '-';
+                    var category_name = '-';
+                    var size_id = null;
 
-                        var category_value = '-';
-                        var size_id = null;
+                    $.each(valueOfElement.sec_size_chart, function (index_1, category) {
 
-                        $.each(valueOfElement.sec_size_chart, function (index_1, category) {
+                        category_value = category['secondary_size'];
+                        category_name = category['category_name'].trim();
+                        size_id = category['id'];
 
-                            if ($.trim(size_category_text[index]) === $.trim(category['category_name'])) {
-
-                                category_value = category['secondary_size'];
-                                size_id = category['id'];
-                                return false;
-
-                            }
-
-                        });
-
-                        quantity_html += `<strong class="text-justify">` + $.trim(size_category_text[index]) + `</strong> : ` + category_value + `<br>`;
-
+                        quantity_html += `<strong class="text-justify">` + category_name + `</strong> : ` + category_value + `<br>`;
                         size_value = category_value === '-' ? null : category_value;
 
                         secondary_sizes.push({
                             id: size_id,
-                            secondary_size: $.trim(size_category_text[index]),
+                            secondary_size: category_name,
                             value: size_value
                         });
-
-                    }
+                    });
 
                     quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm label-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" min=` + moq + `><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
                 quantity_html += `</tbody>
                                         </table>
                                         </div><div id="barcode-svg-div" style="display:none;"><svg id="barcode-ean-13"></svg></div>`;
-                $('.teasco-care-quantity-div').html(quantity_html);
+                $('.tesco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
-                if (size_id === '4') {
+                if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
                 if(callback != null) {
@@ -303,11 +254,13 @@ $(function () {
     }
 
     // Get MOQ value based on supplier value.
-    getMoq = (user_role, crud_type) => {
-        var supplier_id = $('#tesco_care_supplier option:selected').val();
+    getMoq = (obj, user_role, crud_type) => {
+        var supplier_id = $(obj).val();
         var buyer_id = localStorage.getItem("buyer_id");
         var template_id = crud_type === 'create'?localStorage.getItem("templates"):$('#label_template_id').val();
         var template_name = crud_type === 'create'?localStorage.getItem("template_group"):$('#label_template_name').val();
+        var template_splitted = template_name.split("-");
+        var template = template_splitted[0].trim();
 
         if (supplier_id != '') {
 
@@ -329,13 +282,14 @@ $(function () {
                     /** hide quantity missing error msgs */
                     $('.label-quantity-feedback').removeClass('has-error has-danger');
                     $('.label-quantity-feedback-err-msg').css('display', 'none');
-                    $('.label-quantity-field').prop('required', false);
-                    $('.label-quantity-field').parent().removeClass('has-error')
+                    $('.tesco-quantity-field').prop('required', false);
+                    $('.tesco-quantity-field').parent().removeClass('has-error')
                     $('.help-block').html('');
+
                     /** [ Dynamic moq value assignment on supplier change ] */
-                    $('.label-quantity-field').each(function () {
-                        $(this).attr("min", data.moq[0][template_name]);
-                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template_name]);
+                    $('.tesco-quantity-field').each(function () {
+                        $(this).attr("min", data.moq[0][template]);
+                        $(this).data("min-error", "Qty should be >= " + data.moq[0][template]);
                     });
 
                 },
@@ -359,12 +313,12 @@ $(function () {
             /** hide quantity missing error msgs */
             $('.label-quantity-feedback').removeClass('has-error has-danger');
             $('.label-quantity-feedback-err-msg').css('display', 'none');
-            $('.label-quantity-field').prop('required', false);
-            $('.label-quantity-field').parent().removeClass('has-error')
+            $('.tesco-quantity-field').prop('required', false);
+            $('.tesco-quantity-field').parent().removeClass('has-error')
             $('.help-block').html('');
 
             /** [ Remove MOQ values] */
-            $('.label-quantity-field').each(function () {
+            $('.tesco-quantity-field').each(function () {
                 $(this).removeAttr("min");
                 $(this).data("min-error", "");
             });
@@ -412,9 +366,9 @@ $(function () {
                         $('.create-download-artwork').css('display', 'inline-block')
                         $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
-                        $('.label-order-cancel-btn').show();
+                        $('.order-cancel-btn').show();
 
-                        postLabelOrderSubmit(response.data);
+                        postLabelOrderSubmit(user_type, response.data);
 
                         $(window).scrollTop(0);
                     },
@@ -439,7 +393,7 @@ $(function () {
         });
     }
 
-    postLabelOrderSubmit = (data) => {
+    postLabelOrderSubmit = (user_type, data) => {
 
         // Handle po upload modal button issue after page reloading
         $('.po-submit-btn').text('Save');
@@ -458,65 +412,30 @@ $(function () {
 
             /** [ store last updated id as hidden input , for cancel order functionality] */
 
-            var div_html = '<input class="washcare-table-id-hidden" id="washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
+            var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + data.last_insertion + '">';
 
             $('.label-order-invisible-div').html(div_html);
-
 
             // check if po upload is required or not.
             if (data.po_required === 1) {
                 /** Buyer Po upload modal for combined po upload modal */
-                var html = '<div class="container-fluid">\
-                        <div class="template-error1"></div>\
-                            <div class="col-md-12">\
-                                <br> <strong>Select Artwork :</strong>\
-                            <div class="row" id="Washcare_row">\
-                            <div class="col-md-4">\
-                            <div class="form-check form-group has-feedback">\
-                                <label class="form-check-label">\
-                                <input class="form-check-input template-checkbox1" type="checkbox" value="' + data.last_insertion + '" name="Washcare" id="Washcare" style="margin-right: 10px;" data-name="Washcare"> ' + localStorage.getItem("template_group") + ' </label>\
-                            <div class="help-block with-errors"></div>\
-                        </div></div>\
-                        <div class="col-md-8 Washcare-po-div po-number-div" style="display:none; margin-top: 5px;">\
-                        <strong><span id="Washcare-uploaded-po"></span></strong>\
-                        <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>\
-                        </div></div>\
-                        </div>\
-                            <div class="row">\
-                                <div class="col-md-12 upload-po-form">\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_number" class="form_label">PO Number</label>\
-                                            <input class="form-control input-sm " placeholder="PO Number" required="" name="po_number" value="" id="po_number" type="text" maxlength="11">\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                                        <div class="form-group has-feedback">\
-                                            <label for="po_file">Purchase Order File</label> <span class="control-fileupload"> <label for="file">Choose a file :</label> <input type="file" id="po_file" name="po_file" class="po-file-upload form-control center-block" required="" accept="application/pdf"> </span>\
-                                            <div class="help-block with-errors"></div>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-md-6">\
-                        <div class="form-group has-feedback">\
-                            <label for="combined_delivery_date">Delivery Date</label>\
-                            <div class="input-group date" data-provide="datepicker" id="delivery_datepicker">\
-                                <input value="" id="combined_delivery_date" required="" name="combined-delivery-date" type="text" class="form-control center-block" placeholder="Select Delivery Date">\
-                                <div class="input-group-addon">\
-                                    <span class="glyphicon glyphicon-th"></span >\
-                                </div >\
-                            </div >\
-                            <div class="help-block with-errors"></div>\
-                        </div>\
-                        </div>\
-                        </div>\
-                            </div>\
-                            </div>';
+                var html = `<br> <strong>Select Artwork :</strong>
+                                <div class="row">
+                                <div class="col-md-4">
+                                <div class="form-check form-group has-feedback">
+                                    <label class="form-check-label">
+                                    <input class="form-check-input template-checkbox1" type="checkbox" value="${data.last_insertion}" name="Washcare" id="Washcare" style="margin-right: 10px;" data-name="Washcare"> ${localStorage.getItem("template_group")} </label>
+                                <div class="help-block with-errors"></div>
+                            </div></div>
+                            <div class="col-md-8 Washcare-po-div po-number-div" style="display:none; margin-top: 5px;">
+                            <strong><span id="Washcare-uploaded-po"></span></strong>
+                            <i aria-hidden="true" style="color: green;margin-left: 9px;font-size: 15px;" class="fa fa-check"></i>
+                            </div></div>`;
                 /** Dynamic content for po upload modal tab */
-                $('#po-upload-modal-content').html(html);
+                $('#template-checkbox-div').html(html);
 
-                if (data.delivery_date_req === 1) {
-                    $('#combined_delivery_date').attr('required', true);
+                if (data.delivery_date_required === 1) {
+                    $('#combined_delivery_date').prop('required', true);
                 }
 
                 /** [ Backdrop for bootstrap modal ] */
@@ -617,52 +536,11 @@ $(function () {
                     formData.append('po_number', po_number);
                     formData.append('po_file', po_file);
 
-                    uploadCombinedPO(formData, templateName);
+                    uploadCombinedPO(user_type, formData, templateName);
                 }
             }
 
         });
-    }
-
-    cancelCareLabelOrder = (user_type) => {
-
-        var array_list = [];
-        my_object = new Object();
-
-        my_object.table = 'Washcare';
-        my_object.table_id = $('#washcare_order_id').val();
-
-        array_list.push(my_object);
-
-        $.ajax({
-            url: base_url + "/" + user_type + "/tesco/cancel-tesco-order",
-            type: 'PUT',
-            data: {
-                _token: csrf_token,
-                data_array: array_list
-            },
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            statusCode: {
-                200: function (response) {
-                    $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been cancelled successfully</div>');
-
-                    $('#cancelLabelOrderModal').modal('hide');
-                    $('.label-order-cancel-btn').remove();
-                    $(window).scrollTop(0);
-                },
-                400: function (error) {
-                    $('.snackbar_span').html("Something went wrong!!");
-                    showSnackbar();
-                }
-            },
-            complete: function () {
-                $(".loader").hide();
-            }
-        })
-
     }
 
     validateEanBarcodeValue = (obj) => {
@@ -673,9 +551,13 @@ $(function () {
             if (barcodecheck === false) {
                 /**  [ Show validation error message ] **/
                 obj.value = '';
-               alert('Enter a valid barcode.');
-
+                alert('Enter a valid barcode.');
+                return  false;
             }
+
+            // copy uk barcode to ce barcode input and vice-versa
+            var zone = obj.id.split('_')[0] == 'ce'?'uk':'ce';
+            $(`#${zone}_ean_${obj.id.split('_')[2]}`).val(obj.value);
         }
 
     }

@@ -172,7 +172,6 @@ function orderStatus() {
 
 									},
 									success: function (data) {
-										console.log("ADSdasdsad")
 										$('#po-file-upload-group').modal('show')
 										$('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
 										
@@ -1525,23 +1524,10 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 							data: form_data,
 							type: 'post',
 							success: function (data) {
-								//location.reload()
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
-								// $.each(a, function (index, value) {
-								// 	$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
-								// 	$('li[data-id=' + value + ']').removeAttr('style')
-								// 	$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
-								// });
-
-								// $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-								// 	$("#success-alert").slideUp(500);
-								// });
-								// /** Reset po upload form**/
-								// $('#new_po_no').val("")
-								// $('#combined_delivery_date').val("")
-								// document.getElementById("new_po_file").value=null; 
+								
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
@@ -1887,19 +1873,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po) {
 								$('#po-file-upload-div').modal('hide')
 								$('.snackbar_span').html('PO Updated Successfully');
 								showSnackbar();
-								// $.each(a, function (index, value) {
-								// 	$('li[data-id=' + value + ']').removeClass('list-group-item').addClass('check-list');
-								// 	$('li[data-id=' + value + ']').removeAttr('style')
-								// 	$('li[data-id=' + value + ']').html($('li[data-id=' + value + ']').text());
-								// });
-
-								// $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-								// 	$("#success-alert").slideUp(500);
-								// });
-								// /** Reset po upload form**/
-								// $('#new_po_no').val("")
-								// $('#combined_delivery_date').val("")
-								// document.getElementById("new_po_file").value=null; 
 							},
 							error: function () {
 								console.log('somethig is wrong, please try later');
@@ -2971,7 +2944,6 @@ function printHangDiv(data,disney) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
-							//console.log(data)
 							if(size[0] == "TAILLE")
 							{
 								svgDoc1.getElementById("size").innerHTML = "";
@@ -2992,14 +2964,6 @@ function printHangDiv(data,disney) {
 								if(data.size_chart.length > 0)
 								{
 									svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size+" CM";
-	//								if(data.size_chart[0].size.length == 2)
-	//								{
-	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
-	//								}
-	//								else
-	//								{
-	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
-	//								}
 									
 								}
 								else
@@ -3013,7 +2977,6 @@ function printHangDiv(data,disney) {
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
-								//console.log(size[0].length)
 								if(size[0].length == 1)
 								{
 									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
@@ -3228,7 +3191,6 @@ function printWashDiv(data,data_back,data_middle,dataid) {
 						tryCount: 0,
 						retryLimit: 2,
 						success: function (data) {
-							//console.log(data)
 							if(size[0] == "TAILLE")
 							{
 								svgDoc1.getElementById("size1").innerHTML = size_txt;
@@ -3285,9 +3247,6 @@ function printWashDiv(data,data_back,data_middle,dataid) {
 			
 		}
 	})
-	
-	//alert(i)
-	//console.log(index_arr)
 	
 	
 	var a1_back = document.getElementById(data_back);
@@ -4313,9 +4272,7 @@ function label_order_details(uvc) {
 				
 				if(check_count == data.orchestra_wash_care_label_orders.length)
 				{
-					//console.log(wcl_already_exists)
 					 $(data.color_wcl).each(function (index1, value1) {
-						// console.log(value1.color_code)
 					 if(wcl_already_exists.includes(value1.Color_Code) != true)
 					 {
 						$wash_status = "";
@@ -4582,13 +4539,6 @@ function label_order_details(uvc) {
 							var wash_enable = "display:none !important";
 							var wash_name = "";
 						}
-//						$(data.orchestra_wash_care_label_orders).each(function (index2, value2) {
-//							if(value2.color_code == value1.Color_Code)
-//							{
-//								console.log("hai")
-//							}
-//
-//						});
 
 						$('#add_modal').append('<div class="col-md-4"> <input type="hidden"  id="delete_id'+washcare+'"><div class="card add-card wash-card'+washcare+'" style="height: 280px;" data-toggle="modal" data-target=".wash_care_label_main" data-backdrop="static" data-keyboard="false"><span class="label label-' + $wash_status + ' label-status">' + $wash_status_text + '</span> <div class="card-title"> <p class="pull-right" id="clickme'+washcare+'" style="cursor: pointer;">View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i></p><h5><b class="washlabelname'+washcare+'">' + wash_name + 'Washcare Label</b></h5> </div><div class="row"> <div class="col-md-6 col-md-offset-3"> <div class="img_artwork"><img src="' + base_url + '/images/wcl_default.png" class="img-responsive center-block"></div></div></div><p id="washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;display: inline-block;"><i class="fa fa-plus" aria-hidden="true"></i> Add washcare label</p><p id="clone_washcare_label_card'+washcare+'" style="'+wash_enable+';cursor:pointer;    display: inline-block;float: right;"><i class="fa fa-clone" aria-hidden="true"></i> Clone washcare label</p></div></div>')
 				   		var old_id=washcare;
@@ -4892,7 +4842,6 @@ function washcarelabels(data, dataid,color_code,new_flag) {
         composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
     });
     $.each(data.orchestra_care_symbols, function (index, value) {
-		//console.log(value.care_instruction.length)
 		if(value.care_instruction.length > 15)
 		{
 			var carEng = value.care_instruction.slice(0,15)+"...";
@@ -5663,7 +5612,6 @@ function washcarelabels(data, dataid,color_code,new_flag) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + "-" + $('select.made_in_select' + dataid).find(':selected').data('english') + "-" + $('select.made_in_select' + dataid).find(':selected').data('spanish') + "-" + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + dataid).find(':selected').data('italian') + "-" + $('select.made_in_select' + dataid).find(':selected').data('dutch') + "-" + $('select.made_in_select' + dataid).find(':selected').data('german') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
-				//console.log(text_for_mad_in);
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -9691,12 +9639,10 @@ function jsbarcode_hang(code, id, svgDoc) {
 	// https://developer.mozilla.org/en/DOM/window.btoa
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
-	// img.src - contains base64 URI from svg
 
 	//remove temporary canvas
 	canvasTmp.remove();
 	
-	//console.log(svg_xml)
 	
 	var allGs = document.getElementsByTagName('g');
 	var firstG = allGs[0];
@@ -10049,7 +9995,6 @@ function setSpecialTag(id,colour) {
 function setHeatTransfer(id,colour) {
   
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	
 	var tot_qty_tableheat = [];
@@ -10195,7 +10140,6 @@ function setMainLabel(id,colour) {
 function setSizeLabel(id,colour) {
   
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	
 	var tot_qty_tablesize = [];

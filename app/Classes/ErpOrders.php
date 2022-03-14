@@ -74,7 +74,18 @@ class ErpOrders
 		try {
 			$qnty_table     = $request['tableName'] . '_quanty';
 			$order_table_array = explode("_", $request['tableName']);
-			$template_name = $order_table_array[1] !=  'washcare'?strtoupper($order_table_array[1]):title_case($order_table_array[1]);
+
+			switch ($order_table_array[1]) {
+				case 'washcare':
+					$template_name = title_case($order_table_array[1]);
+					break;
+				case 'swingticket':
+					$template_name = 'SwingTicket';
+					break;
+				default:
+					$template_name = strtoupper($order_table_array[1]);
+					break;
+			}
 
 			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
 
@@ -120,7 +131,8 @@ class ErpOrders
 					$orders,
 					$erp_order,
 					$request['buyer_id'],
-					$po_no
+					$po_no,
+					$request['tableName']
 				);
 				
 			} else {
@@ -150,22 +162,20 @@ class ErpOrders
 					$orders,
 					$new_erp_order,
 					$request['buyer_id'],
-					$po_no
+					$po_no,
+					$request['tableName']
 				);
 			}
 
-			$result = response()->json([
+			return response()->json([
 				'error' => false, 'message' => 'success',
 				'erp_id' => $erp_order_id,
 				'buyer_id' => (int)$request['buyer_id'],
 				'customer_id' => $orders->tesco_supplier_id
 			], 200);
 		} catch (\Exception $e) {
-
-			$result = response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+			throw new \Exception($e);
 		}
-
-		return $result;
 	}
 	
 	/**
@@ -177,7 +187,7 @@ class ErpOrders
 	 * @param [type] $buyer_id
 	 * @return void
 	 */
-	function insertOrderDetails($qnty_table, $orders, $erp_order, $buyer_id, $customer_po_no)
+	function insertOrderDetails($qnty_table, $orders, $erp_order, $buyer_id, $customer_po_no, $order_table)
 	{
 
 		$order_status_id  = DB::table('orders_status')
@@ -187,7 +197,6 @@ class ErpOrders
 
 		$style_ref = strtolower($orders->zone) . '_style_ref';
 		$style_no  = $orders->zone === "joint" ? $orders->uk_style_ref . '/' . $orders->ce_style_ref : $orders->$style_ref;
-		$tesco_label_order = $orders->zone === "joint" ? true : false;
 
 		$custom_ref_name = DB::table('price_taxation')
 		->where([
@@ -203,7 +212,7 @@ class ErpOrders
 		->where('action', 'PO Manager Verification Pending')
 		->value('id');
 
-		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $tesco_label_order);
+		$template_level = $this->tesco_material_obj->tescoMaterialDetails($orders->template_id, $order_table);
 
 		// unique id for array creation
 		// combination of erpid-refname-styleno-buyerpo-ordertype
@@ -222,6 +231,13 @@ class ErpOrders
 			try {
 
 				if ($dataExists == 0) {
+					
+					DB::table('erp_order_details')
+					->where([
+						'order_qnty_table_name' => $qnty_table,
+						'order_qnty_table_id' => $value->id
+					])
+					->delete();
 
 					// to handle composite unique error while updating customer PO.
 					DB::table('erp_order_details')
