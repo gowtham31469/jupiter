@@ -2347,6 +2347,8 @@ class OrderStatusCntrl extends Controller
                     {
                         $i=0;
                         PDF::AddPage();
+                        $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                         $first_page++;
                     }
                 }
@@ -2356,6 +2358,8 @@ class OrderStatusCntrl extends Controller
                     {
                         $i=0;
                         PDF::AddPage();
+                        $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                     }
                 }
                 
@@ -2415,6 +2419,8 @@ class OrderStatusCntrl extends Controller
                         $i=0;
                         $wri_x=-129;
                         PDF::AddPage();
+                        $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                         $first_page++;
                     }
                 }
@@ -2425,6 +2431,8 @@ class OrderStatusCntrl extends Controller
                         $i=0;
                         $wri_x=-129;
                         PDF::AddPage();
+                        $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
+						PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
                     }
                 }
                 
