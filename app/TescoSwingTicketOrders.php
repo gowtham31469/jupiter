@@ -63,6 +63,7 @@ class TescoSwingTicketOrders extends Model
             'mm_product_benefit_text',
             'is_ce_mark_required',
             'is_machine_washable',
+            'size_department_text',
     ];
 
     protected $casts = [
@@ -115,7 +116,6 @@ class TescoSwingTicketOrders extends Model
     public function quantities()
     {
         return $this->hasMany('App\TescoSwingTicketOrdersQuantity', 'swingticket_order_id')
-            ->join('tesco_primary_size', 'tesco_swingticket_orders_quanty.size_id', 'tesco_primary_size.id')
             ->select([
                 'tesco_swingticket_orders_quanty.id',
                 'swingticket_order_id',
@@ -123,8 +123,7 @@ class TescoSwingTicketOrders extends Model
                 'quantity as count',
                 'uk_size as size',
                 'ce_size',
-                'department_title',
-                'tesco_primary_size.id as size_id'
+                'selected_secondary_sizes',
             ])->orderBy('tesco_swingticket_orders_quanty.id', 'asc');
     }
 }

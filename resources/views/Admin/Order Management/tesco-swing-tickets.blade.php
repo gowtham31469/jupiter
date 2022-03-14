@@ -50,8 +50,21 @@
                         <td> {{ $value->uk_size }}</td>
                         <td>{{ $value->ce_size }}</td>
                         <td>
+                            @php
+                               $myArray = [];
+                            @endphp
+
                             @foreach ($value->secSizeChart as $sec_size)
-                            <strong class="text-justify">{{ $sec_size->category_name }}</strong> : {{ $sec_size->secondary_size }} <br>
+                                <strong class="text-justify">{{ $sec_size->category_name }}</strong> : {{ $sec_size->secondary_size }} <br>
+
+                                @php
+                                    $object = new stdClass();
+                                    $object->id = $sec_size->id;
+                                    $object->secondary_size = $sec_size->category_name;
+                                    $object->value = $sec_size->secondary_size;
+                                    $myArray[] = $object;
+                                @endphp
+
                             @endforeach
                         </td>
                         <td>
@@ -64,6 +77,7 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
+                        <input type='hidden' id='secondary_size_data_{{$value->id}}' name='secondary_size_data[]' value='{{ json_encode($myArray) }}'>
                     </tr>
                     @endforeach
                 </tbody>
