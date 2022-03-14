@@ -5587,19 +5587,19 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                         $y_ben = 0;
                         var json_text = "";
                         $($benefit_str).each(function(index,benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
         
                         $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
                         $($sl_benefit_str).each(function(index,sl_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
         
                         $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
                         $($hu_benefit_str).each(function(index,hu_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val+'</tspan>';
+                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val.toLowerCase()+'</tspan>';
                             $y_ben += 7.8;
                         })
                         svgDoc.getElementById("mm_benefits").innerHTML = json_text;
@@ -5645,7 +5645,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 var ce_symbol_fin = ce_symbol.join(',_');
                 var size_comp_fin = size_comp_arr.join(',_');
                 var product_desc_fin = product_desc_arr.join(',_');
-                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file);
+                PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file,data.order_details[0].tesco_size_department);
             }
 
         },
@@ -8641,7 +8641,7 @@ function M13021C(data,svgDoc_back,val)
                    ];
 }
 
-function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file) {
+function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file,tesco_size_department) {
 	
 	var url = "";
 	
@@ -8662,7 +8662,8 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
             product_desc_fin:product_desc_fin,
             wee_symbol_fin:wee_symbol_fin,
             ce_symbol_fin:ce_symbol_fin,
-            woolmark_logo_file:woolmark_logo_file
+            woolmark_logo_file:woolmark_logo_file,
+            tesco_size_department:tesco_size_department
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -11433,11 +11434,16 @@ function jsbarcodetescoticketsean(code, id, svgDoc) {
     svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
     svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
 
-    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Bold')
 
-    svg.getElementsByTagName('text')[0].setAttribute('x', '15')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[2].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[4].setAttribute('font-weight', '700')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '20')
 
     svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
     svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
@@ -11502,9 +11508,14 @@ function jsbarcodetescoticketseanhoriz(code, id, svgDoc) {
     svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
     svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
 
-    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Regular')
-    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Regular')
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Bold')
+
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[2].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[4].setAttribute('font-weight', '700')
 
     svg.getElementsByTagName('text')[0].setAttribute('x', '15')
 

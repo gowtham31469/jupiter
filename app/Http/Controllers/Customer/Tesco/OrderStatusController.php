@@ -4812,6 +4812,8 @@ class OrderStatusController extends Controller
 
                 $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
 
+                $tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+
                 $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
 
                 $order_omp  = 	DB::table($table)
@@ -4913,6 +4915,7 @@ class OrderStatusController extends Controller
                 $value->tesco_year_under=$tesco_year_under;
                 $value->tesco_year_over=$tesco_year_over;
                 $value->tesco_translation=$tesco_translation;
+                $value->tesco_size_department=$tesco_size_department[0]->department_name;
             }
             else
             {
