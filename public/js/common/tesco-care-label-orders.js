@@ -9,13 +9,14 @@ $(function () {
     renderTescoCareOrders = (role, template_id, callback=null) => {
         var user_role = role.toLowerCase();
         var size_id = $('#tesco_care_size_chart').val();
+        var size_department = $('#tesco_care_size_chart option:selected').text();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
-            getSizechart(size_id, user_role,template_id, callback);
+            getSizechart(size_id, size_department, user_role,template_id, callback);
             
         }); 
     }
@@ -162,7 +163,7 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, role,template_id, callback=null) => {
+    getSizechart = (size_id, size_department, role,template_id, callback=null) => {
         var size_chart = [];
         $.ajax({
             type: "get",
@@ -241,7 +242,7 @@ $(function () {
                 $('.tesco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
-                if (size_id === '4') {
+                if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
                 if(callback != null) {

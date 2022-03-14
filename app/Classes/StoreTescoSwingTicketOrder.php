@@ -49,6 +49,7 @@ class StoreTescoSwingTicketOrder
         }
         
         $max_id = TescoSwingTicketOrders::max('id');
+        $size_department_text = DB::table('tesco_size_department')->where('id', $request->swing_primary_size_id)->value('department_name');
 
         $order_id = $template_data->company_id == 1 ? "JGA_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1) : "SP_" . str_replace(" ", "", str_replace("/", "_", $template_data->item_name)) . "00" . ($max_id + 1);
 
@@ -108,17 +109,22 @@ class StoreTescoSwingTicketOrder
             'mm_product_benefit_text'   => $translation_texts['mm_product_benefits_translation'],
             'is_ce_mark_required'       => !is_null($request->swing_ce_mark) ? $request->swing_ce_mark : 0,
             'is_machine_washable'       => !is_null($request->swing_machine_washable) ? $request->swing_machine_washable : 0,
+            'size_department_text'      => $size_department_text
         );
 
         $swing_ticket_order_id = TescoSwingTicketOrders::create($insert_data)->id;
 
         for ($qty_index = 0; $qty_index < count($request->swing_ean); $qty_index++) {
 
+            $primary_size = DB::table('tesco_primary_size')->where('id', $request->secondary_size_id[$qty_index])->select('uk_size', 'ce_size')->first();
             $qty_data[] = array(
                 'swingticket_order_id'     => $swing_ticket_order_id,
                 'ean_barcode'              => $request->swing_ean[$qty_index],
                 'quantity'                 => !is_null($request->swing_quantity[$qty_index]) ? $request->swing_quantity[$qty_index] : 0,
                 'size_id'                  => $request->secondary_size_id[$qty_index],
+                'selected_secondary_sizes' => json_decode(json_encode($request->secondary_size_data[$qty_index]), true),
+                'uk_size'                  => $primary_size->uk_size,
+                'ce_size'                  => $primary_size->ce_size,
             );
         }
 

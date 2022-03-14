@@ -13,6 +13,9 @@ class TescoSwingTicketOrdersQuantity extends Model
         'size_id',
         'ean_barcode',
         'quantity',
+        'ce_size',
+        'uk_size',
+        'selected_secondary_sizes'
     ];
 
     /**
