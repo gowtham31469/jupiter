@@ -231,14 +231,6 @@ class ErpOrders
 			try {
 
 				if ($dataExists == 0) {
-					
-					DB::table('erp_order_details')
-					->where([
-						'order_qnty_table_name' => $qnty_table,
-						'order_qnty_table_id' => $value->id
-					])
-					->delete();
-
 					// to handle composite unique error while updating customer PO.
 					DB::table('erp_order_details')
 					->where([
