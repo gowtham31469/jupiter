@@ -239,6 +239,14 @@ class ErpOrders
 					])
 					->delete();
 
+					// to handle composite unique error while updating customer PO.
+					DB::table('erp_order_details')
+					->where([
+						'order_qnty_table_name' => $qnty_table,
+						'order_qnty_table_id' => $value->id
+					])
+					->delete();
+
 					$erp_order_details_id = ErpOrderDetails::create([
 						'erp_order_id'     		=> $erp_order->id,
 						'style_no'         		=> $style_no,
