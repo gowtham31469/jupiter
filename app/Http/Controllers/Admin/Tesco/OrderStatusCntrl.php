@@ -2618,6 +2618,9 @@ class OrderStatusCntrl extends Controller
         PDF::SetFont('fandfsans');
         PDF::SetFont('fandfsanslight');
 
+        PDF::setPrintHeader(false);
+        PDF::setPrintFooter(false);
+
 
         $svgStringFront=urldecode($data_front[0]);
 
