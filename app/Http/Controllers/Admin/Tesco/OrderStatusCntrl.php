@@ -2620,6 +2620,7 @@ class OrderStatusCntrl extends Controller
 
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
+		PDF::SetAutoPageBreak(TRUE);
 
 
         $svgStringFront=urldecode($data_front[0]);
