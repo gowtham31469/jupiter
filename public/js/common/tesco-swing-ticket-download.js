@@ -439,7 +439,7 @@ function M13304C(data,svgDoc_back,val)
                 svgDoc_back.getElementById("size_list_translation_align").innerHTML = size_list_translation;  
                 svgDoc_back.getElementById("size_list_align").innerHTML = "";       
             }
-            else if(val.ce_size_name == "Newborn")
+            else if(val.ce_size_name.toLowerCase() == "newborn")
             {
                 var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:6px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="6" style="font-family:FandFSans-Regular; font-size:6px;"> • '+ data.tesco_nb[0].slovak +" • "+ data.tesco_nb[0].hungarian+'</tspan>';
                 
@@ -507,7 +507,7 @@ function M13304C(data,svgDoc_back,val)
                     svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
                     svgDoc_back.getElementById("size_list").innerHTML = "";       
                 }
-                else if(val.ce_size_name == "Newborn")
+                else if(val.ce_size_name.toLowerCase() == "newborn")
                 {
                     var size_list_translation = data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech +" • "+ data.tesco_nb[0].slovak +" • "+ data.tesco_nb[0].hungarian;
                     
@@ -557,7 +557,7 @@ function M13304C(data,svgDoc_back,val)
                     svgDoc_back.getElementById("size_list_translation_align").innerHTML = size_list_translation;  
                     svgDoc_back.getElementById("size_list_align").innerHTML = "";       
                 }
-                else if(val.ce_size_name == "Newborn")
+                else if(val.ce_size_name.toLowerCase() == "newborn")
                 {
                     var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:6px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="6" style="font-family:FandFSans-Regular; font-size:6px;"> • '+ data.tesco_nb[0].slovak +" • "+ data.tesco_nb[0].hungarian+'</tspan>';
                     
@@ -637,7 +637,7 @@ function M13304C(data,svgDoc_back,val)
             svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
             svgDoc_back.getElementById("size_list").innerHTML = "";       
         }
-        else if(val.ce_size_name == "Newborn")
+        else if(val.ce_size_name.toLowerCase() == "newborn")
         {
             var size_list_translation = data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech +" • "+ data.tesco_nb[0].slovak +" • "+ data.tesco_nb[0].hungarian;
             
@@ -812,7 +812,7 @@ function M13114COpt3(data,svgDoc_back,val)
 		svgDoc_back.getElementById("size_list_right_align1").innerHTML = "";
         svgDoc_back.getElementById("size_list_right_align2").innerHTML = ""; 
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1003,7 +1003,7 @@ function M13233C(data,svgDoc_back,val)
         
         svgDoc_back.getElementById("size_list_right_align").innerHTML = "";
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1183,7 +1183,7 @@ function M13114COpt1(data,svgDoc_back,val)
             svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
         }
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1366,7 +1366,7 @@ function M13020C(data,svgDoc_back,val)
             svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
         }
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1543,7 +1543,7 @@ function M13163C(data,svgDoc_back,val)
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";       
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1673,7 +1673,7 @@ function M13022C(data,svgDoc_back,val)
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";       
     }
-    else if(val.ce_size_name == "Newborn")
+    else if(val.ce_size_name.toLowerCase() == "newborn")
     {
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
@@ -1855,7 +1855,7 @@ function M13114COpt4(data,svgDoc_back,val)
                     }
                     
                 }
-                else if(val.ce_size_name == "Newborn")
+                else if(val.ce_size_name.toLowerCase() == "newborn")
                 {
                     svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
 
@@ -2403,7 +2403,7 @@ function M13114COpt2(data,svgDoc_back,val)
                     }
                     
                 }
-                else if(val.ce_size_name == "Newborn")
+                else if(val.ce_size_name.toLowerCase() == "newborn")
                 {
                     svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
 
@@ -2952,7 +2952,7 @@ function M13021C(data,svgDoc_back,val)
                     }
                     
                 }
-                else if(val.ce_size_name == "Newborn")
+                else if(val.ce_size_name.toLowerCase() == "newborn")
                 {
                     svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
 
