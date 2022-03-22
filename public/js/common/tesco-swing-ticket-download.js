@@ -191,7 +191,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 if(data.order_details[0].is_machine_washable == true)
                 {
                     svgDoc.getElementById("machine_logo").removeAttribute('visibility','hidden')
-                    svgDoc.getElementById("machine_washable").innerHTML =data.order_details[0].tesco_translation[0].english
+                    svgDoc.getElementById("machine_washable").innerHTML =data.order_details[0].tesco_translation[0].english.toUpperCase();
                 }
                 else
                 {
