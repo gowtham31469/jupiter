@@ -119,7 +119,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 else if(sticker_name == "GE/01/M13114C-Opt1-sticker")
                 {
                     //console.log(svgDoc_back)
-                    var temp_data = M13114COpt1(data,svgDoc_back,val)
+                    var temp_data = M13020C(data,svgDoc_back,val)
                 }
                 else if(sticker_name == "GE/01/M13114C-Opt2-sticker")
                 {
@@ -191,7 +191,7 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 if(data.order_details[0].is_machine_washable == true)
                 {
                     svgDoc.getElementById("machine_logo").removeAttribute('visibility','hidden')
-                    svgDoc.getElementById("machine_washable").innerHTML =data.order_details[0].tesco_translation[0].english
+                    svgDoc.getElementById("machine_washable").innerHTML =data.order_details[0].tesco_translation[0].english.toUpperCase();
                 }
                 else
                 {
@@ -1341,7 +1341,7 @@ function M13020C(data,svgDoc_back,val)
     var product_desc_eng ="";
     $(product_desc_text).each(function (keys, vals) {
 
-        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.czech+'</tspan><tspan x="0" y="6" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.slovak+'</tspan><tspan x="0" y="12" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.hungarian+'</tspan>';
+        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.czech+'</tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.slovak+'</tspan><tspan x="0" y="10" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.hungarian+'</tspan>';
 
         product_desc_eng = vals.english;
         
@@ -1352,113 +1352,381 @@ function M13020C(data,svgDoc_back,val)
 
     if(val.ce_size_name == "tiny baby")
     {
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        var size_category_translation = "";
+
+        var size_comp = [];
+
+        $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+            var sec_size = vals.secondary_size.split(':')
+            if(keys !=0 )
+            {
+                size_category_translation += " " +vals.english+" "
+            }
+            else
+            {
+                size_category_translation += vals.english+" "
+            }
+            size_category_translation += toTitleCase(vals.czech)+"•"
+            size_category_translation += toTitleCase(vals.slovak)+"•"
+            size_category_translation += toTitleCase(vals.hungarian)+": "
+            size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+
+            size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+            
+        })
+        
+        $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+
+        if(val.tesco_secondary_size_chart.length > 0)
+        {
+            var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+            svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+        }
+        else
+        {
+            svgDoc_back.getElementById("size_bold").innerHTML = "";
+        }
+
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_tiny[0].english +" • "+ data.tesco_tiny[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_tiny[0].slovak+" • "+data.tesco_tiny[0].hungarian+'</tspan>';
         
-        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";     
-        
-        if(val.tesco_secondary_size_chart.length == 2)
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;         
+
+        if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.8413)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
         }
-        else if(val.tesco_secondary_size_chart.length == 3)
+        else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
+        else if($size_category_str.length == 5)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+
+        }
+    
     }
     else if(val.ce_size_name.toLowerCase() == "newborn")
     {
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        var size_category_translation = "";
+
+        var size_comp = [];
+
+        $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+            var sec_size = vals.secondary_size.split(':')
+            if(keys !=0 )
+            {
+                size_category_translation += " " +vals.english+" "
+            }
+            else
+            {
+                size_category_translation += vals.english+" "
+            }
+            size_category_translation += toTitleCase(vals.czech)+"•"
+            size_category_translation += toTitleCase(vals.slovak)+"•"
+            size_category_translation += toTitleCase(vals.hungarian)+": "
+            size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+            size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+            
+        })
+        
+        $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+        
+        if(val.tesco_secondary_size_chart.length > 0)
+        {
+            var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+            svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+        }
+        else
+        {
+            svgDoc_back.getElementById("size_bold").innerHTML = "";
+        }
+
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_nb[0].english +" • "+ data.tesco_nb[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_nb[0].slovak+" • "+data.tesco_nb[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
-
-        if(val.tesco_secondary_size_chart.length == 2)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.8413)");
-        }
-        else if(val.tesco_secondary_size_chart.length == 3)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
-        }
         
+
+        if($size_category_str.length <= 3)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
+        }
+        else if($size_category_str.length == 4)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
+        else if($size_category_str.length == 5)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
     }
     else if(val.ce_size_name == "up to 1M")
     {
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        var size_category_translation = "";
+
+        var size_comp = [];
+
+        $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+            var sec_size = vals.secondary_size.split(':')
+            if(keys !=0 )
+            {
+                size_category_translation += " " +vals.english+" "
+            }
+            else
+            {
+                size_category_translation += vals.english+" "
+            }
+            size_category_translation += toTitleCase(vals.czech)+"•"
+            size_category_translation += toTitleCase(vals.slovak)+"•"
+            size_category_translation += toTitleCase(vals.hungarian)+": "
+            size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+            size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+            
+        })
+        
+        $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+        
+        if(val.tesco_secondary_size_chart.length > 0)
+        {
+            var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+            svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+        }
+        else
+        {
+            svgDoc_back.getElementById("size_bold").innerHTML = "";
+        }
 
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up1[0].english +" • "+ data.tesco_up1[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up1[0].slovak+" • "+data.tesco_up1[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
-
-        if(val.tesco_secondary_size_chart.length == 2)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.8413)");
-        }
-        else if(val.tesco_secondary_size_chart.length == 3)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
-        }
         
+        if($size_category_str.length <= 3)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
+        }
+        else if($size_category_str.length == 4)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
+        else if($size_category_str.length == 5)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
     }
     else if(val.ce_size_name == "up to 3M")
     {
+        svgDoc_back.getElementById("size_list").innerHTML = "";
+
+        var size_category_translation = "";
+
+        var size_comp = [];
+
+        $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+            var sec_size = vals.secondary_size.split(':')
+            if(keys !=0 )
+            {
+                size_category_translation += " " +vals.english+" "
+            }
+            else
+            {
+                size_category_translation += vals.english+" "
+            }
+            size_category_translation += toTitleCase(vals.czech)+"•"
+            size_category_translation += toTitleCase(vals.slovak)+"•"
+            size_category_translation += toTitleCase(vals.hungarian)+": "
+            size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+            size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+            
+        })
+        
+        $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+        
+
+        if(val.tesco_secondary_size_chart.length > 0)
+        {
+            var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+            svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
+        }
+        else
+        {
+            svgDoc_back.getElementById("size_bold").innerHTML = "";
+        }
+
         var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_up3[0].english +" • "+ data.tesco_up3[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_up3[0].slovak+" • "+data.tesco_up3[0].hungarian+'</tspan>';
         
         svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
-        svgDoc_back.getElementById("size_list").innerHTML = "";
 
-        if(val.tesco_secondary_size_chart.length == 2)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.8413)");
-        }
-        else if(val.tesco_secondary_size_chart.length == 3)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
-        }
 
+        if($size_category_str.length <= 3)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
+        }
+        else if($size_category_str.length == 4)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
+        else if($size_category_str.length == 5)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
+        }
     } 
     else if(val.ce_size_name == "One size")
     {
-        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].english +" • "+ data.tesco_onesize[0].czech+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:5px;">• '+data.tesco_onesize[0].slovak+" • "+data.tesco_onesize[0].hungarian+'</tspan>';
-        
-        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
         svgDoc_back.getElementById("size_list").innerHTML = "";
 
-        if(val.tesco_secondary_size_chart.length == 2)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 50.8413)");
-        }
-        else if(val.tesco_secondary_size_chart.length == 3)
-        {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
-        }
+        $size_category_str = "null";
 
+        var size_comp = [];
+
+
+        svgDoc_back.getElementById("size_bold").innerHTML = ""
+
+        var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Bold;font-weight:700; font-size:6.5px;">'+data.tesco_onesize[0].english+'</tspan><tspan x="0" y="8" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].czech+'</tspan><tspan x="0" y="14" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].slovak+'</tspan><tspan x="0" y="20" style="font-family:FandFSans-Regular; font-size:5px;">'+data.tesco_onesize[0].hungarian+'</tspan>';
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+
+        svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 40)");
     }
     else
     {
         svgDoc_back.getElementById("size_list").innerHTML = val.ce_size_name;
-        svgDoc_back.getElementById("size_list_translation").innerHTML = "";
 
-        if(val.tesco_secondary_size_chart.length == 2)
+        var size_category_translation = "";
+
+        var size_comp = [];
+
+        $(val.tesco_secondary_size_chart).each(function (keys, vals) {
+            var sec_size = vals.secondary_size.split(':')
+            if(keys !=0 )
+            {
+                size_category_translation += " " +vals.english+" "
+            }
+            else
+            {
+                size_category_translation += vals.english+" "
+            }
+            size_category_translation += toTitleCase(vals.czech)+"•"
+            size_category_translation += toTitleCase(vals.slovak)+"•"
+            size_category_translation += toTitleCase(vals.hungarian)+": "
+            size_category_translation += sec_size[1].replaceAll(/\s/g,'')
+            size_comp.push(sec_size[1].replaceAll(/\s/g,''))
+            
+        })
+        
+        $size_category_str = chunkSubstr(size_category_translation, 42).split(/\r?\n/);
+        
+
+
+        if(val.tesco_secondary_size_chart.length > 0)
         {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+            var size_bold = val.tesco_secondary_size_chart[0].secondary_size.split(':')
+
+            svgDoc_back.getElementById("size_bold").innerHTML = size_bold[1].trim();
         }
-        else if(val.tesco_secondary_size_chart.length == 3)
+        else
         {
-            svgDoc_back.getElementById("size_category_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 47.8413)");
+            svgDoc_back.getElementById("size_bold").innerHTML = "";
+        }
+
+
+        if(val.ce_size_name.toString().slice(-1) == "M")
+        {
+            if(val.ce_size_name == "0-3M")
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_under[0].czech+" • "+ val.tesco_month_under[0].slovak+" • "+ val.tesco_month_under[0].hungarian+'</tspan>';
+            }
+            else if(val.ce_size_name == "M")
+            {
+                var size_list_translation = "";
+            }
+            else
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">months • '+ val.tesco_month_over[0].czech+" • "+ val.tesco_month_over[0].slovak+" • "+ val.tesco_month_over[0].hungarian+'</tspan>';
+            }
+        }
+        else if(val.ce_size_name.toString().slice(-1) == "Y")
+        {
+            if(val.ce_size_name == "1- 1½Y")
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_und[0].czech+" • "+ val.tesco_year_und[0].slovak+" • "+ val.tesco_year_und[0].hungarian+'</tspan>';
+            }
+            else if(val.ce_size_name == "1-2Y")
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+            }
+            else if(val.ce_size_name == "2-3Y")
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+            }
+            else
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
+            }
+        }
+        else
+        {
+            var size_list_translation = "";
+        }
+        
+        svgDoc_back.getElementById("size_list_translation").innerHTML = size_list_translation;  
+
+
+        if($size_category_str.length <= 3)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48)");
+        }
+        else if($size_category_str.length == 4)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 55)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 45)");
+
+            svgDoc_back.getElementById("size_list").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 40)");
+        }
+        else if($size_category_str.length == 5)
+        {
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 45)");
         }
     }
 
-
-    var sec_size = "";
-    var sec_size_y =0;
-    $(val.tesco_secondary_size_chart).each(function (keys, vals) {
-         sec_size += '<tspan x="0" y="'+sec_size_y+'" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.secondary_size+'</tspan>';
-         sec_size_y+=6;
-    });
-
-    svgDoc_back.getElementById("size_category_translation").innerHTML = sec_size;
 
     //Back Svg Price Details
     var sl_price2 = parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)) != 0?parseInt(data.order_details[0].sk_selling_price.toString().slice(-2)):'';
@@ -1477,16 +1745,16 @@ function M13020C(data,svgDoc_back,val)
     }
     svgDoc_back.getElementById("hu_price").innerHTML = '<tspan x="0" y="0" style="fill:#8A8B92; font-family:FandFSans-Regular; font-size:8px;">'+hu_price+' Ft</tspan>';
 
-    $size_category_str = null;
+    //$size_category_str = null;
 
     var product_desc_text = val.product_desc_text;
 
-    var size_comp = null;
+    //var size_comp = null;
 
 
     var barcode_change = val.ean_barcode;
 
-    jsbarcodetescoticketsean(barcode_change, 'barcode', svgDoc_back);
+    jsbarcodetescoticketseansmall(barcode_change, 'barcode', svgDoc_back);
 
     return [
         size_comp,
@@ -3547,4 +3815,79 @@ addOptionIdHyphen = (option_id) => {
 
 function toTitleCase(str) {
 	return str[0].toUpperCase() + str.slice(1)
+}
+
+
+
+function jsbarcodetescoticketseansmall(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 286,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '50px');
+    svg.setAttribute('font-family', 'fandfsansb');
+    svg.setAttribute('letter-spacing', '8px');
+
+    svg.setAttribute('width', '79px');
+    svg.setAttribute('height', '54px');
+
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '9px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '12px')
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[2].setAttribute('font-family', 'FandFSans-Bold')
+    svg.getElementsByTagName('text')[4].setAttribute('font-family', 'FandFSans-Bold')
+
+
+    svg.getElementsByTagName('text')[0].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[2].setAttribute('font-weight', '700')
+    svg.getElementsByTagName('text')[4].setAttribute('font-weight', '700')
+
+    svg.getElementsByTagName('text')[0].setAttribute('x', '20')
+
+    svg.getElementsByTagName('text')[0].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[2].setAttribute('style', 'font-size:55px')
+    svg.getElementsByTagName('text')[4].setAttribute('style', 'font-size:55px')
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // img.src - contains base64 URI from svg
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    svgDoc.getElementById(id).innerHTML = svg_xml;
 }
