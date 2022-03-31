@@ -373,6 +373,11 @@ class UploadCsvController extends Controller
 
   public function uploadOrchestraOrderCSVFile(Request $request)
   {
+
+    request()->validate([
+      'csv_files.*'  => 'required|max:102400',
+    ]);
+
     $success = 0;
 
     if ($request->hasFile('csv_files')) {

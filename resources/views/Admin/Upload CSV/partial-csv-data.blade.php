@@ -29,19 +29,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                            @foreach($partial_po_data as $key => $value)
-                            <tr>
-                               <td>{{ $loop->iteration }}</td>
-                               <td>{{ $value['UVC'] ?? '-' }}</td>
-                               <td>{{ $value['UVC_TCO'] ?? '-' }}</td>
-                               <td>{{ $value['BuyerPONo'] ?? '-' }}</td>
-                               <td>{{ $value['Season_Code'] ?? '-' }}</td>
-                               <td>{{ $value['SupplierName'] ?? '-' }}</td>
-                               <td><span class="label label-warning">Price CSV Data Missing</span></td>
-                              </tr>
-                         @endforeach
                       </tbody>
-                     </table>
                   </div>
                 </div>
               </div>
@@ -57,14 +45,23 @@
 @endif @section('jqueryIncludes')
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.logo').html('Partial CSV Data');
-    })
+    $(function () {
+    $('.logo').html('Partial CSV Data');
+    var table = $('#csv-partial-list-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('partial-csv-data') }}",
+        columns: [
+            { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false },
+            {data: 'UVC', name: 'UVC'},
+            {data: 'UVC_TCO', name: 'UVC_TCO'},
+            {data: 'BuyerPONo', name: 'BuyerPONo'},
+            {data: 'Season_Code', name: 'Season_Code'},
+            {data: 'SupplierName', name: 'SupplierName'},
+            {data: 'Status', name: 'Status', orderable: false, searchable: false}
+        ]
+    });
 
-     /** [ Data Tabeles scripts ] */
-     $('#csv-partial-list-table').DataTable();
-     $("#csv-partial-list-table_filter input").addClass('form-control input-sm');
-     $("#csv-partial-list-table_filter input").attr('placeholder', 'Data Search');
-     $('#csv-partial-list-table_length select').addClass('form-control input-sm');
+    });
 </script>
 @endsection

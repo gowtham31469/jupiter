@@ -91,6 +91,7 @@
 
             this.on("error", function(file, responseText) {
                 $(".loader").hide();
+                console.log(responseText);
                 $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(responseText.message);
             });
         },

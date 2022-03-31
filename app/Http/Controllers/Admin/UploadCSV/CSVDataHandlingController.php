@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use DB;
 use App\Classes\Uploads;
+use DataTables;
 
 class CSVDataHandlingController extends Controller
 {
@@ -66,6 +67,36 @@ class CSVDataHandlingController extends Controller
       }  
     }
 
+    /**
+     * Partial CSV data ajax datatable.
+     *
+     * @return array csv data
+     */
+    public function getConflictsCSVData()
+    {
+      $tp_parcel_details = TempOrchestraParcelDetails::query()
+      ->select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_details' as \"table\""), DB::raw("'PO Conflicting' as \"Changes\""))
+      ->groupBy('UVC', 'id')
+      ->get()
+      ->toArray();
+
+      $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::query()
+      ->select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""), DB::raw("'Price Conflicting' as \"Changes\""))
+      ->groupBy('UVC', 'id')
+      ->get()
+      ->toArray();
+
+      $result_array = array_merge($tp_parcel_qty_details, $tp_parcel_details);
+
+      return Datatables::of($result_array)
+        ->addIndexColumn()
+        ->addColumn('Status', function () {
+          return '<span class="label label-warning">Price CSV Data Missing</span>';
+        })
+        ->rawColumns(['Status'])
+        ->make(true);
+    }
+
      /**
      * Show the csv partial data page
      * @author <Praveen>
@@ -73,33 +104,42 @@ class CSVDataHandlingController extends Controller
      */
     public function partialCSV()
     {
-      try
-      {
-        $module_var = new Modules();
-        $is_allowed = $module_var->permittedModules();
-        if($is_allowed)
-        {
-          $get_main_module = $module_var->getMainModules();
-          $get_sub_module = $module_var->getSubModules(34);
-          
-          View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
-              return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
-          });
+      $module_var = new Modules();
+      $is_allowed = $module_var->permittedModules();
+      if ($is_allowed) {
+        $get_main_module = $module_var->getMainModules();
+        $get_sub_module = $module_var->getSubModules(34);
 
-        // Price data missing for SKU Code(In PO CSV)
-        $partial_po_data = OrchestraParcelDetails::select('UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'SupplierName')->where('is_price_data_exists', false)->get()->toArray();
-         
-          return View::make('Admin/Upload CSV/partial-csv-data', compact(['partial_po_data']));
-        }
-        else
-        {
-          return redirect('/admin/dashboard');
-        }
+        View::composer('layouts.Admin.navbar', function ($view) use ($get_main_module, $get_sub_module) {
+          return $view->with(['modules' => $get_main_module, 'sub_modules' => $get_sub_module]);
+        });
+
+        return view('Admin/Upload CSV/partial-csv-data');
+      } else {
+        return redirect('/admin/dashboard');
       }
-      catch (\Exception $e)
-      {
-        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-      }  
+    }
+    
+    /**
+     * Partial CSV data ajax datatable.
+     *
+     * @return array csv data
+     */
+    public function getPartialCSVData()
+    {
+      $partial_po_data = OrchestraParcelDetails::query()
+        ->select('UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'SupplierName')
+        ->where('is_price_data_exists', false)
+        ->get()
+        ->toArray();
+
+      return Datatables::of($partial_po_data)
+        ->addIndexColumn()
+        ->addColumn('Status', function () {
+          return '<span class="label label-warning">Price CSV Data Missing</span>';
+        })
+        ->rawColumns(['Status'])
+        ->make(true);
     }
 
     /**

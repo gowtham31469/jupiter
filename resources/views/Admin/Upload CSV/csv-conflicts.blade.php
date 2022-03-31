@@ -29,16 +29,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                      @foreach($result_array as $key => $value)
-                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td><a href="javaScript:void(0);" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false" onclick="getUvcData('{{ $value['table'] }}', '{{ $value['UVC'] }}')" data-table="{{ $value['table'] }}">{{ $value['UVC'] ?? '-' }}</a></td>
-                            <td>{{ $value['Season_Code'] ?? '-' }}</td>
-                            <td>{{ $value['SupplierName'] ?? '-' }}</td>
-                            <td>{{ $value['Theme'] ?? '-' }}</td>
-                            <td>{{ $value['Changes'] ?? '-' }}</td>
-                           </tr>
-                      @endforeach
+                     
                   </tbody>
                  </table>
               </div>
@@ -107,5 +98,21 @@
         $("#csv-conflicts-list-table_filter input").attr('placeholder', 'Data Search');
         $('#csv-conflicts-list-table_length select').addClass('form-control input-sm');
     })
+    $(function () {
+    $('.logo').html('CSV Conflicts');
+    var table = $('#csv-conflicts-list-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('csv-conflicts-data') }}",
+        columns: [
+            { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false },
+            {data: 'UVC', name: 'UVC'},
+            {data: 'Season_Code', name: 'Season_Code'},
+            {data: 'SupplierName', name: 'SupplierName'},
+            {data: 'Theme', name: 'Theme'},
+            {data: 'Changes', name: 'Changes', orderable: false, searchable: false}
+        ]
+    });
+    });
 </script>
 @endsection
