@@ -48,13 +48,7 @@ class CSVDataHandlingController extends Controller
               return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
           });
           
-          $tp_parcel_details = TempOrchestraParcelDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_details' as \"table\""), DB::raw("'PO Conflicting' as \"Changes\""))->groupBy('UVC', 'id')->get()->toArray();
-
-          $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""), DB::raw("'Price Conflicting' as \"Changes\""))->groupBy('UVC', 'id')->get()->toArray();
-
-          $result_array = array_merge($tp_parcel_qty_details, $tp_parcel_details);
-
-          return View::make('Admin/Upload CSV/csv-conflicts', compact(['result_array']));
+          return View::make('Admin/Upload CSV/csv-conflicts');
         }
         else
         {
@@ -90,10 +84,14 @@ class CSVDataHandlingController extends Controller
 
       return Datatables::of($result_array)
         ->addIndexColumn()
-        ->addColumn('Status', function () {
-          return '<span class="label label-warning">Price CSV Data Missing</span>';
+        ->addColumn('UVC', function($result_array) {
+          return '<a href="javaScript:void(0);" title="view more" class="view-more" data-placement="bottom"  data-backdrop="static" data-keyboard="false" onclick="getUvcData('."'".$result_array['table']."'".', '."'".$result_array['UVC']."'".')" data-table="'.$result_array['table'].'">'.$result_array['UVC'].'</a>';
         })
-        ->rawColumns(['Status'])
+        ->addColumn('Changes', function($result_array) {
+          return '<span class="label label-warning">'.$result_array['Changes'].'</span>';
+        })
+        ->rawColumns(['UVC', 'Changes'])
+        ->setTotalRecords(100)
         ->make(true);
     }
 
@@ -139,6 +137,7 @@ class CSVDataHandlingController extends Controller
           return '<span class="label label-warning">Price CSV Data Missing</span>';
         })
         ->rawColumns(['Status'])
+        ->setTotalRecords(100)
         ->make(true);
     }
 
@@ -196,10 +195,19 @@ class CSVDataHandlingController extends Controller
            $main_table = str_replace("temp_", "", $temp_table);
 
            // delete from main table 
-           DB::table($main_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
+           DB::table($main_table)
+           ->where('BuyerPONo', $po)
+           ->where('UVC', $uvc)
+           ->where('UVC_TCO', $uvc_tco)
+           ->delete();
 
            // get data from temp table
-           $temp_table_data = DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get()->toArray();
+           $temp_table_data = DB::table($temp_table)
+           ->where('BuyerPONo', $po)
+           ->where('UVC', $uvc)
+           ->where('UVC_TCO', $uvc_tco)
+           ->get()
+           ->toArray();
 
            if($main_table === 'orchestra_parcel_details')
            {

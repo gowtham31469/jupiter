@@ -89,15 +89,6 @@
 <script src="{{ asset('js/Admin/orchestra-csv-upload.js') }}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.logo').html('CSV Conflicts');
-
-        /** [ Data Tabeles scripts ] */
-        $('#csv-conflicts-list-table').DataTable();
-        $("#csv-conflicts-list-table_filter input").addClass('form-control input-sm');
-        $("#csv-conflicts-list-table_filter input").attr('placeholder', 'Data Search');
-        $('#csv-conflicts-list-table_length select').addClass('form-control input-sm');
-    })
     $(function () {
     $('.logo').html('CSV Conflicts');
     var table = $('#csv-conflicts-list-table').DataTable({
