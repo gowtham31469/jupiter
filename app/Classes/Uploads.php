@@ -421,22 +421,22 @@ class Uploads
 
 				$is_price_data_exists = $value->price_data()->count() === 0?0:1;
 				
-				if (DB::table('orchestra_parcel_details')->select("id")->where('UVC', trim($value->{'REFERENCE CODE'}))->exists())
+				if (DB::table('orchestra_parcel_details')->where('UVC', trim($value->{'REFERENCE CODE'}))->exists())
 				{
-					$parcel_details_po = DB::table('orchestra_parcel_details')->select("id")->where([
+					$parcel_details_po = DB::table('orchestra_parcel_details')->where([
 																	['UVC', trim($value->{'REFERENCE CODE'})], 
 																	['BuyerPONo', trim($value->PO)],
 																	])->exists();
 					if ($parcel_details_po)
 					{  
-						$parcel_details_sku_code = DB::table('orchestra_parcel_details')->select("id")->where([
+						$parcel_details_sku_code = DB::table('orchestra_parcel_details')->where([
 																				['UVC', trim($value->{'REFERENCE CODE'})],
 																				['BuyerPONo', trim($value->PO)],
 																				['SKU_Code', trim($value->{'SKU CODE'})],
 																				])->exists();
 						if($parcel_details_sku_code)
 						{
-							$parcel_details_last_date = DB::table('orchestra_parcel_details')->select("id")->where([
+							$parcel_details_last_date = DB::table('orchestra_parcel_details')->where([
 																						['UVC', trim($value->{'REFERENCE CODE'})],
 																						['BuyerPONo', trim($value->PO)],
 																						['SKU_Code', trim($value->{'SKU CODE'})],
@@ -485,10 +485,10 @@ class Uploads
 			foreach ($value->price_data as $key => $price_row) {
 
 			// check sku code already exists or not 
-			if (DB::table('orchestra_parcel_quantity_details')->select("id")->where('UVC_TCO', trim($price_row->{'SKU CODE'}))->exists()) {
+			if (DB::table('orchestra_parcel_quantity_details')->where('UVC_TCO', trim($price_row->{'SKU CODE'}))->exists()) {
 
 				// check PO details missing for this sku code (ie, PO number = null).
-				$po_missing = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+				$po_missing = DB::table('orchestra_parcel_quantity_details')->where([
 					['UVC_TCO', trim($price_row->{'SKU CODE'})],
 					['BuyerPONo', null],
 				])->exists();
@@ -500,14 +500,14 @@ class Uploads
 				}
 
 				// check price details already exists for this sku code with same Country_Code.
-				$order_with_same_countrycode = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+				$order_with_same_countrycode = DB::table('orchestra_parcel_quantity_details')->where([
 					['UVC_TCO', trim($price_row->{'SKU CODE'})],
 					['Country_Code', trim($price_row->{'COUNTRY CODE'})],
 				])->exists();
 
 				if ($order_with_same_countrycode) {
 					// check price details already exists with same UVC_TCO ,COUNTRY CODE & different Last_Change_Date
-					$quantity_date = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+					$quantity_date = DB::table('orchestra_parcel_quantity_details')->where([
 						['UVC_TCO', trim($price_row->{'SKU CODE'})],
 						['Country_Code', trim($price_row->{'COUNTRY CODE'})],
 						['Last_Change_Date', trim($price_row->LAST_CHANGE_DATE)],
@@ -520,7 +520,7 @@ class Uploads
 					}
 				} else {
 					// check price details already exists with same UVC_TCO & Last_Change_Date
-					$quantity_date = DB::table('orchestra_parcel_quantity_details')->select("id")->where([
+					$quantity_date = DB::table('orchestra_parcel_quantity_details')->where([
 						['UVC_TCO', trim($price_row->{'SKU CODE'})],
 						['Last_Change_Date', trim($price_row->LAST_CHANGE_DATE)],
 					])->exists();

@@ -445,7 +445,9 @@ Route::post('admin/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@
 
 Route::post('admin/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadCsvController@uploadOrchestraOrderCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
+Route::get('admin/csv-conflicts-data', 'Admin\UploadCSV\CSVDataHandlingController@getConflictsCSVData')->name('csv-conflicts-data');
 Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
+Route::get('admin/partial-csv-data', 'Admin\UploadCSV\CSVDataHandlingController@getPartialCSVData')->name('partial-csv-data');
 Route::get('admin/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
 Route::post('admin/confirm-uvc-data','Admin\UploadCSV\CSVDataHandlingController@confirmUVCOrders');
 Route::post('admin/cancel-uvc-data','Admin\UploadCSV\CSVDataHandlingController@cancelUVCOrders');
