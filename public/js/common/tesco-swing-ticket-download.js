@@ -1336,18 +1336,18 @@ function M13020C(data,svgDoc_back,val)
     svgDoc_back.getElementById("short_description").innerHTML = short_description;
 
 
-    var product_desc_text = JSON.parse(val.product_desc_text)
-    var product_desc_translation ="";
-    var product_desc_eng ="";
-    $(product_desc_text).each(function (keys, vals) {
+    // var product_desc_text = JSON.parse(val.product_desc_text)
+    // var product_desc_translation ="";
+    // var product_desc_eng ="";
+    // $(product_desc_text).each(function (keys, vals) {
 
-        product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.czech+'</tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.slovak+'</tspan><tspan x="0" y="10" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.hungarian+'</tspan>';
+    //     product_desc_translation += '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.czech+'</tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.slovak+'</tspan><tspan x="0" y="10" style="font-family:FandFSans-Regular; font-size:5px;">'+vals.hungarian+'</tspan>';
 
-        product_desc_eng = vals.english;
+    //     product_desc_eng = vals.english;
         
-    })
-    svgDoc_back.getElementById("prod_english").innerHTML = product_desc_eng;
-    svgDoc_back.getElementById("prod_trans").innerHTML = product_desc_translation;
+    // })
+    // svgDoc_back.getElementById("prod_english").innerHTML = product_desc_eng;
+    // svgDoc_back.getElementById("prod_trans").innerHTML = product_desc_translation;
 
 
     if(val.ce_size_name == "tiny baby")
@@ -1396,19 +1396,19 @@ function M13020C(data,svgDoc_back,val)
 
         if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
         }
         else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
         else if($size_category_str.length == 5)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
 
@@ -1461,19 +1461,19 @@ function M13020C(data,svgDoc_back,val)
 
         if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
         }
         else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
         else if($size_category_str.length == 5)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
@@ -1523,19 +1523,19 @@ function M13020C(data,svgDoc_back,val)
         
         if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
         }
         else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
         else if($size_category_str.length == 5)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
@@ -1587,19 +1587,19 @@ function M13020C(data,svgDoc_back,val)
 
         if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 56)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 38)");
         }
         else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 52)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
         else if($size_category_str.length == 5)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 54)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 35)");
         }
@@ -1707,13 +1707,13 @@ function M13020C(data,svgDoc_back,val)
 
         if($size_category_str.length <= 3)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 58)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 60)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 48)");
         }
         else if($size_category_str.length == 4)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 55)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 57)");
 
             svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 45)");
 
@@ -1721,9 +1721,9 @@ function M13020C(data,svgDoc_back,val)
         }
         else if($size_category_str.length == 5)
         {
-            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 51.5)");
+            svgDoc_back.getElementById("size_bold").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 57)");
 
-            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 45)");
+            svgDoc_back.getElementById("size_list_translation").setAttribute('transform', "matrix(1, 0, 0, 1, 58, 46)");
         }
     }
 
