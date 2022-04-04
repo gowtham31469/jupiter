@@ -1312,15 +1312,15 @@ class PrintController extends Controller
                 {
                     if(count($siz_cat) <= 3)
                     {
-                        $wri_y=101.5;
+                        $wri_y=103;
                     }
                     else if(count($siz_cat) == 4)
                     {
-                        $wri_y=99.5;
+                        $wri_y=102;
                     }
                     else if(count($siz_cat) == 5)
                     {
-                        $wri_y=98.5;
+                        $wri_y=101;
                     }
                 }
 				
@@ -1368,8 +1368,8 @@ class PrintController extends Controller
 						}
 					}
 	
-					if($request->template_name != "FFC/01/M13020C" && $request->template_name != "GE/01/M13114C - Opt 1")
-                    {
+					// if($request->template_name != "FFC/01/M13020C" && $request->template_name != "GE/01/M13114C - Opt 1")
+                    // {
 	
 						$par_pro = json_decode($product_desc_fin[0]);
 						
@@ -1421,7 +1421,7 @@ class PrintController extends Controller
 		
 							PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
 						}
-					}
+					//}
 				}
 	
 				
@@ -1616,15 +1616,15 @@ class PrintController extends Controller
                 {
                     if(count($siz_cat) <= 3)
                     {
-                        $wri_y=101.5;
+                        $wri_y=103;
                     }
                     else if(count($siz_cat) == 4)
                     {
-                        $wri_y=99.5;
+                        $wri_y=102;
                     }
                     else if(count($siz_cat) == 5)
                     {
-                        $wri_y=98.5;
+                        $wri_y=101;
                     }
                 }
                 
@@ -1672,8 +1672,8 @@ class PrintController extends Controller
                         }
                     }
 	
-					if($request->template_name != "FFC/01/M13020C" && $request->template_name != "GE/01/M13114C - Opt 1")
-                    {
+					// if($request->template_name != "FFC/01/M13020C" && $request->template_name != "GE/01/M13114C - Opt 1")
+                    // {
     
 						$par_pro = json_decode($product_desc_fin[0]);
 						
@@ -1725,7 +1725,7 @@ class PrintController extends Controller
 		
 							PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
 						}
-					}
+					//}
                 }
     
                 
