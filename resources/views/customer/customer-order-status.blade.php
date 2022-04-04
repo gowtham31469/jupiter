@@ -750,6 +750,7 @@
     <script src="{{ asset('js/Customer/customer-order.js') }}"></script>
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/Customer/orchestra-order-status.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-orchestra-pi.js') }}"></script>

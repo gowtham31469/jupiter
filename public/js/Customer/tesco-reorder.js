@@ -603,7 +603,7 @@ function extraQuantityLabelTescoRepeatOrderCustomer(type,id,name,zone,po_number,
 
 			var split_template = data.template_file[0].template_file.split(',')
 
-			$('.sample_artwork_care_label_reorder').html('<img src="/images/FRONT.png"><img src="/images/BACK.png">')
+			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
 
@@ -819,7 +819,7 @@ function extraQuantityLabelTesco(type,id,name,zone,po_number,liid)
 
 			var split_template = data.template_file[0].template_file.split(',')
 
-			$('.sample_artwork_care_label_reorder').html('<img src="/images/FRONT.png"><img src="/images/BACK.png">')
+			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
 
@@ -953,7 +953,7 @@ function extraQuantitySTTesco(type,id,name,zone,po_number,liid)
 
 			var split_template = data.template_file[0].template_file.split(',')
 
-			$('.sample_artwork_care_label_reorder').html('<img src="/images/swing_tickets.png">')
+			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
 
@@ -1086,7 +1086,7 @@ function extraQuantityStTescoRepeatOrder(type,id,name,zone,po_number,liid)
 
 			var split_template = data.template_file[0].template_file.split(',')
 
-			$('.sample_artwork_care_label_reorder').html('<img src="/images/swing_tickets.png">')
+			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
 

@@ -13,6 +13,9 @@ class TescoSwingTicketOrdersQuantity extends Model
         'size_id',
         'ean_barcode',
         'quantity',
+        'ce_size',
+        'uk_size',
+        'selected_secondary_sizes'
     ];
 
     /**
@@ -28,10 +31,6 @@ class TescoSwingTicketOrdersQuantity extends Model
      */
     public function sizes()
     {
-        return $this->hasOne('App\TescoPrimarySize', 'id', 'size_id')->with(['secSizeChart'])->where(
-            [
-                'tesco_primary_size.is_flag' => true
-            ]
-        );
+        return $this->hasOne('App\TescoPrimarySize', 'id', 'size_id')->with(['secSizeChart']);
     }
 }

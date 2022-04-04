@@ -87,7 +87,7 @@ class UpdateTescoSwingTicketOrder
 
             $qty_data = array(
                 'ean_barcode'     => $request->swing_ean[$qty_index],
-                'quantity'        => $request->swing_quantity[$qty_index],
+                'quantity'        => !is_null($request->swing_quantity[$qty_index]) ? $request->swing_quantity[$qty_index] : 0,
             );
 
             TescoSwingTicketOrdersQuantity::where([

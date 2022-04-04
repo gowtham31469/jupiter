@@ -4678,6 +4678,7 @@ class OrderStatusController extends Controller
                                     ->join('tesco_primary_size','tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
                                     ->where($table_id,$id)
                                     ->where('quantity','!=',null)
+                                    ->where('quantity','!=',0)
                                     ->orderBy('tesco_washcare_orders_quanty.id', 'asc')
 									->select('*')
                                     ->get();
@@ -4709,6 +4710,7 @@ class OrderStatusController extends Controller
             $order_details  = 	DB::table($qty_table)
                                 ->where($table_id,$id)
                                 ->where('quantity','!=',null)
+                                ->where('quantity','!=',0)
                                 ->orderBy('id', 'asc')
                                 ->select('*')
                                 ->get();
@@ -4809,6 +4811,8 @@ class OrderStatusController extends Controller
                                 ->get();
 
                 $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
+
+                $tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
 
                 $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
 
@@ -4911,6 +4915,7 @@ class OrderStatusController extends Controller
                 $value->tesco_year_under=$tesco_year_under;
                 $value->tesco_year_over=$tesco_year_over;
                 $value->tesco_translation=$tesco_translation;
+                $value->tesco_size_department=$tesco_size_department[0]->department_name;
             }
             else
             {

@@ -9,13 +9,14 @@ $(function () {
     renderTescoCareOrders = (role, template_id, callback=null) => {
         var user_role = role.toLowerCase();
         var size_id = $('#tesco_care_size_chart').val();
+        var size_department = $('#tesco_care_size_chart option:selected').text();
 
         $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
-            getSizechart(size_id, user_role,template_id, callback);
+            getSizechart(size_id, size_department, user_role,template_id, callback);
             
         }); 
     }
@@ -162,7 +163,7 @@ $(function () {
 
 
     // Method to fetch tesco care size chart lists
-    getSizechart = (size_id, role,template_id, callback=null) => {
+    getSizechart = (size_id, size_department, role,template_id, callback=null) => {
         var size_chart = [];
         $.ajax({
             type: "get",
@@ -174,6 +175,12 @@ $(function () {
                 template_id:template_id
             },
             success: function (response) {
+
+                var moq = 0;
+
+                if (role == 'customer') {
+                    moq = response.moq;
+                }
 
                 var temp_file = response.tesco_template[0].template_file.split(',');
                 $('#hidden_name').val(response.tesco_template[0].template_name)
@@ -225,7 +232,7 @@ $(function () {
 
                     quantity_html += `</td> <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" type="text" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
                                             <td><div class="form-group has-feedback label-ean-feedback"><input class="form-control input-sm label-ean-field" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" min=` + moq + `><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
                                         </tr>`;
                 });
@@ -235,7 +242,7 @@ $(function () {
                 $('.tesco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
-                if (size_id === '4') {
+                if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
                 if(callback != null) {

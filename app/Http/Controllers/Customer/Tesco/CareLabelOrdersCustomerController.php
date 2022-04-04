@@ -64,7 +64,7 @@ class CareLabelOrdersCustomerController extends Controller
     public function index()
     {
         try {
-            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
             return View::make('customer/tesco-customer-care-labels')
                 ->with([
                     'symbols' => $this->symbols,
@@ -109,26 +109,28 @@ class CareLabelOrdersCustomerController extends Controller
         $tesco_template = DB::table('tesco_template')
             ->where('item_id', $template_id)
             ->get();
+        
+        $moq = DB::table('price_taxation')
+        ->where([
+            'template_id' => $template_id,
+            'customer_id' => Auth::guard('web_customer')->user()->company_id,
+            'buyer_id' => 2
+        ])
+        ->value('price_taxation.moq');
+
+        $moq_value = !is_null($moq) ? $moq : 0;
 
         return response()->json([
             'message' => 'success',
             'data' => $tesco_sizelists,
-            'tesco_template' => $tesco_template 
+            'tesco_template' => $tesco_template,
+            'moq' => $moq_value
         ], 200);
     }
 
     public function getTescoTemplateMoq(Request $request)
     {
         $templates = explode(',', $request['templates']);
-
-        $buyer_id  = $request['buyer_id'];
-
-        /**  [Get parent customer id from tesco_suppliers metadata id] */
-        $customer_id = DB::table("customer_metadata")
-            ->where('customer_metadata_id', $request['supplier'])
-            ->select('customer_id')
-            ->first();
-
         $moq_array = array();
         $moq_value = array();
 
@@ -142,13 +144,12 @@ class CareLabelOrdersCustomerController extends Controller
             $moq = DB::table('price_taxation')
                 ->where([
                     'template_id' => $template_id,
-                    'customer_id' => $customer_id->customer_id,
-                    'buyer_id' => $buyer_id
+                    'customer_id' => Auth::guard('web_customer')->user()->company_id,
+                    'buyer_id' => $request['buyer_id']
                 ])
-                ->select('price_taxation.moq')
-                ->first();
+                ->value('price_taxation.moq');
 
-            $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq->moq : 0;
+            $moq_value[$temp_name->item_name] = !is_null($moq) ? $moq : 0;
         }
 
         array_push($moq_array, $moq_value);
@@ -176,7 +177,7 @@ class CareLabelOrdersCustomerController extends Controller
     public function getCareLabelOrderDetail(Request $request)
     {
         if ($request->ajax()) {
-            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->id());
+            $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
 
             $get_order_details = new EditTescoOrders();
             $result = $get_order_details->getCareLabelOrderDetails($request);

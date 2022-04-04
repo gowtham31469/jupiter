@@ -28,7 +28,8 @@ class TescoWashcareOrders extends Model
         'country_of_origin_id',
         'kids_warning_id',
         'primary_size_id',
-        'tog_id',
+        'size_department_text',
+        'tog',
         'wash_symbol_id',
         'bleach_symbol_id',
         'dry_symbol_id',
@@ -130,7 +131,6 @@ class TescoWashcareOrders extends Model
     public function quantities()
     {
         return $this->hasMany('App\TescoWashcareOrdersQuantity', 'washcare_order_id')
-            ->join('tesco_primary_size', 'tesco_washcare_orders_quanty.size_id', 'tesco_primary_size.id')
             ->select([
                 'tesco_washcare_orders_quanty.id',
                 'washcare_order_id',
@@ -140,8 +140,6 @@ class TescoWashcareOrders extends Model
                 'selected_secondary_sizes',
                 'uk_size as size',
                 'ce_size',
-                'department_title',
-                'tesco_primary_size.id as size_id'
             ])->orderBy('tesco_washcare_orders_quanty.id', 'asc');
     }
 

@@ -43,15 +43,28 @@
                         <th>Quantity <small>(Units)</small></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="swing_ticket_qty_table">
                     @foreach ($size_data as $value)
                     <tr id="swing_size_{{$loop->iteration}}">
                         <input type="hidden" id="secondary_size_id_{{ $value->id }}" name="secondary_size_id[]" value="{{ $value->id }}">
                         <td> {{ $value->uk_size }}</td>
                         <td>{{ $value->ce_size }}</td>
                         <td>
+                            @php
+                               $myArray = [];
+                            @endphp
+
                             @foreach ($value->secSizeChart as $sec_size)
-                            <strong class="text-justify">{{ $sec_size->category_name }}</strong> : {{ $sec_size->secondary_size }} <br>
+                                <strong class="text-justify">{{ $sec_size->category_name }}</strong> : {{ $sec_size->secondary_size }} <br>
+
+                                @php
+                                    $object = new stdClass();
+                                    $object->id = $sec_size->id;
+                                    $object->secondary_size = $sec_size->category_name;
+                                    $object->value = $sec_size->secondary_size;
+                                    $myArray[] = $object;
+                                @endphp
+
                             @endforeach
                         </td>
                         <td>
@@ -60,10 +73,11 @@
                             </div>
                         </td>
                         <td>
-                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]">
+                            <div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="swing_quantity_{{$value->id}}" name="swing_quantity[]" min="0">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </td>
+                        <input type='hidden' id='secondary_size_data_{{$value->id}}' name='secondary_size_data[]' value='{{ json_encode($myArray) }}'>
                     </tr>
                     @endforeach
                 </tbody>

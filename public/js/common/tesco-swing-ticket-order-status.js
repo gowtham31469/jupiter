@@ -106,28 +106,9 @@ $( () => {
         $('#swingticket_order_id').val(order_data.order_details.id);
         $('#swingticket_template_id').val(order_data.order_details.template_id);
         $('#swingticket_template_name').val(order_data.order_details.item_master.template_name);
-        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name);
-
-        var quantity_html = `<input type="hidden" id="primary_size_id" name="primary_size_id">`;
-
-        $.each(order_data.order_details.quantity_details, (indexInArray, valueOfElement) => {
-            quantity_html += `<tr id="swing_size_${indexInArray}">
-                                            <input type="hidden" id="secondary_size_id_` + valueOfElement.id + `" name="secondary_size_id[]" value="` + valueOfElement.id + `">
-                                            <td >` + valueOfElement.sizes.uk_size + `</td>
-                                            <td >` + valueOfElement.sizes.ce_size + `</td>  <td >`;
-
-            $.each(valueOfElement.sizes.sec_size_chart, function (index, sec_size) {
-
-                quantity_html += `<strong class="text-justify">${sec_size.category_name}</strong> : ${sec_size.secondary_size} <br>`;
-
-            });
-
-            var ean_barcode = valueOfElement.ean_barcode != null?valueOfElement.ean_barcode:"";
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="EAN Barcode" id="swing_ean_` + valueOfElement.size_id + `" name="swing_ean[]" value="` + ean_barcode + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback swingticket-quantity-feedback"><input type="number" class="form-control input-sm swingticket-quantity-field" placeholder="Quantity" id="swing_quantity_` + valueOfElement.size_id + `" name="swing_quantity[]" value="` + valueOfElement.quantity + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td></tr>`;
-        });
+        $('.swingticket-order-details').text(" Order Details - " + order_data.order_details.item_master.template_name + " (" + order_data.order_details.size_department_text +")");
         
-        $('#swing_ticket_qty_table').html(quantity_html);
+        renderQtyTableBody(order_data.order_details.quantities, order_data.moq)
 
         var footer_btn = `<button style="margin-left: 10px;" class="btn btn-primary pull-right input-sm hidden" id="submit_swingticket_order_btn" type="submit" disabled="true" onclick="validateTescoSwingTicketOrder('`+user_type+`')">Submit</button>
         <button class="btn btn-warning  pull-right input-sm" id="edit_swingticket_order_btn" style="width: 55px;margin-left: 10px;" onclick="editSwingTicketOrder()" type="button">Edit</button>
@@ -288,7 +269,6 @@ $( () => {
             } else {
                 e.preventDefault();
                 $('#submit_swingticket_order_btn').prop('disabled',true)
-                console.log("PKDDD");
                 updateSwingTicketOrder(user_role);
             }
         })
