@@ -273,6 +273,18 @@ class Dashboard
 								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name',DB::raw('sum(quantity) as sum'))
 								->groupBy('tesco_washcare_orders.id','tesco_template.template_name','customers.company_name')
 								->get();
+			$new_orders['swing'] = DB::table('tesco_swingticket_orders')
+				->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+				->join('tesco_tsl3_orders_quanty','tesco_tsl3_orders_quanty.tsl3_order_id','=','tesco_swingticket_orders.id')
+									->whereRaw('tesco_swingticket_orders.created_at > current_date - 1')
+									->where('new_ord_flag',0)
+									->where('order_status','!=','Order Cancelled')
+									->where('is_order_count_empty',0)
+									->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+									->select('tesco_swingticket_orders.*','customers.company_name',DB::raw('sum(count) as sum'))
+									->groupBy('tesco_swingticket_orders.id','customers.company_name')
+									->get();
+
 			return $new_orders;
 	}
 	
@@ -367,6 +379,17 @@ class Dashboard
 								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
 								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
 								->get();
+
+			$approved_orders['swing'] = DB::table('tesco_swingticket_orders')
+			->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('app_ord_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+								->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
+
         	return $approved_orders;
 	}
 	
@@ -461,6 +484,15 @@ class Dashboard
 								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
 								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
 								->get();
+			$pending_orders['swing'] = DB::table('tesco_swingticket_orders')
+			->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Placed')
+								->where('pen_ord_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+								->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();					
 			return $pending_orders;
 	}
 	
@@ -690,6 +722,30 @@ class Dashboard
 								->where('is_order_count_empty',0)
 								->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
 								->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
+
+		$app_pipo['swing_1'] = DB::table('tesco_swingticket_orders')
+			->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('po_status','PO Pending')
+								->whereIn('pi_status',['PI Approval Pending',""])
+								->where('app_pipo_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+								->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+								->get();
+		
+		$app_pipo['swing_2'] = DB::table('tesco_swingticket_orders')
+			->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+								->where('order_status','Order Approved')
+								->where('po_status','PO Uploaded')
+								->where('pi_status','PI Approval Pending')
+								->where('app_pipo_flag',0)
+								->where('is_order_count_empty',0)
+								->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+								->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
 								->get();
         	return $app_pipo;
 	}

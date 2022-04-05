@@ -534,6 +534,13 @@ function triggerLevel3()
 								full_validation = 0;
 							}
 						});
+
+						$("#material option:selected").each(function (i,v) {
+							if($(this).val() == "Swing Tickets")
+							{
+								full_validation = 2;
+							}
+						});
 						
 						if(full_validation == 0)
 						{	
@@ -562,6 +569,21 @@ function triggerLevel3()
 						showSnackbar();
 						}
 					}
+
+
+					if(full_validation == 2)
+						{	
+							sub_material = "label";
+							if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+									{
+										call_ajax($status)
+									}
+							else
+							{
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
+							}
+						}
 				}
 				else{
 					$('.snackbar_span').html("Please select the status.");
