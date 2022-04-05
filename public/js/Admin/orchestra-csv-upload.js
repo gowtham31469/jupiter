@@ -25,7 +25,7 @@
                 success: function(data){
                     $('.top-content').html('<h4 class="pull-left"><strong>Changed Orders for UVC '+data.uvc+'</strong></h4><br><br><hr>');
 
-                    $('.sub-menu-button').html('<button class="btn btn-xs btn-default pull-right" type="button" onclick="goBack()" data-insert="true"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>\
+                    $('.sub-menu-button').html('<button class="btn btn-xs btn-default pull-right" type="button" onclick="location.reload()" data-insert="true"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>\
                     <button class="btn btn-xs btn-success " type="button" onclick="confirmUVCOrders()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Confirm</button>\
                     <button class="btn btn-xs btn-danger" type="button" onclick="cancelUVCOrders()" style="margin-right: 5px;"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>');
 
