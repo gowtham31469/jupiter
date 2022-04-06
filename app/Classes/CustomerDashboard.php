@@ -50,6 +50,7 @@ class CustomerDashboard
         $this->tsl2_table = "tesco_tsl2_orders";
         $this->tsl3_table = "tesco_tsl3_orders";
         $this->wash_table = "tesco_washcare_orders";
+        $this->swing_table = "tesco_swingticket_orders";
     }
 
 
@@ -162,7 +163,7 @@ class CustomerDashboard
                               ->where('app_ord_flag',0)
                               ->where('is_order_count_empty',0)
                               ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
 
         return $approved ;
@@ -291,7 +292,7 @@ class CustomerDashboard
                               ->where('is_order_count_empty',0)
                               ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
                               ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
         return $approved ;
 	}
@@ -407,7 +408,7 @@ class CustomerDashboard
                               ->where('pen_ord_flag',0)
                               ->where('is_order_count_empty',0)
                               ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
 
         return $pending;
@@ -525,7 +526,7 @@ class CustomerDashboard
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
 
-          $pending['wcl'] = DB::table('tesco_swingticket_orders')
+          $pending['swing'] = DB::table('tesco_swingticket_orders')
                               ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
                               ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
                               ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
@@ -534,7 +535,7 @@ class CustomerDashboard
                               ->where('is_order_count_empty',0)
                               ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
                               ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
         return $pending;
 	}
@@ -651,7 +652,7 @@ class CustomerDashboard
                               ->where('cancel_ord_flag',0)
                               ->where('is_order_count_empty',0)
                               ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
         return $cancelled;
 	}
@@ -779,7 +780,7 @@ class CustomerDashboard
                              ->where('is_order_count_empty',0)
                              ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
-                             ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                             ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->swing_table."'".' as "tablename"'),'customers.company_name')
                              ->get() ;                 
         return $cancelled;
 	}

@@ -149,6 +149,21 @@ class Dashboard
 										->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
 										->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
 										->get();
+
+			$pendingproduction['swing'] = DB::table('tesco_swingticket_orders')
+			->join('customers','customers.id','=','tesco_swingticket_orders.tesco_supplier_id')
+			->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+										->whereIn('order_status',['Order Approved','Order Placed'])
+										->where(function ($query) {
+											$query->where('po_file',null)
+											->orWhere('purchase_order_no',null);
+										})
+										->where('pen_pro_flag',0)
+										->where('is_order_count_empty',0)
+										->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+										->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),'customers.company_name')
+										->get();
+																	
       		return $pendingproduction;
    }
 	

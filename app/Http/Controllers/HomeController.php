@@ -29,7 +29,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {dd("gyuj");
+    {
         $module_var = new Modules();
         $is_allowed = $module_var->permittedModules();
         if($is_allowed)

@@ -294,6 +294,19 @@
 								<td><label onclick="viewed({{ $value->id }},'tesco_washcare_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
 							</tr>
 							@endforeach
+
+							@foreach ($pendingproduction['swing'] as $value)
+							<tr>
+								<td><input type="checkbox" name="checkbox" value="tesco_swingticket_orders-{{ $value->id }}" class="checkbox"></td>
+								<td>{{ $value->company_name }}</td>
+								<td>Tesco</td>
+								<td>{{ $value->uk_style_ref."/".$value->ce_style_ref }}</td>
+								<td>{{ $value->TemplateName }}</td>
+								<td>-</td>
+								<td><label onclick="viewed({{ $value->id }},'tesco_swingticket_orders')" style="cursor:pointer" class="label label-warning">Mark as viewed</label></td>
+							</tr>
+							@endforeach
+
 						</tbody>
 
 					</table>
