@@ -154,6 +154,17 @@ class CustomerDashboard
                               ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
+          $approved['swing'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                              ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                              ->where('order_status',"Order Approved")
+                              ->where('app_ord_flag',0)
+                              ->where('is_order_count_empty',0)
+                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->get() ;
+
         return $approved ;
 	}
 
@@ -270,6 +281,18 @@ class CustomerDashboard
                               ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
+
+          $approved['swing'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                              ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                              ->where('order_status',"Order Approved")
+                              ->where('app_ord_flag',0)
+                              ->where('is_order_count_empty',0)
+                              ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
+                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->get() ;
         return $approved ;
 	}
 
@@ -374,6 +397,19 @@ class CustomerDashboard
                               ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
+
+
+          $pending['swing'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                              ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                              ->where('order_status',"Order Placed")
+                              ->where('pen_ord_flag',0)
+                              ->where('is_order_count_empty',0)
+                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->get() ;
+
         return $pending;
 	}
 
@@ -488,6 +524,18 @@ class CustomerDashboard
                               ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ;
+
+          $pending['wcl'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                              ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                              ->where('order_status',"Order Placed")
+                              ->where('pen_ord_flag',0)
+                              ->where('is_order_count_empty',0)
+                              ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
+                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->get() ;
         return $pending;
 	}
 
@@ -593,6 +641,18 @@ class CustomerDashboard
                               ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                               ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
                               ->get() ; 
+
+
+        $cancelled['swing'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                              ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                              ->where('order_status',"Order Cancelled")
+                              ->where('cancel_ord_flag',0)
+                              ->where('is_order_count_empty',0)
+                              ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                              ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                              ->get() ;
         return $cancelled;
 	}
 
@@ -707,22 +767,35 @@ class CustomerDashboard
                              ->where('tesco_washcare_orders.order_placed_by','=',$customer_id)
                              ->whereBetween('tesco_washcare_orders.created_at', [$from_date, $to_date])
                              ->select('tesco_washcare_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
-                             ->get() ;                   
+                             ->get() ;   
+
+
+        $cancelled['swing'] = DB::table('tesco_swingticket_orders')
+                              ->join('customers','tesco_swingticket_orders.tesco_supplier_id','=','customers.id')
+                              ->join('tesco_template','tesco_swingticket_orders.template_id','=','tesco_template.item_id')
+                             ->where('tesco_swingticket_orders.tesco_supplier_id', $customer_role_id->company_id)
+                             ->where('order_status',"Order Cancelled")
+                             ->where('cancel_ord_flag',0)
+                             ->where('is_order_count_empty',0)
+                             ->where('tesco_swingticket_orders.order_placed_by','=',$customer_id)
+                             ->whereBetween('tesco_swingticket_orders.created_at', [$from_date, $to_date])
+                             ->select('tesco_swingticket_orders.*',DB::raw('tesco_template.template_name as "TemplateName"'),DB::raw("'".$this->wash_table."'".' as "tablename"'),'customers.company_name')
+                             ->get() ;                 
         return $cancelled;
 	}
 
   public function getApprovedOrdersCount($approved_orders)
   {
-    return count($approved_orders['tcl1'])+count($approved_orders['tcl2'])+count($approved_orders['tcl4'])+count($approved_orders['tcl5'])+count($approved_orders['thl1'])+count($approved_orders['thl3'])+count($approved_orders['tsl1'])+count($approved_orders['tsl2']) + count($approved_orders['tsl3']) + count($approved_orders['wcl']);
+    return count($approved_orders['tcl1'])+count($approved_orders['tcl2'])+count($approved_orders['tcl4'])+count($approved_orders['tcl5'])+count($approved_orders['thl1'])+count($approved_orders['thl3'])+count($approved_orders['tsl1'])+count($approved_orders['tsl2']) + count($approved_orders['tsl3']) + count($approved_orders['wcl']) +count($approved_orders['swing']);
   }
   
   public function getPendingOrdersCount($app_pending_orders)
   {
-    return count($app_pending_orders['tcl1'])+count($app_pending_orders['tcl2'])+count($app_pending_orders['tcl4'])+count($app_pending_orders['tcl5'])+count($app_pending_orders['thl1'])+count($app_pending_orders['thl3'])+count($app_pending_orders['tsl1'])+count($app_pending_orders['tsl2']) + count($app_pending_orders['tsl3']) + count($app_pending_orders['wcl']);
+    return count($app_pending_orders['tcl1'])+count($app_pending_orders['tcl2'])+count($app_pending_orders['tcl4'])+count($app_pending_orders['tcl5'])+count($app_pending_orders['thl1'])+count($app_pending_orders['thl3'])+count($app_pending_orders['tsl1'])+count($app_pending_orders['tsl2']) + count($app_pending_orders['tsl3']) + count($app_pending_orders['wcl']) + count($app_pending_orders['swing']);
   }
 
   public function getCancelledOrdersCount($cancelled_orders)
   {
-    return count($cancelled_orders['tcl1'])+count($cancelled_orders['tcl2'])+count($cancelled_orders['tcl4'])+count($cancelled_orders['tcl5'])+count($cancelled_orders['thl1'])+count($cancelled_orders['thl3'])+count($cancelled_orders['tsl1'])+count($cancelled_orders['tsl2']) + count($cancelled_orders['tsl3']) + count($cancelled_orders['wcl']);
+    return count($cancelled_orders['tcl1'])+count($cancelled_orders['tcl2'])+count($cancelled_orders['tcl4'])+count($cancelled_orders['tcl5'])+count($cancelled_orders['thl1'])+count($cancelled_orders['thl3'])+count($cancelled_orders['tsl1'])+count($cancelled_orders['tsl2']) + count($cancelled_orders['tsl3']) + count($cancelled_orders['wcl']) + count($cancelled_orders['swing']);
   }
 }
