@@ -519,7 +519,6 @@ class HomeController extends Controller
           $formdata   = explode(',',$request->formdata);;
           foreach ($formdata as $key => $value) {
             $table_name =   preg_replace( '/_[^_]*$/', '', $value );
-            
             $row_id = substr($value, strrpos($value, '_') + 1);
             if ($table_name!="select-all-can") {
               $data   = DB::table($table_name)->where('id',$row_id)
