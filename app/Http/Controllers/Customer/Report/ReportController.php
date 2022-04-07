@@ -96,8 +96,8 @@ class ReportController extends Controller
 
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		// dd($startDate);
@@ -136,8 +136,8 @@ class ReportController extends Controller
 
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
@@ -287,12 +287,18 @@ class ReportController extends Controller
 
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		$table_names = OrderManagementHistory::where('buyer_id',$request->buyer)
-		->whereIn('season',$request->season)
+		->where(function ($query) use ($request) {
+			$request->type == "others" ? $query
+				->whereIn('season',$request->season)
+				->whereIn('ocn_number',$request->ocns)
+				: '';
+		})
+		// ->whereIn('season',$request->season)
 		->whereIn('material',$request->materials)
 		->whereIn('sub_material',$request->mat_subs)
 		->whereIn('style',$request->styles)
@@ -300,7 +306,7 @@ class ReportController extends Controller
 		->whereIn('reference',$request->references)
 		// ->whereIn('customer_po',$request->pos)
 		->whereIn('buyer_po',$request->buyer_pos)
-		->whereIn('ocn_number',$request->ocns)
+		// ->whereIn('ocn_number',$request->ocns)
 		->whereIn('name_in_reports',$request->names)
 		// ->whereBetween('created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
 		->whereBetween('created_at', [$startDate, $endDate])
