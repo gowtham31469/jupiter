@@ -240,7 +240,7 @@ $(document).ready(function() {
    */
   function displayApprovedTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['swing'].concat(data.data['tsl2']))))))))));
       var html = "";
       $(orders).each(function(index, value)
       {
@@ -414,7 +414,7 @@ $(document).ready(function() {
    */
   function displayPendingTable(data)
   {
-      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
+      var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['swing'].concat(data.data['tsl2']))))))))));
       var html = "";
       $(orders).each(function(index, value)
       {
@@ -492,7 +492,7 @@ $(document).ready(function() {
    */
   function displayCancelledTable(data)
   {
-    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['tsl2'])))))))));
+    var orders = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tcl5'].concat(data.data['swing'].concat(data.data['tsl2']))))))))));
                  
     var html = "";
     $(orders).each(function(index, value)

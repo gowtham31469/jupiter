@@ -249,24 +249,9 @@
 <script type="text/javascript" src="{{ asset('js/Admin/report.js') }}"></script>
 <script type="text/javascript">
 
-
-	// var d = new Date();
-                // var maxDate = d.toLocaleDateString('en-US');
-                // d.setMonth(d.getMonth() - 6);
-                // var minDate = d.toLocaleDateString('en-US');
-
-                // alert(minDate)
-                // alert(maxDate)
-
-                // $('input[name="startdateos"]').daterangepicker({
-                //     "minDate": minDate,
-                //     "maxDate": maxDate,
-                //     autoUpdateInput: false
-                // });
-
-                $(function() {
+$(function() {
   $('input[name="startdateos"]').daterangepicker({
-    opens: 'left',
+    // opens: 'left',
     autoUpdateInput: false,
     // "minDate": minDate,
         // "startDate": minDate
@@ -277,79 +262,25 @@
     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
   });
 });
-                // ,
-                // function (start, end, label) {
-                //     var start_date = start.format('YYYY-MM-DD');
-                //     var end_date = end.format('YYYY-MM-DD');
-                //     $('#start_date').val(start_date);
-                //     $('#end_date').val(end_date);
-                //     $.ajax({
-                //         url: base_url + "/customer/tesco/tesco-orders-submit-filter",
-                //         type: "Post",
-                //         dataType: "json",
-                //         data: {
-                //             _token: csrf_token,
-                //             start_date:start_date,
-                //             end_date:end_date
-                //         },
-                //         beforeSend: function () {
-                //             $(".loader").show();
-                //             $(".loader").css('margin-top', '12%');
-                //         },
-                //         statusCode: {
-                //             /** [Show response status based on HTTP status code] */
-                //             200: function (data) {
-                                
-                //                 $("#seasonos").html("");
-                //                 $("#ukstylenoos").html("");
-                //                 $("#stylenoos").html("");
 
-                //                 $(data.data).each(function(index,value){
-                //                     $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
-                //                 })
-                
-                //                 $(data.style_no).each(function(index,value){
-                //                     if (value.zone == "CE") {
-                //                         if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
-                //                             $("#stylenoos").append("<option value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
-                //                         }
-                //                     } else {
-                //                         if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
-                //                             $("#ukstylenoos").append("<option value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
-                //                         }
-                //                     }
-                //                 })
-                //                 $(".selectpicker").val('');
-                //                 $('.selectpicker').selectpicker('refresh');
-                //             },
-                //             400: function () {
-                //                 $('.snackbar_span').html('Something went wrong');
-                //                 showSnackbar();
-                //             }
-                //         },
-                //         error: function (data) {
-                //         },
-                //         complete: function () {
-                //             $(".loader").hide();
-                //             $(".loader").css('margin-top', '0%');
-                //         }
-                //     })
-                // });
 
-                $('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
-                    $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-                    	$("#txtFrom").val(picker.startDate.format('YYYY-MM-DD'))
-  						$("#txtTo").val(picker.endDate.format('YYYY-MM-DD'))
-                });
+$('input[name="startdateos"]').on('apply.daterangepicker', function(ev, picker){
+        $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+        	$("#txtFrom").val(picker.startDate.format('YYYY-MM-DD'))
+				$("#txtTo").val(picker.endDate.format('YYYY-MM-DD'))
+    });
 
-                $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
-                    $(this).val('');
-                });
+    $('input[name="startdateos"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+
 
 	function triggerLevel1()
 	{	
 
-		// /
+		if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
+		{
 			if($("#buyer").val().length > 0 && $("#season").val().length > 0 )
 			{
 				$("#loader1").removeClass('hidden')
@@ -456,11 +387,11 @@
 				$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
 				showSnackbar();
 			}
-		// }
-		// else{
-		// 	$('.snackbar_span').html("Please set the date interval.");
-		// 	showSnackbar();
-		// }
+		}
+		else{
+			$('.snackbar_span').html("Please set the date interval.");
+			showSnackbar();
+		}
 	}
 
 function triggerLevel2()
@@ -589,11 +520,10 @@ function triggerLevel3()
 			$('.selectpicker').removeClass('open');
 			if($(".roleSelection option:selected").val().length > 0)
 			{
+				// console.log($("#po").val().length && $("#po").val().length > 0)
 				if($("#options_for_orders").val().length || $("#options_for_delivery").val().length )
 				{
-		
-					if($("#reference").val().length > 0 && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#sticker_types").val().length > 0)
-					{
+					
 						$status =[]
 						if($(".roleSelection option:selected").html() == "Orders")
 						{
@@ -603,33 +533,65 @@ function triggerLevel3()
 						{
 							$status = $("#options_for_delivery").val()
 						}
-						$.ajax({
-							type : 'post',
-							url: "{{ $get_table_fields_route }}",
-							data:{
-								'role' : $(".roleSelection option:selected").html(),
-								'status' : $status,
-								'_token': "{{ csrf_token() }}",	
-							},
-							success:function(data)
-							{	
-								if(data.Default.length > 0)
-								{
-									$("#_prefModal").modal('hide')
-									create_table(data.Default,data.Extra)
-								}
-								else{
-									$('.snackbar_span').html("No values found for this combination !!.");
-									showSnackbar();
-								}
+
+						var full_validation = 1 ;
+
+						$("#mat_sub option:selected").each(function (i,v) {
+							if($(this).val() == "Printed Labels")
+							{
+								full_validation = 0;
 							}
 						});
-					}
-					else
-					{
+
+						$("#material option:selected").each(function (i,v) {
+							if($(this).val() == "Swing Tickets")
+							{
+								full_validation = 2;
+							}
+						});
+						
+						if(full_validation == 0)
+						{	
+							sub_material = "label";
+
+							if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && 	 $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#buyer").val().length > 0 )
+									{
+										call_ajax($status)
+									}
+							else
+							{
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
+							}
+						}
+						if(full_validation == 1)
+						{
+						sub_material = "others";
+						if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#ocn").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+						{
+							call_ajax($status)
+						}
+						else
+						{
 						$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
 						showSnackbar();
+						}
 					}
+
+
+					if(full_validation == 2)
+						{	
+							sub_material = "label";
+							if($("#reference").val().length > 0  && $("#buyer_po").val().length > 0 && $("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0)
+									{
+										call_ajax($status)
+									}
+							else
+							{
+								$('.snackbar_span').html("Please select atleast one value from each of the select boxes.");
+								showSnackbar();
+							}
+						}
 				}
 				else{
 					$('.snackbar_span').html("Please select the status.");
@@ -642,11 +604,34 @@ function triggerLevel3()
 			}
 		}
 
-	
+
+function call_ajax(stat,sub_mat)
+{
+	$.ajax({
+		type : 'post',
+		url: "{{ $get_table_fields_route }}",
+		data:{
+			'role' : $(".roleSelection option:selected").html(),
+			'status' : stat,
+			'_token': "{{ csrf_token() }}",	
+		},
+		success:function(data)
+		{	
+			if(data.Default.length > 0)
+			{
+				$("#_prefModal").modal('hide')
+				create_table(data.Default,data.Extra)
+			}
+		else{
+			$('.snackbar_span').html("No values found for this combination !!.");
+			showSnackbar();
+		}
+		}
+	});
+}
 
 function create_table(def,extra)
 { 
-	$(".selectpicker").selectpicker('refresh')
 	$("#reportTable").DataTable().destroy();
 	$("#all_data").empty();
 	$("#all_fields").html('')
@@ -661,16 +646,44 @@ function create_table(def,extra)
 	po = [];
 	buyer_po = [];
 	ocn = [];
-	$status =[];
+	$status =[]
 	report_names =[];
-
+	
 	if($(".roleSelection option:selected").html() == "Orders")
 	{
 		$status = $("#options_for_orders").val()
+		selections = '';
+		$("#options_for_orders option:selected").each(function (i,v) {
+		var $this = $(this);
+		if ($this.length) {
+			if(i==0)
+			{
+				selections+=$this.text();
+			}
+			else
+			{
+				selections+=", "+$this.text();
+			}
+		}
+		});
 	}
 	else
 	{
 		$status = $("#options_for_delivery").val()
+		selections = '';
+		$("#options_for_orders option:selected").each(function (i,v) {
+		var $this = $(this);
+		if ($this.length) {
+			if(i==0)
+			{
+				selections+=$this.text();
+			}
+			else
+			{
+				selections+=", "+$this.text();
+			}
+		}
+		});
 	}
 
 	$.each($("#reference option:selected"), function(){            
@@ -699,6 +712,10 @@ function create_table(def,extra)
 		heading+='<th>'+def[i]+'</th>'
 		$("#all_fields").html(heading)
 		$(".ReportSection").removeClass('hidden')
+		// allColoumns.push({
+		// 	data: def[i]
+		// });
+
 
 		if(def[i] == "DT_Row_Index")
 		{
@@ -714,7 +731,6 @@ function create_table(def,extra)
 			title: def[i]
 			});	
 		}
-		
 	}
 
 		reportTable = $('#reportTable').dataTable( {
@@ -772,23 +788,18 @@ function create_table(def,extra)
 				mat_subs : mat_sub,
 				customers : $("#customer").val(),
 				season : seasons,
-				names : report_names,
 				date_start : date1,
-				date_end : date2
+				date_end : date2,
+				names : report_names,
+				type : sub_material
 			}
 		},
-		"columns" :allColoumns,
-
-		// initComplete: function () 
-		// 	 {
-	 {{-- //                   $('.dataTables_filter').after('{!! Form::select('sticker_type', $sticker_types,null,['class' => 'selectpicker','required','id'=>'sticker_type','data-live-search'=>"true",'title'=>'Select Type'])!!}') --}}
-		// 				$(".selectpicker").selectpicker('refresh')
-	 //         }
+		"columns" :allColoumns
 	});
 		// $('table tr:first th:first').text('S.No');
-		// $("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text()+selections+" ]")
 
-			var selections = "[ ";
+
+		var selections = "[ ";
 		    if($(".roleSelection option:selected").html() == "Orders")
 				{
 					$.each($("#options_for_orders option:selected"), function(i,v){     
@@ -822,19 +833,12 @@ function create_table(def,extra)
 
 		$("#headerText").html(" Report of "+selections+" ]"+" - "+$("#buyer option:selected").text())
 
+
+		// $("#reportTitle").html($(".roleSelection option:selected").html()+" Report of "+$("#buyer option:selected").text())
 		$("#moreOtions").removeClass('hidden')
 		$('.dt-buttons').append('<button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="moreOtions"><span>More Options</span></button><button class="dt-button buttons-html5" tabindex="0" aria-controls="reportTable" type="button" id="setFilters"><span class="fa fa-cogs"></span></button>')
-		
 
 	}
 
-	// $(document).on('change', '#sticker_type', function (event) {
- //            var options = [];
- //            $.each($(this).children("option:selected"), function () {
- //                options.push($(this).text());
- //            });
- //            var filter = options.join().replace(/,/g,'|');
- //            reportTable.api().columns(10).search(filter ? '\\b'+filter+'\\b' : ''  ,true, false).draw();
- //        })
 </script>
 @endsection 
