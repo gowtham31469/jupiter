@@ -91,7 +91,6 @@ class ReportController extends Controller
         }
     }
 
-
     public function level1Filter(Request $request)
 	{
 		if($request->date_start == null || $request->date_end == null)
@@ -102,8 +101,8 @@ class ReportController extends Controller
 
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
@@ -139,8 +138,8 @@ class ReportController extends Controller
 
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		$result = OrderManagementHistory::where('buyer_id',$request->buyer)
@@ -278,11 +277,10 @@ class ReportController extends Controller
 			$endDate = Carbon::now();
         	$startDate = Carbon::now()->subMonth(6);
 		}
-
 		else
 		{
-			$endDate = $request->date_end;
-        	$startDate = $request->date_start;
+			$endDate = $request->date_end.' 23:59:59';
+        	$startDate = $request->date_start.' 00:00:00';
 		}
 
 		$table_names = OrderManagementHistory::where('buyer_id',$request->buyer)

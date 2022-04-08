@@ -238,11 +238,13 @@ class PrintManagerController extends Controller
 				}
 				else
 				{
-					$jobcard_id_list  = Erp::where('erp_orders.buyer_id', '=', $buyer_id)
-											->where('erp_orders.customer_id', '=', $customer_id)
-											->where('erp_orders.status','!=',4)
-											->pluck('erp_orders.erp_id','erp_orders.id')
-											->all();
+					$jobcard_id_list  = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
+							->where('erp_order_details.company_id', '=', session()->get('company'))
+							->where('erp_orders.buyer_id', '=', $buyer_id)
+							->where('erp_orders.customer_id', '=', $customer_id)
+							->where('erp_orders.status','!=',4)
+							->pluck('erp_orders.erp_id','erp_orders.id')
+							->all();
 					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 				}
 				    
