@@ -443,7 +443,7 @@ Route::post('admin/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController
 Route::get('admin/upload-size-chart', 'Admin\UploadCSV\UploadCsvController@uploadSizeChart');
 Route::post('admin/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@uploadSizeChartCsv');
 
-Route::post('admin/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadCsvController@uploadOrchestraOrderCSVFile');
+Route::post('admin/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadOrchestraCSVController@uploadOrchestraOrderCSVFile');
 Route::get('admin/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
 Route::get('admin/csv-conflicts-data', 'Admin\UploadCSV\CSVDataHandlingController@getConflictsCSVData')->name('csv-conflicts-data');
 Route::get('admin/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
