@@ -370,6 +370,10 @@ Route::Post('admin/orchestra/order-management/update-label-orders-po', 'Admin\Or
 Route::get('admin/orchestra/template-management/get-company-list', 'Admin\Orchestra\TemplateManagementCntrl@getCompanyList');
 Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCntrl@checkERPStatus');
 
+Route::post('admin/orchestra/orchestra-orders-filter', 'Admin\Orchestra\OrderStatusFilters@orchestraOrdersFilter');
+Route::post('admin/orchestra/orchestra-orders-filter-by-daterange', 'Admin\Orchestra\OrderStatusFilters@orchestraOrdersFilterByDateRange');
+Route::post('admin/orchestra/get-orchestra-orders', 'Admin\Orchestra\OrderStatusFilters@getOrchestraOrders');
+
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
 Route::post('admin/tesco/template-management/template-view', 'Admin\Tesco\TemplateManagementCntrl@templateView');
