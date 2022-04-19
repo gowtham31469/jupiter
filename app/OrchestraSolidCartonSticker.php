@@ -13,4 +13,16 @@ class OrchestraSolidCartonSticker extends Model
     {
         return $this->hasMany(OrchestraSolidCartonStickerQty::class,'oscs_id');
     }
+
+    public function template() {
+
+        return $this->belongsTo('App\OrchestraItemMaster', 'template_id');
+        
+    }
+
+    public function customer() {
+
+      return $this->belongsTo('App\Customer', 'tesco_supplier_id');
+      
+    }
 }
