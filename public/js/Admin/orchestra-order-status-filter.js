@@ -676,9 +676,20 @@ getOrchestraOrders = () => {
         statusCode: {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
-                $('#OrderStatusTable').html(tescoStatusTable(data.data, "path"))
-                var $tableSel = $('#datatable-tesco-orders');
-                var tableSelection = $tableSel.DataTable({
+                console.log(data);
+                var path = base_url + "/admin/orchestra/get-orchestra-orders";
+                var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders.concat(data.orchestra_size_label_orders.concat(data.orchestra_heat_transfer_orders)))))))));
+
+                newObj.sort(function (obj1, obj2) {
+                    var date1 = obj1.OrderDate;
+                    var date2 = obj2.OrderDate;
+                    if (date1 > date2) return -1;
+                    if (date1 < date2) return 1;
+                    return 0;
+                });
+                $('.main-content').append(orchestraStatusTable(newObj, path));
+                var $tableSel = $('#datatable-orchestra-orders');
+                $tableSel.DataTable({
                     "columnDefs": [{
                         "targets": '_all',
                         "createdCell": function (td, cellData, rowData, row, col) {
@@ -697,9 +708,7 @@ getOrchestraOrders = () => {
                         null,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
+						null,
                         {
                             "sType": "date-uk"
                         },
@@ -709,14 +718,11 @@ getOrchestraOrders = () => {
                         null,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
                     ],
                     initComplete: function () {
-                        $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
-                        $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
-                        $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
+                        $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
+                        $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
+                        $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
                     }
                 });
 

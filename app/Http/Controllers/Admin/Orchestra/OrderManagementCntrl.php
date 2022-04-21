@@ -118,15 +118,6 @@ class OrderManagementCntrl extends Controller
     public function Orders()
     {
 		
-//		// check for price data missing for SKU Code(In PO CSV)
-//        $parcel_details = OrchestraParcelDetails::select(DB::raw('distinct on (orchestra_parcel_quantity_details."UVC_TCO") orchestra_parcel_quantity_details."UVC_TCO"'))->join('orchestra_parcel_quantity_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_quantity_details.UVC_TCO')->get()->toArray();
-//
-//        $UVC_TCO_array1 = [];
-//        foreach ($parcel_details as $key => $value) {
-//          array_push($UVC_TCO_array1, $value['UVC_TCO']);
-//        }
-//
-		
 		 $UVC_TCO_array1 = [];
          // check for po data missing for SKU Code(In price CSV)
          $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
