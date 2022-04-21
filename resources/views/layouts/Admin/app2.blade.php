@@ -260,6 +260,7 @@
 	<script src="{{ asset('js/Erp/job-card-artwork.js') }}"></script>
 	<script src="{{ asset('js/Erp/print-manager.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
 	<script src="{{ asset('js/Erp/erp-settings.js') }}"></script>
 
 @yield('jqueryIncludes')

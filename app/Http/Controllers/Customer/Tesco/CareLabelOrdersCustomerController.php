@@ -61,7 +61,7 @@ class CareLabelOrdersCustomerController extends Controller
         $this->part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
@@ -73,6 +73,7 @@ class CareLabelOrdersCustomerController extends Controller
                     'kids_warning' => $this->kids_warning,
                     'components' => $this->components,
                     'fabriclists' => $this->fabriclists,
+                    'template' => $request['template'],
                     'additional_instructions' => $this->additional_instructions,
                     'part_of_two_piece_set' => $this->part_of_two_piece_set
                 ]);
