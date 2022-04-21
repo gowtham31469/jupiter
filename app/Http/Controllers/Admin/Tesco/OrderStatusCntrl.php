@@ -236,7 +236,7 @@ class OrderStatusCntrl extends Controller
 
             $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
             ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -300,6 +300,15 @@ class OrderStatusCntrl extends Controller
             $thl1 = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                     ->select("season_code");
+
+            $tesco_washcare_orders = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+            ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("tesco_season_codes.name as season_code");
                 
             $data = DB::table("tesco_thl3_orders")
             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -313,43 +322,53 @@ class OrderStatusCntrl extends Controller
                 ->union($tsl2)
                 ->union($tsl3)
                 ->union($thl1)
+                ->union($tesco_washcare_orders)
+                ->union($tesco_swingticket_orders)
                 ->get();
 
             $tcl1_style = DB::table("tesco_tcl1_orders")
             ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl2_style = DB::table("tesco_tcl2_orders")
             ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                     
             $tcl4_style = DB::table("tesco_tcl4_orders")
             ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl5_style = DB::table("tesco_tcl5_orders")
             ->whereBetween('tesco_tcl5_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl1_style = DB::table("tesco_tsl1_orders")
             ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tsl2_style = DB::table("tesco_tsl2_orders")
             ->whereBetween('tesco_tsl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl3_style = DB::table("tesco_tsl3_orders")
             ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $thl1_style = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
+            $tesco_washcare_orders_style = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
+
+            $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                        ->select("uk_style_ref","ce_style_ref","zone")
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
                         ->union($tcl1_style)
                         ->union($tcl2_style)
                         ->union($tcl4_style)
@@ -358,6 +377,8 @@ class OrderStatusCntrl extends Controller
                         ->union($tsl2_style)
                         ->union($tsl3_style)
                         ->union($thl1_style)
+                        ->union($tesco_washcare_orders_style)
+                        ->union($tesco_swingticket_orders_style)
                         ->get();
 
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
@@ -944,7 +965,7 @@ class OrderStatusCntrl extends Controller
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
                                 {
-                                    $query->orWhereIn('season_code', $seasonos);
+                                    $query->orWhereIn('name', $seasonos);
                                 }
                             })
                             ->where(function($query) use ($stylenoos,$ukstylenoos){
