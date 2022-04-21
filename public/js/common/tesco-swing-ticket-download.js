@@ -381,7 +381,7 @@ function M13304C(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
     
 
@@ -776,7 +776,7 @@ function M13114COpt3(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 3/g, "")+' - '+month_ca+' • M2 • '+val.season_code+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.uk_style_ref+' • '+optionID+'</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.twenty_four_char_desc+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;');
 
     var country_of_origin_text = JSON.parse(val.country_of_origin_text);
 
@@ -968,7 +968,7 @@ function M13233C(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2 • '+val.season_code+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.uk_style_ref+' • '+optionID+'</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.twenty_four_char_desc+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
     var country_of_origin_text = JSON.parse(val.country_of_origin_text);
 
@@ -1150,7 +1150,7 @@ function M13114COpt1(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 1/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
 
     var product_desc_text = JSON.parse(val.product_desc_text)
@@ -1333,7 +1333,7 @@ function M13020C(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 1/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
 
     // var product_desc_text = JSON.parse(val.product_desc_text)
@@ -1776,7 +1776,7 @@ function M13163C(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2 • '+val.season_code+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.uk_style_ref+' • '+optionID+'</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.twenty_four_char_desc+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
     var country_of_origin_text = JSON.parse(val.country_of_origin_text);
 
@@ -1906,7 +1906,7 @@ function M13022C(data,svgDoc_back,val)
 
     var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name+' - '+month_ca+' • M2 • '+val.season_code+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.uk_style_ref+' • '+optionID+'</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.twenty_four_char_desc+'</tspan>';
 
-    svgDoc_back.getElementById("short_description").innerHTML = short_description;
+    svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
     var country_of_origin_text = JSON.parse(val.country_of_origin_text);
 
@@ -2032,7 +2032,7 @@ function M13114COpt4(data,svgDoc_back,val)
 
                 var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 4/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-                svgDoc_back.getElementById("short_description").innerHTML = short_description;
+                svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
 
 
@@ -2580,7 +2580,7 @@ function M13114COpt2(data,svgDoc_back,val)
 
                 var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 2/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-                svgDoc_back.getElementById("short_description").innerHTML = short_description;
+                svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
 
 
@@ -3128,7 +3128,7 @@ function M13021C(data,svgDoc_back,val)
 
                 var short_description = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.twenty_four_char_desc+'</tspan><tspan x="0" y="5.4" style="font-family:FandFSans-Regular; font-size:4.5px;">'+val.item_name.replace(/ - Opt 2/g, "")+' - '+month_ca+' • M2</tspan><tspan x="0" y="10.8" style="font-family:FandFSans-Regular; font-size:4.5px;">• '+val.eqos_site_code+' • '+val.season_code+' • '+optionID+'</tspan>';
 
-                svgDoc_back.getElementById("short_description").innerHTML = short_description;
+                svgDoc_back.getElementById("short_description").innerHTML = short_description.replace('&', '&amp;')
 
 
 
