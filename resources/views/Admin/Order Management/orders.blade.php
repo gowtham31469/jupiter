@@ -1198,6 +1198,7 @@
 <script src="{{ asset('js/Admin/tesco-reorder.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
+<script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>

@@ -3,7 +3,7 @@ $( () => {
     // Method to render view tesco care label orders page
     renderLabelViewOrderPage = (order_data, role) => {
         user_role = role.toLowerCase();
-        $('.main-content').load('/' + user_role + '/tesco/care-label-orders', (response, status, xhr) => {
+        $('.main-content').load('/' + user_role + '/tesco/care-label-orders?size='+order_data.order_details.primary_size_id+'&template='+order_data.order_details.template_id, (response, status, xhr) => {
             $('li.year-nav-menu, li.buyer-nav-menu').addClass('hidden');
 
             $('li.buyer-nav-menu').addClass('hidden');
