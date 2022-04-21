@@ -52,10 +52,30 @@ class OrderStatusFilters extends Controller
                         ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_hang_tag_orders.template_front_id')
                         ->where('orchestra_hang_tag_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_hang_tag_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -69,17 +89,37 @@ class OrderStatusFilters extends Controller
                         ->select('orchestra_hang_tag_orders.color_code', 'orchestra_hang_tag_orders.uvc as UVC', DB::raw("orchestra_hang_tag_orders.season_code as \"Season\""), DB::raw("'-' as \"BuyerPONo\""), DB::raw("'Hang Tag' as \"ArtworkType\""), DB::raw("'Hang Tag' as \"TemplateName\""), 'orchestra_item_master.item_name as Reference No', 'customers.id as customer_id', 'customers.company_name as SupplierName', DB::raw("to_char(orchestra_hang_tag_orders.created_at, "."'".$ddmmyy."'".") as \"OrderDate\""), DB::raw("to_char(orchestra_hang_tag_orders.delivery_date, "."'".$ddmmyy."'".") as \"DeliveryDate\""), 'orchestra_hang_tag_orders.status as Artwork Status', 'orchestra_hang_tag_orders.pi_status as PI Status', 'orchestra_hang_tag_orders.po_status as PO Status', 'orchestra_hang_tag_orders.po_number as PO Number', DB::raw("'".$actions."'".' as "Actions"'), DB::raw("'orchestra_hang_tag_orders' as \"tableName\""), 'orchestra_hang_tag_orders.id  as tableID', 'orchestra_hang_tag_orders.po_file', 'customers.pi_required', 'customers.po_required', 'orchestra_hang_tag_orders.template_front_id as template_id', 'orchestra_hang_tag_orders.order_flag', 'customers.delivery_day_count', 'orchestra_hang_tag_orders.is_order_count_empty')
                         ->groupBy('orchestra_hang_tag_orders.uvc', 'customers.company_name', 'orchestra_hang_tag_orders.created_at', 'orchestra_hang_tag_orders.delivery_date', 'orchestra_hang_tag_orders.status', 'orchestra_hang_tag_orders.pi_status', 'orchestra_hang_tag_orders.status', 'orchestra_hang_tag_orders.po_status', 'orchestra_hang_tag_orders.po_number', 'customers.pi_required', 'customers.id', 'orchestra_hang_tag_orders.id', 'orchestra_item_master.item_name')
                         ->orderBy('orchestra_hang_tag_orders.id', 'asc')
-                        // ->toSql();
                         ->get();
+
         $data['orchestra_special_tag_orders'] = DB::table('orchestra_special_tag_orders')
                         ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_special_tag_orders.template_id')
                         ->leftjoin('customers','customers.id', 'orchestra_special_tag_orders.customer_id')
                         ->where('orchestra_special_tag_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_special_tag_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -100,10 +140,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_main_label_orders.customer_id')
                         ->where('orchestra_main_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_main_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -123,10 +183,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_size_label_orders.customer_id')
                         ->where('orchestra_size_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_size_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -146,10 +226,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_heat_transfer_orders.customer_id')
                         ->where('orchestra_heat_transfer_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_heat_transfer_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -170,10 +270,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
                         ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_wash_care_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -193,10 +313,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_solid_carton_sticker_orders.customer_id')
                         ->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_solid_carton_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -216,10 +356,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_solid_poly_bag_sticker_orders.customer_id')
                         ->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_solid_poly_bag_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -239,10 +399,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_standard_carton_sticker_orders.customer_id')
                         ->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_standard_carton_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
@@ -262,10 +442,30 @@ class OrderStatusFilters extends Controller
                         ->leftjoin('customers','customers.id', 'orchestra_standard_poly_bag_sticker_orders.customer_id')
                         ->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_standard_poly_bag_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
-                        ->WhereIn('season_code', $orch_filter_season)
-                        ->WhereIn('uvc', $orch_filter_style)
-                        ->WhereIn('po_status', $orch_filter_postatus)
-                        ->WhereIn('pi_status', $orch_filter_pistatus)
+                        ->where(function($query) use ($orch_filter_season){
+                            if($orch_filter_season)
+                            {
+                                $query->orWhereIn('season_code', $orch_filter_season);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_style){
+                            if($orch_filter_style)
+                            {
+                                $query->orWhereIn('uvc', $orch_filter_style);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_postatus){
+                            if($orch_filter_postatus)
+                            {
+                                $query->orWhereIn('po_status', $orch_filter_postatus);
+                            }
+                        })
+                        ->where(function($query) use ($orch_filter_pistatus){
+                            if($orch_filter_pistatus)
+                            {
+                                $query->orWhereIn('pi_status', $orch_filter_pistatus);
+                            }
+                        })
                         ->where(function($query) use ($orch_filter_orderstatus, $orch_filter_artworkstatus){
                             if($orch_filter_orderstatus)
                             {
