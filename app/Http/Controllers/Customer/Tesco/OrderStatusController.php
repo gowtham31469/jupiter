@@ -4805,7 +4805,7 @@ class OrderStatusController extends Controller
                                 ->join('tesco_care_symbols as iron',$table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$table.'.dryclean_symbol_id', 'cleaning.id')
                                 ->where('tesco_washcare_orders.id',$value->$table_id)
-                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
                                 ->get();
                 
                 $value->po_number=$order_omp[0]->po_number;
@@ -4845,6 +4845,16 @@ class OrderStatusController extends Controller
                 $value->iron_astm=$order_omp[0]->iron_astm;
                 $value->clean_iso=$order_omp[0]->clean_iso;
                 $value->clean_astm=$order_omp[0]->clean_astm;
+                $value->white_wash_iso=$order_omp[0]->white_wash_iso;
+                $value->white_wash_astm=$order_omp[0]->white_wash_astm;
+                $value->white_whit_iso=$order_omp[0]->white_whit_iso;
+                $value->white_whit_astm=$order_omp[0]->white_whit_astm;
+                $value->white_dry_iso=$order_omp[0]->white_dry_iso;
+                $value->white_dry_astm=$order_omp[0]->white_dry_astm;
+                $value->white_iron_iso=$order_omp[0]->white_iron_iso;
+                $value->white_iron_astm=$order_omp[0]->white_iron_astm;
+                $value->white_clean_iso=$order_omp[0]->white_clean_iso;
+                $value->white_clean_astm=$order_omp[0]->white_clean_astm;
                 $value->degree=$order_omp[0]->degree;
                 $value->additional_care_text_1=$order_omp[0]->additional_care_text_1;
                 $value->additional_care_text_2=$order_omp[0]->additional_care_text_2;

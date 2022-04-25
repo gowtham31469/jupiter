@@ -701,7 +701,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var table_name_print = "tesco_washcare_orders";
 				var name2 = temp_name+"-sticker"
 
-				downloadArtworkLabels("tesco_svg_modal" + i, temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof","erp",name2,"print_manager",i,"")
+				downloadArtworkLabels("tesco_svg_modal" + i, name2,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"proof","erp",temp_name,"print_manager",i,"")
 			}
 	    break;
 
@@ -746,7 +746,7 @@ function DownloadArtwork(modal,i,template_file,style_no,buyer_no,id,order_type,c
 				var table_name_print = "tesco_washcare_orders";
 				var name2 = temp_name+"-sticker"
 
-				downloadArtworkLabels("tesco_svg_modal" + i, temp_name,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print","erp",name2,"print_manager",i,"")
+				downloadArtworkLabels("tesco_svg_modal" + i, name2,style_no,buyer_no,id,order_type,obj,template_id,table_name_print,"print","erp",temp_name,"print_manager",i,"")
 			}
 	   		
 	    break;
@@ -5519,7 +5519,7 @@ function testWhite(x) {
 }
 
 
-function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
+function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso) {
 	
 	var url = "";
 	
@@ -5546,7 +5546,17 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
             iron_astm:iron_astm,
             iron_iso:iron_iso,
             clean_astm:clean_astm,
-            clean_iso:clean_iso
+            clean_iso:clean_iso,
+            white_wash_astm:white_wash_astm,
+            white_wash_iso:white_wash_iso,
+            white_whit_astm:white_whit_astm,
+            white_whit_iso:white_whit_iso,
+            white_dry_astm:white_dry_astm,
+            white_dry_iso:white_dry_iso,
+            white_iron_astm:white_iron_astm,
+            white_iron_iso:white_iron_iso,
+            white_clean_astm:white_clean_astm,
+            white_clean_iso:white_clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -5574,7 +5584,7 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
 	})
 }
 
-function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
+function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso) {
 	
 	var url = "";
 	
@@ -5601,7 +5611,17 @@ function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_tex
             iron_astm:iron_astm,
             iron_iso:iron_iso,
             clean_astm:clean_astm,
-            clean_iso:clean_iso
+            clean_iso:clean_iso,
+            white_wash_astm:white_wash_astm,
+            white_wash_iso:white_wash_iso,
+            white_whit_astm:white_whit_astm,
+            white_whit_iso:white_whit_iso,
+            white_dry_astm:white_dry_astm,
+            white_dry_iso:white_dry_iso,
+            white_iron_astm:white_iron_astm,
+            white_iron_iso:white_iron_iso,
+            white_clean_astm:white_clean_astm,
+            white_clean_iso:white_clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,
