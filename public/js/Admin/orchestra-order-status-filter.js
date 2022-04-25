@@ -66,7 +66,7 @@ orderStatus = () => {
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-primary input-sm pull-right" type="button" onclick="getOrchestraOrders(this)" id="orch_filter_submit_btn">Submit</button>
+                        <button class="btn btn-primary input-sm pull-right" type="button" onclick="getOrchestraOrders()" id="orch_filter_submit_btn">Submit</button>
                     </div>
                     </form>
                     <div class="col-md-3">
@@ -466,8 +466,6 @@ uploadOrchestraPOFile = () => {
                                                     showSnackbar();
                                                 }, 10000);
 
-
-                                                //tescoOrderStatus()
                                             },
                                             error: function () {
                                                 console.log('somethig is wrong, please try later');
@@ -549,7 +547,6 @@ uploadOrchestraPOFile = () => {
                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                     showSnackbar();
                                                 }, 10000);
-                                                //tescoOrderStatus()
                                             },
                                             error: function () {
                                                 console.log('somethig is wrong, please try later');
@@ -620,7 +617,6 @@ uploadOrchestraPOFile = () => {
                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                 showSnackbar();
                                             }, 10000);
-                                            //tescoOrderStatus()
                                         },
                                         error: function (data) {
 

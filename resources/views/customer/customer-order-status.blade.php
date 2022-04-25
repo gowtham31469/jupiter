@@ -850,11 +850,11 @@
 
                             submitOs(this)
                         } else if (localStorage.getItem("buyer") === 'orchestra') {
-                            getOrchestraOrders(this)
+                            getOrchestraOrders()
                         }
                         $('.snackbar_span').html('PO Updated Successfully');
                         showSnackbar();
-                    }, 10000);
+                    }, 3000);
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);

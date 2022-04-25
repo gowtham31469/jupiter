@@ -185,34 +185,8 @@ class OrderManagementCntrl extends Controller
                                         ->orderBy('orchestra_parcel_details.id','asc')
                                         ->get();
 		
-		//$data['tu'] = DB::table('orchestra_tu_meta_data')->select('orchestra_tu_meta_data.*')->where('orchestra_tu_meta_data.meta_data',$data['order_details']{0}->Size)->get();
-		
-		
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
-		
-//			$sku_code = DB::table('orchestra_parcel_details')
-//                                        ->select('orchestra_parcel_details.SKU_Code')
-//                                        ->where('orchestra_parcel_details.UVC',$uvc)
-//                                        ->groupBy('orchestra_parcel_details.SKU_Code')
-//                                        ->get();
-//			$data['sku'] =array();
-//
-//			foreach($sku_code as $val)
-//			{
-//			  $str = explode('-',$val->SKU_Code);
-//				
-//			  if (in_array($str[1], $data['sku'])) 
-//			  { 
-//			  	
-//			  }
-//				else
-//				{
-//					array_push($data['sku'],$str[1]);
-//				}
-//			}
-		
-
             // get price details for po data
             foreach($data['order_details'] as $key => $value)
             {
@@ -500,49 +474,6 @@ class OrderManagementCntrl extends Controller
 
                }
 		
-//		$treeviewwash= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('parent_id','120')->orWhere('id','77')->orWhere('id','4')->orWhere('id','120')->orderBy('item_name', 'asc')->get()->toArray();
-//		//print_r($treeviewwash);
-//            if($treeviewwash){
-//                        $childs = array();
-//                        foreach($treeviewwash as &$item) 
-//                        {
-//                        $childs[$item->parent_id][] = &$item;
-//                        unset($item);
-//                        }
-//                        foreach($treeviewwash as &$item) 
-//                        {
-//                            if (isset($childs[$item->id]))
-//                            {
-//                                $item->children = $childs[$item->id];
-//                                unset($item);
-//                            }
-//                        }
-//                        $tree = $childs[0];
-//                        $data['treeviewwash']=$tree;
-//
-//               }
-        
-//        $treeviewmain= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no IS NULL THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','4')->orWhere('id','76')->orWhere('tag_name','mainsize')->orderBy('item_name', 'asc')->get()->toArray();
-//            if($treeviewmain){
-//                        $childs = array();
-//                        foreach($treeviewmain as &$item) 
-//                        {
-//                        $childs[$item->parent_id][] = &$item;
-//                        unset($item);
-//                        }
-//                        foreach($treeviewmain as &$item) 
-//                        {
-//                            if (isset($childs[$item->id]))
-//                            {
-//                                $item->children = $childs[$item->id];
-//                                unset($item);
-//                            }
-//                        }
-//                        $tree = $childs[0];
-//                        $data['treeviewmain']=$tree;
-//
-//               }
-		
         $code=$data['order_details']{0}->Family_Code;
 		
         $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
@@ -605,13 +536,6 @@ class OrderManagementCntrl extends Controller
             $data['orchestra_size_label_orders_qty']="";
         }
 		
-//        $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)->get();
-//        foreach($data['orchestra_main_label_orders'] as $value)
-//        {
-//            $orchestra_main_label_orders_qty=DB::table('orchestra_main_label_orders_qty')->select('*')->where('oml_id',$value->id)->get();
-//            $value->qty=$orchestra_main_label_orders_qty;
-//        }
-        
        if($data['order_details']{0}->FactoryCode == "HF-FREEUSD")
 	   {
 				$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select(DB::raw('distinct on ("card_flag") "card_flag"'),'*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.card_flag','asc')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
@@ -2099,142 +2023,6 @@ class OrderManagementCntrl extends Controller
     } 
 	
 	/**
-     * This Function is used to save the Main and Size Labels Details.
-     *
-     * @return Void
-     */
-	
-//    public function setMainLabel(Request $request)
-//    {
-//        //$delivery_date = $request->delivery_date;
-//        $template_front_id = $request->template_front_id; 
-//        $template_name = $request->template_name;
-//        $tot_qty_table = explode(',',$request->tot_qty_table);
-//        $uvc_tco = explode(',',$request->uvc_tco);
-//        $size = explode(',',$request->size);
-//        $parcel_id =$request->parcel_id;
-//        $season_code =$request->season_code;
-//		$main_label_count = explode(',',$request->main_label_count);
-//        $uvc =$request->uvc;
-//		$main_label_qty =$request->main_label_qty;
-//        $id =$request->id;
-//		$main_flag =$request->main_flag;
-//		$factory = DB::table("orchestra_parcel_details")->join('customers','customers.factory_code','=','orchestra_parcel_details.FactoryCode')->where('UVC',$uvc)->select('customers.*')->get();
-//		
-//		if($main_flag == "size")
-//		{
-//			$tots="";
-//		}
-//		else
-//		{
-//			$tots=$main_label_qty;
-//		}
-//		if(count($factory) > 0)
-//		{
-//			
-//			$pi_required=$factory{0}->pi_required;
-//			if($pi_required == 1)
-//			{
-//				$pi_status="PI Approval Pending";
-//				if($factory{0}->po_required == 1)
-//				{
-//					$po_status="PO Pending";
-//				}
-//				else
-//				{
-//					$po_status="";
-//				}
-//				
-//			}
-//			else
-//			{
-//				$po_status="PO Pending";
-//				$pi_status="";
-//			}
-//			$status="Order Approved";
-//		}
-//		else
-//		{
-//			$status="";
-//			$po_status="";
-//			$pi_status="";
-//		}
-//        if($id != "null")
-//        {
-//              MainLabelOrders::where('id',$id)
-//                   ->update([
-//                        'uvc' => $uvc,
-//                        'template_id'      => $template_front_id,
-//                        'template_name'      => $template_name,
-//                        'svg_path'    => "", 
-//					    'final_qty'    => $tots, 
-//                        'customer_id'    => $factory{0}->id,
-//					    'total_flag'    => $main_flag, 
-//                        'status'    => $status,
-//						'orchestra_parcel_details_id'    => $parcel_id,
-//						'season_code'    => $season_code,
-//					    'pi_status'           => $pi_status,
-//				 		'po_status'           => $po_status,
-//                  ]);
-//                $deleted = MainLabelOrdersQty::where('oml_id', '=', $id)
-//                            ->delete();
-//                $i=0;
-//                foreach($tot_qty_table as $value)
-//                {
-//                     MainLabelOrdersQty::create([
-//                                        'oml_id' => $id,
-//                                        'size'      => $size[$i],
-//                                        'uvc_tco'      => $uvc_tco[$i],
-//                                        'quantity'    => $value,
-//						 				'main_qty'=>$main_label_count[$i]
-//                             ]);
-//                    $i++;
-//                }
-//			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-//                        ->update([
-//                          'order_status' => "Order Placed"
-//
-//            ]);
-//        }
-//        else
-//        {
-//               $inserted = MainLabelOrders::create([
-//                                'uvc' => $uvc,
-//                                'template_id'      => $template_front_id,
-//                                'template_name'      => $template_name,
-//				   				'final_qty'    => $tots, 
-//                        		'customer_id'    => $factory{0}->id,
-//				   				'total_flag'    => $main_flag, 
-//                                'svg_path'    => "", 
-//                                'status'    => $status,
-//								'orchestra_parcel_details_id'    => $parcel_id,
-//								'season_code'    => $season_code,
-//				   				'pi_status'           => $pi_status,
-//				 				'po_status'           => $po_status,
-//                     ]);
-//                $i=0;
-//                foreach($tot_qty_table as $value)
-//                {
-//                     MainLabelOrdersQty::create([
-//                                        'oml_id' => $inserted->id,
-//                                        'size'      => $size[$i],
-//                                        'uvc_tco'      => $uvc_tco[$i],
-//                                        'quantity'    => $value,
-//						 				'main_qty'=>$main_label_count[$i]
-//                             ]);
-//                    $i++;
-//                }
-//			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-//                        ->update([
-//                          'order_status' => "Order Placed"
-//
-//            ]);
-//        }
-//       
-//           
-//    } 
-	
-	/**
      * This Function is used to save the Solid Sticker Details.
      *
      * @return Void
@@ -2242,7 +2030,6 @@ class OrderManagementCntrl extends Controller
 	
     public function setSolidStickers(Request $request)
     {
-       // $delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
         $tot_qty_poly = explode(',',$request->tot_qty_poly);

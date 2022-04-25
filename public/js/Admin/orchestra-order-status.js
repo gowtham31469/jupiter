@@ -2,238 +2,6 @@
 var td_row = "";
 
 /**
- * method to show the Orchestra order status table
- * @return {[type]} [description]
- */
-// function orderStatus() {
-//     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-//     $('.edit-orch-order-panel').html('');
-//     $('.template-error').html('');
-//     var buyer = localStorage.getItem("buyer");
-    
-//     $.ajax({
-//         url: base_url + "/admin/" + buyer + "/order-management/order-status",
-//         type: "Post",
-//         dataType: "json",
-//         data: {
-//             _token: csrf_token
-//         },
-//         beforeSend: function () {
-//             $(".loader").show();
-//             $(".loader").css('margin-top', '12%');
-//         },
-//         statusCode: {
-//             /** [Show response status based on HTTP status code] */
-//             200: function (data) {
-//                 var path = base_url + "/admin/" + buyer + "/order-management/order-status";
-//                 var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders.concat(data.orchestra_size_label_orders.concat(data.orchestra_heat_transfer_orders)))))))));
-
-//                 var newObj1 = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_solid_carton_sticker_orders.concat(data.orchestra_solid_poly_bag_sticker_orders.concat(data.orchestra_standard_carton_sticker_orders.concat(data.orchestra_standard_poly_bag_sticker_orders.concat(data.orchestra_size_label_orders.concat(data.orchestra_heat_transfer_orders)))))))));
-
-//                 $('.main-content').html("<button style='margin-bottom:10px' id='po-file-upload-button' class='btn btn-sm btn-primary pull-right' type='button'>Update PO</button>");
-//                 newObj.sort(function (obj1, obj2) {
-//                     var date1 = obj1.OrderDate;
-//                     var date2 = obj2.OrderDate;
-//                     if (date1 > date2) return -1;
-//                     if (date1 < date2) return 1;
-//                     return 0;
-//                 });
-//                 $('.main-content').append(orchestraStatusTable(newObj, path));
-//                 $('.edit-orch-order-panel').html("")
-//                 var uniqueNames = [];
-
-//                 newObj1.sort(function (obj1, obj2) {
-//                     var date1 = obj1.OrderDate;
-//                     var date2 = obj2.OrderDate;
-//                     if (date1 > date2) return -1;
-//                     if (date1 < date2) return 1;
-//                     return 0;
-//                 });
-
-//                 // push uvc into array and show it in uvc selectio dropdown
-//                 for (i = 0; i < newObj1.length; i++) {
-//                     if (uniqueNames.indexOf(newObj1[i].UVC) === -1) {
-//                         uniqueNames.push(newObj1[i].UVC);
-//                     }
-//                 }
-
-                
-
-
-//                 var $tableSel = $('#datatable-orchestra-orders');
-//                 $tableSel.DataTable({
-//                     "pageLength": 25,
-//                     "order": [
-//                         [7, "desc"]
-//                     ],
-//                     "aoColumns": [
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-// 						null,
-//                         {
-//                             "sType": "date-uk"
-//                         },
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-//                         null,
-//                     ],
-//                     initComplete: function () {
-//                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
-//                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-//                         $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Customer</option></select></div><div class="col-md-3"><select class="selectpicker" id="styleNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectTemplate"> <option disabled selected>Select Template Name</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
-//                         //For Custom Filters
-//                         this.api().columns().every(function (i) {
-//                             var column = this;
-//                             if (i === 0 || i === 6 || i === 4) {
-//                                 var select;
-//                                 switch (i) {
-//                                     case 0:
-//                                         select = $('#styleNumber')
-//                                         break;
-//                                     case 6:
-//                                         select = $('#supplierName')
-//                                         break;
-//                                     case 4:
-//                                         select = $('#selectTemplate')
-//                                         break;
-//                                 }
-//                                 select.on('change', function () {
-//                                     var val = $.fn.dataTable.util.escapeRegex(
-//                                         $(this).val()
-//                                     );
-
-//                                     column
-//                                         .search(val ? '^' + val + '$' : '', true, false)
-//                                         .draw();
-//                                 });
-
-//                                 select.append('<option value=""> </option>');
-//                                 column.data().unique().sort().each(function (d, j) {
-//                                     cleanText = d.replace(/<\/?[^>]+(>|$)/g, "");
-//                                     select.append('<option value="' + cleanText + '">' + cleanText + '</option>')
-//                                 });
-//                             }
-//                         });
-//                     }
-//                 });
-
-//                 $("#reset").on("click", function () {
-//                     $('#styleNumber').val('').change();
-//                     $('#supplierName').val('').change();
-//                     $('#selectTemplate').val('').change();
-//                     $.fn.dataTableExt.afnFiltering.length = 0;
-//                     $tableSel.dataTable().fnDraw();
-//                     $('input[name="daterange"]').val('Filter by Order Date');
-//                     $('input[name="daterange"]').datepicker("refresh");
-//                     $('.selectpicker').selectpicker('val', 1);
-//                     $('.selectpicker').selectpicker('refresh');
-
-//                 });
-
-//                 $('.selectpicker').selectpicker();
-//                 $('input[name="daterange"]').daterangepicker({
-
-//                     },
-//                     function (start, end, label) {
-//                         $.fn.dataTableExt.afnFiltering.length = 0;
-//                         $tableSel.dataTable().fnDraw();
-//                         filterByDate(7, start, end); // We call our filter function
-//                         $tableSel.dataTable().fnDraw(); // Manually redraw the table after filtering
-//                     });
-
-//                 $('input[name="daterange"]').val('Filter by Order Date');
-
-
-//                 // Clear the filter. Unlike normal filters in Datatables,
-//                 // custom filters need to be removed from the afnFiltering array.
-//                 $('.cancelBtn').on('click', function (e) {
-//                     e.preventDefault();
-//                     $.fn.dataTableExt.afnFiltering.length = 0;
-//                     $tableSel.dataTable().fnDraw();
-//                 });
-//                 $('.pi-view').tooltip('show')
-//                 $('.pi-view').tooltip('toggle')
-//                 $('.po-view').tooltip('show')
-//                 $('.po-view').tooltip('toggle')
-//                 $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
-//                 $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
-//                 $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
-//             },
-//             400: function () {
-//                 $('.snackbar_span').html('Something went wrong');
-//                 showSnackbar();
-//             }
-//         },
-//         error: function (data) {},
-//         complete: function () {
-//             $(".loader").hide();
-//             $(".loader").css('margin-top', '0%');
-//         }
-//     })
-// }
-
-
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-    "date-uk-pre": function (a) {
-        var ukDatea = a.split('-');
-        return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-    },
-
-    "date-uk-asc": function (a, b) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-
-    "date-uk-desc": function (a, b) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-});
-
-function showFilter() {
-    $('.filter-window').toggle();
-}
-/* Our main filter function
- * We pass the column location, the start date, and the end date
- */
-var filterByDate = function (column, startDate, endDate) {
-    // Custom filter syntax requires pushing the new filter to the global filter array
-
-    $.fn.dataTableExt.afnFiltering.push(
-        function (oSettings, aData, iDataIndex) {
-            var columnDate = aData[column].toString().split("-").reverse().join("-");
-
-            var rowDate = normalizeDate(columnDate),
-                start = normalizeDate(startDate),
-                end = normalizeDate(endDate);
-            // If our date from the row is between the start and end
-            if (start <= rowDate && rowDate <= end) {
-                return true;
-            } else if (rowDate >= start && end === '' && start !== '') {
-                return true;
-            } else if (rowDate <= end && start === '' && end !== '') {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    );
-};
-
-// converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220
-var normalizeDate = function (dateString) {
-    var date = new Date(dateString);
-    var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
-    return normalized;
-}
-
-
-/**
  * [method append data to orchestraStatusTable ]
  * @param  {[type]} data [description]
  * @param  {[type]} path [description]
@@ -1638,7 +1406,6 @@ function jsbarcodestdcartonBOs(code, id, svgDoc) {
 
 	/* Time to play ;) */
 
-	// https://developer.mozilla.org/en/XMLSerializer
 	svg_xml = (new XMLSerializer()).serializeToString(svg);
 	ctx = canvasTmp.getContext('2d');
 
@@ -1649,7 +1416,6 @@ function jsbarcodestdcartonBOs(code, id, svgDoc) {
 		ctx.drawImage(img, 0, 0);
 	};
 
-	// https://developer.mozilla.org/en/DOM/window.btoa
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
@@ -1825,26 +1591,6 @@ function hangtagmodalOs(data) {
 
     })
 	
-//	$('#hangtagform .onesizein').keyup(function () {
-//		
-//		var inches=$(this).val();
-//        var mySVG = document.getElementById("svg2");
-//		var svgDoc;
-//		svgDoc = mySVG.contentDocument;
-//		svgDoc.getElementById("in").innerHTML = inches;
-//
-//		
-//    });
-//	$('#hangtagform .onesizecm').keyup(function () {
-//		
-//		var cm=$(this).val();
-//        var mySVG = document.getElementById("svg2");
-//		var svgDoc;
-//		svgDoc = mySVG.contentDocument;
-//		svgDoc.getElementById("cm").innerHTML = cm;
-//		
-//    });
-
     $("#clickmehang").click(function () {
         // $('.sample-artwork').html("")
         $("#hangtagform .backdrop").toggleClass('active');
@@ -2038,9 +1784,6 @@ function hangtagmodalOs(data) {
                         var svgDoc;
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
-							
-							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
@@ -2290,9 +2033,6 @@ function hangtagmodalOs(data) {
                         var svgDoc;
                         mySVG.addEventListener("load", function () {
                             svgDoc = mySVG.contentDocument;
-							
-							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
 							
                             var svgItem = svgDoc.getElementById("uvc_tco");
                             svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";

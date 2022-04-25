@@ -7500,7 +7500,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -7575,7 +7574,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -7644,7 +7642,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
                                                         },
                                                         success: function (data) {
-                                                            //tescoOrderStatus()
                                                             $('#po-file-upload-group').modal('hide')
                                                             $('.snackbar_span').html('PO Updated Successfully');
                                                             showSnackbar();$('#po-file-upload-div').modal('hide')
@@ -10841,13 +10838,6 @@ function wordWrap(str, maxWidth) {
             if (testWhite(str.charAt(i))) {
 				
 				var arabic = /[\u0600-\u06FF]/;
-//				var split_text = [str.slice(0, i), newLineStr].join('').split(' - ')
-//				$(split_text).each(function(index,value){
-//					if(arabic.test(value) == true)
-//					{
-//						"<tspan>"+value+"</tspan>"
-//					}
-//				})
 				
 				if(arabic.test([str.slice(0, i), newLineStr].join('')) == true)
 				{

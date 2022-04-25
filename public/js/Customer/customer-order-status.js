@@ -913,7 +913,6 @@ function tescoOrderStatus() {
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
-                                                                //tescoOrderStatus()
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');

@@ -72,9 +72,7 @@ class ProductDescriptionController extends Controller
 
       try {
           $id = $request['id'];
-          // if(TescoProductDescription::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
-          //       $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
-          // } else {
+          
               $updated = TescoProductDescription::where('id',$id)->update([
                                         'english'   => $request['english'],
                                         'polish'    => $request['polish'],
@@ -83,7 +81,6 @@ class ProductDescriptionController extends Controller
                                         'hungarian' => $request['hungarian']
                         ]);
             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
-          // }        
       } catch (\Exception $e) {
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }

@@ -7549,7 +7549,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -7624,7 +7623,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
                                                             data: form_data,
                                                             type: 'post',
                                                             success: function (data) {
-                                                                //tescoOrderStatus()
                                                                 $('#po-file-upload-group').modal('hide')
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
@@ -7693,7 +7691,6 @@ function orchestra_label_order_details(buyer, buyer_id, uvc, data) {
 
                                                         },
                                                         success: function (data) {
-                                                            //tescoOrderStatus()
                                                             $('#po-file-upload-group').modal('hide')
                                                             $('.snackbar_span').html('PO Updated Successfully');
                                                             showSnackbar();$('#po-file-upload-div').modal('hide')
