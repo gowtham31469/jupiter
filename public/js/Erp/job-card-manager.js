@@ -3843,7 +3843,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
 
 
-function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,isEdit,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso) {
+function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,isEdit,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso) {
 	
 	var url = "";
 	
@@ -3870,7 +3870,17 @@ function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front
             iron_astm:iron_astm,
             iron_iso:iron_iso,
             clean_astm:clean_astm,
-            clean_iso:clean_iso
+            clean_iso:clean_iso,
+            white_wash_astm:white_wash_astm,
+            white_wash_iso:white_wash_iso,
+            white_whit_astm:white_whit_astm,
+            white_whit_iso:white_whit_iso,
+            white_dry_astm:white_dry_astm,
+            white_dry_iso:white_dry_iso,
+            white_iron_astm:white_iron_astm,
+            white_iron_iso:white_iron_iso,
+            white_clean_astm:white_clean_astm,
+            white_clean_iso:white_clean_iso
 		},
 		tryCount: 0,
 		retryLimit: 2,

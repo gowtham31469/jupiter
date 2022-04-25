@@ -236,7 +236,7 @@ class OrderStatusCntrl extends Controller
 
             $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
             ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -300,6 +300,15 @@ class OrderStatusCntrl extends Controller
             $thl1 = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                     ->select("season_code");
+
+            $tesco_washcare_orders = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+            ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("tesco_season_codes.name as season_code");
                 
             $data = DB::table("tesco_thl3_orders")
             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -313,43 +322,53 @@ class OrderStatusCntrl extends Controller
                 ->union($tsl2)
                 ->union($tsl3)
                 ->union($thl1)
+                ->union($tesco_washcare_orders)
+                ->union($tesco_swingticket_orders)
                 ->get();
 
             $tcl1_style = DB::table("tesco_tcl1_orders")
             ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl2_style = DB::table("tesco_tcl2_orders")
             ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                     
             $tcl4_style = DB::table("tesco_tcl4_orders")
             ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl5_style = DB::table("tesco_tcl5_orders")
             ->whereBetween('tesco_tcl5_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl1_style = DB::table("tesco_tsl1_orders")
             ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tsl2_style = DB::table("tesco_tsl2_orders")
             ->whereBetween('tesco_tsl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl3_style = DB::table("tesco_tsl3_orders")
             ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $thl1_style = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
+            $tesco_washcare_orders_style = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
+
+            $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                        ->select("uk_style_ref","ce_style_ref","zone")
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
                         ->union($tcl1_style)
                         ->union($tcl2_style)
                         ->union($tcl4_style)
@@ -358,6 +377,8 @@ class OrderStatusCntrl extends Controller
                         ->union($tsl2_style)
                         ->union($tsl3_style)
                         ->union($thl1_style)
+                        ->union($tesco_washcare_orders_style)
+                        ->union($tesco_swingticket_orders_style)
                         ->get();
 
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
@@ -944,7 +965,7 @@ class OrderStatusCntrl extends Controller
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
                                 {
-                                    $query->orWhereIn('season_code', $seasonos);
+                                    $query->orWhereIn('name', $seasonos);
                                 }
                             })
                             ->where(function($query) use ($stylenoos,$ukstylenoos){
@@ -2053,6 +2074,17 @@ class OrderStatusCntrl extends Controller
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
 
+        $white_wash_astm = $request->white_wash_astm;
+        $white_wash_iso = $request->white_wash_iso;
+        $white_whit_astm = $request->white_whit_astm;
+        $white_whit_iso = $request->white_whit_iso;
+        $white_dry_astm = $request->white_dry_astm;
+        $white_dry_iso = $request->white_dry_iso;
+        $white_iron_astm = $request->white_iron_astm;
+        $white_iron_iso = $request->white_iron_iso;
+        $white_clean_astm = $request->white_clean_astm;
+        $white_clean_iso = $request->white_clean_iso;
+
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
         PDF::SetFont('arialuni');
@@ -2083,6 +2115,17 @@ class OrderStatusCntrl extends Controller
             
             $svgString=urldecode($value);
             //print_r($svgString);
+            
+            if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+            {
+                $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
+           <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
+           <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
+           </svg>';
+                PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
@@ -2100,22 +2143,43 @@ class OrderStatusCntrl extends Controller
 
         PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-
-        PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-
-        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+        {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else
+        {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        
 
         //print_r($svgStringBack);
 
@@ -2949,6 +3013,17 @@ class OrderStatusCntrl extends Controller
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
 
+        $white_wash_astm = $request->white_wash_astm;
+        $white_wash_iso = $request->white_wash_iso;
+        $white_whit_astm = $request->white_whit_astm;
+        $white_whit_iso = $request->white_whit_iso;
+        $white_dry_astm = $request->white_dry_astm;
+        $white_dry_iso = $request->white_dry_iso;
+        $white_iron_astm = $request->white_iron_astm;
+        $white_iron_iso = $request->white_iron_iso;
+        $white_clean_astm = $request->white_clean_astm;
+        $white_clean_iso = $request->white_clean_iso;
+
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
         PDF::SetFont('arialuni');
@@ -3135,6 +3210,16 @@ class OrderStatusCntrl extends Controller
             }
             
             $svgString=urldecode($value);
+
+            if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+            {
+                $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
+           <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
+           <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
+           </svg>';
+                PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
@@ -3152,21 +3237,44 @@ class OrderStatusCntrl extends Controller
 
         PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=140.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-        PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+        {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else
+        {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
 
-
-        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        
 
         PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
         print_r(url('/storage/app/template/label.pdf'));
@@ -3451,7 +3559,7 @@ class OrderStatusCntrl extends Controller
                                 ->join('tesco_care_symbols as iron',$table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$table.'.dryclean_symbol_id', 'cleaning.id')
                                 ->where('tesco_washcare_orders.id',$value->$table_id)
-                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
                                 ->get();
                 
                 $value->po_number=$order_omp{0}->po_number;
@@ -3491,6 +3599,16 @@ class OrderStatusCntrl extends Controller
                 $value->iron_astm=$order_omp[0]->iron_astm;
                 $value->clean_iso=$order_omp[0]->clean_iso;
                 $value->clean_astm=$order_omp[0]->clean_astm;
+                $value->white_wash_iso=$order_omp[0]->white_wash_iso;
+                $value->white_wash_astm=$order_omp[0]->white_wash_astm;
+                $value->white_whit_iso=$order_omp[0]->white_whit_iso;
+                $value->white_whit_astm=$order_omp[0]->white_whit_astm;
+                $value->white_dry_iso=$order_omp[0]->white_dry_iso;
+                $value->white_dry_astm=$order_omp[0]->white_dry_astm;
+                $value->white_iron_iso=$order_omp[0]->white_iron_iso;
+                $value->white_iron_astm=$order_omp[0]->white_iron_astm;
+                $value->white_clean_iso=$order_omp[0]->white_clean_iso;
+                $value->white_clean_astm=$order_omp[0]->white_clean_astm;
                 $value->degree=$order_omp[0]->degree;
                 $value->additional_care_text_1=$order_omp[0]->additional_care_text_1;
                 $value->additional_care_text_2=$order_omp[0]->additional_care_text_2;
