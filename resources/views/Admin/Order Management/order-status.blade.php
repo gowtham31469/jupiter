@@ -331,6 +331,7 @@
             </div>
         </div>
     </div>
+    <div class="left-panel col-md-12 edit-orch-order-panel"></div>
 
     <div class="left-panel col-md-12 edit-sticker-order-panel" style="display: none;">
         <div class="loader">
@@ -930,7 +931,12 @@
                     $('#po-file-upload').modal('hide')
                     setTimeout(function() {
                         $(".loader").hide();
-                        submitOs(this)
+                        if(localStorage.getItem("buyer") === 'tesco') {
+
+                            submitOs(this)
+                        } else if(localStorage.getItem("buyer") === 'orchestra'){
+                            getOrchestraOrders(this)
+                        }
                         $('.snackbar_span').html('PO Updated Successfully');
                         showSnackbar();
                     }, 10000);

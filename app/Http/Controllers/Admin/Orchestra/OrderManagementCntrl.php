@@ -3825,7 +3825,11 @@ class OrderManagementCntrl extends Controller
             $pi_obj      =   new ProformaInvoice();
             $data        =   $pi_obj->getOrchestraPIDetails($request);
             unset($data['price_list']);
-            $attatchment =   $pi_obj->getOrchestraAttachment($data,$request);
+            $attachment =   $pi_obj->getOrchestraAttachment($data,$request);
+
+            if (!$data) {
+                return response()->json(['error' => true, 'message' => 'No content found', 'pi_status' => false], 204);
+            }
 
             // call PI generation function
             $pi_number = $pi_obj->piNumberGenerator();
@@ -3835,9 +3839,7 @@ class OrderManagementCntrl extends Controller
             $sub_total   =   0 ;
             $erp_obj     =   new ErpOrders();
 
-            if ($data)
-            {
-                if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") 
+            if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") 
                 {
                     $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
                 }
@@ -3891,14 +3893,13 @@ class OrderManagementCntrl extends Controller
                               'sub_total'        => $sub_total,
                               'bill_amount'      => $billamnt
                             ]);
-            }
 
             $approved_data   = DB::table($table_name)
                         ->where('id',$row_id)
                         ->update([
                             'pi_status' => "PI Approved",
                             'pi_id' => $pi_details->id,
-                            'pi_file' => $attatchment, 
+                            'pi_file' => $attachment, 
                             'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                         ]);
             /** @var array [Pass array of values to updateOrchestraErpOrders function] */
@@ -3915,11 +3916,11 @@ class OrderManagementCntrl extends Controller
 
             if ($approved_data)
             {
-               $result = response()->json(['error'=> false,'message' =>'success'    ],200);
+               $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
             }
             else
             {
-                $result = response()->json(['error'=> true,'message' =>'Error'],400);
+                $result = response()->json(['error'=> true,'message' =>'Error', 'pi_status' => false],400);
             }
         }
         catch (\Exception $e)

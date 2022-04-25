@@ -2,7 +2,7 @@
  * Method to display orchestra order status page 
  */
 orderStatus = () => {
-    $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.main-content').html('');
     $('.top-content').html('');
     $('.template-error').html('');
     $("#orch_filter_season").html("");
@@ -687,7 +687,7 @@ getOrchestraOrders = () => {
                     if (date1 < date2) return 1;
                     return 0;
                 });
-                $('.main-content').append(orchestraStatusTable(newObj, path));
+                $('#orchestraStatusTable').html(orchestraStatusTable(newObj, path));
                 var $tableSel = $('#datatable-orchestra-orders');
                 $tableSel.DataTable({
                     "columnDefs": [{
