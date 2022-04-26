@@ -14,7 +14,7 @@ $(document).ready(function () {
             $('#buyerSelectionModalCenter').modal('hide');
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') {
-                orderStatus();
+                orderStatus('customer');
             } else {
                 tescoOrderStatus();
             }
@@ -58,7 +58,7 @@ $(document).ready(function () {
         $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
         var buyer = localStorage.getItem("buyer");
         if (buyer === 'orchestra') {
-            orderStatus();
+            orderStatus('customer');
         } else {
             tescoOrderStatus();
         }
@@ -75,7 +75,7 @@ $(document).ready(function () {
             $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') {
-                orderStatus();
+                orderStatus('customer');
             } else {
                 tescoOrderStatus();
             }

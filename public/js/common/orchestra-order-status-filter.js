@@ -1,7 +1,7 @@
 /**
  * Method to display orchestra order status page 
  */
-orderStatus = () => {
+orderStatus = (user_type) => {
     $('.main-content').html('');
     $('.top-content').html('');
     $('.template-error').html('');
@@ -66,7 +66,7 @@ orderStatus = () => {
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-primary input-sm pull-right" type="button" onclick="getOrchestraOrders()" id="orch_filter_submit_btn">Submit</button>
+                        <button class="btn btn-primary input-sm pull-right" type="button" onclick="getOrchestraOrders('${user_type}')" id="orch_filter_submit_btn">Submit</button>
                     </div>
                     </form>
                     <div class="col-md-3">
@@ -76,7 +76,7 @@ orderStatus = () => {
                 </div>
                 <div style="padding-top:15px;" id="orchestraStatusTable"></div>
                 `);
-    getFilterData(start_date, end_date)
+    getFilterData(start_date, end_date, user_type)
 
     $('#po-file-upload-button').on('click', () => {
         uploadOrchestraPOFile()
@@ -85,11 +85,11 @@ orderStatus = () => {
 }
 
 
-getFilterData = (start_date, end_date) => {
+getFilterData = (start_date, end_date, user_type) => {
     $("#orch_filter_season").html("");
     $("#orch_filter_style").html("");
     $.ajax({
-        url: base_url + "/admin/orchestra/orchestra-orders-filter",
+        url: base_url + "/"+user_type+"/orchestra/orchestra-orders-filter",
         type: "POST",
         dataType: "json",
         data: {
@@ -142,7 +142,7 @@ getFilterData = (start_date, end_date) => {
                         var end_date = end.format('YYYY-MM-DD');
                         $('#start_date').val(start_date);
                         $('#end_date').val(end_date);
-                        getFilterData(start_date, end_date)
+                        getFilterData(start_date, end_date, user_type)
                     });
 
                 $('input[name="orch_filter_daterange"]').on('apply.daterangepicker', function (ev, picker) {
@@ -656,9 +656,9 @@ uploadOrchestraPOFile = () => {
 }
 
 
-getOrchestraOrders = () => {
+getOrchestraOrders = (user_type) => {
     $.ajax({
-        url: base_url + "/admin/orchestra/get-orchestra-orders",
+        url: base_url + "/"+user_type+"/orchestra/get-orchestra-orders",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },

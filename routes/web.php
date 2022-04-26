@@ -182,7 +182,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/order-management/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
 	
 	//ORCHESTRA STATUS
-	Route::post('customer/orchestra/order-status', 'Customer\Orchestra\OrderController@orchestraOrderStatus');
 	Route::post('customer/orchestra/order-management/show-orchestra-pi', 'Customer\Orchestra\OrderController@getOrchestraPI');
 	Route::post('customer/orchestra/approve-orchestra-pi', 'Customer\Orchestra\OrderController@approveOrchestraPI');
 	Route::post('customer/orchestra/reject-orchestra-pi', 'Customer\Orchestra\OrderController@rejectOrchestraPI');
@@ -210,7 +209,6 @@ Route::group(['middleware' => 'customer_auth'], function()
 
 	//TESCO ORDER STATUS
 	Route::post('customer/tesco/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
-	Route::post('customer/tesco/order-status', 'Customer\Tesco\OrderStatusController@index');
 	Route::post('customer/tesco/order-management/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
 	Route::put('customer/tesco/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
 
@@ -277,6 +275,10 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/order-management/print-special-pdf', 'Customer\OrderManagement\OrderController@printSpecialPdf');
 	Route::post('customer/order-management/print-wash-pdf', 'Customer\OrderManagement\OrderController@printWashPdf');
 	Route::get('customer/order-management/get-tsl-size', 'Customer\OrderManagement\OrderController@getTescoTSLSizechart');
+
+	Route::post('customer/orchestra/orchestra-orders-filter', 'Customer\Orchestra\CustomerOrderStatusFilter@orchestraOrdersFilter');
+	Route::post('customer/orchestra/orchestra-orders-filter-by-daterange', 'Customer\Orchestra\CustomerOrderStatusFilter@orchestraOrdersFilterByDateRange');
+	Route::post('customer/orchestra/get-orchestra-orders', 'Customer\Orchestra\CustomerOrderStatusFilter@getOrchestraOrders');
 	
 });
 
@@ -889,7 +891,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('job-manager/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
 	Route::get('job-manager/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
 	Route::put('job-manager/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
-	Route::get('job-manager/script-update-order-status', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateOrderStatusId');
 	Route::get('job-manager/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
 	Route::get('job-manager/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
 	Route::get('job-manager/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 

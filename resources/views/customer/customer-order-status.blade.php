@@ -320,6 +320,9 @@
             </div>
         </div>
     </div>
+
+    <div class="left-panel col-md-12 edit-orch-order-panel"></div>
+    
     <div class="left-panel col-md-12 edit-sticker-order-panel" style="display: none;">
         <div class="loader">
             <div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div>
@@ -763,6 +766,7 @@
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/Customer/orchestra-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-order-status-filter.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
@@ -850,7 +854,7 @@
 
                             submitOs(this)
                         } else if (localStorage.getItem("buyer") === 'orchestra') {
-                            getOrchestraOrders()
+                            getOrchestraOrders('customer')
                         }
                         $('.snackbar_span').html('PO Updated Successfully');
                         showSnackbar();

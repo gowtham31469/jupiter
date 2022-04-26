@@ -780,7 +780,7 @@
     <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-order-status.js') }}"></script>
-    <script src="{{ asset('js/Admin/orchestra-order-status-filter.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-order-status-filter.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
@@ -814,7 +814,7 @@
                     $('.selected-buyer').text('Selected Buyer : ' + $('.buyers-card.active-buyer.active').data("name"))
                     $('#buyerSelectionModalCenter').modal('hide');
                     if (localStorage.getItem("buyer") === 'orchestra') {
-                        orderStatus();
+                        orderStatus('admin');
                     } else {
                         tescoOrderStatus();
                     }
@@ -860,7 +860,7 @@
             } else {
                 $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                 if (localStorage.getItem("buyer") === 'orchestra') {
-                    orderStatus();
+                    orderStatus('admin');
                 } else if (localStorage.getItem("buyer") === 'tesco') {
                     tescoOrderStatus();
                 } else {
@@ -879,7 +879,7 @@
                 } else {
                     $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                     if (localStorage.getItem("buyer") === 'orchestra') {
-                        orderStatus();
+                        orderStatus('admin');
                     } else {
                         tescoOrderStatus();
                     }
@@ -935,7 +935,7 @@
 
                             submitOs(this)
                         } else if(localStorage.getItem("buyer") === 'orchestra'){
-                            getOrchestraOrders()
+                            getOrchestraOrders('admin')
                         }
                         $('.snackbar_span').html('PO Updated Successfully');
                         showSnackbar();
