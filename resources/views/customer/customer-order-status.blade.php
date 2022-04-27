@@ -765,6 +765,7 @@
     <script src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
     <script src="{{ asset('js/Customer/orchestra-order-status.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-order-status-filter.js') }}"></script>
     <script src="{{ asset('js/Customer/customer-pi.js') }}"></script>
