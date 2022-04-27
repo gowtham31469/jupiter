@@ -15,11 +15,6 @@ $(document).ready(function() {
              $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
              $('#buyerSelectionModalCenter').modal('hide');
              var buyer = localStorage.getItem("buyer");
-             // if (buyer === 'orchestra') {
-             //     orderStatus();
-             // } else {
-             //     tescoOrderStatus();
-             // }
          } else {
              localStorage.removeItem("buyer");
              localStorage.removeItem("buyer_id");
@@ -66,12 +61,6 @@ $(document).ready(function() {
        else 
        {
            $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-           var buyer = localStorage.getItem("buyer");
-           // if (buyer === 'orchestra') {
-           //     orderStatus();
-           // } else {
-           //     tescoOrderStatus();
-           // }
        }
 
        /** To refresh modal while hidden **/
@@ -86,12 +75,6 @@ $(document).ready(function() {
          else 
          {
              $('.selected-buyer').text('Selected Buyer : '+localStorage.getItem("buyer"));
-             var buyer = localStorage.getItem("buyer");
-             // if (buyer === 'orchestra') {
-             //     orderStatus();
-             // } else {
-             //     tescoOrderStatus();
-             // }
          }
         })
     });

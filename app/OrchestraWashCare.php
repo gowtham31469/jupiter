@@ -13,4 +13,16 @@ class OrchestraWashCare extends Model
 	{
 	return $this->hasMany(OrchestraWashCareQty::class,'owcl_id');
 	}
+
+	public function template() {
+
+        return $this->belongsTo('App\OrchestraItemMaster', 'template_id');
+        
+    }
+
+    public function customer() {
+
+      return $this->belongsTo('App\Customer', 'tesco_supplier_id');
+      
+    }
 }

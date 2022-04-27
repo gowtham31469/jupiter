@@ -2,20 +2,12 @@
 
 namespace App\Http\Controllers\Admin\UploadCSV;
 
+use DB;
+use View;
+use DataTables;
+use App\Classes\Modules;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Classes\Modules;
-use Response;
-use View;
-use App\OrchestraParcelDetails;
-use App\OrchestraParcelQuantityDetails;
-use App\TempOrchestraParcelDetails;
-use App\TempOrchestraParcelQuantityDetails;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use DB;
-use App\Classes\Uploads;
-use DataTables;
 
 class CSVDataHandlingController extends Controller
 {
@@ -68,19 +60,22 @@ class CSVDataHandlingController extends Controller
      */
     public function getConflictsCSVData()
     {
-      $tp_parcel_details = TempOrchestraParcelDetails::query()
+      $tp_parcel_details = DB::table('temp_orchestra_parcel_details')
       ->select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_details' as \"table\""), DB::raw("'PO Conflicting' as \"Changes\""))
       ->groupBy('UVC', 'id')
       ->get()
       ->toArray();
 
-      $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::query()
+      $tp_parcel_qty_details = DB::table('temp_orchestra_parcel_quantity_details')
       ->select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""), DB::raw("'Price Conflicting' as \"Changes\""))
       ->groupBy('UVC', 'id')
       ->get()
       ->toArray();
 
       $result_array = array_merge($tp_parcel_qty_details, $tp_parcel_details);
+      $result_array = array_map(function ($value) {
+          return (array)$value;
+      }, $result_array);
 
       return Datatables::of($result_array)
         ->addIndexColumn()
@@ -91,7 +86,6 @@ class CSVDataHandlingController extends Controller
           return '<span class="label label-warning">'.$result_array['Changes'].'</span>';
         })
         ->rawColumns(['UVC', 'Changes'])
-        ->setTotalRecords(100)
         ->make(true);
     }
 
@@ -125,7 +119,7 @@ class CSVDataHandlingController extends Controller
      */
     public function getPartialCSVData()
     {
-      $partial_po_data = OrchestraParcelDetails::query()
+      $partial_po_data = DB::table('orchestra_parcel_details')
         ->select('UVC', 'UVC_TCO', 'BuyerPONo', 'Season_Code', 'SupplierName')
         ->where('is_price_data_exists', false)
         ->get()
@@ -137,7 +131,6 @@ class CSVDataHandlingController extends Controller
           return '<span class="label label-warning">Price CSV Data Missing</span>';
         })
         ->rawColumns(['Status'])
-        ->setTotalRecords(100)
         ->make(true);
     }
 
@@ -153,15 +146,13 @@ class CSVDataHandlingController extends Controller
       {
         $uvc = $request->uvc;
         $table = $request->table_name;
+        $changes = $table === 'temp_orchestra_parcel_details'?'PO Conflicting':'Price Conflicting';
 
-        if($table === 'temp_orchestra_parcel_details')
-        {
-          $data = DB::table($table)->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Size', 'Quantity', 'Po_Status_Code_Description', DB::raw("'PO Conflicting' as \"Changes\""), DB::raw("'temp_orchestra_parcel_details' as \"table\""))->where('UVC', $uvc)->groupBy('UVC_TCO', 'id')->get();
-        }
-        else   
-        {
-          $data = DB::table($table)->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Size', 'Quantity', 'Po_Status_Code_Description', DB::raw("'Price Conflicting' as \"Changes\""), DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""))->where('UVC', $uvc)->groupBy('UVC_TCO', 'id')->get();
-        }
+        $data = DB::table($table)
+        ->select(DB::raw('distinct on ("UVC_TCO") "UVC_TCO"'),'BuyerPONo', 'UVC_TCO', 'Season_Code', 'Size', 'Quantity', 'Po_Status_Code_Description', DB::raw("'$changes' as \"Changes\""), DB::raw("'$table' as \"table\""))
+        ->where('UVC', $uvc)
+        ->groupBy('UVC_TCO', 'id')
+        ->get();
         
         return response()->json(['error'=>'false','message' =>'success', 'data' => $data, 'uvc' => $uvc]);
 
@@ -196,40 +187,34 @@ class CSVDataHandlingController extends Controller
 
            // delete from main table 
            DB::table($main_table)
-           ->where('BuyerPONo', $po)
-           ->where('UVC', $uvc)
-           ->where('UVC_TCO', $uvc_tco)
+           ->where(['BuyerPONo' => $po,
+                    'UVC' => $uvc,
+                    'UVC_TCO' => $uvc_tco])
            ->delete();
 
            // get data from temp table
            $temp_table_data = DB::table($temp_table)
-           ->where('BuyerPONo', $po)
-           ->where('UVC', $uvc)
-           ->where('UVC_TCO', $uvc_tco)
+           ->where(['BuyerPONo' => $po,
+                   'UVC' => $uvc,
+                   'UVC_TCO' => $uvc_tco])
            ->get()
            ->toArray();
 
-           if($main_table === 'orchestra_parcel_details')
-           {
-              foreach ($temp_table_data as $orchestra_parcel_details_value) {
+           $db_model = $main_table === 'orchestra_parcel_details'?'App\\OrchestraParcelDetails':'App\\OrchestraParcelQuantityDetails';
 
-                OrchestraParcelDetails::create((array)$orchestra_parcel_details_value);
+           foreach ($temp_table_data as $orchestra_parcel_details_value) {
 
-              }
+              $db_model::create((array)$orchestra_parcel_details_value);
               unset($orchestra_parcel_details_value);
-           }
-           else   
-           {
-             foreach ($temp_table_data as $temp_table_value) {
 
-                OrchestraParcelQuantityDetails::create((array)$temp_table_value);
-                
-             }
-             unset($temp_table_value);
-           }
+            }
 
            // delete data from temp table
-           DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
+           DB::table($temp_table)
+           ->where(['BuyerPONo' => $po,
+                    'UVC' => $uvc,
+                    'UVC_TCO' => $uvc_tco])
+           ->delete();
 
         }
         unset($value);
@@ -266,7 +251,11 @@ class CSVDataHandlingController extends Controller
            $uvc_tco    = $value['uvc_tco'];
 
            // delete data from temp table
-           DB::table($temp_table)->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->delete();
+           DB::table($temp_table)
+           ->where(['BuyerPONo' => $po,
+                    'UVC' => $uvc,
+                    'UVC_TCO' => $uvc_tco])
+           ->delete();
 
         }
         unset($value);
@@ -288,9 +277,17 @@ class CSVDataHandlingController extends Controller
     {
       try
       {
-        $tp_parcel_details = TempOrchestraParcelDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_details' as \"table\""), DB::raw("'PO Conflicting' as \"Changes\""))->groupBy('UVC', 'id')->get()->toArray();
+        $tp_parcel_details = DB::table('temp_orchestra_parcel_details')
+        ->select(DB::raw('distinct on ("UVC") "UVC"'), 'SupplierName',  'Theme', 'Season_Code', DB::raw("'temp_orchestra_parcel_details' as \"table\""), DB::raw("'PO Conflicting' as \"Changes\""))
+        ->groupBy('UVC', 'id')
+        ->get()
+        ->toArray();
 
-        $tp_parcel_qty_details = TempOrchestraParcelQuantityDetails::select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""), DB::raw("'Price Conflicting' as \"Changes\""))->groupBy('UVC', 'id')->get()->toArray();
+        $tp_parcel_qty_details = DB::table('temp_orchestra_parcel_quantity_details')
+        ->select(DB::raw('distinct on ("UVC") "UVC"'), 'Supplier_Name as SupplierName', 'Season_Code', 'Theme', DB::raw("'temp_orchestra_parcel_quantity_details' as \"table\""), DB::raw("'Price Conflicting' as \"Changes\""))
+        ->groupBy('UVC', 'id')
+        ->get()
+        ->toArray();
 
         $result_array = array_merge($tp_parcel_qty_details, $tp_parcel_details);
 
@@ -318,24 +315,23 @@ class CSVDataHandlingController extends Controller
         $uvc_tco    = $request->uvc_tco;
         $po         = $request->po;
         $main_table = str_replace("temp_", "", $temp_table);
+        $price_details_flag = $temp_table === 'temp_orchestra_parcel_details'?'True':'False';
 
-        if($temp_table === 'temp_orchestra_parcel_details')
-        {
-          // get data from temp table
-          $data['temp_data'] = DB::table($temp_table)->select('*', DB::raw("'false' as \"price_details\""))->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get();
+        // get data from temp table
+        $data['temp_data'] = DB::table($temp_table)
+        ->select('*', DB::raw("'$price_details_flag' as \"price_details\""))
+        ->where('BuyerPONo', $po)
+        ->where('UVC', $uvc)
+        ->where('UVC_TCO', $uvc_tco)
+        ->get();
 
-          // get data from temp table
-          $data['main_data'] = DB::table($main_table)->select('*', DB::raw("'false' as \"price_details\""))->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get();
-        }   
-        else    
-        {
-          // get data from temp table
-          $data['temp_data'] = DB::table($temp_table)->select('*', DB::raw("'true' as \"price_details\""))->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get();
-
-          // get data from temp table
-          $data['main_data'] = DB::table($main_table)->select('*', DB::raw("'true' as \"price_details\""))->where('BuyerPONo', $po)->where('UVC', $uvc)->where('UVC_TCO', $uvc_tco)->get();
-        }
-
+        // get data from temp table
+        $data['main_data'] = DB::table($main_table)
+        ->select('*', DB::raw("'$price_details_flag' as \"price_details\""))
+        ->where('BuyerPONo', $po)
+        ->where('UVC', $uvc)
+        ->where('UVC_TCO', $uvc_tco)
+        ->get();
 
         return response()->json(['error'=>'false','message' =>'Success', 'data' => $data]);
 

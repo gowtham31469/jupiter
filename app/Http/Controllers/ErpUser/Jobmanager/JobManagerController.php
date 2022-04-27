@@ -4111,43 +4111,6 @@ class JobManagerController extends Controller
 			}
 		}
 		}
-		
-		/**
-		 * Function to update order status id value for existing data in erp_order_details table.
-		 * @author <Praveen>
-		 */
-		public function scriptUpdateOrderStatusId()
-		{
-			$order_details = DB::table('erp_order_details')->get();
-			
-			foreach($order_details as $value)
-			{
-				$order_details_data  = 	DB::table($value->order_qnty_table_name)
-										->where('id',$value->order_qnty_table_id)
-										->select('*')
-										->get();
-				
-				if(sizeof($order_details_data) > 0)
-				{
-					$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
-					$order_id    = strtolower(str_replace(" ","",$value->reference_name).'_order_id');
-					$order_data  = 	DB::table($order_table)
-											->where($order_table.'.id',$order_details_data[0]->$order_id)
-											->select($order_table.'.*')
-											->get();
-					$order_status = $order_data[0]->order_status;
-
-					$order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', $order_status)->first();
-					
-					$data = ErpOrderDetails::where('id',$value->id)
-					->update([
-										'order_status_id'  => $order_status_id->id
-									]);
-									echo  "array size= ".sizeof($order_details_data)." |  order status : ". $order_status. "| code_status : ".$data;
-				}
-				echo  "array size= ".sizeof($order_details_data);
-			}
-		}
 	
 
  public function printPdfTable(Request $request)

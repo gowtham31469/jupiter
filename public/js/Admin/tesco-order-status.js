@@ -739,8 +739,6 @@ function tescoOrderStatus() {
                                                                     showSnackbar();
                                                                 }, 10000);
 
-                                                                
-                                                                //tescoOrderStatus()
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -822,7 +820,6 @@ function tescoOrderStatus() {
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
-                                                                //tescoOrderStatus()
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -893,7 +890,6 @@ function tescoOrderStatus() {
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
                                                             }, 10000);
-                                                            //tescoOrderStatus()
                                                         },
                                                         error: function (data) {
 
@@ -1072,58 +1068,6 @@ function submitOs(obj)
             $(".loader").css('margin-top', '0%');
         }
     })
-}
-
-jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-    "date-uk-pre": function (a) {
-        var ukDatea = a.split('-');
-        return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-    },
-
-    "date-uk-asc": function (a, b) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-
-    "date-uk-desc": function (a, b) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-});
-
-function showFilter() {
-    $('.filter-window').toggle();
-}
-/* Our main filter function
- * We pass the column location, the start date, and the end date
- */
-var filterByDate = function (column, startDate, endDate) {
-    // Custom filter syntax requires pushing the new filter to the global filter array
-
-    $.fn.dataTableExt.afnFiltering.push(
-        function (oSettings, aData, iDataIndex) {
-            var columnDate = aData[column].toString().split("-").reverse().join("-");
-
-            var rowDate = normalizeDate(columnDate),
-                start = normalizeDate(startDate),
-                end = normalizeDate(endDate);
-            // If our date from the row is between the start and end
-            if (start <= rowDate && rowDate <= end) {
-                return true;
-            } else if (rowDate >= start && end === '' && start !== '') {
-                return true;
-            } else if (rowDate <= end && start === '' && end !== '') {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    );
-};
-
-// converts date strings to a Date object, then normalized into a YYYYMMMDD format (ex: 20131220). Makes comparing dates easier. ex: 20131220 > 20121220
-var normalizeDate = function (dateString) {
-    var date = new Date(dateString);
-    var normalized = date.getFullYear() + '' + (("0" + (date.getMonth() + 1)).slice(-2)) + '' + ("0" + date.getDate()).slice(-2);
-    return normalized;
 }
 
 /**
@@ -5239,12 +5183,7 @@ function tescoSetPO(obj, id, tableName, po_file) {
                 200: function (data) {
                     $('#snackbar').css('background-color', '#00b6ff');
                     $('.snackbar_span').html(data.message);
-                    //$(obj).closest('tr').find('.tesco-po').val(po_number);
-                   // $(obj).closest('tr').find('.po-span').addClass('hidden');
                     $ponumber = $(obj).closest('tr').find('.tesco-po').val();
-                    // $div = $(obj).closest('tr').find('.text-center');
-                    // $(obj).closest('tr').find('.tesco-po').parent().parent().remove();
-                    // $div.text($ponumber)
                     if ($(obj).closest('tr').find('.po_class').text() == "PO Pending" && po_file != "null") {
                         $(obj).closest('tr').find('.po_class').html("PO Uploaded")
                         $(obj).closest('tr').find('.po_class').removeClass("label-POPending").addClass('label-POUploaded');
@@ -5696,7 +5635,6 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
-                                                                //tescoOrderStatus()
                                                                 
                                                             },
                                                             error: function () {
@@ -5779,7 +5717,6 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                                     $('.snackbar_span').html('PO Updated Successfully');
                                                                     showSnackbar();
                                                                 }, 10000);
-                                                                //tescoOrderStatus()
                                                             },
                                                             error: function () {
                                                                 console.log('somethig is wrong, please try later');
@@ -5850,7 +5787,6 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                                                 $('.snackbar_span').html('PO Updated Successfully');
                                                                 showSnackbar();
                                                             }, 10000);
-                                                            //tescoOrderStatus()
                                                         },
                                                         error: function (data) {
 
@@ -8197,50 +8133,6 @@ function checkjsbarcodeean(code) {
     return return_value;
 }
 
-function enableArtworkEdit(tablename, rowid) {
-    
-    $.ajax({
-        url: base_url + "/admin/tesco/enable-artwork-edit",
-        type: 'post',
-        data: {
-            tablename: tablename,
-            rowid: rowid,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            // $(".loader").show();
-        },
-        success: function (data) {
-            $('#enable_edit').addClass('hidden')
-            $('#disable_edit').removeClass('hidden')
-        },
-        error: function (data) {
-
-        },
-        complete: function () {}
-    })
-}
-
-function disableArtworkEdit(tablename, rowid) {
-    
-    $.ajax({
-        url: base_url + "/admin/tesco/disable-artwork-edit",
-        type: 'post',
-        data: {
-            tablename: tablename,
-            rowid: rowid,
-            _token: csrf_token
-        },
-        beforeSend: function () {},
-        success: function (data) {
-            $('#enable_edit').removeClass('hidden')
-            $('#disable_edit').addClass('hidden')
-        },
-        error: function (data) {
-        },
-        complete: function () {}
-    })
-}
 
 function oswordWrap(str, maxWidth) {
     var newLineStr = ""; done = false; res = '';
@@ -8295,30 +8187,6 @@ function testWhite(x) {
     var white = new RegExp(/^\s$/);
     return white.test(x.charAt(0));
 }
-
-// function oslabelwrap(text, width){
-//     text.each(function() {
-//         var text = d3.select(this),
-//             words = text.text().split(/\s+/).reverse(),
-//             word,
-//             line = [],
-//             lineNumber = 0,
-//             lineHeight = 1.1, // ems
-//             y = text.attr("y"),
-//             dy = parseFloat(text.attr("dy")),
-//             tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
-//         while (word = words.pop()) {
-//           line.push(word);
-//           tspan.text(line.join(" "));
-//           if (tspan.node().getComputedTextLength() > width) {
-//             line.pop();
-//             tspan.text(line.join(" "));
-//             line = [word];
-//             tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-//           }
-//         }
-//       });
-// }
 
 /**
  * Approve tesco artworks from order status page with confirmation modal

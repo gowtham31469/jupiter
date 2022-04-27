@@ -261,6 +261,12 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                $('.snackbar_span').html('Something went wrong');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
             }
         },
         error: function (data){

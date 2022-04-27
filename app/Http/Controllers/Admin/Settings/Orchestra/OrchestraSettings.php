@@ -62,7 +62,6 @@ class OrchestraSettings extends Controller
 
             $templates = TescoItemMasterMdl::where('parent_id',42)->pluck('item_name','id');
 
-            // dd($label_categories,$size_departments);
             return view('Admin/Settings/home')->with(['buyers' => $buyers, 'category' => $category,'buyer_count' => $buyer_count, 'company' => $company,'categories' => $label_categories,'departments'=>$size_departments,'templates' => $templates]);
         }
         else
@@ -154,8 +153,6 @@ class OrchestraSettings extends Controller
              }
         
 
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
-        
         } catch (\Exception $e)
         {
                $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -296,8 +293,6 @@ class OrchestraSettings extends Controller
 
                 $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
            }       
-        
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -452,7 +447,6 @@ class OrchestraSettings extends Controller
 
            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
          }
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -590,7 +584,6 @@ class OrchestraSettings extends Controller
 
           $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
          }
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         
         } catch (\Exception $e)
         {
@@ -891,7 +884,6 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
            $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
         }
         
@@ -1044,7 +1036,6 @@ class OrchestraSettings extends Controller
             'turkish'    => $request['turkish']
           ]);
 
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
              $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
          }
         
@@ -1180,7 +1171,6 @@ class OrchestraSettings extends Controller
           ]);
 
           $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
-          // $result = response()->json(['error'=> false,'message' =>'Success'],200);
         }
         
         } catch (\Exception $e)

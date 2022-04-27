@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TempOrchestraParcelQuantityDetails extends Model
 {
+    protected $table = 'temp_orchestra_parcel_quantity_details';
+
     protected $fillable = [
         'FactoryCode',
         'EditionNumber',
