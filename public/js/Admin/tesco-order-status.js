@@ -9944,50 +9944,6 @@ function checkjsbarcodeean(code) {
     return return_value;
 }
 
-function enableArtworkEdit(tablename, rowid) {
-    
-    $.ajax({
-        url: base_url + "/admin/tesco/enable-artwork-edit",
-        type: 'post',
-        data: {
-            tablename: tablename,
-            rowid: rowid,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            // $(".loader").show();
-        },
-        success: function (data) {
-            $('#enable_edit').addClass('hidden')
-            $('#disable_edit').removeClass('hidden')
-        },
-        error: function (data) {
-
-        },
-        complete: function () {}
-    })
-}
-
-function disableArtworkEdit(tablename, rowid) {
-    
-    $.ajax({
-        url: base_url + "/admin/tesco/disable-artwork-edit",
-        type: 'post',
-        data: {
-            tablename: tablename,
-            rowid: rowid,
-            _token: csrf_token
-        },
-        beforeSend: function () {},
-        success: function (data) {
-            $('#enable_edit').removeClass('hidden')
-            $('#disable_edit').addClass('hidden')
-        },
-        error: function (data) {
-        },
-        complete: function () {}
-    })
-}
 
 function oswordWrap(str, maxWidth) {
     var newLineStr = ""; done = false; res = '';

@@ -724,4 +724,33 @@ class OrderStatusCntrl extends Controller
         
     }
 
+    /**
+     * This function is used to toggle the artwork edit permission for customer
+     * 
+     * @return boolean values
+     */
+    public function toggleArtworkEditPermission(Request $request)
+    {
+       try {
+           $tablename = $request->table_name;
+           $rowid     = $request->rowid;
+
+           $permission = DB::table($tablename)->where('id',$rowid)->value('edit_permission') == 1?0:1;
+
+           DB::table($tablename)->where('id',$rowid)
+            ->update([
+                'edit_permission' => $permission
+            ]);            
+
+           $result = response()->json(['error'=> false,'message' =>'success', 'permission' => $permission],200);
+       }
+       catch (\Exception $e)
+       {
+           $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+       }
+       return $result;
+   }  
+
+
+
 }

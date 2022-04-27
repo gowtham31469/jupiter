@@ -353,6 +353,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.hang_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_hang_tag_orders[0].edit_permission === 0) {
+                        $('#save_hang_button').remove();
+                    }
 					
 				}
 				else if(at == "SpecialTag")
@@ -366,6 +370,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.special_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_special_tag_orders[0].edit_permission === 0) {
+                        $('#save_special_button').remove();
+                    }
 				}
 				else if(at == "MainLabel")
 				{
@@ -378,6 +386,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_main_label_orders[0].edit_permission === 0) {
+                        $('#save_main_label_button').remove();
+                    }
 				}
 				else if(at == "WashCareLabel")
 				{
@@ -391,6 +403,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.wash_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_wash_care_label_orders[0].edit_permission === 0) {
+                        $('#save_wash_button').remove();
+                    }
 				}
 				else if(at == "SizeLabel")
 				{
@@ -404,6 +420,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.size_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_size_label_orders[0].edit_permission === 0) {
+                        $('#save_size_label_button').remove();
+                    }
 				}
 				else if(at == "HeatTransfer")
 				{
@@ -417,6 +437,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.heat_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_heat_transfer_orders[0].edit_permission === 0) {
+                        $('#save_heat_transfer_button').remove();
+                    }
 				}
 				else if(at == "SolidCartonStickers")
 				{
@@ -432,6 +456,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_solid_carton_sticker_orders[0].edit_permission === 0) {
+                        $('#save_solid_carton_button').remove();
+                    }
 				}
 				else if(at == "SolidPolyBagStickers")
 				{
@@ -445,6 +473,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_solid_poly_bag_sticker_orders[0].edit_permission === 0) {
+                        $('#save_solid_poly_bag_button').remove();
+                    }
 				}
 				else if(at == "StandardCartonStickers")
 				{
@@ -463,6 +495,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_standard_carton_sticker_orders[0].edit_permission === 0) {
+                        $('#save_standard_carton_button').remove();
+                    }
 				}
 				else if(at == "StandardPolyBagStickers")
 				{
@@ -476,6 +512,10 @@ function updateArtworkOrc(obj) {
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
+
+                    if (data.orchestra_standard_poly_bag_sticker_orders[0].edit_permission === 0) {
+                        $('#save_standard_poly_bag_button').remove();
+                    }
 				}
 				$('.left-panelos').addClass('active');
 				$('.right-panelos').addClass('active');

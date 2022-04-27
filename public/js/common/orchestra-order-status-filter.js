@@ -79,7 +79,7 @@ orderStatus = (user_type) => {
     getFilterData(start_date, end_date, user_type)
 
     $('#po-file-upload-button').on('click', () => {
-        uploadOrchestraPOFile()
+        uploadOrchestraPOFile(user_type)
     });
 
 }
@@ -155,7 +155,7 @@ getFilterData = (start_date, end_date, user_type) => {
                     picker.setEndDate({})
                 });
 
-                $('#uvc_select_div').html('<label>Select Style Number</label><select id="style_num" class="form-control selectpicker" data-live-search="true">' + options + '</select>');
+                $('#uvc_select_div').html('<label>Select Style Number</label><select id="uvc_selection" class="form-control selectpicker" data-live-search="true">' + options + '</select>');
 
                 $(".selectpicker").val('');
                 $('.selectpicker').selectpicker('refresh');
@@ -174,9 +174,10 @@ getFilterData = (start_date, end_date, user_type) => {
     })
 }
 
-uploadOrchestraPOFile = () => {
-    $('#po-file-upload-group').modal("show");
-    $('#style_num').selectpicker('refresh');
+uploadOrchestraPOFile = (user_type) => {
+    $('#po-file-upload-button').click(function () {
+    $('#po-file-upload-group').modal("show")
+    $('#uvc_selection').selectpicker('refresh');
     $('#new_po_div_status').addClass('hidden');
     $('#new_po1_status').addClass('hidden');
     $('#map_po_status').addClass('hidden');
@@ -190,8 +191,8 @@ uploadOrchestraPOFile = () => {
     $('#new_po_error_status').addClass('hidden')
     $('#new_po_file_error_status').addClass('hidden')
     $('#new_po_error_length_status').addClass('hidden');
-    $('#style_num').change(function () {
-        if ($(this).val() != "Select Style Number") {
+    $('#uvc_selection').change(function () {
+        if ($(this).val() != "Select UVC") {
             $('#new_po_div_status').addClass('hidden');
             $('#new_po1_status').addClass('hidden');
             $('#map_po_status').addClass('hidden');
@@ -202,15 +203,13 @@ uploadOrchestraPOFile = () => {
             $('#exist_artwork_div_status').removeClass('hidden')
 
             var selected = $(this).find('option:selected');
-            var styleNum = selected.val();
-            var zone = selected.data('zone');
+            var uvc = selected.val();
             $.ajax({
-                url: base_url + "/admin/tesco/get-artworks",
+                url: base_url + "/" + user_type + "/orchestra/order-management/get-existing-label-orders-status-po",
                 type: "get",
                 dataType: "json",
                 data: {
-                    styleNum: styleNum,
-                    zone: zone
+                    uvc: uvc
                 },
                 beforeSend: function () {
 
@@ -218,38 +217,48 @@ uploadOrchestraPOFile = () => {
                 statusCode: {
                     /** [Show response status based on HTTP status code] */
                     200: function (data) {
-
                         $('#check_error_status').addClass('hidden')
                         $('#new_po_error_status').addClass('hidden')
                         $('#new_po_file_error_status').addClass('hidden')
                         $('#new_po_error_length_status').addClass('hidden');
                         $('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
-                        var newObj = data.data['tcl1'].concat(data.data['tcl2'].concat(data.data['tcl4'].concat(data.data['thl1'].concat(data.data['thl3'].concat(data.data['tsl1'].concat(data.data['tsl3'].concat(data.data['wcl'].concat(data.data['tsl2'].concat(data.data['tcl5']).concat(data.data['swingtickets'])))))))));
+                        var newObj = [...data.orchestra_hang_tag_orders, ...data.orchestra_special_tag_orders, ...data.orchestra_main_label_orders, ...data.orchestra_wash_care_label_orders, ...data.orchestra_solid_carton_sticker_orders, ...data.orchestra_solid_poly_bag_sticker_orders, ...data.orchestra_standard_carton_sticker_orders, ...data.orchestra_standard_poly_bag_sticker_orders, ...data.orchestra_size_label_orders, ...data.orchestra_heat_transfer_orders];
+                        
                         var coun = 0;
                         var options = "<option>Select PO</option>";
-                        var unique_po = []
                         var old_po = ""
                         var new_po_div_status = 0;
                         $(newObj).each(function (index1, value1) {
-                            //alert(value1.tableName.length)
-                            //console.log(value1.TemplateName.length)
-                            if (value1.TemplateName.length <= 5) {
-                                var margin_right = "160px";
-                            } else {
-                                var margin_right = "85px";
-                            }
 
-                            if (value1.purchase_order_no != "" && value1.purchase_order_no != null && value1.po_file != "" && value1.po_file != null) {
-                                if (old_po != value1.purchase_order_no) {
-                                    options += "<option>" + value1.purchase_order_no + "</option>";
+                            if (value1.po_number != "" && value1.po_number != null) {
+                                if (old_po != value1.po_number) {
+                                    options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
                                 }
-                                old_po = value1.purchase_order_no
+                                
+                                if(value1.color_code != "" && value1.color_code != null)
+                                {
+                                    var c_name = value1.color_code+' ' + value1.TemplateName ;
+                                }
+                                else
+                                {
+                                    var c_name = value1.TemplateName;
+                                }
+                                
+                                old_po = value1.po_number
                                 coun++;
-                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">' + value1.TemplateName + '<span style="display: inline-block;margin-left: ' + margin_right + ';" class="tab"></span>' + value1.po_number + '<span style="display: inline-block;margin-left: 160px;" class="tab"></span>' + value1.purchase_order_no + '</li>')
+                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="check-list">'+c_name+ '</li>')
                                 new_po_div_status++;
 
                             } else {
-                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">' + value1.TemplateName + '<span style="display: inline-block;margin-left: ' + margin_right + ';" class="tab"></span>' + value1.po_number + '<span style="display: inline-block;margin-left: 160px;" class="tab"></span>-' + '</li>')
+                                    if(value1.color_code != "" && value1.color_code != null)
+                                    {
+                                        var c_name = value1.color_code+' ' + value1.TemplateName;
+                                    }
+                                    else
+                                    {
+                                        var c_name = value1.TemplateName;
+                                    }
+                                $('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="' + value1.tableName + '-' + value1.id + '" data-company="' + value1.company_id + '"class="list-group-item">'+ c_name + '</li>')
                             }
 
                         });
@@ -439,33 +448,25 @@ uploadOrchestraPOFile = () => {
                                         var aa = a.join(',');
                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                         var new_po_no = $('#new_po_no_status').val();
-
+                                        
                                         var form_data = new FormData();
                                         form_data.append('id', aa);
                                         form_data.append('po_file', new_po_file);
                                         form_data.append('po', new_po_no);
                                         form_data.append('_token', csrf_token);
                                         $.ajax({
-                                            url: base_url + "/admin/tesco/update-po",
+                                            url: base_url + "/"+user_type+"/orchestra/order-management/update-label-orders-po",
                                             dataType: 'text',
                                             cache: false,
                                             contentType: false,
                                             processData: false,
                                             data: form_data,
                                             type: 'post',
-                                            beforeSend: function () {
-                                                $(".loader").show();
-                                            },
                                             success: function (data) {
-                                                $('#ukstylenoos').selectpicker('val', styleNum);
+                                                getOrchestraOrders(user_type)
                                                 $('#po-file-upload-group').modal('hide')
-                                                setTimeout(function () {
-                                                    $(".loader").hide();
-                                                    submitOs(this)
-                                                    $('.snackbar_span').html('PO Updated Successfully');
-                                                    showSnackbar();
-                                                }, 10000);
-
+                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                showSnackbar();
                                             },
                                             error: function () {
                                                 console.log('somethig is wrong, please try later');
@@ -521,32 +522,25 @@ uploadOrchestraPOFile = () => {
                                         var aa = a.join(',');
                                         var new_po_file = $('#new_po_file_status').prop('files')[0];
                                         var new_po_no = $('#new_po_no_status').val();
-
+                                        
                                         var form_data = new FormData();
                                         form_data.append('id', aa);
                                         form_data.append('po_file', new_po_file);
                                         form_data.append('po', new_po_no);
                                         form_data.append('_token', csrf_token);
                                         $.ajax({
-                                            url: base_url + "/admin/tesco/update-po",
+                                            url: base_url + "/"+user_type+"/orchestra/order-management/update-label-orders-po",
                                             dataType: 'text',
                                             cache: false,
                                             contentType: false,
                                             processData: false,
                                             data: form_data,
                                             type: 'post',
-                                            beforeSend: function () {
-                                                $(".loader").show();
-                                            },
                                             success: function (data) {
-                                                $('#ukstylenoos').selectpicker('val', styleNum);
+                                                getOrchestraOrders(user_type)
                                                 $('#po-file-upload-group').modal('hide')
-                                                setTimeout(function () {
-                                                    $(".loader").hide();
-                                                    submitOs(this)
-                                                    $('.snackbar_span').html('PO Updated Successfully');
-                                                    showSnackbar();
-                                                }, 10000);
+                                                $('.snackbar_span').html('PO Updated Successfully');
+                                                showSnackbar();
                                             },
                                             error: function () {
                                                 console.log('somethig is wrong, please try later');
@@ -575,7 +569,7 @@ uploadOrchestraPOFile = () => {
                                 $('#check_error_status').removeClass('hidden')
                             }
                         });
-                        $('#update_po_status').unbind().click(function () {
+                        $('#update_po_status').click(function () {
 
                             var sList = 0;
                             $('#exist_artwork_div_status input[type=checkbox]').each(function () {
@@ -595,28 +589,25 @@ uploadOrchestraPOFile = () => {
                                         }
                                     });
                                     var aa = a.join(',');
-
+                                    
                                     $.ajax({
-                                        url: base_url + "/admin/tesco/copy-po",
+                                        url: base_url + "/"+user_type+"/orchestra/order-management/map-label-orders-po",
                                         type: "Post",
                                         dataType: "json",
                                         data: {
                                             _token: csrf_token,
                                             id: aa,
-                                            po: $('#select_po_status').val()
+                                            po: $('#select_po_status').val(),
+                                            po_file:$('#select_po_status option:selected').attr('data-id')
                                         },
                                         beforeSend: function () {
-                                            $(".loader").show();
+
                                         },
                                         success: function (data) {
-                                            $('#ukstylenoos').selectpicker('val', styleNum);
+                                            getOrchestraOrders(user_type)
                                             $('#po-file-upload-group').modal('hide')
-                                            setTimeout(function () {
-                                                $(".loader").hide();
-                                                submitOs(this)
-                                                $('.snackbar_span').html('PO Updated Successfully');
-                                                showSnackbar();
-                                            }, 10000);
+                                            $('.snackbar_span').html('PO Updated Successfully');
+                                            showSnackbar();
                                         },
                                         error: function (data) {
 
@@ -653,6 +644,8 @@ uploadOrchestraPOFile = () => {
             })
         }
     });
+
+});
 }
 
 
@@ -733,6 +726,39 @@ getOrchestraOrders = (user_type) => {
         complete: function () {
             $(".loader").hide();
             $(".loader").css('margin-top', '0%');
+        }
+    })
+}
+
+toggleOrchArtworkEditPermission = (tablename, rowid) => {
+    
+    $.ajax({
+        url: base_url + "/admin/orchestra/toggle-orchestra-edit-permission",
+        type: 'post',
+        data: {
+            table_name: tablename,
+            rowid: rowid,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+            if (data.permission === 0) {
+                $('#toggle_orch_edit_permission').addClass('btn-success');
+                $('#toggle_orch_edit_permission').removeClass('btn-danger');
+                $('#toggle_orch_edit_permission').text('Enable Edit');
+            } else {
+                $('#toggle_orch_edit_permission').addClass('btn-danger');
+                $('#toggle_orch_edit_permission').removeClass('btn-success');
+                $('#toggle_orch_edit_permission').text('Disable Edit');
+            }
+        },
+        error: function (data) {
+
+        },
+        complete: function () {
+            $(".loader").hide();
         }
     })
 }

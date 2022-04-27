@@ -40,7 +40,6 @@ use Carbon\Carbon;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Auth;
-use Illuminate\Support\Facades\Redis;
 use App\Classes\EditErpOrders;
 use App\Classes\CleanString;
 

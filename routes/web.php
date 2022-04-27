@@ -373,6 +373,7 @@ Route::get('admin/orchestra/get-erp-status', 'Admin\Orchestra\OrderManagementCnt
 Route::post('admin/orchestra/orchestra-orders-filter', 'Admin\Orchestra\OrderStatusFilters@orchestraOrdersFilter');
 Route::post('admin/orchestra/orchestra-orders-filter-by-daterange', 'Admin\Orchestra\OrderStatusFilters@orchestraOrdersFilterByDateRange');
 Route::post('admin/orchestra/get-orchestra-orders', 'Admin\Orchestra\OrderStatusFilters@getOrchestraOrders');
+Route::post('admin/orchestra/toggle-orchestra-edit-permission', 'Admin\Orchestra\OrderStatusCntrl@toggleArtworkEditPermission');
 
 /** Tesco order-management**/
 Route::get('admin/tesco/order-management', 'Admin\Tesco\OrderManagementCntrl@index');
@@ -776,9 +777,6 @@ Route::put('admin/admin-role-management/make-admin-inactive', 'Admin\AdminRoleMa
 Route::get('admin/get-profile-details', 'Admin\AdminProfile\AdminProfileController@getAdminDetailsById');
 Route::put('admin/update-admin-profile-details', 'Admin\AdminProfile\AdminProfileController@updateAdminById');
 Route::put('admin/update-admin-password', 'Admin\AdminProfile\AdminProfileController@updateAdminPassword');
-
-Route::post('admin/tesco/enable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@enableArtworkEdit');
-Route::post('admin/tesco/disable-artwork-edit', 'Admin\Tesco\OrderStatusCntrl@disableArtworkEdit');
 
 /** admin role Management **/
 Route::get('admin/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
