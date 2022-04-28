@@ -526,13 +526,13 @@ function tescoOrders(callback) {
 										},
 										{
 											"id": "36",
-											"text": "GCL25W/M12723G",
+											"text": "GCL25B/M13278G",
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
 										{
 											"id": "37",
-											"text": "GCL25W/M13220G",
+											"text": "GCL25B/M13279G",
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
