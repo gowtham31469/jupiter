@@ -321,7 +321,7 @@ class DashboardController extends Controller
 									->select(DB::raw('count(*) as sum'))
 									->get();
 			
-			$tot_count = $new_count['tcl1']{0}->sum + $new_count['tcl2']{0}->sum + $new_count['tcl4']{0}->sum + $new_count['tcl5']{0}->sum + $new_count['thl1']{0}->sum + $new_count['thl3']{0}->sum + $new_count['tsl1']{0}->sum + $new_count['tsl2']{0}->sum + $new_count['tsl3']{0}->sum + $new_count['wcl']{0}->sum;
+			$tot_count = $new_count['tcl1'][0]->sum + $new_count['tcl2'][0]->sum + $new_count['tcl4'][0]->sum + $new_count['tcl5'][0]->sum + $new_count['thl1'][0]->sum + $new_count['thl3'][0]->sum + $new_count['tsl1'][0]->sum + $new_count['tsl2'][0]->sum + $new_count['tsl3'][0]->sum + $new_count['wcl'][0]->sum;
 			
             $result = response()->json(['error'=> false,'message' =>'success','new_orders'=>$new_orders,'tot_count'=>$tot_count],200);
 		}
