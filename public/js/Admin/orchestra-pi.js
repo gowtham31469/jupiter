@@ -173,6 +173,11 @@ const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) =>
             {
                $('.snackbar_span').html('Something went wrong');
                showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
+               showSnackbar();
             }
         },
         error: function (errorXHR, errorStatus, errorThrown) {
@@ -223,13 +228,29 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
             200: function(data)
             {
                $('.snackbar_span').html('PI Approved Successfully');
-               $('#profoma-invoice').modal("hide")
+               $('#snackbar').css('background-color','#00b6ff');
+
+               $('#'+table_name+'_'+row_id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
+
+               var attrbs = $('#'+table_name+'_'+row_id+' .pi_generation').attr('onclick');
+               // var attrbs = attrbs.replace("false", "true");
+               $('#'+table_name+'_'+row_id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               //location.reload();             
+               
+                if (data.pi_status === true)
+                {
+                    $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=orchestradownloadPi("'+template_id+'","'+row_id+'","'+table_name+'","orchestra")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
+                }            
             },
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }

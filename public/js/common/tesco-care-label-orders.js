@@ -11,7 +11,7 @@ $(function () {
         var size_id = $('#tesco_care_size_chart').val();
         var size_department = $('#tesco_care_size_chart option:selected').text();
 
-        $('.main-content').load('/' + user_role + '/tesco/care-label-orders', ( response, status, xhr ) => {
+        $('.main-content').load('/' + user_role + '/tesco/care-label-orders?size='+size_id+'&template='+template_id, ( response, status, xhr ) => {
             $(".selectpicker").selectpicker("refresh");
             $('li.year-nav-menu').addClass('hidden');
             $('li.buyer-nav-menu').addClass('hidden');

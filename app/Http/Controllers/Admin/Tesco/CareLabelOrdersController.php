@@ -63,7 +63,7 @@ class CareLabelOrdersController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $get_main_module = $this->module->getMainModules();
@@ -81,6 +81,7 @@ class CareLabelOrdersController extends Controller
                     'kids_warning' => $this->kids_warning,
                     'components' => $this->components,
                     'fabriclists' => $this->fabriclists,
+                    'template' => $request['template'],
                     'additional_instructions' => $this->additional_instructions,
                     'part_of_two_piece_set' => $this->part_of_two_piece_set
                 ]);
