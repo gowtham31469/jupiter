@@ -984,8 +984,8 @@ class PrintController extends Controller
 
 	   
 
-	   PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-	   print_r(url('/storage/app/template/label.pdf'));
+	   PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+       print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
 	} 
 
 	public function proofDivTescoTicketos(Request $request)

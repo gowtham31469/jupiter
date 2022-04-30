@@ -2895,7 +2895,11 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 
 	var a = document.getElementById(data);
     var svgDoc = a.contentDocument;
-    svgDoc.getElementById("watermark").innerHTML = "JGA";
+    if(table_name_print != "tesco_washcare_orders")
+    {
+        svgDoc.getElementById("watermark").innerHTML = "JGA";
+    }
+    
 	var name2=name;
 	var name = name + "-sticker";
 	if (name == "TSL1-sticker") {
