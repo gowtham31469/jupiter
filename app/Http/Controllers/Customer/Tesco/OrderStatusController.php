@@ -4703,6 +4703,7 @@ class OrderStatusController extends Controller
                 $value->exclusive_trims_text=$order_omp[0]->exclusive_trims_text;
                 $value->contains_non_textile_part_text=$order_omp[0]->contains_non_textile_part_text;
                 $value->part_of_set_text=$order_omp[0]->part_of_set_text;
+                $value->created_at=$order_omp[0]->created_at;
                 
             }
             else if($table_name_print == "tesco_swingticket_orders")
