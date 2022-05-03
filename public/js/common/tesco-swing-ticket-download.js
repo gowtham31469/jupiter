@@ -903,6 +903,12 @@ function M13114COpt3(data,svgDoc_back,val)
 
                 var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].hungarian+'</tspan>';
             }
+            else if(val.ce_size_name == "3-4Y")
+            {
+                var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].czech+'  · </tspan><tspan x="27" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].slovak+'</tspan>';
+
+                var size_list_right_align2 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">· </tspan><tspan x="2.21" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_under[0].hungarian+'</tspan>';
+            }
             else
             {
                 var size_list_right_align1 = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">years  · </tspan><tspan x="14.69" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].czech+'  · </tspan><tspan x="24" y="0" style="font-family:FandFSans-Regular; font-size:4.3px;">'+val.tesco_year_over[0].slovak+'</tspan>';
@@ -1077,6 +1083,10 @@ function M13233C(data,svgDoc_back,val)
                 var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].hungarian+'</tspan>';
             }
             else if(val.ce_size_name == "2-3Y")
+            {
+                var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].hungarian+'</tspan>';
+            }
+            else if(val.ce_size_name == "3-4Y")
             {
                 var size_list_right_align = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years</tspan><tspan x="16.76" y="0" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:8.25;">	</tspan><tspan x="26.3" y="0" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].czech+' </tspan><tspan x="0" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].slovak+'</tspan><tspan x="22.19" y="5" style="font-family:FandFSans-Regular; font-size:5px; letter-spacing:2.06;">	</tspan><tspan x="26.3" y="5" style="font-family:FandFSans-Regular; font-size:5px;">'+ val.tesco_year_under[0].hungarian+'</tspan>';
             }
@@ -1689,6 +1699,10 @@ function M13020C(data,svgDoc_back,val)
                 var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
             }
             else if(val.ce_size_name == "2-3Y")
+            {
+                var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+            }
+            else if(val.ce_size_name == "3-4Y")
             {
                 var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
             }
@@ -2499,6 +2513,10 @@ function M13114COpt4(data,svgDoc_back,val)
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
+                        else if(val.ce_size_name == "3-4Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                        }
                         else
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_over[0].czech+" • "+ val.tesco_year_over[0].slovak+" • "+ val.tesco_year_over[0].hungarian+'</tspan>';
@@ -3044,6 +3062,10 @@ function M13114COpt2(data,svgDoc_back,val)
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "2-3Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                        }
+                        else if(val.ce_size_name == "3-4Y")
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
@@ -3593,6 +3615,10 @@ function M13021C(data,svgDoc_back,val)
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
                         else if(val.ce_size_name == "2-3Y")
+                        {
+                            var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
+                        }
+                        else if(val.ce_size_name == "3-4Y")
                         {
                             var size_list_translation = '<tspan x="0" y="0" style="font-family:FandFSans-Regular; font-size:5px;">years • '+ val.tesco_year_under[0].czech+" • "+ val.tesco_year_under[0].slovak+" • "+ val.tesco_year_under[0].hungarian+'</tspan>';
                         }
