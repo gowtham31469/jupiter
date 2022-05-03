@@ -213,96 +213,105 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
             }
             else
             {
-                if(data.order_details[0].mm_product_benefit_id != null)
+                if(data.order_details[0].mm_product_benefit_id == null && data.order_details[0].product_benefit_id == null)
                 {
-                    if(sticker_name == "FFC/01/M13022C-sticker" || sticker_name == "FFC/01/M13020C-sticker" || sticker_name == "GE/01/M13114C-Opt1-sticker" || sticker_name == "GE/01/M13114C-Opt2-sticker" || sticker_name == "GE/01/M13114C-Opt3-sticker" || sticker_name == "GE/01/M13114C-Opt4-sticker")
-                    {
-                        svgDoc.getElementById("lycra").setAttribute('visibility','hidden')
-                        svgDoc.getElementById("lycra_extra_life").setAttribute('visibility','hidden')
-                    }
-                    var mm_benefit_json = JSON.parse(data.order_details[0].mm_product_benefit_text)
-    
-                    $mm_benefit_str = chunkSubstr(mm_benefit_json[0].czech, 36).split(/\r?\n/);
-                    $y_ben = 0;
-                    var mm_json_text = "";
-                    $($mm_benefit_str).each(function(index,mm_benefit_val){
-                        mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+mm_benefit_val+'</tspan>';
-                        $y_ben += 7.8;
-                    })
-    
-                    $sl_mm_benefit_str = chunkSubstr(mm_benefit_json[0].slovak, 36).split(/\r?\n/);
-                    $($sl_mm_benefit_str).each(function(index,sl_mm_benefit_val){
-                        mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_mm_benefit_val+'</tspan>';
-                        $y_ben += 7.8;
-                    })
-    
-                    $hu_mm_benefit_str = chunkSubstr(mm_benefit_json[0].hungarian, 36).split(/\r?\n/);
-                    $($hu_mm_benefit_str).each(function(index,hu_mm_benefit_val){
-                        mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_mm_benefit_val+'</tspan>';
-                        $y_ben += 7.8;
-                    })
-                    svgDoc.getElementById("mm_benefits").innerHTML = mm_json_text;
-    
-                    
+                    svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
+                    svgDoc.getElementById("mm_benefits").innerHTML = "";
                 }
                 else
                 {
-    
-                    if(data.order_details[0].is_lycra == true)
-                    {
-                        svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
-                        svgDoc.getElementById("mm_benefits").innerHTML = "";
-                        var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
-    
-                        if(sticker_name == "FFC/01/M13022C-sticker" || sticker_name == "FFC/01/M13020C-sticker" || sticker_name == "GE/01/M13114C-Opt1-sticker" || sticker_name == "GE/01/M13114C-Opt2-sticker" || sticker_name == "GE/01/M13114C-Opt3-sticker" || sticker_name == "GE/01/M13114C-Opt4-sticker")
-                        {
-                            if(product_benefit_json[0].english == "Lycra")
-                            {
-                                svgDoc.getElementById("lycra").removeAttribute('visibility','hidden')
-                                svgDoc.getElementById("lycra_extra_life").setAttribute('visibility','hidden')
-                            }
-                            else if(product_benefit_json[0].english == "Lycra Extra Life")
-                            {
-                                svgDoc.getElementById("lycra").setAttribute('visibility','hidden')
-                                svgDoc.getElementById("lycra_extra_life").removeAttribute('visibility','hidden')
-                            }
-                        }
-                        
-                    }
-                    else
+                    if(data.order_details[0].mm_product_benefit_id != null)
                     {
                         if(sticker_name == "FFC/01/M13022C-sticker" || sticker_name == "FFC/01/M13020C-sticker" || sticker_name == "GE/01/M13114C-Opt1-sticker" || sticker_name == "GE/01/M13114C-Opt2-sticker" || sticker_name == "GE/01/M13114C-Opt3-sticker" || sticker_name == "GE/01/M13114C-Opt4-sticker")
                         {
                             svgDoc.getElementById("lycra").setAttribute('visibility','hidden')
                             svgDoc.getElementById("lycra_extra_life").setAttribute('visibility','hidden')
                         }
-                        svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
-                        var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
+                        var mm_benefit_json = JSON.parse(data.order_details[0].mm_product_benefit_text)
         
-                        $benefit_str = chunkSubstr(product_benefit_json[0].czech, 36).split(/\r?\n/);
+                        $mm_benefit_str = chunkSubstr(mm_benefit_json[0].czech, 36).split(/\r?\n/);
                         $y_ben = 0;
-                        var json_text = "";
-                        $($benefit_str).each(function(index,benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val.toLowerCase()+'</tspan>';
+                        var mm_json_text = "";
+                        $($mm_benefit_str).each(function(index,mm_benefit_val){
+                            mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+mm_benefit_val+'</tspan>';
                             $y_ben += 7.8;
                         })
         
-                        $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
-                        $($sl_benefit_str).each(function(index,sl_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val.toLowerCase()+'</tspan>';
+                        $sl_mm_benefit_str = chunkSubstr(mm_benefit_json[0].slovak, 36).split(/\r?\n/);
+                        $($sl_mm_benefit_str).each(function(index,sl_mm_benefit_val){
+                            mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_mm_benefit_val+'</tspan>';
                             $y_ben += 7.8;
                         })
         
-                        $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
-                        $($hu_benefit_str).each(function(index,hu_benefit_val){
-                            json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val.toLowerCase()+'</tspan>';
+                        $hu_mm_benefit_str = chunkSubstr(mm_benefit_json[0].hungarian, 36).split(/\r?\n/);
+                        $($hu_mm_benefit_str).each(function(index,hu_mm_benefit_val){
+                            mm_json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_mm_benefit_val+'</tspan>';
                             $y_ben += 7.8;
                         })
-                        console.log(svgDoc)
-                        svgDoc.getElementById("mm_benefits").innerHTML = json_text;
+                        svgDoc.getElementById("mm_benefits").innerHTML = mm_json_text;
+        
+                        
                     }
-                    
+                    else
+                    {
+        
+                        if(data.order_details[0].is_lycra == true)
+                        {
+                            svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
+                            svgDoc.getElementById("mm_benefits").innerHTML = "";
+                            var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
+        
+                            if(sticker_name == "FFC/01/M13022C-sticker" || sticker_name == "FFC/01/M13020C-sticker" || sticker_name == "GE/01/M13114C-Opt1-sticker" || sticker_name == "GE/01/M13114C-Opt2-sticker" || sticker_name == "GE/01/M13114C-Opt3-sticker" || sticker_name == "GE/01/M13114C-Opt4-sticker")
+                            {
+                                if(product_benefit_json[0].english == "Lycra")
+                                {
+                                    svgDoc.getElementById("lycra").removeAttribute('visibility','hidden')
+                                    svgDoc.getElementById("lycra_extra_life").setAttribute('visibility','hidden')
+                                }
+                                else if(product_benefit_json[0].english == "Lycra Extra Life")
+                                {
+                                    svgDoc.getElementById("lycra").setAttribute('visibility','hidden')
+                                    svgDoc.getElementById("lycra_extra_life").removeAttribute('visibility','hidden')
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            if(sticker_name == "FFC/01/M13022C-sticker" || sticker_name == "FFC/01/M13020C-sticker" || sticker_name == "GE/01/M13114C-Opt1-sticker" || sticker_name == "GE/01/M13114C-Opt2-sticker" || sticker_name == "GE/01/M13114C-Opt3-sticker" || sticker_name == "GE/01/M13114C-Opt4-sticker")
+                            {
+                                svgDoc.getElementById("lycra").setAttribute('visibility','hidden')
+                                svgDoc.getElementById("lycra_extra_life").setAttribute('visibility','hidden')
+                            }
+                            svgDoc.getElementById("made_mindfully_logo").setAttribute('visibility','hidden')
+                            var product_benefit_json = JSON.parse(data.order_details[0].product_benefit_text)
+            
+                            $benefit_str = chunkSubstr(product_benefit_json[0].czech, 36).split(/\r?\n/);
+                            $y_ben = 0;
+                            var json_text = "";
+                            $($benefit_str).each(function(index,benefit_val){
+                                json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+benefit_val.toLowerCase()+'</tspan>';
+                                $y_ben += 7.8;
+                            })
+            
+                            $sl_benefit_str = chunkSubstr(product_benefit_json[0].slovak, 36).split(/\r?\n/);
+                            $($sl_benefit_str).each(function(index,sl_benefit_val){
+                                json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+sl_benefit_val.toLowerCase()+'</tspan>';
+                                $y_ben += 7.8;
+                            })
+            
+                            $hu_benefit_str = chunkSubstr(product_benefit_json[0].hungarian, 36).split(/\r?\n/);
+                            $($hu_benefit_str).each(function(index,hu_benefit_val){
+                                json_text += '<tspan x="0" y="'+$y_ben+'" style="fill:#8A8B92; font-family:FandFSans-Light; font-size:6.5px;">'+hu_benefit_val.toLowerCase()+'</tspan>';
+                                $y_ben += 7.8;
+                            })
+                            console.log(svgDoc)
+                            svgDoc.getElementById("mm_benefits").innerHTML = json_text;
+                        }
+                        
+                    }
                 }
+                
     
                 //Front Svg Price Details
     
