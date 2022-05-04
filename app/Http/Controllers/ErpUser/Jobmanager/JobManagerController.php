@@ -691,6 +691,7 @@ class JobManagerController extends Controller
 																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
 																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
 																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+																	$value->created_at=$order_omp[0]->created_at;
 											
 										}
 									}
@@ -7499,8 +7500,8 @@ $buyer_no=$request->buyer_no;
 	
 		   
 	
-		   PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-		   print_r(url('/storage/app/template/label.pdf'));
+		   PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+           print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
 		} 
 		 
 
@@ -7636,8 +7637,8 @@ $buyer_no=$request->buyer_no;
 
         //print_r($svgStringBack);
 
-        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-        print_r(url('/storage/app/template/label.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
      } 
 
 }

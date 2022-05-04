@@ -9,6 +9,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
     }
     else if(buyer_type == "customer")
     {
+        console.log(data)
+        svgDoc.getElementById("watermark").innerHTML = "JGA";
         var buyer_url = base_url + "/customer/tesco/get-order-details";
     }
     else if(buyer_type == "erp")
@@ -70,6 +72,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
         var a_front_text = document.getElementById('tesco_svg_front_modal');
         var svgDoc_front_text = a_front_text.contentDocument;
     }
+    svgDoc.getElementById("reference_number").innerHTML = name2;
             
    //console.log(name+" - "+name2);
 
@@ -201,6 +204,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     svgDoc.getElementById("part_of_two_piece_set").removeAttribute("visibility", "hidden");
+                    svgDoc.getElementById("part_of_two_piece_set").innerHTML = val.part_name;
                 }
                 
                 if(val.uk_size == "tiny baby")
