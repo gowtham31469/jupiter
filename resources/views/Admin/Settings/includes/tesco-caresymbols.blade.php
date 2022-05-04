@@ -41,6 +41,26 @@
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group has-feedback">
+                    {!! Form::label('white_iso_symbol', 'White ISO Symbol (*.svg only)', ['class' => 'form_label']) !!}
+                    <div class="row">
+                        <div class="col-md-2"> <img width="30px" id="add_white_iso_symbol" src="/not-available.png"
+                                alt="symbol"></div>
+                        <div class="col-md-10"> {{ Form::file('white_iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        </div>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    {!! Form::label('white_astms_symbol', 'White Astms Symbol (*.svg only)', ['class' => 'form_label']) !!}
+                    <div class="row">
+                        <div class="col-md-2"><img width="30px" id="add_white_astms_symbol" src="/not-available.png"
+                                alt="symbol"></div>
+                        <div class="col-md-10">{{ Form::file('white_astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        </div>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
                     {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
                     {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
                     <div class="help-block with-errors"></div>
@@ -64,7 +84,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="tescoSymbolsLabel">Add Symbols</h4>
+                <h4 class="modal-title" id="tescoSymbolsLabel">Edit Symbols</h4>
             </div>
             {!! Form::open(['id' => 'edit_tesco_symbols_form','data-toggle' => 'validator','role' => 'form']) !!}
             <input type="hidden" id="edit_tesco_symbol_id">
@@ -83,7 +103,7 @@
                 <div class="form-group has-feedback">
                     {!! Form::label('edit_iso_symbol', 'ISO Symbol (*.svg only)', ['class' => 'form_label']) !!}
                     <div class="row">
-                        <div class="col-md-2"> <img width="30px" id="edit_iso_symbol" src="/not-available.png"
+                        <div class="col-md-2"> <img width="30px" id="edit_iso_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
                         <div class="col-md-8"> {{ Form::file('edit_iso_symbol', ['required', 'accept' => 'image/svg']) }}
                         </div>
@@ -96,12 +116,38 @@
                 <div class="form-group has-feedback">
                     {!! Form::label('edit_astms_symbol', 'Astms Symbol (*.svg only)', ['class' => 'form_label']) !!}
                     <div class="row">
-                        <div class="col-md-2"><img width="30px" id="edit_astms_symbol" src="/not-available.png"
+                        <div class="col-md-2"><img width="30px" id="edit_astms_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
                         <div class="col-md-8">{{ Form::file('edit_astms_symbol', ['required', 'accept' => 'image/svg']) }}
                         </div>
                         <div class="col-md-2">
                             <img id="astm_image" style="width:30px;height:30px">
+                        </div>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    {!! Form::label('edit_white_iso_symbol', 'WHITE ISO Symbol (*.svg only)', ['class' => 'form_label']) !!}
+                    <div class="row">
+                        <div class="col-md-2"> <img width="30px" id="edit_white_iso_symbol_image" src="/not-available.png"
+                                alt="symbol"></div>
+                        <div class="col-md-8"> {{ Form::file('edit_white_iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        </div>
+                        <div class="col-md-2">
+                            <img id="white_iso_image" style="width:30px;height:30px">
+                        </div>
+                    </div>
+                    <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group has-feedback">
+                    {!! Form::label('edit_white_astms_symbol', 'White Astms Symbol (*.svg only)', ['class' => 'form_label']) !!}
+                    <div class="row">
+                        <div class="col-md-2"><img width="30px" id="edit_white_astms_symbol_image" src="/not-available.png"
+                                alt="symbol"></div>
+                        <div class="col-md-8">{{ Form::file('edit_white_astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        </div>
+                        <div class="col-md-2">
+                            <img id="white_astm_image" style="width:30px;height:30px">
                         </div>
                     </div>
                     <div class="help-block with-errors"></div>
