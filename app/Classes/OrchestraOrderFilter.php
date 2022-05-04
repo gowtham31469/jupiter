@@ -45,6 +45,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -54,6 +57,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -63,6 +69,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -72,6 +81,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -81,6 +93,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -90,6 +105,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -99,6 +117,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -108,6 +129,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -117,6 +141,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code");
@@ -126,6 +153,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("season_code")
@@ -154,6 +184,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'printed_boards' as \"type\""));
@@ -163,6 +196,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'printed_boards' as \"type\""));
@@ -172,6 +208,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'labels' as \"type\""));
@@ -181,6 +220,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'labels' as \"type\""));
@@ -190,7 +232,11 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
+                                
                         })
                         ->select("uvc", DB::raw("'labels' as \"type\""));
 
@@ -199,6 +245,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'labels' as \"type\""));
@@ -208,6 +257,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'stickers' as \"type\""));
@@ -217,6 +269,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'stickers' as \"type\""));
@@ -226,6 +281,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'stickers' as \"type\""));
@@ -235,6 +293,9 @@ class OrchestraOrderFilter
                         ->where(function ($query) {
                                 if (Auth::guard('web_customer')->user()) {
                                         $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('order_placed_by', Auth::guard('web_customer')->id());
+                                        }
                                 }
                         })
                         ->select("uvc", DB::raw("'stickers' as \"type\""))
@@ -285,6 +346,14 @@ class OrchestraOrderFilter
                                 ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_hang_tag_orders.template_front_id')
                                 ->where('orchestra_hang_tag_orders.status','!=','Order Cancelled')
                                 ->whereBetween('orchestra_hang_tag_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                                ->where(function ($query) {
+                                        if (Auth::guard('web_customer')->user()) {
+                                                $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                                if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                        $query->where('orchestra_hang_tag_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                                }
+                                        }
+                                })
                                 ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -329,6 +398,14 @@ class OrchestraOrderFilter
                                 ->leftjoin('customers','customers.id', 'orchestra_special_tag_orders.customer_id')
                                 ->where('orchestra_special_tag_orders.status','!=','Order Cancelled')
                                 ->whereBetween('orchestra_special_tag_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                                ->where(function ($query) {
+                                        if (Auth::guard('web_customer')->user()) {
+                                                $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                                if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                        $query->where('orchestra_special_tag_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                                }
+                                        }
+                                })
                                 ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -373,6 +450,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_main_label_orders.customer_id')
                         ->where('orchestra_main_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_main_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_main_label_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -416,6 +501,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_size_label_orders.customer_id')
                         ->where('orchestra_size_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_size_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_size_label_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -459,6 +552,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_heat_transfer_orders.customer_id')
                         ->where('orchestra_heat_transfer_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_heat_transfer_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_heat_transfer_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -503,6 +604,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
                         ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_wash_care_label_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_wash_care_label_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -546,6 +655,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_solid_carton_sticker_orders.customer_id')
                         ->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_solid_carton_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_solid_carton_sticker_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -589,6 +706,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_solid_poly_bag_sticker_orders.customer_id')
                         ->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_solid_poly_bag_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_solid_poly_bag_sticker_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -632,6 +757,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_standard_carton_sticker_orders.customer_id')
                         ->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_standard_carton_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_standard_carton_sticker_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
@@ -675,6 +808,14 @@ class OrchestraOrderFilter
                         ->leftjoin('customers','customers.id', 'orchestra_standard_poly_bag_sticker_orders.customer_id')
                         ->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')
                         ->whereBetween('orchestra_standard_poly_bag_sticker_orders.created_at', [$start_date.' 00:00:00', $end_date.' 23:59:59'])
+                        ->where(function ($query) {
+                                if (Auth::guard('web_customer')->user()) {
+                                        $query->where('customer_id', Auth::guard('web_customer')->user()->company_id);
+                                        if(Auth::guard('web_customer')->user()->role_id != 1){
+                                                $query->where('orchestra_standard_poly_bag_sticker_orders.order_placed_by', Auth::guard('web_customer')->id());
+                                        }
+                                }
+                        })
                         ->where(function($query) use ($orch_filter_season){
                                 if($orch_filter_season)
                                 {
