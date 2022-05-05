@@ -241,20 +241,13 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-               $('.snackbar_span').html('PI Approved Successfully');
-               $('#snackbar').css('background-color','#00b6ff');
+                $('#profoma-invoice').modal("hide");
 
-               $('#'+table_name+'_'+id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
+                $('.snackbar_span').html('PI Approved Successfully');
+                $('#snackbar').css('background-color','#00b6ff');
+                showSnackbar();
 
-               var attrbs = $('#'+table_name+'_'+id+' .pi_generation').attr('onclick');
-               // var attrbs = attrbs.replace("false", "true");
-               $('#'+table_name+'_'+id+' .pi_generation').attr('onclick', attrbs);
-               showSnackbar();
-               
-                if (data.pi_status === true)
-                {
-                    $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=downloadPi("'+template_id+'","'+id+'","'+table_name+'","tesco")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-                }
+                submitOs()
             },
             400: function()
             {
