@@ -3051,8 +3051,28 @@ function readURL(input) {
     }
 }
 
-$("#cofreet_symbol").add("#astms_symbol").add("#edit_cofreet_symbol").add("#edit_astms_symbol").change(function() {
+function editreadURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#'+input.id+'_image').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$("#cofreet_symbol").add("#astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
     readURL(this);
+    if (".hidden_" + this.id != "undefined") {
+        $(".hidden_" + this.id).removeClass('hidden')
+    }
+
+});
+
+$("#edit_cofreet_symbol").add("#edit_astms_symbol").add("#edit_iso_symbol").add("#edit_white_iso_symbol").add("#edit_white_astms_symbol").change(function() {
+    editreadURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
     }
