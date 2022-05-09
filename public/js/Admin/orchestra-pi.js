@@ -227,20 +227,13 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
+               $('#profoma-invoice').modal("hide");
+
                $('.snackbar_span').html('PI Approved Successfully');
                $('#snackbar').css('background-color','#00b6ff');
-
-               $('#'+table_name+'_'+row_id+' .pi_class').removeClass().addClass('pi_class label label-PIApproved').text('PI Approved');
-
-               var attrbs = $('#'+table_name+'_'+row_id+' .pi_generation').attr('onclick');
-               // var attrbs = attrbs.replace("false", "true");
-               $('#'+table_name+'_'+row_id+' .pi_generation').attr('onclick', attrbs);
                showSnackbar();
-               
-                if (data.pi_status === true)
-                {
-                    $('.pi_actions').html('<button class="btn btn-default btn-xs downloadPi" id="downloadPi" onclick=orchestradownloadPi("'+template_id+'","'+row_id+'","'+table_name+'","orchestra")>Download</button><button type="button" class="btn btn-default btn-xs" data-dismiss="modal" aria-label="Close">Close</button>')
-                }            
+
+               getOrchestraOrders('admin');
             },
             400: function()
             {
