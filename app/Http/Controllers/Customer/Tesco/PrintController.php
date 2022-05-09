@@ -1208,6 +1208,24 @@ class PrintController extends Controller
 		PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
 
 
+		if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
+        {
+            $html_board = '<h6 style="color:red">GSM: 300 GSM</h6><h6 style="color:red">BOARD: To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR: FRONT:F&F GREY C,BACK:F&F GREYC,485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+        }
+        else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
+        {
+
+            $html_board = '<h6 style="color:red">GSM: 300 GSM</h6><h6 style="color:red">BOARD: Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR: FRONT:F&F GREY C,BACK:F&F GREYC,485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+        }
+        else if($request->template_name == "FFC/01/M13304C")
+        {
+
+            $html_board = '<h6 style="color:red">GSM: 300 GSM</h6><h6 style="color:red">BOARD: To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR: FRONT:F&F GREY B&C,  BACK:F&F GREYC,485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+		}
+		
 		if($request->template_name == "FFC/01/M13304C")
         {
             PDF::ImageSVG('@' . $svgStringFront, $x=$xx, $y=80, $w=78, $h=108, $link='', $align='', $palign='', $border=0, $fitonpage=false);
