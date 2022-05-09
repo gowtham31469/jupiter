@@ -578,6 +578,8 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 
+										$tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+
 										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
 										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
 			
@@ -691,6 +693,7 @@ class JobManagerController extends Controller
 																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
 																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
 																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+                													$value->tesco_size_department=$tesco_size_department[0]->department_name;
 																	$value->created_at=$order_omp[0]->created_at;
 											
 										}
@@ -2322,6 +2325,24 @@ class JobManagerController extends Controller
 
 				$html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
 				PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+				if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
+				{
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C</h6><h6 style="color:red">BACK : F&F GREYC,485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
+				else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
+				{
+
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C</h6><h6 style="color:red">BACK : F&F GREYC,485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
+				else if($request->template_name == "FFC/01/M13304C")
+				{
+
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY B&C</h6><h6 style="color:red">BACK : F&F GREYC,485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=50, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
 				
 				if($request->template_name == "FFC/01/M13304C")
         {
@@ -7225,6 +7246,7 @@ $buyer_no=$request->buyer_no;
 		   $svgStringBack=urldecode($data_back[0]);
 		   $svgStringBackText=urldecode($data_back_text[0]);
 		   $svgStringFrontImage=urldecode($data_front_image[0]);
+		   $tesco_size_department = $request->tesco_size_department;
 	
 		   $wash_astm = $request->wash_astm;
 		   $wash_iso = $request->wash_iso;
