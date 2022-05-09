@@ -2140,14 +2140,22 @@ class TescoSettings extends Controller
     public function addTescoLabelSizeChart(Request $request){
       $data = $request->all();
       $primary_data = $data['customData']['primary'];
-      $sec_data = $data['customData']['secondary'];
+      if(isset($data['customData']['secondary']))
+      {
+        $sec_data = $data['customData']['secondary'];
+      }
+      else
+      {
+        $sec_data = "";
+      }
 
       try {
           $primary_inserted = TescoPrimarySize::create([
                     'tesco_size_department_id'   => $primary_data['size_department'],
                     'department_title'    => $primary_data['labelsize_dept_title'],
                     'uk_size'     => $primary_data['labelsize_uksize'],
-                    'ce_size'    => $primary_data['labelsize_cesize']
+                    'ce_size'    => $primary_data['labelsize_cesize'],
+                    'po_size'     => $primary_data['labelsize_posize']
           ]);
           
           foreach ($sec_data as $key => $value) {
@@ -2185,7 +2193,14 @@ class TescoSettings extends Controller
     public function updateTescoLabelSizeChart(Request $request){
       $data = $request->all();
       $primary_data = $data['customData']['primary'];
-      $sec_data = $data['customData']['secondary'];
+      if(isset($data['customData']['secondary']))
+      {
+        $sec_data = $data['customData']['secondary'];
+      }
+      else
+      {
+        $sec_data = "";
+      }
 
       try {
           TescoPrimarySize::where('id',$data['customData']['primary']['edit_tesco_primary_id'])->first()->delete();
@@ -2193,7 +2208,8 @@ class TescoSettings extends Controller
                     'tesco_size_department_id'   => $primary_data['edit_size_department'],
                     'department_title'    => $primary_data['edit_labelsize_dept_title'],
                     'uk_size'     => $primary_data['edit_labelsize_uksize'],
-                    'ce_size'    => $primary_data['edit_labelsize_cesize']
+                    'ce_size'    => $primary_data['edit_labelsize_cesize'],
+                    'po_size'     => $primary_data['edit_labelsize_posize']
           ]);
 
             foreach ($sec_data as $key => $value) {

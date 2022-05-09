@@ -709,6 +709,7 @@ class PrintController extends Controller
 	   $svgStringBack=urldecode($data_back[0]);
 	   $svgStringBackText=urldecode($data_back_text[0]);
 	   $svgStringFrontImage=urldecode($data_front_image[0]);
+	   $tesco_size_department = $request->tesco_size_department;
 
 	   $wash_astm = $request->wash_astm;
 	   $wash_iso = $request->wash_iso;
@@ -903,6 +904,9 @@ class PrintController extends Controller
 		 
 	   $i=0;
 	   $xx=15;
+
+	   
+
 	   foreach($data_front as $value)
 	   {
 		   
@@ -915,6 +919,8 @@ class PrintController extends Controller
 		   if($i == 0)
 		   {
 			   PDF::AddPage();
+			   $html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
+		PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
 		   }
 		   
 		   $svgString=urldecode($value);

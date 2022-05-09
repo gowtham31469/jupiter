@@ -578,6 +578,8 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 
+										$tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+
 										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
 										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
 			
@@ -691,6 +693,7 @@ class JobManagerController extends Controller
 																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
 																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
 																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+                													$value->tesco_size_department=$tesco_size_department[0]->department_name;
 																	$value->created_at=$order_omp[0]->created_at;
 											
 										}
@@ -7225,6 +7228,7 @@ $buyer_no=$request->buyer_no;
 		   $svgStringBack=urldecode($data_back[0]);
 		   $svgStringBackText=urldecode($data_back_text[0]);
 		   $svgStringFrontImage=urldecode($data_front_image[0]);
+		   $tesco_size_department = $request->tesco_size_department;
 	
 		   $wash_astm = $request->wash_astm;
 		   $wash_iso = $request->wash_iso;

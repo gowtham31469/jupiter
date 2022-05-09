@@ -3063,8 +3063,91 @@ function editreadURL(input) {
     }
 }
 
+
+function readweeURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#add_wee_symbol').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function readeditweeURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#edit_wee_symbol_image').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+
+function readwoolURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#add_woolmark_symbol').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function readeditwoolURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            $('#edit_woolmark_logo_image').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+
 $("#cofreet_symbol").add("#astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
     readURL(this);
+    if (".hidden_" + this.id != "undefined") {
+        $(".hidden_" + this.id).removeClass('hidden')
+    }
+
+});
+
+$("#wee_symbol").change(function() {
+    readweeURL(this);
+    if (".hidden_" + this.id != "undefined") {
+        $(".hidden_" + this.id).removeClass('hidden')
+    }
+
+});
+
+$("#edit_wee_symbol").change(function() {
+    readeditweeURL(this);
+    if (".hidden_" + this.id != "undefined") {
+        $(".hidden_" + this.id).removeClass('hidden')
+    }
+
+});
+
+$("#woolmark_symbol").change(function() {
+    readwoolURL(this);
+    if (".hidden_" + this.id != "undefined") {
+        $(".hidden_" + this.id).removeClass('hidden')
+    }
+
+});
+
+$("#edit_woolmark_logo").change(function() {
+    readeditwoolURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
     }

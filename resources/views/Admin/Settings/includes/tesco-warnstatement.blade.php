@@ -13,35 +13,35 @@
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('kids_stmt_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('kids_stmt_english',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in english','required')) !!}
+                            {!! Form::text('kids_stmt_english',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in english','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('kids_stmt_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('kids_stmt_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in polish','required')) !!}
+                            {!! Form::text('kids_stmt_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in polish','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('kids_stmt_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('kids_stmt_czech',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in czech','required')) !!}
+                            {!! Form::text('kids_stmt_czech',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in czech','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('kids_stmt_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('kids_stmt_slovak',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in slovak','required')) !!}
+                            {!! Form::text('kids_stmt_slovak',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in slovak','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('kids_stmt_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('kids_stmt_hungarian',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in hungarian','required')) !!}
+                            {!! Form::text('kids_stmt_hungarian',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in hungarian','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -72,35 +72,35 @@
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_kids_stmt_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_kids_stmt_english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric name in english','required')) !!}
+                            {!! Form::text('edit_kids_stmt_english',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'warning name in english','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_kids_stmt_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_kids_stmt_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in polish','required')) !!}
+                            {!! Form::text('edit_kids_stmt_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in polish','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_kids_stmt_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_kids_stmt_czech',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in czech','required')) !!}
+                            {!! Form::text('edit_kids_stmt_czech',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in czech','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_kids_stmt_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_kids_stmt_slovak',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in slovak','required')) !!}
+                            {!! Form::text('edit_kids_stmt_slovak',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in slovak','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_kids_stmt_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_kids_stmt_hungarian',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in hungarian','required')) !!}
+                            {!! Form::text('edit_kids_stmt_hungarian',$value = '', array('class' => 'form-control input-sm','placeholder' => 'warning name in hungarian','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
