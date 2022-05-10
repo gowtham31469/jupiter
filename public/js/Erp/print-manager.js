@@ -5563,6 +5563,7 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
 		async: false,
 		success: function (data) {
 
+
 			var element = document.createElement('a');
 			element.setAttribute('href', data.file_path);
 			element.setAttribute('download', name);
