@@ -578,7 +578,7 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 
-										$tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+										$tesco_size_department=DB::table('tesco_size_department')->where('id',$order_details[0]->primary_size_id)->select('*')->get();
 
 										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
 										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
