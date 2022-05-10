@@ -3026,8 +3026,8 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 		success: function (data) {
 
 			var element = document.createElement('a');
-			element.setAttribute('href', data.url);
-			element.setAttribute('download', template_name);
+			element.setAttribute('href', data.file_path);
+			element.setAttribute('download', name);
 
 			element.style.display = 'none';
 			document.body.appendChild(element);
