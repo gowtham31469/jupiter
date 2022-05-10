@@ -578,8 +578,6 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 
-										$tesco_size_department=DB::table('tesco_size_department')->where('id',$order_details[0]->primary_size_id)->select('*')->get();
-
 										$supplier_id =DB::table('erp_orders')->where('id',$order_details[0]->erp_order_id)->select('*')->get();
 										$customer_name=DB::table('customers')->where('id',$supplier_id[0]->customer_id)->select('*')->get();
 			
@@ -593,6 +591,9 @@ class JobManagerController extends Controller
 											
 											$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 											$order_id  = "washcare_order_id";
+
+
+											$tesco_size_department=DB::table('tesco_size_department')->where('id',$order_details_omp[0]->tesco_size_department_id)->select('*')->get();
 
 
 											$component  = 	DB::table('tesco_washcare_orders_component_mapping')
@@ -7523,7 +7524,10 @@ $buyer_no=$request->buyer_no;
 		   
 	
 		   PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
-           print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
+		   
+		   $file_path =  url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf');	
+
+		   return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf')],200);
 		} 
 		 
 
@@ -7660,7 +7664,11 @@ $buyer_no=$request->buyer_no;
         //print_r($svgStringBack);
 
         PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
+		
+
+		$file_path =  url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf');	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf')],200);
      } 
 
 }
