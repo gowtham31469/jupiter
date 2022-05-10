@@ -115,6 +115,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
             }
 
+            svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
+            
             // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
             // {
             //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
