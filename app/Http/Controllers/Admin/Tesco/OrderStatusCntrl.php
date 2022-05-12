@@ -3506,12 +3506,14 @@ class OrderStatusCntrl extends Controller
                                     
             $component  = 	DB::table('tesco_washcare_orders_component_mapping')
                                 ->where('washcare_order_id',$id)
+                                ->orderBy('tesco_washcare_orders_component_mapping.id', 'asc')
                                 ->select('*')
                                 ->get();
             foreach($component as $comp_val)
             {
                $fibre =  DB::table('tesco_washcare_orders_component_fibre_mapping')
                                 ->where('washcare_component_id',$comp_val->id)
+                                ->orderBy('tesco_washcare_orders_component_fibre_mapping.id', 'asc')
                                 ->select('*')
                                 ->get();
                 $comp_val->fibre=$fibre;
