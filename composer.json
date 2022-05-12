@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "appstract/laravel-opcache": "^2.0",
-        "doctrine/dbal": "v2.4.2",
+        "doctrine/dbal": "^2.5",
         "elibyy/tcpdf-laravel": "5.5.*",
         "fideloper/proxy": "~3.3",
         "hesto/multi-auth": "^2.0",
@@ -76,6 +76,9 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     }
 }
