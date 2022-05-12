@@ -15,7 +15,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_english', 'English', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_english',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in english','required')) !!}
+                            => 'description name in english','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_polish', 'Polish', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in polish','required')) !!}
+                            => 'description name in polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_czech', 'Czech', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in czech','required')) !!}
+                            => 'description name in czech','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_slovak', 'Slovak', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in slovak','required')) !!}
+                            => 'description name in slovak','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'components name in hungarian','required')) !!}
+                            input-sm','placeholder' => 'description name in hungarian','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_edit_english', 'English', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_edit_english',$value = '', array('class' => 'form-control input-sm
-                            ','placeholder' => 'components name in english','required','id' => 'desc_edit_english')) !!}
+                            ','placeholder' => 'description name in english','required','id' => 'desc_edit_english')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_edit_polish', 'Polish', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_edit_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in polish','required','id' => 'desc_edit_polish')) !!}
+                            => 'description name in polish','id' => 'desc_edit_polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_edit_czech', 'Czech', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_edit_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in czech','required','id' => 'desc_edit_czech')) !!}
+                            => 'description name in czech','required','id' => 'desc_edit_czech')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_edit_slovak', 'Slovak', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_edit_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in slovak','required','id' => 'desc_edit_slovak')) !!}
+                            => 'description name in slovak','required','id' => 'desc_edit_slovak')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('desc_edit_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
                             {!! Form::text('desc_edit_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'components name in hungarian','required','id' => 'desc_edit_hungarian')) !!}
+                            input-sm','placeholder' => 'description name in hungarian','required','id' => 'desc_edit_hungarian')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

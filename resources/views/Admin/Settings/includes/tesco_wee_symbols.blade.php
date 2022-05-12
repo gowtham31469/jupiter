@@ -18,7 +18,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('wee_symbol', 'Wee Symbol (*.svg only)', ['class' => 'form_label']) !!}
                             <div class="row">
-                                <div class="col-md-2"> <img width="30px" id="add_iso_symbol" src="/not-available.png"
+                                <div class="col-md-2"> <img width="30px" id="add_wee_symbol" src="/not-available.png"
                                     alt="symbol"></div>
                                     <div class="col-md-10"> {{ Form::file('wee_symbol', ['required', 'accept' => 'image/svg']) }}
                                     </div>
@@ -58,7 +58,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_wee_symbol', 'Wee Symbol (*.svg only)', ['class' => 'form_label']) !!}
                             <div class="row">
-                                <div class="col-md-2"> <img width="30px" id="edit_wee_symbol" src="/not-available.png"
+                                <div class="col-md-2"> <img width="30px" id="edit_wee_symbol_image" src="/not-available.png"
                                     alt="symbol"></div>
                                     <div class="col-md-8"> {{ Form::file('edit_wee_symbol', ['required', 'accept' => 'image/svg']) }}
                                     </div>

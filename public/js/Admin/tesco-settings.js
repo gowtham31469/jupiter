@@ -1113,6 +1113,10 @@ function tescoSuppliers() {
                  $('#iso_image').attr('src',data.tesco_symbols[0].iso_symbols);
 
                  $('#astm_image').attr('src',data.tesco_symbols[0].astms_symbol);
+
+                 $('#white_iso_image').attr('src',data.tesco_symbols[0].white_iso_symbols);
+
+                 $('#white_astm_image').attr('src',data.tesco_symbols[0].white_astms_symbol);
         
                  $('#editTescoSymbolsModal').modal({
                       backdrop: 'static',
@@ -1137,13 +1141,15 @@ function tescoSuppliers() {
    }
   }
 
- function updateTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree,id,csrf_token)
+ function updateTescoSymbols(iso_symbols, astms_symbol,white_iso_symbols, white_astms_symbol, category_id, care_instruction, care_degree,id,csrf_token)
  {
   try{
        var form_data = new FormData();
 
       form_data.append('iso_symbols', iso_symbols);
       form_data.append('astms_symbol', astms_symbol);
+      form_data.append('white_iso_symbols', white_iso_symbols);
+      form_data.append('white_astms_symbol', white_astms_symbol);
       form_data.append('category_id', category_id);
       form_data.append('care_instruction', care_instruction);
       form_data.append('care_degree', care_degree);
@@ -2618,13 +2624,15 @@ function tescoSymbols() {
 /**
  * Function to Tesco Settings Symbols
  */
-function addTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree) {
+function addTescoSymbols(iso_symbols, astms_symbol,white_iso_symbols,white_astms_symbol, category_id, care_instruction, care_degree) {
   try {
       
       var form_data = new FormData();
 
       form_data.append('iso_symbols', iso_symbols);
       form_data.append('astms_symbol', astms_symbol);
+      form_data.append('white_iso_symbols', white_iso_symbols);
+      form_data.append('white_astms_symbol', white_astms_symbol);
       form_data.append('category_id', category_id);
       form_data.append('care_instruction', care_instruction);
       form_data.append('care_degree', care_degree);
@@ -4699,7 +4707,7 @@ function addTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          //alert('Success'); 
           $("#addTescoLabelSizeChartModal").modal('hide')
           tescoLabelSizeChart()
         },
@@ -4735,7 +4743,7 @@ function updateTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          //alert('Success'); 
           $("#editTescoPrimarySizeModal").modal('hide')
           tescoLabelSizeChart()
         },
@@ -4874,6 +4882,7 @@ function updateTescoLabelSizeChart() {
               $(".edit_labelsize_dept_title").val(data.tesco_primary_size[0]['department_title'])
               $(".edit_labelsize_uksize").val(data.tesco_primary_size[0]['uk_size'])
               $(".edit_labelsize_cesize").val(data.tesco_primary_size[0]['ce_size'])
+              $(".edit_labelsize_posize").val(data.tesco_primary_size[0]['po_size'])
               $(".edit_size_department").val(data.tesco_primary_size[0]['tesco_size_department_id'])
 
               $div = '';

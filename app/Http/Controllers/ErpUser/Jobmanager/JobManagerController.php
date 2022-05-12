@@ -593,6 +593,9 @@ class JobManagerController extends Controller
 											$order_id  = "washcare_order_id";
 
 
+											$tesco_size_department=DB::table('tesco_size_department')->where('id',$order_details_omp[0]->tesco_size_department_id)->select('*')->get();
+
+
 											$component  = 	DB::table('tesco_washcare_orders_component_mapping')
 																					->where('washcare_order_id',$order_details_omp{0}->washcare_order_id)
 																					->select('*')
@@ -691,6 +694,8 @@ class JobManagerController extends Controller
 																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
 																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
 																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+                													$value->tesco_size_department=$tesco_size_department[0]->department_name;
+																	$value->created_at=$order_omp[0]->created_at;
 											
 										}
 									}
@@ -2321,6 +2326,24 @@ class JobManagerController extends Controller
 
 				$html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
 				PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+
+				if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
+				{
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
+				else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
+				{
+
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
+				else if($request->template_name == "FFC/01/M13304C")
+				{
+
+					$html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</h6><h6 style="color:red"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+					PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+				}
 				
 				if($request->template_name == "FFC/01/M13304C")
         {
@@ -7224,6 +7247,7 @@ $buyer_no=$request->buyer_no;
 		   $svgStringBack=urldecode($data_back[0]);
 		   $svgStringBackText=urldecode($data_back_text[0]);
 		   $svgStringFrontImage=urldecode($data_front_image[0]);
+		   $tesco_size_department = $request->tesco_size_department;
 	
 		   $wash_astm = $request->wash_astm;
 		   $wash_iso = $request->wash_iso;
@@ -7499,8 +7523,11 @@ $buyer_no=$request->buyer_no;
 	
 		   
 	
-		   PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-		   print_r(url('/storage/app/template/label.pdf'));
+		   PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+		   
+		   $file_path =  url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf');	
+
+		   return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf')],200);
 		} 
 		 
 
@@ -7636,8 +7663,12 @@ $buyer_no=$request->buyer_no;
 
         //print_r($svgStringBack);
 
-        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-        print_r(url('/storage/app/template/label.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+		
+
+		$file_path =  url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf');	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf')],200);
      } 
 
 }

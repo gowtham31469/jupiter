@@ -9,6 +9,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
     }
     else if(buyer_type == "customer")
     {
+        console.log(data)
+        svgDoc.getElementById("watermark").innerHTML = "JGA";
         var buyer_url = base_url + "/customer/tesco/get-order-details";
     }
     else if(buyer_type == "erp")
@@ -70,6 +72,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
         var a_front_text = document.getElementById('tesco_svg_front_modal');
         var svgDoc_front_text = a_front_text.contentDocument;
     }
+    svgDoc.getElementById("reference_number").innerHTML = name2;
             
    //console.log(name+" - "+name2);
 
@@ -112,6 +115,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
             }
 
+            if(data.order_details[0].leather_suede_code != "" && data.order_details[0].leather_suede_code != null)
+            {
+                svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
+            }
+            else
+            {
+                svgDoc.getElementById("leather_suede_code").innerHTML = "";
+            }
+
+            
+            
             // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
             // {
             //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
@@ -201,6 +215,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     svgDoc.getElementById("part_of_two_piece_set").removeAttribute("visibility", "hidden");
+                    svgDoc.getElementById("part_of_two_piece_set").innerHTML = val.part_name;
                 }
                 
                 if(val.uk_size == "tiny baby")
@@ -458,7 +473,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                         svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
                     }
-                    else if(val.uk_size == "1-2 years" || val.uk_size == "2-3 years" || val.uk_size == "3-4 years" || val.uk_size == "4-5 years" || val.uk_size == "5-6 years" || val.uk_size == "6-7 years" || val.uk_size == "7-8 years" || val.uk_size == "8-9 years" || val.uk_size == "9-10 years")
+                    else if(val.uk_size == "1-2Y" || val.uk_size == "2-3Y" || val.uk_size == "3-4Y" || val.uk_size == "4-5Y" || val.uk_size == "5-6Y" || val.uk_size == "6-7Y" || val.uk_size == "7-8Y" || val.uk_size == "8-9Y" || val.uk_size == "9-10Y")
                     {
                         svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
                         svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
@@ -469,8 +484,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
+                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
                         svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
 
@@ -480,7 +495,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                         svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 259.591)");
                     }
-                    else if(val.uk_size == "10-11 years" || val.uk_size == "11-12 years" || val.uk_size == "12-13 years" || val.uk_size == "13-14 years" || val.uk_size == "14-15 years" || val.uk_size == "15-16 years")
+                    else if(val.uk_size == "10-11Y" || val.uk_size == "11-12Y" || val.uk_size == "12-13Y" || val.uk_size == "13-14Y" || val.uk_size == "14-15Y" || val.uk_size == "15-16Y")
                     {
                         svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
                         svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
@@ -491,8 +506,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
+                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
                         svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
 
@@ -533,8 +548,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     //     svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
                     //     svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
                     //     svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("uk_size").innerHTML = "9-10 years";
-                    //     svgDoc.getElementById("ce_size").innerHTML = "9-10 years";
+                    //     svgDoc.getElementById("uk_size").innerHTML = "9-10Y";
+                    //     svgDoc.getElementById("ce_size").innerHTML = "9-10Y";
 
                     //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
 
@@ -995,17 +1010,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                 if(order_page == "job_card_manager")
                 {
-                    PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso);
+                    PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
                 }
                 else
                 {
                     if(art_type == "print")
                     {
-                        PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso);
+                        PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
                     }
                     else 
                     {
-                        PopupTescoLabelsProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso);
+                        PopupTescoLabelsProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
                     }
                 }
                 
