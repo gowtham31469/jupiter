@@ -246,7 +246,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                     svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
                 }
-                else if(val.uk_size == "Newborn")
+                else if(val.uk_size.toLowerCase() == "newborn")
                 {
                     svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
                     svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
