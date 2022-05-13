@@ -1305,7 +1305,7 @@ function tescoStatusTable(data, path) {
                     }
 
                 } else if (key == "Artwork") {
-                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending') {
+                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending' && value['order_status'] != 'Order Cancelled') {
                         var zone = value.Zone
                         var style_no = "";
                         if(value.tableName == "tesco_washcare_orders")

@@ -1171,7 +1171,7 @@ function tescoStatusTable(data, path) {
 
                 } else if (key == "Artwork") {
 
-                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending') {
+                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending' && value['order_status'] != 'Order Cancelled') {
                         var zone = value.Zone
                         var style_no = "";
                         if(value.tableName == "tesco_washcare_orders")
@@ -1207,7 +1207,7 @@ function tescoStatusTable(data, path) {
                         
 
                 }else if (key == "Print Proof") {
-                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending') {
+                    if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending' && value['order_status'] != 'Order Cancelled') {
                         var zone = value.Zone
                         var style_no = "";
                         if(value.tableName == "tesco_washcare_orders")
@@ -1243,7 +1243,16 @@ function tescoStatusTable(data, path) {
                     }
                     var po_file = value['po_file'];
                      let customer_po_number = value['PO Number'] === null?'':value['PO Number'];
+
+                     if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending' && value['order_status'] != 'Order Cancelled') {
+                         
                      tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="tesco-po" id="tesco-po" class="form-control input-sm tesco-po" placeholder="Enter PO" maxlength="11" value="'+customer_po_number+'"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default tesco-po-submit" onclick=tescoSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+
+                     }
+                     else
+                     {
+                        tr += '<td align="center">-</td>';
+                     }
                     
 
             }else if (key == "order_status") {
