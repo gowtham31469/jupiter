@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
 use File;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 /**
  * Buyer management controller
  * @author <Praveen>
@@ -69,6 +71,83 @@ class BuyerManagementController extends Controller
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
+
+    /**
+     * Creating dynamic table
+     * @return \Illuminate\Http\Response
+     */
+    public function createTableGeneric($table_name, $fields = [])
+    {
+        // laravel check if table is not already exists
+        if (!Schema::hasTable($table_name)) {
+
+            Schema::create($table_name, function (Blueprint $table) use ($fields, $table_name) {
+                $table->increments('id');
+                if (count($fields) > 0) {
+                    foreach ($fields as $field) {
+                        $table->{$field['type']}($field['name']);
+                    }
+                }
+                $table->timestamps();
+            });
+    
+            return response()->json(['message' => 'Given table has been successfully created!'], 200);
+        }
+    
+        return response()->json(['message' => 'Given table is already existis.'], 400);
+    }
+
+    /**
+     * Method to create dynamic item master
+     * @return \Illuminate\Http\Response
+     */
+    public function createItemMasterOld($buyer_name)
+    {
+        // set dynamic table name 
+        $table_name = $buyer_name.'_item_master';
+        echo "Table Name = =".$table_name;
+
+        // set your dynamic fields 
+        $fields = [
+            ['name' => 'company_id', 'type' => 'integer'],
+            ['name' => 'parent_id', 'type' => 'integer'],
+            ['name' => 'item_name', 'type' => 'string'],
+            ['name' => 'ref_no', 'type' => 'string'],
+            ['name' => 'tag_name', 'type' => 'string'],
+            ['name' => 'is_qrcode_required', 'type' => 'integer']
+        ];
+
+        return $this->createTable(strtolower($table_name), $fields);
+    }
+
+    /**
+     * Method to create dynamic item master
+     * @return \Illuminate\Http\Response
+     */
+    public function createItemMaster($buyer_name)
+    {
+        // set dynamic table name 
+        $table_name = $buyer_name.'_item_master';
+
+        Schema::create(strtolower($table_name), function (Blueprint $table) {
+          $table->increments('id');
+          $table->integer('company_id')->unsigned();
+          $table->integer('parent_id')->unsigned();
+          $table->string('item_name');
+          $table->string('ref_no');
+          $table->string('tag_name');
+          $table->integer('is_qrcode_required')->unsigned();
+          $table->timestamps();
+
+          $table->foreign('company_id')->references('id')
+          ->on('company')->onDelete('cascade');
+          /* Indexes	*/
+          $table->index(['company_id']);
+        });
+
+        return response()->json(['message' => 'Given table has been successfully created!'], 200);
+    }
+
     /**
      * Add buyers for JGA.
      * @param \Illuminate\Http\Request
@@ -118,6 +197,8 @@ class BuyerManagementController extends Controller
                                 'is_active'        => 0,
                                 'logo'             => $destination_path_insert
                               ]);
+                  
+                  $item_master_creation = $this->createItemMaster($name);
                     
                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
