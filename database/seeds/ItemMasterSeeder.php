@@ -146,9 +146,9 @@ class ItemMasterSeeder extends Seeder
             13 => 
             array (
                 'id' => 14,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 2,
-                'item_name' => 'Others',
+                'item_name' => 'Size Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -158,7 +158,7 @@ class ItemMasterSeeder extends Seeder
                 'id' => 15,
                 'company_id' => 2,
                 'parent_id' => 2,
-                'item_name' => 'Size Sticker',
+                'item_name' => 'CMYK Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -166,9 +166,9 @@ class ItemMasterSeeder extends Seeder
             15 => 
             array (
                 'id' => 16,
-                'company_id' => 2,
+                'company_id' => 1,
                 'parent_id' => 2,
-                'item_name' => 'CMYK Sticker',
+                'item_name' => 'Others',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
