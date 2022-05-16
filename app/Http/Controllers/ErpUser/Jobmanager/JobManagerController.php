@@ -236,23 +236,6 @@ class JobManagerController extends Controller
 				
 			}
 
-			$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-			->where('is_enabled', true)
-			->pluck('disp_mode', 'id')
-			->all();
-			$erp_finish_type = DB::table('erp_finish_type')
-			->where('is_enabled', true)
-			->pluck('finish_type', 'id')
-			->all();
-			$erp_machines = DB::table('erp_machines')
-			->where('is_enabled', true)
-			->pluck('machine', 'id')
-			->all();
-			$erp_teeth_no = DB::table('erp_teeth_no')
-			->where('is_enabled', true)
-			->pluck('teeth_no', 'id')
-			->all();
-
 			asort($orders_erp);
 
 			return view(
@@ -260,10 +243,6 @@ class JobManagerController extends Controller
 				[
 					'orders' => $orders_erp,
 					'companies' => $companies,
-					'disp_modes' => $erp_dispatch_mode,
-					'finish_types' => $erp_finish_type,
-					'machines' => $erp_machines,
-					'teeth_nos' => $erp_teeth_no
 				]
 			);
 		}
@@ -1256,11 +1235,37 @@ class JobManagerController extends Controller
 				$template_data['customer_po_array'] = $customer_po_array;
 				$template_data['color_code']       = $color_code;
 				$template_data['tint_color']       = $tint_color;
+
+				$erp_dispatch_mode = DB::table('erp_dispatch_mode')
+				->where('is_enabled', true)
+				->pluck('disp_mode', 'id')
+				->all();
+				$erp_finish_type = DB::table('erp_finish_type')
+				->where('is_enabled', true)
+				->pluck('finish_type', 'id')
+				->all();
+				$erp_machines = DB::table('erp_machines')
+				->where('is_enabled', true)
+				->pluck('machine', 'id')
+				->all();
+				$erp_teeth_no = DB::table('erp_teeth_no')
+				->where('is_enabled', true)
+				->pluck('teeth_no', 'id')
+				->all();
 			} else {
 				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
 			}
 
-			return response()->json(['error'=> false,'message' =>'Success', 'template_data' => $template_data],200);
+			return response()->json([
+				'error'=> false,
+				'message' =>'Success', 
+				'template_data' => $template_data,
+				'disp_modes' => $erp_dispatch_mode,
+				'finish_types' => $erp_finish_type,
+				'machines' => $erp_machines,
+				'teeth_nos' => $erp_teeth_no
+
+			],200);
   
 		  } catch (\Exception $e)
 		  {
@@ -3271,11 +3276,7 @@ class JobManagerController extends Controller
 								->pluck('buyers.buyer_name','buyers.id')
 								->all();
 				
-				$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('is_enabled','=',true)->pluck('disp_mode','id')->all();
-				$erp_finish_type   = DB::table('erp_finish_type')->where('is_enabled','=',true)->pluck('finish_type','id')->all();
-				$erp_machines      = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
-				$erp_teeth_no      = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
-				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
+				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies]);	
 			} catch (\Exctesteption $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
@@ -3317,8 +3318,35 @@ class JobManagerController extends Controller
 										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
 										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
 										->get();
-					$jobcard_data->additional_details = $jobcard_details;					
-					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_data' => $jobcard_data], 200);
+					$jobcard_data->additional_details = $jobcard_details;	
+
+					$erp_dispatch_mode = DB::table('erp_dispatch_mode')
+					->where('is_enabled', true)
+					->pluck('disp_mode', 'id')
+					->all();
+					$erp_finish_type = DB::table('erp_finish_type')
+					->where('is_enabled', true)
+					->pluck('finish_type', 'id')
+					->all();
+					$erp_machines = DB::table('erp_machines')
+					->where('is_enabled', true)
+					->pluck('machine', 'id')
+					->all();
+					$erp_teeth_no = DB::table('erp_teeth_no')
+					->where('is_enabled', true)
+					->pluck('teeth_no', 'id')
+					->all();
+
+					return response()->json([
+						'error'=> false,
+						'message' =>'Success', 
+						'jobcard_data' => $jobcard_data,
+						'disp_modes' => $erp_dispatch_mode,
+						'finish_types' => $erp_finish_type,
+						'machines' => $erp_machines,
+						'teeth_nos' => $erp_teeth_no
+
+					], 200);
 				}
 	
 			} catch (\Exctesteption $e) {
