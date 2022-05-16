@@ -43,7 +43,7 @@ class TescoLabelOrderRequest extends FormRequest
 
             'tesco_care_garment_component.*'   => ['nullable', 'numeric', 'sometimes', 'exists:tesco_components,id'],
             'tesco_care_fiber.*'               => ['nullable', 'numeric', 'sometimes', 'exists:tesco_fabriclists,id'],
-            'fiber_total_percentage.*'         => ['nullable', 'sometimes', 'numeric', 'min:100', 'max:100'],
+            'fiber_total_percentage.*'         => ['nullable', 'sometimes', 'numeric', Rule::in(['0', '100']), 'max:100'],
             'fiber_individual_percentage.*'    => ['nullable', 'sometimes', 'digits_between:1,100'],
 
             'tesco_care_kids_warning'          => ['sometimes', 'nullable', 'numeric', 'exists:tesco_kids_warning_statements,id' ],
