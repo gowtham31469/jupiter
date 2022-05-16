@@ -150,6 +150,58 @@ class BuyerManagementController extends Controller
     }
 
     /**
+     * Method to rename dynamic item master
+     * @return \Illuminate\Http\Response
+     */
+    public function renameItemMaster($old_buyer_name, $new_buyer_name)
+    {
+        // set dynamic table name 
+        $old_table_name = strtolower($old_buyer_name).'_item_master';
+        $new_table_name = strtolower($new_buyer_name).'_item_master';
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropForeign(['company_id']);
+        });
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropIndex(['company_id']);
+        });
+      
+        Schema::rename($old_table_name, $new_table_name);
+      
+        Schema::table($new_table_name, function (Blueprint $table) {
+          $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
+          $table->index(['company_id']);
+        });
+    }
+
+    /**
+     * Method to rename buyer template table
+     * @return \Illuminate\Http\Response
+     */
+    public function renameTemplateTable($old_buyer_name, $new_buyer_name)
+    {
+        // set dynamic table name 
+        $old_table_name = strtolower($old_buyer_name).'_template';
+        $new_table_name = strtolower($new_buyer_name).'_template';
+        $item_master_table = strtolower($new_buyer_name).'_item_master';
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropForeign(['item_id']);
+          $table->dropForeign(['material_id']);
+          $table->dropIndex(['item_id', 'material_id']);
+        });
+
+        Schema::rename($old_table_name, $new_table_name);
+      
+        Schema::table($new_table_name, function (Blueprint $table) {
+          $table->foreign('item_id')->references('id')->on($item_master_table)->onDelete('cascade');
+          $table->foreign('material_id')->references('id')->on('raw_material_master')->onDelete('cascade');
+          $table->index(['company_id', 'material_id']);
+        });
+    }
+
+    /**
      * Add buyers for JGA.
      * @param \Illuminate\Http\Request
      * @author <Praveen>
@@ -288,17 +340,25 @@ class BuyerManagementController extends Controller
               }
               else
               {
-                  Buyer::find($id)
-                   ->update([
-                     'buyer_name'          => $input['name'],
-                     'buyer_email'         => $input['email'],
-                     'buyer_phone'         => $input['phone'],
-                     'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
-                     'logo'                => $destination_path_insert
-                  ]);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
-            }
+                $b_name = DB::table('buyers')->where('id','=',$id)->value('buyer_name');
+                Buyer::find($id)
+                  ->update([
+                    'buyer_name'          => $input['name'],
+                    'buyer_email'         => $input['email'],
+                    'buyer_phone'         => $input['phone'],
+                    'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
+                    'logo'                => $destination_path_insert
+                ]);
+                if($b_name !== $input['name']) {
+                  // Update Corresponding item master name
+                  $updated_item_master = $this->renameItemMaster($b_name, $input['name']);
+                  // Update corresponding template name
+                  $updated_template_name = $this->renameTemplateTable($b_name, $input['name']);
+                }
+                 
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
             } catch (\Exception $e)
             {
                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
