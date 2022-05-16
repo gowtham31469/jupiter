@@ -16,6 +16,7 @@ use Hash;
 use File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use ItemMasterSeeder;
 /**
  * Buyer management controller
  * @author <Praveen>
@@ -73,63 +74,15 @@ class BuyerManagementController extends Controller
     }
 
     /**
-     * Creating dynamic table
-     * @return \Illuminate\Http\Response
-     */
-    public function createTableGeneric($table_name, $fields = [])
-    {
-        // laravel check if table is not already exists
-        if (!Schema::hasTable($table_name)) {
-
-            Schema::create($table_name, function (Blueprint $table) use ($fields, $table_name) {
-                $table->increments('id');
-                if (count($fields) > 0) {
-                    foreach ($fields as $field) {
-                        $table->{$field['type']}($field['name']);
-                    }
-                }
-                $table->timestamps();
-            });
-    
-            return response()->json(['message' => 'Given table has been successfully created!'], 200);
-        }
-    
-        return response()->json(['message' => 'Given table is already existis.'], 400);
-    }
-
-    /**
-     * Method to create dynamic item master
-     * @return \Illuminate\Http\Response
-     */
-    public function createItemMasterOld($buyer_name)
-    {
-        // set dynamic table name 
-        $table_name = $buyer_name.'_item_master';
-        echo "Table Name = =".$table_name;
-
-        // set your dynamic fields 
-        $fields = [
-            ['name' => 'company_id', 'type' => 'integer'],
-            ['name' => 'parent_id', 'type' => 'integer'],
-            ['name' => 'item_name', 'type' => 'string'],
-            ['name' => 'ref_no', 'type' => 'string'],
-            ['name' => 'tag_name', 'type' => 'string'],
-            ['name' => 'is_qrcode_required', 'type' => 'integer']
-        ];
-
-        return $this->createTable(strtolower($table_name), $fields);
-    }
-
-    /**
      * Method to create dynamic item master
      * @return \Illuminate\Http\Response
      */
     public function createItemMaster($buyer_name)
     {
         // set dynamic table name 
-        $table_name = $buyer_name.'_item_master';
+        $table_name = strtolower($buyer_name).'_item_master';
 
-        Schema::create(strtolower($table_name), function (Blueprint $table) {
+        Schema::create($table_name, function (Blueprint $table) {
           $table->increments('id');
           $table->integer('company_id')->unsigned();
           $table->integer('parent_id')->unsigned();
@@ -143,6 +96,54 @@ class BuyerManagementController extends Controller
           ->on('company')->onDelete('cascade');
           /* Indexes	*/
           $table->index(['company_id']);
+        });
+
+        // Run seeder for item master
+        $item_master_seeder = new ItemMasterSeeder;
+        $item_master_seeder->run($table_name);
+
+        return response()->json(['message' => 'Given table has been successfully created!'], 200);
+    }
+
+
+    /**
+     * Method to create dynamic template table while creating buyers
+     * @return \Illuminate\Http\Response
+     */
+    public function createTemplateTable($buyer_name)
+    {
+        // set dynamic table name 
+        $table_name = strtolower($buyer_name).'_template';
+        $item_master_table = strtolower($buyer_name).'_item_master';
+
+        Schema::create($table_name, function (Blueprint $table) use ($item_master_table) {
+          $table->increments('id');
+          $table->integer('item_id')->unsigned();
+          $table->integer('material_id')->unsigned();
+          $table->integer('hierarchy_id');
+          $table->string('template_name');
+          $table->string('template_description')->nullable();
+          $table->string('template_file')->nullable();
+          $table->smallInteger('disney')->nullable();
+          $table->integer('tax');
+          $table->string('gl_code');
+          $table->string('hsn_code');
+          $table->string('color');
+          $table->integer('dimension_height');
+          $table->integer('dimension_width');
+          $table->string('gl_text');
+          $table->smallInteger('flag');
+          $table->integer('name_in_reports')->nullable();
+          $table->string('type')->nullable();
+          $table->timestamps();
+          
+          $table->foreign('item_id')->references('id')
+          ->on($item_master_table)->onDelete('cascade');
+    
+          $table->foreign('material_id')->references('id')
+          ->on('raw_material_master')->onDelete('cascade');
+          /* Indexes	*/
+          $table->index(['item_id','material_id']);
         });
 
         return response()->json(['message' => 'Given table has been successfully created!'], 200);
@@ -199,6 +200,7 @@ class BuyerManagementController extends Controller
                               ]);
                   
                   $item_master_creation = $this->createItemMaster($name);
+                  $template_creation = $this->createTemplateTable($name);
                     
                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
