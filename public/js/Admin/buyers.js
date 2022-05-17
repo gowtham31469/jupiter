@@ -128,9 +128,9 @@
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
                   },
-                  409: function() {
+                  409: function(data) {
                        $('#buyer_result').removeAttr('style');
-                       $('#buyer_result').html('Email already registered.')
+                       $('#buyer_result').html(data.responseJSON.message)
                        $("#buyer_result").addClass("alert alert-warning");
                   },
                   422: function() {

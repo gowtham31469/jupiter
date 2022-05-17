@@ -238,7 +238,10 @@ class BuyerManagementController extends Controller
                 
                 if(Buyer::where('buyer_email',$email)->exists())
                 {
-                  $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                  $result = response()->json(['error'=> true,'message' =>'Email already registered.'],409);
+                }
+                elseif(Buyer::where('buyer_name',$name)->exists()) {
+                  $result = response()->json(['error'=> true,'message' =>'Buyer already registered'],409);
                 }
                 else
                 {
