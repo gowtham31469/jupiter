@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\EANBarcode;
+use App\Rules\ITFBarcode;
+use App\Rules\Numeric;
+use App\Rules\OrmsTpn;
 
 class TescoSingleStickerOrderRequest extends FormRequest
 {
@@ -35,22 +39,23 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'manufacture_date'      => ['required'],
             'department'            => ['required', 'numeric', 'exists:tesco_department,id'],
             'brand'                 => ['required', 'numeric', 'exists:tesco_brand,id'],
-            'rfid'                  => ['required'],
-            'tag_at_source'         => ['required'],
+            'rfid'                  => ['required', Rule::in(['0', '1'])],
+            'tag_at_source'         => ['required', Rule::in(['0', '1'])],
             'ocn_no'                => ['required', 'numeric'],
 
-            'zone'                  => ['required'],
-            'type'                  => ['required'],
+            'zone'                  => ['required', Rule::in(['CE', 'UK'])],
+            'type'                  => ['required', Rule::in(['single'])],
             'templates'             => ['required'],
             'created_by'            => ['nullable', 'sometimes'],
             'full_description'      => ['nullable', 'sometimes'],
             'qr_code'               => ['nullable', 'sometimes'],
 
-            'orms_tpn.*'            => ['required', 'numeric'],
-            'barcode.*'             => ['required', 'numeric'],
-            'case_size.*'           => ['required', 'numeric'],
-            'size.*'                => ['nullable', 'sometimes'],
-            'sticker_count.*'       => ['required', 'nullable'],
+            'orms_tpn'            => ['required', new Numeric, new OrmsTpn],
+            'itf_barcode'         => ['sometimes', new ITFBarcode, new Numeric],
+            'ean_barcode'         => ['sometimes', new EANBarcode, new Numeric],
+            'case_size'           => ['required', new Numeric],
+            'size'                => ['required'],
+            'sticker_count.*'     => ['required', 'nullable'],
             
         ];
     }
@@ -69,5 +74,10 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'uk_style.required'  => 'UK Style Number is required.',
             'supplier.required'  => 'Tesco Supplier is required.',
         ];
+    }
+
+    public function keywords ()
+    {
+        return explode(',', $this->get('keywords'));
     }
 }
