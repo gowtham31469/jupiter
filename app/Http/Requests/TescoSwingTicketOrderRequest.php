@@ -61,19 +61,7 @@ class TescoSwingTicketOrderRequest extends FormRequest
     public function messages()
     {
         return [
-            // 'tesco_care_po.required' => 'PO Number is required.',
-            // 'tesco_care_po.size' => 'PO Number must be between 1 and 10 digits.',
-            // 'tesco_care_eqos.required' => 'EQOS Supplier Number is required.',
-            // 'tesco_care_eqos.size' => 'EQOS Supplier Number must be between 1 and 10 digits.',
-            // 'tesco_care_ce_style.required'  => 'Option ID is required.',
-            // 'tesco_care_uk_style.required'  => 'UK Style Number is required.',
-            // 'tesco_care_coo.required'  => 'Country of Origin is required.',
-            // 'tesco_care_supplier.required'  => 'Tesco Supplier is required.',
-            // 'tesco_care_wash_instruction.required'  => 'Wash Instruction is required.',
-            // 'tesco_care_bleach_instruction.required'  => 'Bleach Instruction is required.',
-            // 'tesco_care_dry_instruction.required'  => 'Dry Instruction is required.',
-            // 'tesco_care_iron_instruction.required'  => 'Iron Instruction is required.',
-            // 'tesco_care_dry_clean_instruction.required'  => 'Dry Clean Instruction is required.',
+            'swing_ean.*.digits' => 'EAN Barcode must be 13 digits.',
         ];
     }
 }
