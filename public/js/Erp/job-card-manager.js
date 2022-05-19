@@ -243,7 +243,7 @@ function generateJobcard(){
             statusCode: {
                 /** [Show response status based on HTTP status code] */
                 200: function(data) {
-                    
+
                     if(data.error === false)
                     {
                         if(data.template_data.company)
@@ -571,6 +571,31 @@ function generateJobcard(){
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
                         }
+
+                        var disp_modes_options = '';
+                        $.each(data.disp_modes, function (key, item) {
+                            disp_modes_options += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#disp_mode').append(disp_modes_options);
+
+                        var machine_options = '';
+                        $.each(data.machines, function (key, item) {
+                            machine_options += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#machine').append(machine_options);
+
+                        var teeth_no_options = '';
+                        $.each(data.teeth_nos, function (key, item) {
+                            teeth_no_options += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#teeth_no').append(teeth_no_options);
+
+                        var finish_type_options = '';
+                        $.each(data.finish_types, function (key, item) {
+                            finish_type_options += '<option value="' + key + '">' + item + '</option>';
+                        });
+                        $('#finish_type').append(finish_type_options);
+                        $('.selectpicker').selectpicker('refresh');
                         
                     }
                     else
@@ -1222,6 +1247,32 @@ function storeJobcard()
              success: function(data){
                  $('.edit-ratio-list-table-div').html('');
                  $('.edit-single-list-table-div').html('');
+
+
+                var disp_modes_options = '';
+                $.each(data.disp_modes, function (key, item) {
+                    disp_modes_options += '<option value="' + key + '">' + item + '</option>';
+                });
+                $('#edit_disp_mode').append(disp_modes_options);
+
+                var machine_options = '';
+                $.each(data.machines, function (key, item) {
+                    machine_options += '<option value="' + key + '">' + item + '</option>';
+                });
+                $('#edit_machine').append(machine_options);
+
+                var teeth_no_options = '';
+                $.each(data.teeth_nos, function (key, item) {
+                    teeth_no_options += '<option value="' + key + '">' + item + '</option>';
+                });
+                $('#edit_teeth_no').append(teeth_no_options);
+
+                var finish_type_options = '';
+                $.each(data.finish_types, function (key, item) {
+                    finish_type_options += '<option value="' + key + '">' + item + '</option>';
+                });
+                $('#edit_finish_type').append(finish_type_options);
+
                  //hidden jobcard id for edit functionality
                  $('#jobcard_id').val(id);
                  $('#edit_jc_company_name').text(data.jobcard_data.company);
@@ -1280,12 +1331,9 @@ function storeJobcard()
                   {
                       $(".edit-common-data-div").addClass("hidden");
                   }
+                  
+                 $('.selectpicker').selectpicker('refresh');
 
-                 /** [ Refresh  bootstrap selectpicker ] */
-                 $('#edit_finish_type').selectpicker('refresh');
-                 $('#edit_teeth_no').selectpicker('refresh');
-                 $('#edit_machine').selectpicker('refresh');
-                 $('#edit_disp_mode').selectpicker('refresh');
                  var ratio_table = '';
                  $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
                     if(template_type === 'ratio')
