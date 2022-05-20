@@ -80,6 +80,8 @@ class TescoLabelOrderRequest extends FormRequest
             'tesco_care_dry_instruction.required'  => 'Dry Instruction is required.',
             'tesco_care_iron_instruction.required'  => 'Iron Instruction is required.',
             'tesco_care_dry_clean_instruction.required'  => 'Dry Clean Instruction is required.',
+            'uk_ean.*.digits' => 'UK ean barcode must be 13 digits.',
+            'ce_ean.*.digits' => 'CE ean barcode must be 13 digits.',
         ];
     }
 }

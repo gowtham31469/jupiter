@@ -18,7 +18,7 @@ class UploadCombinedPO
     public function uploadCustomerPO($request)
     {
         $erp_obj        = new ErpOrders();
-        $updated_erp_table_array = [];
+        $response_status = [];
         $template_ids  = explode(',', $request['template_id']);
         $template      = explode(',', $request['templates']);
 
@@ -34,14 +34,14 @@ class UploadCombinedPO
                 //Dynamic function name and database model name for each templates
                 $model_name = 'App\\' . "Tesco" . $template[$key] . "Orders";
                 $order_table_name = "tesco_" . strtolower($template[$key]) . "_orders";
-                $response = $model_name::where('id', $template_id)
-                    ->update([
-                        'po_status'         => "PO Uploaded",
-                        'purchase_order_no' => $request['po_number'],
-                        'po_file'           => $destination_path_insert,
-                        'delivery_date'     => $request['delivery_date'],
-                        'po_uploaded_at'    => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                    ]);
+                $model_name::where('id', $template_id)
+                ->update([
+                    'po_status'         => "PO Uploaded",
+                    'purchase_order_no' => $request['po_number'],
+                    'po_file'           => $destination_path_insert,
+                    'delivery_date'     => $request['delivery_date'],
+                    'po_uploaded_at'    => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                ]);
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
                 $data_array = [];
                 $tesco_buyer_id = DB::table('buyers')->select('id')->where('buyer_name', '=', 'Tesco')->first();
@@ -49,11 +49,7 @@ class UploadCombinedPO
                 $data_array['buyer_id'] = $tesco_buyer_id->id;
                 $data_array['id'] = $template_id;
 
-                $jsonResponse = $erp_obj->updateTescoErpOrders($data_array);
-
-                $content = $jsonResponse->getContent();
-
-                $updated_erp_table_array = json_decode($content, true);
+                $response_status = $erp_obj->updateTescoErpOrders($data_array);
 
                 // update po upload status as "PO Uploaded" in order history table
                 OrderManagementHistory::where([['order_table_name', $order_table_name], ['order_table_id', $template_id]])->update([
@@ -63,9 +59,7 @@ class UploadCombinedPO
             }
         }
 
-        $class_status = array_key_exists('message', $updated_erp_table_array) ? $updated_erp_table_array['message'] : 'error';
-
-        if ($class_status === 'success') {
+        if ($response_status === 'success') {
             return response()->json(['error' => false, 'message' => 'success', 'po_number' => $request['po_number']], 200);
         } else {
             return response()->json(['error' => true, 'message' => 'Failed'], 400);
