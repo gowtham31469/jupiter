@@ -35,8 +35,6 @@ use App\Classes\TescoCareMetadata;
 class OrderStatusCntrl extends Controller
 {
     private $ratio_pack_type;
-    private $updated_erp_table_array;
-    private $class_status;
     private $erp_obj;
     private $caremeta;
 	/**
@@ -49,8 +47,6 @@ class OrderStatusCntrl extends Controller
        $this->middleware('auth');
        $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
 
-       $this->updated_erp_table_array = [];
-       $this->class_status = 'success';
        $this->erp_obj    = new ErpOrders();
 
        $this->caremeta = $caremeta;
@@ -3915,7 +3911,7 @@ class OrderStatusCntrl extends Controller
                 }
             }
 
-            if ($this->class_status === 'success' ) 
+            if ($jsonResponse === 'success' ) 
             {
                 return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully','po_status' => $po_status],200);
             }
@@ -4023,7 +4019,7 @@ class OrderStatusCntrl extends Controller
                 }
             }
 
-            if ($this->class_status === 'success' ) 
+            if ($jsonResponse === 'success' ) 
             {
                return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert,'po_status' => $po_status],200);
             }
