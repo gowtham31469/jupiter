@@ -75,9 +75,4 @@ class TescoSingleStickerOrderRequest extends FormRequest
             'supplier.required'  => 'Tesco Supplier is required.',
         ];
     }
-
-    public function keywords ()
-    {
-        return explode(',', $this->get('keywords'));
-    }
 }

@@ -28,7 +28,7 @@ class Tpnd implements Rule
         $tpnds = explode(',', $value);
         foreach($tpnds as $tpnd)
         {
-            if(strlen($tpnd) != 14)
+            if(strlen($tpnd) != 9)
             {
                 return false;
             }
