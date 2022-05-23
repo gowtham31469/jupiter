@@ -42,16 +42,11 @@ use App\Classes\UploadCombinedPO;
 use App\Classes\CancelTescoOrders;
 use App\Http\Controllers\Controller;
 use App\TescoWashcareOrdersQuantity;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\Process\Process;
 use App\TescoSwingTicketOrdersQuantity;
-use Illuminate\Support\Facades\Validator;
 use App\Classes\StoreOrderManagementHistory;
 use App\TescoWashcareOrdersComponentMapping;
 use App\TescoWashcareOrdersComponentFibreMapping;
-use Intervention\Image\ImageManagerStatic as Image;
 use App\Http\Requests\TescoRatioStickerOrderRequest;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class OrderManagementCntrl extends Controller
 {
