@@ -246,8 +246,9 @@ function tescoApprovePI(template_id,id,table_name,billamnt)
                 $('.snackbar_span').html('PI Approved Successfully');
                 $('#snackbar').css('background-color','#00b6ff');
                 showSnackbar();
-
-                submitOs()
+                if(window.location.pathname.split("/")[3] == 'order-status'){
+                    submitOs()
+                }
             },
             400: function()
             {
