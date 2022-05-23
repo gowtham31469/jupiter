@@ -5,40 +5,26 @@ namespace App\Http\Controllers\Customer\Tesco;
 use DB;
 use PDF;
 use Auth;
-use View;
 use Config;
-use Response;
 use Carbon\Carbon;
 use App\TescoTCL1Orders;
 use App\TescoTCL2Orders;
-use App\TescoTCL4Orders;
 use App\TescoTHL1Orders;
-use App\TescoTHL3Orders;
 use App\TescoTSL1Orders;
-use App\TescoTSL3Orders;
-use App\Classes\ErpOrders;
 use App\Classes\TescoOrders;
 use App\TescoWashcareOrders;
 use Illuminate\Http\Request;
 use App\FinancialYearResetDate;
-use App\OrderManagementHistory;
 use App\TescoSwingTicketOrders;
 use App\Classes\SaveTescoOrders;
 use App\TescoTCL1OrdersQuantity;
 use App\TescoTCL2OrdersQuantity;
-use App\TescoTCL4OrdersQuantity;
 use App\TescoTHL1OrdersQuantity;
-use App\TescoTHL3OrdersQuantity;
 use App\TescoTSL1OrdersQuantity;
-use App\TescoTSL3OrdersQuantity;
 use App\Classes\UploadCombinedPO;
 use App\Classes\CancelTescoOrders;
-use App\Classes\ApproveTescoOrders;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Http\Requests\TescoRatioStickerOrderRequest;
 
 class OrderController extends Controller
 {
@@ -358,9 +344,10 @@ class OrderController extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioOrders(Request $request)
+    public function setCERatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj  = new TescoOrders();
             
@@ -613,9 +600,11 @@ class OrderController extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioOrders(Request $request)
+    public function setUKRatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
+
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj  = new TescoOrders();
             
