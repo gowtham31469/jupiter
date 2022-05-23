@@ -981,7 +981,7 @@ function createOrders(parsedObj = false, oType = false) {
                          var po_number_component = `<div class="col-md-3">
                                                         <div class="form-group has-feedback">
                                                             <label for="tesco_po_number">PO Number</label>
-                                                            <input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">
+                                                            <input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="PO Number must be 7 characters." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">
                                                             <div class="help-block with-errors"></div>
                                                         </div>
                                                     </div>`;
