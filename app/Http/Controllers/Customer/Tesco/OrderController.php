@@ -38,6 +38,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\TescoRatioStickerOrderRequest;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class OrderController extends Controller
@@ -358,9 +359,10 @@ class OrderController extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioOrders(Request $request)
+    public function setCERatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj  = new TescoOrders();
             
@@ -613,9 +615,11 @@ class OrderController extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioOrders(Request $request)
+    public function setUKRatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
+
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj  = new TescoOrders();
             

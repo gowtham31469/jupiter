@@ -5900,12 +5900,26 @@ function storeCERatioTCL1TCL2TSL1()
                      $(".loader").show();
                      $('.submit-btn').prop('disabled', true);
                  },
-                 success: function (data) {
-
-                    /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
+                 statusCode: {
+                    200: function (data) {
+                        /** Call  afterOrderSubmitted() */
+                        var stl_no =  (zone=="CE")? ce_style : uk_style;
+                        afterOrderSubmitted(data,po_number,stl_no)
+                    },
+                    400: function (error) {
+                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                        $('.submit-btn').prop('disabled', false);
+                    },
+                    422: function (errorXHR) {
+                        var error_msg = ``;
+                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                            error_msg += `<li>` + valueOfElement + `</li>`;
+                        });
+                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                        $('.submit-btn').prop('disabled', false);
+                        $(window).scrollTop(0);
+                    }
+                },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
                   if (this.tryCount <= this.retryLimit) {
@@ -6022,12 +6036,26 @@ function storeCERatioTHL1()
                      $(".loader").show();
                      $('.submit-btn').prop('disabled', true);
                  },
-                 success: function (data) {
-
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
+                 statusCode: {
+                    200: function (data) {
+                        /** Call  afterAdminOrderSubmitted() */
+                        var stl_no =  (zone=="CE")? ce_style : uk_style;
+                        afterOrderSubmitted(data,po_number,stl_no)
+                    },
+                    400: function (error) {
+                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                        $('.submit-btn').prop('disabled', false);
+                    },
+                    422: function (errorXHR) {
+                        var error_msg = ``;
+                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                            error_msg += `<li>` + valueOfElement + `</li>`;
+                        });
+                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                        $('.submit-btn').prop('disabled', false);
+                        $(window).scrollTop(0);
+                    }
+                },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
                   if (this.tryCount <= this.retryLimit) {
@@ -6136,11 +6164,26 @@ function storeUKRatioTCL1TCL2TSL1()
                      $(".loader").show();
                      $('.submit-btn').prop('disabled', true);
                  },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
+                 statusCode: {
+                    200: function (data) {
+                        /** Call  afterAdminOrderSubmitted() */
+                        var stl_no =  (zone=="CE")? ce_style : uk_style;
+                        afterOrderSubmitted(data,po_number,stl_no)
+                    },
+                    400: function (error) {
+                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                        $('.submit-btn').prop('disabled', false);
+                    },
+                    422: function (errorXHR) {
+                        var error_msg = ``;
+                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                            error_msg += `<li>` + valueOfElement + `</li>`;
+                        });
+                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                        $('.submit-btn').prop('disabled', false);
+                        $(window).scrollTop(0);
+                    }
+                },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
                   if (this.tryCount <= this.retryLimit) {
@@ -6228,11 +6271,26 @@ function storeUKRatioTHL1()
                      $(".loader").show();
                      $('.submit-btn').prop('disabled', true);
                  },
-                 success: function (data) {
-                       /** Call  afterOrderSubmitted() */
-                    var stl_no =  (zone=="CE")? ce_style : uk_style;
-                    afterOrderSubmitted(data,po_number,stl_no)
-                 },
+                 statusCode: {
+                    200: function (data) {
+                        /** Call  afterAdminOrderSubmitted() */
+                        var stl_no =  (zone=="CE")? ce_style : uk_style;
+                        afterOrderSubmitted(data,po_number,stl_no)
+                    },
+                    400: function (error) {
+                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                        $('.submit-btn').prop('disabled', false);
+                    },
+                    422: function (errorXHR) {
+                        var error_msg = ``;
+                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                            error_msg += `<li>` + valueOfElement + `</li>`;
+                        });
+                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                        $('.submit-btn').prop('disabled', false);
+                        $(window).scrollTop(0);
+                    }
+                },
                  error: function(errorXHR, errorStatus, errorThrown) {
                   this.tryCount++;
                   if (this.tryCount <= this.retryLimit) {
