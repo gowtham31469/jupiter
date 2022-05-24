@@ -28,6 +28,8 @@ use App\TescoPrimarySize;
 use App\TescoSecondarySizeChart;
 use App\TescoSeasonCode;
 use App\TescoProductDescription;
+use App\NonArtworkSizeChart;
+use App\NonArtworkUom;
 
 class TescoSettings extends Controller
 {
@@ -2294,6 +2296,166 @@ class TescoSettings extends Controller
       }
     }
 
+
+public function naSizeChart()
+{
+  try {
+        $sizechart = NonArtworkSizeChart::select('*')->orderBy('is_enabled','desc')->get();
+        return response()->json(['error'=>'false','message' =>'success', 'sizechart' => $sizechart]);
+      } catch (\Exception $e)
+      {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
 }
 
+public function naUOM()
+{
+  try {
+        $uom = NonArtworkUom::select('*')->orderBy('is_enabled','desc')->get();
+        return response()->json(['error'=>'false','message' =>'success', 'uom' => $uom]);
+      } catch (\Exception $e)
+      {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+}
+
+public function addnaSizeChart(Request $request)
+{
+    try {
+         $is_exists = NonArtworkSizeChart::where([['size', '=', $request['na_size']]])->exists();
+
+         if($is_exists)
+         {
+           $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
+         }
+         else
+         {
+            $inserted = NonArtworkSizeChart::create([
+                    'size'   => $request['na_size'],
+                    'is_enabled' => 1
+                  ]);
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+         }
+
+    } catch (\Exception $e)
+    {
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+    return $result;
+}
+
+public function addnaUOM(Request $request)
+{
+    try {
+         $is_exists = NonArtworkUom::where([['uom', '=', $request['na_uom']]])->exists();
+
+         if($is_exists)
+         {
+           $result = response()->json(['error'=> true,'message' =>'UOM Already Exists'],208);
+         }
+         else
+         {
+            $inserted = NonArtworkUom::create([
+                    'uom'   => $request['na_uom'],
+                    'is_enabled' => 1
+                  ]);
+            $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+         }
+
+    } catch (\Exception $e)
+    {
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+    return $result;
+}
+
+public function getnaSizeChartById(Request $request)
+{
+    try {
+      $sizechart = NonArtworkSizeChart::select('*')->where('id', $request['id'])->get();
+      return response()->json(['error'=>'false','message' =>'success', 'sizechart' => $sizechart]);
+    } catch (\Exception $e)
+    {
+      return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+}
+
+public function getnaUOMById(Request $request)
+{
+    try {
+      $uom = NonArtworkUom::select('*')->where('id', $request['id'])->get();
+      return response()->json(['error'=>'false','message' =>'success', 'uom' => $uom]);
+    } catch (\Exception $e)
+    {
+      return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+}
+
+public function updatenaSizeChartById(Request $request)
+{
+try {
+      $id        = $request['id'];
+      $size  = $request['na_size'];
+
+      $is_exists = NonArtworkSizeChart::where([
+        ['size', '=', $size],
+        ['id','<>',$id]
+      ])->exists();
+
+      if($is_exists)
+      {
+          $result = response()->json(['error'=> true,'message' =>'Size Chart Already Exists'],208);
+      }
+      else
+      {
+        NonArtworkSizeChart::find($id)
+          ->update([
+            'size' => $size
+        ]);
+
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      }
+    
+    } catch (\Exception $e)
+    {
+      $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+    return $result;
+}
+
+
+
+public function updatenaUOMById(Request $request)
+{
+try {
+      $id        = $request['id'];
+      $uom  = $request['na_uom'];
+
+      $is_exists = NonArtworkUom::where([
+        ['uom', '=', $uom],
+        ['id','<>',$id]
+      ])->exists();
+
+      if($is_exists)
+      {
+          $result = response()->json(['error'=> true,'message' =>'UOM Already Exists'],208);
+      }
+      else
+      {
+        NonArtworkUom::find($id)
+          ->update([
+            'uom' => $uom
+        ]);
+
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+      }
+    
+    } catch (\Exception $e)
+    {
+      $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+    return $result;
+}
+
+}
 
