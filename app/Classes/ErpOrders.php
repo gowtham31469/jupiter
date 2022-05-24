@@ -70,112 +70,102 @@ class ErpOrders
 	 */
 	public function updateTescoErpOrders($request)
 	{
+		$qnty_table     = $request['tableName'] . '_quanty';
+		$order_table_array = explode("_", $request['tableName']);
 
-		try {
-			$qnty_table     = $request['tableName'] . '_quanty';
-			$order_table_array = explode("_", $request['tableName']);
-
-			switch ($order_table_array[1]) {
-				case 'washcare':
-					$template_name = title_case($order_table_array[1]);
-					break;
-				case 'swingticket':
-					$template_name = 'SwingTicket';
-					break;
-				default:
-					$template_name = strtoupper($order_table_array[1]);
-					break;
-			}
-
-			$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
-
-			$orders  = $model_name::with([
-				'quantities',
-				'template',
-				'customer'
-			])
-			->where('id', $request['id'])
-			->first();
-
-			if ($orders->customer->pi_required == 1 && $orders->customer->po_required == 0) {
-
-				$po_no     = $orders->pi_id;
-				$po_file   = $orders->pi_file;
-			} else if ($orders->customer->po_required == 1) {
-
-				$po_no     = $orders->purchase_order_no;
-				$po_file   = $orders->po_file;
-			}
-
-			$erp_order = Erp::where([
-				'buyer_id' => $request['buyer_id'],
-				'customer_id' => $orders->tesco_supplier_id,
-				'po_no' => $po_no,
-			])
-			->select('id', 'status')
-			->first();
-			
-			if ($erp_order) {
-
-				Erp::where('id', $erp_order->id)
-					->update([
-						'status' => 1,
-						'previous_status' => $erp_order->status,
-						'po_file' => $po_file
-					]);
-
-				$erp_order_id = $erp_order->id;
-
-				$this->insertOrderDetails(
-					$qnty_table,
-					$orders,
-					$erp_order,
-					$request['buyer_id'],
-					$po_no,
-					$request['tableName']
-				);
-				
-			} else {
-
-				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
-				$erp_id = $this->erp_id_gen_obj->generateErpID(
-					$this->financial_year_start,
-					$this->today_date,
-					$this->financial_year,
-					$this->month
-				);
-				
-				$new_erp_order = Erp::create([
-					'buyer_id'         => $request['buyer_id'],
-					'customer_id'      => $orders->tesco_supplier_id,
-					'po_no'            => $po_no,
-					'po_file'          => $po_file,
-					'status'		   => 1,
-					'created_at'       => $this->current_date,
-					'erp_id'           => $erp_id
-				]);
-				
-				$erp_order_id = $new_erp_order->id;
-				
-				$this->insertOrderDetails(
-					$qnty_table,
-					$orders,
-					$new_erp_order,
-					$request['buyer_id'],
-					$po_no,
-					$request['tableName']
-				);
-			}
-
-			return response()->json([
-				'error' => false, 'message' => 'success',
-				'erp_id' => $erp_order_id,
-				'buyer_id' => (int)$request['buyer_id'],
-				'customer_id' => $orders->tesco_supplier_id
-			], 200);
-		} catch (\Exception $e) {
-			throw new \Exception($e);
+		switch ($order_table_array[1]) {
+			case 'washcare':
+				$template_name = title_case($order_table_array[1]);
+				break;
+			case 'swingticket':
+				$template_name = 'SwingTicket';
+				break;
+			default:
+				$template_name = strtoupper($order_table_array[1]);
+				break;
 		}
+
+		$model_name  = 'App\\' . "Tesco" . $template_name . "Orders";
+
+		$orders  = $model_name::with([
+			'quantities',
+			'template',
+			'customer'
+		])
+		->where('id', $request['id'])
+		->first();
+
+		if ($orders->customer->pi_required == 1 && $orders->customer->po_required == 0) {
+
+			$po_no     = $orders->pi_id;
+			$po_file   = $orders->pi_file;
+		} else if ($orders->customer->po_required == 1) {
+
+			$po_no     = $orders->purchase_order_no;
+			$po_file   = $orders->po_file;
+		}
+
+		$erp_order = Erp::where([
+			'buyer_id' => $request['buyer_id'],
+			'customer_id' => $orders->tesco_supplier_id,
+			'po_no' => $po_no,
+		])
+		->select('id', 'status')
+		->first();
+		
+		if ($erp_order) {
+
+			Erp::where('id', $erp_order->id)
+				->update([
+					'status' => 1,
+					'previous_status' => $erp_order->status,
+					'po_file' => $po_file
+				]);
+
+			$erp_order_id = $erp_order->id;
+
+			$this->insertOrderDetails(
+				$qnty_table,
+				$orders,
+				$erp_order,
+				$request['buyer_id'],
+				$po_no,
+				$request['tableName']
+			);
+			
+		} else {
+
+			// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
+			$erp_id = $this->erp_id_gen_obj->generateErpID(
+				$this->financial_year_start,
+				$this->today_date,
+				$this->financial_year,
+				$this->month
+			);
+			
+			$new_erp_order = Erp::create([
+				'buyer_id'         => $request['buyer_id'],
+				'customer_id'      => $orders->tesco_supplier_id,
+				'po_no'            => $po_no,
+				'po_file'          => $po_file,
+				'status'		   => 1,
+				'created_at'       => $this->current_date,
+				'erp_id'           => $erp_id
+			]);
+			
+			$erp_order_id = $new_erp_order->id;
+			
+			$this->insertOrderDetails(
+				$qnty_table,
+				$orders,
+				$new_erp_order,
+				$request['buyer_id'],
+				$po_no,
+				$request['tableName']
+			);
+		}
+
+		return 'success';
 	}
 	
 	/**
