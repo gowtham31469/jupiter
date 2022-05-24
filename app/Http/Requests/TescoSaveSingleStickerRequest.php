@@ -4,6 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\EANBarcode;
+use App\Rules\ITFBarcode;
+use App\Rules\Numeric;
+use App\Rules\OrmsTpn;
 
 class TescoSaveSingleStickerRequest extends FormRequest
 {
@@ -39,6 +43,12 @@ class TescoSaveSingleStickerRequest extends FormRequest
             'barcode.*'             => ['nullable', 'sometimes', 'numeric'],
             'case_size.*'           => ['nullable', 'sometimes', 'numeric'],
             'size.*'                => ['nullable', 'sometimes'],
+
+            'orms_tpn'            => ['nullable', 'sometimes', new Numeric, new OrmsTpn],
+            'itf_barcode'         => ['nullable', 'sometimes', new ITFBarcode, new Numeric],
+            'ean_barcode'         => ['nullable', 'sometimes', new EANBarcode, new Numeric],
+            'case_size'           => ['nullable', 'sometimes', new Numeric],
+            'size'                => ['nullable', 'sometimes'],
             
         ];
     }

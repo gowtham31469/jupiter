@@ -958,7 +958,7 @@ function createOrders(parsedObj = false, oType = false) {
 					var po_number_component = `<div class="col-md-3">
 													<div class="form-group has-feedback">
 														<label for="tesco_po_number">PO Number</label>
-														<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">
+														<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="PO Number must be 7 characters." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number" onkeyup="dynamicSVGTemplates()" maxlength="7">
 														<div class="help-block with-errors"></div>
 													</div>
 												</div>`;
@@ -1345,7 +1345,7 @@ function createOrders(parsedObj = false, oType = false) {
                                                 <td class="slno">1</td>\
                                                 <td>\
                                                     <div class="form-group has-feedback">\
-                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
+                                                        <input type="text" class="form-control input-sm ce_ratio_orms_tpn" required="" id="ce_ratio_orms_tpn_1" data-minlength="13" data-required-error="Mandatory Field." data-minlength-error="Enter 13 digits." name="ce_ratio_orms_tpn_1" onkeypress="return isNumber(event)" onchange="return isNumber(event)" placeholder="Enter ORMS TPN" onkeyup="dynamicSVGTemplates()" maxlength="13">\
                                                         <div class="help-block with-errors"></div>\
                                                     </div>\
                                                 </td>\
@@ -7507,9 +7507,6 @@ function setTescoOrder() {
 		var count_TCL1 = [];
 		var count_TCL2 = [];
 		var count_TSL1 = [];
-		var count_TCL4 = [];
-		var count_TSL3 = [];
-		var count_THL3 = [];
 		var count_THL1 = [];
 		var msg        = '';
 
@@ -7938,10 +7935,25 @@ function storeCERatioTCL1TCL2TSL1() {
 				$(".loader").show();
 				$('.submit-btn').prop('disabled', true);
 			},
-			success: function (data) {
-				/** Call  afterAdminOrderSubmitted() */
-				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterAdminOrderSubmitted(data,po_number,stl_no)
+			statusCode: {
+				200: function (data) {
+					/** Call  afterAdminOrderSubmitted() */
+					var stl_no =  (zone=="CE")? ce_style : uk_style;
+					afterAdminOrderSubmitted(data,po_number,stl_no)
+				},
+				400: function (error) {
+					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+					$('.submit-btn').prop('disabled', false);
+				},
+				422: function (errorXHR) {
+					var error_msg = ``;
+					$.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+						error_msg += `<li>` + valueOfElement + `</li>`;
+					});
+					$('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+					$('.submit-btn').prop('disabled', false);
+					$(window).scrollTop(0);
+				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -8055,11 +8067,25 @@ function storeCERatioTHL1() {
 				$(".loader").show();
 				$('.submit-btn').prop('disabled', true);
 			},
-			success: function (data) {
-
-				/** Call  afterAdminOrderSubmitted() */
-				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterAdminOrderSubmitted(data,po_number,stl_no)
+			statusCode: {
+				200: function (data) {
+					/** Call  afterAdminOrderSubmitted() */
+					var stl_no =  (zone=="CE")? ce_style : uk_style;
+					afterAdminOrderSubmitted(data,po_number,stl_no)
+				},
+				400: function (error) {
+					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+					$('.submit-btn').prop('disabled', false);
+				},
+				422: function (errorXHR) {
+					var error_msg = ``;
+					$.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+						error_msg += `<li>` + valueOfElement + `</li>`;
+					});
+					$('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+					$('.submit-btn').prop('disabled', false);
+					$(window).scrollTop(0);
+				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -8190,10 +8216,25 @@ function storeUKRatioTCL1TCL2TSL1() {
 				$(".loader").show();
 				$('.submit-btn').prop('disabled', true);
 			},
-			success: function (data) {
-				/** Call  afterAdminOrderSubmitted() */
-				var stl_no =  (zone=="CE")? ce_style : uk_style;
-				afterAdminOrderSubmitted(data,po_number,stl_no)
+			statusCode: {
+				200: function (data) {
+					/** Call  afterAdminOrderSubmitted() */
+					var stl_no =  (zone=="CE")? ce_style : uk_style;
+					afterAdminOrderSubmitted(data,po_number,stl_no)
+				},
+				400: function (error) {
+					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+					$('.submit-btn').prop('disabled', false);
+				},
+				422: function (errorXHR) {
+					var error_msg = ``;
+					$.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+						error_msg += `<li>` + valueOfElement + `</li>`;
+					});
+					$('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+					$('.submit-btn').prop('disabled', false);
+					$(window).scrollTop(0);
+				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
@@ -8304,6 +8345,26 @@ function storeUKRatioTHL1() {
 				/** Call  afterAdminOrderSubmitted() */
 				var stl_no =  (zone=="CE")? ce_style : uk_style;
 				afterAdminOrderSubmitted(data,po_number,stl_no)
+			},
+			statusCode: {
+				200: function (data) {
+					/** Call  afterAdminOrderSubmitted() */
+					var stl_no =  (zone=="CE")? ce_style : uk_style;
+					afterAdminOrderSubmitted(data,po_number,stl_no)
+				},
+				400: function (error) {
+					$('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+					$('.submit-btn').prop('disabled', false);
+				},
+				422: function (errorXHR) {
+					var error_msg = ``;
+					$.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+						error_msg += `<li>` + valueOfElement + `</li>`;
+					});
+					$('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+					$('.submit-btn').prop('disabled', false);
+					$(window).scrollTop(0);
+				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				this.tryCount++;
