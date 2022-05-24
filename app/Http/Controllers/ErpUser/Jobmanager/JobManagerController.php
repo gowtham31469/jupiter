@@ -55,6 +55,9 @@ class JobManagerController extends Controller
 	public function __construct()
 	{
 		$this->middleware('erpuser');
+
+		$role = "JOB CARD MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 

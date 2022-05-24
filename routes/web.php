@@ -831,7 +831,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
-	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
+	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager'); 
 	
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');	
 	
@@ -844,7 +844,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
 	
 	/* Routes for Print Manager Module */
-	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
+	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager'); 
 	
 	/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 

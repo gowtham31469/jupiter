@@ -30,6 +30,8 @@ class PoManagerController extends Controller
     public function __construct()
     {
 		$this->middleware('erpuser');
+		$role = "PO MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 

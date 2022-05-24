@@ -25,6 +25,8 @@ class PrintManagerController extends Controller
      */
     public function __construct()
     {
+		$role = "PRINT MANAGER";
+        $this->middleware('role_permission:'.$role);
         $this->middleware('erpuser');
    
     }
