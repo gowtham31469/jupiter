@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddVotesToUsersTable extends Migration
+class CreateNonArtworkSizeChartTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddVotesToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::create('non_artwork_size_chart', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('size');
+            $table->string('description')->nullable(true);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddVotesToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('non_artwork_size_chart');
     }
 }
