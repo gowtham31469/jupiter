@@ -18,54 +18,61 @@ function isNumber(evt) {
     }
 }
 
-function add_template() {
+function add_template(template_id) {
+	var tax = $('#tax_new').val();
     var template_name = $('#template_name').val();
-    var reference_number = $('#reference_number').val();
-    var company = $('#company').val();
-    alert();
-
-    $.ajax({
+	var ref = $('#reference_number').val();
+	var company = $('#company_new').val();
+	var hsncode = $('#hsn_code_new').val();
+	var glcode = $('#gl_code_new').val();
+	var color = $('#color_new').val();
+	var material = $('#material_new').val();
+	var height = $('#dimension_height_new').val();
+	var width = $('#dimension_width_new').val();
+	var buyer = localStorage.getItem("buyer");
+	var gltext = $('#gl_text_new').val();
+	var name_in_reports = $('#name_in_reports_new').val();
+	
+	$.ajax({
         url: base_url + "/admin/non-artwork-template/add-new-template",
-        method: 'POST',
-        data: { _token: csrf_token, template_name: template_name, reference_number: reference_number, company: company},
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        statusCode: {
-
-            /** [Show response status based on HTTP status code] */
-            200: function () {
-                $('.snackbar_span').html('Admin Added Successfully');
-                showSnackbar();
-                $('#addAdminModal').modal('hide');
-                admin();
-            },
-            400: function () {
-                $('.snackbar_span').html("Something went wrong!!");
-                showSnackbar();
-            },
-            409: function () {
-                $('#add_admin_result').removeAttr('style');
-                $('#add_admin_result').html('Email already registered.')
-                $("#add_admin_result").addClass("alert alert-warning");
-            }
-        },
-        error: function (errorXHR, errorStatus, errorThrown) {
-            console.error(errorStatus);
-        },
-        complete: function () {
-            /** [ To make top menu active ] */
-            $(function () {
-                var url = window.location;
-                $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-                $('.dynamic-menu a').filter(function () {
-                    return this.href == url;
-                }).parent('li').addClass('current-page').find('a').addClass('active');
-            });
-            $(".loader").hide();
-        }
-    })
+		type: "POST",
+		dataType: "json",
+		data: {
+			tax: tax,
+			ref: ref,
+			company: company,
+			hsncode:hsncode,
+			glcode:glcode,
+			color:color,
+			material_id:material,
+			height:height,
+			width:width,
+			template_id:template_id,
+			_token: csrf_token,
+			gltext:gltext,
+			buyer:buyer,
+			name_in_reports:name_in_reports,
+            template_name:template_name
+		},
+		beforeSend: function () {
+			$(".loader").show();
+			$(".loader").css('margin-top', '12%');
+		},
+		success: function (data) {
+            $('#addTemplateModal').modal('hide');
+			template_list();
+		},
+		error: function (data) {
+			$('.snackbar_span').html('Unable to save. Try again!!');
+			showSnackbar();
+		},
+		complete: function () {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+		}
+	});
 }
+
 
 function template_list() {
     var buyer = localStorage.getItem("buyer");

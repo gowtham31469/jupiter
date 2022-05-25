@@ -82,44 +82,91 @@
     {{-- Add a new template --}}
     <!-- Modal -->
     <div class="modal fade" id="addTemplateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addTemplateModal">Add Template</h5>
+            <h5 class="modal-title" id="addTemplateModal"><b>Add Template</b></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            {!! Form::open(['id' => 'add_template_form','data-toggle' => 'validator','role' => 'form']) !!}
-            <div class="modal-body">
-              <div id="add_new_template"></div>
-                <div class="form-group has-feedback">
-                  {!! Form::label('template_name', 'Template Name', ['class' => 'form_label']) !!}
-                  {!! Form::text('template_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
-                  <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                  {!! Form::label('reference_number', 'Reference Number', ['class' => 'form_label']) !!}
-                  <div class="input-group">
-                    {!! Form::text('reference_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Ref.No', 'maxlength' => '50')) !!}
+            <div class="">
+              <div class="row">
+                  {!! Form::open(['id' => 'add_template_form','data-toggle' => 'validator','role' => 'form']) !!}
+                  <div class="modal-body">
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('template_name', 'Template Name :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::text('template_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('reference_number', 'Reference Number :', ['class' => 'form_label pull-left']) !!}
+                          {!! Form::text('reference_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Ref.No', 'maxlength' => '50')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('company_new', 'Select Company :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::select('company_new',  $value=$company, null, ['class' => 'form-control input-sm']) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('tax_new', 'Taxation Value (%) :', ['class' => 'form_label pull-left']) !!}
+                          {!! Form::select('tax_new', $value= $tax, null, ['class' => 'form-control input-sm']) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('material_new', 'Material :', ['class' => 'form_label pull-left']) !!}
+                          {!! Form::select('material_new', $value= $material, null, ['class' => 'form-control input-sm']) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('gl_text_new', 'GL Text :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::text('gl_text_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Text','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('gl_code_new', 'GL Code :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::text('gl_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;', 'onkeypress'=> 'return isNumber(event)')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('color_new', 'Color :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::text('color_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('hsn_code_new', 'HSN Code :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::number('hsn_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'HSN Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('dimension_height_new', 'Height (mm): ', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::number('dimension_height_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Height','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('dimension_width_new', 'Width (mm) :', ['class' => 'form_label pull-left']) !!}
+                        {!! Form::number('dimension_width_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Width','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                        {!! Form::label('name_in_reports_new', 'Name in reports :', ['class' => 'form_label pull-left']) !!}
+                          {!! Form::select('name_in_reports_new', $value=$name_in_reports, null, ['class' => 'form-control input-sm']) !!}
+                        <div class="help-block with-errors"></div>
+                      </div>
+                      <div class="clearfix"></div>
                   </div>
-                  <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group has-feedback">
-                  {!! Form::label('company', 'Select Company', ['class' => 'form_label']) !!}
-                  <div class="input-group">
-                    {!! Form::select('company', [ 1 => 'Jupiter Garments Accessories', 2=> 'Spectra Prints' ], null, ['class' => 'form-control input-sm']) !!}
+                  <div class="modal-footer">
+                      {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                      {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
                   </div>
-                  <div class="help-block with-errors"></div>
-                </div>
-               
+                  {!! Form::close() !!}
+              </div>
             </div>
-            <div class="modal-footer">
-                {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
-            </div>
-            {!! Form::close() !!}
           </div>
         </div>
       </div>
@@ -342,16 +389,16 @@
                   
         </div>`);
         });
-         $('.modal').on('hidden.bs.modal', function (e) {
+        $('.modal').on('hidden.bs.modal', function (e) {
             $(this)
                 .find("input[type=textarea]").val('').end();
-            
         })
 
       /** Add template bootstrap form validation **/
       $('#add_template_form').validator().on('submit', function (e) {
         e.preventDefault();
-          add_template();
+        selectedIndex = $("#tree1").jstree("get_selected", true);
+        add_template(selectedIndex[0].id);
       })
      </script>
     @endsection

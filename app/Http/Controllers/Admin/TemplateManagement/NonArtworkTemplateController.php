@@ -30,6 +30,12 @@ class NonArtworkTemplateController extends Controller
         return view('Admin/login');
     }
 
+
+    /**
+     * Method to fetch buyers
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function templateList()
     {
         $module_var = new Modules();
@@ -44,11 +50,83 @@ class NonArtworkTemplateController extends Controller
             
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
-            return view('Admin/Template Management/non-artwork-template-list',['buyers' => $buyers,'buyer_count' => $buyer_count]);
+            $company = DB::table("company")->pluck('name', 'id');
+            $tax = DB::table("tax_code")->pluck('tax', 'id');
+            $material = DB::table("raw_material_master")->where('is_enabled','=',true)->pluck('material_name_employee', 'id');
+            $name_in_reports = DB::table("reports_template_level_name")->pluck('name', 'id');
+            
+            return view('Admin/Template Management/non-artwork-template-list',['buyers' => $buyers, 'buyer_count' => $buyer_count, 'company' => $company, 'tax' => $tax, 'material'=> $material, 'name_in_reports' => $name_in_reports ]);
         }
         else
         {
              return redirect('/admin/dashboard');
         }
-    }  
+    }
+    
+
+    /**
+     * Method to add new templates
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function addTemplate(Request $request) {
+        $buyer 		 = $request['buyer'];
+        $taxation    = $request['tax'];
+        $ref         = $request['ref'];
+        $company     = $request['company'];
+        $hsncode     = $request['hsncode'];
+        $glcode      = $request['glcode'];
+        $color       = $request['color'];
+        $material_id = $request['material_id'];
+        $height      = $request['height'];
+        $width       = $request['width'];
+        $gltext      = $request['gltext'];
+        $parent_id   = $request['template_id'];
+        $template_name   = $request['template_name'];
+        
+        
+        $auto_inc_id = DB::table($buyer.'_item_master')->max('id');
+        $item_id = DB::table($buyer.'_item_master')->insertGetId([
+                            'id' => $auto_inc_id + 1,
+                            'company_id' => $company,
+                            'parent_id' => $parent_id,
+                            'item_name'    => $template_name,
+                            'tag_name'    => $ref,
+                            'ref_no' => $ref,
+                            'is_qrcode_required' => 0
+                    ]);
+    
+        DB::table($buyer.'_template')->insertGetId([
+                            'item_id'          => $item_id,
+                            'tax'              => $taxation,
+                            'template_name'    => $ref,
+                            'hsn_code'         => $hsncode,
+                            'gl_code'          => $glcode,
+                            'gl_text'          => $gltext,
+                            'color'            => $color,
+                            'dimension_height' => $height,
+                            'dimension_width'  => $width,
+                            'material_id'      => $material_id,
+                            'hierarchy_id'     => $parent_id,
+                            'name_in_reports'  => $request['name_in_reports'],
+                            'flag'             => 0
+                        ]);
+        return response()->json(['error'=> false,'message' =>'success'],200);
+    }
+
+    /**
+	*To Show Template When Click Tree Node
+	*/
+    public function templateView(Request $request)
+    {
+         $template_id = $request['template_id'];
+		 $buyer = $request['buyer'];
+         $treeviewData= DB::table($buyer."_template")
+                                ->select($buyer.'_template.*',$buyer.'_item_master.ref_no',$buyer.'_item_master.company_id','company.name as company_name')
+                                ->join($buyer.'_item_master',$buyer.'_item_master.id','=',$buyer.'_template.item_id')
+                                ->join('company','company.id','=',$buyer.'_item_master.company_id')
+                                ->where('item_id',$template_id)->orderBy($buyer.'_template.id','asc')
+                                ->get();
+         return json_encode($treeviewData);
+    } 
 }
