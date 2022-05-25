@@ -653,6 +653,19 @@ Route::post('admin/tesco/settings/tax-code', 'Admin\Settings\Tesco\TescoSettings
 Route::post('admin/tesco/add-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@addTaxCodes');
 Route::get('admin/tesco/get-tesco-tax-code-details', 'Admin\Settings\Tesco\TescoSettings@getTaxCodesById');
 Route::put('admin/tesco/update-tesco-tax-code', 'Admin\Settings\Tesco\TescoSettings@updateTaxCodesById');
+
+
+Route::post('admin/tesco/settings/na-size-chart', 'Admin\Settings\Tesco\TescoSettings@naSizeChart');
+Route::post('admin/tesco/add-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@addnaSizeChart');
+Route::get('admin/tesco/get-tesco-na-size-chart-details', 'Admin\Settings\Tesco\TescoSettings@getnaSizeChartById');
+Route::put('admin/tesco/update-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@updatenaSizeChartById');
+
+Route::post('admin/tesco/settings/na-uom', 'Admin\Settings\Tesco\TescoSettings@naUOM');
+Route::post('admin/tesco/add-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@addnaUOM');
+Route::get('admin/tesco/get-tesco-na-uom-details', 'Admin\Settings\Tesco\TescoSettings@getnaUOMById');
+Route::put('admin/tesco/update-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@updatenaUOMById');
+
+
 Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@rawMaterials');
 Route::post('admin/tesco/add-raw-material', 'Admin\Settings\Tesco\TescoSettings@addRawMaterial');
 Route::get('admin/tesco/get-raw-material-details', 'Admin\Settings\Tesco\TescoSettings@getRawMaterialById');
