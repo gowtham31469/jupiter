@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/Erp/custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/Erp/jobcard.css') }}">
 	<link href="{{ asset('js/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('js/datatables/responsive.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     

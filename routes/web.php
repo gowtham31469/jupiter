@@ -947,6 +947,9 @@ Route::group(['prefix' => 'erp'], function () {
 	//Financial Year
 	Route::get('/settings/financial-year', 'ErpUser\ERPSettings\ERPSettingsController@getFinancialYear')->name('erp-financialyear');
 	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
+
+	/* Routes for Non artwork jobcards */
+	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@index')->name('non-artwork-jobcard-manager'); 
 });
 
 //Orchestra Order Management - customer
