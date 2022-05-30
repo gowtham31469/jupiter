@@ -130,6 +130,8 @@
 		<svg id="ean-13"></svg>\
 	</div>
 </div>
+<div id="splitdiv" style="opacity: 0;position:absolute;">
+	</div>
 <!-- Job card updation Modal -->
 <div class="modal jobcard-updation-modal fade" id="jobcardUpdationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardUpdationModalCenter">
 	<div class="modal-dialog modal-lg jobcard-updation-modal-dialog" role="document">
