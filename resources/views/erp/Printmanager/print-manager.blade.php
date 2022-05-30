@@ -374,10 +374,10 @@ transform: scale(1);
 	<div id="svgdiv" style="position:absolute;visibility:hidden">\
 	 <svg id="ean-13"></svg>\
    </div>
-   <div id="splitdiv"  style="position:absolute;visibility:hidden">
-    </div>
 </div>
 
+<div id="splitdiv">
+    </div>
 <!-- Buyer selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog buyer-selection-modal-dialog" role="document">
