@@ -621,7 +621,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
             
             
-            $('#modaldiv').append('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+en_care_instructions+'</div>');  
+            $('#splitdiv').append('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre">'+en_care_instructions+'</div>');  
 
 
             $chunk_str = chunksplit("breaking_words")
@@ -780,15 +780,15 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
            // $sk_garment_str = chunkSubstr(sk_garment_component, 28).split(/\r?\n/);
             //$hu_garment_str = chunkSubstr(hu_garment_component, 28).split(/\r?\n/);
 
-            $('#modaldiv').append('<div id="breaking_words_en" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+en_garment_component+'</div>');  
+            $('#splitdiv').append('<div id="breaking_words_en" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre">'+en_garment_component+'</div>');  
 
-            // $('#modaldiv').append('<div id="breaking_words_pl" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+pl_garment_component+'</div>');  
+            // $('#splitdiv').append('<div id="breaking_words_pl" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+pl_garment_component+'</div>');  
 
-            $('#modaldiv').append('<div id="breaking_words_cz" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+cz_garment_component+'</div>');  
+            $('#splitdiv').append('<div id="breaking_words_cz" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre">'+cz_garment_component+'</div>');  
 
-            $('#modaldiv').append('<div id="breaking_words_sk" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+sk_garment_component+'</div>');  
+            $('#splitdiv').append('<div id="breaking_words_sk" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre">'+sk_garment_component+'</div>');  
 
-            $('#modaldiv').append('<div id="breaking_words_hu" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre ">'+hu_garment_component+'</div>');  
+            $('#splitdiv').append('<div id="breaking_words_hu" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre">'+hu_garment_component+'</div>');  
 
 
             $garment_str = chunksplit("breaking_words_en")
