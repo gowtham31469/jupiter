@@ -950,6 +950,10 @@ Route::group(['prefix' => 'erp'], function () {
 
 	/* Routes for Non artwork jobcards */
 	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@index')->name('non-artwork-jobcard-manager'); 
+	Route::post('non-artwork-job-manager/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getCustomersByBuyerId'); 
+	Route::post('non-artwork-job-manager/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getItemNamesByCustomerId'); 
+	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getReferencesByItemName'); 
+	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getStyleOcnBuyerPoByItemName'); 
 });
 
 //Orchestra Order Management - customer

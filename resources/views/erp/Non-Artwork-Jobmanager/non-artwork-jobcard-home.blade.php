@@ -16,10 +16,11 @@
             <div class="top-content">
                 <div class="filter-window-jobcard" style="display: block;">
                     <h5><strong>Jobcard Filter</strong></h5>
+                    {!! Form::open(['id' => 'nat_jobcard_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
                     <div class="row">
-                    <div class="col-md-2">
+                        <div class="col-md-2">
                             <div class="input-group">
-                                <select class="selectpicker" id="nat_erp_id" title="Select ERP Id" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_erp_id[]">
+                                <select class="selectpicker" id="nat_erp_id" title="Select ERP Id" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_erp_id[]" onchange="disableLevelTwoFilters()">
                                 @foreach($erp_po_ids as $erp_id => $po)
                                     <option value="{{$erp_id}}">{{ $erp_id }}</option>
                                 @endforeach
@@ -28,7 +29,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="input-group">
-                                <select class="selectpicker" id="nat_customer_po" title="Select Customer PO" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_customer_po[]">
+                                <select class="selectpicker" id="nat_customer_po" title="Select Customer PO" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_customer_po[]" onchange="disableLevelTwoFilters()">
                                 @foreach($erp_po_ids as $erp_id => $po)
                                     <option value="{{$po}}">{{ $po }}</option>
                                 @endforeach
@@ -36,55 +37,60 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="input-group">
-                                <select class="selectpicker" id="nat_buyer" title="Select Buyer" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_buyer[]">
+                            <div class="form-group has-feedback">
+                                <select class="selectpicker" id="nat_buyer" title="Select Buyer"  data-live-search="true" name="nat_buyer" onchange="getNATCustomers()" required>
+                                <option value="">Select Buyer</option>
                                 @foreach($buyers as $id => $buyer)
                                     <option value="{{$id}}">{{ $buyer }}</option>
                                 @endforeach
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="input-group">
-                                <select class="selectpicker" id="nat_customer" title="Select Customer" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_customer[]">
-                                @foreach($customers as $id => $customer)
-                                    <option value="{{$id}}">{{ $customer }}</option>
-                                @endforeach
+                            <div class="form-group has-feedback">
+                                <select class="selectpicker" id="nat_customer" title="Select Customer" data-live-search="true" name="nat_customer[]"  onchange="getNATItemNames()" name="nat_customer" required disabled>
+                                <option value="">Select Customer</option>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="input-group">
-                                <select class="selectpicker" id="nat_item_name" title="Select Item Name" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10">
-                                @foreach($item_names as $id => $item_name)
-                                    <option value="{{$id}}">{{ $item_name }}</option>
-                                @endforeach
+                            <div class="form-group has-feedback">
+                                <select class="selectpicker" id="nat_item_name" title="Select Item Name" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" onchange="getNATReferences()" name="nat_item_name[]" required disabled>
+                                <option value="">Select Item Name</option>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <div class="input-group">
-                                <select class="selectpicker" id="nat_reference" title="Select Reference" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10">
+                            <div class="form-group has-feedback">
+                                <select class="selectpicker" id="nat_reference" title="Select Reference" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" onchange="getNATStyleOCNBuyerPO()" name="nat_reference[]" required disabled>
+                                <option value="">Select Reference</option>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 15px;">
+                    <div class="row" id="nat_jc_filter_2" style="margin-top: 15px;">
                         <div class="col-md-2">
                             <div class="input-group">
-                                <select class="selectpicker" id="nat_style_number" title="Select Style Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10">
+                                <select class="selectpicker" id="nat_style_number" title="Select Style Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_style_number[]"  disabled>
+                                <option value="">Select Style Number</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="input-group">
-                                <select class="selectpicker" id="nat_ocn_number" title="Select OCN Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10">
+                                <select class="selectpicker" id="nat_ocn_number" title="Select OCN Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_ocn_number[]" disabled>
+                                <option value="">Select OCN Number</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="input-group">
-                                <select class="selectpicker" id="nat_buyer_po_number" title="Select Buyer PO Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10">
+                                <select class="selectpicker" id="nat_buyer_po_number" title="Select Buyer PO Number" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_buyer_po_number[]" disabled>
+                                <option value="">Select Buyer PO Number</option>
                                 </select>
                             </div>
                         </div>
@@ -92,10 +98,11 @@
                         
                     </div>
                     <div class="filter-actions-jobcard">
-                        <button class="btn btn-primary input-sm pull-right" onclick="submitOs(this)" id="submitos">Submit</button>
-                        <button class="btn btn-default input-sm pull-right" id="reset">Clear Filter</button>
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm pull-right','type' => 'submit'] ) !!}
+                        {!! Form::button('Clear Filter', ['class' => 'btn btn-default btn-sm pull-right','type' => 'button', 'onclick' => 'clearNATJobcardFilter()'] ) !!}
                         <div class="clearfix"></div>
                     </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
             <div class="main-sub-menu" style="padding-top: inherit;">
