@@ -374,6 +374,8 @@ transform: scale(1);
 	<div id="svgdiv" style="position:absolute;visibility:hidden">\
 	 <svg id="ean-13"></svg>\
    </div>
+   <div id="splitdiv"  style="position:absolute;visibility:hidden">
+    </div>
 </div>
 
 <!-- Buyer selection Modal -->

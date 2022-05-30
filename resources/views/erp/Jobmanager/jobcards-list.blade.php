@@ -129,6 +129,8 @@
 	<div id="svgdiv" style="position:absolute;visibility:hidden">\
 		<svg id="ean-13"></svg>\
 	</div>
+	<div id="splitdiv"  style="position:absolute;visibility:hidden">
+		</div>
 </div>
 <!-- Job card updation Modal -->
 <div class="modal jobcard-updation-modal fade" id="jobcardUpdationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardUpdationModalCenter">

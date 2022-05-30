@@ -62,6 +62,8 @@
     </div>
     <div id="objectDiv" style="position:absolute;visibility:hidden">
     </div>
+    <div id="splitdiv"  style="position:absolute;visibility:hidden">
+    </div>
 </div>
 <div class="col-sm-12 col-md-12 main">
 
