@@ -46,7 +46,7 @@
     <div id="objectDiv" style="position:absolute;visibility:hidden">
     </div>
 </div>
-<div id="splitdiv">
+<div id="splitdiv" style="opacity: 0;position:absolute;">
     </div>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">

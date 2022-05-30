@@ -376,7 +376,7 @@ transform: scale(1);
    </div>
 </div>
 
-<div id="splitdiv">
+<div id="splitdiv" style="opacity: 0;position:absolute;">
     </div>
 <!-- Buyer selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
