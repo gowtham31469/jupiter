@@ -81,9 +81,15 @@ Route::get('admin/order-management/get-tsl-size', 'Admin\OrderManagement\OrderCo
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
+
 Route::get('admin/non-artwork-template-management', 'Admin\TemplateManagement\NonArtworkTemplateController@templateList');
+
 Route::post('admin/non-artwork-template/add-new-template', 'Admin\TemplateManagement\NonArtworkTemplateController@addTemplate');
+
+Route::post('admin/non-artwork-template/template-view', 'Admin\TemplateManagement\NonArtworkTemplateController@templateView');
+
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
+
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
 
 Route::post('admin/template-management/template-hierarchy', 'Admin\TemplateManagement\TemplateController@templateHierarchy');

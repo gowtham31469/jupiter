@@ -145,9 +145,8 @@ function template_list() {
             $('#tree1').on('activate_node.jstree', function (e, data) {
                 if (data.instance.is_leaf(data.node)) {
                     var template_id = data.node.id;
-
                     $.ajax({
-                        url: base_url + "/admin/template-management/template-view",
+                        url: base_url + "/admin/non-artwork-template/template-view/",
                         type: "Post",
                         dataType: "json",
                         data: {
@@ -313,68 +312,6 @@ function template_list() {
                             $(".loader").css('margin-top', '0%');
                         }
                     })
-                }
-                else {
-                    var parent = data.instance.get_parent(data.node);
-                    if (parent != "#") {
-                        var template_id = data.node.id;
-                        $.ajax({
-                            url: base_url + "/admin/template-management/get-company-list",
-                            type: "get",
-                            dataType: "json",
-                            data: {
-                                buyer: buyer
-                            },
-                            beforeSend: function () {
-                                $(".loader").show();
-                            },
-                            statusCode: {
-                                200: function (companydata) {
-                                    var company = "";
-                                    $.each(companydata.company, function (index1, value1) {
-                                        company += "<option value=" + value1.id + ">" + value1.name + "</option>";
-                                    });
-                                    var tax = "";
-                                    $.each(companydata.tax, function (index2, value2) {
-                                        tax += "<option value=" + value2.tax + ">" + value2.tax + "</option>";
-                                    });
-                                    var material = "";
-                                    $.each(companydata.material, function (index3, value3) {
-                                        material += "<option value=" + value3.id + ">" + value3.material_name_employee + "</option>";
-                                    });
-
-                                    var name_in_reports = "";
-                                    $.each(companydata.name_in_reports, function (index4, value4) {
-
-                                        name_in_reports += "<option value=" + index4 + ">" + value4 + "</option>";
-                                    });
-                                    //											alert()
-                                    $('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "add_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_new">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="" name="ref_new" id="ref_new" required> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_new">Company Name :</label> <select class="form-control input-sm " name="company_new" id="company_new" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_new">Taxation Value (%):</label> <select class="form-control input-sm " name="tax_new" id="tax_new" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_new">Material :</label> <select class="form-control input-sm " name="material_new" id="material_new" style="width: 100%;" required=""><option value="">Select a material</option>' + material + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_text_new">GL Text :</label> <input class="form-control input-sm" placeholder="GL Text" required type="text" value="" name="gl_text_new" id="gl_text_new" maxlength = "25"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_new">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="" name="gl_code_new" id="gl_code_new" maxlength = "15" onkeypress = "return isNumber(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_new">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="" name="color_new" id="color_new" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_new">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="" name="hsn_code_new" id="hsn_code_new" maxlength = "10" > <div class="help-block with-errors"></div></div> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_new">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="" name="dimension_height_new" id="dimension_height_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_new">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="" name="dimension_width_new" id="dimension_width_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <label class="pull-left" for=name_in_reports_new">Name in reports:</label> <select class="form-control input-sm " name="name_in_reports_new" id="name_in_reports_new" style="width: 100%;" required=""><option value="">Select a name</option>' + name_in_reports + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="new" >Add</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
-                                    $('.descriptionDiv').css('margin-top', '20px')
-                                    $('.viewDiv').css('margin-top', '0px')
-                                    /* Template details edit form */
-                                    $('#add_template_data_form').validator().on('submit', function (e) {
-                                        if (e.isDefaultPrevented()) {
-
-                                        }
-                                        else {
-                                            e.preventDefault();
-                                            addTemplate(template_id);
-                                        }
-                                    })
-
-                                }
-
-                            },
-                            error: function (errorXHR, errorStatus, errorThrown) { },
-                            complete: function () { $(".loader").hide(); }
-                        })
-                    }
-                    else {
-                        $('.descriptionDiv').html('');
-                        $('.viewDiv').html('');
-                    }
-
                 }
             });
 
