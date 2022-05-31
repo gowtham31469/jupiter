@@ -88,6 +88,10 @@ Route::post('admin/non-artwork-template/add-new-template', 'Admin\TemplateManage
 
 Route::post('admin/non-artwork-template/template-view', 'Admin\TemplateManagement\NonArtworkTemplateController@templateView');
 
+Route::get('admin/non-artwork-template/get-select-list', 'Admin\TemplateManagement\NonArtworkTemplateController@getSelectList');
+
+Route::post('admin/non-artwork-template/update-template', 'Admin\TemplateManagement\NonArtworkTemplateController@updateTemplate');
+
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
 
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');

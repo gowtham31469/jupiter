@@ -51,7 +51,7 @@ class NonArtworkTemplateController extends Controller
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
             $company = DB::table("company")->pluck('name', 'id');
-            $tax = DB::table("tax_code")->pluck('tax', 'id');
+            $tax = DB::table("tax_code")->distinct()->pluck('tax', 'id');
             $material = DB::table("raw_material_master")->where('is_enabled','=',true)->pluck('material_name_employee', 'id');
             $name_in_reports = DB::table("reports_template_level_name")->pluck('name', 'id');
             
@@ -128,5 +128,85 @@ class NonArtworkTemplateController extends Controller
                                 ->where('item_id',$template_id)->orderBy($buyer.'_template.id','asc')
                                 ->get();
          return json_encode($treeviewData);
+    }
+    
+    
+    /**
+     * Method to get the company, tax, material and report names in select box
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function getSelectList(Request $request)
+    {
+        $items = array();
+        $items['company'] = DB::table("company")
+                            ->select('*')
+                            ->get();
+        $items['tax'] = DB::table("tax_code")
+                            ->select('id', 'tax')
+                            ->distinct()
+                            ->get();
+        $items['material'] = DB::table("raw_material_master")
+                            ->select('id','material_name_employee')
+                            ->where('is_enabled','=',true)
+                            ->get();
+        $items['name_in_reports'] = DB::table("reports_template_level_name")->pluck('name', 'id');
+         
+         return json_encode($items);
+    }
+
+    /**
+     * Method to update the non artwork template
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function updateTemplate(Request $request) {
+        try {
+			$buyer 		 = $request['buyer'];
+            $template_id = $request['template_id'];
+            $taxation    = $request['tax'];
+            $ref         = $request['ref'];
+            $company     = $request['company'];
+            $hsncode     = $request['hsncode'];
+            $glcode      = $request['glcode'];
+            $color       = $request['color'];
+            $material_id = $request['material_id'];
+            $height      = $request['height'];
+            $width       = $request['width'];
+            $gltext      = $request['gltext'];
+            DB::table($buyer.'_template')
+                        ->where('id',$template_id)
+                        ->update([
+                          'tax'              => $taxation,
+                          'template_name'    => $ref,
+                          'hsn_code'         => $hsncode,
+                          'gl_code'          => $glcode,
+                          'gl_text'          => $gltext,
+                          'color'            => $color,
+                          'dimension_height' => $height,
+                          'dimension_width'  => $width,
+                          'material_id'      => $material_id,
+                          'name_in_reports'  => $request['name_in_reports']
+                          ]);
+			
+			$items = DB::table($buyer."_template")
+                                ->select('*')
+                                ->where('id',$template_id)
+                                ->get();
+			$item_id = $items{0}->item_id;
+			DB::table($buyer.'_item_master')
+                        ->where('id',$item_id)
+                        ->update([
+            						   'company_id' => $company,
+            						   'ref_no' => $ref
+                        ]);
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
     } 
 }
