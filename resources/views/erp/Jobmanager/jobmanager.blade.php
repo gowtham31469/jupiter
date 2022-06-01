@@ -449,6 +449,8 @@
 	 <svg id="ean-13"></svg>\
    </div>
 </div>
+<div id="splitdiv" style="opacity: 0;position:absolute;">
+ </div>
 <!-- company selection Modal -->
 <div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog buyer-selection-modal-dialog" role="document">
@@ -564,7 +566,7 @@
 								<div class="col-md-4">
 									 <div class="form-group has-feedback">
 										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']+ $disp_modes),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
+										{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
 										<div class="help-block with-errors"></div>
 									 </div>
 								</div>
@@ -594,7 +596,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{{ Form::select('machine',(['' => '-- Select Machine --']+ $machines),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
+										{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>
@@ -664,7 +666,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']+ $teeth_nos),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
+										{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
 										<div class="help-block with-errors"></div>
 								    </div>
 								</div>
@@ -687,7 +689,7 @@
 								<div class="col-md-3">
 								    <div class="form-group has-feedback">
 										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']+ $finish_types),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
+										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 										<div class="help-block with-errors"></div>
 									</div>
 								</div>

@@ -24,13 +24,6 @@ class CareLabelOrdersCustomerController extends Controller
     private $updateLabelOrder;
     private $parselabel;
     private $customers;
-    private $symbols;
-    private $coo;
-    private $kids_warning;
-    private $components;
-    private $fabriclists;
-    private $additional_instructions;
-    private $part_of_two_piece_set;
 
     public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers)
     {
@@ -44,37 +37,23 @@ class CareLabelOrdersCustomerController extends Controller
         $this->parselabel = $parselabel;
 
         $this->customers = $customers;
-
-        // fetch tesco care metadata from class
-        $this->symbols = $this->caremeta->getCareLabelSymbols();
-
-        $this->coo = $this->caremeta->getCountryOrigin();
-
-        $this->kids_warning = $this->caremeta->getKidsWarning();
-
-        $this->components = $this->caremeta->getCareLabelComponents();
-
-        $this->fabriclists = $this->caremeta->getCareLabelFabrics();
-
-        $this->additional_instructions = $this->caremeta->getCareLabelInstructions();
-
-        $this->part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $tesco_suppliers = $this->customers->getCustomers(Auth::guard('web_customer')->user()->company_id);
             return View::make('customer/tesco-customer-care-labels')
                 ->with([
-                    'symbols' => $this->symbols,
+                    'symbols' => $this->caremeta->getCareLabelSymbols(),
                     'tesco_suppliers' => $tesco_suppliers,
-                    'coo' => $this->coo,
-                    'kids_warning' => $this->kids_warning,
-                    'components' => $this->components,
-                    'fabriclists' => $this->fabriclists,
-                    'additional_instructions' => $this->additional_instructions,
-                    'part_of_two_piece_set' => $this->part_of_two_piece_set
+                    'coo' => $this->caremeta->getCountryOrigin(),
+                    'kids_warning' => $this->caremeta->getKidsWarning(),
+                    'components' => $this->caremeta->getCareLabelComponents(),
+                    'fabriclists' => $this->caremeta->getCareLabelFabrics(),
+                    'template' => $request['template'],
+                    'additional_instructions' => $$this->caremeta->getCareLabelInstructions(),
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -189,14 +168,14 @@ class CareLabelOrdersCustomerController extends Controller
                     'order_details' => $result['order_details'],
                     'moq' => $result['moq'],
                     'erp_details' => $result['erp_details'],
-                    'symbols' => $this->symbols,
+                    'symbols' => $this->caremeta->getCareLabelSymbols(),
                     'tesco_suppliers' => $tesco_suppliers,
-                    'coo' => $this->coo,
-                    'kids_warning' => $this->kids_warning,
-                    'components' => $this->components,
-                    'fabriclists' => $this->fabriclists,
-                    'additional_instructions' => $this->additional_instructions,
-                    'part_of_two_piece_set' => $this->part_of_two_piece_set
+                    'coo' => $this->caremeta->getCountryOrigin(),
+                    'kids_warning' => $this->caremeta->getKidsWarning(),
+                    'components' => $this->caremeta->getCareLabelComponents(),
+                    'fabriclists' => $this->caremeta->getCareLabelFabrics(),
+                    'additional_instructions' => $$this->caremeta->getCareLabelInstructions(),
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
                 ], 200);
             } else {
                 return response()->json(['error' => true, 'message' => 'Error'], 400);

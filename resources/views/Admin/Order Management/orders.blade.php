@@ -799,7 +799,7 @@
                     <div class="col-md-2">
                         <div class="form-group has-feedback">
                             <label for="tesco_care_ce_style" class="form_label">Option ID</label>
-                            <input class="form-control input-sm " placeholder="Option ID" required="" maxlength="10" name="tesco_care_ce_style" type="text" value="" id="tesco_care_ce_style">
+                            <input class="form-control input-sm " placeholder="Option ID" required="" maxlength="8" name="tesco_care_ce_style" type="text" value="" id="tesco_care_ce_style">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -820,7 +820,7 @@
                     <div class="col-md-2">
                         <div class="form-group has-feedback">
                             <label for="tesco_care_leather_id" class="form_label">Leather &amp; Suede ID</label>
-                            <input class="form-control input-sm " placeholder="Leather &amp; Suede ID" maxlength="" name="tesco_care_leather_id" type="text" value="" id="tesco_care_leather_id">
+                            <input class="form-control input-sm " placeholder="Leather &amp; Suede ID" maxlength="7" name="tesco_care_leather_id" type="text" value="" id="tesco_care_leather_id">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -1198,6 +1198,7 @@
 <script src="{{ asset('js/Admin/tesco-reorder.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-orders.js') }}"></script>
 <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
+<script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
 <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
 <script src="{{ asset('js/Admin/parser.js') }}"></script>

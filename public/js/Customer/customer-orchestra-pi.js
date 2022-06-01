@@ -173,6 +173,11 @@ const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) =>
             {
                $('.snackbar_span').html('Something went wrong');
                showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
+               showSnackbar();
             }
         },
         error: function (errorXHR, errorStatus, errorThrown) {
@@ -222,14 +227,23 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
             /** [Show response status based on HTTP status code] */
             200: function(data)
             {
-               $('.snackbar_span').html('PI Approved Successfully');
-               $('#profoma-invoice').modal("hide")
-               showSnackbar();
-               //location.reload();             
+                $('#profoma-invoice').modal("hide");
+
+                $('.snackbar_span').html('PI Approved Successfully');
+                $('#snackbar').css('background-color','#00b6ff');
+                showSnackbar();
+ 
+                getOrchestraOrders('customer');           
             },
             400: function()
             {
                $('.snackbar_span').html('Something went wrong');
+               $('#profoma-invoice').modal("hide")
+               showSnackbar();
+            },
+            204: function(data)
+            {
+               $('.snackbar_span').html('PI Data Not found');
                $('#profoma-invoice').modal("hide")
                showSnackbar();
             }
