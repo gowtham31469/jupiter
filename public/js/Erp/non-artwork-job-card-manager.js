@@ -10,8 +10,20 @@ const filterDefaultLevel = () => {
         #nat_style_number, 
         #nat_ocn_number, 
         #nat_buyer_po_number`)
-            .empty()
-            .prop("disabled", true);
+            .prop('selectedIndex', -1)
+            .prop("disabled", true)
+            .prop("required", false)
+            .parent().parent().removeClass('has-error');
+
+    $(`#nat_buyer,
+        #nat_customer,
+        #nat_item_name,
+        #nat_reference`).parent().next('.help-block').html('');
+
+    $('#nat_jobcard_filter_form').validator('update');
+
+    $(`#nat_buyer`).prop("required", true);
+
 }
 
 /**
@@ -24,15 +36,37 @@ const disableLevelTwoFilters = () => {
 
     $(`#nat_buyer`)
     .prop('selectedIndex', -1)
-    .prop("disabled", true);
+    .prop("disabled", true)
+    .prop("required", false)
+    .parent().parent().removeClass('has-error');
 
     if ($('#nat_customer_po').val().length <= 0 && $('#nat_erp_id').val().length <= 0) {
         $(`#nat_buyer`)
+        .prop("required", true)
         .prop("disabled", false);
     }
 
     $('.selectpicker').selectpicker('refresh');
 
+}
+
+/**
+ * 
+ * To clear all selected filter values.
+ */
+ const clearNATJobcardFilter = () => {
+
+    filterDefaultLevel();
+
+    $(`#nat_buyer,
+       #nat_erp_id,
+       #nat_customer_po`)
+    .prop('selectedIndex', -1)
+    .prop("disabled", false)
+    .parent().parent().removeClass('has-error');
+
+    $('.selectpicker').selectpicker('refresh');
+    $('#nat_jobcard_filter_form').validator('update');
 }
 
 /**
@@ -47,7 +81,7 @@ const getNATCustomers = () => {
     $('.selectpicker').selectpicker('refresh');
 
     if ($('#nat_buyer').val().length <= 0) {
-
+        disableLevelTwoFilters();
         return false;
     }
 
@@ -59,17 +93,24 @@ const getNATCustomers = () => {
             _token: csrf_token
         },
         dataType: "json",
-        success: function (response) {
+        beforeSend:  () => {
+            $(".loader").show();
+        },
+        success: (response) => {
             $("#nat_customer").empty();
-            $(response.customers).each(function (index, value) {
+            $(response.customers).each( (index, value) => {
                 $("#nat_customer")
                     .append($("<option></option>")
                     .attr("value", value.id)
                     .text(value.company_name)) 
+                    .prop("required", true)
                     .prop("disabled", false);
             });
 
             $('.selectpicker').selectpicker('refresh');
+        },
+        complete:() => {
+            $(".loader").hide();
         }
     });
 }
@@ -106,17 +147,24 @@ const getNATItemNames = () => {
             _token: csrf_token
         },
         dataType: "json",
-        success: function (response) {
+        beforeSend:  () => {
+            $(".loader").show();
+        },
+        success: (response) => {
             $("#nat_item_name").empty();
-            $(response.item_names).each(function (index, value) {
+            $(response.item_names).each((index, value) => {
                 $("#nat_item_name")
                     .append($("<option></option>")
                     .attr("value", value.id)
                     .text(value.name)) 
+                    .prop("required", true)
                     .prop("disabled", false);
             });
 
             $('.selectpicker').selectpicker('refresh');
+        },
+        complete:() => {
+            $(".loader").hide();
         }
     });
 }
@@ -154,18 +202,25 @@ const getNATReferences = () => {
             _token: csrf_token
         },
         dataType: "json",
-        success: function (response) {
+        beforeSend:  () => {
+            $(".loader").show();
+        },
+        success: (response) => {
             $("#nat_reference").empty();
 
-            $(response.references).each(function (index, value) {
+            $(response.references).each((index, value) => {
                 $("#nat_reference")
                     .append($("<option></option>")
                     .attr("value", value.reference_name)
                     .text(value.reference_name)) 
+                    .prop("required", true)
                     .prop("disabled", false);
             });
 
             $('.selectpicker').selectpicker('refresh');
+        },
+        complete:() => {
+            $(".loader").hide();
         }
     });
 }
@@ -205,14 +260,17 @@ const getNATStyleOCNBuyerPO = () => {
             _token: csrf_token
         },
         dataType: "json",
-        success: function (response) {
+        beforeSend:  () => {
+            $(".loader").show();
+        },
+        success: (response) => {
 
             console.log(response);
             $("#nat_style_number").empty();
             $("#nat_buyer_po_number").empty();
             $("#nat_ocn_number").empty();
 
-            $(response.style_no).each(function (index, value) {
+            $(response.style_no).each((index, value) => {
                 $("#nat_style_number")
                     .append($("<option></option>")
                     .attr("value", value.style_no)
@@ -220,7 +278,7 @@ const getNATStyleOCNBuyerPO = () => {
                     .prop("disabled", false);
             });
 
-            $(response.buyer_po_number).each(function (index, value) {
+            $(response.buyer_po_number).each((index, value) => {
                 $("#nat_buyer_po_number")
                     .append($("<option></option>")
                     .attr("value", value.buyer_po_number)
@@ -228,7 +286,7 @@ const getNATStyleOCNBuyerPO = () => {
                     .prop("disabled", false);
             });
             
-            $(response.ocn_numbers).each(function (index, value) {
+            $(response.ocn_numbers).each((index, value) => {
                 $("#nat_ocn_number")
                     .append($("<option></option>")
                     .attr("value", value.ocn_number)
@@ -237,30 +295,16 @@ const getNATStyleOCNBuyerPO = () => {
             });
 
             $('.selectpicker').selectpicker('refresh');
+        },
+        complete:() => {
+            $(".loader").hide();
         }
     });
 }
 
 
-/**
- * 
- * To clear all selected filter values.
- */
-const clearNATJobcardFilter = () => {
-
-    filterDefaultLevel();
-
-    $(`#nat_buyer,
-       #nat_erp_id,
-       #nat_customer_po`)
-    .prop('selectedIndex', -1)
-    .prop("disabled", false);
-
-    $('.selectpicker').selectpicker('refresh');
-}
-
 /** Create job card form validation **/
-$('#nat_jobcard_filter_form').validator().on('submit', function (e) {
+$('#nat_jobcard_filter_form').validator().on('submit', (e) => {
     if (e.isDefaultPrevented())
     {
 
@@ -273,5 +317,51 @@ $('#nat_jobcard_filter_form').validator().on('submit', function (e) {
 });
 
 const getNatJobcardFiltredData = () => {
-    alert()
+   
+    nat_datatable  = $('#non-artwork-jobcard-table').DataTable({
+        bDestroy:true,
+        processing: true,
+        serverSide: true,
+        pageLength:25,
+        ajax: {
+            url: base_url + "/erp/non-artwork-job-manager/get-nat-filtered-orders",
+            type: 'post',
+            data: {
+                'erp_id'    : $('#nat_erp_id').val(),
+                'customer_po'  : $('#nat_customer_po').val(),
+                'buyer_id'    : $('#nat_buyer').val(),
+                'customer_id': $('#nat_customer').val(),
+                'item_name_id': $('#nat_item_name').val(),
+                'reference_name' : $('#nat_reference').val(),
+                'style_number' : $('#nat_style_number').val(),
+                'ocn_number' : $('#nat_ocn_number').val(),
+                'buyer_po_number' : $('#nat_buyer_po_number').val(),
+                _token: csrf_token
+            },
+        },
+        columns: [
+            { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false },
+            {data: 'erp_id', name: 'erp_id'},
+            {data: 'customer', name: 'customer'},
+            {data: 'buyer', name: 'buyer'},
+            {data: 'customer_po', name: 'customer_po'},
+            {data: 'buyer_po_number', name: 'buyer_po_number'},
+            {data: 'style_no', name: 'style_no'},
+            {data: 'reference_name', name: 'reference_name'},
+            {data: 'ocn_number', name: 'ocn_number'},
+            {data: 'item_name', name: 'item_name'},
+            {data: 'color', name: 'color'},
+            {data: 'composition', name: 'composition'},
+            {data: 'quantity', name: 'quantity'}
+        ]
+    });
+
+    /** [ Data Tabeles scripts ] */
+    $('#non-artwork-jobcard-table').DataTable();
+    $("#non-artwork-jobcard-table_filter input").addClass('form-control input-sm');
+    $("#non-artwork-jobcard-table_filter input").attr('placeholder', 'Data Search');
+    $('#non-artwork-jobcard-table_length select').addClass('form-control input-sm');
+
+    return nat_datatable;
+
 }

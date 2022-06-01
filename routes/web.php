@@ -949,11 +949,12 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
 
 	/* Routes for Non artwork jobcards */
-	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@index')->name('non-artwork-jobcard-manager'); 
-	Route::post('non-artwork-job-manager/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getCustomersByBuyerId'); 
-	Route::post('non-artwork-job-manager/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getItemNamesByCustomerId'); 
-	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getReferencesByItemName'); 
-	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobManagerController@getStyleOcnBuyerPoByItemName'); 
+	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager'); 
+	Route::post('non-artwork-job-manager/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId'); 
+	Route::post('non-artwork-job-manager/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId'); 
+	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName'); 
+	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
+	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
 });
 
 //Orchestra Order Management - customer
