@@ -12,6 +12,15 @@ use Illuminate\Http\Request;
 |
 */
 
+
+Route::get('admin/non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@nonArtworkOrders');
+
+Route::post('admin/save-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
+
+Route::post('admin/get-non-artwork-order-details', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
