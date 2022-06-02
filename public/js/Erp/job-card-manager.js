@@ -612,11 +612,7 @@ function generateJobcard(){
                 }
            },
             error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+                console.log(errorThrown);
             },
             complete: function () {
                 $(".loader").hide();
@@ -1161,11 +1157,7 @@ function storeJobcard()
             },
        },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -1524,11 +1516,7 @@ function storeJobcard()
                 });
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -2015,11 +2003,7 @@ function updateJobcard(formData)
             },
        },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -2067,11 +2051,7 @@ function getCustomersList(evt)
                     },
                },
                 error: function (errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                    console.log(errorThrown);
                 },
                 complete: function () {
                     $(".loader").hide();
@@ -2132,11 +2112,7 @@ function getJobcardIDList(evt)
                     },
                },
                 error: function (errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                    console.log(errorThrown);
                 },
                 complete: function () {
                     $(".loader").hide();
@@ -2198,11 +2174,7 @@ function getJobcardsList()
                     },
                },
                 error: function (errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                    console.log(errorThrown);
                 },
                 complete: function () {
                     $(".loader").hide();
@@ -2309,11 +2281,7 @@ function printHeatTransferJCPreview(style_no,buyer_no,id,order_type,created_at,s
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -2351,11 +2319,7 @@ function  printSpecialTagJCPreview(style_no,buyer_no,id,order_type,created_at,st
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -2393,11 +2357,7 @@ function printMainLabelJCPreview(style_no,buyer_no,id,order_type,created_at,stat
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -2435,11 +2395,7 @@ function printSizeLabelJCPreview(style_no,buyer_no,id,order_type,created_at,stat
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -2608,11 +2564,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                             svgarr.push(str)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
-                                    this.tryCount++;
-                                    if (this.tryCount <= this.retryLimit) {
-                                        $.ajax(this);
-                                        return;
-                                    }
+                                    console.log(errorThrown);
                                 },
                                 complete: function () {
 
@@ -2863,11 +2815,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                             svgarr.push(str)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
-                                    this.tryCount++;
-                                    if (this.tryCount <= this.retryLimit) {
-                                        $.ajax(this);
-                                        return;
-                                    }
+                                    console.log(errorThrown);
                                 },
                                 complete: function () {
 
@@ -3118,11 +3066,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                                 svgarr.push(str)
                                     },
                                     error: function (errorXHR, errorStatus, errorThrown) {
-                                        this.tryCount++;
-                                        if (this.tryCount <= this.retryLimit) {
-                                            $.ajax(this);
-                                            return;
-                                        }
+                                        console.log(errorThrown);
                                     },
                                     complete: function () {
     
@@ -3611,11 +3555,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                                     qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
-                                    this.tryCount++;
-                                    if (this.tryCount <= this.retryLimit) {
-                                        $.ajax(this);
-                                        return;
-                                    }
+                                    console.log(errorThrown);
                                 },
                                 complete: function () {
 
@@ -3900,11 +3840,7 @@ function PopupTescoLabelsPrieview(data_front,data_back,data_back_text,data_front
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -3976,11 +3912,7 @@ $.ajax({
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-            $.ajax(this);
-            return;
-        }
+        console.log(errorThrown);
     },
 })
 }
@@ -4057,11 +3989,7 @@ $.ajax({
 
     },
     error: function (errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-            $.ajax(this);
-            return;
-        }
+        console.log(errorThrown);
     },
 })
 }
@@ -4367,11 +4295,7 @@ function after_forloop()
             },
        },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();

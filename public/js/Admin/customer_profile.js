@@ -32,11 +32,7 @@
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                },
                complete: function () {
                  location.reload()
@@ -80,11 +76,7 @@
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                },
                complete: function () {
                	location.reload()
@@ -168,11 +160,7 @@
                  $('#editCustomerModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
               $('#edit_customer_form').validator('validate');
@@ -243,11 +231,7 @@
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                },
               complete: function () {
                   /** [ To make top menu active ] */
@@ -321,11 +305,7 @@ function addCustomer()
                  }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
             complete: function () {
               /** [ To make top menu active ] */

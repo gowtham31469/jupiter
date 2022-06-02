@@ -110,11 +110,7 @@ function weeSymbols()
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -163,11 +159,7 @@ function addWeeSymbol(wee_symbol_file, wee_symbol_text) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -217,11 +209,7 @@ function editWeeSymbol(id,wee_symbol_file, wee_symbol_text) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -266,11 +254,7 @@ function getTescoWeeSymbolById(id) {
               $('#editWeeSymbolModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -311,11 +295,7 @@ function enableWeeSymbol(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             weeSymbols();
@@ -357,11 +337,7 @@ function disableWeeSymbol(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 weeSymbols();

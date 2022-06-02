@@ -57,11 +57,7 @@ function admin()
            $('#admin-list-table_length select').addClass('form-control input-sm');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-         this.tryCount++;
-         if (this.tryCount <= this.retryLimit) {
-             $.ajax(this);
-             return;
-         }
+         console.log(errorThrown);
       },
       complete: function () {
            /** [To make top menu active] */
@@ -121,11 +117,7 @@ try{
                }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
            },
           complete: function () {
                     /** [ To make top menu active ] */
@@ -176,11 +168,7 @@ function makeAdminActive(id,csrf_token)
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
                admin();
@@ -233,11 +221,7 @@ function makeAdminInactive(id,csrf_token)
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
                admin();

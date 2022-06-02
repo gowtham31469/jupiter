@@ -154,11 +154,7 @@ function sendFeedback(form_data) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -252,11 +248,7 @@ function getMerchandiserProfile(id) {
                 $('#editMerchandiserModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -324,11 +316,7 @@ function editMerchandiser() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 /** [ To make top menu active ] */
@@ -402,11 +390,7 @@ function updateMerchandiserPassword() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 /** [ To make top menu active ] */

@@ -2553,11 +2553,7 @@ function printHangDiv(data,disney) {
 							ajax++;
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -2667,11 +2663,7 @@ function printWashDiv(data,data_back,data_middle,dataid) {
 							ajax++;
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 

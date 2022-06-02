@@ -30,11 +30,7 @@ function update(url, data) {
 				
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
