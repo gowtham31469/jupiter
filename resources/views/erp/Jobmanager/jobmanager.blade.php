@@ -625,7 +625,7 @@
 <script>
 $(document).ready(function() {
 	// disable mousewheel on a input number field when in focus
-    // (to prevent Cromium browsers change the value when scrolling)
+    // (to prevent Chromium browsers change the value when scrolling)
 
     $(document).on("wheel", "input[type=number]", function (e) {
         $(this).blur();

@@ -186,48 +186,26 @@ function generateJobcard(){
         localStorage.removeItem('file_path');
         
         orders = [];
+        ref_array = [];
+        buyer_po_array = [];
+        order_type_array = [];
+        uuid_array = [];
+
         /** [ Create array of orders selected ] */
         $('.row-checkbox', allPages).each(function (i, item) {
             if ($(this).is(':checked')) {
                 orders.push($(this).closest('tr').attr('id')); 
-            }
-        });
-        orders   = orders.join(',');
-
-        ref_array = [];
-        /** [ Create array of reference selected ] */
-        $('.row-checkbox', allPages).each(function (i, item) {
-            if ($(this).is(':checked')) {
-                ref_array.push($(this).closest('tr').data('refname')); 
-            }
-        });
-        ref_array   = ref_array.join(',');
-
-        buyer_po_array = [];
-        /** [ Create array of buyer po selected ] */
-        $('.row-checkbox', allPages).each(function (i, item) {
-            if ($(this).is(':checked')) {
-                buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
-            }
-        });
-        buyer_po_array   = buyer_po_array.join(',');
-
-        order_type_array = [];
-        /** [ Create array of order type selected ] */
-        $('.row-checkbox', allPages).each(function (i, item) {
-            if ($(this).is(':checked')) {
-                order_type_array.push($(this).closest('tr').data('order-type')); 
-            }
-        });
-        order_type_array   = order_type_array.join(',');
-
-        uuid_array = [];
-        /** [ Create array of uuid selected ] */
-        $('.row-checkbox', allPages).each(function (i, item) {
-            if ($(this).is(':checked')) {
+                ref_array.push($(this).closest('tr').data('refname'));
+                buyer_po_array.push($(this).closest('tr').data('buyer-po'));
+                order_type_array.push($(this).closest('tr').data('order-type'));
                 uuid_array.push($(this).closest('tr').data('uuid')); 
             }
         });
+        
+        orders   = orders.join(',');
+        ref_array   = ref_array.join(',');
+        buyer_po_array   = buyer_po_array.join(',');
+        order_type_array   = order_type_array.join(',');
         uuid_array   = uuid_array.join(',');
 
         $.ajax({
@@ -1004,51 +982,10 @@ function storeJobcard()
     total_mtrs = total_mtrs.join(',');
 
     erp_orders_ids = [];
-    /** [ Create array of orders selected ] */
-    $('.row-checkbox', allPages).each(function (i, item) {
-        if ($(this).is(':checked')) {
-            erp_orders_ids.push($(this).closest('tr').attr('id')); 
-        }
-    });
-
-    erp_orders_ids   = erp_orders_ids.join(',');
-
     selected_ref_array = [];
-    /** [ Create array of reference selected ] */
-    $('.row-checkbox', allPages).each(function (i, item) {
-        if ($(this).is(':checked')) {
-            selected_ref_array.push($(this).closest('tr').data('refname')); 
-        }
-    });
-    selected_ref_array   = selected_ref_array.join(',');
-
     selected_buyer_po_array = [];
-    /** [ Create array of buyer po selected ] */
-    $('.row-checkbox', allPages).each(function (i, item) {
-        if ($(this).is(':checked')) {
-            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
-        }
-    });
-    selected_buyer_po_array   = selected_buyer_po_array.join(',');
-
     order_type_array = [];
-    /** [ Create array of order type selected ] */
-    $('.row-checkbox', allPages).each(function (i, item) {
-        if ($(this).is(':checked')) {
-            order_type_array.push($(this).closest('tr').data('order-type')); 
-        }
-    });
-    order_type_array   = order_type_array.join(',');
-
     uuid_array = [];
-    /** [ Create array of uuid selected ] */
-    $('.row-checkbox', allPages).each(function (i, item) {
-        if ($(this).is(':checked')) {
-            uuid_array.push($(this).closest('tr').data('uuid')); 
-        }
-    });
-    uuid_array   = uuid_array.join(',');
-    
     jsonArray = [];
     /** [ Create json object of selected orders ] */
     $('.row-checkbox', allPages).each(function (i, item) {
@@ -1071,10 +1008,23 @@ function storeJobcard()
             erp_order_details_obj.uuid = $(this).closest('tr').data('uuid');
 
             jsonArray.push(erp_order_details_obj);
+
+            erp_orders_ids.push($(this).closest('tr').attr('id')); 
+            selected_ref_array.push($(this).closest('tr').data('refname')); 
+            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+            uuid_array.push($(this).closest('tr').data('uuid')); 
+
         }
     });
 
     final_json_obj['erp_order_details'] = jsonArray;
+    erp_orders_ids   = erp_orders_ids.join(',');
+    selected_ref_array   = selected_ref_array.join(',');
+    selected_buyer_po_array   = selected_buyer_po_array.join(',');
+    order_type_array   = order_type_array.join(',');
+    uuid_array   = uuid_array.join(',');
+
 
     $.ajax({
         url: base_url + "/erp/job-manager/store-jobcard-details",

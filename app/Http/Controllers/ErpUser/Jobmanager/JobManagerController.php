@@ -147,12 +147,13 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
+											->where(['erp_order_details.template_id' => $valuess,
+											         'erp_order_details.deleted_at' => null,
+											         'erp_order_details.status' => $this->erp_jc_status_id,
+											         'erp_order_details.order_status_id' => $this->order_ap_status_id,
+											         'buyers.id' => $buyer_id])
+											->where('erp_order_details.order_qnty_table_name', '<>', 'non_artwork_orders_quanty')
 											// ->where('erp_orders.status', '=', $erp_status_id)
-											->where('erp_order_details.deleted_at', null)
-											->where('erp_order_details.status', '=', $this->erp_jc_status_id)
-											->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
-											->where('buyers.id', $buyer_id)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
 											->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')

@@ -119,7 +119,7 @@
             </div>
             <div class="main-sub-menu" style="padding-top: inherit;">
                 <div class="action-group pull-right sub-menu-button">
-                    <button class=" btn btn-primary btn-sm" onclick="generateJobcard()">
+                    <button class=" btn btn-primary btn-sm" onclick="generateNatJobcard()">
                         Create Jobcard
                     </button>
                 </div>
@@ -166,7 +166,7 @@
 <script>
     $(document).ready(function() {
         // disable mousewheel on a input number field when in focus
-        // (to prevent Cromium browsers change the value when scrolling)
+        // (to prevent Chromium browsers change the value when scrolling)
 
         $(document).on("wheel", "input[type=number]", function(e) {
             $(this).blur();

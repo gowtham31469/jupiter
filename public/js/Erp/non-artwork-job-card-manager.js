@@ -340,7 +340,7 @@ const getNatJobcardFiltredData = () => {
             },
         },
         columns: [
-            { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false },
+            { data: 'Sl_No', name: 'Sl_No'},
             {data: 'erp_id', name: 'erp_id'},
             {data: 'customer', name: 'customer'},
             {data: 'buyer', name: 'buyer'},
@@ -364,4 +364,58 @@ const getNatJobcardFiltredData = () => {
 
     return nat_datatable;
 
+}
+
+function selectNatOrders(event)
+{
+    /** Table checkbox click functionality	**/
+    let checkbox = $("input[class='row-checkbox']");
+    let customer_name = $(event).data('customer-name');
+    let buyer_name = $(event).data('buyer-name');
+    let ischecked= $(event).is(':checked');
+    let length= $(checkbox).filter(':checked').length;
+
+    if(ischecked)
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').addClass("highlight_row");
+        /** Make checkboxes disabled(having different customer and buyer names) **/
+        $(checkbox).not("[data-customer-name='"+customer_name+"']").attr("disabled", "true");
+        $(checkbox).not("[data-buyer-name='"+buyer_name+"']").attr("disabled", "true");
+    }
+    else
+    {
+        /** change table row background color	**/
+        $(event).closest('tr').removeClass("highlight_row");
+        /** Make checkboxes enabled iff all checkboxes unchecked **/
+        if(length === 0)
+         $(checkbox).not("[data-customer-name='"+customer_name+"']").removeAttr("disabled");
+         $(checkbox).not("[data-buyer-name='"+buyer_name+"']").removeAttr("disabled");
+    }
+}
+
+
+const generateNatJobcard = () => {
+    var len = $("input[name='nat-row-checkbox']:checked").length;
+    
+    if (len < 1) {
+        $('.snackbar_span').html("Please select at least 1 ERP Id.");
+        showSnackbar();
+        return false;
+    }
+
+    var jsonArray = [];
+    $('input[name="nat-row-checkbox"]').each(function (i, item) {
+        if ($(this).is(':checked')) {
+            jsonArray.push($(this).data('erp-id'));
+        }
+    });
+
+    if([...new Set(jsonArray)].length > 3) {
+        $('.snackbar_span').html("Please select only a maximum of 3 distinct ERP Id's.");
+        showSnackbar();
+        return false;
+    }
+
+    alert();
 }

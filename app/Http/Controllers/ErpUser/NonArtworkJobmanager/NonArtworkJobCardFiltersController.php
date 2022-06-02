@@ -324,7 +324,7 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
                 }
             })
-            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'reports_template_level_name.name as item_name', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id')
+            ->select('erp_order_details.id as erp_order_details_id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'reports_template_level_name.name as item_name', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id', 'erp_order_details.uuid', 'erp_order_details.template_id', 'erp_order_details.created_at')
             ->whereNotNull('erp_order_details.ocn_number')
             ->distinct('erp_order_details.ocn_number')
             ->get();
@@ -347,7 +347,7 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
                 }
             })
-            ->select('erp_orders.erp_id', 'customers.company_name as customer', 'buyers.buyer_name as buyer', 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id')
+            ->select('erp_order_details.id as erp_order_details_id', 'erp_orders.erp_id', 'customers.company_name as customer', 'buyers.buyer_name as buyer', 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id', 'erp_order_details.uuid', 'erp_order_details.template_id', 'erp_order_details.created_at')
             ->whereNotNull('erp_order_details.ocn_number')
             ->distinct('erp_order_details.ocn_number')
             ->get();
@@ -376,7 +376,20 @@ class NonArtworkJobCardFiltersController extends Controller
         }
 
         return Datatables::of($nat_jc_filtered_data)
-        ->addIndexColumn()
+        ->setRowAttr([
+            'data-erp-detail-id' => function($nat_jc_filtered_data) {
+                return $nat_jc_filtered_data["erp_order_details_id"];
+            },
+        ])
+        ->addColumn('Sl_No', function($nat_jc_filtered_data) {
+            return '<div class="form-check">
+                    <a href="javascript:void(0)">
+                        <label>
+                            <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-detail-id="'.$nat_jc_filtered_data['erp_order_details_id'].'" data-erp-id="'.$nat_jc_filtered_data['erp_id'].'" data-customer-name="'.$nat_jc_filtered_data['customer'].'" data-buyer-name="'.$nat_jc_filtered_data['buyer'].'" data-buyer-po="'.$nat_jc_filtered_data['buyer_po_number'].'" data-refname="'.$nat_jc_filtered_data['reference_name'].'" data-refname="'.$nat_jc_filtered_data['reference_name'].'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
+                    </a>
+                    </div>';
+          })
+        ->rawColumns(['Sl_No'])
         ->make(true);
     }
 }
