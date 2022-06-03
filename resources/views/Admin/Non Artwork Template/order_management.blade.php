@@ -11,6 +11,15 @@
 		</div>
 	</div>
 	<div class="main-content">
+
+		<div class="alert alert-danger print-error-msg" style="display:none">
+			<ul></ul>
+		</div>
+
+		<div class="alert alert-success print-success-msg" style="display:none">
+			<ul></ul>
+		</div>
+
 		<form name="non_artwork_orders" id="non_artwork_orders">  
 			<div class="row">
 				<div class="col-md-3">
@@ -39,7 +48,7 @@
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							<label for="buyer">Buyer</label>
-							{!! Form::select('Buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer"]) !!}
+							{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'id'=>'buyer']) !!}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -48,14 +57,14 @@
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							<label for="customer_name">Customer Name</label>
-							{!! Form::select('Customer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Customer Name"]) !!}
+							{!! Form::select('customer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Customer Name"]) !!}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							<label for="tesco_po_number">PO Number</label>
-							<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="tesco_po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="7">
+							<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="7">
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -79,37 +88,38 @@
 						<p>                                                
 							<button type="button" id="add_single_row" class="btn btn-default add-row-btn clone"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
 
-							<button type="button" onclick="clone()"  class="btn btn-default add-row-btn"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
+							<button type="button" id="clone_selected"  class="btn btn-default add-row-btn"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
 
-							<button type="button" onclick=""class="btn btn-default add-row-btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
+							<button type="button" id="delete_selected" class="btn btn-default add-row-btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
 
-							<button type="button" id="save_data" class="btn btn-default add-row-btn"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+							<button type="button" id="save_data" class="btn btn-default add-row-btn submit_data" data-flag="1"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+
+							<button type="button" id="new_order" class="btn btn-default add-row-btn submit_data hidden" data-flag="3"><i class="fa fa-save" aria-hidden="true"></i> Save as new order</button>
 						</p>                                        
 					</div>
 				</div>
-				<div class="alert alert-danger print-error-msg" style="display:none">
-					<ul></ul>
-				</div>
-				<div class="alert alert-success print-success-msg" style="display:none">
-					<ul></ul>
-				</div>
-				<div class="table-responsive">  
-					<table class="table table-bordered">  
-						<tr>
-							<th>Sl No.</th>
-							<th>Jc No.</th>
-							<th>OCN</th>
-							<th>B.Po. No.</th>
-							<th>Style/UVC</th>
-							<th>Item</th>
-							<th>A/W.Appr.Dt</th>
-						</tr>
-						<tbody id="dynamic_field">
-							<tr>
-								<td>
+				
+				<div class="row clearfix">
+    <div class="col-md-12">
+      <table class="table table-bordered table-hover" id="tab_logic">
+        <thead>
+          <tr>
+            	<th class="text-center">Sl.No</th>
+							<th class="text-center">Jc No.</th>
+							<th class="text-center">OCN</th>
+							<th class="text-center">B.Po. No.</th>
+							<th class="text-center">Style/UVC</th>
+							<th class="text-center">Item</th>
+							<th class="text-center">A/W.Appr.Dt</th>
+							<th class="text-center">Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="dynamic_field">
+          <tr id='addr0' class="clonable">
+            <td>
 									<div class="custom-control custom-checkbox">
-										<input type="checkbox" class="custom-control-input" id="customCheck1">
-										<label class="custom-control-label" for="customCheck1">&nbsp;1</label>
+										<input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck1">
+										<label class="custom-control-label">&nbsp;1</label>
 									</div>
 								</td>
 								<td>
@@ -118,29 +128,62 @@
 									</div>
 								</td>
 								<td>
-									<input type="text" name="Orders[1][ocn]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
+									<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
 								</td>
 								<td>
-									<input type="text" name="Orders[1][bpn]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
+									<input type="text" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
 								</td>
 								<td>
-									<input type="text" name="Orders[1][style]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
+									<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 								</td>
 								<td>
-									{!! Form::select('List[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+									{!! Form::select('list[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field']) !!}
 								</td>
 								<td>
 									<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-										<input value="" id="" name="Orders[0][approve_date]" type="text" class="form-control"placeholder="Select Due Date">
+										<input value="" id="" name="approve_date[]" type="text" class="form-control"placeholder="Select Due Date">
 										<div class="input-group-addon">
 											<span class="glyphicon glyphicon-th"> </span >
 										</div >
 									</div >
 								</td>
-							</tr> 
-						</tbody>
-					</table>  
-				</div>
+								<td>
+									<input type="text" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
+								</td>
+          </tr>
+          <tr id='addr1' class="clonable"></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row clearfix">
+    <div class="pull-right col-md-4">
+      <table class="table table-bordered table-hover" id="tab_logic_total">
+        <tbody>
+          <tr>
+            <th class="text-center">Total Quantity</th>
+            <td class="text-center"><input type="number" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
+          </tr>
+          <tr>
+            <th class="text-center">Tax</th>
+            <td class="text-center"><div class="input-group mb-2 mb-sm-0">
+                <input type="number" class="form-control" id="tax" placeholder="0">
+                <div class="input-group-addon">%</div>
+              </div></td>
+          </tr>
+          <tr>
+            <th class="text-center">Tax Amount</th>
+            <td class="text-center"><input type="number" name='tax_amount' id="tax_amount" placeholder='0.00' class="form-control" readonly/></td>
+          </tr>
+          <tr>
+            <th class="text-center">Total Quantity</th>
+            <td class="text-center"><input type="number" name='total_amount' id="total_amount" placeholder='0.00' class="form-control" readonly/></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 			</form>  
 		</div>
 	</div>
@@ -154,24 +197,11 @@
 
 @section('jqueryIncludes')
 <script type="text/javascript">
-	$(document).ready(function(){      
+	$(document).ready(function()
+	{      
 		var postURL = "<?php echo url('admin/save-non-artwork'); ?>";
 		var getDetailsURL = "<?php echo url('admin/get-non-artwork-order-details'); ?>";
 		var i=1;  
-
-
-		$('#add_single_row').click(function(){  
-			i++;  
-
-			$('#dynamic_field').append('<tr><td><div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" id="customCheck1"><label class="custom-control-label" for="customCheck1">&nbsp;&nbsp;'+i+'</label></div></td><td><div class="form-group has-feedback label-ean-feedback"><p>32123414</p></div></td><td><input type="text" name= "Orders['+i+'][ocn]" id="" class="form-control input-sm label-ean-field" placeholder="OCN Number"></td><td><input type="text" name="Orders['+i+'][bpo]"class="form-control input-sm label-ean-field" placeholder="BPO Number"></td><td><input type="text" name="Orders['+i+'][style]" class="form-control input-sm label-ean-field" placeholder="Style/UVC"></td><td>{!! Form::select("List[]", $buyers, null, ['class' => "form-control input-sm label-ean-field"]) !!}</td><td><div class="input-group tesco_manufacture_date date" data-provide="datepicker"><input value="" id="approveDate_v1" name=Orders['+i+'][approved_orders] type="text" class="form-control"placeholder="Select Due Date"><div class="input-group-addon"><span class="glyphicon glyphicon-th"> </span ></div ></div ></td></tr>');  
-		});   
-
-
-		$(document).on('click', '.btn_remove', function(){  
-			var button_id = $(this).attr("id");   
-			$('#row'+button_id+'').remove();  
-		});  
-
 
 		$.ajaxSetup({
 			headers: {
@@ -179,28 +209,81 @@
 			}
 		});
 
+		$('#add_single_row').click(function()
+		{  
+			 $('#tab_logic').append('<tr id="addr'+(i+1)+'" class="clonable"></tr>');
+			 $('#addr'+i).html($('#tab_logic').find(' tbody tr:eq(0)').html()).find('td:first-child').html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck'+(i+1)+'"><label class="custom-control-label">&nbsp;&nbsp;'+(i+1)+'</label></div>')
+			   i++;
+			
+		});   
 
-		$('#save_data').click(function(){            
-			$.ajax({  
-				url:postURL,  
-				method:"POST",  
-				data:$('#non_artwork_orders').serialize(),
-				type:'json',
-				success:function(data)  
+		$(document).on("click","#clone_selected",function()
+		{
+			var getSelectedRows = $(".clonable input:checked").parents("tr").clone();
+			$("#dynamic_field").find('tr:last').prev().after(getSelectedRows)
+
+			$('#tab_logic tbody tr').each(function(key,val)
+				{		
+						$(this).attr('id','addr'+key).find("td:eq(0)").html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck'+1+'"><label class="custom-control-label">&nbsp;&nbsp;'+(key+1)+'</label></div>')
+				})
+			i= $('#tab_logic tr').length-2;
+		})
+
+
+		$(document).on("click","#delete_selected",function()
+		{
+			$('input[type=checkbox]:checked').each(function () 
+			{
+				if($(this).parents("tr").attr('id')!="addr0")
 				{
-					if(data.error){
-						printErrorMsg(data.error);
-					}else{
-						i=1;
-						$('.dynamic-added').remove();
-						$('#non_artwork_orders')[0].reset();
-						$(".print-success-msg").find("ul").html('');
-						$(".print-success-msg").css('display','block');
-						$(".print-error-msg").css('display','none');
-						$(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
-					}
-				}  
-			});  
+					$(this).parents("tr").remove()
+				}
+				else
+				{
+					$('.snackbar_span').html('System will not delete the first row !!!');
+           showSnackbar();
+				}
+     });
+
+			$('#tab_logic tbody tr').each(function(key,val)
+				{	
+						$(this).attr('id','addr'+key).find("td:eq(0)").html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" id="customCheck1"><label class="custom-control-label" for="customCheck1">&nbsp;&nbsp;'+(key+1)+'</label></div>')
+				})
+			i= $('#tab_logic tr').length-2;
+		})
+
+
+		$(document).on("keyup change",".quantity",function(){	
+				total=0;
+				$('.quantity').each(function() {
+					total += parseInt($(this).val());
+				});
+				$("#sub_total").val(total)
+				$("#total_amount").val(total)
+  	});
+
+
+		$(document).on("click",".submit_data",function(){
+				$.ajax({  
+					url:postURL,  
+					method:"POST",  
+					data:$('#non_artwork_orders').serialize(),
+					type:'json',
+					success:function(data)  
+					{
+						if(data.error){
+							printErrorMsg(data.error);
+						}else{
+							i=1;
+							$('.dynamic-added').remove();
+							$('#non_artwork_orders')[0].reset();
+							$(".print-success-msg").find("ul").html('');
+							$(".print-success-msg").css('display','block');
+							$(".print-error-msg").css('display','none');
+							$(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
+						}
+					}  
+				});  
 		});  
 
 
@@ -213,16 +296,21 @@
 			});
 		}
 
-
 		$("#getOrderDetails").on('click', function () {
+
+				$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
+				$("#new_order").removeClass('hidden')
           $.ajax({
            type:'POST',
            url:getDetailsURL,
            data:{id:$("#order_id").val()},
            success:function(data){
-
+           		console.log(data)
               // $("#dynamic_field").find("tr:gt(0)").remove();
-              // $("#dyanamics_here").html(data)
+              $("#dynamic_field").html('')
+              $("#dynamic_field").html(data.order_details)
+              $("#buyer").val(data.order.buyer_id)
+              i=3
               console.log(data);
            }
         });
