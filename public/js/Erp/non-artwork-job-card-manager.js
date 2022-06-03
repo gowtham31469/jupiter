@@ -396,23 +396,37 @@ function selectNatOrders(event)
 
 
 const generateNatJobcard = () => {
-    var len = $("input[name='nat-row-checkbox']:checked").length;
+    var checked_count = $("input[name='nat-row-checkbox']:checked").length;
     
-    if (len < 1) {
-        $('.snackbar_span').html("Please select at least 1 ERP Id.");
+    if (checked_count < 1) {
+        $('.snackbar_span').html("Please select at least 1 order.");
         showSnackbar();
         return false;
     }
 
-    var jsonArray = [];
+    if(checked_count > 3) {
+        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
+        showSnackbar();
+        return false;
+    }
+    
+    var buyerArray = [];
+    var customerArray = [];
     $('input[name="nat-row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
-            jsonArray.push($(this).data('erp-id'));
+            buyerArray.push($(this).data('buyer-name'));
+            customerArray.push($(this).data('customer-name'));
         }
     });
 
-    if([...new Set(jsonArray)].length > 3) {
-        $('.snackbar_span').html("Please select only a maximum of 3 distinct ERP Id's.");
+    if([...new Set(buyerArray)].length != 1) {
+        $('.snackbar_span').html("Please select the same buyer orders.");
+        showSnackbar();
+        return false;
+    }
+
+    if([...new Set(customerArray)].length != 1) {
+        $('.snackbar_span').html("Please select the same customer orders.");
         showSnackbar();
         return false;
     }

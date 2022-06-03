@@ -295,13 +295,17 @@ class NonArtworkJobCardFiltersController extends Controller
     public function getFilteredNatOrders(Request $request)
     {
         if(!$request['erp_id'] && !$request['customer_po']){
-            $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
+            $buyer_name = DB::table('buyers')
+            ->where('id', $request['buyer_id'])
+            ->value('buyer_name');
 
             $nat_jc_filtered_data = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
-            ->join('customers', 'customers.id', 'erp_orders.customer_id')
             ->join('reports_template_level_name', strtolower($buyer_name).'_template.name_in_reports', 'reports_template_level_name.id')
+            ->join('customers', 'customers.id', 'erp_orders.customer_id')
+            ->join('non_artwork_orders_quanty', 'non_artwork_orders_quanty.id', 'erp_order_details.order_qnty_table_id')
+            ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_status_id' => $this->order_ap_status_id,
@@ -324,15 +328,22 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
                 }
             })
-            ->select('erp_order_details.id as erp_order_details_id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'reports_template_level_name.name as item_name', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id', 'erp_order_details.uuid', 'erp_order_details.template_id', 'erp_order_details.created_at')
-            ->whereNotNull('erp_order_details.ocn_number')
-            ->distinct('erp_order_details.ocn_number')
+            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id')
+            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"))
             ->get();
         } else {
+            $buyer_name = DB::table('erp_orders')
+            ->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
+            ->where('erp_orders.erp_id', $request['erp_id'][0])
+            ->value('buyer_name');
 
-            $nat_jc_filtered_data = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+            $nat_jc_filtered_data = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+            ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
+            ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
+            ->join('reports_template_level_name', strtolower($buyer_name).'_template.name_in_reports', 'reports_template_level_name.id')
             ->join('customers', 'customers.id', 'erp_orders.customer_id')
-            ->join('buyers', 'buyers.id', 'erp_orders.buyer_id')
+            ->join('non_artwork_orders_quanty', 'non_artwork_orders_quanty.id', 'erp_order_details.order_qnty_table_id')
+            ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_status_id' => $this->order_ap_status_id,
@@ -347,45 +358,17 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
                 }
             })
-            ->select('erp_order_details.id as erp_order_details_id', 'erp_orders.erp_id', 'customers.company_name as customer', 'buyers.buyer_name as buyer', 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.order_quantity as quantity', 'erp_order_details.order_qnty_table_id', 'erp_order_details.uuid', 'erp_order_details.template_id', 'erp_order_details.created_at')
-            ->whereNotNull('erp_order_details.ocn_number')
-            ->distinct('erp_order_details.ocn_number')
+            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id')
+            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"))
             ->get();
         }
 
-        foreach ($nat_jc_filtered_data as $data) {
-            $nat_order_data = DB::table('non_artwork_orders_quanty')
-            ->join('non_artwork_orders', 'non_artwork_orders_quanty.non_artwork_order_id', 'non_artwork_orders.id')
-            ->where('non_artwork_orders_quanty.id', $data->order_qnty_table_id)
-            ->select('color', 'composition')
-            ->first();
-
-            $data['color'] = $nat_order_data->color;
-            $data['composition'] = $nat_order_data->composition;
-
-            if($request['erp_id'] || $request['customer_po']){
-               
-                $data['item_name'] = DB::table('non_artwork_orders_quanty')
-                ->join('non_artwork_orders', 'non_artwork_orders_quanty.non_artwork_order_id', 'non_artwork_orders.id')
-                ->join(strtolower($data->buyer).'_item_master', 'non_artwork_orders.template_id', strtolower($data->buyer).'_item_master.id')
-                ->join(strtolower($data->buyer).'_template', strtolower($data->buyer).'_template.item_id', strtolower($data->buyer).'_item_master.id')
-                ->join('reports_template_level_name', strtolower($data->buyer).'_template.name_in_reports', 'reports_template_level_name.id')
-                ->where('non_artwork_orders_quanty.id', $data->order_qnty_table_id)
-                ->value('reports_template_level_name.name as item_name');
-            }
-        }
-
         return Datatables::of($nat_jc_filtered_data)
-        ->setRowAttr([
-            'data-erp-detail-id' => function($nat_jc_filtered_data) {
-                return $nat_jc_filtered_data["erp_order_details_id"];
-            },
-        ])
         ->addColumn('Sl_No', function($nat_jc_filtered_data) {
             return '<div class="form-check">
                     <a href="javascript:void(0)">
                         <label>
-                            <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-detail-id="'.$nat_jc_filtered_data['erp_order_details_id'].'" data-erp-id="'.$nat_jc_filtered_data['erp_id'].'" data-customer-name="'.$nat_jc_filtered_data['customer'].'" data-buyer-name="'.$nat_jc_filtered_data['buyer'].'" data-buyer-po="'.$nat_jc_filtered_data['buyer_po_number'].'" data-refname="'.$nat_jc_filtered_data['reference_name'].'" data-refname="'.$nat_jc_filtered_data['reference_name'].'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
+                            <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-id="'.$nat_jc_filtered_data->erp_id.'" data-customer-name="'.$nat_jc_filtered_data->customer.'" data-buyer-name="'.$nat_jc_filtered_data->buyer.'" data-buyer-po="'.$nat_jc_filtered_data->buyer_po_number.'" data-refname="'.$nat_jc_filtered_data->reference_name.'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
                     </a>
                     </div>';
           })
