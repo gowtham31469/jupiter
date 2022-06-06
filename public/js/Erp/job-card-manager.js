@@ -222,173 +222,15 @@ function generateJobcard(){
                 /** [Show response status based on HTTP status code] */
                 200: function(data) {
 
-                    if(data.error === false)
-                    {
-                        if(data.template_data.company)
-                        {
-                            $('#jc_company_name').text(data.template_data.company.company)
-                            $('#company_address').text(data.template_data.company.company_address)
-                            $('#company_logo').attr('src', data.template_data.company.company_logo);
-                            $('#jc_company_name').attr('data-company-id', data.template_data.company.company_id)
-                        }
-
-                        $('#work_order').text( data.template_data.workorder_id);
-
-                        $('#today_date').text( data.template_data.today_date);
-
-                        data.template_data.article.length > 0?$('#article').text(data.template_data.article):'';
-
-                        $('#material').val(data.template_data.material)
-
-                        if(data.template_data.customer)
-                        {
-                            $('#customer').text(data.template_data.customer.customer_name)
-                            $('#customer').attr('data-customer-id', data.template_data.customer.customer_id)
-                        }
-
-                        if(data.template_data.buyer)
-                        {
-                            $('#buyer').text(data.template_data.buyer.buyer_name)
-                            $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
-
-                            // show tint color and customer po for orchestra jc modal
-                            if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
-                            {
-                                $(".common-data-div").removeClass("hidden");
-
-                                if(data.template_data.tint_color.length === 1)
-                                {
-                                    $('#tint_color').val(data.template_data.tint_color)
-                                }
-                                else
-                                {
-                                    $('#tint_color').val('')
-                                }
-                            } 
-                            else 
-                            {
-                                $(".common-data-div").addClass("hidden");
-                            }
-                        }
-
-                        if(data.template_data.style_array.length === 1)
-                        {
-                            if(data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra')
-                            {
-                                if(data.template_data.tint_color.length === 1)
-                                {
-                                    $('#style_no').val(data.template_data.style_array+" - "+data.template_data.color_code)
-                                }
-                                else
-                                {
-                                    $('#style_no').val(data.template_data.style_array)
-                                }
-                            } 
-                            else 
-                            {
-                                $('#style_no').val(data.template_data.style_array)
-                            }
-                            
-                        }
-                        else
-                        {
-                            $('#style_no').val('')
-                        }
-
-                        if(data.template_data.refnum_array.length === 1)
-                        {
-                            $('#reference').val(data.template_data.refnum_array)
-                        }
-                        else
-                        {
-                            $('#reference').val('')
-                        }
+                    if (data.error === false) {
                         
-                        if(data.template_data.ordertype_array.length === 1)
-                        {
-                           if(data.template_data.ordertype_array[0] === 'newOrder')
-                           {
-                             $('#order_type').text('Initial')
-                           }
-                           else if(data.template_data.ordertype_array[0] ===  'reOrder')
-                           {
-                             $('#order_type').text('ReOrder')
-                           }
-                           else if(data.template_data.ordertype_array[0] === 'repeatOrder')
-                           {
-                             $('#order_type').text('RepeatOrder')
-                           }
-                           else
-                           {
-                             $('#order_type').text('')
-                           }
-                        }
-                        else 
-                        {
-                            $('#order_type').text('')
-                        } 
-                        
-                        $('#order_date').text(data.template_data.order_date);  
-
-                        if(data.template_data.length.length === 1)
-                        {
-                            $('#length').val(data.template_data.length)
-                        }
-                        else
-                        {
-                            $('#length').val('')
-                        } 
-
-                        if(data.template_data.width.length === 1)
-                        {
-                            $('#width').val(data.template_data.width)
-                        }
-                        else
-                        {
-                            $('#width').val('')
-                        } 
-
-                        if(data.template_data.color.length === 1)
-                        {
-                            $('#print_color').val(data.template_data.color)
-                        }
-                        else
-                        {
-                            $('#print_color').val('')
-                        }
-
-                        if(data.template_data.cus_del_date.length === 1)
-                        {
-                            $('#cus_del_date').val(data.template_data.cus_del_date)
-                        }
-                        else
-                        {
-                            $('#cus_del_date').val('')
-                        }
-
-                        if(data.template_data.customer_po_array.length === 1)
-                        {
-                            $('#customer_po').text(data.template_data.customer_po_array[0])
-                        }
-                        else
-                        {
-                            $('#customer_po').val('')
-                        }
-
-                        /** append erp_details_ids  as hidden */
-                        var hidden_html = '';
-                        $.each(data.template_data.order_detail_ids, function(index, erp_details_id){
-                            hidden_html += '<div hidden class="erp-details-id">'+erp_details_id+'</div>'
-                        });
-                        $('.order-details-div').html(hidden_html);
-
+                        renderCommonJCView(data);
                         /** Show ratio templates dynamic table */
                         var ratio_table_html = '';
-                        if(data.template_data.ratio.length != 0)
-                        {
-                            $.each(data.template_data.ratio, function(key, template){
+                        if (data.template_data.ratio.length != 0) {
+                            $.each(data.template_data.ratio, function (key, template) {
                                 var total = 0;
-                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="'+key+'"  border="0.2">\
+                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="' + key + '"  border="0.2">\
                                                         <thead>\
                                                             <tr>\
                                                                 <th>REF.NO</th>\
@@ -400,75 +242,73 @@ function generateJobcard(){
                                                             </tr>\
                                                         </thead>\
                                                         <tbody>';
-                                                        template.sort(function(a, b){
-                                                            return a.qty_table_id - b.qty_table_id;
-                                                        });
-                                                        $.each(template, function(ratio_table_row, row){
-                                                            if (row.hasOwnProperty('ratio_pack_type')) {
-                                                                var ratio_pack_type = ' '+row.ratio_pack_type;
-                                                            } else {
-                                                                var ratio_pack_type = '';
-                                                            }
-                                                            total += parseInt(row.order_quantity);
-                                                            let buyer_po_number = (row.buyer_po_number === null||"") ?'-':row.buyer_po_number;
-                                                            let ocn_number = (row.ocn_number === null||"") ?'-':row.ocn_number;
-                                                            ratio_table_html += '<tr class="tr-'+row.reference_name.replace(/ /g, '-')+'" id='+row.id+' data-template-id='+row.template_id+'>\
-                                                            <td id="ratio_tr_refname_'+ratio_table_row+'">'+row.reference_name+''+ratio_pack_type+'</td>\
-                                                            <td id="ratio_tr_buyer_po_'+ratio_table_row+'">'+buyer_po_number+'</td>\
-                                                            <td id="ratio_tr_erp_id_'+ratio_table_row+'">'+row.erp_id+'</td>\
-                                                            <td id="ratio_tr_ocn_'+ratio_table_row+'">'+ocn_number+'</td>\
-                                                            <td id="ratio_tr_qty_'+ratio_table_row+'">'+row.order_quantity+'</td>\
+                                template.sort(function (a, b) {
+                                    return a.qty_table_id - b.qty_table_id;
+                                });
+                                $.each(template, function (ratio_table_row, row) {
+                                    if (row.hasOwnProperty('ratio_pack_type')) {
+                                        var ratio_pack_type = ' ' + row.ratio_pack_type;
+                                    } else {
+                                        var ratio_pack_type = '';
+                                    }
+                                    total += parseInt(row.order_quantity);
+                                    let buyer_po_number = (row.buyer_po_number === null || "") ? '-' : row.buyer_po_number;
+                                    let ocn_number = (row.ocn_number === null || "") ? '-' : row.ocn_number;
+                                    ratio_table_html += '<tr class="tr-' + row.reference_name.replace(/ /g, '-') + '" id=' + row.id + ' data-template-id=' + row.template_id + '>\
+                                                            <td id="ratio_tr_refname_' + ratio_table_row + '">' + row.reference_name + '' + ratio_pack_type + '</td>\
+                                                            <td id="ratio_tr_buyer_po_' + ratio_table_row + '">' + buyer_po_number + '</td>\
+                                                            <td id="ratio_tr_erp_id_' + ratio_table_row + '">' + row.erp_id + '</td>\
+                                                            <td id="ratio_tr_ocn_' + ratio_table_row + '">' + ocn_number + '</td>\
+                                                            <td id="ratio_tr_qty_' + ratio_table_row + '">' + row.order_quantity + '</td>\
                                                             <td></td>\
                                                             </tr>';
-                                                            ratio_table_row++;
-                                                        });
-                                                        ratio_table_html += '<tr>\
+                                    ratio_table_row++;
+                                });
+                                ratio_table_html += '<tr>\
                                                             <th class="highlight_row" colspan="4">Total</th>\
-                                                            <td><strong>'+total+'</strong></td>\
+                                                            <td><strong>' + total + '</strong></td>\
                                                             <td></td>\
                                                         </tr>\
                                                     </tbody>\
                                                 </table>';
                             });
                             $('.ratio-list-table-div').html(ratio_table_html);
-                        }
-                        else{
+                        } else {
                             $('.ratio-list-table-div').html(ratio_table_html);
                         }
 
                         /** Show single templates dynamic table */
                         var single_table_html = '';
                         var meters_div_html = '';
-                        if(data.template_data.single.length != 0)
-                        {
+                        if (data.template_data.single.length != 0) {
                             var row = 0;
                             var table = 0;
-                            $.each(data.template_data.single, function(key, erpid){   
-                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_'+table+'"  border="0.2">\
+                            $.each(data.template_data.single, function (key, erpid) {
+                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_' + table + '"  border="0.2">\
                                 <tbody id="single_list_table_body"><tr>\
                                 <th width="80px">ID.NO</th>';
-                                $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td colspan="2" data-template-id="'+common_data.template_id+'" class="single-erpid-'+index+'">'+common_data.erp_id+'</td>';
+                                $.each(erpid.order_data, function (index, common_data) {
+                                    single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
                                 });
                                 var template_name = key.split("_");
-                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="'+template_name[0]+'">REFNUM  : '+template_name[0]+'</td></tr>\
+                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="' + template_name[0] + '">REFNUM  : ' + template_name[0] + '</td></tr>\
                                                             <tr>\
                                                                 <th width="80px">B.PO.NO</th>';
-                                $.each(erpid.order_data, function(index, common_data){
-                                    let buyer_po_no = (common_data.buyer_po_number === null||"") ?'-':common_data.buyer_po_number;
-                                    single_table_html += '<td colspan="2" class="single-buyer-po-'+index+'">'+buyer_po_no+'</td>';
+                                $.each(erpid.order_data, function (index, common_data) {
+                                    let buyer_po_no = (common_data.buyer_po_number === null || "") ? '-' : common_data.buyer_po_number;
+                                    single_table_html += '<td colspan="2" class="single-buyer-po-' + index + '">' + buyer_po_no + '</td>';
                                 });
                                 single_table_html += '</tr>\
                                                             <tr>\
                                                                 <th width="80px">OCN</th>';
-                                $.each(erpid.order_data, function(index, common_data){
-                                    let ocn_no = (common_data.ocn_number === null||"") ?'-':common_data.ocn_number;
-                                    single_table_html += '<td colspan="2" class="single-ocn-'+index+'">'+ocn_no+'</td>';
+                                $.each(erpid.order_data, function (index, common_data) {
+                                    let ocn_no = (common_data.ocn_number === null || "") ? '-' : common_data.ocn_number;
+                                    single_table_html += '<td colspan="2" class="single-ocn-' + index + '">' + ocn_no + '</td>';
                                 });
 
                                 single_table_html += '</tr>\
                                                       <th width="80px">SIZE /PRICE</th>';
-                                $.each(erpid.order_data, function(index, common_data){
+                                $.each(erpid.order_data, function (index, common_data) {
                                     single_table_html += '<th>O.QNT</th>\
                                     <th>P.QNT</th>';
                                 });
@@ -479,37 +319,37 @@ function generateJobcard(){
                                                             </tr>';
                                 var total_quantity_final = 0;
                                 var sum = [];
-                                $.each(erpid.size, function(index2, quantity_data){
+                                $.each(erpid.size, function (index2, quantity_data) {
                                     var total_qty_sizewise = 0;
                                     var size_text = index2.split("_");
                                     var col = 0;
-                                    single_table_html += '<tr><td class="single-size-row">'+size_text[0]+'</td>';
-                                    
-                                    $.each(quantity_data, function(index3, qty){
+                                    single_table_html += '<tr><td class="single-size-row">' + size_text[0] + '</td>';
+
+                                    $.each(quantity_data, function (index3, qty) {
                                         total_qty_sizewise += parseInt(qty);
-                                        single_table_html +='<td class="quantity-'+col+' quantity-td" data-size-value="'+size_text[0]+'">'+parseInt(qty)+'</td><td></td>';
+                                        single_table_html += '<td class="quantity-' + col + ' quantity-td" data-size-value="' + size_text[0] + '">' + parseInt(qty) + '</td><td></td>';
                                         /** Column wise total quantity calculation */
                                         sum[col] = parseInt(qty) + (sum[col] || 0);
                                         col++;
                                     });
 
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-'+row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table+'" id="total_excess_row_table_'+row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+row+'"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
-                                
+                                    single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+
                                     total_quantity_final += parseInt(total_qty_sizewise);
                                     row++;
                                 });
 
                                 single_table_html += '<tr>\
-                                                      <th class="highlight_row total-text" data-ref-name = "'+template_name[0].replace(/ |\//g, '_')+'">TOTAL</th>';
+                                                      <th class="highlight_row total-text" data-ref-name = "' + template_name[0].replace(/ |\//g, '_') + '">TOTAL</th>';
                                 var total_col = 0;
-                                $.each(erpid.order_data, function(index, common_data){
-                                    single_table_html += '<td class="total-quantity-col-'+total_col+'"><strong>'+sum[total_col]+'</strong></td>\
+                                $.each(erpid.order_data, function (index, common_data) {
+                                    single_table_html += '<td class="total-quantity-col-' + total_col + '"><strong>' + sum[total_col] + '</strong></td>\
                                                           <td></td>';
                                     total_col++;
                                 });
-                                
-                                single_table_html += '<td><strong class="total-qty-'+template_name[0].replace(/ |\//g, '_')+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                                                        <td class="total-excess-col-table-'+table+' total-excess-'+template_name[0].replace(/ |\//g, '_')+'"></td>\
+
+                                single_table_html += '<td><strong class="total-qty-' + template_name[0].replace(/ |\//g, '_') + '">' + parseInt(total_quantity_final) + '</strong></td>\
+                                                        <td class="total-excess-col-table-' + table + ' total-excess-' + template_name[0].replace(/ |\//g, '_') + '"></td>\
                                                         <td></td>\
                                                         <td></td>\
                                                     </tr>';
@@ -517,63 +357,37 @@ function generateJobcard(){
                                                 </table>';
                                 table++;
                                 /** Show actual excess % and meters div only once for each references */
-                                if(template_name[1] === '0')
-                                {
-                                    meters_div_html +='<div class="col-md-12">\
+                                if (template_name[1] === '0') {
+                                    meters_div_html += '<div class="col-md-12">\
                                                 <div class="col-md-3">\
-                                                    <label for="act_excess_'+template_name[0].replace(/ |\//g, '_')+'" >ACT EXCESS % ('+template_name[0]+'):</label>\
-                                                    <span class="act-excess" data-act-excess-ref="'+template_name[0]+'" id="act_excess_'+template_name[0].replace(/ |\//g, '_')+'"></span>\
+                                                    <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % (' + template_name[0] + '):</label>\
+                                                    <span class="act-excess" data-act-excess-ref="' + template_name[0] + '" id="act_excess_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                    <label for="sticker_mtr_'+template_name[0].replace(/ |\//g, '_')+'" >STKRS MTRS ('+template_name[0]+'):</label>\
-                                                    <span class="sticker-mtrs" id="sticker_mtr_'+template_name[0].replace(/ |\//g, '_')+'"></span>\
+                                                    <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >STKRS MTRS (' + template_name[0] + '):</label>\
+                                                    <span class="sticker-mtrs" id="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
                                                 </div>\
                                                 <div class="col-md-3">\
                                                 <div class="form-group has-feedback">\
-                                                    <label for="settings_'+template_name[0].replace(/ |\//g, '_')+'" >SETTINGS ('+template_name[0]+') :</label>\
-                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_'+template_name[0].replace(/ |\//g, '_')+'" placeholder="SETTINGS" id="settings_'+template_name[0].replace(/ |\//g, '_')+'" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                    <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS (' + template_name[0] + ') :</label>\
+                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
                                                     <div class="help-block with-errors"></div>\
                                                 </div>\
                                                 </div>\
                                                 <div class="col-md-3">\
-                                                <label for="total_mtrs_'+template_name[0].replace(/ |\//g, '_')+'" >TOTAL MTRS ('+template_name[0]+'):</label>\
-                                                <span id="total_mtrs_'+template_name[0].replace(/ |\//g, '_')+'" data-tem-ref-name="'+template_name[0].replace(/ |\//g, '_')+'" class="total-meters"></span>\
+                                                <label for="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" >TOTAL MTRS (' + template_name[0] + '):</label>\
+                                                <span id="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" data-tem-ref-name="' + template_name[0].replace(/ |\//g, '_') + '" class="total-meters"></span>\
                                                 </div>\
                                             </div>';
                                 }
                             });
-                                
+
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
                         } else {
                             $('.single-list-table-div').html(single_table_html);
                             $('.meter-calculation-div').html(meters_div_html);
                         }
-
-                        var disp_modes_options = '';
-                        $.each(data.disp_modes, function (key, item) {
-                            disp_modes_options += '<option value="' + key + '">' + item + '</option>';
-                        });
-                        $('#disp_mode').append(disp_modes_options);
-
-                        var machine_options = '';
-                        $.each(data.machines, function (key, item) {
-                            machine_options += '<option value="' + key + '">' + item + '</option>';
-                        });
-                        $('#machine').append(machine_options);
-
-                        var teeth_no_options = '';
-                        $.each(data.teeth_nos, function (key, item) {
-                            teeth_no_options += '<option value="' + key + '">' + item + '</option>';
-                        });
-                        $('#teeth_no').append(teeth_no_options);
-
-                        var finish_type_options = '';
-                        $.each(data.finish_types, function (key, item) {
-                            finish_type_options += '<option value="' + key + '">' + item + '</option>';
-                        });
-                        $('#finish_type').append(finish_type_options);
-                        $('.selectpicker').selectpicker('refresh');
                         
                     }
                     else
@@ -620,6 +434,131 @@ function generateJobcard(){
         })
         
     }
+}
+
+const renderCommonJCView = (data) => {
+    $('#style_no').val('');
+    $('#order_type').text('');
+    $('#length').val('');
+    $('#width').val('');
+    $('#print_color').val('');
+    $('#cus_del_date').val('');
+    $('#customer_po').val('');
+    $(".common-data-div").addClass("hidden");
+
+    if (data.template_data.company) {
+        $('#jc_company_name').text(data.template_data.company.company)
+        $('#company_address').text(data.template_data.company.company_address)
+        $('#company_logo').attr('src', data.template_data.company.company_logo);
+        $('#jc_company_name').attr('data-company-id', data.template_data.company.company_id)
+    }
+
+    $('#work_order').text(data.template_data.workorder_id);
+
+    $('#today_date').text(data.template_data.today_date);
+
+    data.template_data.article.length > 0 ? $('#article').text(data.template_data.article) : '';
+
+    $('#material').val(data.template_data.material)
+
+    if (data.template_data.customer) {
+        $('#customer').text(data.template_data.customer.customer_name)
+        $('#customer').attr('data-customer-id', data.template_data.customer.customer_id)
+    }
+
+    if (data.template_data.buyer) {
+        $('#buyer').text(data.template_data.buyer.buyer_name)
+        $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+
+        // show tint color and customer po for orchestra jc modal
+        if (data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra') {
+            $(".common-data-div").removeClass("hidden");
+
+            data.template_data.tint_color.length === 1 ? $('#tint_color').val(data.template_data.tint_color) : $('#tint_color').val('');
+        }
+    }
+
+    if (data.template_data.style_array.length === 1) {
+        if (data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra') {
+            data.template_data.tint_color.length === 1 ? $('#style_no').val(data.template_data.style_array + " - " + data.template_data.color_code) : $('#style_no').val(data.template_data.style_array);
+        } else {
+            $('#style_no').val(data.template_data.style_array)
+        }
+
+    }
+
+    data.template_data.refnum_array.length === 1 ? $('#reference').val(data.template_data.refnum_array) : $('#reference').val('');
+
+    if (data.template_data.ordertype_array.length === 1) {
+        switch (data.template_data.ordertype_array[0]) {
+            case 'newOrder':
+                $('#order_type').text('Initial');
+                break;
+            case 'reOrder':
+                $('#order_type').text('ReOrder');
+                break;
+            case 'repeatOrder':
+                $('#order_type').text('RepeatOrder');
+                break;
+            default:
+                $('#order_type').text('')
+                break;
+        }
+    }
+
+    $('#order_date').text(data.template_data.order_date);
+
+    if (data.template_data.length.length === 1) {
+        $('#length').val(data.template_data.length);
+    }
+
+    if (data.template_data.width.length === 1) {
+        $('#width').val(data.template_data.width);
+    }
+
+    if (data.template_data.color.length === 1) {
+        $('#print_color').val(data.template_data.color);
+    }
+
+    if (data.template_data.cus_del_date.length === 1) {
+        $('#cus_del_date').val(data.template_data.cus_del_date);
+    }
+
+    if (data.template_data.customer_po_array.length === 1) {
+        $('#customer_po').text(data.template_data.customer_po_array[0]);
+    }
+
+    /** append erp_details_ids  as hidden */
+    var hidden_html = '';
+    $.each(data.template_data.order_detail_ids, function (index, erp_details_id) {
+        hidden_html += '<div hidden class="erp-details-id">' + erp_details_id + '</div>'
+    });
+    $('.order-details-div').html(hidden_html);
+
+    var disp_modes_options = '';
+    $.each(data.disp_modes, function (key, item) {
+        disp_modes_options += '<option value="' + key + '">' + item + '</option>';
+    });
+    $('#disp_mode').append(disp_modes_options);
+
+    var machine_options = '';
+    $.each(data.machines, function (key, item) {
+        machine_options += '<option value="' + key + '">' + item + '</option>';
+    });
+    $('#machine').append(machine_options);
+
+    var teeth_no_options = '';
+    $.each(data.teeth_nos, function (key, item) {
+        teeth_no_options += '<option value="' + key + '">' + item + '</option>';
+    });
+    $('#teeth_no').append(teeth_no_options);
+
+    var finish_type_options = '';
+    $.each(data.finish_types, function (key, item) {
+        finish_type_options += '<option value="' + key + '">' + item + '</option>';
+    });
+    $('#finish_type').append(finish_type_options);
+    $('.selectpicker').selectpicker('refresh');
 }
 
 /**

@@ -841,7 +841,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
 	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
-	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
+	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession'); 
 	
 	/* Routes for Print Manager Module */
 	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager'); 
@@ -955,6 +955,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName'); 
 	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
 	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
+	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
 });
 
 //Orchestra Order Management - customer

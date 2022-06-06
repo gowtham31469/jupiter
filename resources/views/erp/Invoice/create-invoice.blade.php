@@ -307,7 +307,7 @@ $(document).ready(function(){
         $('#buyerSelectionModalCenter').modal('show');  
         
         $.ajax({
-            url: base_url + "/erp/po-manager/set_company_session",
+            url: base_url + "/erp/set-erp-company-session",
             type: "Post",
             dataType: "json",
             data: {

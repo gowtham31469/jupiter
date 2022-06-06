@@ -412,12 +412,17 @@ const generateNatJobcard = () => {
     
     var buyerArray = [];
     var customerArray = [];
+    var uuid_array = [];
     $('input[name="nat-row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
             buyerArray.push($(this).data('buyer-name'));
             customerArray.push($(this).data('customer-name'));
+
+            uuid_array.push($(this).data('uuid'));
         }
     });
+
+    uuid_array   = uuid_array.join(',');
 
     if([...new Set(buyerArray)].length != 1) {
         $('.snackbar_span').html("Please select the same buyer orders.");
@@ -431,5 +436,55 @@ const generateNatJobcard = () => {
         return false;
     }
 
-    alert();
+    $.ajax({
+        url:base_url + "/erp/non-artwork-job-manager/get-nat-jc-details",
+        dataType:"json",
+        method:"get",
+        data:{uuid_array:uuid_array},
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+          $(".loader").show();
+        },
+        statusCode: {
+            /** [Show response status based on HTTP status code] */
+            200: function(data) {
+
+                renderCommonJCView(data);
+                
+                /** [ Backdrop for bootstrap modal ] */
+                $('#natJobcardCreationModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+
+                /** [ Validate create_jobcard form using bootstrap validator ] */
+                $('#create_jobcard').validator('update');
+                $('#natJobcardCreationModal').modal('show');
+                $('.datepicker').datepicker({
+                    format: 'dd-mm-yyyy'
+                });
+                // enable print button (for old version browsers)
+                $('#jc_print_btn').prop('disabled', false);
+            },
+            406: function(data) {
+                 $('.snackbar_span').html(data.responseJSON.message);
+                 showSnackbar();
+            },
+            404: function(data) {
+                $('.snackbar_span').html(data.responseJSON.message);
+                showSnackbar();
+           },
+            400: function() {
+                $('.snackbar_span').html("Something went wrong");
+                showSnackbar();
+            }
+       },
+        error: function(errorXHR, errorStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
 }

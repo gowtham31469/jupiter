@@ -38,7 +38,7 @@ class NonArtworkJobCardFiltersController extends Controller
     {
         $erp_user_data  = DB::table('erpusers_template_mapping')
         ->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
-        ->where('erpusers_template_mapping.company', 1)
+        ->where('erpusers_template_mapping.company',session()->get('company'))
         ->where(function ($query) {
             if (Auth::guard('erpuser')->id() != 1) {
                 $query->where('erpusers_template_mapping.erp_user', Auth::guard('erpuser')->id());
@@ -71,8 +71,30 @@ class NonArtworkJobCardFiltersController extends Controller
 	 */
     public function index()
     {
+        $companies   = 	DB::table('erpuser_company_mapping')
+									->join('company','erpuser_company_mapping.company','company.id')
+									->where('erpuser_company_mapping.erp_user',Auth::guard('erpuser')->id())
+									->select('erpuser_company_mapping.*','company.name', 'company.logo')
+									->get();
+        if(!$companies){
+            return view('erp.home');
+        }
+                      
+        $session_company_id = session()->get('company');
+
+        if($session_company_id == "" && $session_company_id == null){
+            $company_data   = DB::table('company')
+                            ->where('company.id', $companies[0]->company)
+                            ->select('company.id', 'company.name')
+                            ->first();
+
+            session()->put('company', $company_data->id);
+            session()->put('company_name', strtolower( str_replace(' ','',$company_data->name)) );
+        }
+        
         $new_orders = $this->getPermittedTemplates();
         $buyers_array = array();
+        $erp_po_ids = array();
 
         foreach ($new_orders as $key => $values) {
             $split_key = explode('-', $key);
@@ -107,6 +129,7 @@ class NonArtworkJobCardFiltersController extends Controller
             [
                 'erp_po_ids' => $erpid_collection->all(),
                 'buyers' => $buyers_array,
+                'companies' => $companies
             ]
         );
     }
@@ -328,8 +351,8 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
                 }
             })
-            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id')
-            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"))
+            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type')
+            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type')
             ->get();
         } else {
             $buyer_name = DB::table('erp_orders')
@@ -358,8 +381,8 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
                 }
             })
-            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id')
-            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"))
+            ->groupBy('erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type')
+            ->select('erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type')
             ->get();
         }
 
@@ -368,11 +391,19 @@ class NonArtworkJobCardFiltersController extends Controller
             return '<div class="form-check">
                     <a href="javascript:void(0)">
                         <label>
-                            <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-id="'.$nat_jc_filtered_data->erp_id.'" data-customer-name="'.$nat_jc_filtered_data->customer.'" data-buyer-name="'.$nat_jc_filtered_data->buyer.'" data-buyer-po="'.$nat_jc_filtered_data->buyer_po_number.'" data-refname="'.$nat_jc_filtered_data->reference_name.'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
+                            <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-id="'.$nat_jc_filtered_data->erp_id.'" data-customer-name="'.$nat_jc_filtered_data->customer.'" data-buyer-name="'.$nat_jc_filtered_data->buyer.'" data-buyer-po="'.$nat_jc_filtered_data->buyer_po_number.'" data-refname="'.$nat_jc_filtered_data->reference_name.'" data-uuid="'.$nat_jc_filtered_data->uuid.'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
                     </a>
                     </div>';
           })
         ->rawColumns(['Sl_No'])
         ->make(true);
+    }
+
+    public function getNatJcOrderDetails(Request  $request){
+        return response()->json([
+            'error'=> false,
+            'message' =>'success', 
+            'references' => $request
+        ],200);	
     }
 }

@@ -252,7 +252,7 @@
             {!! Form::close() !!}
          </div>
      </div>
- </div>
+</div>
 <!-- Job card creation Modal -->
 <div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardCreationModalCenter">
      <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
@@ -617,7 +617,7 @@
             {!! Form::close() !!}
          </div>
      </div>
- </div>
+</div>
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
@@ -657,7 +657,7 @@ $(document).ready(function() {
           	$('#buyerSelectionModalCenter').modal('hide');
 		  
 			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
+				url: base_url + "/erp/set-erp-company-session",
 				type: "Post",
 				dataType: "json",
 				data: {
