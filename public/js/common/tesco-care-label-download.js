@@ -1116,7 +1116,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 $z+=6;
                 $line_length++;
             })
-            
+            console.log(chunks)
             svgDoc_back_text.getElementById("wash_text").innerHTML = chunks;
             svgDoc_back_text.getElementById("wash_text_2").innerHTML = new_chunks;
 
