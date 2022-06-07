@@ -174,7 +174,7 @@ class CareLabelOrdersCustomerController extends Controller
                     'kids_warning' => $this->caremeta->getKidsWarning(),
                     'components' => $this->caremeta->getCareLabelComponents(),
                     'fabriclists' => $this->caremeta->getCareLabelFabrics(),
-                    'additional_instructions' => $$this->caremeta->getCareLabelInstructions(),
+                    'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
                     'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
                 ], 200);
             } else {
