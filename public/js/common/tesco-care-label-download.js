@@ -671,7 +671,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             })
 
             var en_garment_component = "";
-            var pl_garment_component = "";
+            //var pl_garment_component = "";
             var cz_garment_component = "";
             var sk_garment_component = "";
             var hu_garment_component = "";
@@ -681,7 +681,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 if(index != 0)
                 {
                     en_garment_component += " / " +toTitleCase(garment_component_text[0].english);
-                    pl_garment_component += " / " +toTitleCase(garment_component_text[0].polish);
+                   // pl_garment_component += " / " +toTitleCase(garment_component_text[0].polish);
                     cz_garment_component += " / " +toTitleCase(garment_component_text[0].czech);
                     sk_garment_component += " / " +toTitleCase(garment_component_text[0].slovak);
                     hu_garment_component += " / " +toTitleCase(garment_component_text[0].hungarian);
@@ -689,7 +689,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     en_garment_component += toTitleCase(garment_component_text[0].english);
-                    pl_garment_component += toTitleCase(garment_component_text[0].polish);
+                    //pl_garment_component += toTitleCase(garment_component_text[0].polish);
                     cz_garment_component += toTitleCase(garment_component_text[0].czech);
                     sk_garment_component += toTitleCase(garment_component_text[0].slovak);
                     hu_garment_component += toTitleCase(garment_component_text[0].hungarian);
@@ -699,7 +699,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
                     en_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
 
-                    pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
+                    //pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
 
                     cz_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
 
@@ -718,7 +718,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(exclusive_trims_text != "" && exclusive_trims_text != null)
             {
                 en_garment_component += " / " + toTitleCase(exclusive_trims_text[0].english)
-                pl_garment_component += " / " + toTitleCase(exclusive_trims_text[0].polish)
+                //pl_garment_component += " / " + toTitleCase(exclusive_trims_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(exclusive_trims_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(exclusive_trims_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(exclusive_trims_text[0].hungarian)
@@ -727,7 +727,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
             {
                 en_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].english)
-                pl_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].polish)
+                //pl_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].hungarian)
@@ -736,7 +736,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(kids_warning_text != "" && kids_warning_text != null)
             {
                 en_garment_component += " / " + toTitleCase(kids_warning_text[0].english)
-                pl_garment_component += " / " + toTitleCase(kids_warning_text[0].polish)
+                //pl_garment_component += " / " + toTitleCase(kids_warning_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(kids_warning_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(kids_warning_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(kids_warning_text[0].hungarian)
@@ -745,21 +745,21 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(additional_care_text_1 != "" && additional_care_text_1 != null)
             {
                 //console.log("Polish : "+additional_care_text_1[0].polish)
-                pl_garment_component += " / " + toTitleCase(additional_care_text_1[0].polish)
+                //pl_garment_component += " / " + toTitleCase(additional_care_text_1[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_1[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_1[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_1[0].hungarian)
             }
             if(additional_care_text_2 != "" && additional_care_text_2 != null)
             {
-                pl_garment_component += " / " + toTitleCase(additional_care_text_2[0].polish)
+                //pl_garment_component += " / " + toTitleCase(additional_care_text_2[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_2[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_2[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_2[0].hungarian)
             }
             if(additional_care_text_3 != "" && additional_care_text_3 != null)
             {
-                pl_garment_component += " / " + toTitleCase(additional_care_text_3[0].polish)
+                //pl_garment_component += " / " + toTitleCase(additional_care_text_3[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_3[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_3[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_3[0].hungarian)
@@ -767,7 +767,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(degree >= 30)
             {
-                pl_garment_component += " / " + toTitleCase(data.degree_text[0].polish)
+               // pl_garment_component += " / " + toTitleCase(data.degree_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(data.degree_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(data.degree_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(data.degree_text[0].hungarian)
@@ -776,7 +776,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(part_of_set_text != "" && part_of_set_text != null)
             {
                 en_garment_component += " / " + toTitleCase(part_of_set_text[0].english)
-                pl_garment_component += " / " + toTitleCase(part_of_set_text[0].polish)
+                //pl_garment_component += " / " + toTitleCase(part_of_set_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(part_of_set_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(part_of_set_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(part_of_set_text[0].hungarian)
