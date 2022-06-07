@@ -1030,12 +1030,24 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
             else
             {
-                chunks += '<tspan x="0" y="'+$y+'">HU</tspan>';
+                if($line_length == 15)
+                {
+                    new_chunks += '<tspan x="0" y="6">HU</tspan>';
+                }
+                else
+                {
+                    chunks += '<tspan x="0" y="'+$y+'">HU</tspan>';
+                }
+                
             }
 
-            $($hu_garment_str).each(function(index,hu_garment_val){
+            $($hu_garment_str).each(function(index_str_hu,hu_garment_val){
                 
-                if($line_length == 15)
+                if((index_str_hu == 0 && $line_length ==15))
+                {
+                    $z=6;
+                }
+                else if($line_length == 15)
                 {
                     $z=0;
                 }
@@ -1061,20 +1073,42 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 else
                 {
-                    if(hu_garment_val.charAt(0) == "/")
+                    if((index_str_hu == 0 && $line_length ==15))
                     {
-                        var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
-
-                        var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
-
-                        var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
-                        chunks += '<tspan>'+new_hu_garment_val+'</tspan>'; 
+                        if(hu_garment_val.charAt(0) == "/")
+                        {
+                            var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
+    
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+    
+    
+                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
+                            new_chunks += '<tspan>'+new_hu_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
+                        }
                     }
                     else
                     {
-                        var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
-                        chunks += '<tspan x="12" y="'+$y+'">'+new_hu_garment_val+'</tspan>'; 
+                        if(hu_garment_val.charAt(0) == "/")
+                        {
+                            var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
+
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+
+                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                            chunks += '<tspan>'+new_hu_garment_val+'</tspan>'; 
+                        }
+                        else
+                        {
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            chunks += '<tspan x="12" y="'+$y+'">'+new_hu_garment_val+'</tspan>'; 
+                        }
                     }
+                    
                     //chunks += '<tspan x="12" y="'+$y+'">'+hu_garment_val+'</tspan>';   
                 }
                 
