@@ -623,7 +623,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             
             let sample = en_care_instructions.split('AT');
 
-            if(sample.length > 0)
+            if(sample.length > 1)
             {
                 //$('#splitdiv').html("")
                 $('#splitdiv').html('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
