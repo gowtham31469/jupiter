@@ -620,8 +620,11 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 en_care_instructions += " / " + toTitleCase(data.degree_text[0].english)
             }
             
+            
+            let sample = en_care_instructions.split('AT');
+
             //$('#splitdiv').html("")
-            $('#splitdiv').html('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+en_care_instructions+'</div>');  
+            $('#splitdiv').html('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>');  
 
 
             $chunk_str = chunksplit("breaking_words")
@@ -634,6 +637,11 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             $ind=1;
             //console.log("gy:"+$chunk_str.length)
             $($chunk_str).each(function(index,chunk_val){
+                if(chunk_val != "AT 30º")
+                {
+                    chunk_val = chunk_val.replaceAll('\xa0','')
+                }
+
                 if(chunk_val.charAt(0) == "/")
                 {
                     var firstOccuranceIndex = chunk_val.search(/\//) + 1;
@@ -774,28 +782,28 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 hu_garment_component += " / " + toTitleCase(part_of_set_text[0].hungarian)
             }
 
-            //$garment_str = chunkSubstr(en_garment_component, 28).split(/\r?\n/);
+            $garment_str = chunkSubstrpercentage(en_garment_component, 28);
             //$pl_garment_str = chunkSubstr(pl_garment_component, 28).split(/\r?\n/);
-            //$cz_garment_str = chunkSubstr(cz_garment_component, 28).split(/\r?\n/);
-           // $sk_garment_str = chunkSubstr(sk_garment_component, 28).split(/\r?\n/);
-            //$hu_garment_str = chunkSubstr(hu_garment_component, 28).split(/\r?\n/);
+            $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 28);
+            $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 28);
+            $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 28);
 
-            $('#splitdiv').append('<div id="breaking_words_en" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+en_garment_component+'</div>');  
+            // $('#splitdiv').append('<div id="breaking_words_en" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+en_garment_component+'</div>');  
 
             // $('#splitdiv').append('<div id="breaking_words_pl" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;display:none">'+pl_garment_component+'</div>');  
 
-            $('#splitdiv').append('<div id="breaking_words_cz" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+cz_garment_component+'</div>');  
+            // $('#splitdiv').append('<div id="breaking_words_cz" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+cz_garment_component+'</div>');  
 
-            $('#splitdiv').append('<div id="breaking_words_sk" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sk_garment_component+'</div>');  
+            // $('#splitdiv').append('<div id="breaking_words_sk" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sk_garment_component+'</div>');  
 
-            $('#splitdiv').append('<div id="breaking_words_hu" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+hu_garment_component+'</div>');  
+            // $('#splitdiv').append('<div id="breaking_words_hu" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+hu_garment_component+'</div>');  
 
 
-            $garment_str = chunksplit("breaking_words_en")
+            //$garment_str = chunksplit("breaking_words_en")
             //$cz_garment_str = chunksplit("breaking_words_en")
-            $cz_garment_str = chunksplit("breaking_words_cz")
-            $sk_garment_str = chunksplit("breaking_words_sk")
-            $hu_garment_str = chunksplit("breaking_words_hu")
+            //$cz_garment_str = chunksplit("breaking_words_cz")
+            //$sk_garment_str = chunksplit("breaking_words_sk")
+            //$hu_garment_str = chunksplit("breaking_words_hu")
 
             chunks += '<tspan x="0" y="'+$y+'">EN</tspan>';
 
@@ -922,11 +930,24 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
             else
             {
-                chunks += '<tspan x="0" y="'+$y+'">SK</tspan>';
+                if($line_length == 15)
+                {
+                    new_chunks += '<tspan x="0" y="6">SK</tspan>';
+                }
+                else
+                {
+                    chunks += '<tspan x="0" y="'+$y+'">SK</tspan>';
+                }
             }
             $ind_sk=1;
-            $($sk_garment_str).each(function(index,sk_garment_val){
-                if($line_length == 15)
+            $($sk_garment_str).each(function(index_str_en,sk_garment_val){
+                console.log("$line_length 1" + $line_length)
+
+                if((index_str_en == 0 && $line_length ==15))
+                {
+                    $z=6;
+                }
+                else if($line_length == 15)
                 {
                     $z=0;
                 }
@@ -951,20 +972,41 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 else
                 {
-                    if(sk_garment_val.charAt(0) == "/")
+                    if((index_str_en == 0 && $line_length ==15))
                     {
-                        var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
-
-                        var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
-
-                        var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
-                        chunks += '<tspan>'+new_sk_garment_val+'</tspan>'; 
+                        if(sk_garment_val.charAt(0) == "/")
+                        {
+                            var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
+    
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+    
+                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
+                            new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
+                        }
+                        else
+                        {
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
+                        }
                     }
                     else
                     {
-                        var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
-                        chunks += '<tspan x="12" y="'+$y+'">'+new_sk_garment_val+'</tspan>'; 
+                        if(sk_garment_val.charAt(0) == "/")
+                        {
+                            var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
+    
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+    
+                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                            chunks += '<tspan>'+new_sk_garment_val+'</tspan>'; 
+                        }
+                        else
+                        {
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            chunks += '<tspan x="12" y="'+$y+'">'+new_sk_garment_val+'</tspan>'; 
+                        }
                     }
+                    
                     //chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';   
                 }
                 
@@ -1128,4 +1170,36 @@ function chunksplit(breaking_id)
                 wordBreak.push(beforeBreak);
                return wordBreak;
             }
+}
+
+function chunkSubstrpercentage(str,n) {
+    let arr = str?.split(' ');
+    let result=[]
+    let subStr=arr[0]
+    for(let i = 1; i < arr.length; i++){
+        let word = arr[i]
+        if(subStr.length + word.length + 1 <= n){
+            subStr = subStr + ' ' + word
+            console.log("subStr" + subStr)
+        }
+        else{
+        	if(subStr.slice(-1) == "%")
+            {
+           	   const withoutLastChunk = subStr.slice(0, subStr.lastIndexOf(" "));
+               result.push(withoutLastChunk);
+               
+			   const withLastChunk = subStr.replace(withoutLastChunk,"")
+               subStr = withLastChunk.trim() + ' ' + word
+               
+            }
+            else
+            {
+              result.push(subStr);
+              subStr = word
+            }
+            
+        }
+    }
+    if(subStr.length){result.push(subStr)}
+    return result
 }
