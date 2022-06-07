@@ -646,14 +646,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     var firstOccuranceIndex = chunk_val.search(/\//) + 1;
 
-                    var resultStr = chunk_val.substr(0, firstOccuranceIndex) + chunk_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                    var resultStr = chunk_val.substr(0, firstOccuranceIndex) + chunk_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                     var new_chunk_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
                     chunks += '<tspan>'+new_chunk_val+'</tspan>';
                 }
                 else
                 {
-                    var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                    var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                     chunks += '<tspan x="12" y="'+$y+'">'+new_chunk_val+'</tspan>';
                 }
                 //chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
@@ -814,14 +814,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     var firstOccuranceIndex = garment_val.search(/\//) + 1;
 
-                    var resultStr = garment_val.substr(0, firstOccuranceIndex) + garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                    var resultStr = garment_val.substr(0, firstOccuranceIndex) + garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                     var new_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
                     chunks += '<tspan>'+new_garment_val+'</tspan>';
                 }
                 else
                 {
-                    var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                    var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                     chunks += '<tspan x="12" y="'+$y+'">'+new_garment_val+'</tspan>';
                 }
                 //chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
@@ -879,14 +879,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         var firstOccuranceIndex = cz_garment_val.search(/\//) + 1;
 
-                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                         var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
                         new_chunks += '<tspan>'+new_cz_garment_val+'</tspan>';
                     }
                     else
                     {
-                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                         new_chunks += '<tspan x="12" y="'+$z+'">'+new_cz_garment_val+'</tspan>';
                     }
                     //new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
@@ -897,14 +897,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         var firstOccuranceIndex = cz_garment_val.search(/\//) + 1;
 
-                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                         var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
                         chunks += '<tspan>'+new_cz_garment_val+'</tspan>'; 
                     }
                     else
                     {
-                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                         chunks += '<tspan x="12" y="'+$y+'">'+new_cz_garment_val+'</tspan>'; 
                     }
                     //chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';   
@@ -958,14 +958,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
 
-                        var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                        var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                         var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
                         new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
                     }
                     else
                     {
-                        var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                        var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                         new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
                     }
                     //new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
@@ -978,14 +978,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
     
-                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
     
                             var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
                             new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
                         }
                         else
                         {
-                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                             new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
                         }
                     }
@@ -995,14 +995,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
     
-                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
     
                             var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
                             chunks += '<tspan>'+new_sk_garment_val+'</tspan>'; 
                         }
                         else
                         {
-                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                             chunks += '<tspan x="12" y="'+$y+'">'+new_sk_garment_val+'</tspan>'; 
                         }
                     }
@@ -1058,7 +1058,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
 
-                        var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                        var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
 
                         var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
@@ -1066,7 +1066,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else
                     {
-                        var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                        var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                         new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
                     }
                     //new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
@@ -1079,7 +1079,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
     
-                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
     
     
                             var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
@@ -1087,7 +1087,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         }
                         else
                         {
-                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                             new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
                         }
                     }
@@ -1097,14 +1097,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
 
-                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>'); 
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
 
                             var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
                             chunks += '<tspan>'+new_hu_garment_val+'</tspan>'; 
                         }
                         else
                         {
-                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1"> / </tspan><tspan>')
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
                             chunks += '<tspan x="12" y="'+$y+'">'+new_hu_garment_val+'</tspan>'; 
                         }
                     }
