@@ -4,15 +4,16 @@ namespace App\Http\Controllers\ErpUser\NonArtworkJobmanager;
 
 use Auth;
 use DataTables;
+use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use Illuminate\Http\Request;
 use App\Classes\JobcardMetadata;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
-use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
+use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
+use App\Http\Controllers\Controller;
+use App\ErpOrderDetails as ErpOrderDetails;
+use Illuminate\Database\Eloquent\Collection;
 
 class NonArtworkJobCardFiltersController extends Controller
 {
@@ -409,181 +410,57 @@ class NonArtworkJobCardFiltersController extends Controller
         ->make(true);
     }
 
-    public function getNatJcOrderDetails(Request  $request){
-        if(session()->get('company_name') === "jupitergarmentsaccessories"){
-            $jc_metadata = New JobcardMetadata();
+    public function getNatJcOrderDetails(Request  $request)
+    {
+        if (session()->get('company_name') === "jupitergarmentsaccessories") {
+            $jc_metadata = new JobcardMetadata();
+            $jc_class_obj = new JobcardCommonClass();
             $metadata = $jc_metadata->erpJobcardMetaData();
 
             $uuid_array         = explode(',', $request['uuid_array']);
             $erp_orders_ids     = explode(',', $request['erp_id_array']);
-            $order_dt_array     = array();
-            $delivery_dt_array  = array();
-            $style_array        = array();
-            $ordertype_array    = array();
-            $temp_id_array      = array();
             $template_data      = array();
             $ratio_templates    = array();
-            $single_templates   = array();
-            $print_color_array  = array();
-            $material_array     = array();
-            $article_array      = array();
-            $length_array       = array();
-            $width_array        = array();
-            $distinct_ref_array = array();
-            $common_data_chunk  = array();
-            $size_chunk         = array();
-            $final_chunk        = array();
-            $order_detail_ids   = array();
-            $erp_id_array       = array();
-            $customer_po_array  = array();
             $color_code         = array();
             $tint_color         = array();
 
             /** Get erp order details table ids from erp orders table id */
-            foreach ($uuid_array as $row => $uuid) {
+            list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
 
-                $order_detail_id_array = ErpOrderDetails::where([
-                    'erp_order_details.uuid' => $uuid,
-                    'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id
-                ])->pluck('erp_order_details.id')->all();
+            list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array) = $jc_class_obj->createOrderDataArray($order_details_collection);
 
-                $order_detail_ids = array_unique(array_merge($order_detail_ids, $order_detail_id_array));
-            }
-            sort($order_detail_ids);
-            
-            $order_details_collection = Erp::with(['customer', 'buyer'])
-            ->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-            ->join('non_artwork_orders_quanty', 'non_artwork_orders_quanty.id', 'erp_order_details.order_qnty_table_id')
-            ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
-            ->join('company', 'erp_order_details.company_id', 'company.id')
-            ->whereIn('erp_order_details.id', $order_detail_ids)
-            ->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'non_artwork_orders.color', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id')
-            ->get();
-
-            foreach ($order_details_collection as $key => $order_details) {
-
-                !in_array($order_details->created_at, $order_dt_array, true) ? array_push($order_dt_array, $order_details->created_at) : $order_dt_array;
-
-                !in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array, true) ? array_push($delivery_dt_array, Carbon::parse($order_details->delivery_date)->format('d-m-Y')) : $delivery_dt_array;
-
-                !in_array($order_details->style_no, $style_array, true) ? array_push($style_array, $order_details->style_no) : $style_array;
-
-                !in_array($order_details->order_type, $ordertype_array, true) ? array_push($ordertype_array, $order_details->order_type) : $ordertype_array;
-
-                !in_array($order_details->template_id, $temp_id_array, true) ? array_push($temp_id_array, $order_details->template_id) : $temp_id_array;
-
-                !in_array($order_details->reference_name, $distinct_ref_array, true) ? array_push($distinct_ref_array, $order_details->reference_name) : $distinct_ref_array;
-
-                !in_array($order_details->po_no, $customer_po_array, true) ? array_push($customer_po_array, $order_details->po_no) : $customer_po_array;
-
-                /** Create separate single templates array  */
-                // to differenciate reorder and repeatorder having same values
-                $unique_id = $order_details->uuid;
-
-                $erp_id_array[$order_details->reference_name][] = $unique_id;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['ocn_number'] = $order_details->ocn_number;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['erp_id'] = $order_details->erp_id;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['template_id'] = $order_details->template_id;
-
-                $single_templates[$order_details->reference_name]['size'][$order_details->size][$unique_id] = $order_details->order_quantity;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['style_no'] = $order_details->style_no;
-
-                $single_templates[$order_details->reference_name]['order_data'][$unique_id]['color'] = $order_details->color;
-
+            if (empty($temp_id_array)) {
+                return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
             }
 
             /** Get templates metadata details */
-            if (!empty($temp_id_array)) {
-                $template_details = DB::table($order_details_collection[0]['buyer']->template_table)
-                    ->select($order_details_collection[0]['buyer']->template_table . '.color', $order_details_collection[0]['buyer']->template_table . '.dimension_height as length', $order_details_collection[0]['buyer']->template_table . '.dimension_width as width', $order_details_collection[0]['buyer']->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $order_details_collection[0]['buyer']->template_table . '.material_id')
-                    ->join($order_details_collection[0]['buyer']->item_master_table, $order_details_collection[0]['buyer']->item_master_table . '.id', $order_details_collection[0]['buyer']->template_table . '.hierarchy_id')
-                    ->join('raw_material_master', 'raw_material_master.id', $order_details_collection[0]['buyer']->template_table . '.material_id')
-                    ->whereIn($order_details_collection[0]['buyer']->template_table . '.item_id', $temp_id_array)
-                    ->orderBy($order_details_collection[0]['buyer']->template_table . '.id')
-                    ->get();
+            list($print_color_array, $material_array, $article_array, $length_array, $width_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
 
-                foreach ($template_details as $template_detail) {
-                    !in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
-
-                    !in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
-
-                    !in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
-
-                    !in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
-
-                    !in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
-                }
-            } else {
-                return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
-            }
-            
             /** Different size breakup value handling */
-            foreach ($single_templates as $template => $template_item) {
-                ksort($template_item['order_data']);
-                $po_count = sizeof($template_item['order_data']);
+            $final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
 
-                foreach ($template_item['size'] as $size => $qty) {
-                    $size_count = sizeof($qty);
-
-                    if ($size_count < $po_count) {
-                        /** push 0 qty value for missing/additional size-breakup  */
-                        for ($i = 0; $i < sizeof($erp_id_array[$template]); $i++) {
-                            $qty = !array_key_exists($erp_id_array[$template][$i], $qty) ? array_merge($qty, [$erp_id_array[$template][$i] => 0]) : $qty;
-                        }
-                    }
-                    ksort($qty);
-
-                    $template_item['size'][$size] = $qty;
-                }
-                $single_templates[$template] = $template_item;
-
-                /** Split template data array into small chunks (3 elements in each chunks) */
-                /** common data chunk */
-                $common_data_chunk = array_chunk($template_item['order_data'], 3);
-                foreach ($common_data_chunk as $key => $data) {
-                    $final_chunk[$template . '_' . $key]['order_data'] = $data;
-                }
-
-                foreach ($template_item['size'] as $size => $qty) {
-                    /** size-quantity chunk */
-                    $size_chunk =  array_chunk($qty, 3, true);
-                    foreach ($size_chunk as $key2 => $value2) {
-                        /** check if all the size values are 0 or not
-                         * remove following if condition if client wants zero qty size in final table.
-                         */
-                        $is_size_qty_empty = array_filter($value2) != NULL ? 0 : 1;
-                        if ($is_size_qty_empty != 1) {
-                            $final_chunk[$template . '_' . $key2]['size'][$size . '_' . $key2] = $value2;
-                        }
-                    }
-                }
-            }
+            $company_array = $jc_class_obj->companyData($order_details_collection[0]);
 
             // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
             $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+
+            $metadata  = $jc_metadata->erpJobcardMetaData();
 
             /** Push all array values into template_data array */
             $template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
             $template_data['cus_del_date']     = $delivery_dt_array;
             $template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
             $template_data['workorder_id']     = $workorder_id;
-            $template_data['company']          = $order_details_collection[0]->company;
+            $template_data['company']          = $company_array;
             $template_data['customer']         = $order_details_collection[0]->customer;
             $template_data['buyer']            = $order_details_collection[0]->buyer;
             $template_data['ordertype_array']  = $ordertype_array;
             $template_data['style_array']      = $style_array;
             $template_data['refnum_array']     = $distinct_ref_array;
             $template_data['color']            = $print_color_array;
-            $template_data['material']		   = $material_array;
+            $template_data['material']         = $material_array;
             $template_data['article']          = $article_array;
-            $template_data['length']   		   = $length_array;
+            $template_data['length']           = $length_array;
             $template_data['width']            = $width_array;
             $template_data['ratio']            = $ratio_templates;
             $template_data['single']           = $final_chunk;
@@ -591,20 +468,19 @@ class NonArtworkJobCardFiltersController extends Controller
             $template_data['customer_po_array'] = $customer_po_array;
             $template_data['color_code']       = $color_code;
             $template_data['tint_color']       = $tint_color;
-            $metadata                          = $jc_metadata->erpJobcardMetaData();
-            return $template_data;
-            return response()->json([
-				'error'=> false,
-				'message' =>'Success', 
-				'template_data' => $template_data,
-				'disp_modes' => $metadata['erp_dispatch_mode'],
-				'finish_types' => $metadata['erp_finish_type'],
-				'machines' => $metadata['erp_machines'],
-				'teeth_nos' => $metadata['erp_teeth_no']
 
-			],200);	
-        }else {
-            return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
+            return response()->json([
+                'error' => false,
+                'message' => 'Success',
+                'template_data' => $template_data,
+                'disp_modes' => $metadata['erp_dispatch_mode'],
+                'finish_types' => $metadata['erp_finish_type'],
+                'machines' => $metadata['erp_machines'],
+                'teeth_nos' => $metadata['erp_teeth_no']
+
+            ], 200);
+        } else {
+            return response()->json(['error' => true, 'message' => 'Jobcard for Spectrra Printers currently not available !!'], 406);
         }
     }
 }

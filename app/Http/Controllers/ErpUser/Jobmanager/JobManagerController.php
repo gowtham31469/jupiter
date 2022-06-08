@@ -1027,48 +1027,17 @@ class JobManagerController extends Controller
 				}
 				sort($order_detail_ids);
 				
-				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
+				$order_details_collection = Erp::with(['customer:id,short_name', 'buyer:id,buyer_name,template_table,item_master_table'])
 				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+				->join('company', 'erp_order_details.company_id', 'company.id')
 				->whereIn('erp_order_details.id', $order_detail_ids)
+				->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id', 'erp_orders.po_no')
 				->get();
 
-				/** Same buyer or not validation */
-				$buyer_id_list = $order_details_collection->pluck('buyer_id')->toArray();
-
-				if (count(array_unique($buyer_id_list)) === 1) {
-					$buyer = DB::table('buyers')
-					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
-					->where('id', $buyer_id_list[0])
-					->first();
-
-					$this->buyer_name = $buyer->buyer_name;
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
-				}
-
-				/** Same customer or not validation */
-				$customer_id_list = $order_details_collection->pluck('customer_id')->toArray();
-
-				if (count(array_unique($customer_id_list)) === 1) {
-					$customer = DB::table('customers')
-					->select('short_name as customer_name', 'id as customer_id')
-					->where('id', $customer_id_list[0])
-					->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
-				}
-
-				/** Same company or not validation */
-				$company_id_list = $order_details_collection->pluck('company_id')->toArray();
-
-				if (count(array_unique($company_id_list)) === 1) {
-					$company = DB::table('company')
-					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
-					->where('id', $company_id_list[0])
-					->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
-				}
+				$company_array['company'] = $order_details_collection[0]->company;
+				$company_array['company_id'] = $order_details_collection[0]->company_id;
+				$company_array['company_address'] = $order_details_collection[0]->company_address;
+				$company_array['company_logo'] = $order_details_collection[0]->company_logo;
 
 				foreach ($order_details_collection as $key => $order_details) {
 
@@ -1088,7 +1057,7 @@ class JobManagerController extends Controller
 
 					/** Create separate ratio/single templates array  */
 					if ($order_details->template_type == "ratio") {
-						if ($this->buyer_name === "Tesco") {
+						if ($order_details_collection[0]['buyer']->buyer_name === "Tesco") {
 							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
 							->select($order_details->order_qnty_table_name . '.id as qty_table_id', $order_details->order_qnty_table_name . '.ratio_pack_type')
 							->first();
@@ -1107,17 +1076,17 @@ class JobManagerController extends Controller
 						// to differenciate reorder and repeatorder having same values
 						$unique_id = $order_details->uuid;
 
-						$erp_id_array[$order_details->reference_name][] = $order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id;
+						$erp_id_array[$order_details->reference_name][] = $unique_id;
 
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['ocn_number'] = $order_details->ocn_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['erp_id'] = $order_details->erp_id;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['template_id'] = $order_details->template_id;
-						$single_templates[$order_details->reference_name]['size'][$order_details->size][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id] = $order_details->order_quantity;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['ocn_number'] = $order_details->ocn_number;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['erp_id'] = $order_details->erp_id;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['template_id'] = $order_details->template_id;
+						$single_templates[$order_details->reference_name]['size'][$order_details->size][$unique_id] = $order_details->order_quantity;
 					}
 
 					// Add color code and age group pantone color as tint color for orchestra
-					if ($this->buyer_name === "Orchestra") {
+					if ($order_details_collection[0]['buyer']->buyer_name === "Orchestra") {
 						// parse orchestra orders table and table id from quantity table name
 						$main_table     = str_replace("_qty", "", $order_details->order_qnty_table_name);
 						$result_str     = str_replace("_", " ", str_replace("_orders", "", $main_table));
@@ -1126,41 +1095,43 @@ class JobManagerController extends Controller
 							$qnty_id .= strtolower($word[0]);
 						}
 
-						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
-						->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
-						->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
-						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
-						->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
-						->first();
+						if(in_array($main_table, ['orchestra_solid_carton_sticker_orders', 'orchestra_solid_poly_bag_sticker_orders', 'orchestra_standard_carton_sticker_orders', 'orchestra_standard_poly_bag_sticker_orders'])){
+							$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
+							->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
+							->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
+							->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
+							->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
+							->first();
 
-						!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
-						!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
+							!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
+							!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
+						}
 					}
 				}
 
-				/** Get templates metadata details */
-				if (!empty($temp_id_array)) {
-					$template_details = DB::table($buyer->template_table)
-						->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
-						->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
-						->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
-						->whereIn($buyer->template_table . '.item_id', $temp_id_array)
-						->orderBy($buyer->template_table . '.id')
-						->get();
-
-					foreach ($template_details as $template_detail) {
-						!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
-
-						!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
-
-						!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
-
-						!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
-
-						!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
-					}
-				} else {
+				if(empty($temp_id_array)){
 					return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
+				}
+
+				/** Get templates metadata details */
+				$template_details = DB::table($order_details_collection[0]['buyer']->template_table)
+					->select($order_details_collection[0]['buyer']->template_table . '.color', $order_details_collection[0]['buyer']->template_table . '.dimension_height as length', $order_details_collection[0]['buyer']->template_table . '.dimension_width as width', $order_details_collection[0]['buyer']->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $order_details_collection[0]['buyer']->template_table . '.material_id')
+					->join($order_details_collection[0]['buyer']->item_master_table, $order_details_collection[0]['buyer']->item_master_table . '.id', $order_details_collection[0]['buyer']->template_table . '.hierarchy_id')
+					->join('raw_material_master', 'raw_material_master.id', $order_details_collection[0]['buyer']->template_table . '.material_id')
+					->whereIn($order_details_collection[0]['buyer']->template_table . '.item_id', $temp_id_array)
+					->orderBy($order_details_collection[0]['buyer']->template_table . '.id')
+					->get();
+
+				foreach ($template_details as $template_detail) {
+					!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
+
+					!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
+
+					!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
+
+					!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
+
+					!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
 				}
 				
 				/** Different size breakup value handling */
@@ -1205,10 +1176,6 @@ class JobManagerController extends Controller
 					}
 				}
 
-				/** Unset unwanted values from buyers array */
-				unset($buyer->template_table);
-				unset($buyer->item_master_table);
-
 				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
 				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
 
@@ -1217,9 +1184,9 @@ class JobManagerController extends Controller
 				$template_data['cus_del_date']     = $delivery_dt_array;
 				$template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
 				$template_data['workorder_id']     = $workorder_id;
-				$template_data['company']          = $company;
-				$template_data['customer']         = $customer;
-				$template_data['buyer']            = $buyer;
+				$template_data['company']          = $company_array;
+				$template_data['customer']         = $order_details_collection[0]->customer;
+				$template_data['buyer']            = $order_details_collection[0]->buyer;
 				$template_data['ordertype_array']  = $ordertype_array;
 				$template_data['style_array']      = $style_array;
 				$template_data['refnum_array']     = $distinct_ref_array;

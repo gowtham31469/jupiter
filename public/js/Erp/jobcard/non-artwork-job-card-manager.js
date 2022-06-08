@@ -453,7 +453,7 @@ const generateNatJobcard = () => {
             /** [Show response status based on HTTP status code] */
             200: function(data) {
 
-                // renderCommonJCView(data);
+                renderCommonJCView(data);
                 
                 /** [ Backdrop for bootstrap modal ] */
                 $('#natJobcardCreationModal').modal({

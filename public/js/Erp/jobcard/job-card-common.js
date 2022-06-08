@@ -28,13 +28,13 @@
     $('#material').val(data.template_data.material)
 
     if (data.template_data.customer) {
-        $('#customer').text(data.template_data.customer.customer_name)
-        $('#customer').attr('data-customer-id', data.template_data.customer.customer_id)
+        $('#customer').text(data.template_data.customer.short_name)
+        $('#customer').attr('data-customer-id', data.template_data.customer.id)
     }
 
     if (data.template_data.buyer) {
         $('#buyer').text(data.template_data.buyer.buyer_name)
-        $('#buyer').attr('data-buyer-id', data.template_data.buyer.buyer_id)
+        $('#buyer').attr('data-buyer-id', data.template_data.buyer.id)
 
         // show tint color and customer po for orchestra jc modal
         if (data.template_data.buyer.buyer_name.toLowerCase() === 'orchestra') {
