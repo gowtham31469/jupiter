@@ -1,7 +1,7 @@
 @extends('layouts.Erp.app') @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
-	<li><a href="{{ route('poManager') }}">Po Verify</a></li>
+	<li><a href="{{ route('po-manager') }}">Po Verify</a></li>
 	<li><a href="" class="active">Orders List</a></li>
 </ul>
 
@@ -199,7 +199,7 @@
 
 				
 				$.ajax({
-					url: base_url + "/erp/po-manager/set_company_session",
+					url: base_url + "/erp/set-erp-company-session",
 					type: "Post",
 					dataType: "json",
 					data: {

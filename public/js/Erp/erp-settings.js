@@ -60,11 +60,7 @@ var isSubmitting = false;
     
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function () {
                 $(".loader").hide();
@@ -129,11 +125,7 @@ var isSubmitting = false;
     
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function () {
                 $(".loader").hide();
@@ -198,11 +190,7 @@ var isSubmitting = false;
     
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function () {
                 $(".loader").hide();
@@ -267,11 +255,7 @@ var isSubmitting = false;
     
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function () {
                 $(".loader").hide();
@@ -319,11 +303,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -372,11 +352,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -425,11 +401,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -478,11 +450,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -529,11 +497,7 @@ var isSubmitting = false;
                  $('#editERPDispModeModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -580,11 +544,7 @@ var isSubmitting = false;
                  $('#editERPMachineModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -631,11 +591,7 @@ var isSubmitting = false;
                  $('#editERPTeethNoModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -681,11 +637,7 @@ var isSubmitting = false;
                  $('#editERPFinishTypeModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -731,11 +683,7 @@ var isSubmitting = false;
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -781,11 +729,7 @@ var isSubmitting = false;
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -830,11 +774,7 @@ var isSubmitting = false;
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -880,11 +820,7 @@ var isSubmitting = false;
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -927,11 +863,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                dispatchMode();
@@ -975,11 +907,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                machines();
@@ -1024,11 +952,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                teethNo();
@@ -1071,11 +995,7 @@ var isSubmitting = false;
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                finishType();
@@ -1124,11 +1044,7 @@ function makeDispatchModeDisabled(id)
                  }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                dispatchMode();
@@ -1177,11 +1093,7 @@ function makeMachineDisabled(id)
                  }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                machines();
@@ -1229,11 +1141,7 @@ function makeTeethNoDisabled(id)
                  }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                teethNo();
@@ -1281,11 +1189,7 @@ function makeFinishTypeDisabled(id)
                  }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                finishType();
@@ -1348,11 +1252,7 @@ function makeFinishTypeDisabled(id)
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1399,11 +1299,7 @@ function updateFinancialYearDate(){
                   },
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-               this.tryCount++;
-               if (this.tryCount <= this.retryLimit) {
-                   $.ajax(this);
-                   return;
-               }
+               console.log(errorThrown);
              },
              complete: function () {
                 financialYear();

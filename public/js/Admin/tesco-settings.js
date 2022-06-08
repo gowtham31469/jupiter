@@ -65,11 +65,7 @@ function tescoBrands() {
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -117,11 +113,7 @@ function tescoBrands() {
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                        $(".loader").hide();
@@ -168,11 +160,7 @@ function addSeasonCode()
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                        $(".loader").hide();
@@ -219,11 +207,7 @@ function addSeasonCode()
                  $('#editTescoBrandsModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -266,11 +250,7 @@ function addSeasonCode()
                  $('#editTescoSeasonCodeModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
              },
              complete: function () {
                  $(".loader").hide();
@@ -315,11 +295,7 @@ function addSeasonCode()
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -362,11 +338,7 @@ function addSeasonCode()
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -409,11 +381,7 @@ function addSeasonCode()
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoBrands();
@@ -462,11 +430,7 @@ function addSeasonCode()
                   }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoBrands();
@@ -507,11 +471,7 @@ function makeSeasonCodeEnabled(id,csrf_token)
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoSeasonCodes();
@@ -550,11 +510,7 @@ function makeSeasonCodeEnabled(id,csrf_token)
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoSeasonCodes();
@@ -627,11 +583,7 @@ function tescoDepartment() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -681,11 +633,7 @@ function tescoDepartment() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                         $(".loader").hide();
@@ -734,11 +682,7 @@ function tescoDepartment() {
                  $('#editTescoDepartmentsModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -785,11 +729,7 @@ function tescoDepartment() {
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -831,11 +771,7 @@ function tescoDepartment() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoDepartment();
@@ -884,11 +820,7 @@ function tescoDepartment() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoDepartment();
@@ -959,11 +891,7 @@ function tescoSuppliers() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -1012,11 +940,7 @@ function tescoSuppliers() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                         $(".loader").hide();
@@ -1064,11 +988,7 @@ function tescoSuppliers() {
                  $('#editTescoSuppliersModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -1126,11 +1046,7 @@ function tescoSuppliers() {
                  $('#editTescoSymbolsModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -1180,11 +1096,7 @@ function tescoSuppliers() {
                 }
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                $(".loader").hide();
@@ -1230,11 +1142,7 @@ function tescoSuppliers() {
                   },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                $(".loader").hide();
@@ -1277,11 +1185,7 @@ function tescoSuppliers() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoSuppliers();
@@ -1330,11 +1234,7 @@ function tescoSuppliers() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                 tescoSuppliers();
@@ -1406,11 +1306,7 @@ function tescoSizeChart() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -1460,11 +1356,7 @@ function tescoSizeChart() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                         $(".loader").hide();
@@ -1513,11 +1405,7 @@ function tescoSizeChart() {
                  $('#editTescoSizeChartsModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -1564,11 +1452,7 @@ function tescoSizeChart() {
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -1610,11 +1494,7 @@ function tescoSizeChart() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoSizeChart();
@@ -1663,11 +1543,7 @@ function tescoSizeChart() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoSizeChart();
@@ -1720,11 +1596,7 @@ function taxCode() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -1774,11 +1646,7 @@ function taxCode() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                         $(".loader").hide();
@@ -1827,11 +1695,7 @@ function taxCode() {
                  $('#editTaxCodesModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -1879,11 +1743,7 @@ function taxCode() {
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -1952,11 +1812,7 @@ function tescoMaterialMasters() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -2005,11 +1861,7 @@ function tescoMaterialMasters() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                  $(".loader").hide();
@@ -2058,11 +1910,7 @@ function tescoMaterialMasters() {
                  $('#editTescoMaterialModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
              complete: function () {
                  $(".loader").hide();
@@ -2109,11 +1957,7 @@ function tescoMaterialMasters() {
                 },
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
             },
            complete: function () {
                      $(".loader").hide();
@@ -2155,11 +1999,7 @@ function tescoMaterialMasters() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoMaterialMasters();
@@ -2208,11 +2048,7 @@ function tescoMaterialMasters() {
                    }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoMaterialMasters();
@@ -2283,11 +2119,7 @@ function tescoErrorReportEmail() {
   
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
           },
           complete: function () {
               $(".loader").hide();
@@ -2337,11 +2169,7 @@ function tescoErrorReportEmail() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                  $(".loader").hide();
@@ -2390,11 +2218,7 @@ function tescoErrorReportEmail() {
                     $('#editTescoErrorReportEmailModal').modal('show');
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                   this.tryCount++;
-                   if (this.tryCount <= this.retryLimit) {
-                       $.ajax(this);
-                       return;
-                   }
+                  console.log(errorThrown);
                  },
                 complete: function () {
                     $(".loader").hide();
@@ -2444,11 +2268,7 @@ function tescoErrorReportEmail() {
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
               },
               complete: function () {
                  $(".loader").hide();
@@ -2490,11 +2310,7 @@ function tescoErrorReportEmail() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoErrorReportEmail();
@@ -2538,11 +2354,7 @@ function tescoErrorReportEmail() {
                     }
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                 console.log(errorThrown);
                },
                complete: function () {
                  tescoErrorReportEmail();
@@ -2605,11 +2417,7 @@ function tescoSymbols() {
         $('#tesco-symbols-list-table_length select').addClass('form-control input-sm');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
       },
       complete: function() {
           $(".loader").hide();
@@ -2666,11 +2474,7 @@ function addTescoSymbols(iso_symbols, astms_symbol,white_iso_symbols,white_astms
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -2711,11 +2515,7 @@ function makeSymbolEnabled(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               orchestraSymbols();
@@ -2756,11 +2556,7 @@ function enableTescoSymbol(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoSymbols();
@@ -2802,11 +2598,7 @@ function disableTescoSymbol(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoSymbols();
@@ -2879,11 +2671,7 @@ function tescoCountries() {
       
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-            $.ajax(this);
-            return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -2943,11 +2731,7 @@ function addTescoCountries() {
         }
       },
       error: function (errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function () {
         $(".loader").hide();
@@ -2994,11 +2778,7 @@ function getTescoCountryById(id) {
             $('#editTescoCountryModal').modal('show');
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function() {
             $(".loader").hide();
@@ -3056,11 +2836,7 @@ function editTescoCountry() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3100,11 +2876,7 @@ function enableTescoCountry(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoCountries();
@@ -3145,11 +2917,7 @@ function disableTescoCountry(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoCountries();
@@ -3221,11 +2989,7 @@ function tescoComponents() {
             $('#tesco-components-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3286,11 +3050,7 @@ function addTescoComponents() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3337,11 +3097,7 @@ function getTescoComponentsById(id) {
               $('#editTescoComponentsModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3401,11 +3157,7 @@ function editTescoComponents() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3446,11 +3198,7 @@ function enableTescoComponents(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoComponents();
@@ -3492,11 +3240,7 @@ function disableTescoComponents(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 tescoComponents();
@@ -3569,11 +3313,7 @@ function tescoFabricList() {
             $('#tesco-fabric-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3633,11 +3373,7 @@ function addTescoFabric() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3684,11 +3420,7 @@ function getTescoFabricById(id) {
               $('#editTescoFabricModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3747,11 +3479,7 @@ function updateTescoFabric() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3791,11 +3519,7 @@ function enableTescoFabric(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoFabricList();
@@ -3836,11 +3560,7 @@ function disableTescoFabric(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoFabricList();
@@ -3913,11 +3633,7 @@ function tescoKidsWarningStmt() {
             $('#tesco-kids-stmt-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -3977,11 +3693,7 @@ function addTescoKidsStatement() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4029,11 +3741,7 @@ function getTescoKidsStmtById(id) {
               $('#editTescoKidsStatementModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4092,11 +3800,7 @@ function updateTescoKidsStmt() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4136,11 +3840,7 @@ function enableTescoKidsStatement(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoKidsWarningStmt();
@@ -4181,11 +3881,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               tescoKidsWarningStmt();
@@ -4258,11 +3954,7 @@ function disableTescoKidsStatement(id, csrf_token) {
             $('#tesco-translations-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4322,11 +4014,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4374,11 +4062,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               $('#editTescoTranslationModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4437,11 +4121,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -4481,11 +4161,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoTranslations();
@@ -4526,11 +4202,7 @@ function disableTescoTranslation(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoTranslations();
@@ -4585,11 +4257,7 @@ function tescoLabelSizeChart() {
         $('#tesco-label-sizechart-list-table_length select').addClass('form-control input-sm');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
       },
       complete: function() {
           $(".loader").hide();
@@ -4638,11 +4306,7 @@ function getLabelSizeModalData() {
       $('.secondary-categories').html(checkboxDiv)
     },
     error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
     },
     complete: function() {
       $(".loader").hide();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
@@ -4790,11 +4454,7 @@ function updateTescoLabelSizeChart() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoLabelSizeChart();
@@ -4835,11 +4495,7 @@ function updateTescoLabelSizeChart() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoLabelSizeChart();
@@ -4922,11 +4578,7 @@ $inputBox+= '<div class="col-md-6 removeLabelSizeItem sizechart-'+data.categorie
 
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -5013,11 +4665,7 @@ function tescoSeasonCodes()
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();

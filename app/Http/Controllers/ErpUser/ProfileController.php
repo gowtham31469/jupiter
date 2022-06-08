@@ -173,4 +173,29 @@ class ProfileController extends Controller
 			}
 		}	
     }
+
+	/**
+	 * setCompanySession function
+	 * 
+	 * Store company data into session.
+	 * @param Request $request
+	 * @return void
+	 */
+	public function setCompanySession(Request $request)
+	{
+		if (session()->has('company') && session()->has('company_name')) {
+			// delete existing company session 
+			session()->forget('company');
+			session()->forget('company_name');
+
+			// update company session data
+			session()->put('company', $request->company_id);
+			session()->put('company_name', $request->company_name);
+		} else {
+			// create company session data
+			session(['company' => $request->company_id, 'company_name' => $request->company_name]);
+		}
+
+		return response()->json(['error' => false, 'message' => 'success', 'company' => session()->get('company')], 200);
+	}
 }

@@ -38,6 +38,7 @@ use App\Buyer;
 use App\FinancialYearResetDate;
 use App\Classes\TescoMaterialQuery;
 use App\Classes\JobcardIDGenerator;
+use App\Classes\JobcardMetadata;
 
 class JobManagerController extends Controller
 {
@@ -55,6 +56,9 @@ class JobManagerController extends Controller
 	public function __construct()
 	{
 		$this->middleware('erpuser');
+
+		$role = "JOB CARD MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
@@ -84,17 +88,16 @@ class JobManagerController extends Controller
 									->select('erpuser_company_mapping.*','company.name', 'company.logo')
 									->get();
 
-			if($companies)
+			if(!$companies)
 			{
-				$company_id   = DB::table('company')
+				return view('erp.home');
+				
+			}
+
+			$company_id   = DB::table('company')
 								->select('company.*')
 								->where('company.id', $companies[0]->company)
 								->first();
-			}
-			else
-			{
-				return view('erp.home');
-			}
 
 			if(session()->get('company') == "" && session()->get('company') == null)
 			{
@@ -103,25 +106,17 @@ class JobManagerController extends Controller
 			}
 
 			// full access to erp admin
-			if($erp_user_id != 1)
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-									->where('erpusers_template_mapping.company',session()->get('company'))
-									->where('erpusers_template_mapping.erp_user',$erp_user_id)
-									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
-									->distinct('erpusers_template_mapping.templates')
-									->get();
-			}
-			else
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-									->where('erpusers_template_mapping.company',session()->get('company'))
-									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
-									->distinct('erpusers_template_mapping.templates')
-									->get();
-			}
+			$templates   = 		DB::table('erpusers_template_mapping')
+								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
+								->where('erpusers_template_mapping.company',session()->get('company'))
+								->where(function ($query) use ($erp_user_id) {
+									if ($erp_user_id != 1) {
+												$query->where('erpusers_template_mapping.erp_user',$erp_user_id);
+										}
+								})
+								->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
+								->distinct('erpusers_template_mapping.templates')
+								->get();
 			
 			$new_orders = array();
 			$i=1;
@@ -153,12 +148,13 @@ class JobManagerController extends Controller
 											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
 											->join('erp_status', 'erp_orders.status', 'erp_status.id')
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
+											->where(['erp_order_details.template_id' => $valuess,
+											         'erp_order_details.deleted_at' => null,
+											         'erp_order_details.status' => $this->erp_jc_status_id,
+											         'erp_order_details.order_status_id' => $this->order_ap_status_id,
+											         'buyers.id' => $buyer_id])
+											->where('erp_order_details.order_qnty_table_name', '<>', 'non_artwork_orders_quanty')
 											// ->where('erp_orders.status', '=', $erp_status_id)
-											->where('erp_order_details.deleted_at', null)
-											->where('erp_order_details.status', '=', $this->erp_jc_status_id)
-											->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
-											->where('buyers.id', $buyer_id)
 											->orderBy('erp_order_details.erp_order_id', 'asc')
 											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
 											->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
@@ -277,7 +273,7 @@ class JobManagerController extends Controller
 
 							->where(function($query) use($buyer_no) 
 							{
-							$query->when($buyer_no!="null", function ($q) use($buyer_no) 
+								$query->when($buyer_no!="null", function ($q) use($buyer_no) 
 							{
 							return $q->where('erp_order_details.buyer_po_number',$buyer_no);
 							});
@@ -978,6 +974,7 @@ class JobManagerController extends Controller
 	{
 	  try {
 			if(session()->get('company_name') === "jupitergarmentsaccessories"){
+				$jc_metadata = New JobcardMetadata();
 				$erp_orders_ids     = explode(',', $request['orders']);
 				$selected_ref_arrays= explode(',', $request['ref_array']);
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
@@ -1030,48 +1027,17 @@ class JobManagerController extends Controller
 				}
 				sort($order_detail_ids);
 				
-				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
+				$order_details_collection = Erp::with(['customer:id,short_name', 'buyer:id,buyer_name,template_table,item_master_table'])
 				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+				->join('company', 'erp_order_details.company_id', 'company.id')
 				->whereIn('erp_order_details.id', $order_detail_ids)
+				->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id', 'erp_orders.po_no')
 				->get();
 
-				/** Same buyer or not validation */
-				$buyer_id_list = $order_details_collection->pluck('buyer_id')->toArray();
-
-				if (count(array_unique($buyer_id_list)) === 1) {
-					$buyer = DB::table('buyers')
-					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
-					->where('id', $buyer_id_list[0])
-						->first();
-
-					$this->buyer_name = $buyer->buyer_name;
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
-				}
-
-				/** Same customer or not validation */
-				$customer_id_list = $order_details_collection->pluck('customer_id')->toArray();
-
-				if (count(array_unique($customer_id_list)) === 1) {
-					$customer = DB::table('customers')
-					->select('short_name as customer_name', 'id as customer_id')
-					->where('id', $customer_id_list[0])
-						->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
-				}
-
-				/** Same company or not validation */
-				$company_id_list = $order_details_collection->pluck('company_id')->toArray();
-
-				if (count(array_unique($company_id_list)) === 1) {
-					$company = DB::table('company')
-					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
-					->where('id', $company_id_list[0])
-						->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
-				}
+				$company_array['company'] = $order_details_collection[0]->company;
+				$company_array['company_id'] = $order_details_collection[0]->company_id;
+				$company_array['company_address'] = $order_details_collection[0]->company_address;
+				$company_array['company_logo'] = $order_details_collection[0]->company_logo;
 
 				foreach ($order_details_collection as $key => $order_details) {
 
@@ -1091,7 +1057,7 @@ class JobManagerController extends Controller
 
 					/** Create separate ratio/single templates array  */
 					if ($order_details->template_type == "ratio") {
-						if ($this->buyer_name === "Tesco") {
+						if ($order_details_collection[0]['buyer']->buyer_name === "Tesco") {
 							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
 							->select($order_details->order_qnty_table_name . '.id as qty_table_id', $order_details->order_qnty_table_name . '.ratio_pack_type')
 							->first();
@@ -1110,17 +1076,17 @@ class JobManagerController extends Controller
 						// to differenciate reorder and repeatorder having same values
 						$unique_id = $order_details->uuid;
 
-						$erp_id_array[$order_details->reference_name][] = $order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id;
+						$erp_id_array[$order_details->reference_name][] = $unique_id;
 
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['ocn_number'] = $order_details->ocn_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['erp_id'] = $order_details->erp_id;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['template_id'] = $order_details->template_id;
-						$single_templates[$order_details->reference_name]['size'][$order_details->size][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id] = $order_details->order_quantity;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['ocn_number'] = $order_details->ocn_number;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['erp_id'] = $order_details->erp_id;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
+						$single_templates[$order_details->reference_name]['order_data'][$unique_id]['template_id'] = $order_details->template_id;
+						$single_templates[$order_details->reference_name]['size'][$order_details->size][$unique_id] = $order_details->order_quantity;
 					}
 
 					// Add color code and age group pantone color as tint color for orchestra
-					if ($this->buyer_name === "Orchestra") {
+					if ($order_details_collection[0]['buyer']->buyer_name === "Orchestra") {
 						// parse orchestra orders table and table id from quantity table name
 						$main_table     = str_replace("_qty", "", $order_details->order_qnty_table_name);
 						$result_str     = str_replace("_", " ", str_replace("_orders", "", $main_table));
@@ -1129,41 +1095,43 @@ class JobManagerController extends Controller
 							$qnty_id .= strtolower($word[0]);
 						}
 
-						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
-						->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
-						->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
-						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
-						->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
-						->first();
+						if(in_array($main_table, ['orchestra_solid_carton_sticker_orders', 'orchestra_solid_poly_bag_sticker_orders', 'orchestra_standard_carton_sticker_orders', 'orchestra_standard_poly_bag_sticker_orders'])){
+							$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
+							->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
+							->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
+							->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
+							->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
+							->first();
 
-						!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
-						!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
+							!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
+							!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
+						}
 					}
 				}
 
-				/** Get templates metadata details */
-				if (!empty($temp_id_array)) {
-					$template_details = DB::table($buyer->template_table)
-						->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
-						->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
-						->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
-						->whereIn($buyer->template_table . '.item_id', $temp_id_array)
-						->orderBy($buyer->template_table . '.id')
-						->get();
-
-					foreach ($template_details as $template_detail) {
-						!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
-
-						!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
-
-						!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
-
-						!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
-
-						!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
-					}
-				} else {
+				if(empty($temp_id_array)){
 					return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
+				}
+
+				/** Get templates metadata details */
+				$template_details = DB::table($order_details_collection[0]['buyer']->template_table)
+					->select($order_details_collection[0]['buyer']->template_table . '.color', $order_details_collection[0]['buyer']->template_table . '.dimension_height as length', $order_details_collection[0]['buyer']->template_table . '.dimension_width as width', $order_details_collection[0]['buyer']->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $order_details_collection[0]['buyer']->template_table . '.material_id')
+					->join($order_details_collection[0]['buyer']->item_master_table, $order_details_collection[0]['buyer']->item_master_table . '.id', $order_details_collection[0]['buyer']->template_table . '.hierarchy_id')
+					->join('raw_material_master', 'raw_material_master.id', $order_details_collection[0]['buyer']->template_table . '.material_id')
+					->whereIn($order_details_collection[0]['buyer']->template_table . '.item_id', $temp_id_array)
+					->orderBy($order_details_collection[0]['buyer']->template_table . '.id')
+					->get();
+
+				foreach ($template_details as $template_detail) {
+					!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
+
+					!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
+
+					!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
+
+					!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
+
+					!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
 				}
 				
 				/** Different size breakup value handling */
@@ -1208,10 +1176,6 @@ class JobManagerController extends Controller
 					}
 				}
 
-				/** Unset unwanted values from buyers array */
-				unset($buyer->template_table);
-				unset($buyer->item_master_table);
-
 				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
 				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
 
@@ -1220,9 +1184,9 @@ class JobManagerController extends Controller
 				$template_data['cus_del_date']     = $delivery_dt_array;
 				$template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
 				$template_data['workorder_id']     = $workorder_id;
-				$template_data['company']          = $company;
-				$template_data['customer']         = $customer;
-				$template_data['buyer']            = $buyer;
+				$template_data['company']          = $company_array;
+				$template_data['customer']         = $order_details_collection[0]->customer;
+				$template_data['buyer']            = $order_details_collection[0]->buyer;
 				$template_data['ordertype_array']  = $ordertype_array;
 				$template_data['style_array']      = $style_array;
 				$template_data['refnum_array']     = $distinct_ref_array;
@@ -1237,23 +1201,8 @@ class JobManagerController extends Controller
 				$template_data['customer_po_array'] = $customer_po_array;
 				$template_data['color_code']       = $color_code;
 				$template_data['tint_color']       = $tint_color;
+				$metadata                          = $jc_metadata->erpJobcardMetaData();
 
-				$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-				->where('is_enabled', true)
-				->pluck('disp_mode', 'id')
-				->all();
-				$erp_finish_type = DB::table('erp_finish_type')
-				->where('is_enabled', true)
-				->pluck('finish_type', 'id')
-				->all();
-				$erp_machines = DB::table('erp_machines')
-				->where('is_enabled', true)
-				->pluck('machine', 'id')
-				->all();
-				$erp_teeth_no = DB::table('erp_teeth_no')
-				->where('is_enabled', true)
-				->pluck('teeth_no', 'id')
-				->all();
 			} else {
 				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
 			}
@@ -1262,10 +1211,10 @@ class JobManagerController extends Controller
 				'error'=> false,
 				'message' =>'Success', 
 				'template_data' => $template_data,
-				'disp_modes' => $erp_dispatch_mode,
-				'finish_types' => $erp_finish_type,
-				'machines' => $erp_machines,
-				'teeth_nos' => $erp_teeth_no
+				'disp_modes' => $metadata['erp_dispatch_mode'],
+				'finish_types' => $metadata['erp_finish_type'],
+				'machines' => $metadata['erp_machines'],
+				'teeth_nos' => $metadata['erp_teeth_no']
 
 			],200);
   
@@ -1333,393 +1282,381 @@ class JobManagerController extends Controller
 
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-				if(isset($company_id) && isset($jobcard_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
+				if(!isset($company_id) && !isset($jobcard_id) && !isset($created_date) && !isset($article) && !isset($material) && !isset($customer_id) && !isset($buyer_id) && !isset($disp_mode) && !isset($order_date) && !isset($machine) && !isset($cus_del_date)  && !isset($finish_type)  && !isset($compiled_by) && !isset($final_json_obj) && !isset($material))
 				{
-					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
-					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
+					return response()->json(['error'=> true,'message' =>'Parameter is Missing'],400);
+				}
 
-					$article_array = explode(', ', $article);
-					
-					// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-					$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
+				$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
 
-					// Get Erp status table id for 'Jobcard Created' status.
-					$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
-					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
-						'work_order_id'          => $workorder_id,
-						'company_id'             => $company_id,
-						'customer_id'            => $customer_id,
-						'buyer_id'               => $buyer_id,
-						'created_date'           => $created_date,
-						'material'               => $material,
-						'article'                => $article,
-						'style_number'           => $style_no,
-						'reference'              => $reference,
-						'order_type'             => $order_type,
-						'dispatch_mode'          => $disp_mode,
-						'order_date'             => $order_date,
-						'length'                 => $length,
-						'repeat_gap'             => $repeat_gap,
-						'machine'                => $machine,
-						'customer_del_date'      => $cus_del_date,
-						'width'                  => $width,
-						'roll_width'             => $roll_width,
-						'film_no'                => $film_no,
-						'invoice_date'           => $invoice_date,
-						'length_side'            => $length_side,
-						'excess_percentage'      => $excess,
-						'teeth_no'               => $teeth_no,
-						'invoice_num'            => $inv_no,
-						'no_of_stickers'         => $no_sticker,
-						'finish_type'            => $finish_type,
-						'print_color'            => $print_color,
-						'compiled_by'            => $compiled_by,
-						'barcode_read'           => $barcode_read,
-						'operator'               => $operator,
-						'checker'                => $checker,
-						'authorized_by'          => $authorized_by,
-						'axicon_verifier'        => $axicon_verifier,
-						'approved_by'            => $approved_by,
-						'packer'                 => $packer,
-						'approval_date'          => $approval_date,
-						'roll_issued_by'         => $roll_issued_by,
-						'cutter'                 => $cutter,
-						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
-						'created_at'             => $current_timestamp,
-						'updated_at'             => $current_timestamp,
-						'tint_color'             => $tint_color,
-						'customer_po_num'        => $customer_po_num
-					  ]);
+				$article_array = explode(', ', $article);
+				
+				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+
+				// Get Erp status table id for 'Jobcard Created' status.
+				$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
+				$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
+					'work_order_id'          => $workorder_id,
+					'company_id'             => $company_id,
+					'customer_id'            => $customer_id,
+					'buyer_id'               => $buyer_id,
+					'created_date'           => $created_date,
+					'material'               => $material,
+					'article'                => $article,
+					'style_number'           => $style_no,
+					'reference'              => $reference,
+					'order_type'             => $order_type,
+					'dispatch_mode'          => $disp_mode,
+					'order_date'             => $order_date,
+					'length'                 => $length,
+					'repeat_gap'             => $repeat_gap,
+					'machine'                => $machine,
+					'customer_del_date'      => $cus_del_date,
+					'width'                  => $width,
+					'roll_width'             => $roll_width,
+					'film_no'                => $film_no,
+					'invoice_date'           => $invoice_date,
+					'length_side'            => $length_side,
+					'excess_percentage'      => $excess,
+					'teeth_no'               => $teeth_no,
+					'invoice_num'            => $inv_no,
+					'no_of_stickers'         => $no_sticker,
+					'finish_type'            => $finish_type,
+					'print_color'            => $print_color,
+					'compiled_by'            => $compiled_by,
+					'barcode_read'           => $barcode_read,
+					'operator'               => $operator,
+					'checker'                => $checker,
+					'authorized_by'          => $authorized_by,
+					'axicon_verifier'        => $axicon_verifier,
+					'approved_by'            => $approved_by,
+					'packer'                 => $packer,
+					'approval_date'          => $approval_date,
+					'roll_issued_by'         => $roll_issued_by,
+					'cutter'                 => $cutter,
+					'cartons'                => $cartons,
+					'template_quantity_json' => $final_json_obj,
+					'created_at'             => $current_timestamp,
+					'updated_at'             => $current_timestamp,
+					'tint_color'             => $tint_color,
+					'customer_po_num'        => $customer_po_num
+					]);
+				
+				/** Store jobcard settings and excess details**/
+				if($store_jobcard_id != '')
+				{
+					$single_ref      = explode(',', $request['single_ref']);
+					$act_excess 	 = explode(',', $request['act_excess']);
+					$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+					$settings        = explode(',', $request['settings']);
+					$total_mtrs 	 = explode(',', $request['total_mtrs']);
 					
-					/** Store jobcard settings and excess details**/
-					if($store_jobcard_id != '')
+					if (!empty($request['single_ref'])) 
 					{
-						if (!empty($request['single_ref'])) 
+						$i = 0;
+						foreach($single_ref as $value)
 						{
-							
-							$single_ref      = explode(',', $request['single_ref']);
-							$act_excess 	 = explode(',', $request['act_excess']);
-							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
-							$settings        = explode(',', $request['settings']);
-							$total_mtrs 	 = explode(',', $request['total_mtrs']);
-
-							$i = 0;
-							foreach($single_ref as $value)
-							{
-								$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
-									'jobcard_main_table_id'   => $store_jobcard_id,
-									'ref_name'                => $single_ref[$i],
-									'mtrs_for_stickers'       => $sticker_mtr[$i],
-									'actual_excess'           => $act_excess[$i],
-									'settings'                => $settings[$i],
-									'total_mtrs'              => $total_mtrs[$i],
-									'created_at'              => $current_timestamp,
-									'updated_at'              => $current_timestamp
-								]);
-								$i++;
-							}
+							$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
+								'jobcard_main_table_id'   => $store_jobcard_id,
+								'ref_name'                => $single_ref[$i],
+								'mtrs_for_stickers'       => $sticker_mtr[$i],
+								'actual_excess'           => $act_excess[$i],
+								'settings'                => $settings[$i],
+								'total_mtrs'              => $total_mtrs[$i],
+								'created_at'              => $current_timestamp,
+								'updated_at'              => $current_timestamp
+							]);
+							$i++;
 						}
-						else
-						{
-							$single_ref      = explode(',', $request['single_ref']);
-							$act_excess 	 = explode(',', $request['act_excess']);
-							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
-							$settings        = explode(',', $request['settings']);
-							$total_mtrs 	 = explode(',', $request['total_mtrs']);
+					}
+
+					/** Update jobcard created status erp order details table */
+					foreach($erp_orders_ids as $row => $erp_orders_id)
+					{
+						/** Get updated data and update in history table */
+						// buyer po is optional for orchestra orders 
+						$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
+						->where('erp_order_details.order_type', $order_types[$row])
+						->where('erp_order_details.uuid', $uuid[$row])
+						->where('erp_order_details.reference_name', $selected_ref[$row]);
+
+						if($buyer_pos[$row] != "") {
+							$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+							->update([
+								'status'  => $erp_status_id,
+								'jc_number' => $workorder_id,
+								'jc_created_by' => Auth::guard('erpuser')->id(),
+								'jc_created_date' => $current_timestamp
+							]);
+
+							$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
+						} else {
+							$update_query->update([
+								'status'  => $erp_status_id,
+								'jc_number' => $workorder_id,
+								'jc_created_by' => Auth::guard('erpuser')->id(),
+								'jc_created_date' => $current_timestamp
+							]);
+
+							$jobcard_data = $update_query->get();
 						}
 
-						/** Update jobcard created status erp order details table */
-						foreach($erp_orders_ids as $row => $erp_orders_id)
+						$template       = 'Available';
+						$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
+						
+						foreach($jobcard_data as $key => $data)
 						{
-							/** Get updated data and update in history table */
-							// buyer po is optional for orchestra orders 
-							$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-							->where('erp_order_details.order_type', $order_types[$row])
-							->where('erp_order_details.uuid', $uuid[$row])
-							->where('erp_order_details.reference_name', $selected_ref[$row]);
+							$qnty_table     = $data->order_qnty_table_name;
+							$qty_row_id     = $data->order_qnty_table_id;
+							if($buyer->buyer_name === 'Tesco'){
 
-							if($buyer_pos[$row] != "") {
-								$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
-								->update([
-									'status'  => $erp_status_id,
-									'jc_number' => $workorder_id,
-									'jc_created_by' => Auth::guard('erpuser')->id(),
-									'jc_created_date' => $current_timestamp
-								]);
-
-								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
-							} else {
-								$update_query->update([
-									'status'  => $erp_status_id,
-									'jc_number' => $workorder_id,
-									'jc_created_by' => Auth::guard('erpuser')->id(),
-									'jc_created_date' => $current_timestamp
-								]);
-
-								$jobcard_data = $update_query->get();
-							}
-
-							$template       = 'Available';
-							$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
-							
-							foreach($jobcard_data as $key => $data)
-							{
-								$qnty_table     = $data->order_qnty_table_name;
-								$qty_row_id     = $data->order_qnty_table_id;
-								if($buyer->buyer_name === 'Tesco'){
-
-									$main_table     = str_replace("_quanty","",$qnty_table);
-									$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-									$order_details  = DB::table($qnty_table)
-														->select($main_table.'.*')
-														->where($qnty_table.'.id', $qty_row_id)
-														->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-														->first();
-									$season         = $order_details->season_code;
-									$country        = $order_details->zone;
-									$style_zone     = strtolower($country).'_style_ref';
-									$template_id    = $order_details->template_id;
-									$order_table_array = explode("_", $main_table);
-									$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-									
-									$material_name  = $template_level->material;
-									$material_sub   = $template_level->material_sub;
-									$material_ref   = $template_level->ref;
-									
-									if ($customer->pi_required == 1 && $customer->po_required== 0) {
-										$customer_po  = $order_details->pi_id;
-									}
-									else if($customer->po_required== 1){
-										$customer_po  = $order_details->purchase_order_no;
-									}
-
-									$buyer_po       = $order_details->po_number;
-									$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-									$ocn_number     = $order_details->ocn_number;
-									
-
-								} else if($buyer->buyer_name === 'Orchestra'){
-
-									$main_table     = str_replace("_qty","",$qnty_table);
-									$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-									$qnty_id        = '';
-									foreach (explode(' ', $result_str) as $word)
-									{
-									$qnty_id .= strtolower($word[0]);
-									}
-									
-									$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+								$main_table     = str_replace("_quanty","",$qnty_table);
+								$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
+								$order_details  = DB::table($qnty_table)
+													->select($main_table.'.*')
+													->where($qnty_table.'.id', $qty_row_id)
+													->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
 													->first();
-									
-									// template front and back id storing in orchestra_hang_tag_orders table
-									$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-									$template_data = DB::table('orchestra_item_master')
-													->where('orchestra_item_master.id', $template_id)
-													->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-									$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
-									$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
-									
-									$material_ref   = $template_data->item_name;
-
-									if ($customer->pi_required == 1 && $customer->po_required== 0) {
-										$customer_po  = $order_details->pi_id;
-									}
-									else if($customer->po_required== 1){
-										$customer_po  = $order_details->po_number;
-									}
-									
-									$buyer_po       = $order_details->po;
-									$style          = $order_details->uvc;
-									$ocn_number     = null;
-									$season         = $order_details->season_code;
-									$country        = null;
-
-								} else {
-
-									$template       = 'Not Available';
-
+								$season         = $order_details->season_code;
+								$country        = $order_details->zone;
+								$style_zone     = strtolower($country).'_style_ref';
+								$template_id    = $order_details->template_id;
+								$order_table_array = explode("_", $main_table);
+								$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
+								
+								$material_name  = $template_level->material;
+								$material_sub   = $template_level->material_sub;
+								$material_ref   = $template_level->ref;
+								
+								if ($customer->pi_required == 1 && $customer->po_required== 0) {
+									$customer_po  = $order_details->pi_id;
+								}
+								else if($customer->po_required== 1){
+									$customer_po  = $order_details->purchase_order_no;
 								}
 
-								// it will insert if erp_order_details_id i snot exists, otherwise it will update 
-								$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
-									'buyer_id'             => $buyer_id,
-									'template'             => $template,
-									'season'               => $season,
-									'country'              => $country,
-									'customer_id'          => $customer_id,
-									'material'             => $material_name,
-									'mat_sub'              => $material_sub,
-									'reference'            => $material_ref,
-									'style'                => $style,
-									'po'                   => $customer_po,
-									'buyer_po'             => $buyer_po,
-									'ocn'                  => $ocn_number,
-									'created_at'           => $current_timestamp,
-									'updated_at'           => $current_timestamp,
-									'disp_mode_id'         => $disp_mode
-								]);
-
-								DB::table('event_history')
-								->insert([
-									'history_id'  => $history_id->id,
-									'action_id'   => $action_id,
-									'created_by'  => Auth::guard('erpuser')->id(),
-									'created_at'  => $current_timestamp,
-									'updated_at'  => $current_timestamp,
-								]);
+								$buyer_po       = $order_details->po_number;
+								$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
+								$ocn_number     = $order_details->ocn_number;
 								
+
+							} else if($buyer->buyer_name === 'Orchestra'){
+
+								$main_table     = str_replace("_qty","",$qnty_table);
+								$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+								$qnty_id        = '';
+								foreach (explode(' ', $result_str) as $word)
+								{
+								$qnty_id .= strtolower($word[0]);
+								}
+								
+								$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
+												->first();
+								
+								// template front and back id storing in orchestra_hang_tag_orders table
+								$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+								$template_data = DB::table('orchestra_item_master')
+												->where('orchestra_item_master.id', $template_id)
+												->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
+								$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
+								$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
+								
+								$material_ref   = $template_data->item_name;
+
+								if ($customer->pi_required == 1 && $customer->po_required== 0) {
+									$customer_po  = $order_details->pi_id;
+								}
+								else if($customer->po_required== 1){
+									$customer_po  = $order_details->po_number;
+								}
+								
+								$buyer_po       = $order_details->po;
+								$style          = $order_details->uvc;
+								$ocn_number     = null;
+								$season         = $order_details->season_code;
+								$country        = null;
+
+							} else {
+
+								$template       = 'Not Available';
+
 							}
+
+							// it will insert if erp_order_details_id i snot exists, otherwise it will update 
+							$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
+								'buyer_id'             => $buyer_id,
+								'template'             => $template,
+								'season'               => $season,
+								'country'              => $country,
+								'customer_id'          => $customer_id,
+								'material'             => $material_name,
+								'mat_sub'              => $material_sub,
+								'reference'            => $material_ref,
+								'style'                => $style,
+								'po'                   => $customer_po,
+								'buyer_po'             => $buyer_po,
+								'ocn'                  => $ocn_number,
+								'created_at'           => $current_timestamp,
+								'updated_at'           => $current_timestamp,
+								'disp_mode_id'         => $disp_mode
+							]);
+
+							DB::table('event_history')
+							->insert([
+								'history_id'  => $history_id->id,
+								'action_id'   => $action_id,
+								'created_by'  => Auth::guard('erpuser')->id(),
+								'created_at'  => $current_timestamp,
+								'updated_at'  => $current_timestamp,
+							]);
 							
 						}
-
-						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
-						foreach($erp_orders_ids as $row => $erp_orders_id)
-						{
-							$erp_order_table_status = DB::table('erp_order_details')
-								->where('erp_order_details.erp_order_id', $erp_orders_id)
-								->pluck('status')->all();
-							
-							if(count(array_unique($erp_order_table_status)) === 1)
-							{
-								DB::table('erp_orders')
-									->where('erp_orders.id', $erp_orders_id)
-									->update([
-										'status'  => $erp_order_table_status[0]
-									]);
-							}
-						}
-
-						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
-
-						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
-						$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
-						$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
-						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
-
-						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
-						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
-						$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
-						$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
-						$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
-						$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 						
-						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);		
-
-						$pdf->SetPrintHeader(true);
-						$pdf->SetPrintFooter(true);  
-
-						//margins
-						$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-						$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-						$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-						
-						// set header and footer fonts
-						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-						
-						// /** Handle Page break */
-						// if ($pdf->last_page_flag)
-						// {
-								// set auto page breaks
-							$pdf->SetAutoPageBreak(TRUE, 40);
-		
-						// }
-						// else 
-						// {
-						// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-						// }
-						
-
-						// set image scale factor
-						$pdf->setImageScale(1.8);
-
-						// set font
-						$pdf->SetFont('helvetica', '', 8);
-
-						// add a page
-						$pdf->AddPage('P', 'A4');
-
-						// set some text to print
-						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-								->with([
-										'buyer' 		   => $buyer,
-										'customer' 		   => $customer,
-										'company'		   => $company,
-										'workorder_id'     => $workorder_id,
-										'created_date'     => $formated_created_date,
-										'article'	       => $article,
-										'material'		   => $material,
-										'style_no'		   => $style_no,
-										'order_type'       => $order_type,
-										'reference'		   => $reference,
-										'disp_mode'	       => $erp_dispatch_mode,
-										'order_date'	   => $formated_order_date,
-										'length'		   => $length,
-										'repeat_gap'	   => $repeat_gap,
-										'machine'		   => $erp_machine,
-										'cus_del_date' 	   => $formated_cus_del_date,
-										'roll_width'	   => $roll_width,
-										'width'	  		   => $width,
-										'film_no'		   => $film_no, 
-										'invoice_date'     => $formated_inv_date,
-										'length_side'	   => $length_side,
-										'excess'	       => $excess,
-										'teeth_no'		   => $erp_teeth_no,
-										'inv_no'	       => $inv_no,
-										'no_sticker'	   => $no_sticker,
-										'finish_type'	   => $erp_finish_type,
-										'print_color'      => $print_color,
-										'compiled_by'      => $compiled_by,
-										'barcode_read'     => $barcode_read,
-										'operator'         => $operator,
-										'checker'          => $checker,
-										'authorized_by'    => $authorized_by,
-										'axicon_verifier'  => $axicon_verifier,
-										'approved_by'	   => $approved_by,
-										'packer'		   => $packer,
-										'approval_date'    => $format_approval_date,
-										'roll_issued_by'   => $roll_issued_by,
-										'cutter'		   => $cutter,
-										'cartons' 		   => $cartons,
-										'final_json_obj'   => json_decode($final_json_obj, true),
-										'single_ref'	   => $single_ref,
-										'act_excess'	   => $act_excess,
-										'sticker_mtr'	   => $sticker_mtr,
-										'settings'		   => $settings,
-										'total_mtrs' 	   => $total_mtrs,
-										'tint_color'       => $tint_color,
-										'customer_po'      => $customer_po_num
-								]);
-
-						//append content to header
-						$pdf->SetXY(13.4,26.3);
-						$pdf->writeHTML($view->render());
-
-						//Close and output PDF document
-						ob_end_clean();
-						$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
-						$pdf->IncludeJS("print();");
-						$pdf->Output( public_path($file_path), 'F');
-
-						DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
-						->update([
-							'file_path'   => $file_path,
-							'updated_at'  => $current_timestamp
-						]);
-						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 					}
-					else
+
+					/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
+					foreach($erp_orders_ids as $row => $erp_orders_id)
 					{
-						return response()->json(['error'=> true,'message' =>'Error'],400);
+						$erp_order_table_status = DB::table('erp_order_details')
+							->where('erp_order_details.erp_order_id', $erp_orders_id)
+							->pluck('status')->all();
+						
+						if(count(array_unique($erp_order_table_status)) === 1)
+						{
+							DB::table('erp_orders')
+								->where('erp_orders.id', $erp_orders_id)
+								->update([
+									'status'  => $erp_order_table_status[0]
+								]);
+						}
 					}
+
+					$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
+
+					$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
+					$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
+					$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
+					$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
+
+					/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+					$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+					$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+					$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+					$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 					
+					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);		
+
+					$pdf->SetPrintHeader(true);
+					$pdf->SetPrintFooter(true);  
+
+					//margins
+					$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+					$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+					$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+					
+					// set header and footer fonts
+					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+					
+					// /** Handle Page break */
+					// if ($pdf->last_page_flag)
+					// {
+							// set auto page breaks
+						$pdf->SetAutoPageBreak(TRUE, 40);
+	
+					// }
+					// else 
+					// {
+					// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+					// }
+					
+
+					// set image scale factor
+					$pdf->setImageScale(1.8);
+
+					// set font
+					$pdf->SetFont('helvetica', '', 8);
+
+					// add a page
+					$pdf->AddPage('P', 'A4');
+
+					// set some text to print
+					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+							->with([
+									'buyer' 		   => $buyer,
+									'customer' 		   => $customer,
+									'company'		   => $company,
+									'workorder_id'     => $workorder_id,
+									'created_date'     => $formated_created_date,
+									'article'	       => $article,
+									'material'		   => $material,
+									'style_no'		   => $style_no,
+									'order_type'       => $order_type,
+									'reference'		   => $reference,
+									'disp_mode'	       => $erp_dispatch_mode,
+									'order_date'	   => $formated_order_date,
+									'length'		   => $length,
+									'repeat_gap'	   => $repeat_gap,
+									'machine'		   => $erp_machine,
+									'cus_del_date' 	   => $formated_cus_del_date,
+									'roll_width'	   => $roll_width,
+									'width'	  		   => $width,
+									'film_no'		   => $film_no, 
+									'invoice_date'     => $formated_inv_date,
+									'length_side'	   => $length_side,
+									'excess'	       => $excess,
+									'teeth_no'		   => $erp_teeth_no,
+									'inv_no'	       => $inv_no,
+									'no_sticker'	   => $no_sticker,
+									'finish_type'	   => $erp_finish_type,
+									'print_color'      => $print_color,
+									'compiled_by'      => $compiled_by,
+									'barcode_read'     => $barcode_read,
+									'operator'         => $operator,
+									'checker'          => $checker,
+									'authorized_by'    => $authorized_by,
+									'axicon_verifier'  => $axicon_verifier,
+									'approved_by'	   => $approved_by,
+									'packer'		   => $packer,
+									'approval_date'    => $format_approval_date,
+									'roll_issued_by'   => $roll_issued_by,
+									'cutter'		   => $cutter,
+									'cartons' 		   => $cartons,
+									'final_json_obj'   => json_decode($final_json_obj, true),
+									'single_ref'	   => $single_ref,
+									'act_excess'	   => $act_excess,
+									'sticker_mtr'	   => $sticker_mtr,
+									'settings'		   => $settings,
+									'total_mtrs' 	   => $total_mtrs,
+									'tint_color'       => $tint_color,
+									'customer_po'      => $customer_po_num
+							]);
+
+					//append content to header
+					$pdf->SetXY(13.4,26.3);
+					$pdf->writeHTML($view->render());
+
+					//Close and output PDF document
+					ob_end_clean();
+					$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
+					$pdf->IncludeJS("print();");
+					$pdf->Output( public_path($file_path), 'F');
+
+					DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
+					->update([
+						'file_path'   => $file_path,
+						'updated_at'  => $current_timestamp
+					]);
+					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 				}
 				else
 				{
-					return response()->json(['error'=> true,'message' =>'Parameter is Missing'],400);
+					return response()->json(['error'=> true,'message' =>'Error'],400);
 				}
 		}
 		catch (\Exception $e)

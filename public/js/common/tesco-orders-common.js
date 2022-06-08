@@ -54,11 +54,7 @@ uploadCombinedPO = (user_type, formdata, templateName) => {
                  }
              },
              error: function (errorXHR, errorStatus, errorThrown) {
-                 this.tryCount++;
-                 if (this.tryCount <= this.retryLimit) {
-                     $.ajax(this);
-                     return;
-                 }
+                console.log(errorThrown);
              },
              complete: function () {}
          })
@@ -104,11 +100,7 @@ const cancelTescoOrder= (user_type) => {
 
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -237,11 +229,7 @@ viewOrder = (user_type, pNumber,aWork, style_number, zone, orderid) => {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();

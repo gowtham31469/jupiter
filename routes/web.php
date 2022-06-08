@@ -844,7 +844,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
-	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
+	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager'); 
 	
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');	
 	
@@ -854,10 +854,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
 	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
-	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
+	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession'); 
 	
 	/* Routes for Print Manager Module */
-	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
+	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager'); 
 	
 	/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
@@ -960,6 +960,15 @@ Route::group(['prefix' => 'erp'], function () {
 	//Financial Year
 	Route::get('/settings/financial-year', 'ErpUser\ERPSettings\ERPSettingsController@getFinancialYear')->name('erp-financialyear');
 	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
+
+	/* Routes for Non artwork jobcards */
+	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager'); 
+	Route::post('non-artwork-job-manager/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId'); 
+	Route::post('non-artwork-job-manager/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId'); 
+	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName'); 
+	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
+	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
+	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
 });
 
 //Orchestra Order Management - customer

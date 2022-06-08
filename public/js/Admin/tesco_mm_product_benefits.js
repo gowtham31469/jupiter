@@ -92,11 +92,7 @@ function tescoMMProductBenefits() {
             $('#tesco-components-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -159,11 +155,7 @@ function addMMProductBenefits() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -213,11 +205,7 @@ function gettescoMMProductBenefitsById(id) {
               $('#editMMProductBenefitsModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -280,11 +268,7 @@ function updateMMProductBenefits() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -325,11 +309,7 @@ function enableMMProductBenefits(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoMMProductBenefits();
@@ -371,11 +351,7 @@ function disableMMProductBenefits(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 tescoMMProductBenefits();

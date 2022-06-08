@@ -682,11 +682,7 @@ function tescoOrders(callback) {
 
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 								$(".loader").hide();
@@ -885,11 +881,7 @@ function tescoOrders(callback) {
 				callback();
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 
@@ -1570,11 +1562,7 @@ function createOrders(parsedObj = false, oType = false) {
 				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				/** [ To make top menu active ] */
@@ -1742,11 +1730,7 @@ function printDivTesco(data, name, obj) {
 							svgarr.push(svg)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -1967,11 +1951,7 @@ function printDivTesco(data, name, obj) {
 							svgarr.push(svg)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -2192,11 +2172,7 @@ function printDivTesco(data, name, obj) {
 								svgarr.push(svg)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -2561,11 +2537,7 @@ function printDivTesco(data, name, obj) {
 							svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -2849,11 +2821,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 							svgarr.push(svg)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3074,11 +3042,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 								svgarr.push(svg)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -3302,11 +3266,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 							svgarr.push(svg)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3582,11 +3542,7 @@ function printDivTescoSet(data, name,set_po_number,set_style) {
 							svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3920,11 +3876,7 @@ function GenerateDivTesco(data, name, obj) {
                             barcode_final.push(barcode_change)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -4258,11 +4210,7 @@ function GenerateDivTesco(data, name, obj) {
 								barcode_final.push(barcode_change)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -4596,11 +4544,7 @@ function GenerateDivTesco(data, name, obj) {
 								barcode_final.push(barcode_change)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -5030,11 +4974,7 @@ function GenerateDivTesco(data, name, obj) {
 							qr_tpndarr.push(qr_tpnd)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -5199,11 +5139,7 @@ function nonArtworkOrders()
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5314,11 +5250,7 @@ function PopupTesco(data, name,zone) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5390,11 +5322,7 @@ function PopupTescoSmall(data, name,zone) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5437,11 +5365,7 @@ function PopupTescoSet(data, name) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5481,11 +5405,7 @@ function PopupTescoSmallSet(data, name) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5542,11 +5462,7 @@ function PopupTescoGenerate(data, name,svgDoc,qr_tpnd_fin) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5589,11 +5505,7 @@ function PopupTescoGenerateSmall(data,bar_fin, name,svgDoc) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5635,11 +5547,7 @@ function PdfboxGenerateSmall(data, name,svgDoc) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -6437,11 +6345,7 @@ function dynamicSVGTemplatescard(id, item) {
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 							/** [To make top menu active] */
@@ -6680,11 +6584,7 @@ function dynamicSVGTemplatescard(id, item) {
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 							/** [To make top menu active] */
@@ -7224,11 +7124,7 @@ function dynamicSVGTemplatescard(id, item) {
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 							/** [To make top menu active] */
@@ -7464,11 +7360,7 @@ function dynamicSVGTemplatescard(id, item) {
 							}
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 							/** [To make top menu active] */
@@ -7956,11 +7848,7 @@ function storeCERatioTCL1TCL2TSL1() {
 				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -8088,11 +7976,7 @@ function storeCERatioTHL1() {
 				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -8237,11 +8121,7 @@ function storeUKRatioTCL1TCL2TSL1() {
 				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -8367,11 +8247,7 @@ function storeUKRatioTHL1() {
 				}
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9169,11 +9045,7 @@ function saveCERatioTCL1TCL2TSL1() {
 
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9285,11 +9157,7 @@ function saveCERatioTHL1() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9421,11 +9289,7 @@ function saveCESingleTCL4TSL3() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9546,11 +9410,7 @@ function saveCESingleTHL3() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9677,11 +9537,7 @@ function saveUKRatioTCL1TCL2TSL1() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9785,11 +9641,7 @@ function saveUKRatioTHL1() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -9913,11 +9765,7 @@ function saveUKSingleTCL4TSL3() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -10030,11 +9878,7 @@ function saveUKSingleTHL3() {
 				afterOrderSaved(data)
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -10226,11 +10070,7 @@ function dynamicTescoSuppliers(id)
 						 
 		           },
 		           error: function(errorXHR, errorStatus, errorThrown) {
-		                this.tryCount++;
-		                if (this.tryCount <= this.retryLimit) {
-		                    $.ajax(this);
-		                    return;
-		                }
+						console.log(errorThrown);
 		            },
 		           complete: function () {
 	                   isSubmitting = false;
@@ -10446,11 +10286,7 @@ function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_tex
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -10515,11 +10351,7 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -10598,11 +10430,7 @@ function PopupTescoTicketsPrintManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
         complete: function() {
 			$(".loader").hide();
@@ -10656,11 +10484,7 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 		complete: function() {
 			$(".loader").hide();
