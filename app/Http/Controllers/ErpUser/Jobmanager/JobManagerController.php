@@ -38,6 +38,7 @@ use App\Buyer;
 use App\FinancialYearResetDate;
 use App\Classes\TescoMaterialQuery;
 use App\Classes\JobcardIDGenerator;
+use App\Classes\JobcardMetadata;
 
 class JobManagerController extends Controller
 {
@@ -973,6 +974,7 @@ class JobManagerController extends Controller
 	{
 	  try {
 			if(session()->get('company_name') === "jupitergarmentsaccessories"){
+				$jc_metadata = New JobcardMetadata();
 				$erp_orders_ids     = explode(',', $request['orders']);
 				$selected_ref_arrays= explode(',', $request['ref_array']);
 				$buyer_pos          = explode(',', $request['buyer_po_array']);
@@ -1037,7 +1039,7 @@ class JobManagerController extends Controller
 					$buyer = DB::table('buyers')
 					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
 					->where('id', $buyer_id_list[0])
-						->first();
+					->first();
 
 					$this->buyer_name = $buyer->buyer_name;
 				} else {
@@ -1051,7 +1053,7 @@ class JobManagerController extends Controller
 					$customer = DB::table('customers')
 					->select('short_name as customer_name', 'id as customer_id')
 					->where('id', $customer_id_list[0])
-						->first();
+					->first();
 				} else {
 					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
 				}
@@ -1063,7 +1065,7 @@ class JobManagerController extends Controller
 					$company = DB::table('company')
 					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
 					->where('id', $company_id_list[0])
-						->first();
+					->first();
 				} else {
 					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
 				}
@@ -1232,23 +1234,8 @@ class JobManagerController extends Controller
 				$template_data['customer_po_array'] = $customer_po_array;
 				$template_data['color_code']       = $color_code;
 				$template_data['tint_color']       = $tint_color;
+				$metadata                          = $jc_metadata->erpJobcardMetaData();
 
-				$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-				->where('is_enabled', true)
-				->pluck('disp_mode', 'id')
-				->all();
-				$erp_finish_type = DB::table('erp_finish_type')
-				->where('is_enabled', true)
-				->pluck('finish_type', 'id')
-				->all();
-				$erp_machines = DB::table('erp_machines')
-				->where('is_enabled', true)
-				->pluck('machine', 'id')
-				->all();
-				$erp_teeth_no = DB::table('erp_teeth_no')
-				->where('is_enabled', true)
-				->pluck('teeth_no', 'id')
-				->all();
 			} else {
 				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
 			}
@@ -1257,10 +1244,10 @@ class JobManagerController extends Controller
 				'error'=> false,
 				'message' =>'Success', 
 				'template_data' => $template_data,
-				'disp_modes' => $erp_dispatch_mode,
-				'finish_types' => $erp_finish_type,
-				'machines' => $erp_machines,
-				'teeth_nos' => $erp_teeth_no
+				'disp_modes' => $metadata['erp_dispatch_mode'],
+				'finish_types' => $metadata['erp_finish_type'],
+				'machines' => $metadata['erp_machines'],
+				'teeth_nos' => $metadata['erp_teeth_no']
 
 			],200);
   

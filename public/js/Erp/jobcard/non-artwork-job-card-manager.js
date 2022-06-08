@@ -413,16 +413,19 @@ const generateNatJobcard = () => {
     var buyerArray = [];
     var customerArray = [];
     var uuid_array = [];
+    var erp_id_array = [];
     $('input[name="nat-row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
             buyerArray.push($(this).data('buyer-name'));
             customerArray.push($(this).data('customer-name'));
 
             uuid_array.push($(this).data('uuid'));
+            erp_id_array.push($(this).data('erp-id'));
         }
     });
 
     uuid_array   = uuid_array.join(',');
+    erp_id_array   = erp_id_array.join(',');
 
     if([...new Set(buyerArray)].length != 1) {
         $('.snackbar_span').html("Please select the same buyer orders.");
@@ -440,7 +443,7 @@ const generateNatJobcard = () => {
         url:base_url + "/erp/non-artwork-job-manager/get-nat-jc-details",
         dataType:"json",
         method:"get",
-        data:{uuid_array:uuid_array},
+        data:{uuid_array:uuid_array, erp_id_array:erp_id_array},
         tryCount : 0,
         retryLimit : 2,
         beforeSend: function () {
@@ -450,7 +453,7 @@ const generateNatJobcard = () => {
             /** [Show response status based on HTTP status code] */
             200: function(data) {
 
-                renderCommonJCView(data);
+                // renderCommonJCView(data);
                 
                 /** [ Backdrop for bootstrap modal ] */
                 $('#natJobcardCreationModal').modal({
