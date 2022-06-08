@@ -252,11 +252,11 @@ class StoreTescoLabelOrder
             ->get() : null;
 
         $translations['exclusive_trim'] = !is_null($request->tesco_care_exclusive_trim) ? DB::table('tesco_care_additional_instructions')
-            ->where('english', 'Exclusive of trims')
+            ->where('english', '*exclusive of trims')
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 
-        $translations['non_textile_part'] = !is_null($request->tesco_care_non_textile_part) ? DB::table('tesco_fabriclists')
+        $translations['non_textile_part'] = !is_null($request->tesco_care_non_textile_part) ? DB::table('tesco_components')
             ->where('english', 'Contains non-textile parts of animal origin')
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
