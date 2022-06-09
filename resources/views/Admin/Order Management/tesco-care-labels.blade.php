@@ -3,6 +3,7 @@
 <input type="hidden" id="order_type" name="order_type" value="newOrder">
 <input type="hidden" id="hidden_id" name="hidden_id">
 <input type="hidden" id="hidden_name" name="hidden_name">
+<input type="hidden" id="care_template_id" name="care_template_id" value="{{ $template }}">
 <span id="result"></span>
 <div class="row">
     <div class="col-md-12">
@@ -27,7 +28,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -51,7 +52,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '')) !!}
+        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>

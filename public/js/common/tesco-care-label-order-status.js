@@ -22,7 +22,15 @@ $( () => {
             /** [Show response status based on HTTP status code] */
             200: function (data) {
                
-                loadCareLabelDetails(data, user_type)
+                if (data.order_details.order_status == "Saved") {
+                    $('.snackbar_span').html('Please Check in Create Order Page!!!');
+                    showSnackbar();
+                } else if (data.order_details.order_status == "Order Cancelled") {
+                    $('.snackbar_span').html('Order Cancelled!!!');
+                    showSnackbar();
+                } else {
+                    loadCareLabelDetails(data, user_type)
+                }
 
             },
             400: function () {

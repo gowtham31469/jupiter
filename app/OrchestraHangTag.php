@@ -12,4 +12,16 @@ class OrchestraHangTag extends Model
     {
         return $this->hasMany(OrchestraHangTagQty::class,'oht_id');
     }
+
+    public function template() {
+
+        return $this->belongsTo('App\OrchestraItemMaster', 'template_front_id');
+        
+    }
+
+    public function customer() {
+
+      return $this->belongsTo('App\Customer', 'tesco_supplier_id');
+      
+    }
 }

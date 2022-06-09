@@ -17,6 +17,8 @@
             <li id="5"  onclick="taxCode()" ><a class="active">Tax Code</a></li>
             <li id="6"  onclick="tescoMaterialMasters()"><a>Material Master</a></li>
             <li id="7"  onclick="tescoErrorReportEmail()"><a>Error Report Email</a></li>
+            <li id="8"  onclick="naSizeChart()"><a>Size Chart</a></li>
+            <li id="9"  onclick="naUom()"><a>UOM</a></li>
           </ul>
         </div>
         <div class="content">
@@ -284,6 +286,120 @@
              </div>
          </div>
      </div>
+
+
+
+     {{-- Add Tesco Size Chart Modal --}}
+   <div class="modal fade" id="addNaSizeModal" tabindex="-1" role="dialog" aria-labelledby="addSizeLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addSizeLabel">Add Size Chart</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="tesco_size_chart_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('size_chart', 'Size Chart', ['class' => 'form_label']) !!}
+                          {!! Form::text('size_chart',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Size Chart','required', 'maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {{-- Edit Tesco Size Chart Modal --}}
+    <div class="modal fade" id="EditNaSizeModal" tabindex="-1" role="dialog" aria-labelledby="EditSizeLabel">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title" id="EditSizeLabel">Edit Size Chart</h4>
+                 </div>
+                 {!! Form::open(['id' => 'edit_tesco_size_chart_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 {!! Form::hidden('edit_tesco_size_chart_id',$value = null, array('id'=>'edit_tesco_size_chart_id','class' => 'form-control input-sm')) !!}
+                     <div class="modal-body">
+                       <div id="edit_tesco_size_chart_result"></div>
+                         <div class="form-group has-feedback">
+                           {!! Form::label('edit_size_chart', 'Size Chart', ['class' => 'form_label']) !!}
+                           {!! Form::text('edit_size_chart',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Size Chart','required', 'maxlength' => '25')) !!}
+                           <div class="help-block with-errors"></div>
+                         </div>
+                     </div>
+                     <div class="modal-footer">
+                         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                         {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                     </div>
+                {!! Form::close() !!}
+             </div>
+         </div>
+     </div>
+
+
+
+     {{-- Add Tesco UOM Modal --}}
+   <div class="modal fade" id="addNaUomModal" tabindex="-1" role="dialog" aria-labelledby="addUomLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addUomLabel">Add UOM</h4>
+                </div>
+                {!! Form::open(['id' => 'add_tesco_uom_form','data-toggle' => 'validator','role' => 'form']) !!}
+                    <div class="modal-body">
+                      <div id="tesco_uom_result"></div>
+                        <div class="form-group has-feedback">
+                          {!! Form::label('uom', 'UOM', ['class' => 'form_label']) !!}
+                          {!! Form::text('uom',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UOM','required', 'maxlength' => '25')) !!}
+                          <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                        {!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                    </div>
+               {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+
+
+    {{-- Edit Tesco UOM Modal --}}
+    <div class="modal fade" id="EditNaUomModal" tabindex="-1" role="dialog" aria-labelledby="EditUomLabel">
+         <div class="modal-dialog" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                     <h4 class="modal-title" id="EditUomLabel">Edit UOM</h4>
+                 </div>
+                 {!! Form::open(['id' => 'edit_tesco_uom_form','data-toggle' => 'validator','role' => 'form']) !!}
+                 {!! Form::hidden('edit_tesco_uom_id',$value = null, array('id'=>'edit_tesco_uom_id','class' => 'form-control input-sm')) !!}
+                     <div class="modal-body">
+                       <div id="edit_tesco_uom_result"></div>
+                         <div class="form-group has-feedback">
+                           {!! Form::label('edit_uom', 'UOM', ['class' => 'form_label']) !!}
+                           {!! Form::text('edit_uom',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UOM','required', 'maxlength' => '25')) !!}
+                           <div class="help-block with-errors"></div>
+                         </div>
+                     </div>
+                     <div class="modal-footer">
+                         {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+                         {!! Form::button('Update', ['class' => 'btn btn-primary btn-sm','type' => 'submit'] ) !!}
+                     </div>
+                {!! Form::close() !!}
+             </div>
+         </div>
+     </div>
     @endsection @else
     <script type="text/javascript">
         window.location = "{{ url('/admin') }}";
@@ -447,7 +563,139 @@
            /* call makeErrorReportEmailDisabled function from tesco-settings.js*/
            makeErrorReportEmailDisabled(id,csrf_token)
        });
-		
+    
+       
+       /** Add Tesco material form validation **/
+     $('#add_tesco_material_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           /* call addTescoMaterial function from  tesco-settings.js*/
+           addTescoMaterial();
+        }
+      })
+       
+       /** get edit Tesco material details **/
+       $(document).on('click','.edit-tesco-material',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoMaterialById function from tesco-settings.js*/
+           getTescoMaterialById(id);
+       });
+
+       /** submit edit Tesco material form **/
+       $('#edit_tesco_material_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoMaterial function from tesco-settings.js*/
+            editTescoMaterial();
+         }
+       })
+       /** To Enable  Material  on click **/
+       $(document).on('click', '#make_material_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeMaterialEnabled function from tesco-settings.js*/
+           makeMaterialEnabled(id,csrf_token)
+       });
+
+       /** To disable Material  on click **/
+       $(document).on('click', '#make_material_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeMaterialDisabled function from tesco-settings.js*/
+           makeMaterialDisabled(id,csrf_token)
+       });
+
+       
+
+
+
+
+
+
+       /** Add Size Chart form validation **/
+     $('#add_tesco_size_chart_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           addTescoSizeChart();
+        }
+      })
+
+      /** Add Size Chart form validation **/
+     $('#add_tesco_uom_form').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+           e.preventDefault();
+           addTescoUom();
+        }
+      })
+
+      /** get edit Tesco material details **/
+      $(document).on('click','.edit-na-size',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoMaterialById function from tesco-settings.js*/
+           getnaSizeChartById(id);
+       });
+
+
+
+       /** get edit Tesco material details **/
+       $(document).on('click','.edit-na-uom',function(e){
+           var id = $(this).closest('tr').attr('id');
+           e.preventDefault();
+           /* call getTescoMaterialById function from tesco-settings.js*/
+           getnaUOMById(id);
+       });
+
+       $('#edit_tesco_size_chart_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoMaterial function from tesco-settings.js*/
+            editSizeChart();
+         }
+       })
+       $('#edit_tesco_uom_form').validator().on('submit', function (e) {
+         if (e.isDefaultPrevented())
+         {
+
+         }
+         else
+         {
+            e.preventDefault();
+            /* call editTescoMaterial function from tesco-settings.js*/
+            editUom();
+         }
+       })
+
+
+
+
+
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){
         $('.meta-data-list li a').removeClass("active");

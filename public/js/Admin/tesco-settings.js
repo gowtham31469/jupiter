@@ -1113,6 +1113,10 @@ function tescoSuppliers() {
                  $('#iso_image').attr('src',data.tesco_symbols[0].iso_symbols);
 
                  $('#astm_image').attr('src',data.tesco_symbols[0].astms_symbol);
+
+                 $('#white_iso_image').attr('src',data.tesco_symbols[0].white_iso_symbols);
+
+                 $('#white_astm_image').attr('src',data.tesco_symbols[0].white_astms_symbol);
         
                  $('#editTescoSymbolsModal').modal({
                       backdrop: 'static',
@@ -1137,13 +1141,15 @@ function tescoSuppliers() {
    }
   }
 
- function updateTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree,id,csrf_token)
+ function updateTescoSymbols(iso_symbols, astms_symbol,white_iso_symbols, white_astms_symbol, category_id, care_instruction, care_degree,id,csrf_token)
  {
   try{
        var form_data = new FormData();
 
       form_data.append('iso_symbols', iso_symbols);
       form_data.append('astms_symbol', astms_symbol);
+      form_data.append('white_iso_symbols', white_iso_symbols);
+      form_data.append('white_astms_symbol', white_astms_symbol);
       form_data.append('category_id', category_id);
       form_data.append('care_instruction', care_instruction);
       form_data.append('care_degree', care_degree);
@@ -2618,13 +2624,15 @@ function tescoSymbols() {
 /**
  * Function to Tesco Settings Symbols
  */
-function addTescoSymbols(iso_symbols, astms_symbol, category_id, care_instruction, care_degree) {
+function addTescoSymbols(iso_symbols, astms_symbol,white_iso_symbols,white_astms_symbol, category_id, care_instruction, care_degree) {
   try {
       
       var form_data = new FormData();
 
       form_data.append('iso_symbols', iso_symbols);
       form_data.append('astms_symbol', astms_symbol);
+      form_data.append('white_iso_symbols', white_iso_symbols);
+      form_data.append('white_astms_symbol', white_astms_symbol);
       form_data.append('category_id', category_id);
       form_data.append('care_instruction', care_instruction);
       form_data.append('care_degree', care_degree);
@@ -4699,7 +4707,7 @@ function addTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          //alert('Success'); 
           $("#addTescoLabelSizeChartModal").modal('hide')
           tescoLabelSizeChart()
         },
@@ -4735,7 +4743,7 @@ function updateTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-          alert('Success'); 
+          //alert('Success'); 
           $("#editTescoPrimarySizeModal").modal('hide')
           tescoLabelSizeChart()
         },
@@ -4874,6 +4882,7 @@ function updateTescoLabelSizeChart() {
               $(".edit_labelsize_dept_title").val(data.tesco_primary_size[0]['department_title'])
               $(".edit_labelsize_uksize").val(data.tesco_primary_size[0]['uk_size'])
               $(".edit_labelsize_cesize").val(data.tesco_primary_size[0]['ce_size'])
+              $(".edit_labelsize_posize").val(data.tesco_primary_size[0]['po_size'])
               $(".edit_size_department").val(data.tesco_primary_size[0]['tesco_size_department_id'])
 
               $div = '';
@@ -5020,3 +5029,388 @@ function tescoSeasonCodes()
 }
 
 
+
+//Size chart
+
+ function naSizeChart() {
+  try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').show();
+    $('.orchestra-sidebar').hide();
+    
+    $.ajax({
+        url: base_url + "/admin/tesco/settings/na-size-chart",
+        type: "POST",
+        dataType: "json",
+        data: {
+            _token: csrf_token
+        },
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+                var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addNaSizeModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Size Chart</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">Size Chart</h3></div><table id="na-size-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>Size</th><th>Actions</th></tr></thead><tbody>';
+                 $.each(data.sizechart, function(i, item){
+                  var index = i+1;
+                  tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.size+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-na-size filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                 });
+                 tesco_metadata += '</tbody></table></div>';
+                 $('.content').html(tesco_metadata)
+                 $('.edit-na-size').tooltip('show')
+                 $('.edit-na-size').tooltip('toggle')
+                 $('.status').tooltip('show')
+                 $('.status').tooltip('toggle')
+                 $('#na-size-list-table').DataTable();
+                 $("#na-size-list-table_filter input").addClass('form-control input-sm');
+                 $("#na-size-list-table_filter input").attr('placeholder', 'Data Search');
+                 $('#na-size-list-table_length select').addClass('form-control input-sm');
+
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+}
+
+
+
+function naUom() {
+  try{
+    $('.content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+    $('.tesco-sidebar').show();
+    $('.orchestra-sidebar').hide();
+    
+    $.ajax({
+        url: base_url + "/admin/tesco/settings/na-uom",
+        type: "POST",
+        dataType: "json",
+        data: {
+            _token: csrf_token
+        },
+        tryCount : 0,
+        retryLimit : 2,
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+                var tesco_metadata = '<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div><div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addNaUomModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add UOM</a></div></div><div class="template-block"><div class="top-content"><h3 class="content-heading">UOM</h3></div><table id="na-uom-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead><tr><th>Sl. No</th><th>UOM</th><th>Actions</th></tr></thead><tbody>';
+                 $.each(data.uom, function(i, item){
+                  var index = i+1;
+                  tesco_metadata += '<tr id="'+item.id+'"><td>'+index+'</td><td>'+item.uom+'</td><td><a href="#"><i class="fa fa-pencil fa-button edit-na-uom filterbtn options" title="Edit" data-placement="left"></i></a></td></tr>';
+                 });
+                 tesco_metadata += '</tbody></table></div>';
+                 $('.content').html(tesco_metadata)
+                 $('.edit-na-uom').tooltip('show')
+                 $('.edit-na-uom').tooltip('toggle')
+                 $('.status').tooltip('show')
+                 $('.status').tooltip('toggle')
+                 $('#na-uom-list-table').DataTable();
+                 $("#na-uom-list-table_filter input").addClass('form-control input-sm');
+                 $("#na-uom-list-table_filter input").attr('placeholder', 'Data Search');
+                 $('#na-uom-list-table_length select').addClass('form-control input-sm');
+
+        },
+        error: function(errorXHR, errorStatus, errorThrown) {
+          this.tryCount++;
+          if (this.tryCount <= this.retryLimit) {
+              $.ajax(this);
+              return;
+          }
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
+    } catch (e) {
+     console.log("Error:"+e)
+   }
+}
+
+
+function addTescoSizeChart()
+{
+   try{
+        var size_chart        = $('#size_chart').val();
+
+        $.ajax({
+            url: base_url + "/admin/tesco/add-tesco-na-size-chart",
+            method: 'POST',
+            data: {_token:csrf_token,na_size:size_chart},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            statusCode: {
+                 200: function() {
+                      $('.snackbar_span').html("SizeChart Added Successfully");
+                      showSnackbar();
+                      $('#addNaSizeModal').modal('hide');
+                      naSizeChart()
+                 },
+                 208: function() {
+                      $('#tesco_size_chart_result').removeAttr('style');
+                      $('#tesco_size_chart_result').html('This size chart names already exists.')
+                      $("#tesco_size_chart_result").addClass("alert alert-warning");
+                 },
+                 400: function() {
+                      $('.snackbar_span').html("Something went wrong!!");
+                      showSnackbar();
+                 }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+            complete: function () {
+               $(".loader").hide();
+            }
+        })
+    } catch (e) {
+    console.log("Error:"+e)
+  }
+ }
+
+
+function addTescoUom()
+{
+   try{
+        var uom        = $('#uom').val();
+
+        $.ajax({
+            url: base_url + "/admin/tesco/add-tesco-na-uom",
+            method: 'POST',
+            data: {_token:csrf_token,na_uom:uom},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            statusCode: {
+                 200: function() {
+                      $('.snackbar_span').html("UOM Added Successfully");
+                      showSnackbar();
+                      $('#addNaUomModal').modal('hide');
+                      naUom()
+                 },
+                 208: function() {
+                      $('#tesco_uom_result').removeAttr('style');
+                      $('#tesco_uom_result').html('This uom names already exists.')
+                      $("#tesco_uom_result").addClass("alert alert-warning");
+                 },
+                 400: function() {
+                      $('.snackbar_span').html("Something went wrong!!");
+                      showSnackbar();
+                 }
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+            complete: function () {
+               $(".loader").hide();
+            }
+        })
+    } catch (e) {
+    console.log("Error:"+e)
+  }
+ }
+
+
+ function getnaSizeChartById(id)
+ {
+   try{
+        if(isSubmitting) {
+             return;
+         }
+         isSubmitting = true;
+        $.ajax({
+            url:base_url + "/admin/tesco/get-tesco-na-size-chart-details",
+            dataType:"json",
+            method:"get",
+            data:{id:id},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            success: function(data){
+                isSubmitting = false;
+                $('#edit_tesco_size_chart_id').val(id);
+                $('#edit_size_chart').val(data.sizechart[0].size);
+                $('#EditNaSizeModal').modal({
+                     backdrop: 'static',
+                     keyboard: false
+                })
+                $('#edit_tesco_size_chart_form').validator('validate');
+                $('#EditNaSizeModal').modal('show');
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+               this.tryCount++;
+               if (this.tryCount <= this.retryLimit) {
+                   $.ajax(this);
+                   return;
+               }
+             },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+  } catch (e) {
+    console.log("Error:"+e)
+  }
+ }
+
+ function getnaUOMById(id)
+ {
+   try{
+        if(isSubmitting) {
+             return;
+         }
+         isSubmitting = true;
+        $.ajax({
+            url:base_url + "/admin/tesco/get-tesco-na-uom-details",
+            dataType:"json",
+            method:"get",
+            data:{id:id},
+            tryCount : 0,
+            retryLimit : 2,
+            beforeSend: function () {
+              $(".loader").show();
+            },
+            success: function(data){
+                isSubmitting = false;
+                $('#edit_tesco_uom_id').val(id);
+                $('#edit_uom').val(data.uom[0].uom);
+                $('#EditNaUomModal').modal({
+                     backdrop: 'static',
+                     keyboard: false
+                })
+                $('#edit_tesco_uom_form').validator('validate');
+                $('#EditNaUomModal').modal('show');
+            },
+            error: function(errorXHR, errorStatus, errorThrown) {
+               this.tryCount++;
+               if (this.tryCount <= this.retryLimit) {
+                   $.ajax(this);
+                   return;
+               }
+             },
+            complete: function () {
+                $(".loader").hide();
+            }
+        })
+  } catch (e) {
+    console.log("Error:"+e)
+  }
+ }
+
+
+ function editSizeChart()
+ {
+  try{
+       var id                  = $('#edit_tesco_size_chart_id').val();
+       var size        = $('#edit_size_chart').val();
+
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-na-size-chart",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data: {_token:csrf_token,na_size:size,id:id},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Size Chart Updated Successfully");
+                       showSnackbar();
+                       $('#EditNaSizeModal').modal('hide');
+                       naSizeChart()
+                },
+                208: function() {
+                     $('#edit_tesco_size_chart_result').removeAttr('style');
+                     $('#edit_tesco_size_chart_result').html('This size chart names already exists.')
+                     $("#edit_tesco_size_chart_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }
+
+
+ function editUom()
+ {
+  try{
+       var id                  = $('#edit_tesco_uom_id').val();
+       var uom        = $('#edit_uom').val();
+
+       $.ajax({
+           url:base_url + "/admin/tesco/update-tesco-na-uom",
+           dataType:"json",
+           beforeSend: function () {
+             $(".loader").show();
+           },
+           method:"put",
+           data: {_token:csrf_token,na_uom:uom,id:id},
+           tryCount : 0,
+           retryLimit : 2,
+           statusCode: {
+                200: function() {
+                       $('.snackbar_span').html("Uom Updated Successfully");
+                       showSnackbar();
+                       $('#EditNaUomModal').modal('hide');
+                       naUom()
+                },
+                208: function() {
+                     $('#edit_tesco_uom_result').removeAttr('style');
+                     $('#edit_tesco_uom_result').html('This uom names already exists.')
+                     $("#edit_tesco_uom_result").addClass("alert alert-warning");
+                },
+           },
+           error: function(errorXHR, errorStatus, errorThrown) {
+              this.tryCount++;
+              if (this.tryCount <= this.retryLimit) {
+                  $.ajax(this);
+                  return;
+              }
+            },
+           complete: function () {
+                     $(".loader").hide();
+           }
+       })
+   } catch (e) {
+     console.log("Error:"+e)
+   }
+ }

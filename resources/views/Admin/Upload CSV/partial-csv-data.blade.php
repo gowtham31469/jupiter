@@ -50,6 +50,7 @@
     var table = $('#csv-partial-list-table').DataTable({
         processing: true,
         serverSide: true,
+        pageLength:25,
         ajax: "{{ route('partial-csv-data') }}",
         columns: [
             { data: 'DT_Row_Index', name: 'DT_Row_Index', orderable: false, searchable: false },
@@ -61,6 +62,12 @@
             {data: 'Status', name: 'Status', orderable: false, searchable: false}
         ]
     });
+
+    /** [ Data Tabeles scripts ] */
+    $('#csv-partial-list-table').DataTable();
+    $("#csv-partial-list-table_filter input").addClass('form-control input-sm');
+    $("#csv-partial-list-table_filter input").attr('placeholder', 'Data Search');
+    $('#csv-partial-list-table_length select').addClass('form-control input-sm');
 
     });
 </script>

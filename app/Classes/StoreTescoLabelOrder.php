@@ -31,7 +31,7 @@ class StoreTescoLabelOrder
             ->select('tesco_item_master.item_name', 'reports_template_level_name.name as name_in_reports', 'tesco_item_master.company_id')
             ->first();
 
-        if(count($template_data) === 0){
+        if(!$template_data){
             $errors = ["tesco_template" => "Template details are missing"];
             return response()->json(['errors' => $errors, 'message' => 'Template details are missing'], 422);
         }
@@ -252,11 +252,11 @@ class StoreTescoLabelOrder
             ->get() : null;
 
         $translations['exclusive_trim'] = !is_null($request->tesco_care_exclusive_trim) ? DB::table('tesco_care_additional_instructions')
-            ->where('english', 'Exclusive of trims')
+            ->where('english', '*exclusive of trims')
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 
-        $translations['non_textile_part'] = !is_null($request->tesco_care_non_textile_part) ? DB::table('tesco_fabriclists')
+        $translations['non_textile_part'] = !is_null($request->tesco_care_non_textile_part) ? DB::table('tesco_components')
             ->where('english', 'Contains non-textile parts of animal origin')
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;

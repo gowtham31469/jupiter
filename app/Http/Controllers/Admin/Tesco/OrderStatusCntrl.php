@@ -23,7 +23,6 @@ use Carbon\Carbon;
 use App\Classes\EditErpOrders;
 use App\Classes\ERPOrderStatusCheck;
 use Auth;
-use Illuminate\Support\Facades\Redis;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\CleanString;
@@ -36,8 +35,6 @@ use App\Classes\TescoCareMetadata;
 class OrderStatusCntrl extends Controller
 {
     private $ratio_pack_type;
-    private $updated_erp_table_array;
-    private $class_status;
     private $erp_obj;
     private $caremeta;
 	/**
@@ -50,8 +47,6 @@ class OrderStatusCntrl extends Controller
        $this->middleware('auth');
        $this->ratio_pack_type = ['RatA', 'RatB', 'RatC', 'RatD', 'RatE', 'RatF', 'RatG', 'RatH', 'RatI', 'RatJ', 'RatK', 'RatL', 'RatM', 'RatN', 'RatO', 'RatP', 'RatQ', 'RatR', 'RatS', 'RatT', 'RatU', 'RatV', 'RatW', 'RatX', 'RatY', 'RatZ'];
 
-       $this->updated_erp_table_array = [];
-       $this->class_status = 'success';
        $this->erp_obj    = new ErpOrders();
 
        $this->caremeta = $caremeta;
@@ -118,15 +113,8 @@ class OrderStatusCntrl extends Controller
                             ->get();
 
             $admin_id = Auth::guard('web')->id();
-            /***********REDIS***************/
-            /** set order-status data into redis */ 
-            Redis::set('admin-order-status:tesco-'.$admin_id, json_encode($data));
 
-            /***********REDIS***************/
-            /** get order-status data from redis */
-            $data = Redis::get('admin-order-status:tesco-'.$admin_id);
-            $data = json_decode($data);
-	     	$result = response()->json(['error'=> false,'message' =>'success','data'=>$data],200);            
+	     	$result = response()->json(['error'=> false,'message' =>'success','data'=> json_encode($data)],200);            
         }
         catch (\Exception $e)
         {
@@ -236,7 +224,7 @@ class OrderStatusCntrl extends Controller
 
             $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
             ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -300,6 +288,15 @@ class OrderStatusCntrl extends Controller
             $thl1 = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
                     ->select("season_code");
+
+            $tesco_washcare_orders = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("season_code");
+
+            $tesco_swingticket_orders = DB::table("tesco_swingticket_orders")
+            ->join('tesco_season_codes','tesco_swingticket_orders.season_code_id','=','tesco_season_codes.id')
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("tesco_season_codes.name as season_code");
                 
             $data = DB::table("tesco_thl3_orders")
             ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
@@ -313,43 +310,53 @@ class OrderStatusCntrl extends Controller
                 ->union($tsl2)
                 ->union($tsl3)
                 ->union($thl1)
+                ->union($tesco_washcare_orders)
+                ->union($tesco_swingticket_orders)
                 ->get();
 
             $tcl1_style = DB::table("tesco_tcl1_orders")
             ->whereBetween('tesco_tcl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl2_style = DB::table("tesco_tcl2_orders")
             ->whereBetween('tesco_tcl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
                     
             $tcl4_style = DB::table("tesco_tcl4_orders")
             ->whereBetween('tesco_tcl4_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tcl5_style = DB::table("tesco_tcl5_orders")
             ->whereBetween('tesco_tcl5_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl1_style = DB::table("tesco_tsl1_orders")
             ->whereBetween('tesco_tsl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $tsl2_style = DB::table("tesco_tsl2_orders")
             ->whereBetween('tesco_tsl2_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
             
             $tsl3_style = DB::table("tesco_tsl3_orders")
             ->whereBetween('tesco_tsl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
 
             $thl1_style = DB::table("tesco_thl1_orders")
             ->whereBetween('tesco_thl1_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                    ->select("uk_style_ref","ce_style_ref","zone");
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""));
+
+            $tesco_washcare_orders_style = DB::table("tesco_washcare_orders")
+            ->whereBetween('tesco_washcare_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'labels' as \"type\""));
+
+            $tesco_swingticket_orders_style = DB::table("tesco_swingticket_orders")
+            ->whereBetween('tesco_swingticket_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                    ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'swing tickets' as \"type\""));
 
             $style_no = DB::table("tesco_thl3_orders")
                         ->whereBetween('tesco_thl3_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
-                        ->select("uk_style_ref","ce_style_ref","zone")
+                        ->select("uk_style_ref","ce_style_ref","zone",DB::raw("'stickers' as \"type\""))
                         ->union($tcl1_style)
                         ->union($tcl2_style)
                         ->union($tcl4_style)
@@ -358,6 +365,8 @@ class OrderStatusCntrl extends Controller
                         ->union($tsl2_style)
                         ->union($tsl3_style)
                         ->union($thl1_style)
+                        ->union($tesco_washcare_orders_style)
+                        ->union($tesco_swingticket_orders_style)
                         ->get();
 
             $result = response()->json(['error'=> false,'message' =>'success','data'=>$data,'style_no'=>$style_no],200);
@@ -944,7 +953,7 @@ class OrderStatusCntrl extends Controller
                             ->where(function($query) use ($seasonos){
                                 if(count($seasonos))
                                 {
-                                    $query->orWhereIn('season_code', $seasonos);
+                                    $query->orWhereIn('name', $seasonos);
                                 }
                             })
                             ->where(function($query) use ($stylenoos,$ukstylenoos){
@@ -2053,6 +2062,17 @@ class OrderStatusCntrl extends Controller
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
 
+        $white_wash_astm = $request->white_wash_astm;
+        $white_wash_iso = $request->white_wash_iso;
+        $white_whit_astm = $request->white_whit_astm;
+        $white_whit_iso = $request->white_whit_iso;
+        $white_dry_astm = $request->white_dry_astm;
+        $white_dry_iso = $request->white_dry_iso;
+        $white_iron_astm = $request->white_iron_astm;
+        $white_iron_iso = $request->white_iron_iso;
+        $white_clean_astm = $request->white_clean_astm;
+        $white_clean_iso = $request->white_clean_iso;
+
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
         PDF::SetFont('arialuni');
@@ -2083,6 +2103,17 @@ class OrderStatusCntrl extends Controller
             
             $svgString=urldecode($value);
             //print_r($svgString);
+            
+            if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+            {
+                $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
+           <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
+           <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
+           </svg>';
+                PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
@@ -2100,27 +2131,48 @@ class OrderStatusCntrl extends Controller
 
         PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-
-        PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-
-        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+        {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else
+        {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        
 
         //print_r($svgStringBack);
 
-        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-        print_r(url('/storage/app/template/label.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
      } 
 
      public function proofDivTescoTicketos(Request $request)
@@ -2335,6 +2387,23 @@ class OrderStatusCntrl extends Controller
         $html_note = '<h3 style="color:red">Note: DOP will change to the month of production.</h3>';
 		PDF::writeHTMLCell($w=0, $h=0, $x=15, $y=260, $html_note, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         
+        if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
+        {
+            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+        }
+        else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
+        {
+
+            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+        }
+        else if($request->template_name == "FFC/01/M13304C")
+        {
+
+            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</h6><h6 style="color:red"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+        }
 
         if($request->template_name == "FFC/01/M13304C")
         {
@@ -2937,6 +3006,7 @@ class OrderStatusCntrl extends Controller
         $svgStringBack=urldecode($data_back[0]);
         $svgStringBackText=urldecode($data_back_text[0]);
         $svgStringFrontImage=urldecode($data_front_image[0]);
+        $tesco_size_department = $request->tesco_size_department;
 
         $wash_astm = $request->wash_astm;
         $wash_iso = $request->wash_iso;
@@ -2948,6 +3018,17 @@ class OrderStatusCntrl extends Controller
         $iron_iso = $request->iron_iso;
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
+
+        $white_wash_astm = $request->white_wash_astm;
+        $white_wash_iso = $request->white_wash_iso;
+        $white_whit_astm = $request->white_whit_astm;
+        $white_whit_iso = $request->white_whit_iso;
+        $white_dry_astm = $request->white_dry_astm;
+        $white_dry_iso = $request->white_dry_iso;
+        $white_iron_astm = $request->white_iron_astm;
+        $white_iron_iso = $request->white_iron_iso;
+        $white_clean_astm = $request->white_clean_astm;
+        $white_clean_iso = $request->white_clean_iso;
 
         define ('PDF_FONT_NAME_MAIN', 'arialuni');
         define ('PDF_FONT_NAME_DATA', 'arialuni');
@@ -3116,7 +3197,7 @@ class OrderStatusCntrl extends Controller
           
           });
         
-        
+          
           
         $i=0;
         $xx=15;
@@ -3132,9 +3213,21 @@ class OrderStatusCntrl extends Controller
             if($i == 0)
             {
                 PDF::AddPage();
+                $html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
+                PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
             }
             
             $svgString=urldecode($value);
+
+            if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+            {
+                $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
+           <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
+           <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
+           </svg>';
+                PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
             PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
@@ -3152,24 +3245,47 @@ class OrderStatusCntrl extends Controller
 
         PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=140.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-        PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+        {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else
+        {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+    
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
 
+        
 
-        PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-        PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-
-        PDF::Output( public_path('/storage/app/template/label.pdf'), 'F');
-        print_r(url('/storage/app/template/label.pdf'));
+        PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
      } 
           /**
     * Print Preview For Stickers
@@ -3386,12 +3502,14 @@ class OrderStatusCntrl extends Controller
                                     
             $component  = 	DB::table('tesco_washcare_orders_component_mapping')
                                 ->where('washcare_order_id',$id)
+                                ->orderBy('tesco_washcare_orders_component_mapping.id', 'asc')
                                 ->select('*')
                                 ->get();
             foreach($component as $comp_val)
             {
                $fibre =  DB::table('tesco_washcare_orders_component_fibre_mapping')
                                 ->where('washcare_component_id',$comp_val->id)
+                                ->orderBy('tesco_washcare_orders_component_fibre_mapping.id', 'asc')
                                 ->select('*')
                                 ->get();
                 $comp_val->fibre=$fibre;
@@ -3441,6 +3559,8 @@ class OrderStatusCntrl extends Controller
                                 
                 $tesco_item_master=DB::table('tesco_item_master')->where('id',$odetails[0]->template_id)->select('*')->get();
 
+                $tesco_size_department=DB::table('tesco_size_department')->where('id',$odetails[0]->primary_size_id)->select('*')->get();
+
                 $customer_name=DB::table('customers')->where('id',$odetails[0]->tesco_supplier_id)->select('*')->get();
 
                 $order_omp  = 	DB::table('tesco_washcare_orders')
@@ -3451,7 +3571,7 @@ class OrderStatusCntrl extends Controller
                                 ->join('tesco_care_symbols as iron',$table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$table.'.dryclean_symbol_id', 'cleaning.id')
                                 ->where('tesco_washcare_orders.id',$value->$table_id)
-                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm')
+                                ->select('tesco_washcare_orders.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
                                 ->get();
                 
                 $value->po_number=$order_omp{0}->po_number;
@@ -3491,6 +3611,16 @@ class OrderStatusCntrl extends Controller
                 $value->iron_astm=$order_omp[0]->iron_astm;
                 $value->clean_iso=$order_omp[0]->clean_iso;
                 $value->clean_astm=$order_omp[0]->clean_astm;
+                $value->white_wash_iso=$order_omp[0]->white_wash_iso;
+                $value->white_wash_astm=$order_omp[0]->white_wash_astm;
+                $value->white_whit_iso=$order_omp[0]->white_whit_iso;
+                $value->white_whit_astm=$order_omp[0]->white_whit_astm;
+                $value->white_dry_iso=$order_omp[0]->white_dry_iso;
+                $value->white_dry_astm=$order_omp[0]->white_dry_astm;
+                $value->white_iron_iso=$order_omp[0]->white_iron_iso;
+                $value->white_iron_astm=$order_omp[0]->white_iron_astm;
+                $value->white_clean_iso=$order_omp[0]->white_clean_iso;
+                $value->white_clean_astm=$order_omp[0]->white_clean_astm;
                 $value->degree=$order_omp[0]->degree;
                 $value->additional_care_text_1=$order_omp[0]->additional_care_text_1;
                 $value->additional_care_text_2=$order_omp[0]->additional_care_text_2;
@@ -3499,6 +3629,7 @@ class OrderStatusCntrl extends Controller
                 $value->exclusive_trims_text=$order_omp[0]->exclusive_trims_text;
                 $value->contains_non_textile_part_text=$order_omp[0]->contains_non_textile_part_text;
                 $value->part_of_set_text=$order_omp[0]->part_of_set_text;
+                $value->tesco_size_department=$tesco_size_department[0]->department_name;
                 $value->created_at=$order_omp[0]->created_at;
                 
             }
@@ -3705,7 +3836,7 @@ class OrderStatusCntrl extends Controller
             $table_name     = $request->tableName; 
 
             $po_details     = DB::table($table_name)->where('id',$template_id)
-                                ->select('po_file','purchase_order_no')->first();
+                                ->select('po_file','purchase_order_no', 'tesco_supplier_id')->first();
             
             // check order status in erp_oorders table.                    
             $data_array = [];
@@ -3754,15 +3885,10 @@ class OrderStatusCntrl extends Controller
                 $data_array_2['buyer_id'] = $request->buyer_id;
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
-                $content = $jsonResponse->getContent();
 
-                $this->updated_erp_table_array = json_decode($content, true);
-                
-                $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
-
-                if ($this->class_status === 'success' ) {
-                    $buyer_id = $this->updated_erp_table_array['buyer_id'];
-                    $customer_id = $this->updated_erp_table_array['customer_id'];
+                if ($jsonResponse === 'success' ) {
+                    $buyer_id = $request->buyer_id;
+                    $customer_id = $po_details->tesco_supplier_id;
                     
                     $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
                     
@@ -3785,7 +3911,7 @@ class OrderStatusCntrl extends Controller
                 }
             }
 
-            if ($this->class_status === 'success' ) 
+            if ($jsonResponse === 'success' ) 
             {
                 return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully','po_status' => $po_status],200);
             }
@@ -3868,15 +3994,9 @@ class OrderStatusCntrl extends Controller
 
                 $jsonResponse = $this->erp_obj->updateTescoErpOrders($data_array_2);
 
-                $content = $jsonResponse->getContent();
-
-                $this->updated_erp_table_array = json_decode($content, true);
-
-                $this->class_status = array_key_exists('message', $this->updated_erp_table_array)?$this->updated_erp_table_array['message']:'error';
-
-                if ($this->class_status === 'success' ) {
-                    $buyer_id = $this->updated_erp_table_array['buyer_id'];
-                    $customer_id = $this->updated_erp_table_array['customer_id'];
+                if ($jsonResponse === 'success' ) {
+                    $buyer_id = $request->buyer_id;
+                    $customer_id = DB::table($table_name)->where('id',$row_id)->value('tesco_supplier_id');
                     
                     $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_number_updation)->first();
                     
@@ -3899,7 +4019,7 @@ class OrderStatusCntrl extends Controller
                 }
             }
 
-            if ($this->class_status === 'success' ) 
+            if ($jsonResponse === 'success' ) 
             {
                return response()->json(['error'=> false,'message' =>'success','po_file'=>$destination_path_insert,'po_status' => $po_status],200);
             }
@@ -3949,192 +4069,181 @@ class OrderStatusCntrl extends Controller
      */
     public function approveTescoPI(Request $request)
     {
-        try
+        $row_id     =   $request->id;
+        $table_name =   $request->tableName;
+        $buyer_id   =   $request->buyer_id;
+        $billamnt   =   $request->billamnt;
+        $total_qnty =   0 ; 
+        $sub_total  =   0 ;
+        $pi_obj     =   new ProformaInvoice();
+        $data       =   $pi_obj->getTescoPIDetails($request);
+        unset($data['price_list']);
+        $attachment =  $pi_obj->getTescoAttachment($data,$request);
+
+        $erpOrders  =   [];
+        $rep_order_id = 0;
+
+        if (!$data) {
+            return response()->json(['error' => true, 'message' => 'No content found', 'pi_status' => false], 204);
+        }
+
+        $customer_data  = DB::table('customers')->where('id', $data['bank_details']->id)->first();
+
+        $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
+        
+        $style_no = $data['bank_details']->zone === "joint"?$data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref:$data['bank_details']->$zone_style_no;
+
+        if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
+            $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
+        }
+
+        $pi_details = PI::create([
+                'buyer_id'         => $buyer_id,
+                'company_id'       => $data['company_details']->id,
+                'customer_id'      => $data['bank_details']->id,
+                // 'template_id'      => $data['bank_details']->template_id,
+                'buyer_po_no'      => $data['bank_details']->po_number,
+                'uvc_style_no'     => $style_no,
+                'ref_no'           => $data['bank_details']->ref_no,
+                'shipping_address' => $data['ship_to']->address,
+                'billing_address'  => $data['bill_to']->address,
+                'place_of_supply'  => $data['bank_details']->place_of_supply,
+                'template_type'  => $data['bank_details']->template_type,
+                'revision_no'  => $data['item_details'][0]->pi_rev_no,
+                'rep_order_id'     => $rep_order_id,
+                'pi_file'         => $attachment,
+                'pi_number'       => $data['company_details']->pi_number
+
+            ]);
+            
+        foreach ($data['item_details'] as $key => $value)
         {
-            $row_id     =   $request->id;
-            $table_name =   $request->tableName;
-            $buyer_id   =   $request->buyer_id;
-            $billamnt   =   $request->billamnt;
-            $total_qnty =   0 ; 
-            $sub_total  =   0 ;
-            $pi_obj     =   new ProformaInvoice();
-            $data       =   $pi_obj->getTescoPIDetails($request);
-            unset($data['price_list']);
-            $attachment =  $pi_obj->getTescoAttachment($data,$request);
-
-            // call PI generation function
-            $pi_number = $pi_obj->piNumberGenerator();
-
-            $erpOrders  =   [];
-            $rep_order_id = 0;
-
-            if (!$data) {
-                return response()->json(['error' => true, 'message' => 'No content found', 'pi_status' => false], 204);
-            }
-
-            $zone_style_no = strtolower($data['bank_details']->zone).'_style_ref';
-            
-            $style_no = $data['bank_details']->zone === "joint"?$data['bank_details']->uk_style_ref.'/'.$data['bank_details']->ce_style_ref:$data['bank_details']->$zone_style_no;
-
-            if ($data['item_details'][0]->order_flag=="reOrder" || $data['item_details'][0]->order_flag=="repeatOrder") {
-                $rep_order_id = str_replace(' ', '', $data['item_details'][0]->template_name)."_".$row_id;
-            }
-
-            $pi_details = PI::create([
-                    'buyer_id'         => $buyer_id,
-                    'company_id'       => $data['company_details']->id,
-                    'customer_id'      => $data['bank_details']->id,
-                    // 'template_id'      => $data['bank_details']->template_id,
-                    'buyer_po_no'      => $data['bank_details']->po_number,
-                    'uvc_style_no'     => $style_no,
-                    'ref_no'           => $data['bank_details']->ref_no,
-                    'shipping_address' => $data['ship_to']->address,
-                    'billing_address'  => $data['bill_to']->address,
-                    'place_of_supply'  => $data['bank_details']->place_of_supply,
-                    'template_type'  => $data['bank_details']->template_type,
-                    'revision_no'  => $data['item_details'][0]->pi_rev_no,
-                    'rep_order_id'     => $rep_order_id,
-                    'pi_file'         => $attachment,
-                    'pi_number'       => $pi_number
-
-                ]);
+            $unit_cost = $value->price;
+            $tax = $value->tax;
+            $total_qnty+= $value->quantity;
+            $sub_total += $value->quantity *$unit_cost;
+            ProfomaInvoiceItemDetails::create([
+                'pi_id'     => $pi_details->id,
+                'material'  => $value->material_name,
+                'size'      => $value->size,
+                'template_id' => $value->item_id,
+                'ref_no'      => $value->ref_no,
+                'style'     => $value->style,
+                'quantity'  => $value->quantity,
+                'unit_cost' => $unit_cost,
+                'tax'       => $tax
+            ]);
+        }
+        
+        if ($data['item_details'][0]->order_flag == "newOrder") {
+            $tableID = 0;
+            foreach ($data['tables'] as $table => $vals) {
                 
-            foreach ($data['item_details'] as $key => $value)
-            {
-                $unit_cost = $value->price;
-                $tax = $value->tax;
-                $total_qnty+= $value->quantity;
-                $sub_total += $value->quantity *$unit_cost;
-                ProfomaInvoiceItemDetails::create([
-                    'pi_id'     => $pi_details->id,
-                    'material'  => $value->material_name,
-                    'size'      => $value->size,
-                    'template_id' => $value->item_id,
-                    'ref_no'      => $value->ref_no,
-                    'style'     => $value->style,
-                    'quantity'  => $value->quantity,
-                    'unit_cost' => $unit_cost,
-                    'tax'       => $tax
-                ]);
-            }
-            
-            if ($data['item_details'][0]->order_flag == "newOrder") {
-                $tableID = 0;
-               foreach ($data['tables'] as $table => $vals) {
-                    
-                    if ($data['bank_details']->zone === "joint") {
-                        $tableID =  DB::table($table)
-                            ->where($table . '.is_order_count_empty', 0)
-                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                            ->where('order_flag', $data['item_details'][0]->order_flag)
-                            ->where('pi_status', $data['item_details'][0]->pi_status)
-                            ->where('po_number', $data['bank_details']->po_number)->value('id');
-                        DB::table($table)
-                            ->where($table . '.is_order_count_empty', 0)
-                            ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
-                            ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
-                            ->where('order_flag', $data['item_details'][0]->order_flag)
-                            ->where('pi_status', $data['item_details'][0]->pi_status)
-                            ->where('po_number', $data['bank_details']->po_number)
-                            ->update([
-                                'pi_status' => "PI Approved",
-                                'pi_id' => $pi_details->id,
-                                'pi_file' => $attachment,
-                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                            ]);
-                    } else {
-                        $tableID =  DB::table($table)
-                            ->where($table . '.is_order_count_empty', 0)
-                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
-                            ->where('order_flag', $data['item_details'][0]->order_flag)
-                            ->where('pi_status', $data['item_details'][0]->pi_status)
-                            ->where('po_number', $data['bank_details']->po_number)->value('id');
+                if ($data['bank_details']->zone === "joint") {
+                    $tableID =  DB::table($table)
+                        ->where($table . '.is_order_count_empty', 0)
+                        ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                        ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                        ->where('order_flag', $data['item_details'][0]->order_flag)
+                        ->where('pi_status', $data['item_details'][0]->pi_status)
+                        ->where('po_number', $data['bank_details']->po_number)->value('id');
+                    DB::table($table)
+                        ->where($table . '.is_order_count_empty', 0)
+                        ->where('ce_style_ref', $data['bank_details']->ce_style_ref)
+                        ->where('uk_style_ref', $data['bank_details']->uk_style_ref)
+                        ->where('order_flag', $data['item_details'][0]->order_flag)
+                        ->where('pi_status', $data['item_details'][0]->pi_status)
+                        ->where('po_number', $data['bank_details']->po_number)
+                        ->update([
+                            'pi_status' => "PI Approved",
+                            'pi_id' => $pi_details->id,
+                            'pi_file' => $attachment,
+                            'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+                } else {
+                    $tableID =  DB::table($table)
+                        ->where($table . '.is_order_count_empty', 0)
+                        ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                        ->where('order_flag', $data['item_details'][0]->order_flag)
+                        ->where('pi_status', $data['item_details'][0]->pi_status)
+                        ->where('po_number', $data['bank_details']->po_number)->value('id');
 
 
-                        DB::table($table)
-                            ->where($table . '.is_order_count_empty', 0)
-                            ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
-                            ->where('order_flag', $data['item_details'][0]->order_flag)
-                            ->where('pi_status', $data['item_details'][0]->pi_status)
-                            ->where('po_number', $data['bank_details']->po_number)
-                            ->update([
-                                'pi_status' => "PI Approved",
-                                'pi_id' => $pi_details->id,
-                                'pi_file' => $attachment,
-                                'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                            ]);
-                                            
-                    }
-                    
-                    /** @var array [Pass array of values to updateTescoErpOrders function] */
-                    $erpOrders['tableName'] = $table;
-                    $erpOrders['id']        = $tableID;
-                    $erpOrders['buyer_id']  = $buyer_id;
-
-                    $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
-
-                    if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-
-                        $this->erp_obj->updateTescoErpOrders($erpOrders);
-
-                    }
-
-                    // update PI approve status as "PI Approved" in order history table
-                    OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $tableID]])->update([
-                    'pi_status'   => 1
-                    ]);
+                    DB::table($table)
+                        ->where($table . '.is_order_count_empty', 0)
+                        ->where(strtolower($data['bank_details']->zone) . '_style_ref', $style_no)
+                        ->where('order_flag', $data['item_details'][0]->order_flag)
+                        ->where('pi_status', $data['item_details'][0]->pi_status)
+                        ->where('po_number', $data['bank_details']->po_number)
+                        ->update([
+                            'pi_status' => "PI Approved",
+                            'pi_id' => $pi_details->id,
+                            'pi_file' => $attachment,
+                            'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
+                        ]);
+                                        
                 }
-            } else {
-                DB::table($table_name)
-                    ->where('id', $row_id)
-                    ->update([
-                        'pi_status' => "PI Approved",
-                        'pi_id' => $pi_details->id,
-                        'pi_file' => $attachment,
-                        'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
-                    ]);
-  
+                
                 /** @var array [Pass array of values to updateTescoErpOrders function] */
-                $erpOrders['tableName'] = $table_name;
-                $erpOrders['id']        = $row_id;
+                $erpOrders['tableName'] = $table;
+                $erpOrders['id']        = $tableID;
                 $erpOrders['buyer_id']  = $buyer_id;
-                 
-                $customer_data  = DB::table('customers')->where('id',$data['bank_details']->id)->first();
+                
+                if ($customer_data->pi_required == 1 && $customer_data->po_required== 0 && $tableID) {
 
-                if ($customer_data->pi_required == 1 && $customer_data->po_required== 0) {
-
-                   $this->erp_obj->updateTescoErpOrders($erpOrders);
+                    $this->erp_obj->updateTescoErpOrders($erpOrders);
 
                 }
 
                 // update PI approve status as "PI Approved" in order history table
-                OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
-                    'pi_status'   => 1
+                OrderManagementHistory::where([['order_table_name', $table], ['order_table_id', $tableID]])->update([
+                'pi_status'   => 1
                 ]);
             }
-
-            $pi_approved = PI::where('id', $pi_details->id)
+        } else {
+            DB::table($table_name)
+                ->where('id', $row_id)
                 ->update([
-                    'total_quantity'   => $total_qnty,
-                    'sub_total'        => $sub_total,
-                    // 'tax'              => $data['item_details'][0]->tax,
-                    'bill_amount'      => $billamnt
+                    'pi_status' => "PI Approved",
+                    'pi_id' => $pi_details->id,
+                    'pi_file' => $attachment,
+                    'pi_approved_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
                 ]);
 
-            if ($pi_approved)
-            {
-               $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
+            /** @var array [Pass array of values to updateTescoErpOrders function] */
+            $erpOrders['tableName'] = $table_name;
+            $erpOrders['id']        = $row_id;
+            $erpOrders['buyer_id']  = $buyer_id;
+
+            if ($customer_data->pi_required == 1 && $customer_data->po_required== 0  && $row_id) {
+
+                $this->erp_obj->updateTescoErpOrders($erpOrders);
+
             }
-            else
-            {
-                $result = response()->json(['error'=> true,'message' =>'Error', 'pi_status' => false],400);
-            }
+
+            // update PI approve status as "PI Approved" in order history table
+            OrderManagementHistory::where([['order_table_name', $table_name], ['order_table_id', $row_id]])->update([
+                'pi_status'   => 1
+            ]);
         }
-        catch (\Exception $e)
+
+        $pi_approved = PI::where('id', $pi_details->id)
+            ->update([
+                'total_quantity'   => $total_qnty,
+                'sub_total'        => $sub_total,
+                // 'tax'              => $data['item_details'][0]->tax,
+                'bill_amount'      => $billamnt
+            ]);
+
+        if ($pi_approved)
         {
-            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            $result = response()->json(['error'=> false,'message' =>'success', 'pi_status' => true],200);
         }
+        else
+        {
+            $result = response()->json(['error'=> true,'message' =>'Error', 'pi_status' => false],400);
+        }
+       
         return $result;
     }
     

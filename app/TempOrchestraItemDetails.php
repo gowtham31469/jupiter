@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TempOrchestraItemDetails extends Model
 {
+    protected $table = 'temp_orchestra_item_details';
+
       /**
      * The attributes that are mass assignable.
      *

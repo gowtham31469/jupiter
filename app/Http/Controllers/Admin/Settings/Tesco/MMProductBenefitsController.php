@@ -8,7 +8,6 @@ use App\TescoMmProductBenefit;
 
 class MMProductBenefitsController extends Controller
 {
-    //
     public function tescoMMProductBenefits(){
       try {
           $tesco_components = TescoMmProductBenefit::select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
@@ -72,9 +71,6 @@ class MMProductBenefitsController extends Controller
     public function updateTescoMMProductBenefits(Request $request){
       try {
           $id = $request['id'];
-          // if(TescoMmProductBenefit::where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
-          //       $result = response()->json(['error'=> true,'message' =>'Components[English] Already Exists'],208);
-          // } else {
               $updated = TescoMmProductBenefit::where('id',$id)->update([
                                         'english'   => $request['english'],
                                         'polish'    => $request['polish'],
@@ -84,7 +80,6 @@ class MMProductBenefitsController extends Controller
                                         'template_id' => $request['template_id']
                         ]);
             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
-          // }        
       } catch (\Exception $e) {
                 $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
       }

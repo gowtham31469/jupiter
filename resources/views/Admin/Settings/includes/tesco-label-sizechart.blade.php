@@ -41,6 +41,13 @@
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('labelsize_posize', 'PO Size', ['class' => 'form_label']) !!}
+                            {!! Form::text('labelsize_posize',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PO Size','required')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -101,6 +108,13 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_labelsize_cesize', 'CE Size', ['class' => 'form_label']) !!}
                             {!! Form::text('edit_labelsize_cesize',$value = '', array('class' => 'form-control input-sm edit_labelsize_cesize','placeholder' => 'CE Size','required')) !!}
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group has-feedback">
+                            {!! Form::label('edit_labelsize_posize', 'PO Size', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_labelsize_posize',$value = '', array('class' => 'form-control input-sm edit_labelsize_posize','placeholder' => 'PO Size','required')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
