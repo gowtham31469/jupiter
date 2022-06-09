@@ -469,7 +469,7 @@ const generateNatJobcard = () => {
                             single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
                         });
                         var template_name = key.split("_");
-                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '">REFNUM  : ' + template_name[0] + '</td></tr>\
+                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '">REFNUM : ' + template_name[0] + '</td></tr>\
                                                     <tr>\
                                                         <th width="80px">StyleNo/UVC</th>';
                         $.each(erpid.order_data, function (index, common_data) {
