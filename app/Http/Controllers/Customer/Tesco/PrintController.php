@@ -1210,20 +1210,20 @@ class PrintController extends Controller
 
 		if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
         {
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black;">BOARD : To match to fedrigoni,arena extra white smooth</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
         else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
         {
 
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black">BOARD : Laminated together,tinteretto gesso</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
         else if($request->template_name == "FFC/01/M13304C")
         {
 
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</h6><h6 style="color:red"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black">BOARD : To match to fedrigoni,arena extra white smooth</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</p><p style="color:black"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
 		
 		if($request->template_name == "FFC/01/M13304C")
