@@ -63,14 +63,10 @@
     <div id="objectDiv" style="position:absolute;visibility:hidden">
     </div>
 </div>
+<div id="splitdiv" style="opacity: 0;position:absolute;">
+    </div>
 <div class="col-sm-12 col-md-12 main">
 
-
-    <div class="main-content">
-        <div class="select-buyer">
-
-        </div>
-    </div>
     <div class="top-content">
         <div class="buyer-nav-div hidden">
             <a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Buyer</a>
@@ -78,6 +74,12 @@
         {{ Form::hidden('invisible', $buyer_count, array('id' => 'invisible__count_id')) }}
         <div class="clearfix"></div>
     </div>
+    <div class="main-content">
+        <div class="select-buyer">
+
+        </div>
+    </div>
+
     <div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -331,6 +333,7 @@
             </div>
         </div>
     </div>
+    <div class="left-panel col-md-12 edit-orch-order-panel"></div>
 
     <div class="left-panel col-md-12 edit-sticker-order-panel" style="display: none;">
         <div class="loader">
@@ -494,7 +497,7 @@
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '10')) !!}
+                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
@@ -512,7 +515,7 @@
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '')) !!}
+                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
@@ -778,7 +781,9 @@
     <script src="{{ asset('js/Admin/tesco-pi.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
+    <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-order-status.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-order-status-filter.js') }}"></script>
     <script src="{{ asset('js/Admin/orchestra-pi.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-order-status.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-orders.js') }}"></script>
@@ -812,7 +817,7 @@
                     $('.selected-buyer').text('Selected Buyer : ' + $('.buyers-card.active-buyer.active').data("name"))
                     $('#buyerSelectionModalCenter').modal('hide');
                     if (localStorage.getItem("buyer") === 'orchestra') {
-                        orderStatus();
+                        orderStatus('admin');
                     } else {
                         tescoOrderStatus();
                     }
@@ -858,7 +863,7 @@
             } else {
                 $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                 if (localStorage.getItem("buyer") === 'orchestra') {
-                    orderStatus();
+                    orderStatus('admin');
                 } else if (localStorage.getItem("buyer") === 'tesco') {
                     tescoOrderStatus();
                 } else {
@@ -877,7 +882,7 @@
                 } else {
                     $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                     if (localStorage.getItem("buyer") === 'orchestra') {
-                        orderStatus();
+                        orderStatus('admin');
                     } else {
                         tescoOrderStatus();
                     }
@@ -929,10 +934,15 @@
                     $('#po-file-upload').modal('hide')
                     setTimeout(function() {
                         $(".loader").hide();
-                        submitOs(this)
+                        if(localStorage.getItem("buyer") === 'tesco') {
+
+                            submitOs(this)
+                        } else if(localStorage.getItem("buyer") === 'orchestra'){
+                            getOrchestraOrders('admin')
+                        }
                         $('.snackbar_span').html('PO Updated Successfully');
                         showSnackbar();
-                    }, 10000);
+                    }, 3000);
                 });
                 this.on("error", function(file, response) {
                     this.removeFile(file);

@@ -72,7 +72,7 @@ class JobcardIDGenerator
                 if($split_erp_id[0] === 'ERPID'){
                     $order_id = $split_erp_id[1];
                 } else {
-                    $order_id = substr(Erp::where('erp_orders.id', '=', $erp_orders_ids[0])->value('erp_id'),-5);  // last 5 characters/digits of erpid for jobcard id.
+                    $order_id = substr($erp_id_str,-5);  // last 5 characters/digits of erpid for jobcard id.
                 }
             }
             

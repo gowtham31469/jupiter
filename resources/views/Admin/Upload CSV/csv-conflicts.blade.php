@@ -93,6 +93,7 @@
     $('.logo').html('CSV Conflicts');
     var table = $('#csv-conflicts-list-table').DataTable({
         processing: true,
+        pageLength:25,
         serverSide: true,
         ajax: "{{ route('csv-conflicts-data') }}",
         columns: [
@@ -104,6 +105,12 @@
             {data: 'Changes', name: 'Changes', orderable: false, searchable: false}
         ]
     });
+
+    /** [ Data Tabeles scripts ] */
+    $('#csv-conflicts-list-table').DataTable();
+    $("#csv-conflicts-list-table_filter input").addClass('form-control input-sm');
+    $("#csv-conflicts-list-table_filter input").attr('placeholder', 'Data Search');
+    $('#csv-conflicts-list-table_length select').addClass('form-control input-sm');
     });
 </script>
 @endsection

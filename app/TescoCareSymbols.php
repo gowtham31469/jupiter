@@ -18,5 +18,5 @@ class TescoCareSymbols extends Model
       *
       * @var array
       */
-      protected $fillable = ['category_id', 'iso_symbols', 'astms_symbol', 'care_instruction', 'degree', 'is_enabled'];
+      protected $fillable = ['category_id', 'iso_symbols', 'astms_symbol', 'white_iso_symbols', 'white_astms_symbol', 'care_instruction', 'degree', 'is_enabled'];
 }

@@ -19,20 +19,12 @@ use App\Http\Requests\TescoLabelOrderRequest;
 class CareLabelOrdersController extends Controller
 {
     private $storeorder;
-    private $caremeta;
     private $module;
     private $parselabel;
     private $updateLabelOrder;
-    private $symbols;
-    private $coo;
-    private $kids_warning;
-    private $components;
-    private $fabriclists;
-    private $tesco_suppliers;
-    private $additional_instructions;
-    private $part_of_two_piece_set;
+    private $caremeta;
 
-    public function __construct(Modules $module, TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder,  TescoCareLabelParser $parselabel,UpdateTescoLabelOrder $updateLabelOrder)
+    public function __construct(Modules $module, StoreTescoLabelOrder $storeorder, TescoCareMetadata $caremeta,  TescoCareLabelParser $parselabel,UpdateTescoLabelOrder $updateLabelOrder)
     {
         $this->module = $module;
 
@@ -44,26 +36,10 @@ class CareLabelOrdersController extends Controller
         
         $this->updateLabelOrder = $updateLabelOrder;
 
-        // fetch tesco care metadata from class
-        $this->symbols = $this->caremeta->getCareLabelSymbols();
-
-        $this->coo = $this->caremeta->getCountryOrigin();
-
-        $this->kids_warning = $this->caremeta->getKidsWarning();
-
-        $this->components = $this->caremeta->getCareLabelComponents();
-
-        $this->fabriclists = $this->caremeta->getCareLabelFabrics();
-
-        $this->tesco_suppliers = $this->caremeta->getTescoSuppliers();
-
-        $this->additional_instructions = $this->caremeta->getCareLabelInstructions();
-
-        $this->part_of_two_piece_set = $this->caremeta->getPartOfTwoPieceSet();
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $get_main_module = $this->module->getMainModules();
@@ -72,17 +48,18 @@ class CareLabelOrdersController extends Controller
             View::composer('layouts.Admin.navbar', function ($view) use ($get_main_module, $get_sub_module) {
                 return $view->with(['modules' => $get_main_module, 'sub_modules' => $get_sub_module]);
             });
-
+            
             return View::make('Admin/Order Management/tesco-care-labels')
                 ->with([
-                    'symbols' => $this->symbols,
-                    'tesco_suppliers' => $this->tesco_suppliers,
-                    'coo' => $this->coo,
-                    'kids_warning' => $this->kids_warning,
-                    'components' => $this->components,
-                    'fabriclists' => $this->fabriclists,
-                    'additional_instructions' => $this->additional_instructions,
-                    'part_of_two_piece_set' => $this->part_of_two_piece_set
+                    'symbols' => $this->caremeta->getCareLabelSymbols(),
+                    'tesco_suppliers' => $this->caremeta->getTescoSuppliers(),
+                    'coo' => $this->caremeta->getCountryOrigin(),
+                    'kids_warning' => $this->caremeta->getKidsWarning(),
+                    'components' => $this->caremeta->getCareLabelComponents(),
+                    'fabriclists' => $this->caremeta->getCareLabelFabrics(),
+                    'template' => $request['template'],
+                    'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -96,6 +73,7 @@ class CareLabelOrdersController extends Controller
 
     public function getFiberComponentsMeta()
     {
+        // fetch tesco care metadata from class
         $data['components'] = $this->caremeta->getCareLabelComponents();
 
         $data['fabriclists'] = $this->caremeta->getCareLabelFabrics();
@@ -152,14 +130,14 @@ class CareLabelOrdersController extends Controller
                     'order_details' => $result['order_details'],
                     'moq' => $result['moq'],
                     'erp_details' => $result['erp_details'],
-                    'symbols' => $this->symbols,
-                    'tesco_suppliers' => $this->tesco_suppliers,
-                    'coo' => $this->coo,
-                    'kids_warning' => $this->kids_warning,
-                    'components' => $this->components,
-                    'fabriclists' => $this->fabriclists,
-                    'additional_instructions' => $this->additional_instructions,
-                    'part_of_two_piece_set' => $this->part_of_two_piece_set
+                    'symbols' => $this->caremeta->getCareLabelSymbols(),
+                    'tesco_suppliers' => $this->caremeta->getTescoSuppliers(),
+                    'coo' => $this->caremeta->getCountryOrigin(),
+                    'kids_warning' => $this->caremeta->getKidsWarning(),
+                    'components' => $this->caremeta->getCareLabelComponents(),
+                    'fabriclists' => $this->caremeta->getCareLabelFabrics(),
+                    'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
                 ], 200);
             } else {
                 return response()->json(['error' => true, 'message' => 'Error'], 400);

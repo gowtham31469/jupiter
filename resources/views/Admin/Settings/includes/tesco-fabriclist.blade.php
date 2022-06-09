@@ -20,7 +20,7 @@
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('fabric_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('fabric_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in polish','required')) !!}
+                            {!! Form::text('fabric_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'fabric name in polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
                             {!! Form::label('edit_fabric_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('edit_fabric_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in polish','required')) !!}
+                            {!! Form::text('edit_fabric_polish',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Fabric name in polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

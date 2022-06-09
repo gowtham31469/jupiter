@@ -23,7 +23,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('comp_polish', 'Polish', ['class' => 'form_label']) !!}
                             {!! Form::text('comp_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in polish','required')) !!}
+                            => 'components name in polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         <div class="form-group has-feedback">
                             {!! Form::label('comp_edit_polish', 'Polish', ['class' => 'form_label']) !!}
                             {!! Form::text('comp_edit_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'components name in polish','required')) !!}
+                            => 'components name in polish')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

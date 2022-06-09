@@ -42,15 +42,11 @@ use App\Classes\UploadCombinedPO;
 use App\Classes\CancelTescoOrders;
 use App\Http\Controllers\Controller;
 use App\TescoWashcareOrdersQuantity;
-use Illuminate\Support\Facades\Input;
-use Symfony\Component\Process\Process;
-use Illuminate\Support\Facades\Validator;
+use App\TescoSwingTicketOrdersQuantity;
 use App\Classes\StoreOrderManagementHistory;
 use App\TescoWashcareOrdersComponentMapping;
 use App\TescoWashcareOrdersComponentFibreMapping;
-use Intervention\Image\ImageManagerStatic as Image;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use App\TescoSwingTicketOrdersQuantity;
+use App\Http\Requests\TescoRatioStickerOrderRequest;
 
 class OrderManagementCntrl extends Controller
 {
@@ -760,9 +756,11 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setCERatioOrders(Request $request)
+    public function setCERatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
+
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj = new TescoOrders();
             
@@ -1027,9 +1025,11 @@ class OrderManagementCntrl extends Controller
      * @author <Praveen>
      * @return \Illuminate\Http\Response
      */
-    public function setUKRatioOrders(Request $request)
+    public function setUKRatioOrders(TescoRatioStickerOrderRequest $request)
     {
         try {
+            $request->validated();
+            
             /** [ Creating new object for TescoOrders() class ] */
             $tesco_order_obj = new TescoOrders();
             
@@ -4140,7 +4140,7 @@ class OrderManagementCntrl extends Controller
         $data['order_details']->type = 'tesco_swingticket_orders';
       }
 
-      if (array_intersect(["GCL25W/M12723G", "GCL25W/M13220G"], $artwork)) {
+      if (array_intersect(["GCL25W/M12723G", "GCL25W/M13220G","GCL25B/M13278G","GCL25B/M13279G"], $artwork)) {
         $data['order_details']  = TescoWashcareOrders::with([
           'quantities',
           'garment_components',
