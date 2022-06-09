@@ -454,6 +454,134 @@ const generateNatJobcard = () => {
             200: function(data) {
 
                 renderCommonJCView(data);
+
+                /** Show single templates dynamic table */
+                var single_table_html = '';
+                var meters_div_html = '';
+                if (data.template_data.single.length != 0) {
+                    var row = 0;
+                    var table = 0;
+                    $.each(data.template_data.single, function (key, erpid) {
+                        single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_' + table + '"  border="0.2">\
+                        <tbody id="single_list_table_body"><tr>\
+                        <th width="80px">ID.NO</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
+                        });
+                        var template_name = key.split("_");
+                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '">REFNUM  : ' + template_name[0] + '</td></tr>\
+                                                    <tr>\
+                                                        <th width="80px">StyleNo/UVC</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            let style_num = (common_data.style_no === null || "") ? '-' : common_data.style_no;
+                            single_table_html += '<td colspan="2" class="single-style-no-' + index + '">' + style_num + '</td>';
+                        });
+
+                        single_table_html += '</tr>\
+                                                    <tr>\
+                                                        <th width="80px">B.PO.NO</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            let buyer_po_no = (common_data.buyer_po_number === null || "") ? '-' : common_data.buyer_po_number;
+                            single_table_html += '<td colspan="2" class="single-buyer-po-' + index + '">' + buyer_po_no + '</td>';
+                        });
+                        single_table_html += '</tr>\
+                                                    <tr>\
+                                                        <th width="80px">OCN</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            let ocn_no = (common_data.ocn_number === null || "") ? '-' : common_data.ocn_number;
+                            single_table_html += '<td colspan="2" class="single-ocn-' + index + '">' + ocn_no + '</td>';
+                        });
+
+                        single_table_html += '</tr>\
+                        <tr>\
+                                                        <th width="80px">Color</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            let color = (common_data.color === null || "") ? '-' : common_data.color;
+                            single_table_html += '<td colspan="2" class="single-color-' + index + '">' + color + '</td>';
+                        });
+
+                        single_table_html += '</tr>\
+                                                <th width="80px">SIZE /PRICE</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            single_table_html += '<th>O.QNT</th>\
+                            <th>P.QNT</th>';
+                        });
+                        single_table_html += '<th>TOTAL</th>\
+                                                        <th width="180px">EXCESS</th>\
+                                                        <th>MTRS</th>\
+                                                        <th>STOCK</th>\
+                                                    </tr>';
+                        var total_quantity_final = 0;
+                        var sum = [];
+                        $.each(erpid.size, function (index2, quantity_data) {
+                            var total_qty_sizewise = 0;
+                            var size_text = index2.split("_");
+                            var col = 0;
+                            single_table_html += '<tr><td class="single-size-row">' + size_text[0] + '</td>';
+
+                            $.each(quantity_data, function (index3, qty) {
+                                total_qty_sizewise += parseInt(qty);
+                                single_table_html += '<td class="quantity-' + col + ' quantity-td" data-size-value="' + size_text[0] + '">' + parseInt(qty) + '</td><td></td>';
+                                /** Column wise total quantity calculation */
+                                sum[col] = parseInt(qty) + (sum[col] || 0);
+                                col++;
+                            });
+
+                            single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+
+                            total_quantity_final += parseInt(total_qty_sizewise);
+                            row++;
+                        });
+
+                        single_table_html += '<tr>\
+                                                <th class="highlight_row total-text" data-ref-name = "' + template_name[0].replace(/ |\//g, '_') + '">TOTAL</th>';
+                        var total_col = 0;
+                        $.each(erpid.order_data, function (index, common_data) {
+                            single_table_html += '<td class="total-quantity-col-' + total_col + '"><strong>' + sum[total_col] + '</strong></td>\
+                                                    <td></td>';
+                            total_col++;
+                        });
+
+                        single_table_html += '<td><strong class="total-qty-' + template_name[0].replace(/ |\//g, '_') + '">' + parseInt(total_quantity_final) + '</strong></td>\
+                                                <td class="total-excess-col-table-' + table + ' total-excess-' + template_name[0].replace(/ |\//g, '_') + '"></td>\
+                                                <td></td>\
+                                                <td></td>\
+                                            </tr>';
+                        single_table_html += ' </tbody>\
+                                        </table>';
+                        table++;
+                        /** Show actual excess % and meters div only once for each references */
+                        if (template_name[1] === '0') {
+                            meters_div_html += '<div class="col-md-12">\
+                                        <div class="col-md-3">\
+                                            <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % (' + template_name[0] + '):</label>\
+                                            <span class="act-excess" data-act-excess-ref="' + template_name[0] + '" id="act_excess_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
+                                        </div>\
+                                        <div class="col-md-3">\
+                                            <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >STKRS MTRS (' + template_name[0] + '):</label>\
+                                            <span class="sticker-mtrs" id="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
+                                        </div>\
+                                        <div class="col-md-3">\
+                                        <div class="form-group has-feedback">\
+                                            <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS (' + template_name[0] + ') :</label>\
+                                            <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                            <div class="help-block with-errors"></div>\
+                                        </div>\
+                                        </div>\
+                                        <div class="col-md-3">\
+                                        <label for="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" >TOTAL MTRS (' + template_name[0] + '):</label>\
+                                        <span id="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" data-tem-ref-name="' + template_name[0].replace(/ |\//g, '_') + '" class="total-meters"></span>\
+                                        </div>\
+                                    </div>';
+                        }
+                    });
+
+                    $('.single-list-table-div').html(single_table_html);
+                    $('.meter-calculation-div').html(meters_div_html);
+                } else {
+                    $('.single-list-table-div').html(single_table_html);
+                    $('.meter-calculation-div').html(meters_div_html);
+                }
                 
                 /** [ Backdrop for bootstrap modal ] */
                 $('#natJobcardCreationModal').modal({
