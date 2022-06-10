@@ -1053,7 +1053,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             $($hu_garment_str).each(function(index_str_hu,hu_garment_val){
                 
-                if((index_str_hu == 0 && $line_length ==15))
+                if((index_str_hu == 0 && $line_length ==15) || ($hu_garment_str.length == 5 && $line_length == 15))
                 {
                     $z=6;
                 }
@@ -1083,7 +1083,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 else
                 {
-                    if((index_str_hu == 0 && $line_length ==15))
+                    if((index_str_hu == 0 && $line_length ==15) || ($hu_garment_str.length == 5 && $line_length == 15))
                     {
                         if(hu_garment_val.charAt(0) == "/")
                         {
