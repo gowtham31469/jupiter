@@ -265,7 +265,6 @@ const getNATStyleOCNBuyerPO = () => {
         },
         success: (response) => {
 
-            console.log(response);
             $("#nat_style_number").empty();
             $("#nat_buyer_po_number").empty();
             $("#nat_ocn_number").empty();
