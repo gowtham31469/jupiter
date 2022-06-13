@@ -103,7 +103,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-									{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -166,7 +166,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-									{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -201,7 +201,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('no_repeats', 'NO OF REPEATS :', ['class' => 'form_label']) !!}
-									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
+									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -224,7 +224,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('print_length', 'PRINT LENGTH :', ['class' => 'form_label']) !!}
-									{!! Form::number('print_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
+									{!! Form::number('print_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>

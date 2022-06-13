@@ -468,7 +468,7 @@ const generateNatJobcard = () => {
                             single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
                         });
                         var template_name = key.split("_");
-                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '">REFNUM : ' + template_name[0] + '</td></tr>\
+                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '"></td></tr>\
                                                     <tr>\
                                                         <th width="80px">StyleNo/UVC</th>';
                         $.each(erpid.order_data, function (index, common_data) {
@@ -553,23 +553,19 @@ const generateNatJobcard = () => {
                         if (template_name[1] === '0') {
                             meters_div_html += '<div class="col-md-12">\
                                         <div class="col-md-3">\
-                                            <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % (' + template_name[0] + '):</label>\
+                                            <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % :</label>\
                                             <span class="act-excess" data-act-excess-ref="' + template_name[0] + '" id="act_excess_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
                                         </div>\
                                         <div class="col-md-3">\
-                                            <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >STKRS MTRS (' + template_name[0] + '):</label>\
+                                            <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >MTRS FOR STKRS :</label>\
                                             <span class="sticker-mtrs" id="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
                                         </div>\
                                         <div class="col-md-3">\
                                         <div class="form-group has-feedback">\
-                                            <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS (' + template_name[0] + ') :</label>\
-                                            <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                            <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS  :</label>\
+                                            <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" max="99999"  data-max-error="Value should be <= 99999">\
                                             <div class="help-block with-errors"></div>\
                                         </div>\
-                                        </div>\
-                                        <div class="col-md-3">\
-                                        <label for="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" >TOTAL MTRS (' + template_name[0] + '):</label>\
-                                        <span id="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" data-tem-ref-name="' + template_name[0].replace(/ |\//g, '_') + '" class="total-meters"></span>\
                                         </div>\
                                     </div>';
                         }
@@ -617,4 +613,37 @@ const generateNatJobcard = () => {
             $(".loader").hide();
         }
     })
+}
+
+
+const mtrsForNatStickers = () => {
+    var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    $('.total-text').each(function(){
+        let ref_name              = $(this).data('ref-name');
+        let total_qty             = 0;
+        let total_excess          = 0;
+        let mtrs                  = 0;
+        let no_of_repeats         = $('#no_repeats').val() === ''?0:$('#no_repeats').val();
+        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+
+        $('.total-qty-'+ref_name).each(function(){
+            if (!isNaN(total_qty) && total_qty.length !== 0) {
+                total_qty += parseInt($(this).text());
+            }
+        });
+
+        $('.total-excess-'+ref_name).each(function(){
+            if (!isNaN(total_excess) && total_excess.length !== 0) {
+                total_excess += parseInt($(this).text());
+            }
+        });
+
+        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+        {
+            mtrs = parseFloat( ( ( ( parseInt(total_qty) + parseInt(total_excess) ) / parseInt(no_of_repeats) ) * ( ( parseFloat(length_side_dimension) + parseInt(repeat_gap) ) ) ) / 1000 ).toFixed(2);
+        }
+        
+        $('#sticker_mtr_'+ref_name).text(Math.round(mtrs))
+        totalMeters()
+    });
 }
