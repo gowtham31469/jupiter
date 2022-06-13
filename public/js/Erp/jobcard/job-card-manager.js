@@ -549,16 +549,19 @@ function actualExcess()
 function mtrsForStickers()
 {
     var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
+    let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+    
     $('.total-text').each(function(){
         let ref_name              = $(this).data('ref-name');
         let total_qty             = 0;
         let mtrs                  = 0;
-        let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
-        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
 
         $('.total-qty-'+ref_name).each(function(){
+            var qty = parseInt($(this).text()) || 0;
+
             if (!isNaN(total_qty) && total_qty.length !== 0) {
-                total_qty += parseInt($(this).text());
+                total_qty += parseInt(qty);
             }
         });
 

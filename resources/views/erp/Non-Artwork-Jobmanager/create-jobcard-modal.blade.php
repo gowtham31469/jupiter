@@ -83,6 +83,7 @@
 								</div>
 							</div>
 							<div class="col-md-4">
+								<input type="hidden" value="" id="nat_template_type">
 							</div>
 						</div>
 					</div>

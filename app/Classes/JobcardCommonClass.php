@@ -94,9 +94,10 @@ class JobcardCommonClass
 		$article_array      = array();
 		$length_array       = array();
 		$width_array        = array();
+		$type_array         = array();
 
 		$template_details = DB::table($buyer->template_table)
-                ->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
+                ->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id', $buyer->template_table.'.type as template_type')
                 ->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
                 ->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
                 ->whereIn($buyer->template_table . '.item_id', $temp_id_array)
@@ -113,9 +114,11 @@ class JobcardCommonClass
 			!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
 
 			!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
+
+			!in_array($template_detail->template_type, $type_array, true) ? array_push($type_array, $template_detail->template_type) : $type_array;
 		}
 
-		return array($print_color_array, $material_array, $article_array, $length_array, $width_array);
+		return array($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array);
 	}
 
 	public function manipulateSizeData($single_templates, $erp_id_array)

@@ -434,7 +434,7 @@ class NonArtworkJobCardFiltersController extends Controller
             }
 
             /** Get templates metadata details */
-            list($print_color_array, $material_array, $article_array, $length_array, $width_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
+            list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
 
             /** Different size breakup value handling */
             $final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
@@ -462,6 +462,7 @@ class NonArtworkJobCardFiltersController extends Controller
             $template_data['article']          = $article_array;
             $template_data['length']           = $length_array;
             $template_data['width']            = $width_array;
+            $template_data['template_type']    = $type_array;
             $template_data['ratio']            = $ratio_templates;
             $template_data['single']           = $final_chunk;
             $template_data['order_detail_ids'] = $order_detail_ids;

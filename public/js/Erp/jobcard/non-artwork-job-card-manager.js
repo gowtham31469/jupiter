@@ -454,6 +454,8 @@ const generateNatJobcard = () => {
 
                 renderCommonJCView(data);
 
+                $('#nat_template_type').val(data.template_data.template_type[0]);
+
                 /** Show single templates dynamic table */
                 var single_table_html = '';
                 var meters_div_html = '';
@@ -617,33 +619,46 @@ const generateNatJobcard = () => {
 
 
 const mtrsForNatStickers = () => {
-    var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
-    $('.total-text').each(function(){
-        let ref_name              = $(this).data('ref-name');
-        let total_qty             = 0;
-        let total_excess          = 0;
-        let mtrs                  = 0;
+    let ref_name              = $('.total-text').data('ref-name');
+    let total_qty             = 0;
+    let total_excess          = 0;
+    let mtrs                  = 0;
+
+    $('.total-qty-'+ref_name).each(function(){
+        var qty = parseInt($(this).text()) || 0;
+
+        if (!isNaN(total_qty) && total_qty.length !== 0) {
+            total_qty += parseInt(qty);
+        }
+    });
+
+    $('.total-excess-'+ref_name).each(function(){
+        var excess = parseInt($(this).text()) || 0;
+        
+        if (!isNaN(total_excess) && total_excess.length !== 0) {
+            total_excess += parseInt(excess);
+        }
+    });
+
+    if($('#nat_template_type').val().toLowerCase() === 'stickers'){
+        var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
         let no_of_repeats         = $('#no_repeats').val() === ''?0:$('#no_repeats').val();
         let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
-
-        $('.total-qty-'+ref_name).each(function(){
-            if (!isNaN(total_qty) && total_qty.length !== 0) {
-                total_qty += parseInt($(this).text());
-            }
-        });
-
-        $('.total-excess-'+ref_name).each(function(){
-            if (!isNaN(total_excess) && total_excess.length !== 0) {
-                total_excess += parseInt($(this).text());
-            }
-        });
 
         if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
         {
             mtrs = parseFloat( ( ( ( parseInt(total_qty) + parseInt(total_excess) ) / parseInt(no_of_repeats) ) * ( ( parseFloat(length_side_dimension) + parseInt(repeat_gap) ) ) ) / 1000 ).toFixed(2);
         }
-        
-        $('#sticker_mtr_'+ref_name).text(Math.round(mtrs))
-        totalMeters()
-    });
+    } else {
+        let print_length = $('#print_length').val() === ''?0:$('#print_length').val();
+
+        if(!isNaN(print_length) && print_length != 0)
+        {
+            mtrs = parseFloat( ( parseInt(total_qty) + parseInt(total_excess) ) * ( parseFloat(print_length) / 1000 ) ).toFixed(2);
+        }
+
+    }
+
+    $('#sticker_mtr_'+ref_name).text(Math.round(mtrs));
+    totalMeters();
 }
