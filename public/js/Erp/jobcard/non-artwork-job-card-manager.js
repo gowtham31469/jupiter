@@ -587,7 +587,7 @@ const generateNatJobcard = () => {
                 });
 
                 /** [ Validate create_jobcard form using bootstrap validator ] */
-                $('#create_jobcard').validator('update');
+                $('#create_nat_jobcard').validator('update');
                 $('#natJobcardCreationModal').modal('show');
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
@@ -661,4 +661,331 @@ const mtrsForNatStickers = () => {
 
     $('#sticker_mtr_'+ref_name).text(Math.round(mtrs));
     totalMeters();
+}
+
+const validateNatJCForm = () => {
+    $('#create_nat_jobcard').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented())
+        {
+
+        }
+        else
+        {
+            e.preventDefault();
+            storeNatJobcard();
+        }
+    })
+}
+
+const storeNatJobcard = () => {
+    var company_id      = $( '#jc_company_name' ).data('company-id');
+    var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
+    var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
+    var article         = $( '#article' ).text() === ''?null:$('#article').text();
+    var material        = $( '#material' ).val() === ''?null:$('#material').val();
+    var customer_id     = $( '#customer' ).data('customer-id');
+    var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
+    var buyer_id        = $( '#buyer' ).data('buyer-id');
+    var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
+    var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
+    var length          = $( '#length' ).val() === ''?null:$('#length').val();
+    var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
+    var aw_appr_date    = $( '#aw_app_date' ).val() === ''?null:$( '#aw_app_date' ).val();
+    var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
+    var width           = $( '#width' ).val() === ''?null:$('#width').val();
+    var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
+    var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
+    var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
+    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
+    var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
+    var no_repeats      = $( '#no_repeats' ).val() === ''?null:$( '#no_repeats' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
+    var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
+    var print_length    = $( '#print_length' ).val() === ''?null:$('#print_length').val();
+    var composition     = $( '#composition' ).val() === ''?null:$('#composition').val();
+    var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
+    var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
+    var operator        = $( '#operator' ).val() === ''?null:$('#operator').val();
+    var checker         = $( '#checker' ).val() === ''?null:$('#checker').val();
+    var authorized_by   = $( '#author' ).val() === ''?null:$('#author').val();
+    var axicon_verifier = $( '#axicon_verifier' ).val() === ''?null:$('#axicon_verifier').val();
+    var approved_by     = $( '#approved_by' ).val() === ''?null:$('#approved_by').val();
+    var packer          = $( '#packer' ).val() === ''?null:$('#packer').val();
+    var approval_date   = $( '#approval_date' ).val() === ''?null:$('#approval_date').val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
+    var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
+    var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
+    var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
+
+    var final_json_obj =   {
+        "single": {},
+        "erp_order_details" : []
+          }; 
+    
+    var single_ref_obj = {};
+    
+    /** Create single templates json object */
+    $('.single-list-table').each(function (index, table) {
+        var single_obj = {
+            "erp_id": [],
+            "style": [],
+            "buyer_po": [],
+            "ocn": [],
+            "color": [],
+            "temp_id": [],
+            "size": [],
+            "total": [],
+            "excess": []
+              };
+        var erp_id_object  = {};
+        var erp_id_array   = [];
+        var po_object      = {};
+        var po_array       = [];
+        var ocn_object     = {};
+        var ocn_array      = [];
+        var temp_id_object = {};
+        var temp_id_array  = [];
+        single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ |\//g, '_');
+        
+        // create erp_id array
+        $(table).find('tbody tr:eq(0) td:not(:last)').each(function (i, item) {
+            erp_id_object = {};
+            erp_id_object = item.innerHTML;
+            erp_id_array.push(erp_id_object);
+
+            temp_id_object = {};
+            temp_id_object = $(item).data('template-id');
+            temp_id_array.push(temp_id_object);
+        });
+        
+        single_obj['erp_id']  = erp_id_array;
+        single_obj['temp_id'] = temp_id_array;
+        // create po number array
+        $(table).find('tbody tr:eq(1) td').each(function (i, item) {
+            po_object = {};
+            po_object = item.innerHTML;
+            po_array.push(po_object);
+        });
+        single_obj['buyer_po'] = po_array;
+
+        // create ocn number array
+        $(table).find('tbody tr:eq(2) td').each(function (i, item) {
+            ocn_object = {};
+            ocn_object = item.innerHTML;
+            ocn_array.push(ocn_object);
+        });
+        single_obj['ocn'] = ocn_array;
+        
+        var size_object_final = {};
+        var total_qty_object_final = {};
+        var excess_object_final = {};
+        // create size, qty and excess json object
+        $(table).find('tbody tr:gt(5):not(:last-child)').each(function (i, item) {
+            
+            var size_text  = $(item).find('.single-size-row').text();
+            var size_array      = [];
+            $(item).find('.quantity-td').each(function (index, row) {
+                size_object = {};
+                size_object = row.innerHTML;
+                size_array.push(size_object);
+            });
+            size_object_final[size_text] = size_array;
+
+            $(item).find('.total-quantity-class strong').each(function (index1, total_qty) {
+                total_qty_object = {};
+                total_qty_object = total_qty.innerHTML;
+            });
+            total_qty_object_final[size_text] = total_qty_object;
+
+            $(item).find('.total-excess div input').each(function (index2, excess) {
+                excess_object = {};
+                excess_object = excess.value;
+            });
+            excess_object_final[size_text] = excess_object;
+
+        });
+        single_obj['size'] = size_object_final;
+        single_obj['total'] = total_qty_object_final;
+        single_obj['excess'] = excess_object_final;
+        
+        single_ref_obj[single_ref_name+'_'+index] = single_obj;
+        // pushing single templates array into json object
+        final_json_obj['single'] = single_ref_obj;
+    });
+    
+    var single_ref = [];
+    var act_excess = [];
+    /** [ Create array of act-excess ] */
+    $('.act-excess').each(function (i, item) {
+        act_excess[i] = $(item).text() === ''?0:$(item).text();
+        single_ref[i] = $(item).data('act-excess-ref');
+    });
+    act_excess = act_excess.join(',');
+    single_ref = single_ref.join(',');
+
+    var sticker_mtr = [];
+    /** [ Create array of sticker-mtrs ] */
+    $('.sticker-mtrs').each(function (i, item) {
+        sticker_mtr[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    sticker_mtr = sticker_mtr.join(',');
+
+    var settings = [];
+    /** [ Create array of settings ] */
+    $('.settings').each(function (i, item) {
+        settings[i] = $(item).val() === ''?0:$(item).val();
+
+    });
+    settings = settings.join(',');
+
+    var total_mtrs = [];
+    /** [ Create array of total-meters ] */
+    $('.total-meters').each(function (i, item) {
+        total_mtrs[i] = $(item).text() === ''?0:$(item).text();
+
+    });
+    total_mtrs = total_mtrs.join(',');
+
+    erp_orders_ids = [];
+    selected_ref_array = [];
+    selected_buyer_po_array = [];
+    order_type_array = [];
+    uuid_array = [];
+    jsonArray = [];
+    /** [ Create json object of selected orders ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        erp_order_details_obj = {};
+        
+        if ($(this).is(':checked')) {
+            erp_order_details_obj.created_at = $(this).closest('tr').data('created-at');
+            erp_order_details_obj.order_type = $(this).closest('tr').data('order-type');
+            erp_order_details_obj.buyer_po = $(this).closest('tr').data('buyer-po');
+            erp_order_details_obj.refname = $(this).closest('tr').data('refname');
+            erp_order_details_obj.erp_id = $(this).closest('tr').attr('id');
+            erp_order_details_obj.style_no = $(this).closest('tr').data('style-no');
+            erp_order_details_obj.temp_file = $(this).closest('tr').data('template-file');
+            erp_order_details_obj.temp_id = $(this).closest('tr').data('template-id');
+            erp_order_details_obj.temp_name = $(this).closest('tr').data('template-name');
+            erp_order_details_obj.disney = $(this).closest('tr').data('disney');
+            erp_order_details_obj.frontPath = $(this).closest('tr').data('front-path');
+            erp_order_details_obj.backPath = $(this).closest('tr').data('back-path');
+            erp_order_details_obj.middlePath = $(this).closest('tr').data('middle-path');
+            erp_order_details_obj.uuid = $(this).closest('tr').data('uuid');
+
+            jsonArray.push(erp_order_details_obj);
+
+            erp_orders_ids.push($(this).closest('tr').attr('erp-id')); 
+            selected_ref_array.push($(this).closest('tr').data('refname')); 
+            selected_buyer_po_array.push($(this).closest('tr').data('buyer-po')); 
+            order_type_array.push($(this).closest('tr').data('order-type')); 
+            uuid_array.push($(this).closest('tr').data('uuid')); 
+
+        }
+    });
+
+    final_json_obj['erp_order_details'] = jsonArray;
+    erp_orders_ids   = erp_orders_ids.join(',');
+    selected_ref_array   = selected_ref_array.join(',');
+    selected_buyer_po_array   = selected_buyer_po_array.join(',');
+    order_type_array   = order_type_array.join(',');
+    uuid_array   = uuid_array.join(',');
+
+    $.ajax({
+        url: base_url + "/erp/non-artwork-job-manager/store-nat-jobcard-details",
+        type: 'POST',
+        data: {
+            _token: csrf_token,
+            company_id: company_id,
+            workorder_id: workorder_id,
+            created_date: created_date,
+            article: article,
+            material: material,
+            customer_id: customer_id,
+            order_type: order_type,
+            buyer_id: buyer_id,
+            reference: reference,
+            disp_mode: disp_mode,
+            order_date: order_date,
+            length: length,
+            repeat_gap: repeat_gap,
+            machine: machine,
+            cus_del_date: cus_del_date,
+            roll_width: roll_width,
+            width: width,
+            film_no: film_no,
+            invoice_date: invoice_date,
+            length_side: length_side,
+            excess: excess,
+            teeth_no: teeth_no,
+            inv_no: inv_no,
+            no_repeats: no_repeats,
+            finish_type: finish_type,
+            print_color:print_color,
+            compiled_by:compiled_by,
+            barcode_read:barcode_read,
+            operator:operator,
+            checker:checker,
+            authorized_by:authorized_by,
+            axicon_verifier:axicon_verifier,
+            approved_by:approved_by,
+            packer:packer,
+            approval_date:approval_date,
+            roll_issued_by:roll_issued_by,
+            cutter:cutter,
+            cartons:cartons,
+            final_json_obj:JSON.stringify(final_json_obj),
+            single_ref:single_ref,
+            act_excess:act_excess,
+            sticker_mtr:sticker_mtr,
+            settings:settings,
+            total_mtrs:total_mtrs,
+            erp_orders_ids:erp_orders_ids,
+            selected_ref_array:selected_ref_array,
+            selected_buyer_po_array:selected_buyer_po_array,
+            order_type_array:order_type_array,
+            uuid_array:uuid_array,
+            aw_appr_date:aw_appr_date,
+            act_del_date:act_del_date,
+            print_length:print_length,
+            composition:composition
+        },
+        tryCount: 0,
+        retryLimit: 2,
+        async: false,
+        dataType: "json",
+        beforeSend: function () {
+            $(".loader").show();
+            $('#jc_print_btn').prop('disabled', true);
+        },
+        statusCode: {
+            200: function(data) {
+
+                // var resp = JSON.stringify(data.file_path); 
+                // window.open(
+                //     base_url+JSON.parse(resp),
+                //     '_blank' // <- This is what makes it open in a new window.
+                // ); 
+                // $('.snackbar_span').html("Jobcard Created Successfully");
+                // showSnackbar();
+                // $('.modal').modal('hide');
+                // location.reload();
+              
+            },
+            400: function() {
+                $('.snackbar_span').html("Parameter is missing !!!");
+                showSnackbar();
+            },
+       },
+        error: function (errorXHR, errorStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
 }

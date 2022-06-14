@@ -484,4 +484,9 @@ class NonArtworkJobCardFiltersController extends Controller
             return response()->json(['error' => true, 'message' => 'Jobcard for Spectrra Printers currently not available !!'], 406);
         }
     }
+
+    public function createNatJcOrderDetails(Request $request)
+    {
+        dd($request);
+    }
 }

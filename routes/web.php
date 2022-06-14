@@ -982,6 +982,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
 	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
 	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
+	Route::post('non-artwork-job-manager/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@createNatJcOrderDetails');
 });
 
 //Orchestra Order Management - customer

@@ -5,7 +5,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal">Create Jobcard</h4>
 			</div>
-			{!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
+			{!! Form::open(['id' => 'create_nat_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
 			<div class="modal-body nat-jobcard-creation-modal-body">
 				<div class="container-fluid">
 					<div class="row">
@@ -385,7 +385,7 @@
 			</div>
 			<div class="modal-footer nat-jobcard-creation-modal-footer">
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn'] ) !!}
+				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn', 'onclick'  => 'return validateNatJCForm()'] ) !!}
 			</div>
 			{!! Form::close() !!}
 		</div>

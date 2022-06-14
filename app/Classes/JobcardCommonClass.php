@@ -59,7 +59,7 @@ class JobcardCommonClass
 
 			!in_array($order_details->template_id, $temp_id_array, true) ? array_push($temp_id_array, $order_details->template_id) : $temp_id_array;
 
-			!in_array($reference_name, $distinct_ref_array, true) ? array_push($distinct_ref_array, $reference_name) : $distinct_ref_array;
+			!in_array($order_details->reference_name, $distinct_ref_array, true) ? array_push($distinct_ref_array, $order_details->reference_name) : $distinct_ref_array;
 
 			!in_array($order_details->po_no, $customer_po_array, true) ? array_push($customer_po_array, $order_details->po_no) : $customer_po_array;
 
