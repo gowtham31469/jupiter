@@ -256,8 +256,10 @@
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
 	<script src="{{ asset('js/Erp/update.js') }}"></script>
 	<script src="{{ asset('js/Erp/userProfile.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-manager.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/non-artwork-job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-common.js') }}"></script>
 	<script src="{{ asset('js/Erp/print-manager.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>

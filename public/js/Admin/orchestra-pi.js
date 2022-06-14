@@ -181,11 +181,7 @@ const genarateOrchetraPI = (id, table_name, uvc, pi_status, buyer_po) =>
             }
         },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -249,11 +245,7 @@ function orchestraApprovePI(template_id,row_id,table_name,amount)
             }
         },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -302,11 +294,7 @@ function orchestraRejectPI(id,table_name)
             }
         },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
