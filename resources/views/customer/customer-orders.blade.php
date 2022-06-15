@@ -1123,6 +1123,7 @@ background: rgba(0,0,0,0.2);
 <!-- Tesco swing tickets js -->
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
 
 <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>
