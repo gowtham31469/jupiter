@@ -8,6 +8,7 @@
 			{!! Form::open(['id' => 'create_nat_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
 			<div class="modal-body nat-jobcard-creation-modal-body">
 				<div class="container-fluid">
+					<div id="nat_result"></div>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="col-md-4">
@@ -26,7 +27,7 @@
 						<div class="col-md-12">
 							<div class="col-md-4">
 								{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
-								<span id="work_order"></span>
+								<span name="work_order_id" id="work_order"></span>
 							</div>
 							<div class="col-md-4">
 							</div>

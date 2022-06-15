@@ -1550,7 +1550,6 @@ class JobManagerController extends Controller
 					
 					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);		
-
 					$pdf->SetPrintHeader(true);
 					$pdf->SetPrintFooter(true);  
 
@@ -1564,17 +1563,8 @@ class JobManagerController extends Controller
 					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 					
 					// /** Handle Page break */
-					// if ($pdf->last_page_flag)
-					// {
-							// set auto page breaks
-						$pdf->SetAutoPageBreak(TRUE, 40);
-	
-					// }
-					// else 
-					// {
-					// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-					// }
-					
+					// set auto page breaks
+					$pdf->SetAutoPageBreak(TRUE, 40);
 
 					// set image scale factor
 					$pdf->setImageScale(1.8);
