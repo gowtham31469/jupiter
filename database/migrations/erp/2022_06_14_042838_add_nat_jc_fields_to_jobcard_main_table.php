@@ -15,7 +15,7 @@ class AddNatJcFieldsToJobcardMainTable extends Migration
     {
         Schema::table('jobcard_main_table', function (Blueprint $table) {
             $table->date('aw_approve_date')->nullable();
-            $table->date('cus_del_date')->nullable();
+            $table->date('act_del_date')->nullable();
             $table->integer('no_of_repeats')->nullable();
             $table->double('print_length')->nullable(); 
             $table->string('composition')->nullable();
@@ -31,7 +31,7 @@ class AddNatJcFieldsToJobcardMainTable extends Migration
     {
         Schema::table('jobcard_main_table', function (Blueprint $table) {
             $table->dropColumn('aw_approve_date');
-            $table->dropColumn('cus_del_date');
+            $table->dropColumn('act_del_date');
             $table->dropColumn('no_of_repeats');
             $table->dropColumn('print_length'); 
             $table->dropColumn('composition');

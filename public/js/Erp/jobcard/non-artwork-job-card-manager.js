@@ -674,22 +674,74 @@ const validateNatJCForm = () => {
 
 const storeNatJobcard = () => {
 
-    var form_obj = [{
-        "company_id" : $( '#jc_company_name' ).data('company-id'),
-        "workorder_id" : $( '#work_order' ).text() === ''?null:$('#work_order').text(),
-        "created_date" : $( '#today_date' ).text() === ''?null:$('#today_date').text(),
-        "article" : $( '#article' ).text() === ''?null:$('#article').text(),
-        "customer_id" : $( '#customer' ).data('customer-id'),
-        "order_type" : $( '#order_type' ).text() === ''?null:$('#order_type').text(),
-        "buyer_id" : $( '#buyer' ).data('buyer-id'),
-        "order_date" : $( '#order_date' ).text() === ''?null:$('#order_date').text(),
-        "single_ref" : $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref'),
-        "act_excess" : $('#act_excess').text() === ''?0:$('#act_excess').text(),
-        "sticker_mtr" : $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text(),
-        "settings" : $('#settings').text() === ''?0:$('#settings').text(),
-    }];
+    var company_id      = $( '#jc_company_name' ).data('company-id');
+    var workorder_id    = $( '#work_order' ).text() === ''?null:$('#work_order').text();
+    var created_date    = $( '#today_date' ).text() === ''?null:$('#today_date').text();
+    var article         = $( '#article' ).text() === ''?null:$('#article').text();
+    var material        = $( '#material' ).val() === ''?null:$('#material').val();
+    var customer_id     = $( '#customer' ).data('customer-id');
+    var order_type      = $( '#order_type' ).text() === ''?null:$('#order_type').text();
+    var buyer_id        = $( '#buyer' ).data('buyer-id');
+    var buyer           = $( '#buyer' ).text();
+    var reference       = $( '#reference' ).val() === ''?null:$('#reference').val();
+    var disp_mode       = $( '#disp_mode option:selected' ).val() === ''?null:$('#disp_mode option:selected').val();
+    var disp_mode_text  = $( '#disp_mode option:selected' ).text() === ''?null:$('#disp_mode option:selected').text();
+    var order_date      = $( '#order_date' ).text() === ''?null:$('#order_date').text();
+    var length          = $( '#length' ).val() === ''?null:$('#length').val();
+    var repeat_gap      = $( '#repeat_gap' ).val() === ''?null:$( '#repeat_gap' ).val();
+    var machine         = $( '#machine option:selected' ).val() === ''?null:$( '#machine option:selected' ).val();
+    var machine_text    = $( '#machine option:selected' ).text() === ''?null:$( '#machine option:selected' ).text();
+    var cus_del_date    = $( '#cus_del_date' ).val() === ''?null:$( '#cus_del_date' ).val();
+    var roll_width      = $( '#roll_width' ).val() === ''?null:$( '#roll_width' ).val();
+    var width           = $( '#width' ).val() === ''?null:$('#width').val();
+    var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
+    var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
+    var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
+    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
+    var teeth_no_text   = $( '#teeth_no option:selected' ).text() === ''?null:$( '#teeth_no option:selected' ).text();
+    var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
+    var finish_type     = $( '#finish_type option:selected' ).val() === ''?null:$( '#finish_type option:selected' ).val();
+    var finish_type_text= $( '#finish_type option:selected' ).text() === ''?null:$( '#finish_type option:selected' ).text();
+    var print_color     = $( '#print_color' ).val() === ''?null:$('#print_color').val();
+    var compiled_by     = $( '#compiled_by' ).val() === ''?null:$('#compiled_by').val();
+    var barcode_read    = $( '#barcode_read' ).val() === ''?null:$('#barcode_read').val();
+    var operator        = $( '#operator' ).val() === ''?null:$('#operator').val();
+    var checker         = $( '#checker' ).val() === ''?null:$('#checker').val();
+    var authorized_by   = $( '#author' ).val() === ''?null:$('#author').val();
+    var axicon_verifier = $( '#axicon_verifier' ).val() === ''?null:$('#axicon_verifier').val();
+    var approved_by     = $( '#approved_by' ).val() === ''?null:$('#approved_by').val();
+    var packer          = $( '#packer' ).val() === ''?null:$('#packer').val();
+    var approval_date   = $( '#approval_date' ).val() === ''?null:$('#approval_date').val();
+    var roll_issued_by  = $( '#roll_issued_by' ).val() === ''?null:$('#roll_issued_by').val();
+    var cutter          = $( '#cutter' ).val() === ''?null:$('#cutter').val();
+    var cartons         = $( '#cartons' ).val() === ''?null:$('#cartons').val();
+    var no_repeats      = $( '#no_repeats' ).val() === ''?null:$( '#no_repeats' ).val();
+    var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
+    var aw_app_date     = $( '#aw_app_date' ).val() === ''?null:$( '#aw_app_date' ).val();
+    var print_length    = $( '#print_length' ).val() === ''?null:$( '#print_length' ).val(); 
+    var composition     = $( '#composition' ).val() === ''?null:$( '#composition' ).val();
+    var act_excess      = $('#act_excess').text() === ''?0:$('#act_excess').text();
+    var sticker_mtr     = $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text();
+    var settings        = $('#settings').text() === ''?0:$('#settings').text();
+    var single_ref      = $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref');
+
+    // var form_obj = [{
+    //     "company_id" : $( '#jc_company_name' ).data('company-id'),
+    //     "workorder_id" : $( '#work_order' ).text() === ''?null:$('#work_order').text(),
+    //     "created_date" : $( '#today_date' ).text() === ''?null:$('#today_date').text(),
+    //     "article" : $( '#article' ).text() === ''?null:$('#article').text(),
+    //     "customer_id" : $( '#customer' ).data('customer-id'),
+    //     "order_type" : $( '#order_type' ).text() === ''?null:$('#order_type').text(),
+    //     "buyer_id" : $( '#buyer' ).data('buyer-id'),
+    //     "order_date" : $( '#order_date' ).text() === ''?null:$('#order_date').text(),
+    //     "single_ref" : $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref'),
+    //     "act_excess" : $('#act_excess').text() === ''?0:$('#act_excess').text(),
+    //     "sticker_mtr" : $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text(),
+    //     "settings" : $('#settings').text() === ''?0:$('#settings').text(),
+    // }];
    
-    var formData = $('#create_nat_jobcard').serialize() + '&' + $.param(form_obj[0]);
+    // var formData = $('#create_nat_jobcard').serialize() + '&' + $.param(form_obj[0]);
 
     var final_json_obj =   {
         "single": {},
@@ -838,12 +890,61 @@ const storeNatJobcard = () => {
         type: 'POST',
         data: {
             _token: csrf_token,
-            formData:formData,
+            company_id: company_id,
+            workorder_id: workorder_id,
+            created_date: created_date,
+            article: article,
+            material: material,
+            customer_id: customer_id,
+            order_type: order_type,
+            buyer_id: buyer_id,
+            buyer: buyer,
+            reference: reference,
+            disp_mode: disp_mode,
+            order_date: order_date,
+            length: length,
+            repeat_gap: repeat_gap,
+            machine: machine,
+            cus_del_date: cus_del_date,
+            roll_width: roll_width,
+            width: width,
+            film_no: film_no,
+            invoice_date: invoice_date,
+            length_side: length_side,
+            excess: excess,
+            teeth_no: teeth_no,
+            inv_no: inv_no,
+            finish_type: finish_type,
+            print_color:print_color,
+            compiled_by:compiled_by,
+            barcode_read:barcode_read,
+            operator:operator,
+            checker:checker,
+            authorized_by:authorized_by,
+            axicon_verifier:axicon_verifier,
+            approved_by:approved_by,
+            packer:packer,
+            approval_date:approval_date,
+            roll_issued_by:roll_issued_by,
+            cutter:cutter,
+            cartons:cartons,
             final_json_obj:JSON.stringify(final_json_obj),
+            act_excess:act_excess,
+            sticker_mtr:sticker_mtr,
+            settings:settings,
             erp_orders_ids:erp_orders_ids,
-            uuid_array:uuid_array
+            uuid_array:uuid_array,
+            no_repeats:no_repeats,
+            act_del_date:act_del_date,
+            aw_app_date:aw_app_date,
+            print_length:print_length,
+            composition:composition,
+            single_ref:single_ref,
+            disp_mode_text:disp_mode_text,
+            machine_text:machine_text,
+            teeth_no_text:teeth_no_text,
+            finish_type_text:finish_type_text
         },
-        async: false,
         dataType: "json",
         beforeSend: function () {
             $(".loader").show();
