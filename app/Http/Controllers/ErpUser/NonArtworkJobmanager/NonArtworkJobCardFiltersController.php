@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ErpUser\NonArtworkJobmanager;
 
 use Auth;
+use View;
 use DataTables;
 use App\History;
 use Carbon\Carbon;
@@ -14,7 +15,7 @@ use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
 use App\Classes\TescoMaterialQuery;
 use App\Http\Controllers\Controller;
-use App\Classes\JobcardPDFHeaderFooter;
+use App\Classes\JobcardNatPDFHeaderFooter;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -505,7 +506,6 @@ class NonArtworkJobCardFiltersController extends Controller
         ]);
 
         $company_id      = $request['company_id'];
-        $jobcard_id      = $request['workorder_id'];
         $created_date    = $request['created_date'] == ''?NULL:Carbon::parse($request['created_date'],'Asia/Kolkata')->toDateString();
         $article         = $request['article'];
         $material        = $request['material'];
@@ -552,6 +552,18 @@ class NonArtworkJobCardFiltersController extends Controller
         $buyer           = strtolower($request['buyer']);
         $erp_orders_ids  = explode(',', $request['erp_orders_ids']);
         $uuid            = explode(',', $request['uuid_array']);
+
+        $final_obj = json_decode($final_json_obj, true);
+
+foreach($final_obj as $template_type => $template_type_data){
+    if(!empty($template_type_data)){
+        foreach ($template_type_data as $table => $table_data) {
+            foreach ($table_data['erp_id'] as $key => $value) {
+                dd($value);
+            }
+        }
+    }
+}
 
         $current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
         $customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
@@ -615,6 +627,9 @@ class NonArtworkJobCardFiltersController extends Controller
         /** Store jobcard settings and excess details**/
         if($store_jobcard_id != '')
         {
+
+            $action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
+
             DB::table('jobcard_excess_details')->insert([
                 'jobcard_main_table_id'   => $store_jobcard_id,
                 'ref_name'                => $request['single_ref'],
@@ -629,7 +644,7 @@ class NonArtworkJobCardFiltersController extends Controller
             foreach($erp_orders_ids as $row => $erp_orders_id)
             {
                 /** Get updated data and update in history table */
-                $update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
+                ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
                 ->where('erp_order_details.uuid', $uuid[$row])
                 ->update([
                     'status'  => $erp_status_id,
@@ -639,22 +654,18 @@ class NonArtworkJobCardFiltersController extends Controller
                 ]);
 
                 $jobcard_data = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-						->where('erp_order_details.uuid', $uuid[$row])->get();
-
-                $template       = 'Not Available';
-                $action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
+						->where('erp_order_details.uuid', $uuid[$row])
+                        ->select('id', 'order_qnty_table_name', 'order_qnty_table_id', 'status')
+                        ->get();
                 
                 foreach($jobcard_data as $key => $data)
                 {
-                    $qnty_table     = $data->order_qnty_table_name;
-                    $qty_row_id     = $data->order_qnty_table_id;
-                    
-                    $main_table     = str_replace("_quanty","",$qnty_table);
-                    $qnty_id        = str_replace("_orders_quanty","_order_id",str_replace($buyer."_","",$qnty_table));
-                    $order_details  = DB::table($qnty_table)
+                    $main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
+                    $qnty_id        = str_replace("_orders_quanty","_order_id",str_replace($buyer."_","",$data->order_qnty_table_name));
+                    $order_details  = DB::table($data->order_qnty_table_name)
                                         ->select($main_table.'.season_code', $main_table.'.template_id', $main_table.'.purchase_order_no', $main_table.'.po_number', $main_table.'.ocn_number', $main_table.'.style_ref')
-                                        ->where($qnty_table.'.id', $qty_row_id)
-                                        ->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
+                                        ->where($data->order_qnty_table_name.'.id', $data->order_qnty_table_id)
+                                        ->join($main_table, $main_table.'.id', $data->order_qnty_table_name.'.'.$qnty_id)
                                         ->first();
                    
                     $template_level = $this->tesco_material_obj->tescoMaterialDetails($order_details->template_id, $main_table);
@@ -666,7 +677,7 @@ class NonArtworkJobCardFiltersController extends Controller
                     // it will insert if erp_order_details_id i snot exists, otherwise it will update 
                     $history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
                         'buyer_id'             => $buyer_id,
-                        'template'             => $template,
+                        'template'             => 'Not Available',
                         'season'               => $order_details->season_code,
                         'customer_id'          => $customer_id,
                         'material'             => $material_name,
@@ -691,129 +702,107 @@ class NonArtworkJobCardFiltersController extends Controller
                     ]);
                     
                 }
-                
-            }
 
-            /** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
-            foreach($erp_orders_ids as $row => $erp_orders_id)
-            {
-                $erp_order_table_status = DB::table('erp_order_details')
-                    ->where('erp_order_details.erp_order_id', $erp_orders_id)
-                    ->pluck('status')->all();
-                
-                if(count(array_unique($erp_order_table_status)) === 1)
+                /** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
+                if(count(array_unique($jobcard_data->pluck('status')->all())) === 1)
                 {
                     DB::table('erp_orders')
                         ->where('erp_orders.id', $erp_orders_id)
                         ->update([
-                            'status'  => $erp_order_table_status[0]
+                            'status'  => $jobcard_data->pluck('status')->all()[0]
                         ]);
                 }
+                
             }
 
-            // $company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
+            $company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
 
-            // /** [ Creating new object for JobcardPDFHeaderFooter() class ] */
-            // $format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
-            // $formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
-            // $formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
-            // $formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
-            // $formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+            /** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+            $format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+            $formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+            $formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+            $formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+            $formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
+            $formated_aw_app_date = $aw_app_date == ''?NULL:Carbon::parse($aw_app_date)->format('d-m-Y');
+            $formated_act_del_date = $act_del_date == ''?NULL:Carbon::parse($act_del_date)->format('d-m-Y');
             
-            // $pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            // $pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings);		
-            // $pdf->SetPrintHeader(true);
-            // $pdf->SetPrintFooter(true);  
+            $pdf = new JobcardNatPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->setData($company, $workorder_id, $formated_created_date, $article, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $request['single_ref'], $request['act_excess'], $request['sticker_mtr'], $request['settings'], 0, $inv_no, $formated_inv_date);	
 
-            // //margins
-            // $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-            // $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-            // $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->SetPrintHeader(true);
+            $pdf->SetPrintFooter(true);  
+
+            //margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
             
-            // // set header and footer fonts
-            // $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            // $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+            // set header and footer fonts
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
             
-            // // /** Handle Page break */
-            // // set auto page breaks
-            // $pdf->SetAutoPageBreak(TRUE, 40);
+            // /** Handle Page break */
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, 40);
 
-            // // set image scale factor
-            // $pdf->setImageScale(1.8);
+            // set image scale factor
+            $pdf->setImageScale(1.8);
 
-            // // set font
-            // $pdf->SetFont('helvetica', '', 8);
+            // set font
+            $pdf->SetFont('helvetica', '', 8);
 
-            // // add a page
-            // $pdf->AddPage('P', 'A4');
+            // add a page
+            $pdf->AddPage('P', 'A4');
 
-            // // set some text to print
-            // $view = View::make('erp/Jobmanager/jobcard-pdf-template')
-            //         ->with([
-            //                 'buyer' 		   => $buyer,
-            //                 'customer' 		   => $customer,
-            //                 'company'		   => $company,
-            //                 'workorder_id'     => $workorder_id,
-            //                 'created_date'     => $formated_created_date,
-            //                 'article'	       => $article,
-            //                 'material'		   => $material,
-            //                 'style_no'		   => $style_no,
-            //                 'order_type'       => $order_type,
-            //                 'reference'		   => $reference,
-            //                 'disp_mode'	       => $request['disp_mode_text'],
-            //                 'order_date'	   => $formated_order_date,
-            //                 'length'		   => $length,
-            //                 'repeat_gap'	   => $repeat_gap,
-            //                 'machine'		   => $request['machine_text'],
-            //                 'cus_del_date' 	   => $formated_cus_del_date,
-            //                 'roll_width'	   => $roll_width,
-            //                 'width'	  		   => $width,
-            //                 'film_no'		   => $film_no, 
-            //                 'invoice_date'     => $formated_inv_date,
-            //                 'length_side'	   => $length_side,
-            //                 'excess'	       => $excess,
-            //                 'teeth_no'		   => $request['teeth_no_text'],
-            //                 'inv_no'	       => $inv_no,
-            //                 'no_sticker'	   => $no_sticker,
-            //                 'finish_type'	   => $request['finish_type_text'],
-            //                 'print_color'      => $print_color,
-            //                 'compiled_by'      => $compiled_by,
-            //                 'barcode_read'     => $barcode_read,
-            //                 'operator'         => $operator,
-            //                 'checker'          => $checker,
-            //                 'authorized_by'    => $authorized_by,
-            //                 'axicon_verifier'  => $axicon_verifier,
-            //                 'approved_by'	   => $approved_by,
-            //                 'packer'		   => $packer,
-            //                 'approval_date'    => $format_approval_date,
-            //                 'roll_issued_by'   => $roll_issued_by,
-            //                 'cutter'		   => $cutter,
-            //                 'cartons' 		   => $cartons,
-            //                 'final_json_obj'   => json_decode($final_json_obj, true),
-            //                 'single_ref'	   => $single_ref,
-            //                 'act_excess'	   => $act_excess,
-            //                 'sticker_mtr'	   => $sticker_mtr,
-            //                 'settings'		   => $settings,
-            //                 'total_mtrs' 	   => $total_mtrs,
-            //                 'tint_color'       => $tint_color,
-            //                 'customer_po'      => $customer_po_num
-            //         ]);
+            // set some text to print
+            $view = View::make('erp/Jobmanager/jobcard-nat-pdf-template')
+                    ->with([
+                            'buyer' 		   => $buyer,
+                            'customer' 		   => $customer,
+                            'company'		   => $company,
+                            'workorder_id'     => $workorder_id,
+                            'created_date'     => $formated_created_date,
+                            'article'	       => $article,
+                            'material'		   => $material,
+                            'order_type'       => $order_type,
+                            'reference'		   => $reference,
+                            'disp_mode'	       => $request['disp_mode_text'],
+                            'order_date'	   => $formated_order_date,
+                            'length'		   => $length,
+                            'repeat_gap'	   => $repeat_gap,
+                            'machine'		   => $request['machine_text'],
+                            'cus_del_date' 	   => $formated_cus_del_date,
+                            'roll_width'	   => $roll_width,
+                            'width'	  		   => $width,
+                            'film_no'		   => $film_no, 
+                            'length_side'	   => $length_side,
+                            'excess'	       => $excess,
+                            'teeth_no'		   => $request['teeth_no_text'],
+                            'finish_type'	   => $request['finish_type_text'],
+                            'print_color'      => $print_color,
+                            'final_json_obj'   => json_decode($final_json_obj, true),
+                            'aw_app_date'	   => $formated_aw_app_date,
+                            'act_del_date'	   => $formated_act_del_date,
+                            'print_length'	   => $print_length,
+                            'composition' 	   => $composition,
+                            'no_repeats'       => $no_repeats
+                    ]);
 
-            // //append content to header
-            // $pdf->SetXY(13.4,26.3);
-            // $pdf->writeHTML($view->render());
+            //append content to header
+            $pdf->SetXY(13.4,26.3);
+            $pdf->writeHTML($view->render());
 
-            // //Close and output PDF document
-            // ob_end_clean();
+            //Close and output PDF document
+            ob_end_clean();
             $file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
-            // $pdf->IncludeJS("print();");
-            // $pdf->Output( public_path($file_path), 'F');
+            $pdf->IncludeJS("print();");
+            $pdf->Output( public_path($file_path), 'F');
 
-            // DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
-            // ->update([
-            //     'file_path'   => $file_path,
-            //     'updated_at'  => $current_timestamp
-            // ]);
+            DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
+            ->update([
+                'file_path'   => $file_path,
+                'updated_at'  => $current_timestamp
+            ]);
             return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer],200);	
         }
         else

@@ -953,15 +953,15 @@ const storeNatJobcard = () => {
         statusCode: {
             200: function(data) {
 
-                // var resp = JSON.stringify(data.file_path); 
-                // window.open(
-                //     base_url+JSON.parse(resp),
-                //     '_blank' // <- This is what makes it open in a new window.
-                // ); 
-                // $('.snackbar_span').html("Jobcard Created Successfully");
-                // showSnackbar();
-                // $('.modal').modal('hide');
-                // location.reload();
+                var resp = JSON.stringify(data.file_path); 
+                window.open(
+                    base_url+JSON.parse(resp),
+                    '_blank' // <- This is what makes it open in a new window.
+                ); 
+                $('.snackbar_span').html("Jobcard Created Successfully");
+                showSnackbar();
+                $('.modal').modal('hide');
+                location.reload();
               
             },
             400: function() {
