@@ -470,7 +470,7 @@ const generateNatJobcard = () => {
                             single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
                         });
                         var template_name = key.split("_");
-                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="5" data-single-ref-name ="' + template_name[0] + '"></td></tr>\
+                        single_table_html += '<td colspan="4" class="highlight_row" rowspan="6" data-single-ref-name ="' + template_name[0] + '"></td></tr>\
                                                     <tr>\
                                                         <th width="80px">StyleNo/UVC</th>';
                         $.each(erpid.order_data, function (index, common_data) {
@@ -499,6 +499,14 @@ const generateNatJobcard = () => {
                         $.each(erpid.order_data, function (index, common_data) {
                             let color = (common_data.color === null || "") ? '-' : common_data.color;
                             single_table_html += '<td colspan="2" class="single-color-' + index + '">' + color + '</td>';
+                        });
+
+                        single_table_html += '</tr>\
+                        <tr>\
+                                                        <th width="80px">Composition</th>';
+                        $.each(erpid.order_data, function (index, common_data) {
+                            let composition = (common_data.composition === null || "") ? '-' : common_data.composition;
+                            single_table_html += '<td colspan="2" class="single-composition-' + index + '">' + composition + '</td>';
                         });
 
                         single_table_html += '</tr>\
@@ -622,7 +630,11 @@ const mtrsForNatStickers = () => {
     let total_qty             = 0;
     let total_excess          = 0;
     let mtrs                  = 0;
-   
+    var machine_text          = $( '#machine option:selected' ).text() === ''?null:$( '#machine option:selected' ).text();
+    var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    let no_of_repeats         = $('#no_repeats').val() === ''?0:$('#no_repeats').val();
+    let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+
     var qty = parseInt($('.total-qty').text()) || 0;
 
     if (!isNaN(total_qty) && total_qty.length !== 0) {
@@ -635,27 +647,42 @@ const mtrsForNatStickers = () => {
         total_excess += parseInt(excess);
     }
 
-    if($('#nat_template_type').val().toLowerCase() === 'stickers'){
-        var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
-        let no_of_repeats         = $('#no_repeats').val() === ''?0:$('#no_repeats').val();
-        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
-
-        if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
-        {
-            mtrs = parseFloat( ( ( ( parseInt(total_qty) + parseInt(total_excess) ) / parseInt(no_of_repeats) ) * ( ( parseFloat(length_side_dimension) + parseInt(repeat_gap) ) ) ) / 1000 ).toFixed(2);
-        }
-    } else {
-        let print_length = $('#print_length').val() === ''?0:$('#print_length').val();
-
-        if(!isNaN(print_length) && print_length != 0)
-        {
-            mtrs = parseFloat( ( parseInt(total_qty) + parseInt(total_excess) ) * ( parseFloat(print_length) / 1000 ) ).toFixed(2);
-        }
-
+    switch (machine_text.toLowerCase()) {
+        case 'rotary':
+                mtrs = rotaryExcessCalculation(total_qty, length_side_dimension, total_excess);
+            break;
+        case 'flexo':
+                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+            break;
+        case 'flat bed':
+                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+            break;
+    
+        default:
+                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+            break;
     }
 
     $('#sticker_mtr').text(Math.round(mtrs));
     totalMeters();
+}
+
+const flexoFlatbedExcessCalculation = (total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess) => {
+    var mtrs  = 0;
+    if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+    {
+        mtrs = parseFloat( ( ( ( parseInt(total_qty) + parseInt(total_excess) ) / parseInt(no_of_repeats) ) * ( ( parseFloat(length_side_dimension) + parseInt(repeat_gap) ) ) ) / 1000 ).toFixed(2);
+    }
+    return mtrs;
+}
+
+const rotaryExcessCalculation = (total_qty, length_side_dimension) => {
+    var mtrs  = 0;
+    if(!isNaN(length_side_dimension) && length_side_dimension != 0)
+    {
+        mtrs = parseFloat( ( parseInt(total_qty) * parseFloat(length_side_dimension) ) / 1000 ).toFixed(2);
+    }
+    return mtrs;
 }
 
 const validateNatJCForm = () => {
@@ -719,29 +746,10 @@ const storeNatJobcard = () => {
     var no_repeats      = $( '#no_repeats' ).val() === ''?null:$( '#no_repeats' ).val();
     var act_del_date    = $( '#act_del_date' ).val() === ''?null:$( '#act_del_date' ).val();
     var aw_app_date     = $( '#aw_app_date' ).val() === ''?null:$( '#aw_app_date' ).val();
-    var print_length    = $( '#print_length' ).val() === ''?null:$( '#print_length' ).val(); 
-    var composition     = $( '#composition' ).val() === ''?null:$( '#composition' ).val();
     var act_excess      = $('#act_excess').text() === ''?0:$('#act_excess').text();
     var sticker_mtr     = $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text();
     var settings        = $('#settings').text() === ''?0:$('#settings').text();
     var single_ref      = $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref');
-
-    // var form_obj = [{
-    //     "company_id" : $( '#jc_company_name' ).data('company-id'),
-    //     "workorder_id" : $( '#work_order' ).text() === ''?null:$('#work_order').text(),
-    //     "created_date" : $( '#today_date' ).text() === ''?null:$('#today_date').text(),
-    //     "article" : $( '#article' ).text() === ''?null:$('#article').text(),
-    //     "customer_id" : $( '#customer' ).data('customer-id'),
-    //     "order_type" : $( '#order_type' ).text() === ''?null:$('#order_type').text(),
-    //     "buyer_id" : $( '#buyer' ).data('buyer-id'),
-    //     "order_date" : $( '#order_date' ).text() === ''?null:$('#order_date').text(),
-    //     "single_ref" : $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref'),
-    //     "act_excess" : $('#act_excess').text() === ''?0:$('#act_excess').text(),
-    //     "sticker_mtr" : $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text(),
-    //     "settings" : $('#settings').text() === ''?0:$('#settings').text(),
-    // }];
-   
-    // var formData = $('#create_nat_jobcard').serialize() + '&' + $.param(form_obj[0]);
 
     var final_json_obj =   {
         "single": {},
@@ -758,6 +766,7 @@ const storeNatJobcard = () => {
             "buyer_po": [],
             "ocn": [],
             "color": [],
+            "compositions": [],
             "temp_id": [],
             "size": [],
             "total": [],
@@ -773,6 +782,8 @@ const storeNatJobcard = () => {
         var ocn_array      = [];
         var color_object     = {};
         var color_array      = [];
+        var composition_object  = {};
+        var composition_array   = [];
         var temp_id_object = {};
         var temp_id_array  = [];
         single_ref_name    = $(table).find('tbody tr:eq(0) td:last-child').data('single-ref-name').replace(/ |\//g, '_');
@@ -822,12 +833,20 @@ const storeNatJobcard = () => {
             color_array.push(color_object);
         });
         single_obj['color'] = color_array;
+
+        // create composition array
+        $(table).find('tbody tr:eq(5) td').each(function (i, item) {
+            composition_object = {};
+            composition_object = item.innerHTML;
+            composition_array.push(composition_object);
+        });
+        single_obj['compositions'] = composition_array;
         
         var size_object_final = {};
         var total_qty_object_final = {};
         var excess_object_final = {};
         // create size, qty and excess json object
-        $(table).find('tbody tr:gt(5):not(:last-child)').each(function (i, item) {
+        $(table).find('tbody tr:gt(6):not(:last-child)').each(function (i, item) {
             
             var size_text  = $(item).find('.single-size-row').text();
             var size_array      = [];
@@ -937,8 +956,6 @@ const storeNatJobcard = () => {
             no_repeats:no_repeats,
             act_del_date:act_del_date,
             aw_app_date:aw_app_date,
-            print_length:print_length,
-            composition:composition,
             single_ref:single_ref,
             disp_mode_text:disp_mode_text,
             machine_text:machine_text,

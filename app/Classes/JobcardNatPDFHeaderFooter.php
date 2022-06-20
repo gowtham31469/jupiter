@@ -146,7 +146,7 @@ class JobcardNatPDFHeaderFooter extends \TCPDF
                                         <span>'.$this->act_excess.'</span> 
                                     </td>
                                     <td>
-                                        <label>STKRS MTRS :</label>
+                                        <label>MTRS FOR STKRS :</label>
                                         <span>'.$this->sticker_mtr.'</span> 
                                     </td>
                                     <td>

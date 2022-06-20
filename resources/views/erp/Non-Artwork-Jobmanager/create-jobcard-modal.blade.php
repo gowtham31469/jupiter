@@ -112,7 +112,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
+									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required', 'onchange' => 'return mtrsForNatStickers()')) }}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -219,22 +219,6 @@
 									{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
 									{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
 									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="col-md-3">
-								<div class="form-group has-feedback">
-									{!! Form::label('print_length', 'PRINT LENGTH :', ['class' => 'form_label']) !!}
-									{!! Form::number('print_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()')) !!}
-										<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback">
-									{!! Form::label('composition', 'COMPOSITION :', ['class' => 'form_label']) !!}
-									{!! Form::number('composition',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPOSITION', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
-										<div class="help-block with-errors"></div>
 								</div>
 							</div>
 						</div>

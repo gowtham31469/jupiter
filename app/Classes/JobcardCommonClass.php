@@ -27,7 +27,7 @@ class JobcardCommonClass
 		->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
 		->join('company', 'erp_order_details.company_id', 'company.id')
 		->whereIn('erp_order_details.id', $order_detail_ids)
-		->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'non_artwork_orders.color', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id', 'erp_orders.po_no')
+		->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'non_artwork_orders.color', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id', 'erp_orders.po_no', 'non_artwork_orders.composition')
 		->get();
 
 		return array($order_details_collection, $order_detail_ids);
@@ -81,6 +81,8 @@ class JobcardCommonClass
 
 			$single_templates[$reference_name]['order_data'][$unique_id]['color'] = $order_details->color;
 
+			$single_templates[$reference_name]['order_data'][$unique_id]['composition'] = $order_details->composition;
+
 			$single_templates[$reference_name]['size'][$order_details->size][$unique_id] = $order_details->order_quantity;
 
 		}
@@ -95,10 +97,12 @@ class JobcardCommonClass
 		$length_array       = array();
 		$width_array        = array();
 		$type_array         = array();
+		$name_in_reports_array = array();
 
 		$template_details = DB::table($buyer->template_table)
-                ->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id', $buyer->template_table.'.type as template_type')
+                ->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id', $buyer->template_table.'.type as template_type', 'reports_template_level_name.name as name_in_reports')
                 ->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
+                ->join('reports_template_level_name', 'reports_template_level_name' . '.id', $buyer->template_table . '.name_in_reports')
                 ->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
                 ->whereIn($buyer->template_table . '.item_id', $temp_id_array)
                 ->orderBy($buyer->template_table . '.id')
@@ -116,9 +120,12 @@ class JobcardCommonClass
 			!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
 
 			!in_array($template_detail->template_type, $type_array, true) ? array_push($type_array, $template_detail->template_type) : $type_array;
+
+			!in_array($template_detail->name_in_reports, $name_in_reports_array, true) ? array_push($name_in_reports_array, $template_detail->name_in_reports) : $name_in_reports_array;
+
 		}
 
-		return array($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array);
+		return array($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array);
 	}
 
 	public function manipulateSizeData($single_templates, $erp_id_array)

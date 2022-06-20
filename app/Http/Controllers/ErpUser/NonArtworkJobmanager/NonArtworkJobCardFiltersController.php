@@ -439,7 +439,7 @@ class NonArtworkJobCardFiltersController extends Controller
             }
 
             /** Get templates metadata details */
-            list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
+            list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
 
             /** Different size breakup value handling */
             $final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
@@ -447,7 +447,8 @@ class NonArtworkJobCardFiltersController extends Controller
             $company_array = $jc_class_obj->companyData($order_details_collection[0]);
 
             // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-            $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+            // if multiple order IDs are selected for Job Card, use the first id for WO number
+            $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($name_in_reports_array, [$erp_orders_ids[0]]);
 
             $metadata  = $jc_metadata->erpJobcardMetaData();
 
@@ -464,7 +465,7 @@ class NonArtworkJobCardFiltersController extends Controller
             $template_data['refnum_array']     = $distinct_ref_array;
             $template_data['color']            = $print_color_array;
             $template_data['material']         = $material_array;
-            $template_data['article']          = $article_array;
+            $template_data['article']          = $name_in_reports_array;
             $template_data['length']           = $length_array;
             $template_data['width']            = $width_array;
             $template_data['template_type']    = $type_array;
@@ -528,7 +529,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $excess          = $request['excess'];
         $teeth_no        = $request['teeth_no'];
         $inv_no          = $request['inv_no'];
-        $no_sticker      = $request['no_sticker'];
         $finish_type     = $request['finish_type'];
         $print_color     = $request['print_color'];
         $compiled_by     = $request['compiled_by'];
@@ -547,23 +547,9 @@ class NonArtworkJobCardFiltersController extends Controller
         $no_repeats      = $request['no_repeats'];
         $act_del_date    = $request['act_del_date'] == ''?NULL:Carbon::parse($request['act_del_date'],'Asia/Kolkata')->toDateString();
         $aw_app_date     = $request['aw_app_date'] == ''?NULL:Carbon::parse($request['aw_app_date'],'Asia/Kolkata')->toDateString();
-        $print_length    = $request['print_length'];
-        $composition     = $request['composition'];
         $buyer           = strtolower($request['buyer']);
         $erp_orders_ids  = explode(',', $request['erp_orders_ids']);
         $uuid            = explode(',', $request['uuid_array']);
-
-        $final_obj = json_decode($final_json_obj, true);
-
-foreach($final_obj as $template_type => $template_type_data){
-    if(!empty($template_type_data)){
-        foreach ($template_type_data as $table => $table_data) {
-            foreach ($table_data['erp_id'] as $key => $value) {
-                dd($value);
-            }
-        }
-    }
-}
 
         $current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
         $customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
@@ -571,7 +557,7 @@ foreach($final_obj as $template_type => $template_type_data){
         $article_array = explode(', ', $article);
         
         // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-        $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+        $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]);
 
         // Get Erp status table id for 'Jobcard Created' status.
         $erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
@@ -620,8 +606,6 @@ foreach($final_obj as $template_type => $template_type_data){
             'aw_approve_date'        => $aw_app_date,
             'act_del_date'           => $act_del_date,
             'no_of_repeats'          => $no_repeats,
-            'print_length'           => $print_length,
-            'composition'            => $composition
             ]);
         
         /** Store jobcard settings and excess details**/
@@ -783,8 +767,6 @@ foreach($final_obj as $template_type => $template_type_data){
                             'final_json_obj'   => json_decode($final_json_obj, true),
                             'aw_app_date'	   => $formated_aw_app_date,
                             'act_del_date'	   => $formated_act_del_date,
-                            'print_length'	   => $print_length,
-                            'composition' 	   => $composition,
                             'no_repeats'       => $no_repeats
                     ]);
 
