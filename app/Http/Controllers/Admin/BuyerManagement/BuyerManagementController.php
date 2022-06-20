@@ -90,6 +90,7 @@ class BuyerManagementController extends Controller
           $table->string('ref_no');
           $table->string('tag_name');
           $table->integer('is_qrcode_required')->unsigned();
+          $table->boolean('is_non_artwork_template')->deafult(false);
           $table->timestamps();
 
           $table->foreign('company_id')->references('id')

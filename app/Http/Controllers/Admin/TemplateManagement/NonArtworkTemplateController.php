@@ -93,7 +93,8 @@ class NonArtworkTemplateController extends Controller
                             'item_name'    => $template_name,
                             'tag_name'    => $ref,
                             'ref_no' => $ref,
-                            'is_qrcode_required' => 0
+                            'is_qrcode_required' => 0,
+                            'is_non_artwork_template' => 1
                     ]);
     
         DB::table($buyer.'_template')->insertGetId([
