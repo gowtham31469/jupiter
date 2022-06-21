@@ -1981,6 +1981,7 @@ class OrderController extends Controller
        // $delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
@@ -2035,6 +2036,7 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
                         'height'           => $height,  
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
@@ -2077,6 +2079,7 @@ class OrderController extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
                                 'height'           => $height,
 				  				'customer_id'    => $factory{0}->id, 
                                 'svg_path'    => "", 
@@ -2116,6 +2119,7 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
                         'height'           => $height,
 					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -2157,6 +2161,7 @@ class OrderController extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
                                 'height'           => $height, 
 				   				'width'           => $width,
                         		'customer_id'    => $factory{0}->id,
@@ -2206,6 +2211,7 @@ class OrderController extends Controller
         //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $size = explode(',',$request->size);
+        $ocn_number = $request->ocn_number;
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
 		$size_break = explode(',',$request->size_break);
@@ -2267,6 +2273,7 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
                         'height'           => $height, 
                         'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
@@ -2311,6 +2318,7 @@ class OrderController extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
                                 'height'           => $height, 
 				  				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
@@ -2354,6 +2362,7 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
                         'height'           => $height,
 					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -2396,6 +2405,7 @@ class OrderController extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
                                 'height'           => $height,
 				   				'width'           => $width,
 				   				'customer_id'    => $factory{0}->id,
@@ -2440,6 +2450,7 @@ class OrderController extends Controller
 	public function setSolidStickersOs(Request $request)
 	{
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
 		$barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2491,6 +2502,7 @@ class OrderController extends Controller
                         'uvc'              => $uvc,
                         'height'           => $height,
 					    'width'           => $width,
+                        'ocn_number'       => $ocn_number,
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
@@ -2558,6 +2570,7 @@ class OrderController extends Controller
 	public function setSolidPolyBagStickersOs(Request $request)
 	{
         $tot_qty_poly = explode(',',$request->tot_qty_poly); 
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2575,6 +2588,7 @@ class OrderController extends Controller
                    ->update([
                         'height'           => $height,
                         'group_id'    => $age,
+                        'ocn_number'       => $ocn_number,
 		  ]);
 		$deleted = SolidPolyStickerOrdersQty::where('ospbs_id', '=', $poly_id)
 					->delete();
@@ -2634,6 +2648,7 @@ class OrderController extends Controller
 	public function setStandardCartonStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $ocn_number = $request->ocn_number;
 		$size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2654,6 +2669,7 @@ class OrderController extends Controller
                    ->update([
                         'height'           => $height,
 					    'width'           => $width,
+                        'ocn_number'       => $ocn_number,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -2716,6 +2732,7 @@ class OrderController extends Controller
 	public function setStandardPolyBagStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2733,6 +2750,7 @@ class OrderController extends Controller
                    ->update([
                         'final_order_qty_sets'    => $final_order_qty_sets, 
                         'group_id'    => $age,
+                        'ocn_number'       => $ocn_number,
                   ]);
 			
         $deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
