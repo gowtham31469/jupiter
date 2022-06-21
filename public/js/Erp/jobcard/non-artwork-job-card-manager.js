@@ -1,4 +1,3 @@
-
 /**
  * 
  * To reset filter state.
@@ -536,7 +535,7 @@ const generateNatJobcard = () => {
                                 col++;
                             });
 
-                            single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                            single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" readonly><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
 
                             total_quantity_final += parseInt(total_qty_sizewise);
                             row++;
@@ -625,6 +624,104 @@ const generateNatJobcard = () => {
     })
 }
 
+const getMachineExcessData = () => {
+    return $.ajax({
+        type: "get",
+        url: base_url + "/erp/non-artwork-job-manager/get-machine-excess-data",
+        data: {
+            machine: $('#machine option:selected').val()
+        },
+        dataType: "json",
+    })
+}
+
+const getMachineExcess = () => {
+    var order_qty = 0;
+    getMachineExcessData().done((response) => {
+        $('.single-list-table').find('.total-quantity-class strong').each( (index, row) => {
+            order_qty = row.innerHTML;
+
+            $.each(response,  (indexInArray, valueOfElement) => { 
+                 if (_.inRange(order_qty, valueOfElement.min_range, valueOfElement.max_range)) {
+                    switch (valueOfElement.excess_unit) {
+                        case 'percentage':
+                            let total_excess = parseFloat(order_qty * (valueOfElement.excess*1/100)).toFixed(2);
+                            excess_percentage = Math.round(total_excess);
+                            break;
+                        case 'pieces':
+                            excess_percentage = valueOfElement.excess;
+                            break;
+                    
+                        default:
+                            break;
+                    }
+
+                    $(row).parent().next().find(`div input`).val(excess_percentage);
+                    $('#excess').text(`${valueOfElement.excess} ${valueOfElement.excess_unit}` );
+
+                    /** refresh excess values fields in single ref table */
+                    $('#total_excess_row_table_'+index).trigger('input');
+                  }
+            });
+        });
+        totalQtyExcess();
+    });
+} 
+
+/**
+ * Dynamic Total Excess calculation based on calculated excess value.(for JGA company)
+ * @author <Praveen> [praveen@wizroots.com]
+ * 
+ */
+ const totalQtyExcess = () => {
+     var table = 0;
+     $('.single-list-table').each(function () {
+         var total_excess_final = 0;
+         $(this).find('.total-excess-row-table-'+table).each(function () {
+             var excess = $(this).val();
+             if (!isNaN(excess) && excess.length !== 0) {
+                 total_excess_final += parseInt(excess);
+             }
+         });
+         $('.total-excess-col-table-'+table).html('<strong>'+Math.round(total_excess_final)+'</strong>');
+ 
+         table++;
+     });
+     actualQtyExcess()
+ }
+ 
+ /**
+  * Dynamic Actual Excess calculation based on excess value and total quantity.(for JGA company)
+  * @author <Praveen> [praveen@wizroots.com]
+  * 
+  */
+ actualQtyExcess = () => {
+     $('.total-text').each(function(){
+         let total_qty             = 0;
+         let total_excess          = 0;
+         let act_excess            = 0;
+ 
+         $('.total-qty').each(function(){
+             if (!isNaN(total_qty) && total_qty.length !== 0) {
+                 total_qty += parseInt($(this).text());
+             }
+         });
+         $('.total-excess').each(function(){
+            console.log($(this).text());
+             if (!isNaN(total_excess) && total_excess.length !== 0) {
+                 total_excess += parseInt($(this).text());
+             }
+         });
+         if (!isNaN(total_qty) && !isNaN(total_excess)) {
+             act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+         }
+
+         console.log(total_qty);
+         console.log(total_excess);
+         console.log(act_excess);
+         $('#act_excess').text(Math.round(act_excess))
+     });
+ }
 
 const mtrsForNatStickers = () => {
     let total_qty             = 0;
@@ -649,38 +746,27 @@ const mtrsForNatStickers = () => {
 
     switch (machine_text.toLowerCase()) {
         case 'rotary':
-                mtrs = rotaryExcessCalculation(total_qty, length_side_dimension, total_excess);
+                mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, 0);
             break;
         case 'flexo':
-                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+                mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         case 'flat bed':
-                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+                mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
-    
         default:
-                mtrs = flexoFlatbedExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+                mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
     }
 
     $('#sticker_mtr').text(Math.round(mtrs));
-    totalMeters();
 }
 
-const flexoFlatbedExcessCalculation = (total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess) => {
+const machineExcessCalculation = (total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess) => {
     var mtrs  = 0;
-    if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats != 0 && repeat_gap != 0)
+    if(!isNaN(total_qty) && !isNaN(length_side_dimension) && !isNaN(no_of_repeats) && !isNaN(repeat_gap) && no_of_repeats > 0 && repeat_gap >= 0)
     {
         mtrs = parseFloat( ( ( ( parseInt(total_qty) + parseInt(total_excess) ) / parseInt(no_of_repeats) ) * ( ( parseFloat(length_side_dimension) + parseInt(repeat_gap) ) ) ) / 1000 ).toFixed(2);
-    }
-    return mtrs;
-}
-
-const rotaryExcessCalculation = (total_qty, length_side_dimension) => {
-    var mtrs  = 0;
-    if(!isNaN(length_side_dimension) && length_side_dimension != 0)
-    {
-        mtrs = parseFloat( ( parseInt(total_qty) * parseFloat(length_side_dimension) ) / 1000 ).toFixed(2);
     }
     return mtrs;
 }

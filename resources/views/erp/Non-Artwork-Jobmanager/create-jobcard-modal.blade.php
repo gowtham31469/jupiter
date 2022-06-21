@@ -112,7 +112,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required', 'onchange' => 'return mtrsForNatStickers()')) }}
+									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required', 'onchange' => 'return getMachineExcess()')) }}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -174,8 +174,8 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-									{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::label('no_repeats', 'NO OF REPEATS :', ['class' => 'form_label']) !!}
+									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -202,13 +202,6 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('no_repeats', 'NO OF REPEATS :', ['class' => 'form_label']) !!}
-									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
-										<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback">
 									{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 									{{ Form::select('finish_type',(['' => '-- Select Finish Type --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 									<div class="help-block with-errors"></div>
@@ -219,6 +212,12 @@
 									{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
 									{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
 									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('excess', 'EXCESS :', ['class' => 'form_label']) !!}
+									<span id="excess"></span>
 								</div>
 							</div>
 						</div>

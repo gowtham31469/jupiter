@@ -739,7 +739,7 @@ class NonArtworkJobCardFiltersController extends Controller
             $pdf->AddPage('P', 'A4');
 
             // set some text to print
-            $view = View::make('erp/Jobmanager/jobcard-nat-pdf-template')
+            $view = View::make('erp/Non-Artwork-Jobmanager/jobcard-nat-pdf-template')
                     ->with([
                             'buyer' 		   => $buyer,
                             'customer' 		   => $customer,
@@ -792,5 +792,9 @@ class NonArtworkJobCardFiltersController extends Controller
             return response()->json(['error'=> true,'message' =>'Error'],400);
         }
 
+    }
+
+    public function getMachineExcessDetailsById(Request $request){
+        return DB::table('machine_excess_details')->where('machine_id', $request['machine'])->get();
     }
 }
