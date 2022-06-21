@@ -791,6 +791,7 @@
     <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
 
     <script>
         localStorage.removeItem("page_navigation");
