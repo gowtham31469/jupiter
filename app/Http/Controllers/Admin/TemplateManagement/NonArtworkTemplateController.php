@@ -249,4 +249,29 @@ class NonArtworkTemplateController extends Controller
        return  $treeviewData;
 
     } 
+
+    /**
+     * Method to rename the template
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function renameTemplate(Request $request) {
+        try {
+			$buyer = $request['buyer'];
+            $template_id = $request['template_id'];
+            $template_name = $request['new_name'];
+            
+            DB::table($buyer.'_item_master')
+                        ->where('id',$template_id)
+                        ->update(['item_name' => $template_name]);
+			
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    }
 }
