@@ -209,5 +209,44 @@ class NonArtworkTemplateController extends Controller
         }
         return $result;
          
+    }
+
+    /**
+     * Method to list the template hierarchy
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function templateHierarchy(Request $request) {
+	    $buyer = $request->buyer;
+        $treeviewData = array();
+        $treeviewData= DB::table($buyer."_item_master")
+                    ->select('id','parent_id','item_name as text')
+                    ->where('is_non_artwork_template', 1)
+                    ->orderBy('id', 'asc')
+                    ->get()->toArray();
+        
+         
+        if($treeviewData){
+                $childs = array();
+                foreach($treeviewData as &$item) 
+                {
+                $childs[$item->parent_id][] = &$item;
+                unset($item);
+                }
+                foreach($treeviewData as &$item) 
+                {
+                    if (isset($childs[$item->id]))
+                    {
+                        $item->children = $childs[$item->id];
+                        unset($item);
+                    }
+                }
+                $tree = $childs[0];
+                $treefinalData=json_encode($tree);
+                return $treefinalData;
+       }
+
+       return  $treeviewData;
+
     } 
 }

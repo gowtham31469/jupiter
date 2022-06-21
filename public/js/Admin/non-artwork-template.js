@@ -78,7 +78,7 @@ function template_list() {
     var buyer = localStorage.getItem("buyer");
 
     $.ajax({
-        url: base_url + "/admin/template-management/template-hierarchy",
+        url: base_url + "/admin/non-artwork-template/template-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
@@ -90,7 +90,12 @@ function template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            $('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:auto; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8 col-sm-12 col-xs-12" style="margin-top: 70px;"><div class="card text-white preview-tag" style="height:calc(100vh - 110px);overflow-y: auto;"> <div class="card-body text-center justify-content-center"> <div class="loader"></div><div class="viewDiv" style="width:100%;"> </div><div class="descriptionDiv"> </div></div></div></div></div>')
+            $('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:auto; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8 col-sm-12 col-xs-12" style="margin-top: 70px;"><div class="card text-white preview-tag" style="height:calc(100vh - 110px);overflow-y: auto;"> <div class="card-body text-center justify-content-center"> <div class="loader"></div><div class="viewDiv" style="width:100%;"> </div><div class="descriptionDiv"> </div></div></div></div></div>');
+
+            if(data.length < 1) {
+                // alert("Sorry there is no NAT for this buyer!!");
+                $('#newBuyerSelectionModal').modal('show');
+            }
 
             $('#tree1').jstree({
                 'core': {
