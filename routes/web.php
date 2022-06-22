@@ -669,11 +669,16 @@ Route::post('admin/tesco/settings/na-size-chart', 'Admin\Settings\Tesco\TescoSet
 Route::post('admin/tesco/add-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@addnaSizeChart');
 Route::get('admin/tesco/get-tesco-na-size-chart-details', 'Admin\Settings\Tesco\TescoSettings@getnaSizeChartById');
 Route::put('admin/tesco/update-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@updatenaSizeChartById');
+Route::put('admin/tesco/make-na-size-chart-enabled', 'Admin\Settings\Tesco\TescoSettings@makeNaSizeChartEnabled');
+Route::put('admin/tesco/make-na-size-chart-disabled', 'Admin\Settings\Tesco\TescoSettings@makeNaSizeChartDisabled');
 
 Route::post('admin/tesco/settings/na-uom', 'Admin\Settings\Tesco\TescoSettings@naUOM');
 Route::post('admin/tesco/add-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@addnaUOM');
 Route::get('admin/tesco/get-tesco-na-uom-details', 'Admin\Settings\Tesco\TescoSettings@getnaUOMById');
 Route::put('admin/tesco/update-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@updatenaUOMById');
+
+Route::put('admin/tesco/make-na-uom-enabled', 'Admin\Settings\Tesco\TescoSettings@makeNaUomEnabled');
+Route::put('admin/tesco/make-na-uom-disabled', 'Admin\Settings\Tesco\TescoSettings@makeNaUomDisabled');
 
 
 Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@rawMaterials');
