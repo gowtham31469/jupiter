@@ -13,7 +13,7 @@ use App\Classes\JobcardMetadata;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
-use App\Classes\TescoMaterialQuery;
+use App\Classes\NATMaterialQuery;
 use App\Http\Controllers\Controller;
 use App\Classes\JobcardNatPDFHeaderFooter;
 use App\ErpOrderDetails as ErpOrderDetails;
@@ -46,7 +46,7 @@ class NonArtworkJobCardFiltersController extends Controller
 		 
 		// Get order status table id for 'Order Approved' status.
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'Order Approved')->value('id');
-        $this->tesco_material_obj = new TescoMaterialQuery();
+        $this->nat_material_obj = new NATMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 	}
 
@@ -656,7 +656,7 @@ class NonArtworkJobCardFiltersController extends Controller
                                         ->join($main_table, $main_table.'.id', $data->order_qnty_table_name.'.'.$qnty_id)
                                         ->first();
                    
-                    $template_level = $this->tesco_material_obj->tescoMaterialDetails($order_details->template_id, $main_table);
+                    $template_level = $this->nat_material_obj->nonArtworkMaterialDetails($order_details->template_id, $buyer);
                     
                     $material_name  = $template_level->material;
                     $material_sub   = $template_level->material_sub;
