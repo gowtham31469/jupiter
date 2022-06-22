@@ -444,7 +444,7 @@ function updateArtworkOrc(obj) {
 				}
 				else if(at == "SolidCartonStickers")
 				{
-					SolidCartonStickersOs(data)
+					SolidCartonStickersOs(data,"customer")
 					
 					if (data.solid_carton_erp_details != null) {
 							if (data.solid_carton_erp_details.status_name !== 'Hold For JC Queue' && data.solid_carton_erp_details.status_name !== 'Moved To ERP') {
@@ -453,34 +453,38 @@ function updateArtworkOrc(obj) {
                                 $('#modal_height').prop("disabled", true);
                                 $('#width').prop("disabled", true);
                                 $('#save_solid_carton_button').remove()
+                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
 
                     if (data.orchestra_solid_carton_sticker_orders[0].edit_permission === 0) {
                         $('#save_solid_carton_button').remove();
+                        $('.edit_label_order_btn').remove();
                     }
 				}
 				else if(at == "SolidPolyBagStickers")
 				{
-					SolidPolyBagStickersOs(data)
+					SolidPolyBagStickersOs(data,"customer")
 					
 					if (data.solid_poly_erp_details != null) {
 							if (data.solid_poly_erp_details.status_name !== 'Hold For JC Queue' && data.solid_poly_erp_details.status_name !== 'Moved To ERP') {
                                 $('.tot_qty_table_poly').prop("disabled", true);
                                 $('#age').prop("disabled", true);
                                 $('#save_solid_poly_bag_button').remove()
+                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
 
                     if (data.orchestra_solid_poly_bag_sticker_orders[0].edit_permission === 0) {
                         $('#save_solid_poly_bag_button').remove();
+                        $('.edit_label_order_btn').remove();
                     }
 				}
 				else if(at == "StandardCartonStickers")
 				{
-					StandardCartonStickersOs(data)
+					StandardCartonStickersOs(data,"customer")
 					
 					if (data.standard_carton_erp_details != null) {
 							if (data.standard_carton_erp_details.status_name !== 'Hold For JC Queue' && data.standard_carton_erp_details.status_name !== 'Moved To ERP') {
@@ -492,29 +496,33 @@ function updateArtworkOrc(obj) {
                                 $('#total_polybag').prop("disabled", true);
 
                                 $('#save_standard_carton_button').remove()
+                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
 
                     if (data.orchestra_standard_carton_sticker_orders[0].edit_permission === 0) {
                         $('#save_standard_carton_button').remove();
+                        $('.edit_label_order_btn').remove();
                     }
 				}
 				else if(at == "StandardPolyBagStickers")
 				{
-					StandardPolyBagStickersOs(data)
+					StandardPolyBagStickersOs(data,"customer")
 					
 					if (data.standard_poly_erp_details != null) {
 							if (data.standard_poly_erp_details.status_name !== 'Hold For JC Queue' && data.standard_poly_erp_details.status_name !== 'Moved To ERP') {
                                 $('.standard_poly_bag_qty').prop("disabled", true);
                                 $('#age').prop("disabled", true);
                                 $('#save_standard_poly_bag_button').remove()
+                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
 
                     if (data.orchestra_standard_poly_bag_sticker_orders[0].edit_permission === 0) {
                         $('#save_standard_poly_bag_button').remove();
+                        $('.edit_label_order_btn').remove();
                     }
 				}
 				$('.left-panelos').addClass('active');
@@ -537,492 +545,6 @@ function updateArtworkOrc(obj) {
     
 
 }
-
-function SolidCartonStickersOs(data)
-{
-	var tr = "";
-    $qu = 0;
-    if (data.orchestra_solid_carton_sticker_orders != "") {
-        if (data.orchestra_solid_carton_sticker_orders[0].height == null) {
-			$height = "";
-		} else {
-			$height = data.orchestra_solid_carton_sticker_orders[0].height;
-		}
-		
-		if (data.orchestra_solid_carton_sticker_orders[0].width == null) {
-			$width = "";
-		} else {
-			$width = data.orchestra_solid_carton_sticker_orders[0].width;
-		}
-		
-		if($height)
-		{
-			var num = 600 * $width * $height
-			var val = num / (1000 * 1000 * 1000)
-			$parcelVolume = val;
-		}
-		else
-		{
-			$parcelVolume = "";
-		}
-		
-        $template_id = data.orchestra_solid_carton_sticker_orders[0].template_id;
-        $exist_id = data.orchestra_solid_carton_sticker_orders[0].id;
-        $solid_carton_count=data.orchestra_solid_carton_sticker_orders[0].final_qty;
-        
-        var str=data.orchestra_solid_carton_sticker_orders[0].status;
-        $status=str.replace(/ /g, "");
-        $status_text=str;
-        $save_button_class="";
-		$age = data.orchestra_solid_carton_sticker_orders[0].group_id;
-    } else {
-     	$height = "";
-     	$width = 395;
-		$parcelVolume = "";
-        $template_id = "";
-        $exist_id = "";
-        $solid_carton_count="";
-        $status="";
-        $status_text="";
-        $save_button_class="";
-		$age =0;
-    }
-		var tpolytot = 0;
-        var tcarttot = 0;
-        var ttots = 0;
-        $.each(data.orchestra_parcel_details, function (index, value) {
-
-            if (data.orchestra_solid_carton_sticker_orders != "") {
-                $carton_count = data.orchestra_solid_carton_sticker_orders_qty[$qu].quantity;
-            } else {
-                $carton_count = "";
-            }
-
-            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.carton_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $carton_count + '" class="form-control tot_qty_table_carton input-sm"><div class="help-block with-errors"></div></div></td></tr>';
-			if($carton_count != "")
-			{
-				tcarttot += parseInt($carton_count);
-			}
-			ttots += parseInt(value.Quantity)
-            $qu++;
-        });
-    
-    var option = "";
-    $.each(data.orchestra_age_group, function (index, value) {
-        option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
-    });
-	
-    $('.edit-orch-order-panel').append('<form id="solid_cartonform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label">Height</label><div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div><div class="form-group"><label>Width</label><div class="input-group"><input type="text" onkeypress="return checkNumbersOnly(event)" value="' + $width + '" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Carton Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_carton_table"><thead><tr><th>UVC_TCO</th><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Parcel Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablecarton_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_carton_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_cartonclose">Close</button></div> </div>  </form>');
-	$('#age').val($age);
-	
-	barcode_cartonOs('svg2', data)
-	
-	//$('.left').removeClass('disabled')
-    $('#solid_cartonform .tot_qty_table_carton').keyup(function () {
-        var tot_qty_table_carton_final = 0;
-        $('#solid_cartonform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_carton').val() != undefined) {
-                tot_qty_table_carton_final += parseInt($(this).find('.tot_qty_table_carton').val());
-            }
-        })
-        $('#solid_cartonform .tot_qty_tablecarton_fin').text(tot_qty_table_carton_final);
-    });
-	
-    $(".backdrop, #solid_cartonclose").click(function () {
-        $("#solid_cartonform .left-panelos").removeClass('active');
-        $("#solid_cartonform .right-panelos").removeClass('active');
-        $("#solid_cartonform .backdrop").removeClass('active');
-        $('#solid_cartonform .scalable').removeClass('active');
-    })
-
-	
-    $("#modal_height").keyup(function () {
-        if(this.value)
-		{
-			var num = 600 * $('#width').val() * this.value
-			var val = num / (1000 * 1000 * 1000)
-			$('#parcelVolume').val(val)
-		}
-		else
-		{
-			var val = ""
-		}
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("volume").innerHTML = val;
-        svgDoc1.getElementById("height").innerHTML = this.value;
-    });
-	$("#width").keyup(function () {
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("width").innerHTML = this.value;
-    });
-    $('#solid_cartonform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
-
-        } else {
-            e.preventDefault();
-            setsolid_cartonStatusOs()
-        }
-    })
-}
-
-function SolidPolyBagStickersOs(data)
-{
-	var tr = "";
-    $qu = 0;
-    if (data.orchestra_solid_poly_bag_sticker_orders != "") {
-        if (data.orchestra_solid_poly_bag_sticker_orders[0].height == null) {
-			$height = "";
-		} else {
-			$height = data.orchestra_solid_poly_bag_sticker_orders[0].height;
-		}
-		if($height)
-		{
-			var num = 600 * 395 * $height
-			var val = num / (1000 * 1000 * 1000)
-			$parcelVolume = val;
-		}
-		else
-		{
-			$parcelVolume = "";
-		}
-        $template_id = data.orchestra_solid_poly_bag_sticker_orders[0].template_id;
-        $exist_id = data.orchestra_solid_poly_bag_sticker_orders[0].id;
-        $solid_poly_bag_count=data.orchestra_solid_poly_bag_sticker_orders[0].final_qty;
-        
-        var str=data.orchestra_solid_poly_bag_sticker_orders[0].status;
-        $status=str.replace(/ /g, "");
-        $status_text=str;
-        $save_button_class="";
-		$age = data.orchestra_solid_poly_bag_sticker_orders[0].group_id;
-    } else {
-     	$height = "";
-		$parcelVolume = "";
-        $template_id = "";
-        $exist_id = "";
-        $solid_poly_bag_count="";
-        $status="";
-        $status_text="";
-        $save_button_class="";
-		$age =0;
-    }
-		var tpolytot = 0;
-        var tcarttot = 0;
-        var ttots = 0;
-        $.each(data.orchestra_parcel_details, function (index, value) {
-
-            if (data.orchestra_solid_poly_bag_sticker_orders != "") {
-                $poly_count = data.orchestra_solid_poly_bag_sticker_orders_qty[$qu].quantity;
-            } else {
-                $poly_count = "";
-            }
-
-            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="qty">' + value.Quantity + '</td><td class="text-center"><div class="form-group has-feedback has-success"><input  min="'+data.polybag_moq+'" style="margin-bottom: 0px;" onkeypress="return checkorcMOQ(this)"  required type="number" value="' + $poly_count + '" class="form-control tot_qty_table_poly input-sm"><div class="help-block with-errors"></div></div></td></tr>';
-			if($poly_count != "")
-			{
-				tcarttot += parseInt($poly_count);
-			}
-			ttots += parseInt(value.Quantity)
-            $qu++;
-        });
-    
-    var option = "";
-    $.each(data.orchestra_age_group, function (index, value) {
-        option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
-    });
-	
-    $('.edit-orch-order-panel').append('<form id="solid_poly_bagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label hidden">Height</label><div class="input-group hidden"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.polybag_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Solid Poly Bag Stickers</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="solid_poly_bag_table"><thead><tr><th>UVC_TCO</th><th>Size</th><th>Barcode</th><th>Item Qty</th><th>Polybag Sticker Qty</th></tr></thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots + '</td><td class="text-center tot_qty_tablepoly_fin">' + tcarttot + '</td></tr></tbody></table></div> <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_solid_poly_bag_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="solid_poly_bagclose">Close</button></div> </div>  </form>');
-	$('#age').val($age);
-	
-	barcode_polybagOs('svg2', data)
-	
-	//$('.left').removeClass('disabled')
-    $('#solid_poly_bagform .tot_qty_table_poly').keyup(function () {
-        var tot_qty_table_poly_final = 0;
-        $('#solid_poly_bagform tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-                tot_qty_table_poly_final += parseInt($(this).find('.tot_qty_table_poly').val());
-            }
-        })
-        $('#solid_poly_bagform .tot_qty_tablepoly_fin').text(tot_qty_table_poly_final);
-    });
-	
-    $(".backdrop, #solid_poly_bagclose").click(function () {
-        $("#solid_poly_bagform .left-panelos").removeClass('active');
-        $("#solid_poly_bagform .right-panelos").removeClass('active');
-        $("#solid_poly_bagform .backdrop").removeClass('active');
-        $('#solid_poly_bagform .scalable').removeClass('active');
-    })
-	
-	$('#age').change(function () {
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-
-        if($('#age option:selected').val() != 6)
-		{
-			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
-			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
-			svgDoc1.getElementById("pmm").innerHTML = "";
-		}
-		else
-		{
-			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
-			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
-			svgDoc1.getElementById("pmm").innerHTML = "PMM";
-        }
-        
-        
-    });
-
-
-    $('#solid_poly_bagform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
-
-        } else {
-            e.preventDefault();
-            setsolid_poly_bagStatusOs()
-        }
-    })
-}
-function StandardCartonStickersOs(data)
-{
-	var tr = "";
-    $qu = 0;
-    if (data.orchestra_standard_carton_sticker_orders != "") {
-        if (data.orchestra_standard_carton_sticker_orders[0].height == null) {
-			$height = "";
-		} else {
-			$height = data.orchestra_standard_carton_sticker_orders[0].height;
-		}
-		
-		if (data.orchestra_standard_carton_sticker_orders[0].height == null) {
-			$width = "";
-		} else {
-			$width = data.orchestra_standard_carton_sticker_orders[0].width;
-		}
-		if($height)
-		{
-			var num = 600 * $width * $height
-			var val = num / (1000 * 1000 * 1000)
-			$parcelVolume = val;
-		}
-		else
-		{
-			$parcelVolume = "";
-		}
-        $template_id = data.orchestra_standard_carton_sticker_orders[0].template_id;
-        $exist_id = data.orchestra_standard_carton_sticker_orders[0].id;
-        $standard_carton_count=data.orchestra_standard_carton_sticker_orders_qty[0].quantity;
-		
-		if(data.orchestra_standard_carton_sticker_orders[0].total_polybag != "" && data.orchestra_standard_carton_sticker_orders[0].total_polybag != null)
-		{
-			$total_polybag = data.orchestra_standard_carton_sticker_orders[0].total_polybag;
-		}
-		else
-		{
-			$total_polybag = "";
-		}
-		
-		if(data.orchestra_standard_carton_sticker_orders[0].no_of_carton != "" && data.orchestra_standard_carton_sticker_orders[0].no_of_carton != null)
-		{
-			$no_of_carton = data.orchestra_standard_carton_sticker_orders[0].no_of_carton;
-		}
-		else
-		{
-			$no_of_carton = "";
-		}
-		
-        
-        var str=data.orchestra_standard_carton_sticker_orders[0].status;
-        $status=str.replace(/ /g, "");
-        $status_text=str;
-        $save_button_class="";
-		$age = data.orchestra_standard_carton_sticker_orders[0].group_id;
-    } else {
-     	$height = "";
-     	$width = 395;
-		$parcelVolume = "";
-        $template_id = "";
-        $exist_id = "";
-        $total_polybag = "";
-        $standard_carton_count="";
-        $status="";
-		$no_of_carton = "";
-        $status_text="";
-        $save_button_class="";
-		$age =0;
-    }
-	var tr = "";
-	var ttots = 0;
-	var thead = '<thead><tr><th>UVC_TCO	</th><th>Size</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th><th>Ratio</th></tr></thead>';
-        $.each(data.orchestra_parcel_details, function (index, value) {
-            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + data.orchestra_parcel_details[0].ParcelBarCode + '</td><td class="qty">' + value.Sum + '</td></tr>';
-			ttots += parseInt(value.Sum)
-     });
-	
-    
-    var option = "";
-    $.each(data.orchestra_age_group, function (index, value) {
-        option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
-    });
-	
-    $('.edit-orch-order-panel').append('<form id="standard_cartonform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label">Height</label><div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div><div class="form-group"><label>Width</label><div class="input-group"><input type="text" onkeypress="return checkNumbersOnly(event)" value="' + $width + '" class="form-control input-sm" id="width" placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6" style="width: 130px;"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left:-135px;">/</span> <div class="col-md-6" style="width: 130px;"><input data-toggle="modal" data-target=".needed_modal" value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div><div class="form-group"><label>Total Polybags per carton: </label><div class="form-group has-feedback has-success"><input id="total_polybag" value="' + $total_polybag + '" onkeypress="return checkNumbersOnly(event)" type="text" placeholder="Total Polybags per carton" class="form-control input-sm"><div class="help-block with-errors"></div></div></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Standard Carton Stickers</h4> <hr><div class="table-responsive hidden"><table class="table table-striped table-hover table-condensed qty-table-modal" id="standard_carton_table">'+thead+'<tbody>' + tr + '</tbody></table></div><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm standard_carton_qty" value="' + $standard_carton_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_standard_carton_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="standard_cartonclose">Close</button>  </div></div> </div>  </form>');
-	$('#age').val($age);
-	
-	barcode_std_cartonOs('svg2', data)
-	
-    $(".backdrop, #standard_cartonclose").click(function () {
-        $("#standard_cartonform .left-panelos").removeClass('active');
-        $("#standard_cartonform .right-panelos").removeClass('active');
-        $("#standard_cartonform .backdrop").removeClass('active');
-        $('#standard_cartonform .scalable').removeClass('active');
-    })
-
-	
-    $("#modal_height").keyup(function () {
-        if(this.value)
-		{
-			var num = 600 * $('#width').val() * this.value
-			var val = num / (1000 * 1000 * 1000)
-			$('#parcelVolume').val(val)
-		}
-		else
-		{
-			var val = ""
-		}
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("volume").innerHTML = val;
-        svgDoc1.getElementById("height").innerHTML = this.value;
-    });
-	$("#total_polybag").keyup(function () {
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("total_polybags_per_carton").innerHTML = this.value;
-    });
-	$("#width").keyup(function () {
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("width").innerHTML = this.value;
-    });
-	$("#needed_modal").keyup(function () {
-        var svgDoc1;
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        svgDoc1.getElementById("no_of_cartons").innerHTML = this.value;
-    });
-    $('#standard_cartonform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
-
-        } else {
-            e.preventDefault();
-            setstandard_cartonStatusOs()
-        }
-    })
-}
-
-function StandardPolyBagStickersOs(data)
-{
-	var tr = "";
-    $qu = 0;
-	
-	
-    if (data.orchestra_standard_poly_bag_sticker_orders != "") {
-        if (data.orchestra_standard_poly_bag_sticker_orders[0].height == null) {
-			$height = "";
-		} else {
-			$height = data.orchestra_standard_poly_bag_sticker_orders[0].height;
-		}
-		if($height)
-		{
-			var num = 600 * 395 * $height
-			var val = num / (1000 * 1000 * 1000)
-			$parcelVolume = val;
-		}
-		else
-		{
-			$parcelVolume = "";
-		}
-        $template_id = data.orchestra_standard_poly_bag_sticker_orders[0].template_id;
-        $exist_id = data.orchestra_standard_poly_bag_sticker_orders[0].id;
-        $standard_poly_bag_count=data.orchestra_standard_poly_bag_sticker_orders_qty[0].quantity;
-        
-        var str=data.orchestra_standard_poly_bag_sticker_orders[0].status;
-        $status=str.replace(/ /g, "");
-        $status_text=str;
-        $save_button_class="";
-		$age = data.orchestra_standard_poly_bag_sticker_orders[0].group_id;
-    } else {
-     	$height = "";
-		$parcelVolume = "";
-        $template_id = "";
-        $exist_id = "";
-        $standard_poly_bag_count="";
-        $status="";
-        $status_text="";
-        $save_button_class="";
-		$age =0;
-    }
-		var tpolytot = 0;
-        var tcarttot = 0;
-       var ttots = 0;
-	var thead = '<thead><tr><th>UVC_TCO	</th><th>Size</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th><th>Ratio</th></tr></thead>';
-        $.each(data.orchestra_parcel_details, function (index, value) {
-            tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + data.orchestra_parcel_details[0].ParcelBarCode + '</td><td class="qty">' + value.Sum + '</td></tr>';
-			ttots += parseInt(value.Sum)
-     });
-    
-    var option = "";
-    $.each(data.orchestra_age_group, function (index, value) {
-        option += "<option data-color=" + value.color + " value=" + value.id + " style='background-color:" + value.color + "'>" + value.age_group_name + "</option>";
-    });
-	
-	$('.edit-orch-order-panel').append('<form id="standard_poly_bagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4"> <h4>Options</h4> <hr><div class="scroll"> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Age Group</label><select data-live-search="true" class="form-control input-sm age_group" id="age" required>' + option + '</select><div class="help-block with-errors"></div></div> <input type="hidden" value="'+$parcelVolume+'" id="parcelVolume"><label for="edit_merchandiser_buyer" class="form_label hidden">Height</label><div class="input-group hidden"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-target=".bs-example-modal-sm" data-backdrop="static" data-keyboard="false" placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"><object id="svg2" style="width: 527px;height: 347px;border:2px solid" class="center-block svg2" data="' + data.polybag_template + '" type="image/svg+xml"></object><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div></div></div></div></div></div><div class="right-panelos col-md-4"><div class="table-responsive hidden"> <table class="table table-condensed table-bordered table-hover" id="standardpolybagform">' + thead + '<tbody id="standardpolybagformtbody">' + tr + '</tbody></table></div><div class="div-max"> <h4>Quantity Info for Standard Poly Bag Stickers</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm standard_poly_bag_qty" value="' + $standard_poly_bag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_standard_poly_bag_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="standard_poly_bagclose">Close</button>  </div> </div> </div>  </form>');
-	$('#age').val($age);
-	
-	barcode_std_polybagOs('svg2', data)
-	
-    $(".backdrop, #standard_poly_bagclose").click(function () {
-        $("#standard_poly_bagform .left-panelos").removeClass('active');
-        $("#standard_poly_bagform .right-panelos").removeClass('active');
-        $("#standard_poly_bagform .backdrop").removeClass('active');
-        $('#standard_poly_bagform .scalable').removeClass('active');
-    })
-
-	$('#age').change(function () {
-        var mySVG1 = document.getElementById("svg2");
-        svgDoc1 = mySVG1.contentDocument;
-        if($('#age option:selected').val() != 6)
-		{
-			svgDoc1.getElementById("round").style.fill = $('#age option:selected').data('color');
-			svgDoc1.getElementById("pmm").setAttribute('visibility','hidden');
-			svgDoc1.getElementById("pmm").innerHTML = "";
-		}
-		else
-		{
-			svgDoc1.getElementById("round").style.fill = "#FFFFFF"
-			svgDoc1.getElementById("pmm").removeAttribute('visibility','hidden');
-			svgDoc1.getElementById("pmm").innerHTML = "PMM";
-        }
-        
-    });
-
-    $('#standard_poly_bagform').validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
-
-        } else {
-            e.preventDefault();
-            setstandard_poly_bagStatusOs()
-        }
-    })
-}
-
 /**
  * This Function is used to create barcode for carton stickers.
  *  
@@ -4131,239 +3653,6 @@ function setSizeLabelOs(id) {
 		$('#po-file-upload-button').css('display','block')
 }
 
-/**
- * This Function is used to Update Solid Carton Stickers.
- * 
- * @return void
- */
-function setsolid_cartonStatusOs(){
-	var tot_qty_table_poly = [];
-		var tot_qty_carton = [];
-		var size = [];
-		var barcode = [];
-		var uvc_tco = [];
-
-		
-		$('#solid_cartonform tbody tr').each(function () {
-			if ($(this).find('.tot_qty_table_carton').val() != undefined) {
-				tot_qty_carton.push($(this).find('.tot_qty_table_carton').val());
-			}
-			size.push($(this).find('.size').text());
-			barcode.push($(this).find('.barcode').text());
-			uvc_tco.push($(this).find('.uvc_tco').text());
-
-		})
-		tot_qty_carton_fin = tot_qty_carton.join(',');
-		size_fin = size.join(',');
-		barcode_fin = barcode.join(',');
-		uvc_tco_fin = uvc_tco.join(',');
-
-		var buyer = localStorage.getItem("buyer");
-		
-		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/set_solid_stickers_os",
-			type: "Post",
-			data: {
-				tot_qty_carton: tot_qty_carton_fin,
-				size: size_fin,
-				barcode: barcode_fin,
-				uvc_tco: uvc_tco_fin,
-				uvc: $('#uvc_id').val(),
-				height: $('#modal_height').val(),
-				width: $('#width').val(),
-				age: $('#age').val(),
-				parcel_id: $('#parcel_id').val(),
-				season_code: $('#season_code').val(),
-				carton_id: $('#exist_id').val(),
-				_token: csrf_token
-			},
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$("#solid_cartonform .left-panelos").removeClass('active');
-				$("#solid_cartonform .right-panelos").removeClass('active');
-				$("#solid_cartonform .backdrop").removeClass('active');
-				$('#solid_cartonform .scalable').removeClass('active');
-			},
-			error: function (data) {
-
-			}
-		})
-}
-/**
- * This Function is used to Update Solid Poly Bag Stickers.
- * 
- * @return void
- */
-function setsolid_poly_bagStatusOs(){
-	var tot_qty_table_poly = [];
-		var tot_qty_poly = [];
-		var size = [];
-		var barcode = [];
-		var uvc_tco = [];
-
-		
-		$('#solid_poly_bagform tbody tr').each(function () {
-			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-				tot_qty_poly.push($(this).find('.tot_qty_table_poly').val());
-			}
-			size.push($(this).find('.size').text());
-			barcode.push($(this).find('.barcode').text());
-			uvc_tco.push($(this).find('.uvc_tco').text());
-
-		})
-		tot_qty_poly_fin = tot_qty_poly.join(',');
-		size_fin = size.join(',');
-		barcode_fin = barcode.join(',');
-		uvc_tco_fin = uvc_tco.join(',');
-		var buyer = localStorage.getItem("buyer");
-		
-		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/set_solid_poly_bag_stickers_os",
-			type: "Post",
-			data: {
-				tot_qty_poly: tot_qty_poly_fin,
-				size: size_fin,
-				barcode: barcode_fin,
-				uvc_tco: uvc_tco_fin,
-				uvc: $('#uvc_id').val(),
-				height: $('#modal_height').val(),
-				age: $('#age').val(),
-				parcel_id: $('#parcel_id').val(),
-				season_code: $('#season_code').val(),
-				poly_id: $('#exist_id').val(),
-				_token: csrf_token
-			},
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$("#solid_poly_bagform .left-panelos").removeClass('active');
-				$("#solid_poly_bagform .right-panelos").removeClass('active');
-				$("#solid_poly_bagform .backdrop").removeClass('active');
-				$('#solid_poly_bagform .scalable').removeClass('active');
-			},
-			error: function (data) {
-
-			}
-		})
-}
-
-
-/**
- * This Function is used to Update Standard Carton Stickers.
- * 
- * @return void
- */
-function setstandard_cartonStatusOs(){
-	
-		var size = [];
-		var barcode = [];
-		var uvc_tco = [];
-
-		$('#standard_cartonform tbody tr').each(function () {
-			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-				tot_qty_poly.push($(this).find('.tot_qty_table_poly').val());
-			}
-			size.push($(this).find('.size').text());
-			barcode.push($(this).find('.barcode').text());
-			uvc_tco.push($(this).find('.uvc_tco').text());
-
-		})
-		size_fin = size.join(',');
-		barcode_fin = barcode.join(',');
-		uvc_tco_fin = uvc_tco.join(',');
-	
-		var buyer = localStorage.getItem("buyer");
-		
-		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/set_standard_carton_stickers_os",
-			type: "Post",
-			data: {
-				uvc: $('#uvc_id').val(),
-				size: size_fin,
-				barcode: barcode_fin,
-				uvc_tco: uvc_tco_fin,
-				carton_id: $('#exist_id').val(),
-				height: $('#modal_height').val(),
-				width: $('#width').val(),
-				total_polybag: $('#total_polybag').val(),
-				final_order_qty_sets: $('.standard_carton_qty').val(),
-				parcel_id: $('#parcel_id').val(),
-				season_code: $('#season_code').val(),
-				age: $('#age').val(),
-				no_of_carton: $('#needed_modal').val(),
-				_token: csrf_token
-			},
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$("#standard_cartonform .left-panelos").removeClass('active');
-				$("#standard_cartonform .right-panelos").removeClass('active');
-				$("#standard_cartonform .backdrop").removeClass('active');
-				$('#standard_cartonform .scalable').removeClass('active');
-			},
-			error: function (data) {
-
-			}
-		})
-}
-/**
- * This Function is used to Update Standard Poly Bag Stickers.
- * 
- * @return void
- */
-function setstandard_poly_bagStatusOs(){
-	var size = [];
-		var barcode = [];
-		var uvc_tco = [];
-
-		$('#standard_poly_bagform tbody tr').each(function () {
-			if ($(this).find('.tot_qty_table_poly').val() != undefined) {
-				tot_qty_poly.push($(this).find('.tot_qty_table_poly').val());
-			}
-			size.push($(this).find('.size').text());
-			barcode.push($(this).find('.barcode').text());
-			uvc_tco.push($(this).find('.uvc_tco').text());
-
-		})
-		size_fin = size.join(',');
-		barcode_fin = barcode.join(',');
-		uvc_tco_fin = uvc_tco.join(',');
-	var buyer = localStorage.getItem("buyer");
-		
-		$.ajax({
-			url: base_url + "/customer/" + buyer + "/order-management/set_standard_poly_bag_stickers_os",
-			type: "Post",
-			data: {
-				uvc: $('#uvc_id').val(),
-				size: size_fin,
-				barcode: barcode_fin,
-				uvc_tco: uvc_tco_fin,
-				height: $('#modal_height').val(),
-				final_order_qty_sets: $('.standard_poly_bag_qty').val(),
-				parcel_id: $('#parcel_id').val(),
-				season_code: $('#season_code').val(),
-				age: $('#age').val(),
-				poly_id: $('#exist_id').val(),
-				_token: csrf_token
-			},
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			success: function (data) {
-				$("#standard_poly_bagform .left-panelos").removeClass('active');
-				$("#standard_poly_bagform .right-panelos").removeClass('active');
-				$("#standard_poly_bagform .backdrop").removeClass('active');
-				$('#standard_poly_bagform .scalable').removeClass('active');
-			},
-			error: function (data) {
-
-			}
-		})
-}
 
 /**
  * This Function is used to set Heat Transfer in local storage.
