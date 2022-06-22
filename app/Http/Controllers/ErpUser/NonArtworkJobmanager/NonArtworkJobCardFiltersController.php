@@ -429,6 +429,10 @@ class NonArtworkJobCardFiltersController extends Controller
             $color_code         = array();
             $tint_color         = array();
 
+            if(sizeof($uuid_array) > 3) {
+                return response()->json(['error' => true, 'message' => 'Please select only a maximum of 3 orders.'], 400);
+            }
+
             /** Get erp order details table ids from erp orders table id */
             list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
 

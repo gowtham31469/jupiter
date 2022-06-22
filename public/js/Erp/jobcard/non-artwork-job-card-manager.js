@@ -2,7 +2,7 @@
  * 
  * To reset filter state.
  */
-const filterDefaultLevel = () => {
+ const filterDefaultLevel = () => {
     $(`#nat_customer, 
         #nat_item_name,
         #nat_reference, 
@@ -535,7 +535,7 @@ const generateNatJobcard = () => {
                                 col++;
                             });
 
-                            single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" readonly><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+                            single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess-td"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalQtyExcess()"><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
 
                             total_quantity_final += parseInt(total_qty_sizewise);
                             row++;
@@ -611,7 +611,7 @@ const generateNatJobcard = () => {
                 showSnackbar();
            },
             400: function() {
-                $('.snackbar_span').html("Something went wrong");
+                $('.snackbar_span').html(data.responseJSON.message);
                 showSnackbar();
             }
        },
@@ -637,9 +637,12 @@ const getMachineExcessData = () => {
 
 const getMachineExcess = () => {
     var order_qty = 0;
+    $('#excess').text('');
+
     getMachineExcessData().done((response) => {
         $('.single-list-table').find('.total-quantity-class strong').each( (index, row) => {
             order_qty = row.innerHTML;
+            $(row).parent().next().find(`div input`).val('');
 
             $.each(response,  (indexInArray, valueOfElement) => { 
                  if (_.inRange(order_qty, valueOfElement.min_range, valueOfElement.max_range)) {
@@ -657,7 +660,7 @@ const getMachineExcess = () => {
                     }
 
                     $(row).parent().next().find(`div input`).val(excess_percentage);
-                    $('#excess').text(`${valueOfElement.excess} ${valueOfElement.excess_unit}` );
+                    $('#excess').text(`${valueOfElement.excess}` );
 
                     /** refresh excess values fields in single ref table */
                     $('#total_excess_row_table_'+index).trigger('input');
@@ -695,56 +698,30 @@ const getMachineExcess = () => {
   * @author <Praveen> [praveen@wizroots.com]
   * 
   */
- actualQtyExcess = () => {
-     $('.total-text').each(function(){
-         let total_qty             = 0;
-         let total_excess          = 0;
-         let act_excess            = 0;
- 
-         $('.total-qty').each(function(){
-             if (!isNaN(total_qty) && total_qty.length !== 0) {
-                 total_qty += parseInt($(this).text());
-             }
-         });
-         $('.total-excess').each(function(){
-            console.log($(this).text());
-             if (!isNaN(total_excess) && total_excess.length !== 0) {
-                 total_excess += parseInt($(this).text());
-             }
-         });
-         if (!isNaN(total_qty) && !isNaN(total_excess)) {
-             act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
-         }
+ const actualQtyExcess = () => {
+    var total_qty      = parseInt($('.total-qty').text()) || 0;
+    var total_excess   = parseInt($('.total-excess').text()) || 0;
+    var act_excess     = 0;
 
-         console.log(total_qty);
-         console.log(total_excess);
-         console.log(act_excess);
-         $('#act_excess').text(Math.round(act_excess))
-     });
+    if (!isNaN(total_qty) && !isNaN(total_excess)) {
+        act_excess = parseFloat((total_excess/total_qty)*100).toFixed(2);
+    }
+
+    $('#act_excess').text(Math.round(act_excess))
+
+     mtrsForNatStickers();
  }
 
 const mtrsForNatStickers = () => {
-    let total_qty             = 0;
-    let total_excess          = 0;
+    let total_qty             = parseInt($('.total-qty').text()) || 0;
+    let total_excess          = parseInt($('.total-excess').text()) || 0;
     let mtrs                  = 0;
     var machine_text          = $( '#machine option:selected' ).text() === ''?null:$( '#machine option:selected' ).text();
     var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
     let no_of_repeats         = $('#no_repeats').val() === ''?0:$('#no_repeats').val();
     let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
 
-    var qty = parseInt($('.total-qty').text()) || 0;
-
-    if (!isNaN(total_qty) && total_qty.length !== 0) {
-        total_qty += parseInt(qty);
-    }
-
-    var excess = parseInt($('.total-excess').text()) || 0;
-    
-    if (!isNaN(total_excess) && total_excess.length !== 0) {
-        total_excess += parseInt(excess);
-    }
-
-    switch (machine_text.toLowerCase()) {
+    switch (machine_text.toLowerCase().trim()) {
         case 'rotary':
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, 0);
             break;
@@ -755,7 +732,7 @@ const mtrsForNatStickers = () => {
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         default:
-                mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
+                mtrs = machineExcessCalculation(0, 0, 1, 0, 0);
             break;
     }
 
@@ -810,7 +787,7 @@ const storeNatJobcard = () => {
     var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
     var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
     var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
-    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var excess          = $( '#excess' ).text() === ''?0:$( '#excess' ).text();
     var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
     var teeth_no_text   = $( '#teeth_no option:selected' ).text() === ''?null:$( '#teeth_no option:selected' ).text();
     var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
@@ -949,10 +926,12 @@ const storeNatJobcard = () => {
             });
             total_qty_object_final[size_text] = total_qty_object;
 
-            $(item).find('.total-excess div input').each(function (index2, excess) {
+            $(item).find('.total-excess-td div input').each(function (index2, excess) {
+                
                 excess_object = {};
-                excess_object = excess.value;
+                excess_object = excess.value != ''?excess.value:0;
             });
+           
             excess_object_final[size_text] = excess_object;
 
         });

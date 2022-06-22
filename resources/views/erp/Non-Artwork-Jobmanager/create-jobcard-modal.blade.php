@@ -216,7 +216,7 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('excess', 'EXCESS :', ['class' => 'form_label']) !!}
+									{!! Form::label('excess', 'EXCESS %:', ['class' => 'form_label']) !!}
 									<span id="excess"></span>
 								</div>
 							</div>
