@@ -621,7 +621,7 @@ function storeJobcard()
     var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
     var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
     var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
-    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var excess          = $( '#excess' ).val() === ''?0:$( '#excess' ).val();
     var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
     var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
     var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
@@ -747,7 +747,7 @@ function storeJobcard()
 
             $(item).find('.total-excess div input').each(function (index2, excess) {
                 excess_object = {};
-                excess_object = excess.value;
+                excess_object = excess.value != ''?excess.value:0;
             });
             excess_object_final[size_text] = excess_object;
 
