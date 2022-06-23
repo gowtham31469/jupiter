@@ -531,7 +531,7 @@ transform: scale(1);
 
 			
 			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
+				url: base_url + "/erp/set-erp-company-session",
 				type: "Post",
 				dataType: "json",
 				data: {

@@ -615,14 +615,7 @@
            /* call makeMaterialDisabled function from tesco-settings.js*/
            makeMaterialDisabled(id,csrf_token)
        });
-
        
-
-
-
-
-
-
        /** Add Size Chart form validation **/
      $('#add_tesco_size_chart_form').validator().on('submit', function (e) {
         if (e.isDefaultPrevented())
@@ -657,8 +650,6 @@
            getnaSizeChartById(id);
        });
 
-
-
        /** get edit Tesco material details **/
        $(document).on('click','.edit-na-uom',function(e){
            var id = $(this).closest('tr').attr('id');
@@ -692,9 +683,37 @@
          }
        })
 
+       /** To Enable Sizechart on click **/
+       $(document).on('click', '#make_na_size_chart_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeSizechartEnabled function from tesco-settings.js*/
+           makenaSizechartEnabled(id,csrf_token)
+       });
 
+       /** To disable Sizechart on click **/
+       $(document).on('click', '#make_na_size_chart_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeSizechartDisabled function from tesco-settings.js*/
+           makenaSizechartDisabled(id,csrf_token)
+       });
 
+       /** To Enable Uom on click **/
+       $(document).on('click', '#make_na_uom_enabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeUomEnabled function from tesco-settings.js*/
+           makenaUomEnabled(id,csrf_token)
+       });
 
+       /** To disable Uom on click **/
+       $(document).on('click', '#make_na_uom_disabled', function(e) {
+           var id = $(this).closest('tr').attr('id');
+           
+           /* call makeUomDisabled function from tesco-settings.js*/
+           makenaUomDisabled(id,csrf_token)
+       });
 
       /** [ Make sidebar active ] */
        $('.meta-data-list li a').click(function(){

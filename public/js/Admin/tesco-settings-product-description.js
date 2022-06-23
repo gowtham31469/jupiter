@@ -83,11 +83,7 @@ function tescoProductDescriptions() {
             $('#tesco-components-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -148,11 +144,7 @@ function addProductDescription() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -201,11 +193,7 @@ function getTescoProductDescriptionById(id) {
               $('#editProductDescriptionModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -265,11 +253,7 @@ function updateProductDescription() {
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -310,11 +294,7 @@ function enableProductDescription(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
           },
           complete: function() {
             tescoProductDescriptions();
@@ -356,11 +336,7 @@ function disableProductDescription(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 tescoProductDescriptions();

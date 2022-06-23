@@ -1568,11 +1568,7 @@ function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -1633,11 +1629,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -3106,11 +3098,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 				svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3380,11 +3368,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 				svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3656,11 +3640,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                     svgarr.push(str)
                             },
                             error: function (errorXHR, errorStatus, errorThrown) {
-                                this.tryCount++;
-                                if (this.tryCount <= this.retryLimit) {
-                                    $.ajax(this);
-                                    return;
-                                }
+                                console.log(errorThrown);
                             },
                             complete: function () {
     
@@ -4158,11 +4138,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                                 qr_code_check_arr.push(val.po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
                             },
                             error: function (errorXHR, errorStatus, errorThrown) {
-                                this.tryCount++;
-                                if (this.tryCount <= this.retryLimit) {
-                                    $.ajax(this);
-                                    return;
-                                }
+                                console.log(errorThrown);
                             },
                             complete: function () {
 
@@ -4436,11 +4412,7 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
         complete: function() {
 			$(".loader").hide();
@@ -4595,11 +4567,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                             }
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
-                            this.tryCount++;
-                            if (this.tryCount <= this.retryLimit) {
-                                $.ajax(this);
-                                return;
-                            }
+                            console.log(errorThrown);
                         },
                         complete: function () {
                             /** [To make top menu active] */
@@ -4695,11 +4663,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                             }
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
-                            this.tryCount++;
-                            if (this.tryCount <= this.retryLimit) {
-                                $.ajax(this);
-                                return;
-                            }
+                            console.log(errorThrown);
                         },
                         complete: function () {
                             /** [To make top menu active] */
@@ -4827,11 +4791,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                     }
                 },
                 error: function (errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                    console.log(errorThrown);
                 },
                 complete: function () {
                     /** [To make top menu active] */
@@ -5176,11 +5136,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                 }
             },
             error: function (errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function () {
                 /** [To make top menu active] */
@@ -5569,11 +5525,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 							}
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
-                            this.tryCount++;
-                            if (this.tryCount <= this.retryLimit) {
-                                $.ajax(this);
-                                return;
-                            }
+                            console.log(errorThrown);
                         },
                         complete: function () {
                             /** [To make top menu active] */
@@ -5712,11 +5664,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
                             }
                         },
                         error: function (errorXHR, errorStatus, errorThrown) {
-                            this.tryCount++;
-                            if (this.tryCount <= this.retryLimit) {
-                                $.ajax(this);
-                                return;
-                            }
+                            console.log(errorThrown);
                         },
                         complete: function () {
                             /** [To make top menu active] */
@@ -5907,11 +5855,7 @@ function genarateArtwork(data, id, name, zone, style_no, buyer_no, created_at) {
                                     svgarr.push(svg)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
-                                    this.tryCount++;
-                                    if (this.tryCount <= this.retryLimit) {
-                                        $.ajax(this);
-                                        return;
-                                    }
+                                    console.log(errorThrown);
                                 },
                                 complete: function () {
 
@@ -6190,11 +6134,7 @@ function genarateArtwork(data, id, name, zone, style_no, buyer_no, created_at) {
                                     svgarr.push(str)
                                 },
                                 error: function (errorXHR, errorStatus, errorThrown) {
-                                    this.tryCount++;
-                                    if (this.tryCount <= this.retryLimit) {
-                                        $.ajax(this);
-                                        return;
-                                    }
+                                    console.log(errorThrown);
                                 },
                                 complete: function () {
 
@@ -6318,11 +6258,7 @@ function PopupTesco(data, name, zone, style_no, buyer_no, id, created_at) {
 
         },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
     })
 }
@@ -6377,11 +6313,7 @@ function PopupTescoSmall(data, name, zone, style_no, buyer_no, id, created_at) {
 
         },
         error: function (errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
     })
 }
@@ -7037,11 +6969,7 @@ function approveTescoArtwork() {
 
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
-				this.tryCount++;
-				if (this.tryCount <= this.retryLimit) {
-					$.ajax(this);
-					return;
-				}
+				console.log(errorThrown);
 			},
 			complete: function () {
 				$(".loader").hide();
@@ -7114,11 +7042,7 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }

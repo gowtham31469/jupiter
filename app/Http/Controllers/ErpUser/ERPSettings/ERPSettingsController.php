@@ -24,7 +24,7 @@ class ERPSettingsController extends Controller
      */
     public function __construct()
     {
-		$role = "ADMIN";
+	 	    $role = "ADMIN";
         $this->middleware('erpuser');
         $this->middleware('role_permission:'.$role)->except('index');
    

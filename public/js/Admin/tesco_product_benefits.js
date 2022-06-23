@@ -92,11 +92,7 @@ function tescoProductBenefits() {
         $('#tesco-components-list-table_length select').addClass('form-control input-sm');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -158,11 +154,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -212,11 +204,7 @@ function tescoProductBenefits() {
         $('#editProductBenefitsModal').modal('show');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -278,11 +266,7 @@ function tescoProductBenefits() {
         },
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -323,11 +307,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         tescoProductBenefits();
@@ -369,11 +349,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         tescoProductBenefits();
@@ -439,11 +415,7 @@ function uploadProductBenefit(template_id, excel_file) {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();

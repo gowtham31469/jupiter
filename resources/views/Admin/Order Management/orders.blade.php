@@ -419,6 +419,9 @@
 
         </div>
     </div>
+
+<div id="splitdiv" style="opacity: 0;position:absolute;">
+</div>
     <div class="modal fade" id="age_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1209,6 +1212,7 @@
 <!-- Tesco swing tickets js -->
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
 
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>

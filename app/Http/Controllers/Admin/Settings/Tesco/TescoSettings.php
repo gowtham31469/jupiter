@@ -1145,6 +1145,97 @@ class TescoSettings extends Controller
             }
             return $result;
       }
+
+
+       /**
+       * Make Size Chart enabled
+       * @param Size Chart id
+       * @author <Gowtham>
+       * @return boolean true or false
+       */
+      public function makeNaSizeChartEnabled(Request $request)
+      {
+        try {
+              NonArtworkSizeChart::find($request['id'])
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make Size Chart disabled
+       * @author <Gowtham>
+       * @return boolean true or false
+       */
+      public function makeNaSizeChartDisabled(Request $request)
+      {
+        try {
+             
+                  $inserted = NonArtworkSizeChart::find($request['id'])
+                                ->update([
+                                  'is_enabled'  => false
+                              ]);
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+
+        /**
+       * Make UOM enabled
+       * @param UOM id
+       * @author <Gowtham>
+       * @return boolean true or false
+       */
+      public function makeNaUomEnabled(Request $request)
+      {
+        try {
+               NonArtworkUom::find($request['id'])
+               ->update([
+                 'is_enabled'  => true
+              ]);
+
+              $result = response()->json(['error'=> false,'message' =>'Success'],200);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+        }
+      /**
+       * Make UOM disabled
+       * @author <Gowtham>
+       * @return boolean true or false
+       */
+      public function makeNaUomDisabled(Request $request)
+      {
+        try {
+             
+                  $inserted = NonArtworkUom::find($request['id'])
+                                ->update([
+                                  'is_enabled'  => false
+                              ]);
+                  $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+            } 
+            catch (\Exception $e)
+            {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+            }
+            return $result;
+      }
+
+      
       /**
         * Tesco error report emails list show using ajax.
         * @author <Praveen>
