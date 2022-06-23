@@ -990,6 +990,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('non-artwork-job-manager/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@createNatJcOrderDetails');
 	Route::get('non-artwork-job-manager/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
 
+	Route::get('non-artwork-job-manager/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+
 });
 
 //Orchestra Order Management - customer

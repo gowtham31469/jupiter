@@ -3171,11 +3171,11 @@ class JobManagerController extends Controller
 	public function getJobcards()
 	{
 		try {
-				$customer_id = Auth::guard('erpuser')->id();
+				$erpuser_id = Auth::guard('erpuser')->id();
 				
 				$companies   = 	DB::table('erpuser_company_mapping')
 										->join('company','erpuser_company_mapping.company','company.id')
-										->where('erpuser_company_mapping.erp_user',$customer_id)
+										->where('erpuser_company_mapping.erp_user',$erpuser_id)
 										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
 										->get();
 				if($companies)
@@ -3222,9 +3222,9 @@ class JobManagerController extends Controller
 		try {
 				$id = $request['id'];
 
-				$customer_id = Auth::guard('erpuser')->id();
+				$erpuser_id = Auth::guard('erpuser')->id();
 
-				if(session()->get('company') == "" || session()->get('company') == null || $customer_id == null)
+				if(session()->get('company') == "" || session()->get('company') == null || $erpuser_id == null)
 				{
 					return view('erp.home');
 				}
