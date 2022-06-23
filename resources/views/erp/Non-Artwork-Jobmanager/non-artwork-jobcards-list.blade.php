@@ -49,16 +49,16 @@
 				</div>
 				<div class="filter-window-jobcard-list">
 					{!! Form::open(['id' => 'jobcard_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
-					<h5 style="margin-left:15px;"><strong>Jobcard List Filter</strong></h5>
+					<h5 style="margin-left:15px;"><strong>Non Artwork Jobcard Filter</strong></h5>
 					<div class="col-xs-6 col-sm-4">
 						<div class="form-group has-feedback">
-							{{ Form::select('buyer_filter', (['' => 'SELECT A BUYER']+ $buyers), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'buyer_filter', 'required', 'onchange' => 'getCustomersList(this)')) }}
+							{{ Form::select('buyer_filter', (['' => 'SELECT A BUYER']+ $buyers), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'buyer_filter', 'required', 'onchange' => 'getNATCustomersList(this)')) }}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
 					<div class="col-xs-6 col-sm-4">
 						<div class="form-group has-feedback">
-							{{ Form::select('customer_filter', (['' => 'SELECT A CUSTOMER']), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'customer_filter', 'required', 'onchange' => 'getJobcardIDList(this)')) }}
+							{{ Form::select('customer_filter', (['' => 'SELECT A CUSTOMER']), '', array('class' => 'form-control input-sm selectpicker', 'data-width' => '100%','data-live-search'=>'true', 'id' => 'customer_filter', 'required', 'onchange' => 'getNatJobcardIDList(this)')) }}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -470,7 +470,8 @@
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
-@endsection @section('jqueryIncludes')
+@endsection 
+@section('jqueryIncludes')
 <script>
 	$(document).ready(function() {
 		// disable mousewheel on a input number field when in focus

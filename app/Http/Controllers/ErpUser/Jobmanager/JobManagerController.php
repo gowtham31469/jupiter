@@ -3206,7 +3206,7 @@ class JobManagerController extends Controller
 								->all();
 				
 				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies]);	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3278,7 +3278,7 @@ class JobManagerController extends Controller
 					], 200);
 				}
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3571,30 +3571,25 @@ class JobManagerController extends Controller
 	public function getCustomersListByBuyerId(Request $request)
 	{
 		try {
-				$buyer_id = $request['selected_buyer_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
+				if(session()->get('company') == "" || session()->get('company') == null){
 					return view('erp.home');
 				}
 
-				if($buyer_id == null)
-				{
+				if($request['selected_buyer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				else
-				{
-					$customers_list  = 	DB::table('customers')
+				
+				$customers_list  = 	DB::table('customers')
 										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
-										->where('jobcard_main_table.company_id', '=', session()->get('company'))
-										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->where('jobcard_main_table.company_id', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', $request['selected_buyer_id'])
 										->pluck('customers.company_name','customers.id')
 										->all();
-					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
-				}
+
+				return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
 					
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3611,28 +3606,24 @@ class JobManagerController extends Controller
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
 
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
+				if(session()->get('company') == "" || session()->get('company') == null){
 					return view('erp.home');
 				}
 
-				if($buyer_id == null || $customer_id == null)
-				{
+				if($buyer_id == null || $customer_id == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				else
-				{
-					$jobcard_id_list  = DB::table('jobcard_main_table')
-											->where('jobcard_main_table.company_id', '=', session()->get('company'))
-											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-											->where('jobcard_main_table.customer_id', '=', $customer_id)
-											->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
-											->all();
-					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
-				}
+
+				$jobcard_id_list  = DB::table('jobcard_main_table')
+										->where('jobcard_main_table.company_id', '=', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->where('jobcard_main_table.customer_id', '=', $customer_id)
+										->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
+										->all();
+				return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 					
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3650,31 +3641,27 @@ class JobManagerController extends Controller
 				$customer_id = $request['selected_customer_id'];
 				$jobcard_id  = $request['selected_jobcard_id'];
 
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
+				if(session()->get('company') == "" || session()->get('company') == null){
 					return view('erp.home');
 				}
 
-				if($buyer_id == null || $customer_id == null || $jobcard_id == null)
-				{
+				if($buyer_id == null || $customer_id == null || $jobcard_id == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				else
-				{
-					$jobcards_list  = DB::table('jobcard_main_table')
-											->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-											->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-											->where('jobcard_main_table.company_id', '=', session()->get('company'))
-											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-											->where('jobcard_main_table.customer_id', '=', $customer_id)
-											->where('jobcard_main_table.id', '=', $jobcard_id)
-											->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
-											->first();
-					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
-				}
+
+				$jobcards_list  = DB::table('jobcard_main_table')
+										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+										->where('jobcard_main_table.company_id', '=', session()->get('company'))
+										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
+										->where('jobcard_main_table.customer_id', '=', $customer_id)
+										->where('jobcard_main_table.id', '=', $jobcard_id)
+										->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
+										->first();
+				return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
 					
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}

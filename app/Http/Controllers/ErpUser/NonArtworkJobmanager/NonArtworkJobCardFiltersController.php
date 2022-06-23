@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\JobcardNatPDFHeaderFooter;
 use App\ErpOrderDetails as ErpOrderDetails;
 use Illuminate\Database\Eloquent\Collection;
+use App\Classes\ErpUserMappedTemplates;
 
 class NonArtworkJobCardFiltersController extends Controller
 {
@@ -25,6 +26,7 @@ class NonArtworkJobCardFiltersController extends Controller
 	private $order_ap_status_id;
     private $jobcard_id_gen_obj;
 	private $current_date;
+    private $erp_user_mapped_template_obj;
 
 	/**
 	 * Create a new controller instance.
@@ -48,37 +50,8 @@ class NonArtworkJobCardFiltersController extends Controller
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'Order Approved')->value('id');
         $this->nat_material_obj = new NATMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
+		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
 	}
-
-    public function getPermittedTemplates()
-    {
-        $erp_user_data  = DB::table('erpusers_template_mapping')
-        ->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
-        ->where('erpusers_template_mapping.company',session()->get('company'))
-        ->where(function ($query) {
-            if (Auth::guard('erpuser')->id() != 1) {
-                $query->where('erpusers_template_mapping.erp_user', Auth::guard('erpuser')->id());
-            }
-        })
-        ->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table', 'buyers.item_master_table')
-        ->distinct('erpusers_template_mapping.templates')
-        ->get();
-
-        $new_orders = array();
-        $i = 1;
-        foreach ($erp_user_data as $value) {
-            $arr_template =  DB::table($value->template_table)
-                ->where('hierarchy_id', $value->templates)
-                ->distinct('hierarchy_id')
-                ->pluck('item_id');
-            if ($arr_template) {
-                $new_orders[$value->buyer_id . "-" . $i] = $arr_template;
-            }
-            $i++;
-        }
-
-        return $new_orders;
-    }
 
     /**
 	 * Show the Non Artwork Jobcard  Filter View.
@@ -96,9 +69,7 @@ class NonArtworkJobCardFiltersController extends Controller
             return view('erp.home');
         }
                       
-        $session_company_id = session()->get('company');
-
-        if($session_company_id == "" && $session_company_id == null){
+        if(session()->get('company') == "" && session()->get('company') == null){
             $company_data   = DB::table('company')
                             ->where('company.id', $companies[0]->company)
                             ->select('company.id', 'company.name')
@@ -108,7 +79,7 @@ class NonArtworkJobCardFiltersController extends Controller
             session()->put('company_name', strtolower( str_replace(' ','',$company_data->name)) );
         }
         
-        $new_orders = $this->getPermittedTemplates();
+        $new_orders = $this->erp_user_mapped_template_obj->getPermittedTemplates();
         $buyers_array = array();
         $erp_po_ids = array();
 
@@ -172,7 +143,7 @@ class NonArtworkJobCardFiltersController extends Controller
 
     public function getItemNamesByCustomerId(Request $request)
     {
-        $templates = $this->getPermittedTemplates();
+        $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
         $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
 
         foreach ($templates as $key => $values) {
@@ -214,7 +185,7 @@ class NonArtworkJobCardFiltersController extends Controller
     public function getReferencesByItemName(Request $request)
     {
         $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
-        $templates = $this->getPermittedTemplates();
+        $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
             $split_key = explode('-', $key);
@@ -256,7 +227,7 @@ class NonArtworkJobCardFiltersController extends Controller
     public function getStyleOcnBuyerPoByItemName(Request $request)
     {
         $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
-        $templates = $this->getPermittedTemplates();
+        $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
             $split_key = explode('-', $key);

@@ -991,6 +991,8 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('non-artwork-job-manager/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
 
 	Route::get('non-artwork-job-manager/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
+	// Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
 
 });
 
