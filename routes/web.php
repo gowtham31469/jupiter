@@ -19,7 +19,9 @@ Route::post('admin/save-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTempla
 
 Route::post('admin/get-non-artwork-order-details', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
 
+Route::post('admin/get-item-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
 
+Route::post('admin/get-reference-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
 
 Route::get('/', function () {
     return view('welcome');

@@ -6,7 +6,8 @@ use DB;
 use View;
 use Validator;
 use App\Buyer;
-use App\NonArtWorkOrder;
+use App\Customer;
+use App\NonArtworkOrder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Modules;
@@ -25,18 +26,66 @@ class NonArtworkTemplateController extends Controller
             });
             
             $buyers = Buyer::where('artwork_flag','=',1)->where('is_active','=',1)->pluck('buyer_name','id');
-            
+            $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
             
             $buyer_count = count($buyers);
+
+            $select_item_data = DB::table('reports_template_level_name')->pluck('name','id');
             
-            return view('Admin/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders]);
+            return view('Admin/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers]);
+    }
+
+    public function getItem(Request $request)
+    {
+        $buyer = Buyer::where('id',$request->buyer_id)->first()->buyer_name;
+        $template_table = strtolower($buyer)."_template";
+
+        $data = DB::table($template_table)
+                        ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
+                        ->select($template_table.'.id','template_name','name_in_reports','name')
+                        ->get()
+                        ->groupBy('name_in_reports');
+        
+        $arr = [];
+        $opt = "";
+        foreach ($data as $key => $value) {
+           $opt.='<option value='.$value[0]->name_in_reports.'>'.$value[0]->name.'</option>';
+        }
+        $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select">'.$opt.'</select>';
+
+        return response()->json(['items'=>$item_select]);
+
     }
 
 
+    public function getReference(Request $request)
+    {
+        // dd($request->all());
+
+        $buyer = Buyer::where('id',$request->buyer_id)->first()->buyer_name;
+        $template_table = strtolower($buyer)."_template";
+
+        $data = DB::table($template_table)
+                        ->where('name_in_reports',$request->item_id)
+                        ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
+                        ->pluck('template_name',$template_table.'.id')
+                        ->toArray();
+        $arr = [];
+        $opt = "";
+        foreach (array_unique($data) as $key => $value) {
+     
+           $opt.='<option value='.$key.'>'.$value.'</option>';
+        }
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select">'.$opt.'</select>';
+
+        return response()->json(['reference'=>$reference_select]);
+
+    }
 
     public function saveNonArtworkOrders(Request $request)
     {
+
         // dd($request->all());
         $rules = [
             'current_date' => 'required',
@@ -53,27 +102,65 @@ class NonArtworkTemplateController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+        $created_rows = [];
 
         if ($validator->passes()) 
         {
+            foreach ($request->ocn as $key => $value) 
+            {
+                $already_created_nat = NonArtworkOrder::where('ocn_number',$value)
+                                      ->where('style_ref', $request->quantity[$key])  
+                                      ->where('color', $request->color[$key])  
+                                      ->where('composition', $request->composition[$key])  
+                                      ->first();
 
-            $order_id = DB::table('non_artwork_orders')->insertGetId(
+                if($already_created_nat)
+                {
+                    $order_quantity = DB::table('non_artwork_orders_quanty')
+                        ->insert([
+                        [   'non_artwork_order_id' => $already_created_nat->id,
+                            'quantity' => $request->quantity[$key],
+                        ]
+                     ]);
+                }
+                else
+                {
+                    $newly_created_nat_id = NonArtworkOrder::insertGetId(
                                 [ 'buyer_id' => $request->buyer, 
                                   'color' => "test",
                                   'color' => "test",
                                   'order_flag' => "newOrder",
+                                  'ocn_number' => $value,
+                                  'tesco_supplier_id' => $request->customer,
+                                  'po_number' => $request->po_number,
+                                  'color' => $request->color[$key],
+                                  'composition' => $request->composition[$key],
+                                  'item_id' => $request->item[$key],
+                                  'style_ref' => $request->reference[$key],
+                                  'delivery_date' => $request->due_date,
                                 ]
                                 );
 
-            foreach ($request->ocn as $key => $value) 
-            {
-                $order_quantity = DB::table('non_artwork_orders_quanty')->insert([
-                        [   'non_artwork_order_id' => $order_id,
+                    array_push($created_rows, $newly_created_nat_id);
+
+                    
+
+                    $newly_created_nat_qty = DB::table('non_artwork_orders_quanty')
+                        ->insert([
+                        [   'non_artwork_order_id' => $newly_created_nat_id,
                             'quantity' => $request->quantity[$key],
+                            'size' => $request->size[$key],
+                            'rate' => $request->rate[$key],
+                            'rate_value' => $request->rate_value[$key],
                         ]
                      ]);
+                }
             }
-            
+
+           $max_batch_id = NonArtworkOrder::max('order_id')+1;
+
+           NonArtworkOrder::whereIn('id', $created_rows)
+                                    ->update(['order_id' => $max_batch_id]);
            return response()->json(['success'=>'done']);
         }
 
@@ -123,7 +210,16 @@ class NonArtworkTemplateController extends Controller
                                     <input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
                                 </td>
                                 <td>
-                                    <select class="form-control input-sm label-ean-field" name="list[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                    <select class="form-control input-sm label-ean-field" name="item[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm label-ean-field" name="reference[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                </td>
+                                <td>
+                                    <input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
+                                </td>
+                                <td>
+                                    <input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
                                 </td>
                                 <td>
                                     <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
@@ -134,7 +230,19 @@ class NonArtworkTemplateController extends Controller
                                     </div>
                                 </td>
                                 <td>
+                                    <select class="form-control input-sm label-ean-field" name="size[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                </td>
+                                <td>
                                     <input type="text" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity" value="'.$value->quantity.'">
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm label-ean-field" name="uom[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm label-ean-field" name="rate[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                </td>
+                                <td>
+                                    <input type="number" name="rate_value[]" class="form-control input-sm label-ean-field" placeholder="Value">
                                 </td>
           </tr>';
             }

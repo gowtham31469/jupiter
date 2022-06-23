@@ -20,11 +20,14 @@
 			<ul></ul>
 		</div>
 
-		<form name="non_artwork_orders" id="non_artwork_orders">  
+		<!-- <form name="non_artwork_orders" id="non_artwork_orders">   -->
+
+		{!! Form::open(['id' => 'non_artwork_orders','data-toggle' => 'validator','role' => 'form']) !!}
+
 			<div class="row">
 				<div class="col-md-3">
 						<div class="form-group has-feedback">
-							<label for="due_date">Order ID</label>
+							<label for="order_id">Order ID</label>
 							<div class="input-group tesco_manufacture_date date">
 								<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="order_id" id="order_id" required="" placeholder="Enter Order ID" maxlength="7">
 								<div class="input-group-addon" id="getOrderDetails">
@@ -41,7 +44,7 @@
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							<label for="current_date">Current Date</label>
-							<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="current_date" id="current_date" required="" placeholder="Enter PO. Number" maxlength="7">
+							<input type="text" class="form-control" data-minlength="7" data-required-error="Mandatory Field." data-minlength-error="Enter 7 digits." name="current_date" id="current_date" required="" placeholder="Current Date" maxlength="7">
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -57,7 +60,7 @@
 					<div class="col-md-3">
 						<div class="form-group has-feedback">
 							<label for="customer_name">Customer Name</label>
-							{!! Form::select('customer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Customer Name"]) !!}
+							{!! Form::select('customer',$customers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Customer Name"]) !!}
 							<div class="help-block with-errors"></div>
 						</div>
 					</div>
@@ -92,7 +95,7 @@
 
 							<button type="button" id="delete_selected" class="btn btn-default add-row-btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
 
-							<button type="button" id="save_data" class="btn btn-default add-row-btn submit_data" data-flag="1"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+							<button type="submit" id="save_data" class="btn btn-default add-row-btn submit_data" data-flag="1"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
 
 							<button type="button" id="new_order" class="btn btn-default add-row-btn submit_data hidden" data-flag="3"><i class="fa fa-save" aria-hidden="true"></i> Save as new order</button>
 						</p>                                        
@@ -110,8 +113,15 @@
 							<th class="text-center">B.Po. No.</th>
 							<th class="text-center">Style/UVC</th>
 							<th class="text-center">Item</th>
+							<th class="text-center">Reference</th>
+							<th class="text-center">Color</th>
+							<th class="text-center">Composition</th>
 							<th class="text-center">A/W.Appr.Dt</th>
+							<th class="text-center">Size</th>
 							<th class="text-center">Quantity</th>
+							<th class="text-center">UOM</th>
+							<th class="text-center">Rate</th>
+							<th class="text-center">Value</th>
           </tr>
         </thead>
         <tbody id="dynamic_field">
@@ -128,7 +138,7 @@
 									</div>
 								</td>
 								<td>
-									<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
+									<input type="number" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
 								</td>
 								<td>
 									<input type="text" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
@@ -137,7 +147,16 @@
 									<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 								</td>
 								<td>
-									{!! Form::select('list[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+									{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
+								</td>
+								<td>
+									<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference"></select>
+								</td>
+								<td>
+									<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
+								</td>
+								<td>
+									<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 								</td>
 								<td>
 									<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
@@ -148,7 +167,19 @@
 									</div >
 								</td>
 								<td>
-									<input type="text" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
+									{!! Form::select('size[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+								</td>
+								<td>
+									<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
+								</td>
+								<td>
+									{!! Form::select('uom[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+								</td>
+								<td>
+									{!! Form::select('rate[]', $buyers, null, ['class' => 'form-control input-sm label-ean-field rate']) !!}
+								</td>
+								<td>
+									<input type="number" name="rate_value[]" class="form-control input-sm label-ean-field" placeholder="Value">
 								</td>
           </tr>
           <tr id='addr1' class="clonable"></tr>
@@ -184,7 +215,9 @@
       </table>
     </div>
   </div>
-			</form>  
+
+  {{Form::close()}}
+			<!-- </form>   -->
 		</div>
 	</div>
 </div>
@@ -201,7 +234,9 @@
 	{      
 		var postURL = "<?php echo url('admin/save-non-artwork'); ?>";
 		var getDetailsURL = "<?php echo url('admin/get-non-artwork-order-details'); ?>";
+		var row_to_duplicate = $('#tab_logic').find(' tbody tr:eq(0)').html()
 		var i=1;  
+
 
 		$.ajaxSetup({
 			headers: {
@@ -212,8 +247,9 @@
 		$('#add_single_row').click(function()
 		{  
 			 $('#tab_logic').append('<tr id="addr'+(i+1)+'" class="clonable"></tr>');
-			 $('#addr'+i).html($('#tab_logic').find(' tbody tr:eq(0)').html()).find('td:first-child').html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck'+(i+1)+'"><label class="custom-control-label">&nbsp;&nbsp;'+(i+1)+'</label></div>')
+			 $('#addr'+i).html(row_to_duplicate).find('td:first-child').html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck'+(i+1)+'"><label class="custom-control-label">&nbsp;&nbsp;'+(i+1)+'</label></div>')
 			   i++;
+			   $(".selectpicker").selectpicker('refresh')
 			
 		});   
 
@@ -253,7 +289,47 @@
 		})
 
 
-		$(document).on("keyup change",".quantity",function(){	
+		$(document).on("change","#buyer",function(){	
+			
+			$.ajax({
+				method:'POST',
+				type:'json',
+				url:"{{ route('get-item-nat') }}",
+				data: { 'buyer_id' : $("#buyer").val() },
+				success:function(data)
+				{
+					$("#item_td").html('')
+					$("#item_td").html(data.items)
+
+					$(".selectpicker").selectpicker('refresh')
+				}
+			});
+  	});
+
+
+		$(document).on("changed.bs.select",".item_select",function(e){	
+			// $("select").on("changed.bs.select", 
+   //    function(e, clickedIndex, newValue, oldValue) {
+
+   	console.log(this.value)
+   	 e.stopImmediatePropagation()
+			$target = $(this).closest('td').next()
+			item_id = $(this).val()
+			$.ajax({
+				method:'POST',
+				type:'json',
+				url:"{{ route('get-reference-nat') }}",
+				data: { 'buyer_id' : $("#buyer").val() ,'item_id' : item_id },
+				success:function(data)
+				{
+					$target.html('')
+					$target.html(data.reference)
+					$(".selectpicker").selectpicker('refresh')
+				}
+			});
+  	});
+
+		$(document).on("keyup change",".quantity .rate",function(){	
 				total=0;
 				$('.quantity').each(function() {
 					total += parseInt($(this).val());
@@ -263,7 +339,17 @@
   	});
 
 
-		$(document).on("click",".submit_data",function(){
+		$('#non_artwork_orders').validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            submitNonArtworkOrder();
+        }
+    });
+
+		function submitNonArtworkOrder()
+		{
 				$.ajax({  
 					url:postURL,  
 					method:"POST",  
@@ -284,7 +370,7 @@
 						}
 					}  
 				});  
-		});  
+		}
 
 
 		function printErrorMsg (msg) {
