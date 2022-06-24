@@ -3618,6 +3618,7 @@ class JobManagerController extends Controller
 										->where('jobcard_main_table.company_id', '=', session()->get('company'))
 										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
 										->where('jobcard_main_table.customer_id', '=', $customer_id)
+										->where('jobcard_main_table.is_non_artwork_template', 0)
 										->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
 										->all();
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
@@ -3656,6 +3657,7 @@ class JobManagerController extends Controller
 										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
 										->where('jobcard_main_table.customer_id', '=', $customer_id)
 										->where('jobcard_main_table.id', '=', $jobcard_id)
+										->where('jobcard_main_table.is_non_artwork_template', 0)
 										->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
 										->first();
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
@@ -3886,30 +3888,7 @@ class JobManagerController extends Controller
 		
 		
 		
-//		$svgarr = explode(',_',$request->svg);
-//		$name=$request->name;
-//        $svg=urldecode($request->svg);
-//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
-//        PDF::SetFont('frankgothcnbt');
-//		PDF::SetAutoPageBreak(TRUE);
-//		$j=0;
-//		foreach($svgarr as $value)
-//		{
-//			PDF::SetMargins(0, 0, 0, false);
-//			PDF::setImageScale(1);
-//			PDF::AddPage('L', array(80,127));
-//			$svg=urldecode($value);
-//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-//			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
-//			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
-//			$j++;
-//		}
-//		PDF::deletePage(1);
-//        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-//        print_r(url('/storage/app/template/'.$name.'.pdf'));
+
 	} 
 	
 	
@@ -3954,26 +3933,11 @@ class JobManagerController extends Controller
 			 }
 			 else
 			 {
-//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
-//
-//				// now you are able to resize the instance
-//				$img->resize(150, 50);
-//
-//				// finally we save the image as a new file
-//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
-				 
 				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
 				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
-			
-			
-			
-//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-//			
-//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-//			
 			$i++;
 		}
 		$j=0;
@@ -4087,19 +4051,15 @@ class JobManagerController extends Controller
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
 		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-	 
-	 
-	 
 	   
-	   $customer = DB::table("erp_orders")
+	   	 $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
 	 
 	 
-	 	$sticker = DB::table("orchestra_standard_carton_sticker_orders")
+	 	 $sticker = DB::table("orchestra_standard_carton_sticker_orders")
 						->select('*')
 						->where('uvc',$request->style_no)
 						->where('po',$request->buyer_no)
@@ -4131,9 +4091,7 @@ class JobManagerController extends Controller
 	   $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
-//	   
-//		 define ('PDF_FONT_NAME_MAIN', 'calibri');
-//		 define ('PDF_FONT_NAME_DATA', 'calibri');
+
 			// Custom Header
 		  PDF::setHeaderCallback(function($pdf) {
 			$pdf->SetY(0);
@@ -4296,19 +4254,13 @@ class JobManagerController extends Controller
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('calibrib');
 		PDF::AddPage();
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 		PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		$td_size="";
 		$td_col="";
 		$total=0;
@@ -4444,11 +4396,9 @@ class JobManagerController extends Controller
 			'fontsize' => 12,
 			'stretchtext' => 4
 		);
-		 ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
 	    $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -4471,10 +4421,8 @@ class JobManagerController extends Controller
 		 
 		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
 		
 		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
 		if(count($orchestra_color) > 0)
@@ -4490,12 +4438,9 @@ class JobManagerController extends Controller
         PDF::setPrintFooter(false);
 		PDF::SetAutoPageBreak(TRUE);
         PDF::SetFont('calibrib');
-		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		 
-//		PDF::SetAutoPageBreak(TRUE);
 		foreach($svgarr as $value)
         {
 			$svg=urldecode($value);
@@ -4614,8 +4559,6 @@ class JobManagerController extends Controller
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-
 
 $style_no=$request->style_no;
 $buyer_no=$request->buyer_no;
@@ -4845,8 +4788,6 @@ $buyer_no=$request->buyer_no;
         PDF::AddPage('L',array(324,465));
 		PDF::setImageScale(1.66);
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 		
 		//Top Left Corner
 		PDF::Line(7, 6, 7, 12, $style6);
@@ -4925,16 +4866,12 @@ $buyer_no=$request->buyer_no;
 		 $buyer_no=$request->buyer_no;
 		 
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
 		PDF::SetAutoPageBreak(TRUE);
         PDF::SetFont('calibrib');
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		PDF::SetAutoPageBreak(TRUE);
@@ -4946,8 +4883,6 @@ $buyer_no=$request->buyer_no;
 			PDF::AddPage('L',array(324,465));
 			PDF::setImageScale(1.66);
 			$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-			//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-			//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 
 			//Top Left Corner
 			PDF::Line(7, 6, 7, 12, $style6);
@@ -5015,13 +4950,8 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-SOL-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-		
-			
-		
 	   
 	   $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5038,9 +4968,6 @@ $buyer_no=$request->buyer_no;
 	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
-//	   
-//		 define ('PDF_FONT_NAME_MAIN', 'calibri');
-//		 define ('PDF_FONT_NAME_DATA', 'calibri');
 			// Custom Header
 		  PDF::setHeaderCallback(function($pdf) {
 			$pdf->SetY(0);
@@ -5144,8 +5071,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5203,12 +5129,8 @@ $buyer_no=$request->buyer_no;
 		
 		});
         PDF::setImageScale(1.66);
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
         PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
@@ -5224,9 +5146,7 @@ $buyer_no=$request->buyer_no;
 			
 			if($i == 0)
 			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
@@ -5236,9 +5156,7 @@ $buyer_no=$request->buyer_no;
 			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
-				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 				$yy=50;
-				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
@@ -5247,9 +5165,7 @@ $buyer_no=$request->buyer_no;
 			}
 			else
 			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy += 112.5;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
@@ -5260,7 +5176,6 @@ $buyer_no=$request->buyer_no;
 		 }
 		 $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5272,11 +5187,6 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-STD-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
-//		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-		
-		
 	   
 	   $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5399,8 +5309,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5458,19 +5367,16 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
+
 		PDF::SetFont('calibrib');
 		PDF::AddPage();
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+
 		PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=12.5, $y=50, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5486,10 +5392,6 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-SOL-PS-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
-		 //$svg=urldecode($request->svg);
-//		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
 		
 		  $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5612,8 +5514,6 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5671,16 +5571,11 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1.66);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		 
-//		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=50;
@@ -5691,8 +5586,6 @@ $buyer_no=$request->buyer_no;
 			if($i == 3)
 			{
 				PDF::AddPage('P', 'A4');
-				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 				
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
@@ -5702,9 +5595,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else  if($i == 0)
 			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
-				
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
@@ -5713,8 +5603,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else if($i == 1)
 			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 122.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 125, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
@@ -5722,8 +5610,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else
 			{
-				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 197.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 200, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
@@ -5734,7 +5620,6 @@ $buyer_no=$request->buyer_no;
 		 }
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5751,7 +5636,6 @@ $buyer_no=$request->buyer_no;
 	{
 		$svgarrfront=explode(',_',$request->svg); 
 		$name = $request->name;
-		//$svg1=urldecode($request->svg1); 
 		$svgarr=explode(',_',$request->svgRoot); 
 		 $id = $request->id;
 		 
@@ -5937,14 +5821,8 @@ $buyer_no=$request->buyer_no;
 		});
 		
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
-		//PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
-		//PDF::SetFillColor(255, 255, 255);
-		//PDF::SetTextColor(0, 0, 0);
-		//PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		PDF::SetFont('arial');
 		$count=0;
@@ -5957,9 +5835,6 @@ $buyer_no=$request->buyer_no;
 		foreach($arr_mer as $value)
 		{
 			$svg=urldecode($value);
-			//PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
-			//PDF::ImageSVG('@' . $svg,  $x=$xx, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			
 			
 			if($count%2==0)  
 			{  
@@ -5989,9 +5864,6 @@ $buyer_no=$request->buyer_no;
 		
 		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/'.$name.'_cmyk.pdf')." ".public_path('/storage/app/template/'.$name.'.pdf'));
 		
-//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
-		
-		//print_r(url('/storage/app/template/solid1.pdf'));
 		$file_path =  "/storage/app/template/".$name."_cmyk.pdf";	
 
 		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'_cmyk.pdf')],200);	
@@ -6134,8 +6006,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -6193,8 +6064,7 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
+
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
 		
@@ -6342,8 +6212,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -6401,8 +6270,6 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
 		

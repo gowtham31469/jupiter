@@ -454,6 +454,7 @@ const generateNatJobcard = () => {
                 renderCommonJCView(data);
 
                 $('#nat_template_type').val(data.template_data.template_type[0]);
+                $('.nat-jobcard-modal-title').text(data.modal_title);
 
                 /** Show single templates dynamic table */
                 var single_table_html = '';

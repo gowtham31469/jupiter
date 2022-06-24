@@ -101,6 +101,10 @@
     });
     $('.order-details-div').html(hidden_html);
 
+    jcPageSelectbox(data)
+}
+
+const jcPageSelectbox = (data) => {
     var disp_modes_options = '<option value="" selected="selected">-- Select Dispatch Mode --</option>';
     $.each(data.disp_modes, function (key, item) {
         disp_modes_options += '<option value="' + key + '">' + item + '</option>';

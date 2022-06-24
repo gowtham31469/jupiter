@@ -48,7 +48,7 @@
 					</div>
 				</div>
 				<div class="filter-window-jobcard-list">
-					{!! Form::open(['id' => 'jobcard_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
+					{!! Form::open(['id' => 'nat_jobcard_list_filter_form','data-toggle' => 'validator','role' => 'form']) !!}
 					<h5 style="margin-left:15px;"><strong>Non Artwork Jobcard Filter</strong></h5>
 					<div class="col-xs-6 col-sm-4">
 						<div class="form-group has-feedback">
@@ -100,8 +100,11 @@
 
 @include('erp.components.company-selection-modal')
 
+<!-- Job card creation Modal -->
+@include('erp.Non-Artwork-Jobmanager.create-jobcard-modal')
+
 <!-- Job card updation Modal -->
-<div class="modal jobcard-updation-modal fade" id="jobcardUpdationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardUpdationModalCenter">
+<!-- <div class="modal jobcard-updation-modal fade" id="jobcardUpdationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardUpdationModalCenter">
 	<div class="modal-dialog modal-lg jobcard-updation-modal-dialog" role="document">
 		<div class="modal-content jobcard-updation-modal-content">
 			<div class="modal-header">
@@ -465,7 +468,7 @@
 			{!! Form::close() !!}
 		</div>
 	</div>
-</div>
+</div> -->
 
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>

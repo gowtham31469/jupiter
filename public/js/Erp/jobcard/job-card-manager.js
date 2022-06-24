@@ -956,16 +956,7 @@ function storeJobcard()
                             openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname);
                         }
                     });
-					
-//                    var resp = JSON.stringify(data.file_path); 
-//                    window.open(
-//                        base_url+JSON.parse(resp),
-//                        '_blank' // <- This is what makes it open in a new window.
-//                    ); 
-//                    $('.snackbar_span').html("Jobcard Created Successfully");
-//                    showSnackbar();
-//                    $('.modal').modal('hide');
-//                    location.reload();
+				
                 }
               
             },

@@ -458,7 +458,8 @@ class NonArtworkJobCardFiltersController extends Controller
                 'disp_modes' => $metadata['erp_dispatch_mode'],
                 'finish_types' => $metadata['erp_finish_type'],
                 'machines' => $metadata['erp_machines'],
-                'teeth_nos' => $metadata['erp_teeth_no']
+                'teeth_nos' => $metadata['erp_teeth_no'],
+                'modal_title' => 'Create Jobcard'
 
             ], 200);
         } else {
@@ -581,6 +582,7 @@ class NonArtworkJobCardFiltersController extends Controller
             'aw_approve_date'        => $aw_app_date,
             'act_del_date'           => $act_del_date,
             'no_of_repeats'          => $no_repeats,
+            'is_non_artwork_template'=> 1,
             ]);
         
         /** Store jobcard settings and excess details**/

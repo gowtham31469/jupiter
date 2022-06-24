@@ -3,7 +3,7 @@
 		<div class="modal-content nat-jobcard-creation-modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal">Create Jobcard</h4>
+				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal"></h4>
 			</div>
 			{!! Form::open(['id' => 'create_nat_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
 			<div class="modal-body nat-jobcard-creation-modal-body">
@@ -85,6 +85,7 @@
 							</div>
 							<div class="col-md-4">
 								<input type="hidden" value="" id="nat_template_type">
+								<input type="hidden" value="" id="jobcard_id">
 							</div>
 						</div>
 					</div>
