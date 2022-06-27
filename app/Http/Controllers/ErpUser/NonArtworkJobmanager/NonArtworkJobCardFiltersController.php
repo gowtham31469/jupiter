@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use Illuminate\Http\Request;
 use App\Classes\JobcardMetadata;
-use App\Classes\NATMaterialQuery;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
@@ -48,7 +47,6 @@ class NonArtworkJobCardFiltersController extends Controller
 		 
 		// Get order status table id for 'Order Approved' status.
 		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'Order Approved')->value('id');
-        $this->nat_material_obj = new NATMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
 	}
@@ -487,7 +485,7 @@ class NonArtworkJobCardFiltersController extends Controller
         // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
         $workorder_id = $request['crud_operation_type'] === 'created_at'?$this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]):$request['workorder_id'];
 
-        $store_jobcard_id = $crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, $request['crud_operation_type']);
+        $store_jobcard_id = $crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, $request['crud_operation_type'], 1);
         
         /** Store jobcard settings and excess details**/
         if($store_jobcard_id == ''){

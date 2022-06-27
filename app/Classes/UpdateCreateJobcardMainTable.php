@@ -8,6 +8,7 @@ use App\History;
 use Carbon\Carbon;
 use App\ErpOrderDetails;
 use App\JobcardMainTable;
+use App\Classes\NATMaterialQuery;
 
 /**
  * Class to update / create jobcard main table
@@ -16,7 +17,7 @@ use App\JobcardMainTable;
 class UpdateCreateJobcardMainTable
 {
 
-    public function updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, $crud_type)
+    public function updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, $crud_type, $is_non_artwork_template)
     {
 
         $created_date    = $request['created_date'] == '' ? NULL : Carbon::parse($request['created_date'], 'Asia/Kolkata')->toDateString();
@@ -70,8 +71,12 @@ class UpdateCreateJobcardMainTable
                 'aw_approve_date'        => $aw_app_date,
                 'act_del_date'           => $act_del_date,
                 'no_of_repeats'          => $request['no_repeats'],
-                'is_non_artwork_template' => 1,
+                'is_non_artwork_template' => $is_non_artwork_template,
                 $crud_type               => $current_timestamp,
+                'style_number'           => $request['style_no'],
+                'no_of_stickers'         => $request['no_sticker'],
+                'tint_color'             => $request['tint_color'],
+                'customer_po_num'        => $request['customer_po']
             ]
         );
     }
@@ -109,8 +114,8 @@ class UpdateCreateJobcardMainTable
                                     ->where($data->order_qnty_table_name.'.id', $data->order_qnty_table_id)
                                     ->join($main_table, $main_table.'.id', $data->order_qnty_table_name.'.'.$qnty_id)
                                     ->first();
-               
-                $template_level = $this->nat_material_obj->nonArtworkMaterialDetails($order_details->template_id, $buyer);
+                $nat_material_obj = new NATMaterialQuery();
+                $template_level = $nat_material_obj->nonArtworkMaterialDetails($order_details->template_id, $buyer);
                 
                 $material_name  = $template_level->material;
                 $material_sub   = $template_level->material_sub;

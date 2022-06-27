@@ -39,6 +39,7 @@ use App\FinancialYearResetDate;
 use App\Classes\TescoMaterialQuery;
 use App\Classes\JobcardIDGenerator;
 use App\Classes\JobcardMetadata;
+use App\Classes\UpdateCreateJobcardMainTable;
 
 class JobManagerController extends Controller
 {
@@ -1279,6 +1280,7 @@ class JobManagerController extends Controller
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
 				$uuid            = explode(',', $request['uuid_array']);
+				$crud_jc_obj     = new UpdateCreateJobcardMainTable();
 
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -1297,52 +1299,8 @@ class JobManagerController extends Controller
 
 				// Get Erp status table id for 'Jobcard Created' status.
 				$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
-				$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
-					'work_order_id'          => $workorder_id,
-					'company_id'             => $company_id,
-					'customer_id'            => $customer_id,
-					'buyer_id'               => $buyer_id,
-					'created_date'           => $created_date,
-					'material'               => $material,
-					'article'                => $article,
-					'style_number'           => $style_no,
-					'reference'              => $reference,
-					'order_type'             => $order_type,
-					'dispatch_mode'          => $disp_mode,
-					'order_date'             => $order_date,
-					'length'                 => $length,
-					'repeat_gap'             => $repeat_gap,
-					'machine'                => $machine,
-					'customer_del_date'      => $cus_del_date,
-					'width'                  => $width,
-					'roll_width'             => $roll_width,
-					'film_no'                => $film_no,
-					'invoice_date'           => $invoice_date,
-					'length_side'            => $length_side,
-					'excess_percentage'      => $excess,
-					'teeth_no'               => $teeth_no,
-					'invoice_num'            => $inv_no,
-					'no_of_stickers'         => $no_sticker,
-					'finish_type'            => $finish_type,
-					'print_color'            => $print_color,
-					'compiled_by'            => $compiled_by,
-					'barcode_read'           => $barcode_read,
-					'operator'               => $operator,
-					'checker'                => $checker,
-					'authorized_by'          => $authorized_by,
-					'axicon_verifier'        => $axicon_verifier,
-					'approved_by'            => $approved_by,
-					'packer'                 => $packer,
-					'approval_date'          => $approval_date,
-					'roll_issued_by'         => $roll_issued_by,
-					'cutter'                 => $cutter,
-					'cartons'                => $cartons,
-					'template_quantity_json' => $final_json_obj,
-					'created_at'             => $current_timestamp,
-					'updated_at'             => $current_timestamp,
-					'tint_color'             => $tint_color,
-					'customer_po_num'        => $customer_po_num
-					]);
+
+				$store_jobcard_id = $crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, 'created_at', 0);
 				
 				/** Store jobcard settings and excess details**/
 				if($store_jobcard_id != '')
@@ -1359,7 +1317,7 @@ class JobManagerController extends Controller
 						foreach($single_ref as $value)
 						{
 							$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
-								'jobcard_main_table_id'   => $store_jobcard_id,
+								'jobcard_main_table_id'   => $store_jobcard_id->id,
 								'ref_name'                => $single_ref[$i],
 								'mtrs_for_stickers'       => $sticker_mtr[$i],
 								'actual_excess'           => $act_excess[$i],
@@ -1637,7 +1595,7 @@ class JobManagerController extends Controller
 					$pdf->IncludeJS("print();");
 					$pdf->Output( public_path($file_path), 'F');
 
-					DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
+					DB::table('jobcard_main_table')->where('id', $store_jobcard_id->id)
 					->update([
 						'file_path'   => $file_path,
 						'updated_at'  => $current_timestamp
@@ -3334,57 +3292,13 @@ class JobManagerController extends Controller
 				$jobcard_id 	 = $request['jobcard_id'];
 				$tint_color      = $request['tint_color'];
 				$customer_po_num = $request['customer_po'];
+				$crud_jc_obj     = new UpdateCreateJobcardMainTable();
 				
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
-					DB::table('jobcard_main_table')->where('id', $jobcard_id)
-					->update([
-						'work_order_id'          => $workorder_id,
-						'company_id'             => $company_id,
-						'customer_id'            => $customer_id,
-						'buyer_id'               => $buyer_id,
-						'created_date'           => $created_date,
-						'material'               => $material,
-						'article'                => $article,
-						'style_number'           => $style_no,
-						'reference'              => $reference,
-						'order_type'             => $order_type,
-						'dispatch_mode'          => $disp_mode,
-						'order_date'             => $order_date,
-						'length'                 => $length,
-						'repeat_gap'             => $repeat_gap,
-						'machine'                => $machine,
-						'customer_del_date'      => $cus_del_date,
-						'width'                  => $width,
-						'roll_width'             => $roll_width,
-						'film_no'                => $film_no,
-						'invoice_date'           => $invoice_date,
-						'length_side'            => $length_side,
-						'excess_percentage'      => $excess,
-						'teeth_no'               => $teeth_no,
-						'invoice_num'            => $inv_no,
-						'no_of_stickers'         => $no_sticker,
-						'finish_type'            => $finish_type,
-						'print_color'            => $print_color,
-						'compiled_by'            => $compiled_by,
-						'barcode_read'           => $barcode_read,
-						'operator'               => $operator,
-						'checker'                => $checker,
-						'authorized_by'          => $authorized_by,
-						'axicon_verifier'        => $axicon_verifier,
-						'approved_by'            => $approved_by,
-						'packer'                 => $packer,
-						'approval_date'          => $approval_date,
-						'roll_issued_by'         => $roll_issued_by,
-						'cutter'                 => $cutter,
-						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
-						'updated_at'             => $current_timestamp,
-						'tint_color'             => $tint_color,
-						'customer_po_num'        => $customer_po_num
-					]);
+					$crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, 'updated_at', 0);
 					
 					if (!empty($request['single_ref'])) 
 					{

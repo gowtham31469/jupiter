@@ -9,12 +9,6 @@ $(function() {
             getNatJobcardsList();
         }
     });
-
-    // $('.nat-jobcard').on('click', () => {
-    //     var id = $(this).closest('tr').attr('id');
-    //     console.log(id);
-    //     getJobcardDetails(id);
-    // })
 });
 
 /**
@@ -174,7 +168,7 @@ function getNatJobcardsList()
                         <td>'+data.jobcards_list.work_order_id+'</td>\
                         <td>'+data.jobcards_list.company_name+'</td>\
                         <td>'+data.jobcards_list.buyer_name+'</td>\
-                        <td><a onclick="getJobcardDetails('+jc_id+')" href="#"><i class="fa fa-pencil fa-button filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
+                        <td><a onclick="getNatJobcardDetails('+jc_id+')" href="#"><i class="fa fa-pencil fa-button filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
                         </tr>';
                         $('#jobcard_list_table_body').html(html);            
                     },
@@ -207,7 +201,7 @@ function getNatJobcardsList()
    * @author <praveen>
    *
    */
- function getJobcardDetails(id)
+ function getNatJobcardDetails(id)
  {
    try{
         $.ajax({
