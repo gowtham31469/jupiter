@@ -1,44 +1,45 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Jobmanager;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use App\OrchestraSolidPolySticker;
-use App\OrchestraSolidPolyStickerQty;
-use App\OrchestraSolidCartonSticker;
-use App\OrchestraSolidCartonStickerQty;
-use App\OrchestraParcelDetails;
-use App\OrchestraStdCartonStickerQty;
-use App\OrchestraStdCartonSticker;
-use App\OrchestraStdPolyStickerQty;
-use App\OrchestraStdPolySticker;
-use App\OrchestraHangTagQty;
+use DB;
+use PDF;
+use Auth;
+use File;
+use View;
+use Config;
+use Session;
+use Response;
+use App\Buyer;
+use App\History;
+use Carbon\Carbon;
+use App\ErpOrders as Erp;
 use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
 use App\OrchestraWashCare;
-use App\OrchestraWashCareQty;
-use Response;
-use View;
-use Auth;
-use DB;
-use Session;
-use App\ErpOrders as Erp;
-use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
-use PDF;
-use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
-use File;
-use Config;
-use App\History;
-use App\Buyer;
+use App\OrchestraHangTagQty;
+use Illuminate\Http\Request;
+use App\OrchestraWashCareQty;
 use App\FinancialYearResetDate;
-use App\Classes\TescoMaterialQuery;
-use App\Classes\JobcardIDGenerator;
+use App\OrchestraParcelDetails;
 use App\Classes\JobcardMetadata;
+use App\OrchestraStdPolySticker;
+use App\OrchestraSolidPolySticker;
+use App\OrchestraStdCartonSticker;
+use App\Classes\JobcardCommonClass;
+use App\Classes\JobcardIDGenerator;
+use App\Classes\TescoMaterialQuery;
+use App\OrchestraStdPolyStickerQty;
+use App\Http\Controllers\Controller;
+use App\OrchestraSolidCartonSticker;
+use Illuminate\Support\Facades\Mail;
+use App\OrchestraSolidPolyStickerQty;
+use App\OrchestraStdCartonStickerQty;
+use Illuminate\Support\Facades\Input;
+use App\Classes\JobcardPDFHeaderFooter;
+use App\OrchestraSolidCartonStickerQty;
+use Illuminate\Support\Facades\Validator;
+use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\UpdateCreateJobcardMainTable;
 
 class JobManagerController extends Controller
@@ -974,6 +975,7 @@ class JobManagerController extends Controller
 	public function getOrderDetailsByIds(Request $request)
 	{
 	  try {
+			$jc_class_obj = new JobcardCommonClass();
 			if(session()->get('company_name') === "jupitergarmentsaccessories"){
 				$jc_metadata = New JobcardMetadata();
 				$erp_orders_ids     = explode(',', $request['orders']);
@@ -989,16 +991,8 @@ class JobManagerController extends Controller
 				$template_data      = array();
 				$ratio_templates    = array();
 				$single_templates   = array();
-				$print_color_array  = array();
-				$material_array     = array();
-				$article_array      = array();
-				$length_array       = array();
-				$width_array        = array();
 				$distinct_ref_array = array();
 				$single_temp_data   = array();
-				$common_data_chunk  = array();
-				$size_chunk         = array();
-				$final_chunk        = array();
 				$order_detail_ids   = array();
 				$erp_id_array       = array();
 				$customer_po_array  = array();
@@ -1034,11 +1028,6 @@ class JobManagerController extends Controller
 				->whereIn('erp_order_details.id', $order_detail_ids)
 				->select('company.name as company', 'company.id as company_id', 'company.address as company_address', 'company.logo as company_logo', 'erp_order_details.*', 'erp_orders.buyer_id', 'erp_orders.customer_id', 'erp_orders.erp_id', 'erp_orders.po_no')
 				->get();
-
-				$company_array['company'] = $order_details_collection[0]->company;
-				$company_array['company_id'] = $order_details_collection[0]->company_id;
-				$company_array['company_address'] = $order_details_collection[0]->company_address;
-				$company_array['company_logo'] = $order_details_collection[0]->company_logo;
 
 				foreach ($order_details_collection as $key => $order_details) {
 
@@ -1115,67 +1104,12 @@ class JobManagerController extends Controller
 				}
 
 				/** Get templates metadata details */
-				$template_details = DB::table($order_details_collection[0]['buyer']->template_table)
-					->select($order_details_collection[0]['buyer']->template_table . '.color', $order_details_collection[0]['buyer']->template_table . '.dimension_height as length', $order_details_collection[0]['buyer']->template_table . '.dimension_width as width', $order_details_collection[0]['buyer']->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $order_details_collection[0]['buyer']->template_table . '.material_id')
-					->join($order_details_collection[0]['buyer']->item_master_table, $order_details_collection[0]['buyer']->item_master_table . '.id', $order_details_collection[0]['buyer']->template_table . '.hierarchy_id')
-					->join('raw_material_master', 'raw_material_master.id', $order_details_collection[0]['buyer']->template_table . '.material_id')
-					->whereIn($order_details_collection[0]['buyer']->template_table . '.item_id', $temp_id_array)
-					->orderBy($order_details_collection[0]['buyer']->template_table . '.id')
-					->get();
+				list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
 
-				foreach ($template_details as $template_detail) {
-					!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
-
-					!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
-
-					!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
-
-					!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
-
-					!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
-				}
-				
 				/** Different size breakup value handling */
-				foreach ($single_templates as $template => $template_item) {
-					ksort($template_item['order_data']);
-					$po_count = sizeof($template_item['order_data']);
+				$final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
 
-					foreach ($template_item['size'] as $size => $qty) {
-						$size_count = sizeof($qty);
-
-						if ($size_count < $po_count) {
-							/** push 0 qty value for missing/additional size-breakup  */
-							for ($i = 0; $i < sizeof($erp_id_array[$template]); $i++) {
-								$qty = !array_key_exists($erp_id_array[$template][$i], $qty) ? array_merge($qty, [$erp_id_array[$template][$i] => 0]) : $qty;
-							}
-						}
-						ksort($qty);
-
-						$template_item['size'][$size] = $qty;
-					}
-					$single_templates[$template] = $template_item;
-
-					/** Split template data array into small chunks (3 elements in each chunks) */
-					/** common data chunk */
-					$common_data_chunk = array_chunk($template_item['order_data'], 3);
-					foreach ($common_data_chunk as $key => $data) {
-						$final_chunk[$template . '_' . $key]['order_data'] = $data;
-					}
-
-					foreach ($template_item['size'] as $size => $qty) {
-						/** size-quantity chunk */
-						$size_chunk =  array_chunk($qty, 3, true);
-						foreach ($size_chunk as $key2 => $value2) {
-							/** check if all the size values are 0 or not
-							 * remove following if condition if client wants zero qty size in final table.
-							 */
-							$is_size_qty_empty = array_filter($value2) != NULL ? 0 : 1;
-							if ($is_size_qty_empty != 1) {
-								$final_chunk[$template . '_' . $key2]['size'][$size . '_' . $key2] = $value2;
-							}
-						}
-					}
-				}
+				$company_array = $jc_class_obj->companyData($order_details_collection[0]);
 
 				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
 				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
@@ -3179,6 +3113,8 @@ class JobManagerController extends Controller
 	{
 		try {
 				$id = $request['id'];
+				$jc_metadata = new JobcardMetadata();
+                $metadata = $jc_metadata->erpJobcardMetaData();
 
 				$erpuser_id = Auth::guard('erpuser')->id();
 
@@ -3207,31 +3143,14 @@ class JobManagerController extends Controller
 										->get();
 					$jobcard_data->additional_details = $jobcard_details;	
 
-					$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-					->where('is_enabled', true)
-					->pluck('disp_mode', 'id')
-					->all();
-					$erp_finish_type = DB::table('erp_finish_type')
-					->where('is_enabled', true)
-					->pluck('finish_type', 'id')
-					->all();
-					$erp_machines = DB::table('erp_machines')
-					->where('is_enabled', true)
-					->pluck('machine', 'id')
-					->all();
-					$erp_teeth_no = DB::table('erp_teeth_no')
-					->where('is_enabled', true)
-					->pluck('teeth_no', 'id')
-					->all();
-
 					return response()->json([
 						'error'=> false,
 						'message' =>'Success', 
 						'jobcard_data' => $jobcard_data,
-						'disp_modes' => $erp_dispatch_mode,
-						'finish_types' => $erp_finish_type,
-						'machines' => $erp_machines,
-						'teeth_nos' => $erp_teeth_no
+						'disp_modes' => $metadata['erp_dispatch_mode'],
+                        'finish_types' => $metadata['erp_finish_type'],
+                        'machines' => $metadata['erp_machines'],
+                        'teeth_nos' => $metadata['erp_teeth_no'],
 
 					], 200);
 				}

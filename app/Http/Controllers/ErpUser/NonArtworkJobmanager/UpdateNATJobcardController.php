@@ -147,8 +147,6 @@ class UpdateNATJobcardController extends Controller
 					$jobcard_data->act_del_date     =	$jobcard_data->act_del_date == ''?NULL:Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
 					$jobcard_data->aw_approve_date     =	$jobcard_data->aw_approve_date == ''?NULL:Carbon::parse($jobcard_data->aw_approve_date)->format('d-m-Y');
 
-					$metadata  = $jc_metadata->erpJobcardMetaData();
-
 					return response()->json([
 						'error'=> false,
 						'message' =>'Success', 
