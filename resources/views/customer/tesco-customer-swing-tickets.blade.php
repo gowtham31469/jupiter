@@ -119,7 +119,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_product_benefit', 'Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_product_benefit',(['' => '-- Select Product Benefit --'] + $product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_product_benefit', 'data-live-search' => 'true')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -127,7 +127,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('swing_mm_product_benefit', 'MM Product Benefit', ['class' => 'form_label']) !!}
-            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit','required', 'data-live-search' => 'true')) }}
+            {{ Form::select('swing_mm_product_benefit',(['' => '-- Select MM Product Benefit --'] + $mm_product_benefits),'',array('class' => 'selectpicker form-control input-sm','id'=>'swing_mm_product_benefit', 'data-live-search' => 'true')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
