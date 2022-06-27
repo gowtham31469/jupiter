@@ -86,6 +86,7 @@
 							<div class="col-md-4">
 								<input type="hidden" value="" id="nat_template_type">
 								<input type="hidden" value="" id="jobcard_id">
+								<input type="hidden" value="" id="crud_operation_type">
 							</div>
 						</div>
 					</div>

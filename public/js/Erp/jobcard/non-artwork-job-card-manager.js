@@ -455,6 +455,7 @@ const generateNatJobcard = () => {
 
                 $('#nat_template_type').val(data.template_data.template_type[0]);
                 $('.nat-jobcard-modal-title').text(data.modal_title);
+                $('#crud_operation_type').text('created_at');
 
                 /** Show single templates dynamic table */
                 var single_table_html = '';
@@ -812,7 +813,8 @@ const storeNatJobcard = () => {
     var aw_app_date     = $( '#aw_app_date' ).val() === ''?null:$( '#aw_app_date' ).val();
     var act_excess      = $('#act_excess').text() === ''?0:$('#act_excess').text();
     var sticker_mtr     = $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text();
-    var settings        = $('#settings').text() === ''?0:$('#settings').text();
+    var settings        = $('#settings').val() === ''?0:$('#settings').val();
+    var crud_type      = $('#crud_operation_type').text() === ''?'created_at':$('#crud_operation_type').text();
     var single_ref      = $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref');
 
     var final_json_obj =   {
@@ -1026,7 +1028,8 @@ const storeNatJobcard = () => {
             disp_mode_text:disp_mode_text,
             machine_text:machine_text,
             teeth_no_text:teeth_no_text,
-            finish_type_text:finish_type_text
+            finish_type_text:finish_type_text,
+            crud_operation_type:crud_type
         },
         dataType: "json",
         beforeSend: function () {

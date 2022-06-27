@@ -273,101 +273,125 @@ function getNatJobcardsList()
                 $('#inv_no').val(data.jobcard_data.invoice_num);
                 $('#act_del_date').val(data.jobcard_data.act_del_date);
                 $('#no_repeats').val(data.jobcard_data.no_of_repeats);
+                $('#crud_operation_type').text('updated_at');
 
-                // $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
-                //     if (!($.isEmptyObject(template_type_data)))
-                //     {
-                //         var table_row = 0;
-                //         var table_count = 0;
-                //         var single_table = '';
-                //         $.each(template_type_data, function(table, table_data){
-                //             // var template = table.split("_")[0];
-                            
-                //             single_table += '<table class="table table-bordered table-responsive single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
-                //                     <tbody id="single_list_table_body">\
-                //                     <tr>\
-                //                         <th width="80px">ID.NO</th>';
-                //                         $.each(table_data.erp_id, function(key, value){
-                //                             single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
-                //                         });
-                //                         single_table += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name="'+table+'">REFNUM &nbsp;: '+table+'</td>\
-                //                     </tr>\
-                //                     <tr>\
-                //                         <th width="80px">B.PO.NO</th>';
-                //                         $.each(table_data.buyer_po, function(key, value){
-                //                             single_table += '<td colspan="2" class="single-buyer-po-'+key+'">'+value+'</td>';
-                //                         });
-                //                         single_table += '</tr>\
-                //                     <tr>\
-                //                         <th width="80px">OCN</th>';
-                //                         $.each(table_data.ocn, function(key, value){
-                //                             single_table += '<td colspan="2" class="single-ocn-'+key+'">'+value+'</td>';
-                //                         });
-                //                         single_table += '</tr>\
-                //                     <tr>\
-                //                       <th width="80px"><strong>SIZE /PRICE</strong></th>';
-                //                     $.each(table_data.erp_id, function(key, value){
-                //                         single_table += '<th><strong>O.QNT</strong></th>\
-                //                                          <th><strong>P.QNT</strong></th>';
-                //                     });
-                //                     single_table += '<th><strong>TOTAL</strong></th>\
-                //                                      <th width="180px"><strong>EXCESS</strong></th>\
-                //                                      <th><strong>MTRS</strong></th>\
-                //                                      <th><strong>STOCK</strong></th></tr>';
-                                                     
-                //                     var total_quantity_final = 0;
-                //                     var total_excess_final = 0;
-                //                     var qty_col_sum = [];
-                //                     $.each(table_data.size, function(size, quantities){
-                //                         var total_qty_sizewise = 0;
-                //                         var col = 0;
-                //                         single_table += '<tr>\
-                //                             <td class="single-size-row">'+size+'</td>';
-                //                             $.each(quantities, function(key, qty){
-                //                                 single_table += '<td class="quantity-'+key+' quantity-td" data-size-value="'+size+'">'+qty+'</td>\
-                //                                         <td></td>';
-                //                                 total_qty_sizewise += parseInt(qty);
-                //                                 /** Column wise total quantity calculation */
-                //                                 qty_col_sum[col] = parseInt(qty) + (qty_col_sum[col] || 0);
-                //                                 col++;
-                //                             });
-                //                             single_table += '<td class="total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
-                //                             <td class="total-excess">\
-                //                                 <div class="form-group has-feedback">\
-                //                                     <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table_count+'"  id="total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
-                //                                     <div class="help-block with-errors"></div>\
-                //                                 </div>\
-                //                             </td>\
-                //                             <td></td>\
-                //                             <td></td>\
-                //                             </tr>';
-                //                       total_quantity_final += parseInt(total_qty_sizewise);
-                //                       total_excess_final   += parseInt(table_data.excess[size]);
-                //                       table_row++;
-                //                     });
-                //                     single_table += '<tr>\
-                //                                         <th class="highlight_row total-text" data-ref-name="'+table+'">TOTAL</th>';
-                                    
-                //                     var qty_total_col = 0;
-                //                     $.each(table_data.erp_id, function(key, value){
-                //                         single_table += '<td class="total-quantity-col-'+qty_total_col+'"><strong>'+qty_col_sum[qty_total_col]+'</strong></td>\
-                //                         <td></td>';
-                //                         qty_total_col++;
-                //                     });
-                                                        
-                //                     single_table += '<td><strong class="total-qty-'+table+'">'+parseInt(total_quantity_final)+'</strong></td>\
-                //                             <td class="total-excess-col-table-'+table_count+' total-excess-'+table+'"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
-                //                             <td></td>\
-                //                             <td></td>\
-                //                         </tr>\
-                //                 </tbody>\
-                //             </table>';
-                //             table_count++;
-                //         });
-                //     $('.single-list-table-div').html(single_table);
-                //     }
-                   
-                // });
+                 $.each(JSON.parse(data.jobcard_data.template_quantity_json), function(template_type, template_type_data){
+                    if(template_type === 'single')
+                    {
+                        if (!($.isEmptyObject(template_type_data)))
+                        {
+                            var table_row = 0;
+                            var table_count = 0;
+                            var single_table = '';
+                            $.each(template_type_data, function(table, table_data){
+                                var lastIndex = table.lastIndexOf("_");
+
+                                var template = table.substring(0, lastIndex).replace(',','_');
+                                
+                                single_table += '<table class="table table-bordered table-responsive single-list-table" style="font-size: 12px;" id="single_list_table_'+table_count+'" border="0.2">\
+                                        <tbody id="single_list_table_body">\
+                                        <tr>\
+                                            <th width="80px">ID.NO</th>';
+                                            $.each(table_data.erp_id, function(key, value){
+                                                single_table += '<td colspan="2" data-template-id="'+table_data.temp_id[key]+'" class="single-erpid-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '<td colspan="4" class="highlight_row" rowspan="6" data-single-ref-name="'+template.replace('_',' ')+'"></td>\
+                                        </tr>\
+                                        <tr>\
+                                            <th width="80px">StyleNo/UVC</th>';
+                                            $.each(table_data.style, function(key, value){
+                                                single_table += '<td colspan="2" class="single-style-no-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">B.PO.NO</th>';
+                                            $.each(table_data.buyer_po, function(key, value){
+                                                single_table += '<td colspan="2" class="single-buyer-po-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">OCN</th>';
+                                            $.each(table_data.ocn, function(key, value){
+                                                single_table += '<td colspan="2" class="single-ocn-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">Color</th>';
+                                            $.each(table_data.color, function(key, value){
+                                                single_table += '<td colspan="2" class="single-color-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                            <th width="80px">Composition</th>';
+                                            $.each(table_data.compositions, function(key, value){
+                                                single_table += '<td colspan="2" class="single-composition-'+key+'">'+value+'</td>';
+                                            });
+                                            single_table += '</tr>\
+                                        <tr>\
+                                          <th width="80px"><strong>SIZE /PRICE</strong></th>';
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<th><strong>O.QNT</strong></th>\
+                                                             <th><strong>P.QNT</strong></th>';
+                                        });
+                                        single_table += '<th><strong>TOTAL</strong></th>\
+                                                         <th width="180px"><strong>EXCESS</strong></th>\
+                                                         <th><strong>MTRS</strong></th>\
+                                                         <th><strong>STOCK</strong></th></tr>';
+                                                         
+                                        var total_quantity_final = 0;
+                                        var total_excess_final = 0;
+                                        var qty_col_sum = [];
+                                        $.each(table_data.size, function(size, quantities){
+                                            var total_qty_sizewise = 0;
+                                            var col = 0;
+                                            single_table += '<tr>\
+                                                <td class="single-size-row">'+size+'</td>';
+                                                $.each(quantities, function(key, qty){
+                                                    single_table += '<td class="quantity-'+key+' quantity-td" data-size-value="'+size+'">'+qty+'</td>\
+                                                            <td></td>';
+                                                    total_qty_sizewise += parseInt(qty);
+                                                    /** Column wise total quantity calculation */
+                                                    qty_col_sum[col] = parseInt(qty) + (qty_col_sum[col] || 0);
+                                                    col++;
+                                                });
+                                                single_table += '<td class="total-quantity-class total-quantity-row-'+table_row+'"><strong>'+parseInt(total_qty_sizewise)+'</strong></td>\
+                                                <td class="total-excess-td">\
+                                                    <div class="form-group has-feedback">\
+                                                        <input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-'+table_count+'"  id="edit_total_excess_row_table_'+table_row+'" data-required-error="Mandatory Field." name="edit_total_excess_row_table_'+table_row+'" "="" placeholder="Excess %" onkeyup="return editTotalExcess()" value="'+table_data.excess[size]+'">\
+                                                        <div class="help-block with-errors"></div>\
+                                                    </div>\
+                                                </td>\
+                                                <td></td>\
+                                                <td></td>\
+                                                </tr>';
+                                          total_quantity_final += parseInt(total_qty_sizewise);
+                                          total_excess_final   += parseInt(table_data.excess[size]);
+                                          table_row++;
+                                        });
+                                        single_table += '<tr>\
+                                                            <th class="highlight_row total-text" data-ref-name="'+template.replace(/ |\//g, '_')+'">TOTAL</th>';
+                                        
+                                        var qty_total_col = 0;
+                                        $.each(table_data.erp_id, function(key, value){
+                                            single_table += '<td class="total-quantity-col-'+qty_total_col+'"><strong>'+qty_col_sum[qty_total_col]+'</strong></td>\
+                                            <td></td>';
+                                            qty_total_col++;
+                                        });
+                                                            
+                                        single_table += '<td><strong class="total-qty">'+parseInt(total_quantity_final)+'</strong></td>\
+                                                <td class="total-excess-col-table-'+table_count+' total-excess"><strong>'+Math.round(isNaN(total_excess_final) ? '0' : total_excess_final)+'</strong></td>\
+                                                <td></td>\
+                                                <td></td>\
+                                            </tr>\
+                                    </tbody>\
+                                </table>';
+                                table_count++;
+                            });
+                        $('.single-list-table-div').html(single_table);
+                        }
+                    }
+                    
+                 });
 
                // excess, meters and settings calculation values.
                 edit_meters_div_html ='<div class="col-md-12">\
@@ -385,10 +409,6 @@ function getNatJobcardsList()
                                         <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" max="99999" data-max-error="Value should be <= 99999" class="form-control input-sm settings" name="settings" placeholder="SETTINGS" id="settings" onkeyup="return totalMetersEdit()" value="'+data.jobcard_data.settings+'" >\
                                         <div class="help-block with-errors"></div>\
                                     </div>\
-                                    </div>\
-                                    <div class="col-md-3">\
-                                    <label for="total_mtrs" >TOTAL MTRS :</label>\
-                                    <span id="total_mtrs" data-tem-ref-name=" class="total-meters">'+data.jobcard_data.total_mtrs+'</span>\
                                     </div>\
                                 </div>';
                   
