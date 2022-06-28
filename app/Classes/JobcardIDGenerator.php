@@ -54,7 +54,20 @@ class JobcardIDGenerator
 	{
 		try
 		{	
-            $item_array = ['Printed Labels' => 'PL', 'Woven Labels' => 'WL', 'Heat Tranfers' => 'HT', 'Carton & Polybag Stickers' => 'CS', 'Printed Boards' => 'PB', 'Swing Tags' => 'ST', 'Size Stickers' => 'ST', 'Garment Friendly' => 'GF', 'Price Stickers' => 'PS', 'Header Cards' => 'HC', 'Insert Cards' => 'IC', 'Cascades' => 'CD'];
+            $item_array = [
+                'Printed Labels' => 'PL', 
+                'Woven Labels' => 'WL', 
+                'Heat Tranfers' => 'HT', 
+                'Carton & Polybag Stickers' => 'CS', 
+                'Printed Boards' => 'PB', 
+                'Swing Tags' => 'ST', 
+                'Size Stickers' => 'ST', 
+                'Garment Friendly' => 'GF', 
+                'Price Stickers' => 'PS', 
+                'Header Cards' => 'HC', 
+                'Insert Cards' => 'IC', 
+                'Cascades' => 'CD'
+            ];
             
             $article_name = array_key_exists($article_array[0],$item_array) == true?$item_array[$article_array[0]]:'XX';
             

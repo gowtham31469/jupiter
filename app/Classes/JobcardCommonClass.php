@@ -14,8 +14,9 @@ class JobcardCommonClass
 			$order_detail_id_array = ErpOrderDetails::where([
 				'erp_order_details.uuid' => $uuid,
 				'erp_order_details.status' => $erp_jc_status_id,
-				'erp_order_details.order_status_id' => $order_ap_status_id
-			])->pluck('erp_order_details.id')->all();
+			])
+			->whereIn('erp_order_details.order_status_id', $order_ap_status_id)
+			->pluck('erp_order_details.id')->all();
 
 			$order_detail_ids = array_unique(array_merge($order_detail_ids, $order_detail_id_array));
 		}

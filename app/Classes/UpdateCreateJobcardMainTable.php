@@ -107,33 +107,80 @@ class UpdateCreateJobcardMainTable
             
             foreach($jobcard_data as $key => $data)
             {
-                $main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
-                $qnty_id        = str_replace("_orders_quanty","_order_id",str_replace($buyer."_","",$data->order_qnty_table_name));
-                $order_details  = DB::table($data->order_qnty_table_name)
-                                    ->select($main_table.'.season_code', $main_table.'.template_id', $main_table.'.purchase_order_no', $main_table.'.po_number', $main_table.'.ocn_number', $main_table.'.style_ref')
-                                    ->where($data->order_qnty_table_name.'.id', $data->order_qnty_table_id)
-                                    ->join($main_table, $main_table.'.id', $data->order_qnty_table_name.'.'.$qnty_id)
+                if($buyer === 'orchestra'){
+                    $qnty_table     = $data->order_qnty_table_name;
+                    $qty_row_id     = $data->order_qnty_table_id;
+                    $main_table     = str_replace("_qty","",$qnty_table);
+                    $result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
+                    $qnty_id        = '';
+                    foreach (explode(' ', $result_str) as $word)
+                    {
+                        $qnty_id .= strtolower($word[0]);
+                    }
+                    
+                    $order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
                                     ->first();
-                $nat_material_obj = new NATMaterialQuery();
-                $template_level = $nat_material_obj->nonArtworkMaterialDetails($order_details->template_id, $buyer);
-                
-                $material_name  = $template_level->material;
-                $material_sub   = $template_level->material_sub;
-                $material_ref   = $template_level->ref;
+                    
+                    // template front and back id storing in orchestra_hang_tag_orders table
+                    $template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
+
+                    $template_data = DB::table('orchestra_item_master')
+                                    ->where('orchestra_item_master.id', $template_id)
+                                    ->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
+                    $material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
+                    $material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
+                    
+                    $material_ref   = $template_data->item_name;
+                    
+                    $customer_po    = $order_details->po_number;
+                    $buyer_po       = $order_details->po;
+                    $style          = $order_details->uvc;
+                    $ocn_number     = null;
+                    $season         = $order_details->season_code;
+                }  else {
+                    $main_table     = str_replace("_quanty","",$data->order_qnty_table_name);
+                    $qnty_id        = str_replace("_orders_quanty","_order_id",str_replace($buyer."_","",$data->order_qnty_table_name));
+                    
+                    $order_details  = DB::table($data->order_qnty_table_name)
+                                        ->select($main_table.'.*')
+                                        ->where($data->order_qnty_table_name.'.id', $data->order_qnty_table_id)
+                                        ->join($main_table, $main_table.'.id', $data->order_qnty_table_name.'.'.$qnty_id)
+                                        ->first();
+                    
+                    $nat_material_obj = new NATMaterialQuery();
+                    $template_level = $nat_material_obj->nonArtworkMaterialDetails($order_details->template_id, $buyer);
+                    
+                    $material_name  = $template_level->material;
+                    $material_sub   = $template_level->material_sub;
+                    $material_ref   = $template_level->ref;
+
+                    $season         = $order_details->season_code;
+                    $customer_po    = $order_details->purchase_order_no;
+                    $buyer_po       = $order_details->po_number;
+                    $ocn_number     = $order_details->ocn_number;
+
+                    if($buyer === 'tesco'){
+                        $country        = $order_details->zone;
+						$style_zone     = strtolower($country).'_style_ref';
+                        $style          = $order_details->$style_zone;
+                    } else {
+                        $style          = $order_details->style_ref;
+                    }
+                }
                 
                 // it will insert if erp_order_details_id i snot exists, otherwise it will update 
                 $history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
                     'buyer_id'             => $request['buyer_id'],
                     'template'             => 'Not Available',
-                    'season'               => $order_details->season_code,
+                    'season'               => $season,
                     'customer_id'          => $request['customer_id'],
                     'material'             => $material_name,
                     'mat_sub'              => $material_sub,
                     'reference'            => $material_ref,
-                    'style'                => $order_details->style_ref,
-                    'po'                   => $order_details->purchase_order_no,
-                    'buyer_po'             => $order_details->po_number,
-                    'ocn'                  => $order_details->ocn_number,
+                    'style'                => $style,
+                    'po'                   => $customer_po,
+                    'buyer_po'             => $buyer_po,
+                    'ocn'                  => $ocn_number,
                     $request['crud_operation_type']  => $current_timestamp,
                     'disp_mode_id'         => $request['disp_mode']
                 ]);

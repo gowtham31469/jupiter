@@ -43,10 +43,15 @@ class NonArtworkJobCardFiltersController extends Controller
 		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
 
 		// Get Erp status table id for 'Moved To JC Queue' status.
-		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'Moved To JC Queue')->value('id');
+		$this->erp_jc_status_id = DB::table('erp_status')
+                                    ->where('status_name', 'Moved To JC Queue')
+                                    ->value('id');
 		 
 		// Get order status table id for 'Order Approved' status.
-		$this->order_ap_status_id = DB::table('orders_status')->where('status_name', 'Order Approved')->value('id');
+		$this->order_ap_status_id = DB::table('orders_status')
+                                    ->whereIn('status_name', ['Order Approved', 'Order Placed'])
+                                    ->pluck('id')
+                                    ->all();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
 	}
@@ -90,11 +95,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where([
                 'erp_order_details.deleted_at' => null,
                 'erp_order_details.status' => $this->erp_jc_status_id,
-                'erp_order_details.order_status_id' => $this->order_ap_status_id,
                 'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                 'erp_orders.buyer_id' => $buyer_id
             ])
             ->whereIn('erp_order_details.template_id', $values)
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->orderBy('erp_order_details.erp_order_id', 'asc')
             ->pluck('erp_orders.po_no', 'erp_orders.erp_id');
 
@@ -125,9 +130,9 @@ class NonArtworkJobCardFiltersController extends Controller
         ->join('customers', 'erp_orders.customer_id', 'customers.id')
         ->where(['erp_order_details.deleted_at' => null,
                 'erp_order_details.status' => $this->erp_jc_status_id,
-                'erp_order_details.order_status_id' => $this->order_ap_status_id,
                 'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                 'erp_orders.buyer_id' => $request['buyer_id']])
+        ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
         ->select('customers.company_name', 'customers.id')
         ->distinct('customers.id')
         ->get();
@@ -155,11 +160,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('reports_template_level_name', strtolower($buyer_name).'_template.name_in_reports', 'reports_template_level_name.id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id']])
             ->whereIn('erp_order_details.template_id', $values)
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->select('reports_template_level_name.name', 'reports_template_level_name.id')
             ->distinct('reports_template_level_name.id')
             ->get();
@@ -196,11 +201,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('reports_template_level_name', strtolower($buyer_name).'_template.name_in_reports', 'reports_template_level_name.id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id']])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->whereIn('erp_order_details.template_id', $values)
             ->select('erp_order_details.reference_name', 'erp_order_details.template_id')
             ->distinct('erp_order_details.template_id')
@@ -238,11 +243,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('reports_template_level_name', strtolower($buyer_name).'_template.name_in_reports', 'reports_template_level_name.id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id'],])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->whereIn('erp_order_details.reference_name', $request['reference_name'])
             ->whereIn('erp_order_details.template_id', $values);
 
@@ -316,11 +321,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id'],])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->whereIn('erp_order_details.reference_name', $request['reference_name'])
             ->where(function($query) use ($request){
                 if($request['style_number'])
@@ -336,8 +341,8 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
                 }
             })
-            ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type')
-            ->select('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type')
+            ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type', 'erp_order_details.order_status_id')
+            ->select('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type', 'erp_order_details.order_status_id')
             ->get();
         } else {
             $buyer_name = DB::table('erp_orders')
@@ -354,8 +359,8 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
-                    'erp_order_details.order_status_id' => $this->order_ap_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty'])
+            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->where(function($query) use ($request){
                 if($request['erp_id'])
                 {
@@ -366,19 +371,24 @@ class NonArtworkJobCardFiltersController extends Controller
                         $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
                 }
             })
-            ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type')
-            ->select('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type')
+            ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type', 'erp_order_details.order_status_id')
+            ->select('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type', 'erp_order_details.order_status_id')
             ->get();
         }
 
         return Datatables::of($nat_jc_filtered_data)
         ->addColumn('Sl_No', function($nat_jc_filtered_data) {
-            return '<div class="form-check">
+            if ($nat_jc_filtered_data->order_status_id == 4) {
+                return '<div class="form-check">
                     <a href="javascript:void(0)">
                         <label>
                             <input class="row-checkbox" name="nat-row-checkbox" type="checkbox" data-erp-id="'.$nat_jc_filtered_data->id.'" data-customer-name="'.$nat_jc_filtered_data->customer.'" data-buyer-name="'.$nat_jc_filtered_data->buyer.'" data-buyer-po="'.$nat_jc_filtered_data->buyer_po_number.'" data-refname="'.$nat_jc_filtered_data->reference_name.'" data-uuid="'.$nat_jc_filtered_data->uuid.'" style="margin-right: 10px;" onchange="return selectNatOrders(this)"></label>
                     </a>
                     </div>';
+            } else {
+                return '<div class="form-check"></div>';
+            }
+                
           })
         ->rawColumns(['Sl_No'])
         ->make(true);
