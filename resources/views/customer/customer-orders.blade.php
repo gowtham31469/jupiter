@@ -92,6 +92,15 @@
     background-size: 100%;
     background-repeat: no-repeat;
 }
+
+    .custom-width-select-season .btn{
+        width:230px;
+    }
+
+    .custom-width-select-season{
+        margin-top: -7px;
+        width:230px !important;
+    }
 .hiddencis_div{
     display: none !important;
 }
@@ -1124,6 +1133,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
 
 <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>
@@ -1166,13 +1176,6 @@ background: rgba(0,0,0,0.2);
               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
               $('#buyerSelectionModalCenter').modal('hide');
-            //   var buyer = localStorage.getItem("buyer");
-            //   if (buyer === 'orchestra') 
-            //   {
-            //       orders();
-            //   } else {
-            //       tescoOrders(reOrderTesco);
-            //   }
           } else {
               localStorage.removeItem("buyer");
               localStorage.removeItem("buyer_id");
@@ -1221,7 +1224,7 @@ background: rgba(0,0,0,0.2);
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') 
             {
-                orders();
+                orders('customer');
             } else {
                 tescoOrders(reOrderTesco);
             }
@@ -1242,7 +1245,7 @@ background: rgba(0,0,0,0.2);
               var buyer = localStorage.getItem("buyer");
                 if (buyer === 'orchestra') 
                 {
-                    orders();
+                    orders('customer');
                 } else {
                     tescoOrders(reOrderTesco);
                 }
