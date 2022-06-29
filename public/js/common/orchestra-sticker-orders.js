@@ -2474,7 +2474,6 @@ function sticker_order_details(uvc, po, user_type) {
    
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
-	$('.season_code-nav-menu').css('display','none')
     
     $.ajax({
         url: base_url + "/"+user_type+"/" + buyer + "/order-management/sticker-order-details",
@@ -2491,7 +2490,9 @@ function sticker_order_details(uvc, po, user_type) {
         success: function (data) {
 			if(data.customer_active == "active")
 			{
-				 $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+				$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
+				$('.season_code-nav-menu').css('display','none')
+				$('li.buyer-nav-menu').addClass('hidden');
 				orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po,user_type)
 			}
 			else

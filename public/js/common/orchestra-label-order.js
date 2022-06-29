@@ -12,7 +12,6 @@ function label_order_details(uvc,user_type) {
     // var buyer_id=$('.buyer-select').val()
     var buyer = localStorage.getItem("buyer");
     var buyer_id = localStorage.getItem("buyer_id");
-    $('.season_code-nav-menu').css('display','none')
     
     $.ajax({
         url: base_url + "/"+user_type+"/" + buyer + "/order-management/label-order-details",
@@ -28,16 +27,18 @@ function label_order_details(uvc,user_type) {
         success: function (data) {
 			if(data.customers.length > 0)
 			{
+                $('.season_code-nav-menu').css('display','none')
+                $('li.buyer-nav-menu').addClass('hidden');
 				$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
-				 localStorage.setItem("label_order_data", JSON.stringify(data));
-            orchestra_label_order_details(buyer, buyer_id, uvc, data)
-            hangtagmodal(data);
-            specialtags(data);
-            heatTransfer(data);
-            mainlabels(data);
-            sizelabels(data);
-			var wcl_already_exists=[];
-			var check_count=0;
+				localStorage.setItem("label_order_data", JSON.stringify(data));
+                orchestra_label_order_details(buyer, buyer_id, uvc, data)
+                hangtagmodal(data);
+                specialtags(data);
+                heatTransfer(data);
+                mainlabels(data);
+                sizelabels(data);
+                var wcl_already_exists=[];
+                var check_count=0;
 			
             if (data.orchestra_wash_care_label_orders.length > 0) {
                 $.each(data.orchestra_wash_care_label_orders, function (index, value) {
