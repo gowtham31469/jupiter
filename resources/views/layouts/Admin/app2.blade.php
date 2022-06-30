@@ -60,6 +60,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown season_code-nav-menu"></li>
                 <li class="dropdown year-nav-menu"></li>
                 <li class="dropdown buyer-nav-menu"></li>
                  <li><a class="notification" style="cursor: pointer;" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>

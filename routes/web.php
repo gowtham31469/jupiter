@@ -336,6 +336,8 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
 
+
+Route::post('admin/orchestra/order-management/season_code_filter', 'Admin\Orchestra\OrderManagementCntrl@seasonCodeFilter');
 Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderManagementCntrl@Orders');
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
@@ -999,6 +1001,9 @@ Route::group(['prefix' => 'erp'], function () {
 
 //Orchestra Order Management - customer
 Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
+
+Route::post('customer/orchestra/order-management/season_code_filter', 'Customer\Orchestra\OrderController@seasonCodeFilter');
+
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');

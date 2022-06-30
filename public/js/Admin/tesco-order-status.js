@@ -1224,7 +1224,7 @@ function tescoStatusTable(data, path) {
 
                         
 
-                }else if (key == "Print Proof") {
+                } else if (key == "Print Proof") {
                     if (value['order_status'] != 'Saved' && value['order_status'] != 'Order Pending' && value['order_status'] != 'Order Cancelled') {
                         var zone = value.Zone
                         var style_no = "";
@@ -1273,7 +1273,7 @@ function tescoStatusTable(data, path) {
                      }
                     
 
-            }else if (key == "order_status") {
+                } else if (key == "order_status") {
                     if (value['order_status'] != 'Saved') {
                         var str = value[key];
                         $status = str.replace(/ /g, "");
