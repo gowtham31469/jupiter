@@ -662,7 +662,6 @@ const getMachineExcess = () => {
                     }
 
                     $(row).parent().next().find(`div input`).val(excess_percentage);
-                    $('#excess').text(`${valueOfElement.excess}` );
 
                     /** refresh excess values fields in single ref table */
                     $('#total_excess_row_table_'+index).trigger('input');
@@ -710,6 +709,7 @@ const getMachineExcess = () => {
     }
 
     $('#act_excess').text(Math.round(act_excess))
+    $('#excess').text(Math.round(act_excess));
 
      mtrsForNatStickers();
  }
@@ -725,7 +725,7 @@ const mtrsForNatStickers = () => {
 
     switch (machine_text.toLowerCase().trim()) {
         case 'rotary':
-                mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, 0);
+                mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, total_excess);
             break;
         case 'flexo':
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);

@@ -172,7 +172,7 @@ th {
                                 @endforeach
                             </tr>
                             <tr class="single-section" nobr="true">
-                                <th nobr="true"><strong>COMPOSITION</strong></th>
+                                <th nobr="true" style="font-size:11px;"><strong>COMPOSITION</strong></th>
                                 @foreach ($table_data['compositions'] as $key => $value)
                                     <td colspan="2" nobr="true">{{ $value }}</td>
                                 @endforeach
