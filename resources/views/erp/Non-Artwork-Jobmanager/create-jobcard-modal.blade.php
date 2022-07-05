@@ -3,11 +3,12 @@
 		<div class="modal-content nat-jobcard-creation-modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal">Create Jobcard</h4>
+				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal"></h4>
 			</div>
-			{!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
+			{!! Form::open(['id' => 'create_nat_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
 			<div class="modal-body nat-jobcard-creation-modal-body">
 				<div class="container-fluid">
+					<div id="nat_result"></div>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="col-md-4">
@@ -26,7 +27,7 @@
 						<div class="col-md-12">
 							<div class="col-md-4">
 								{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
-								<span id="work_order"></span>
+								<span name="work_order_id" id="work_order"></span>
 							</div>
 							<div class="col-md-4">
 							</div>
@@ -83,6 +84,9 @@
 								</div>
 							</div>
 							<div class="col-md-4">
+								<input type="hidden" value="" id="nat_template_type">
+								<input type="hidden" value="" id="jobcard_id">
+								<input type="hidden" value="" id="crud_operation_type">
 							</div>
 						</div>
 					</div>
@@ -103,14 +107,14 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-									{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
+									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required', 'onchange' => 'return getMachineExcess()')) }}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -166,14 +170,14 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-									{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-									{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+									{!! Form::label('no_repeats', 'NO OF REPEATS :', ['class' => 'form_label']) !!}
+									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForNatStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
 										<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -200,13 +204,6 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('no_repeats', 'NO OF REPEATS :', ['class' => 'form_label']) !!}
-									{!! Form::number('no_repeats',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF REPEATS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
-										<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback">
 									{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
 									{{ Form::select('finish_type',(['' => '-- Select Finish Type --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
 									<div class="help-block with-errors"></div>
@@ -219,20 +216,10 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
-						</div>
-						<div class="col-md-12">
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
-									{!! Form::label('print_length', 'PRINT LENGTH :', ['class' => 'form_label']) !!}
-									{!! Form::number('print_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
-										<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group has-feedback">
-									{!! Form::label('composition', 'COMPOSITION :', ['class' => 'form_label']) !!}
-									{!! Form::number('composition',$value = '', array('class' => 'form-control input-sm','placeholder' => 'COMPOSITION', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
-										<div class="help-block with-errors"></div>
+									{!! Form::label('excess', 'EXCESS %:', ['class' => 'form_label']) !!}
+									<span id="excess"></span>
 								</div>
 							</div>
 						</div>
@@ -384,7 +371,7 @@
 			</div>
 			<div class="modal-footer nat-jobcard-creation-modal-footer">
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn'] ) !!}
+				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn', 'onclick'  => 'return validateNatJCForm()'] ) !!}
 			</div>
 			{!! Form::close() !!}
 		</div>
