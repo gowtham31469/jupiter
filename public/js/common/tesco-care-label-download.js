@@ -1217,7 +1217,7 @@ function chunksplit(breaking_id)
 }
 
 function chunkSubstrpercentage(str,n) {
-    let arr = str?.split(' ');
+    let arr = str.split(' ');
     let result=[]
     let subStr=arr[0]
     for(let i = 1; i < arr.length; i++){
