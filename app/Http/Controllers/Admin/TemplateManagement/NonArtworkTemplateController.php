@@ -93,7 +93,8 @@ class NonArtworkTemplateController extends Controller
                             'item_name'    => $template_name,
                             'tag_name'    => $ref,
                             'ref_no' => $ref,
-                            'is_qrcode_required' => 0
+                            'is_qrcode_required' => 0,
+                            'is_non_artwork_template' => 1
                     ]);
     
         DB::table($buyer.'_template')->insertGetId([
@@ -208,5 +209,69 @@ class NonArtworkTemplateController extends Controller
         }
         return $result;
          
+    }
+
+    /**
+     * Method to list the template hierarchy
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function templateHierarchy(Request $request) {
+	    $buyer = $request->buyer;
+        $treeviewData = array();
+        $treeviewData= DB::table($buyer."_item_master")
+                    ->select('id','parent_id','item_name as text')
+                    ->where('is_non_artwork_template', 1)
+                    ->orderBy('id', 'asc')
+                    ->get()->toArray();
+        
+         
+        if($treeviewData){
+                $childs = array();
+                foreach($treeviewData as &$item) 
+                {
+                $childs[$item->parent_id][] = &$item;
+                unset($item);
+                }
+                foreach($treeviewData as &$item) 
+                {
+                    if (isset($childs[$item->id]))
+                    {
+                        $item->children = $childs[$item->id];
+                        unset($item);
+                    }
+                }
+                $tree = $childs[0];
+                $treefinalData=json_encode($tree);
+                return $treefinalData;
+       }
+
+       return  $treeviewData;
+
     } 
+
+    /**
+     * Method to rename the template
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function renameTemplate(Request $request) {
+        try {
+			$buyer = $request['buyer'];
+            $template_id = $request['template_id'];
+            $template_name = $request['new_name'];
+            
+            DB::table($buyer.'_item_master')
+                        ->where('id',$template_id)
+                        ->update(['item_name' => $template_name]);
+			
+            $result = response()->json(['error'=> false,'message' =>'success'],200);
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    }
 }

@@ -21,7 +21,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Label',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             1 => 
             array (
@@ -31,7 +32,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Stickers',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             2 => 
             array (
@@ -41,7 +43,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Printed Board',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             3 => 
             array (
@@ -51,7 +54,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Printed Label',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             4 => 
             array (
@@ -61,7 +65,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Woven Label',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             5 => 
             array (
@@ -71,7 +76,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Heat Transfers',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             6 => 
             array (
@@ -81,7 +87,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Cotton',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             7 => 
             array (
@@ -91,7 +98,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Others',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             8 => 
             array (
@@ -101,7 +109,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Barcode Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             9 => 
             array (
@@ -111,7 +120,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Hanger Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             10 => 
             array (
@@ -121,7 +131,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Price Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             11 => 
             array (
@@ -131,7 +142,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Fab Friendly Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             12 => 
             array (
@@ -141,7 +153,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Carton & Polybag Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             13 => 
             array (
@@ -151,7 +164,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Size Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             14 => 
             array (
@@ -161,7 +175,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'CMYK Sticker',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             15 => 
             array (
@@ -171,7 +186,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Others',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             16 => 
             array (
@@ -181,7 +197,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Tag',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             17 => 
             array (
@@ -191,7 +208,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Insert Card',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             18 => 
             array (
@@ -201,7 +219,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Photo card',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             19 => 
             array (
@@ -211,7 +230,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Cascade/Wrapband',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             20 => 
             array (
@@ -221,7 +241,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Inner Box',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             21 => 
             array (
@@ -231,7 +252,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Rider Card',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             ),
             22 => 
             array (
@@ -241,7 +263,8 @@ class ItemMasterSeeder extends Seeder
                 'item_name' => 'Others',
                 'ref_no' => '',
                 'tag_name' => '',
-                'is_qrcode_required' => 0
+                'is_qrcode_required' => 0,
+                'is_non_artwork_template' => 1
             )
         ));
 
