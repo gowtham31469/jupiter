@@ -17,11 +17,17 @@ Route::get('admin/non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateCont
 
 Route::post('admin/save-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
 
+Route::post('admin/update-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@updateNonArtworkOrders')->name('update-non-artwork');
+
 Route::post('admin/get-non-artwork-order-details', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
 
 Route::post('admin/get-item-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
 
 Route::post('admin/get-reference-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
+
+
+Route::post('admin/calculate-nat-rate', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
+
 
 Route::get('/', function () {
     return view('welcome');
