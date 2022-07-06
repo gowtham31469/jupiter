@@ -92,6 +92,10 @@ Route::get('admin/non-artwork-template/get-select-list', 'Admin\TemplateManageme
 
 Route::post('admin/non-artwork-template/update-template', 'Admin\TemplateManagement\NonArtworkTemplateController@updateTemplate');
 
+Route::post('admin/non-artwork-template/template-hierarchy', 'Admin\TemplateManagement\NonArtworkTemplateController@templateHierarchy');
+
+Route::post('admin/non-artwork-template/rename-template', 'Admin\TemplateManagement\NonArtworkTemplateController@renameTemplate');
+
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
 
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');

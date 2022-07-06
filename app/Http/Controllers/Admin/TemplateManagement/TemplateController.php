@@ -43,8 +43,8 @@ class TemplateController extends Controller
             View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
                 return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
             });
-            
-            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
+            $buyers_with_template = ['Tesco', 'Orchestra'];
+            $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->whereIn('buyer_name', $buyers_with_template)->get();
             $buyer_count = count($buyers);
             return view('Admin/Template Management/template-list',['buyers' => $buyers,'buyer_count' => $buyer_count]);
         }
