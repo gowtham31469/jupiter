@@ -78,7 +78,7 @@ function template_list() {
     var buyer = localStorage.getItem("buyer");
 
     $.ajax({
-        url: base_url + "/admin/template-management/template-hierarchy",
+        url: base_url + "/admin/non-artwork-template/template-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
@@ -90,10 +90,15 @@ function template_list() {
             $(".loader").css('margin-top', '12%');
         },
         success: function (data) {
-            $('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:auto; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8 col-sm-12 col-xs-12" style="margin-top: 70px;"><div class="card text-white preview-tag" style="height:calc(100vh - 110px);overflow-y: auto;"> <div class="card-body text-center justify-content-center"> <div class="loader"></div><div class="viewDiv" style="width:100%;"> </div><div class="descriptionDiv"> </div></div></div></div></div>')
+            $('.main-content').html('<div class="row"><div class="col-md-4"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand">Expand</button> <button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse">Collapse</button><div class="search-tree"> <input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="card js-card" id="style-4" style="height:calc(100vh - 110px); overflow-y:auto; position:relative;margin-bottom: 15px;"><div class="jaytree force-overflow" id="tree1"> </div></div></div><div class="col-md-8 col-sm-12 col-xs-12" style="margin-top: 70px;"><div class="card text-white preview-tag" style="height:calc(100vh - 110px);overflow-y: auto;"> <div class="card-body text-center justify-content-center"> <div class="loader"></div><div class="viewDiv" style="width:100%;"> </div><div class="descriptionDiv"> </div></div></div></div></div>');
+
+            if(data.length < 1) {
+                $('#newBuyerSelectionModal').modal('show');
+            }
 
             $('#tree1').jstree({
                 'core': {
+                    'check_callback': true,
                     'data': data
                 },
                 "types": {
@@ -103,15 +108,26 @@ function template_list() {
                 },
                 "contextmenu": {
                     "items": function ($node) {
+                        var tree = $("#tree1").jstree(true);
                         return {
-                            "create": {
+                            "Create": {
                                 "separator_before": false,
                                 "separator_after": false,
                                 "label": "Add Template",
+                                "icon": "fa fa-plus-square-o",
                                 "action": function (obj) {
                                     $('#addTemplateModal').modal('show');
                                 }
                             },
+                            "Rename": {
+                                "separator_before": false,
+                                "separator_after": false,
+                                "label": "Rename Template",
+                                "icon": "fa fa-pencil-square-o",
+                                "action": function (obj) { 
+                                    tree.edit($node);
+                                }
+                            },  
                             // "Remove": {
                             //     "separator_before": false,
                             //     "separator_after": false,
@@ -123,14 +139,22 @@ function template_list() {
                         };
                     }
                 },
-                "plugins": ["types", "search", "contextmenu"]
+                "plugins": ["types", "search", "contextmenu" ]
+            }).on('rename_node.jstree', function(e, data) {
+                renameNode(data);
+
+            }).bind("loaded.jstree", function (event, data) {
+                $(this).jstree("open_all");
             });
+
+
             $('#expand').bind("click", function () {
                 $('#tree1').jstree("open_all");
             });
             $('#collapse').bind("click", function () {
                 $('#tree1').jstree("close_all");
             });
+
             var to = false;
             $('#tree1_q').keyup(function () {
                 if (to) {
@@ -373,5 +397,33 @@ function showSnackbar() {
     setTimeout(function () {
         x.className = x.className.replace("show", "");
     }, 3000);
+}
+
+function renameNode(data) {
+    var buyer = localStorage.getItem("buyer");
+    var temp_id = data.node.id;
+    var text = data.node.text;
+    $.ajax({
+		url: base_url + "/admin/non-artwork-template/rename-template",
+		type: "POST",
+		dataType: "json",
+		data: {
+            buyer: buyer,
+			template_id: temp_id,
+            new_name: text,
+            _token: csrf_token
+		},
+		success: function (data) {
+			$('.snackbar_span').html('Template rename successful');
+			showSnackbar();
+		},
+		error: function (data) {
+			$('.snackbar_span').html('Unable to save. Try again!!');
+			showSnackbar();
+		},
+		complete: function () {
+
+		}
+	});
 }
 

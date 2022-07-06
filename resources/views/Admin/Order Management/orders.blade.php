@@ -119,6 +119,15 @@
         background-color: #f1f1f1;
     }
 
+    .custom-width-select-season .btn{
+        width:230px;
+    }
+
+    .custom-width-select-season{
+        margin-top: -7px;
+        width:230px !important;
+    }
+
     .files:before {
         position: absolute;
         bottom: 10px;
@@ -1213,6 +1222,7 @@
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
 
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
@@ -1367,13 +1377,6 @@
                 localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
                 $('.selected-buyer').text('Selected Buyer : ' + $('.buyers-card.active-buyer.active').data("name"))
                 $('#buyerSelectionModalCenter').modal('hide');
-                // var buyer = localStorage.getItem("buyer");
-                // if (buyer === 'orchestra') 
-                // {
-                //     orders();
-                // } else if (buyer === 'tesco')  {
-                //     tescoOrders(reOrderTesco);
-                // }
             } else {
                 localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
@@ -1415,7 +1418,7 @@
             $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') {
-                orders();
+                orders('admin');
             } else if (buyer === 'tesco') {
                 tescoOrders(reOrderTesco);
             } else {
@@ -1435,7 +1438,7 @@
                 $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                 var buyer = localStorage.getItem("buyer");
                 if (buyer === 'orchestra') {
-                    orders();
+                    orders('admin');
                 } else if (buyer === 'tesco') {
                     tescoOrders(reOrderTesco);
                 }

@@ -549,16 +549,19 @@ function actualExcess()
 function mtrsForStickers()
 {
     var length_side_dimension = $('#length_side').val() === ''?0:$('#length_side').val();
+    let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
+    let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
+    
     $('.total-text').each(function(){
         let ref_name              = $(this).data('ref-name');
         let total_qty             = 0;
         let mtrs                  = 0;
-        let no_of_repeats         = $('#no_sticker').val() === ''?0:$('#no_sticker').val();
-        let repeat_gap            = $('#repeat_gap').val() === ''?0:$('#repeat_gap').val();
 
         $('.total-qty-'+ref_name).each(function(){
+            var qty = parseInt($(this).text()) || 0;
+
             if (!isNaN(total_qty) && total_qty.length !== 0) {
-                total_qty += parseInt($(this).text());
+                total_qty += parseInt(qty);
             }
         });
 
@@ -618,7 +621,7 @@ function storeJobcard()
     var film_no         = $( '#film_no' ).val() === ''?null:$( '#film_no' ).val();
     var invoice_date    = $( '#invoice_date' ).val() === ''?null:$( '#invoice_date' ).val();
     var length_side     = $( '#length_side' ).val() === ''?null:$( '#length_side' ).val();
-    var excess          = $( '#excess' ).val() === ''?null:$( '#excess' ).val();
+    var excess          = $( '#excess' ).val() === ''?0:$( '#excess' ).val();
     var teeth_no        = $( '#teeth_no option:selected' ).val() === ''?null:$( '#teeth_no option:selected' ).val();
     var inv_no          = $( '#inv_no' ).val() === ''?null:$( '#inv_no' ).val();
     var no_sticker      = $( '#no_sticker' ).val() === ''?null:$( '#no_sticker' ).val();
@@ -744,7 +747,7 @@ function storeJobcard()
 
             $(item).find('.total-excess div input').each(function (index2, excess) {
                 excess_object = {};
-                excess_object = excess.value;
+                excess_object = excess.value != ''?excess.value:0;
             });
             excess_object_final[size_text] = excess_object;
 
@@ -953,16 +956,7 @@ function storeJobcard()
                             openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname);
                         }
                     });
-					
-//                    var resp = JSON.stringify(data.file_path); 
-//                    window.open(
-//                        base_url+JSON.parse(resp),
-//                        '_blank' // <- This is what makes it open in a new window.
-//                    ); 
-//                    $('.snackbar_span').html("Jobcard Created Successfully");
-//                    showSnackbar();
-//                    $('.modal').modal('hide');
-//                    location.reload();
+				
                 }
               
             },
