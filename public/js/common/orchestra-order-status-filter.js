@@ -707,6 +707,7 @@ getOrchestraOrders = (user_type) => {
                         null,
                         null,
                         null,
+                        null,
                     ],
                     initComplete: function () {
                         $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');

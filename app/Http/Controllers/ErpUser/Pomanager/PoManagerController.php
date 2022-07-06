@@ -30,6 +30,8 @@ class PoManagerController extends Controller
     public function __construct()
     {
 		$this->middleware('erpuser');
+		$role = "PO MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -257,37 +259,6 @@ class PoManagerController extends Controller
             $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         }
         return $result;
-	}
-	
-	/**
-	 * setCompanySession function
-	 * 
-	 * Store company data into session.
-	 * @param Request $request
-	 * @return void
-	 */
-	public function setCompanySession(Request $request)
-	{
-		$company_id = $request->company_id;
-		$company_name = $request->company_name;
-
-		if (session()->has('company') && session()->has('company_name')) {
-			// delete existing company session 
-			session()->forget('company');
-			session()->forget('company_name');
-
-			// update company session data
-			session()->put('company', $company_id);
-			session()->put('company_name', $company_name);
-		}
-		else 
-		{
-			// create company session data
-			session(['company' => $company_id, 'company_name' => $company_name]);
-		}
-		
-		return response()->json(['error'=> false,'message' =>'success'],200);
-		 
 	}
 	
 	/**

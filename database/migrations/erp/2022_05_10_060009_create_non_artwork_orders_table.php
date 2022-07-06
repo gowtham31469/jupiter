@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateNonArtworkOrdersTable extends Migration
+class CreateNonArtworkOrderTable extends Migration
 {
     /**
      * Run the migrations.

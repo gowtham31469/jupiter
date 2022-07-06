@@ -81,7 +81,23 @@ Route::get('admin/order-management/get-tsl-size', 'Admin\OrderManagement\OrderCo
 Route::post('admin/order-management/print-wash-pdf', 'Admin\OrderManagement\OrderController@printWashPdf');
 
 Route::get('admin/template-management', 'Admin\TemplateManagement\TemplateController@templateList');
+
+Route::get('admin/non-artwork-template-management', 'Admin\TemplateManagement\NonArtworkTemplateController@templateList');
+
+Route::post('admin/non-artwork-template/add-new-template', 'Admin\TemplateManagement\NonArtworkTemplateController@addTemplate');
+
+Route::post('admin/non-artwork-template/template-view', 'Admin\TemplateManagement\NonArtworkTemplateController@templateView');
+
+Route::get('admin/non-artwork-template/get-select-list', 'Admin\TemplateManagement\NonArtworkTemplateController@getSelectList');
+
+Route::post('admin/non-artwork-template/update-template', 'Admin\TemplateManagement\NonArtworkTemplateController@updateTemplate');
+
+Route::post('admin/non-artwork-template/template-hierarchy', 'Admin\TemplateManagement\NonArtworkTemplateController@templateHierarchy');
+
+Route::post('admin/non-artwork-template/rename-template', 'Admin\TemplateManagement\NonArtworkTemplateController@renameTemplate');
+
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
+
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
 
 Route::post('admin/template-management/template-hierarchy', 'Admin\TemplateManagement\TemplateController@templateHierarchy');
@@ -93,6 +109,7 @@ Route::post('admin/template-management/add-template', 'Admin\TemplateManagement\
 
 Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
 Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
+
 
 Route::post('admin/orchestra/template-management/template-list-view', 'Admin\Orchestra\TemplateManagementCntrl@templateListView');
 
@@ -323,6 +340,8 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
 
+
+Route::post('admin/orchestra/order-management/season_code_filter', 'Admin\Orchestra\OrderManagementCntrl@seasonCodeFilter');
 Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderManagementCntrl@Orders');
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
@@ -656,11 +675,16 @@ Route::post('admin/tesco/settings/na-size-chart', 'Admin\Settings\Tesco\TescoSet
 Route::post('admin/tesco/add-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@addnaSizeChart');
 Route::get('admin/tesco/get-tesco-na-size-chart-details', 'Admin\Settings\Tesco\TescoSettings@getnaSizeChartById');
 Route::put('admin/tesco/update-tesco-na-size-chart', 'Admin\Settings\Tesco\TescoSettings@updatenaSizeChartById');
+Route::put('admin/tesco/make-na-size-chart-enabled', 'Admin\Settings\Tesco\TescoSettings@makeNaSizeChartEnabled');
+Route::put('admin/tesco/make-na-size-chart-disabled', 'Admin\Settings\Tesco\TescoSettings@makeNaSizeChartDisabled');
 
 Route::post('admin/tesco/settings/na-uom', 'Admin\Settings\Tesco\TescoSettings@naUOM');
 Route::post('admin/tesco/add-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@addnaUOM');
 Route::get('admin/tesco/get-tesco-na-uom-details', 'Admin\Settings\Tesco\TescoSettings@getnaUOMById');
 Route::put('admin/tesco/update-tesco-na-uom', 'Admin\Settings\Tesco\TescoSettings@updatenaUOMById');
+
+Route::put('admin/tesco/make-na-uom-enabled', 'Admin\Settings\Tesco\TescoSettings@makeNaUomEnabled');
+Route::put('admin/tesco/make-na-uom-disabled', 'Admin\Settings\Tesco\TescoSettings@makeNaUomDisabled');
 
 
 Route::post('admin/tesco/settings/material', 'Admin\Settings\Tesco\TescoSettings@rawMaterials');
@@ -844,7 +868,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	
-	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('poManager'); 
+	Route::get('/po-manager', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager'); 
 	
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');	
 	
@@ -854,10 +878,10 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/po-manager/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 	Route::post('/po-manager/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
 	Route::post('/po-manager/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
-	Route::post('/po-manager/set_company_session', 'ErpUser\Pomanager\PoManagerController@setCompanySession'); 
+	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession'); 
 	
 	/* Routes for Print Manager Module */
-	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index'); 
+	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager'); 
 	
 	/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 	Route::get('job-manager', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
@@ -960,10 +984,30 @@ Route::group(['prefix' => 'erp'], function () {
 	//Financial Year
 	Route::get('/settings/financial-year', 'ErpUser\ERPSettings\ERPSettingsController@getFinancialYear')->name('erp-financialyear');
 	Route::put('/settings/update-financial-year-date', 'ErpUser\ERPSettings\ERPSettingsController@updateFinancialYearDateById');
+
+	/* Routes for Non artwork jobcards */
+	Route::get('non-artwork-job-manager', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager'); 
+	Route::post('non-artwork-job-manager/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId'); 
+	Route::post('non-artwork-job-manager/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId'); 
+	Route::post('non-artwork-job-manager/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName'); 
+	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
+	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
+	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
+	Route::post('non-artwork-job-manager/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@createNatJcOrderDetails');
+	Route::get('non-artwork-job-manager/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
+
+	Route::get('non-artwork-job-manager/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+
 });
 
 //Orchestra Order Management - customer
 Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
+
+Route::post('customer/orchestra/order-management/season_code_filter', 'Customer\Orchestra\OrderController@seasonCodeFilter');
+
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');

@@ -1,228 +1,5 @@
 @extends('layouts.Erp.app')
-<style>
-	.action-button-view {
-		border: 1px #333 solid;
-		background-color: #fff;
-		border-radius: 2px;
-		padding: 3px;
-		margin-right: 10px;
-	}
-	
-	.red-icon {
-		color: grey;
-		float: right;
-	}
-	
-	.active {
-		color: #dc3545 !important;
-	}
-	
-	.active-border {
-		border-color: #dc3545 !important;
-	}
-	
-	.bad {
-		background-color: #dc3545;
-		color: #fff;
-	}
-	
-	.cur-po {
-		cursor: pointer;
-		color: grey;
-		float: right;
-	}
-	
-	.cur-po-comp {
-		cursor: pointer;
-		color: grey;
-	}
-	
-	.btn-loader {
-		border: 8px solid #f3f3f3 !important;
-		border-radius: 50% !important;
-		border-top: 8px solid #3498db !important;
-		width: 50px !important;
-		height: 50px !important;
-		-webkit-animation: spin 2s linear infinite !important;
-		/* Safari */
-		animation: spin 2s linear infinite !important;
-	}
-	/* Safari */
-	
-	@-webkit-keyframes spin {
-		0% {
-			-webkit-transform: rotate(0deg);
-		}
-		100% {
-			-webkit-transform: rotate(360deg);
-		}
-	}
-	
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-	
-	label.btn span {
-		font-size: 1.5em;
-	}
-	
-	label input[type="radio"]~i.fa.fa-circle-o {
-		color: #c8c8c8;
-		display: inline;
-	}
-	
-	label input[type="radio"]~i.fa.fa-dot-circle-o {
-		display: none;
-	}
-	
-	label input[type="radio"]:checked~i.fa.fa-circle-o {
-		display: none;
-	}
-	
-	label input[type="radio"]:checked~i.fa.fa-dot-circle-o {
-		color: #7AA3CC;
-		display: inline;
-	}
-	
-	label:hover input[type="radio"]~i.fa {
-		color: #7AA3CC;
-	}
-	
-	label input[type="checkbox"]~i.fa.fa-square-o {
-		color: #c8c8c8;
-		display: inline;
-	}
-	
-	label input[type="checkbox"]~i.fa.fa-check-square-o {
-		display: none;
-	}
-	
-	label input[type="checkbox"]:checked~i.fa.fa-square-o {
-		display: none;
-	}
-	
-	label input[type="checkbox"]:checked~i.fa.fa-check-square-o {
-		color: #7AA3CC;
-		display: inline;
-	}
-	
-	label:hover input[type="checkbox"]~i.fa {
-		color: #7AA3CC;
-	}
-	
-	div[data-toggle="buttons"] label.active {
-		color: #7AA3CC;
-	}
-	
-	div[data-toggle="buttons"] label {
-		display: inline-block;
-		padding: 6px 12px;
-		margin-bottom: 0;
-		font-size: 14px;
-		font-weight: normal;
-		line-height: 2em;
-		text-align: left;
-		white-space: nowrap;
-		vertical-align: top;
-		cursor: pointer;
-		background-color: none;
-		border: 0px solid #c8c8c8;
-		border-radius: 3px;
-		color: #c8c8c8;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		-o-user-select: none;
-		user-select: none;
-	}
-	
-	div[data-toggle="buttons"] label:hover {
-		color: #7AA3CC;
-	}
-	
-	div[data-toggle="buttons"] label:active,
-	div[data-toggle="buttons"] label.active {
-		-webkit-box-shadow: none;
-		box-shadow: none;
-	}
-	
-	.first-padding {
-		padding: 10px 15px;
-		font-weight: bold;
-		font-size: 14px;
-	}
-	
-	.first-padding:nth-child(even),
-	.odd-padding {
-		background-color: #f2f2f2;
-	}
-	
-	.first-padding.col-md-4.text-center {
-		border-right: 5px solid #fff;
-	}
-	
-	.confirmation-container {
-		margin-top: 15px;
-	}
-	
-	.remark-align {
-		padding-left: 0px !important;
-	}
-	.highlight_row {
-		background: #eee;
-	}
-	.ratio-list-table tr,
-	.ratio-list-table th,
-	.ratio-list-table td,
-	.single-list-table tr,
-	.single-list-table th,
-	.single-list-table td {
-		border-right-width: 1px !important;
-		border-bottom-width: 1px !important;
-		border-left-width: 1px !important;
-		border-top-width: 1px !important;
-		border-left: 1px solid #DDD !important;
-		border-top: 1px solid #DDD !important;
-		border-right: 1px solid #DDD !important;
-		border-bottom: 1px solid #DDD !important;
-	}
-
-	.borderless tbody td, .borderless tbody th {
-	    border: none;
-	    padding: 3px;
-	    text-align: left;
-	}
-
-	.workorder {
-		font-size: 16px;
-		text-align: center;
-		background: #eee;
-		font-weight: bold;
-	    letter-spacing: 2px;	
-	}
-	.jc-hr {
-		margin-top: 3px !important;
-		margin-bottom: 3px !important;
-	}
-
-	.vertical-table th {
-	    font-size: 12px;
-	    background: #eee;
-	    border-top: none !important;
-	    padding: 0px !important;
-	}
-	.vertical-table td{ 
-		font-size: 12px;
-	    border-top: none !important;
-	    padding: 0px !important;
-	}
-
-</style>
+<style></style>
 @section('navbar')
 
 <ul class="nav navbar-nav dynamic-menu erp-dynamic-menu">
@@ -452,32 +229,7 @@
 <div id="splitdiv" style="opacity: 0;position:absolute;">
  </div>
 <!-- company selection Modal -->
-<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
-         <div class="modal-content buyer-selection-modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
-                 </div>
-                 <div class="modal-body buyer-selection-modal-body">
-                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
-                      <strong>Warning!</strong> Select a Company to proceed.
-                    </div>
-                    @foreach($companies as $company)
-                     <a class="buyer-card-link" style="cursor: pointer;">
-                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                         </div>
-                     </a>
-                    @endforeach
-                 </div>
-                 <div class="modal-footer buyer-selection-modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
+@include('erp.components.company-selection-modal')
 <!-- Job card creation Modal -->
 <div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardCreationModalCenter">
      <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
@@ -842,7 +594,7 @@
             {!! Form::close() !!}
          </div>
      </div>
- </div>
+</div>
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
@@ -850,7 +602,7 @@
 <script>
 $(document).ready(function() {
 	// disable mousewheel on a input number field when in focus
-    // (to prevent Cromium browsers change the value when scrolling)
+    // (to prevent Chromium browsers change the value when scrolling)
 
     $(document).on("wheel", "input[type=number]", function (e) {
         $(this).blur();
@@ -882,7 +634,7 @@ $(document).ready(function() {
           	$('#buyerSelectionModalCenter').modal('hide');
 		  
 			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
+				url: base_url + "/erp/set-erp-company-session",
 				type: "Post",
 				dataType: "json",
 				data: {

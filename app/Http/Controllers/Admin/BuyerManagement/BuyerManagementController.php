@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Validator;
 use DB;
 use Hash;
 use File;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use ItemMasterSeeder;
 /**
  * Buyer management controller
  * @author <Praveen>
@@ -69,6 +72,136 @@ class BuyerManagementController extends Controller
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
           }
     }
+
+    /**
+     * Method to create dynamic item master
+     * @return \Illuminate\Http\Response
+     */
+    public function createItemMaster($buyer_name)
+    {
+        // set dynamic table name 
+        $table_name = strtolower($buyer_name).'_item_master';
+
+        Schema::create($table_name, function (Blueprint $table) {
+          $table->increments('id');
+          $table->integer('company_id')->unsigned();
+          $table->integer('parent_id')->unsigned();
+          $table->string('item_name');
+          $table->string('ref_no');
+          $table->string('tag_name');
+          $table->integer('is_qrcode_required')->unsigned();
+          $table->boolean('is_non_artwork_template')->deafult(false);
+          $table->timestamps();
+
+          $table->foreign('company_id')->references('id')
+          ->on('company')->onDelete('cascade');
+          /* Indexes	*/
+          $table->index(['company_id']);
+        });
+
+        // Run seeder for item master
+        $item_master_seeder = new ItemMasterSeeder;
+        $item_master_seeder->run($table_name);
+
+        return response()->json(['message' => 'Given table has been successfully created!'], 200);
+    }
+
+
+    /**
+     * Method to create dynamic template table while creating buyers
+     * @return \Illuminate\Http\Response
+     */
+    public function createTemplateTable($buyer_name)
+    {
+        // set dynamic table name 
+        $table_name = strtolower($buyer_name).'_template';
+        $item_master_table = strtolower($buyer_name).'_item_master';
+
+        Schema::create($table_name, function (Blueprint $table) use ($item_master_table) {
+          $table->increments('id');
+          $table->integer('item_id')->unsigned();
+          $table->integer('material_id')->unsigned();
+          $table->integer('hierarchy_id');
+          $table->string('template_name');
+          $table->string('template_description')->nullable();
+          $table->string('template_file')->nullable();
+          $table->smallInteger('disney')->nullable();
+          $table->integer('tax');
+          $table->string('gl_code');
+          $table->string('hsn_code');
+          $table->string('color');
+          $table->integer('dimension_height');
+          $table->integer('dimension_width');
+          $table->string('gl_text');
+          $table->smallInteger('flag');
+          $table->integer('name_in_reports')->nullable();
+          $table->string('type')->nullable();
+          $table->timestamps();
+          
+          $table->foreign('item_id')->references('id')
+          ->on($item_master_table)->onDelete('cascade');
+    
+          $table->foreign('material_id')->references('id')
+          ->on('raw_material_master')->onDelete('cascade');
+          /* Indexes	*/
+          $table->index(['item_id','material_id']);
+        });
+
+        return response()->json(['message' => 'Given table has been successfully created!'], 200);
+    }
+
+    /**
+     * Method to rename dynamic item master
+     * @return \Illuminate\Http\Response
+     */
+    public function renameItemMaster($old_buyer_name, $new_buyer_name)
+    {
+        // set dynamic table name 
+        $old_table_name = strtolower($old_buyer_name).'_item_master';
+        $new_table_name = strtolower($new_buyer_name).'_item_master';
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropForeign(['company_id']);
+        });
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropIndex(['company_id']);
+        });
+      
+        Schema::rename($old_table_name, $new_table_name);
+      
+        Schema::table($new_table_name, function (Blueprint $table) {
+          $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
+          $table->index(['company_id']);
+        });
+    }
+
+    /**
+     * Method to rename buyer template table
+     * @return \Illuminate\Http\Response
+     */
+    public function renameTemplateTable($old_buyer_name, $new_buyer_name)
+    {
+        // set dynamic table name 
+        $old_table_name = strtolower($old_buyer_name).'_template';
+        $new_table_name = strtolower($new_buyer_name).'_template';
+        $item_master_table = strtolower($new_buyer_name).'_item_master';
+
+        Schema::table($old_table_name, function (Blueprint $table) {
+          $table->dropForeign(['item_id']);
+          $table->dropForeign(['material_id']);
+          $table->dropIndex(['item_id', 'material_id']);
+        });
+
+        Schema::rename($old_table_name, $new_table_name);
+      
+        Schema::table($new_table_name, function (Blueprint $table) {
+          $table->foreign('item_id')->references('id')->on($item_master_table)->onDelete('cascade');
+          $table->foreign('material_id')->references('id')->on('raw_material_master')->onDelete('cascade');
+          $table->index(['company_id', 'material_id']);
+        });
+    }
+
     /**
      * Add buyers for JGA.
      * @param \Illuminate\Http\Request
@@ -106,7 +239,10 @@ class BuyerManagementController extends Controller
                 
                 if(Buyer::where('buyer_email',$email)->exists())
                 {
-                  $result = response()->json(['error'=> true,'message' =>'Email Already Exists'],409);
+                  $result = response()->json(['error'=> true,'message' =>'Email already registered.'],409);
+                }
+                elseif(Buyer::where('buyer_name',$name)->exists()) {
+                  $result = response()->json(['error'=> true,'message' =>'Buyer already registered'],409);
                 }
                 else
                 {
@@ -118,6 +254,9 @@ class BuyerManagementController extends Controller
                                 'is_active'        => 0,
                                 'logo'             => $destination_path_insert
                               ]);
+                  
+                  $item_master_creation = $this->createItemMaster($name);
+                  $template_creation = $this->createTemplateTable($name);
                     
                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
                 }
@@ -205,17 +344,25 @@ class BuyerManagementController extends Controller
               }
               else
               {
-                  Buyer::find($id)
-                   ->update([
-                     'buyer_name'          => $input['name'],
-                     'buyer_email'         => $input['email'],
-                     'buyer_phone'         => $input['phone'],
-                     'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
-                     'logo'                => $destination_path_insert
-                  ]);
 
-              $result = response()->json(['error'=> false,'message' =>'Success'],200);
-            }
+                $b_name = DB::table('buyers')->where('id','=',$id)->value('buyer_name');
+                Buyer::find($id)
+                  ->update([
+                    'buyer_name'          => $input['name'],
+                    'buyer_email'         => $input['email'],
+                    'buyer_phone'         => $input['phone'],
+                    'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
+                    'logo'                => $destination_path_insert
+                ]);
+                if($b_name !== $input['name']) {
+                  // Update Corresponding item master name
+                  $updated_item_master = $this->renameItemMaster($b_name, $input['name']);
+                  // Update corresponding template name
+                  $updated_template_name = $this->renameTemplateTable($b_name, $input['name']);
+                }
+                 
+                $result = response()->json(['error'=> false,'message' =>'Success'],200);
+              }
             } catch (\Exception $e)
             {
                    $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

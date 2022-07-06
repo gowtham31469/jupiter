@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/Erp/custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/Erp/jobcard.css') }}">
 	<link href="{{ asset('js/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('js/datatables/responsive.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     
@@ -89,12 +90,15 @@
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
 	<script src="{{ asset('js/Erp/update.js') }}"></script>
 	<script src="{{ asset('js/Erp/userProfile.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-manager.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/non-artwork-job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-common.js') }}"></script>
 	<script src="{{ asset('js/Erp/print-manager.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
 	<script src="{{ asset('js/Erp/erp-settings.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/non-artwork-jc-edit.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');

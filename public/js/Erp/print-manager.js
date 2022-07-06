@@ -1504,11 +1504,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							barcode_final.push(barcode_change)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -1856,11 +1852,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								barcode_final.push(barcode_change)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -2211,11 +2203,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 								barcode_final.push(barcode_change)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -2759,11 +2747,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 							qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3173,11 +3157,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3450,11 +3430,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 					svgarr.push(str)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -3728,11 +3704,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 					svgarr.push(str)
 							},
 							error: function (errorXHR, errorStatus, errorThrown) {
-								this.tryCount++;
-								if (this.tryCount <= this.retryLimit) {
-									$.ajax(this);
-									return;
-								}
+								console.log(errorThrown);
 							},
 							complete: function () {
 	
@@ -4233,11 +4205,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 							qr_code_check_arr.push(val.buyer_po_number+','+val.ean_barcode+','+val.itf_barcode+','+val.orms_tpn)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -4877,11 +4845,7 @@ function PopupTescoPrintManager(data, name,zone,style_no,buyer_no,id,created_at,
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -4941,11 +4905,7 @@ function PopupTescoSmallPrintManager(data, name,zone,style_no,buyer_no,id,create
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -4993,11 +4953,7 @@ function PopupTescoGeneratePrintManager(data, name,svgDoc,template_id,qr_flag,qr
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5041,11 +4997,7 @@ function PopupTescoGenerateSmallPrintManager(data, bar_fin, name,svgDoc) {
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5576,11 +5528,7 @@ function PopupTescoLabelsGenerateProofManager(data_front,data_back,data_back_tex
 			document.body.removeChild(element);
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5642,11 +5590,7 @@ function PopupTescoLabelsGeneratePrintManager(data_front,data_back,data_back_tex
 			document.body.removeChild(element);
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -5694,11 +5638,7 @@ function PopupTescoTicketsPrintManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
         complete: function() {
 			$(".loader").hide();
@@ -5751,11 +5691,7 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 		complete: function() {
 			$(".loader").hide();

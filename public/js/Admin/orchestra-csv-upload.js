@@ -90,11 +90,7 @@
                  $('#uvc-data-list-table_length select').addClass('form-control input-sm');
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                  console.log(errorThrown);
                 },
                 complete: function () {
                     $(".loader").hide();
@@ -148,11 +144,7 @@
           getUvcData(data.table, data.uvc)
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -204,11 +196,7 @@
           getUvcData(data.table, data.uvc)
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -273,11 +261,7 @@
             $('#csv-conflicts-list-table_length select').addClass('form-control input-sm');
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -375,11 +359,7 @@ function getOrderComparisonData(obj)
                  $('#ViewChangesModalCenter').modal('show');
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+              console.log(errorThrown);
             },
            complete: function () {
                /** [ To make top menu active ] */

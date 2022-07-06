@@ -34,11 +34,7 @@ function store(url, data) {
 			},
 			error: function (errorXHR, errorStatus, errorThrown) {
 				if(errorXHR.status == 503){
-					this.tryCount++;
-					if (this.tryCount <= this.retryLimit) {
-						$.ajax(this);
-						return;
-					}
+					console.log(errorThrown);
 				}
 			},
 			complete: function () {
