@@ -175,7 +175,7 @@ class PrintManagerController extends Controller
 				$erp_machines      = DB::table('erp_machines')->where('is_enabled','=',true)->pluck('machine','id')->all();
 				$erp_teeth_no      = DB::table('erp_teeth_no')->where('is_enabled','=',true)->pluck('teeth_no','id')->all();
 				return view('erp.Printmanager.print-manager', ['buyers' => $buyers, 'companies' => $companies, 'disp_modes' => $erp_dispatch_mode, 'finish_types' => $erp_finish_type, 'machines' => $erp_machines, 'teeth_nos' => $erp_teeth_no]);	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -211,7 +211,7 @@ class PrintManagerController extends Controller
 				}
 				    
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -251,7 +251,7 @@ class PrintManagerController extends Controller
 				}
 				    
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	} 
@@ -404,7 +404,7 @@ class PrintManagerController extends Controller
 				}
 				    
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}

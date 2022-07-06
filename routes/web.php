@@ -340,6 +340,8 @@ Route::post('admin/orchestra/order-management/sticker-orders', 'Admin\Orchestra\
 Route::post('admin/orchestra/order-management/label-order-details', 'Admin\Orchestra\OrderManagementCntrl@labelOrderDetails');
 Route::post('admin/orchestra/order-management/sticker-order-details', 'Admin\Orchestra\OrderManagementCntrl@stickerOrderDetails');
 
+
+Route::post('admin/orchestra/order-management/season_code_filter', 'Admin\Orchestra\OrderManagementCntrl@seasonCodeFilter');
 Route::post('admin/orchestra/order-management/orders', 'Admin\Orchestra\OrderManagementCntrl@Orders');
 
 Route::post('admin/orchestra/order-management/set-po-number', 'Admin\Orchestra\OrderManagementCntrl@setPONumber');
@@ -991,10 +993,21 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
 	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
 	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
+	Route::post('non-artwork-job-manager/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@createNatJcOrderDetails');
+	Route::get('non-artwork-job-manager/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
+
+	Route::get('non-artwork-job-manager/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+
 });
 
 //Orchestra Order Management - customer
 Route::post('customer/orchestra/order-management/orders', 'Customer\Orchestra\OrderController@Orders');
+
+Route::post('customer/orchestra/order-management/season_code_filter', 'Customer\Orchestra\OrderController@seasonCodeFilter');
+
 Route::post('customer/orchestra/order-management/label-order-details', 'Customer\Orchestra\OrderController@labelOrderDetails');
 Route::post('customer/orchestra/order-management/sticker-order-details', 'Customer\Orchestra\OrderController@stickerOrderDetails');
 Route::post('customer/orchestra/order-management/set_hang_tag', 'Customer\Orchestra\OrderController@setHangTag');
