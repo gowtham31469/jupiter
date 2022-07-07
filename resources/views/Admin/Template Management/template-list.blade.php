@@ -201,6 +201,8 @@
         $(document).ready(function() {
             /* Show logo on left side */
             $('.logo').html('Templates');
+            localStorage.removeItem("buyer");
+            localStorage.removeItem("buyer_id");
 
             /** [ Make buyers card active ] */
             $('div.buyers-card').click(function(){
