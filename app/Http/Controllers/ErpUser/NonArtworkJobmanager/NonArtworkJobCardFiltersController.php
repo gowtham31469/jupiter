@@ -431,7 +431,7 @@ class NonArtworkJobCardFiltersController extends Controller
 
             // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
             // if multiple order IDs are selected for Job Card, use the first id for WO number
-            $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($name_in_reports_array, [$erp_orders_ids[0]]);
+            $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]);
 
             $metadata  = $jc_metadata->erpJobcardMetaData();
 
@@ -449,6 +449,7 @@ class NonArtworkJobCardFiltersController extends Controller
             $template_data['color']            = $print_color_array;
             $template_data['material']         = $material_array;
             $template_data['article']          = $name_in_reports_array;
+            $template_data['material_hierarchy'] = $article_array;
             $template_data['length']           = $length_array;
             $template_data['width']            = $width_array;
             $template_data['template_type']    = $type_array;
@@ -485,6 +486,7 @@ class NonArtworkJobCardFiltersController extends Controller
         $erp_orders_ids  = explode(',', $request['erp_orders_ids']);
         $uuid            = explode(',', $request['uuid_array']);
         $article_array   = explode(', ', $request['article']);
+        $material_hierarchy   = explode(', ', $request['material_hierarchy']);
         $current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
         $customer = DB::table('customers')
@@ -493,7 +495,7 @@ class NonArtworkJobCardFiltersController extends Controller
         ->first();
         
         // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-        $workorder_id = $request['crud_operation_type'] === 'created_at'?$this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]):$request['workorder_id'];
+        $workorder_id = $request['crud_operation_type'] === 'created_at'?$this->jobcard_id_gen_obj->generateJobcardID($material_hierarchy, [$erp_orders_ids[0]]):$request['workorder_id'];
 
         $store_jobcard_id = $crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, $request['crud_operation_type'], 1);
         
