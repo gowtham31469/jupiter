@@ -362,6 +362,10 @@ $(function () {
                         $('.create-download-artwork').css('display', 'inline-block')
                         $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
+                        $("#alert_success").delay(3000).slideUp(200, function () {
+                            $(this).alert('close');
+                        });
+
                         $('.order-cancel-btn').show();
 
                         postLabelOrderSubmit(user_type, response.data);
