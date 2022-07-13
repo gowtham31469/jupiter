@@ -1669,3 +1669,12 @@ i.remove-component-btn{
     padding-right: 20px;
     padding-top: 15px;
 }
+
+li.year-nav-menu div.selected-year button,
+li.year-nav-menu div.selected-year button:hover,
+li.year-nav-menu div.selected-year button:focus{
+    background-color: #26323800;
+    color: white;
+    border-color: #26323800;
+    margin-top: 2px;
+}
