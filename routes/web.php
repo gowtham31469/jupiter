@@ -13,20 +13,6 @@ use Illuminate\Http\Request;
 */
 
 
-Route::get('admin/non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@nonArtworkOrders');
-
-Route::post('admin/save-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
-
-Route::post('admin/update-non-artwork', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@updateNonArtworkOrders')->name('update-non-artwork');
-
-Route::post('admin/get-non-artwork-order-details', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
-
-Route::post('admin/get-item-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
-
-Route::post('admin/get-reference-nat', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
-
-
-Route::post('admin/calculate-nat-rate', 'Admin\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 
 
 Route::get('/', function () {
@@ -1017,6 +1003,20 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
 	Route::get('non-artwork-job-manager/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
 	Route::get('non-artwork-job-manager/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+
+
+	Route::get('non-artwork-orders', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@nonArtworkOrders')->name('non-artwork-orders');
+
+	Route::post('save-non-artwork', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
+
+	Route::post('get-non-artwork-order-details', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
+
+	Route::post('get-item-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
+
+	Route::post('get-reference-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
+
+
+	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 
 });
 

@@ -1,24 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Admin\NonArtworkTemplate;
+namespace App\Http\Controllers\ErpUser\NonArtworkTemplate;
 
 use DB;
 use View;
 use Validator;
 use App\Buyer;
+use App\History;
 use App\Customer;
 use Carbon\Carbon;
 use App\NonArtworkOrder;
-use App\NonArtworkOrderQuanty;
+use App\Classes\Modules;
 use App\ErpOrderDetails;
 use App\ErpOrders as Erp;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\NonArtworkOrderQuanty;
 use App\FinancialYearResetDate;
-use App\Classes\TescoMaterialQuery;
 use App\Classes\ErpIDGenerator;
-use App\Classes\Modules;
-use App\History;
+use App\Classes\NATMaterialQuery;
+use App\Classes\TescoMaterialQuery;
+use App\Http\Controllers\Controller;
+
+
 // 
 class NonArtworkTemplateController extends Controller
 {
@@ -37,7 +40,12 @@ class NonArtworkTemplateController extends Controller
 
 
     public function __construct()
-    {
+    {   
+        $this->middleware('erpuser');
+
+        $role = "NON TEMPLATE ORDERS";
+        $this->middleware('role_permission:'.$role);
+        
         // get the current time
         $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -74,13 +82,13 @@ class NonArtworkTemplateController extends Controller
 
     public function nonArtworkOrders()
     {   
-            $module_var = new Modules();
-            $get_main_module = $module_var->getMainModules();
-            $get_sub_module = $module_var->getSubModules(9);
+            // $module_var = new Modules();
+            // $get_main_module = $module_var->getMainModules();
+            // $get_sub_module = $module_var->getSubModules(9);
             
-            View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
-                return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
-            });
+            // View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
+            //     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
+            // });
             
             $buyers = Buyer::where('artwork_flag','=',1)->where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
@@ -91,7 +99,7 @@ class NonArtworkTemplateController extends Controller
             $select_item_data = DB::table('reports_template_level_name')->pluck('name','id');
             $uom = DB::table('non_artwork_uom')->pluck('uom','id');
             $size_chart = DB::table('non_artwork_size_chart')->pluck('size','id');
-            return view('Admin/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart]);
+            return view('erp/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart]);
     }
 
     public function getItem(Request $request)
@@ -102,14 +110,14 @@ class NonArtworkTemplateController extends Controller
         $data = DB::table($template_table)
                         ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
                         ->select($template_table.'.id','template_name','name_in_reports','name')
-                        ->get()
-                        ->groupBy('name_in_reports');
-        
+                        ->pluck('name','name_in_reports');
         $arr = [];
         $opt = "";
+
         foreach ($data as $key => $value) {
-           $opt.='<option value='.$value[0]->name_in_reports.'>'.$value[0]->name.'</option>';
+           $opt.='<option value='.$key.'>'.$value.'</option>';
         }
+
         $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select">'.$opt.'</select>';
 
         return response()->json(['items'=>$item_select]);
@@ -127,7 +135,7 @@ class NonArtworkTemplateController extends Controller
         $data = DB::table($template_table)
                         ->where('name_in_reports',$request->item_id)
                         ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
-                        ->pluck('template_name',$template_table.'.id')
+                        ->pluck('template_name','item_id')
                         ->toArray();
         $arr = [];
         $opt = "";
@@ -135,7 +143,7 @@ class NonArtworkTemplateController extends Controller
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
         }
-        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select dropup" data-dropup-auto="false">'.$opt.'</select>';
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select">'.$opt.'</select>';
 
         return response()->json(['reference'=>$reference_select]);
 
@@ -168,7 +176,6 @@ class NonArtworkTemplateController extends Controller
         $buyer = Buyer::where('id',$request->buyer)->first()->buyer_name;
         $template_table = strtolower($buyer)."_template";
         $master_table = strtolower($buyer)."_item_master";
-
         $validator = Validator::make($request->all(), $rules);
         $created_rows = [];
 
@@ -176,14 +183,30 @@ class NonArtworkTemplateController extends Controller
         {
             if($request->action == "update")
             {  
+
                 $nat_orders = NonArtworkOrder::where('order_id',$request->order_id)->get();
                 $nat_ids = $nat_orders->pluck('id');
+                $erp_ids = [];
+
+                Erp::where('erp_id',$nat_orders[0]->order_id)->first()->delete();
                 foreach ($nat_orders as $key => $value) {
+                    array_push($erp_ids,$value->order_id);
                     $value->delete();
                 }
 
                 DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$nat_ids)->delete();
             }
+
+            $new_erp_order = Erp::create([
+                        'buyer_id'         => $request->buyer,
+                        'customer_id'      => $request->customer,
+                        'po_no'            => $request->po_number,
+                        'po_file'          => "Null",
+                        'status'           => 3,
+                        'created_at'       => $this->current_date,
+                        'erp_id'           => $erp_id
+                    ]);
+
             foreach ($request->ocn as $key => $value) 
             {
                 $already_created_nat = NonArtworkOrder::where('ocn_number',$value)
@@ -203,11 +226,14 @@ class NonArtworkTemplateController extends Controller
                 }
                 else
                 {   
+                    // dd($erp_ids[$key]);
+                    $erp_id = $request->action == "update" ? $erp_ids[0]:$erp_id;
                     $newly_created_nat_id = NonArtworkOrder::insertGetId(
                                 [ 'buyer_id' => $request->buyer, 
+                                  'order_id' => $erp_id,
                                   'order_flag' => "newOrder",
                                   'ocn_number' => $value,
-                                  'tesco_supplier_id' => $request->customer,
+                                  'supplier_id' => $request->customer,
                                   'purchase_order_no' => $request->po_number,
                                   'color' => $request->color[$key],
                                   'po_number' => $request->bpo[$key],
@@ -229,23 +255,10 @@ class NonArtworkTemplateController extends Controller
                                         ->first()
                                         ->template_name;
 
-                    $company_id = DB::table($master_table)->where('id',$request->item[$key])->first()->company_id;  
+                    $company_id = DB::table($master_table)->where('id',$request->item[$key])->first()->company_id; 
+
                     $size = DB::table('non_artwork_size_chart')->where('id',$request->size[$key])->first()->size;
                     $uom = DB::table('non_artwork_uom')->where('id',$request->uom[$key])->first()->uom;
-                    // dd($reference_name);
-
-                    // $newly_created_nat_qty = DB::table('non_artwork_orders_quanty')
-                    //     ->insertGetId([
-                    //     [   'non_artwork_order_id' => $newly_created_nat_id,
-                    //         'quantity' => $request->quantity[$key],
-                    //         'size' => $request->size[$key],
-                    //         'size_id' => $request->size[$key],
-                    //         'rate' => $request->rate[$key],
-                    //         'uom' => $request->uom[$key],
-                    //         'uom_id' => $request->uom[$key],
-                    //         'rate_value' => $request->rate_value[$key],
-                    //     ]
-                    //  ]);
 
                     $nat_qty = new NonArtworkOrderQuanty;
                     $nat_qty->non_artwork_order_id = $newly_created_nat_id;
@@ -258,34 +271,27 @@ class NonArtworkTemplateController extends Controller
                     $nat_qty->rate_value = $request->rate_value[$key];
                     $nat_qty->save();
 
-                    $new_erp_order = Erp::create([
-                        'buyer_id'         => $request->buyer,
-                        'customer_id'      => $request->customer,
-                        'po_no'            => $request->po_number,
-                        'po_file'          => "Null",
-                        'status'           => 3,
-                        'created_at'       => $this->current_date,
-                        'erp_id'           => $erp_id
-                    ]);
-                    
+                    $unique_id = 'ERP-'.$reference_name.'-'.$erp_id.'-'.$request->style[$key].'-'.$request->bpo[$key].'-'."newOrder".'-'.$request->item[$key].'-'.$request->color[$key].'-'.$request->composition[$key].'-'.$value;
 
-                     // ERP-ref_name-erp_id-style-buyer_po-ordertype-item_id-color-composition-ocn
-
-                    $unique_id = 'ERP-'.$request->reference[$key].'-'.$erp_id.$request->style[$key].'-'.$request->bpo[$key].'-'."newOrder".'-'.$request->item[$key].'-'.$request->color[$key].'-'.$request->composition[$key].'-'.$value;
-        
                     $custom_ref_name = DB::table('price_taxation')
                         ->where([
                         'customer_id' => $request->customer,
                         'buyer_id' => $request->buyer,
                         'template_id' => $request->reference[$key]
-                        ])->get();
-
-                        if(count($custom_ref_name) == 0)
+                        ])->value('custom_name');
+                     // dd($request->customer,$request->buyer,$request->reference[$key]);
+                        if($custom_ref_name == null)
                         {   
-                            $err =[0=>"Price taxation entry not found !!!"];
-                            return response()->json(['error'=>$err ]);
+                            return response()->json(['error'=>[0=>"Price taxation entry not found !!!"]]);
                         }
-                    
+
+                    DB::table('erp_order_details')
+                    ->where([
+                    'order_qnty_table_name' => "non_artwork_orders_quanty",
+                    'order_qnty_table_id' => $nat_qty->id
+                    ])
+                    ->delete();
+
                     $erp_order_details_id = ErpOrderDetails::create([
                         'erp_order_id'          => $new_erp_order->id,
                         'style_no'              => $request->style[$key],
@@ -317,6 +323,21 @@ class NonArtworkTemplateController extends Controller
                         'fiscal_year_end'       => $this->financial_year_end
                     ])->id;
 
+
+                    $nat_material_obj = new NATMaterialQuery();
+                    $template_level = $nat_material_obj->nonArtworkMaterialDetails($request->reference[$key], strtolower($buyer));
+                    if($template_level)
+                    {
+                        $material_name  = $template_level->material;
+                        $material_sub   = $template_level->material_sub;
+                        $material_ref   = $template_level->ref;
+                    }
+                    else
+                    {
+                        return response()->json(['error'=>[0=>"Template details not found !!!"] ]);
+                    }
+                    
+
                     $history_id = History::create([
                         'buyer_id'             => $request->buyer,
                         'erp_order_details_id' => $erp_order_details_id,
@@ -324,8 +345,8 @@ class NonArtworkTemplateController extends Controller
                         'season'               => null,
                         'country'              => null,
                         'customer_id'          => $request->customer,
-                        'material'             => "nat",
-                        'mat_sub'              => "nat",
+                        'material'             => $material_name,
+                        'mat_sub'              => $material_sub,
                         'reference'            => $request->reference[$key],
                         'style'                => $request->style[$key],
                         'po'                   => $request->po_number,
@@ -347,10 +368,10 @@ class NonArtworkTemplateController extends Controller
                 }
             }
 
-           $max_batch_id = NonArtworkOrder::max('order_id')+1;
+           // $max_batch_id = NonArtworkOrder::max('order_id')+1;
 
-           NonArtworkOrder::whereIn('id', $created_rows)
-                                    ->update(['order_id' => $max_batch_id]);
+           // NonArtworkOrder::whereIn('id', $created_rows)
+           //                          ->update(['order_id' => $max_batch_id]);
            return response()->json(['success'=>'done']);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
@@ -371,8 +392,8 @@ class NonArtworkTemplateController extends Controller
            $order_table_data = NonArtworkOrder::where('order_id',$request->id)->get();
            $order = $order_table_data->take(1)[0];
            $order_ids = $order_table_data->pluck('id');
-           $item_ids = $order_table_data->pluck('item_id');
-           $select_item_data = DB::table('reports_template_level_name')->whereIn('id',$item_ids)->pluck('name','id');
+           // $item_ids = $order_table_data->pluck('item_id');
+           // $select_item_data = DB::table('reports_template_level_name')->whereIn('id',$item_ids)->pluck('name','id');
 
 
            $quantity_table_data = DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$order_ids)->get();
@@ -402,7 +423,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="uom[]">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select uom" name="uom[]">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
@@ -420,6 +441,20 @@ class NonArtworkTemplateController extends Controller
 
             $size_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="size[]">"'.$size_options.'"</select>';
 
+            $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
+            $template_table = strtolower($buyer)."_template";
+
+            $data = DB::table($template_table)
+            ->where('name_in_reports',$value->item_id)
+            ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
+            ->pluck('template_name','item_id')
+            ->toArray();
+
+
+            $select_item_data = DB::table($template_table)
+                        ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
+                        ->select($template_table.'.id','template_name','name_in_reports','name')
+                        ->pluck('name','name_in_reports');
             $item_options='';
             foreach ($select_item_data as $j => $q) 
             {  
@@ -435,15 +470,6 @@ class NonArtworkTemplateController extends Controller
             }
 
             $item_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="item[]">"'.$item_options.'"</select>';
-
-            $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
-            $template_table = strtolower($buyer)."_template";
-
-            $data = DB::table($template_table)
-            ->where('name_in_reports',$value->item_id)
-            ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
-            ->pluck('template_name',$template_table.'.id')
-            ->toArray();
 
             $arr = [];
             $opt = "";
@@ -463,7 +489,8 @@ class NonArtworkTemplateController extends Controller
 
             $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select">'.$opt.'</select>';
 
-            $html.='<tr id="addr0" class="clonable">
+            $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
+            $html.='<tr id="addr'.$key.'" class="clonable">
                                     <td>
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck1">
@@ -485,7 +512,7 @@ class NonArtworkTemplateController extends Controller
                                         <input type="text" name="style[]" class="form-control input-sm label-ean-field" value = "'.$value->style_ref.'" placeholder="Style/UVC">
                                     </td>   
                                     <td width="100">'.$item_select.'</td>
-                                    <td width="150">'.$reference_select.'</td>
+                                    <td width="150" class="reference_td">'.$reference_select.'</td>
                                     <td width="150">
                                         <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color">
                                     </td>
@@ -494,11 +521,11 @@ class NonArtworkTemplateController extends Controller
                                     </td>
                                     <td width="150">
                                         <select class="selectpicker aw_status" name="A_W_Status">
-                                            <option value="0">Not Approved</option>
-                                            <option value="1" selected>Approved</option>
+                                            <option value="0" '.$approved_flag.' >Not Approved</option>
+                                            <option value="1" '.$approved_flag.'>Approved</option>
                                         </select>
                                     </td>
-                                    <td width="170">
+                                    <td width="170" class="aw_td">
                                         <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
                                             <input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
                                             <div class="input-group-addon">
@@ -507,20 +534,23 @@ class NonArtworkTemplateController extends Controller
                                         </div>
                                     </td>
                                     <td width="150">'.$size_select.'</td>
-                                    <td width="150">
+                                    <td width="150" class="quantity_td">
                                         <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
                                     </td>
                                     <td width="150">'.$uom_select.'</td>
-                                    <td width="150"> 
-                                        <select class="form-control input-sm label-ean-field rate" name="rate[]"><option value="1">Orchestra</option><option value="2">Tesco</option></select>
+                                    <td width="150" class="rate_td">
+                                    <input type="number" name="rate[]" class="form-control input-sm label-ean-field" placeholder="Rate" value="'.$quantity_table_data[$key]->rate.'" readonly>
                                     </td>
-                                    <td width="150">
-                                        <input type="number" name="rate_value[]" class="form-control input-sm label-ean-field" placeholder="Value">
+                                    <td width="150" class="value_td">
+                                         <input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value" value="'.$quantity_table_data[$key]->rate_value.'" placeholder="qty*rate" readonly>
                                     </td>
                                 </tr>';
+
+           $last = $key+1;
            }
 
-           return response()->json(['row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates]);
+           $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
+           return response()->json(['row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last]);
         }
     }
 
@@ -550,5 +580,5 @@ class NonArtworkTemplateController extends Controller
        }                            
        return response()->json(['rate'=>0]);
     }
-    
+
 }

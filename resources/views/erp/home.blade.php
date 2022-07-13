@@ -86,6 +86,22 @@
                 </div>
             <?php } ?>
 
+            <?php if (in_array('NON TEMPLATE ORDERS', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
+                <div class="case-wrapper" title="Item" draggable="false">
+                    <a href="{{ route('non-artwork-orders') }}">
+                        <div class="app-icon" style="background-color: #2196F3; position: relative; left: 0px; top: 0px; opacity: 1; transform: rotate(0deg);" title="Item"><i class="fa fa-briefcase" title="Item"></i></div>
+                        <div class="case-label ellipsis">
+                            <div class="circle module-count-list-item hidden" data-doctype="Item"> <span class="circle-text">1</span> </div> <span class="case-label-text">Non Template Orders</span>
+                        </div>
+                        <div class="circle module-remove" style="background-color: rgb(224, 224, 224); color: rgb(33, 33, 33); display: none;">
+                            <div class="circle-text">
+                                <b>×</b>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+
             <?php if (in_array('PRINT MANAGER', $roles) || Auth::guard('erpuser')->user()->is_admin) { ?>
                 <div class="case-wrapper" title="Item" draggable="false">
                     <a href="{{ route('print-manager') }}">
