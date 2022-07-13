@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -1000,6 +999,20 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
 	Route::get('non-artwork-job-manager/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
 	Route::get('non-artwork-job-manager/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+
+
+	Route::get('non-artwork-orders', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@nonArtworkOrders')->name('non-artwork-orders');
+
+	Route::post('save-non-artwork', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
+
+	Route::post('get-non-artwork-order-details', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
+
+	Route::post('get-item-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
+
+	Route::post('get-reference-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
+
+
+	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 
 });
 

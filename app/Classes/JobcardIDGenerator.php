@@ -57,7 +57,7 @@ class JobcardIDGenerator
             $item_array = [
                 'Printed Labels' => 'PL', 
                 'Woven Labels' => 'WL', 
-                'Heat Tranfers' => 'HT', 
+                'Heat Transfers' => 'HT', 
                 'Carton & Polybag Stickers' => 'CS', 
                 'Printed Boards' => 'PB', 
                 'Swing Tags' => 'ST', 

@@ -456,6 +456,7 @@ const generateNatJobcard = () => {
                 $('#nat_template_type').val(data.template_data.template_type[0]);
                 $('.nat-jobcard-modal-title').text(data.modal_title);
                 $('#crud_operation_type').text('created_at');
+                $('#material_hierarchy').text(data.template_data.material_hierarchy)
 
                 /** Show single templates dynamic table */
                 var single_table_html = '';
@@ -815,6 +816,7 @@ const storeNatJobcard = () => {
     var sticker_mtr     = $('#sticker_mtr').text() === ''?0:$('#sticker_mtr').text();
     var settings        = $('#settings').val() === ''?0:$('#settings').val();
     var crud_type      = $('#crud_operation_type').text() === ''?'created_at':$('#crud_operation_type').text();
+    var material_hierarchy = $('#material_hierarchy').text() === ''?null:$('#material_hierarchy').text();
     var single_ref      = $('#act_excess').data('act-excess-ref') === ''?'non-artwork':$('#act_excess').data('act-excess-ref');
 
     var final_json_obj =   {
@@ -1029,7 +1031,8 @@ const storeNatJobcard = () => {
             machine_text:machine_text,
             teeth_no_text:teeth_no_text,
             finish_type_text:finish_type_text,
-            crud_operation_type:crud_type
+            crud_operation_type:crud_type,
+            material_hierarchy:material_hierarchy
         },
         dataType: "json",
         beforeSend: function () {

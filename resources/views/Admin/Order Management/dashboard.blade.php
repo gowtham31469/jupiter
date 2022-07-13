@@ -2590,7 +2590,7 @@ function getCookie(cname) {
 							var date2 = new Date(value.created_at.split(' ')[0]);
 							var timeDiff = Math.abs(date2.getTime() - date1.getTime());
 							var pending_days = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-							var style_no = value.uk_style_ref+"/"+value.ce_style_ref;
+							var style_no = value.ce_style_ref;
 							html += '<tr><td><input type="checkbox" name="checkbox" value="tesco_swingticket_orders-'+value.id+'" class="checkbox"></td><td>'+value.company_name+'</td><td>Tesco</td><td>'+style_no+'</td><td>Sticker</td><td>'+value.TemplateName+'</td><td>-</td><td>'+value.created_at.split(' ')[0].split('-').reverse().join('-')+'</td><td>'+pending_days+'</td><td><label onclick=viewedpenorders('+value.id+',"tesco_swingticket_orders") style="cursor:pointer" class="label label-warning">Mark as viewed</label></td></tr>';
 						}); 
 
