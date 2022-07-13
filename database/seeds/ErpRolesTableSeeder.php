@@ -17,7 +17,8 @@ class ErpRolesTableSeeder extends Seeder
             '2' => 'JOB CARD MANAGER', 
             '3' => 'INVOICE MANAGER',
             '4' => 'PRINT MANAGER', 
-            '5' => 'NON-ARTWORK JOB CARD MANAGER'
+            '5' => 'NON-ARTWORK JOB CARD MANAGER',
+            '6' => 'NON TEMPLATE ORDERS'
         );
         foreach($roles as $key => $role){
             \App\ErpRoles::updateOrCreate([
