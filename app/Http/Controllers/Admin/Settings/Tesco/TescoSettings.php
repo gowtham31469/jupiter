@@ -2232,9 +2232,6 @@ class TescoSettings extends Controller
      */
     public function addTescoLabelSizeChart(Request $request){
       $data = $request->all();
-// <<<<<<< HEAD
-//       $primary_data = $data['customData']['primary'];    
-// =======
       $primary_data = $data['customData']['primary'];
       if(isset($data['customData']['secondary']))
       {
@@ -2244,7 +2241,6 @@ class TescoSettings extends Controller
       {
         $sec_data = "";
       }
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
 
       try {
           $primary_inserted = TescoPrimarySize::create([
@@ -2295,23 +2291,7 @@ class TescoSettings extends Controller
     public function updateTescoLabelSizeChart(Request $request){
       $data = $request->all();
       $primary_data = $data['customData']['primary'];
-// <<<<<<< HEAD
-      
 
-      // dd(array_key_exists('secondary', $data));
-      // dd(sizeof($sec_data));
-      // if(!empty($sec_data))
-      //     {dd("not empty");}
-      //   else
-      //     {dd("empty");}
-
-      // dd($data);
-       // dd($primary_data['edit_labelsize_dept_title']);
-      // 
-      // dd($sec_data);
-
-      // dd($data['customData']['primary']['edit_labelsize_dept_title']);
-// =======
       if(isset($data['customData']['secondary']))
       {
         $sec_data = $data['customData']['secondary'];
@@ -2320,7 +2300,6 @@ class TescoSettings extends Controller
       {
         $sec_data = "";
       }
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
 
       try {
           TescoPrimarySize::where('id',$data['customData']['primary']['edit_tesco_primary_id'])->first()->delete();
@@ -2332,13 +2311,11 @@ class TescoSettings extends Controller
                     'po_size'     => $primary_data['edit_labelsize_posize']
           ]);
 
-// <<<<<<< HEAD
+
           if (array_key_exists('secondary', $data['customData']))
           {
             $sec_data = $data['customData']['secondary'];
             
-// =======
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
             foreach ($sec_data as $key => $value) {
                 $cat_id = explode('_', $key);
                 $secondary_inserted = TescoSecondarySizeChart::create([
@@ -2347,10 +2324,7 @@ class TescoSettings extends Controller
                   'secondary_size'     => $value
                 ]);
             }
-// <<<<<<< HEAD
           }
-// =======
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
 
           $result = $primary_inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
       } catch (\Exception $e) {

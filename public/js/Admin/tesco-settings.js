@@ -4581,11 +4581,6 @@ function addTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-// <<<<<<< HEAD
-          // alert('Success'); 
-// =======
-          //alert('Success'); 
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
           $("#addTescoLabelSizeChartModal").modal('hide')
           $('.snackbar_span').html('New label size added successfully !! ');
           showSnackbar();
@@ -4623,11 +4618,6 @@ function updateTescoLabelSizeChart() {
             $(".loader").show();
         },
         success: function () { 
-// <<<<<<< HEAD
-          // alert('Success'); 
-// =======
-          //alert('Success'); 
-// >>>>>>> 9d2d1ad8f493cc6983459dcf69e01329c9595e2b
           $("#editTescoPrimarySizeModal").modal('hide')
           $('.snackbar_span').html('Label size updated successfully !! ');
           showSnackbar();
