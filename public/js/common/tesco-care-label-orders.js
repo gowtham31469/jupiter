@@ -112,7 +112,7 @@ $(function () {
                     while (fiber_count <= 6) {
                         garment_comp_div += `<div class="col-xs-8">
                                                         <div class="form-group has-feedback">
-                                                        <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber[]">
+                                                        <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber[]">
                                                         <option value="">-- Select Fiber --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
                             garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
@@ -123,7 +123,7 @@ $(function () {
                                                 <div class="col-xs-4">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
@@ -578,3 +578,13 @@ $(function () {
     }
 
 });
+
+$(document).on('change', '.tesco-care-fiber-class', (e) => {
+    var comp_input_id =  e.target.id.replace('tesco_care_fiber', 'fiber_individual_percentage');
+    if(e.target.value === ''){
+        $("#"+comp_input_id).val('').prop( "readonly", true ).trigger("change");
+    } else {
+        $("#"+comp_input_id).val('').prop( "readonly", false ).trigger("change");
+    }
+});
+
