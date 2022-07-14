@@ -156,7 +156,7 @@ $( () => {
 
                                 garment_comp_div += `<div class="col-xs-8">
                                                                     <div class="form-group has-feedback">
-                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
+                                                                    <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
                                                                     <option value="">-- Select Fiber --</option>`;
                                 $.each(data.data.fabriclists, function (fabric_index, item) {
 
