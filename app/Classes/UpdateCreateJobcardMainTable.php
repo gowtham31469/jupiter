@@ -159,13 +159,7 @@ class UpdateCreateJobcardMainTable
                     $buyer_po       = $order_details->po_number;
                     $ocn_number     = $order_details->ocn_number;
 
-                    if($buyer === 'tesco'){
-                        $country        = $order_details->zone;
-						$style_zone     = strtolower($country).'_style_ref';
-                        $style          = $order_details->$style_zone;
-                    } else {
-                        $style          = $order_details->style_ref;
-                    }
+                    $style          = $order_details->style_ref;
                 }
                 
                 // it will insert if erp_order_details_id i snot exists, otherwise it will update 
