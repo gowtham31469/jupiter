@@ -20,7 +20,7 @@ use PDF;
 use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
-use App\Classes\invoiceTCPDF;
+use App\Classes\invoiceTCPDF;   
 use App\EventHistory;
 use App\History;
 use Carbon\Carbon;
