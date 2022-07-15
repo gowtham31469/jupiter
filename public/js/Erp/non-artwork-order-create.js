@@ -68,7 +68,7 @@
 		{
 			$('#dynamic_field tr ').each(function(key,val)
 			{	
-				$(this).attr('id','addr'+key).find("td:eq(0)").html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" id="customCheck1"><label class="custom-control-label" for="customCheck1">&nbsp;&nbsp;'+(key+1)+'</label></div>')
+				$(this).attr('id','addr'+key).find("td:eq(0)").html('<div class="custom-control custom-checkbox"><input type="checkbox" name="customCheck'+(key+1)+'"class="custom-control-input select_row_to_clone" id="customCheck'+(key+1)+'"><label class="custom-control-label" for="customCheck'+(key+1)+'">&nbsp;&nbsp;'+(key+1)+'</label></div>')
 			})
 		}
 
