@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -91,6 +90,10 @@ Route::post('admin/non-artwork-template/template-view', 'Admin\TemplateManagemen
 Route::get('admin/non-artwork-template/get-select-list', 'Admin\TemplateManagement\NonArtworkTemplateController@getSelectList');
 
 Route::post('admin/non-artwork-template/update-template', 'Admin\TemplateManagement\NonArtworkTemplateController@updateTemplate');
+
+Route::post('admin/non-artwork-template/template-hierarchy', 'Admin\TemplateManagement\NonArtworkTemplateController@templateHierarchy');
+
+Route::post('admin/non-artwork-template/rename-template', 'Admin\TemplateManagement\NonArtworkTemplateController@renameTemplate');
 
 Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateController@getTemplateNotes');
 
@@ -991,6 +994,28 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('non-artwork-job-manager/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
 	Route::post('non-artwork-job-manager/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
 	Route::get('non-artwork-job-manager/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
+	Route::post('non-artwork-job-manager/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@storeNatJcOrderDetails');
+	Route::get('non-artwork-job-manager/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
+
+	Route::get('non-artwork-job-manager/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+	Route::get('non-artwork-job-manager/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
+	Route::get('non-artwork-job-manager/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+
+
+	Route::get('non-artwork-orders', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@nonArtworkOrders')->name('non-artwork-orders');
+
+	Route::post('save-non-artwork', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@saveNonArtworkOrders')->name('save-non-artwork');
+
+	Route::post('get-non-artwork-order-details', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getNonArtworkOrders')->name('get-non-artwork');
+
+	Route::post('get-item-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getItem')->name('get-item-nat');
+
+	Route::post('get-reference-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
+
+
+	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
+
 });
 
 //Orchestra Order Management - customer
