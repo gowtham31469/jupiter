@@ -117,7 +117,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(data.order_details[0].bs_en_declaration == 0)
             {
-                console.log("hai")
                 svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
             }
 
