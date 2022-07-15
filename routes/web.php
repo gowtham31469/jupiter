@@ -253,6 +253,7 @@ Route::group(['middleware' => 'customer_auth'], function()
 	Route::post('customer/tesco/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
 	Route::post('customer/tesco/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
 	Route::post('customer/tesco/get-order-details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
+	Route::post('customer/orchestra/get-order-details', 'Customer\Orchestra\OrderStatusCntrl@getOrderDetails');
 	Route::get('customer/tesco/get-erp-status', 'Customer\Tesco\OrderStatusController@checkERPStatus');
 	Route::post('customer/tesco/order-management/orders', 'Customer\Tesco\OrderController@Orders');
 	Route::get('customer/tesco/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
@@ -707,6 +708,7 @@ Route::post('admin/tesco/tesco-orders-submit-filter', 'Admin\Tesco\OrderStatusCn
 
 
 Route::post('admin/tesco/get-order-details', 'Admin\Tesco\OrderStatusCntrl@getOrderDetails');
+Route::post('admin/orchestra/get-order-details', 'Admin\Orchestra\OrderStatusCntrl@getOrderDetails');
 
 
 

@@ -12,14 +12,18 @@ function orchestraStatusTable(data, path) {
     var tr = "";
     var columnsIn = data[0];
     for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code") {
+        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code"  && key != "created_at" && key != "template_file" && key != "Print Proof" && key != "Actions") {
             if (key == "TemplateName") {
                 th += "<th style='text-align: center;'>Template Name</th>";
-            }else if (key == "BuyerPONo") {
+            } else if (key == "BuyerPONo") {
                 th += "<th style='text-align: center;'>BuyerPO No</th>";
-            }else if (key == "ArtworkType") {
+            } else if (key == "ArtworkType") {
                 th += "<th style='display:none'>Artwork Type</th>";
-            }else if (key == "SupplierName") {
+            } else if (key == "Artwork Status") {
+                //New changes start
+                th += "<th>Order Status</th><th>Artwork</th><th>Artwork Status</th>";
+                //New changes end
+            } else if (key == "SupplierName") {
                 th += "<th style='text-align: center;'>Supplier Name</th>";
             } else if (key == "OrderDate") {
                 th += "<th style='text-align: center;'>Order Date</th>";
@@ -39,8 +43,10 @@ function orchestraStatusTable(data, path) {
 
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
-                    let customer_po_number = value[key] === null ? '' : value[key];
-                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    let customer_po_number = value[key] === null ? ' - ' : value[key];
+                    //New changes start
+                    tr += '<td class="text-center">'+customer_po_number+'</td>';
+                    //New changes end
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
                         var orderDate = value[key];
@@ -51,47 +57,119 @@ function orchestraStatusTable(data, path) {
 
 
                 } else if (key == "PI Status") {
+                    //New changes start
                     var str = value[key];
-                    if (str != null && str != "" && value['is_order_count_empty'] == 0) {
-                        if (str == "PI Approved") {
+
+                    if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
+                        if (str === 'PI Approved') {
                             action_status = true;
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
                         }
-                        $status = str.replace(/ /g, "");
-                        $status_text = '<span class="pi_class label label-' + $status + '">' + value[key] + '</span>';
+                        else if (str === 'PI Rejected') {
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
+                        } else {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                                status_text = '<span class="pi_class label label-PIApprovalPending"> PI Approval Pending </span>';
+                                tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
+                            } else {
+                                tr += '<td align="center"><span class="pi_class label label-default"> PI Pending </span></td>';
+                            }
+                        }
                     } else {
-                        $status_text = " - ";
+                        tr += '<td align="center"> - </td>';
                     }
-
-
-                    tr += '<td align="center">' + $status_text + '</td>';
-
+                    //New changes end
                 } else if (key == "Artwork Status") {
                     if (value['is_order_count_empty'] == 0) {
-                        var str = value[key];
-                        $status = str.replace(/ /g, "");
-
-                        tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                        if(value[key] == "Buyer Approval Pending")
+                        {
+                            var str = value[key];
+                            $status = str.replace(/ /g, "");
+    
+                            tr += '<td align="center"><span class="label label-OrderPlaced">Order Placed</span></td>';
+                        }
+                        else
+                        {
+                            var str = value[key];
+                            $status = str.replace(/ /g, "");
+    
+                            tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                        }
+                        
                     } else {
                         tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
                     }
 
-                } else if (key == "PO Status") {
-                    var str = value[key];
-                    var status_text = " - "
-                    if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
-                        if (str != null && str != "") {
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + value[key] + '</span>';
-                        } else {
-                            str = "PO Pending"
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + str + '</span>';
-                        }
-                    } else {
-                        status_text = " - ";
+                    var temp_file = value.template_file.split(',');
+                    
+                    if(value.ArtworkType == "Solid Carton Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg3","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg3","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Solid Poly Bag Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg4","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Standard Carton Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg3","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg3","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Standard Poly Bag Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg4","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    //New changes start
+                    tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+
+                    if (value['Artwork Status'] == "Order Approved") {
+                        var str = value[key];
+                        $status = str.replace(/ /g, "");
+
+                        tr += '<td align="center"><span class="label label-OrderApproved">Artwork Approved</span></td>';
+                    } else if (value['Artwork Status'] == "Order Placed"){
+                        tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
+                    } else if (value['Artwork Status'] == "Buyer Approval Pending"){
+                        tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
+                    }else {
+                        tr += '<td align="center"> - </td>';
                     }
 
-                    tr += '<td align="center class="po_status">' + status_text + '</td>';
+                    //New changes end
+
+                } else if (key == "PO Status") {
+                    var str = value[key];
+                    var po_file = value['po_file'];
+                    var status_text = " - "
+                    if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
+                        if (value['PO Status'] === 'PO Uploaded') {
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
+                            tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUploaded(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","'+value['PO Number']+'","customer") > '+status_text+' </a></td>';
+                        } else {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                                status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
+                                tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","customer") > '+status_text+' </a></td>';
+                            } else {
+                                tr += '<td align="center class="po_status"><span class="po_class label label-default"> PO Pending </span></td>';
+                            }
+                        }
+                    } else {
+                        tr += '<td align="center class="po_status"> - </td>';
+                    }
+
+                    //tr += '<td align="center class="po_status">' + status_text + '</td>';
 
                 } else if (key == "UVC") {
                     var order_flag = value.order_flag;
@@ -103,7 +181,7 @@ function orchestraStatusTable(data, path) {
                         span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
                     tr += '<td align="center" data-id="' + value.tableID + '" data-artwork="' + value.ArtworkType + '" data-season="' + value.Season + '" data-uvc="' + value.UVC + '" data-table="' + value.tableName + '" data-buyer="' + value.BuyerPONo + '" data-color_code="' + value.color_code + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="updateArtworkOrc(this)">' + span_style + '' + value.UVC + '</a></td>';
-                }else if (key == "TemplateName") {
+                } else if (key == "TemplateName") {
 					if(value["color_code"] != "" && value["color_code"] != null)
 					{
 						tr += '<td align="center"> '+ value.color_code +' '+value.TemplateName+' </td>';
@@ -112,43 +190,31 @@ function orchestraStatusTable(data, path) {
 					{
 						tr += '<td align="center"> '+value.TemplateName+' </td>';
 					}
+                } else if (key == "Print Proof") {
+                    //New changes start
+                    // tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    //New changes end
                 } else if (key == "Actions") {
-                    var po_file = value['po_file'];
-                    if (po_file != null) {
-                        style_po = "style='border-color:#FFFFFF'"
-                    } else {
-                        style_po = "style='border-color:#FF0000'"
-                    }
-                    var pi_required = value['pi_required'];
-                    var po_required = value['po_required'];
-                    if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
-                        if (pi_required == 1 && po_required == 1) {
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (po_required == 1 && pi_required == 0) {
-
-                            tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (pi_required == 1 && po_required == 0) {
-
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
-                        }
-                    } else {
-                        tr += '<td align="center"> - </td>';
-                    }
+                    //New changes start
+                    // var po_file = value['po_file'];
+                    // let customer_po_number = value['PO Number'] === null ? '' : value['PO Number'];
+                    // tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    //New changes end
                 } else if (key == "ArtworkType") {
 					tr += '<td style="display:none">' + value[key] + '</td>';
                 } else if (key == "DeliveryDate") {
 
                     if (value['is_order_count_empty'] == 0) {
                         if (value[key] == null) {
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
+                            tr += '<td><span style=display:none;>' + value.created_at + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
                         } else {
 
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '") readonly></td>';
+                            tr += '<td><span style=display:none;>' + value.created_at + '</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '") readonly></td>';
                         }
                     } else {
-                        tr += '<td><span style=display:none;>' + value.OrderDate + '</span> - </td>';
+                        tr += '<td><span style=display:none;>' + value.created_at + '</span> - </td>';
                     }
-                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code") {
+                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code" && key != "created_at" && key != "template_file") {
                     if (value[key] == "" || value[key] == null) {
                         tr += '<td> - </td>';
                     } else {
@@ -232,65 +298,6 @@ const orchestraSetPO = (obj, id, tableName, po_file) => {
         showSnackbar();
 		setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
     }
-}
-/**
- * [orchestraPOUpload for customer po file upload]
- * @param  {[type]} obj [description]
- * @param  {[type]} id  [description]
- * @return {[type]}     [description]
- */
-const orchestraPOUpload = (obj, id, po_file, tableName) => {
-    
-    $.ajax({
-        url: base_url + "/customer/orchestra/get-erp-status",
-        type: 'get',
-        data: {
-            table_name: tableName,
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            // erp_details array null , if order is not moved to erp tables
-            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
-            if (data.erp_details[0] != null) {
-                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
-                    $('.update-po-file').hide();
-
-                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
-                } else {
-                    $('.update-po-file').show();
-                    $('#error_msg_span').html('');
-                }
-            } else {
-                $('.update-po-file').show();
-                $('#error_msg_span').html('');
-            }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-            if (po_file === "null") {
-                $('#po_upload').removeClass('hidden')
-                $('.upload-po').removeClass('hidden')
-                $('#po_file').addClass('hidden')
-            } else {
-                $('#po_upload').addClass('hidden')
-                $('.upload-po').addClass('hidden')
-                $('#po_file').removeClass('hidden')
-            }
-            var po_link = base_url + po_file
-            $('#po_link').attr("href", po_link);
-            $('#rowID').val(id);
-            $('#tableName').val(tableName);
-            $('#buyer_id').val(localStorage.getItem("buyer_id"));
-            $('#po-file-upload').modal('show')
-        }
-    })
 }
 
 $(".update-po-file").click(function () {

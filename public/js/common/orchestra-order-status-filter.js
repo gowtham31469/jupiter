@@ -76,11 +76,10 @@ orderStatus = (user_type) => {
                 </div>
                 <div style="padding-top:15px;" id="orchestraStatusTable"></div>
                 `);
-    getFilterData(start_date, end_date, user_type)
+                
+                getFilterData(start_date, end_date, user_type)
 
-    $('#po-file-upload-button').on('click', () => {
-        uploadOrchestraPOFile(user_type)
-    });
+                uploadOrchestraPOFile(user_type)
 
 }
 
@@ -177,6 +176,7 @@ getFilterData = (start_date, end_date, user_type) => {
 uploadOrchestraPOFile = (user_type) => {
     $('#po-file-upload-button').click(function () {
     $('#po-file-upload-group').modal("show")
+    $('#uvc_selection').val("").attr('disabled',false)
     $('#uvc_selection').selectpicker('refresh');
     $('#new_po_div_status').addClass('hidden');
     $('#new_po1_status').addClass('hidden');
@@ -678,43 +678,90 @@ getOrchestraOrders = (user_type) => {
                 });
                 $('#orchestraStatusTable').html(orchestraStatusTable(newObj, path));
                 var $tableSel = $('#datatable-orchestra-orders');
-                $tableSel.DataTable({
-                    "columnDefs": [{
-                        "targets": '_all',
-                        "createdCell": function (td, cellData, rowData, row, col) {
-                            $(td).css('padding', '5px')
+
+                if(user_type == "admin")
+                {
+                    $tableSel.DataTable({
+                        "columnDefs": [{
+                            "targets": '_all',
+                            "createdCell": function (td, cellData, rowData, row, col) {
+                                $(td).css('padding', '5px')
+                            }
+                        }],
+                        "pageLength": 25,
+                        "order": [
+                            [8, "desc"]
+                        ],
+                        scrollX:        true,
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            {
+                                "sType": "date-uk"
+                            },
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                        ],
+                        initComplete: function () {
+                            $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
+                            $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
+                            $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
                         }
-                    }],
-                    "pageLength": 25,
-                    "order": [
-                        [10, "desc"]
-                    ],
-                    scrollX:        true,
-                    "aoColumns": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-						null,
-                        {
-                            "sType": "date-uk"
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                    ],
-                    initComplete: function () {
-                        $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
-                        $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
-                        $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
-                    }
-                });
+                    });
+                }
+                else
+                {
+                    $tableSel.DataTable({
+                        "columnDefs": [{
+                            "targets": '_all',
+                            "createdCell": function (td, cellData, rowData, row, col) {
+                                $(td).css('padding', '5px')
+                            }
+                        }],
+                        "pageLength": 25,
+                        "order": [
+                            [8, "desc"]
+                        ],
+                        scrollX:        true,
+                        "aoColumns": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            {
+                                "sType": "date-uk"
+                            },
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                        ],
+                        initComplete: function () {
+                            $("#datatable-orchestra-orders_filter input").addClass('form-control input-sm');
+                            $("#datatable-orchestra-orders_filter input").attr('placeholder', 'Data Search');
+                            $('#datatable-orchestra-orders_length select').addClass('form-control input-sm');
+                        }
+                    });
+                }
+                
 
             },
             400: function () {
