@@ -21,16 +21,14 @@
 		}
 
 		function clone_row()
-    		{
-    		console.log(action[0])
-
+    	{
     		var index = $(".main-content select").length + 1;
     		new_tr = ''
 
     		for (var i = 0; i < row_ids.length; i++) 
     		{
     			var row_id = "addr" + ++index  
-    			$('tbody').append('<tr id='+row_id+'></tr>')
+    			$('tbody').append('<tr id='+row_id+' class="clonable"></tr>')
 				$("#"+row_ids[i]).find('td').each (function() 
 				{
 					if($(this).hasClass('selectpicker_td'))

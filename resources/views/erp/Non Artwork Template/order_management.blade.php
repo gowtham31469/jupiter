@@ -192,8 +192,8 @@
 					</tbody>
 				</table>
 				</div>
-				<div class="col-md-7"></div>
-				<div class="col-md-3 calculations">
+				<div class="col-md-8"></div>
+				<div class="col-md-4 calculations">
 				<table class="table table-bordered" id="nat_tab_logic_total">
 					<tbody>
 						<tr>
