@@ -92,6 +92,15 @@
     background-size: 100%;
     background-repeat: no-repeat;
 }
+
+    .custom-width-select-season .btn{
+        width:230px;
+    }
+
+    .custom-width-select-season{
+        margin-top: -7px;
+        width:230px !important;
+    }
 .hiddencis_div{
     display: none !important;
 }
@@ -796,14 +805,14 @@ background: rgba(0,0,0,0.2);
         @for ($i = 1; $i <= 6; $i++)
             <div class="col-xs-8">
                 <div class="form-group has-feedback">
-                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
+                    {{  Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm tesco-care-fiber-class','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-xs-4">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
+                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>
@@ -1124,6 +1133,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
 
 <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>
@@ -1166,13 +1176,6 @@ background: rgba(0,0,0,0.2);
               localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
               $('.selected-buyer').text('Selected Buyer : '+$('.buyers-card.active-buyer.active').data("name"))
               $('#buyerSelectionModalCenter').modal('hide');
-            //   var buyer = localStorage.getItem("buyer");
-            //   if (buyer === 'orchestra') 
-            //   {
-            //       orders();
-            //   } else {
-            //       tescoOrders(reOrderTesco);
-            //   }
           } else {
               localStorage.removeItem("buyer");
               localStorage.removeItem("buyer_id");
@@ -1221,7 +1224,7 @@ background: rgba(0,0,0,0.2);
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') 
             {
-                orders();
+                orders('customer');
             } else {
                 tescoOrders(reOrderTesco);
             }
@@ -1242,7 +1245,7 @@ background: rgba(0,0,0,0.2);
               var buyer = localStorage.getItem("buyer");
                 if (buyer === 'orchestra') 
                 {
-                    orders();
+                    orders('customer');
                 } else {
                     tescoOrders(reOrderTesco);
                 }

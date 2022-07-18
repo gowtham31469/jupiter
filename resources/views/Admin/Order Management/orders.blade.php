@@ -119,6 +119,15 @@
         background-color: #f1f1f1;
     }
 
+    .custom-width-select-season .btn{
+        width:230px;
+    }
+
+    .custom-width-select-season{
+        margin-top: -7px;
+        width:230px !important;
+    }
+
     .files:before {
         position: absolute;
         bottom: 10px;
@@ -877,14 +886,14 @@
                             </div>
                             @for ($i = 1; $i <= 6; $i++) <div class="col-xs-8">
                                 <div class="form-group has-feedback">
-                                    {{ Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
+                                    {{ Form::select('tesco_care_fiber_'.$j.'_'.$i,(['' => '-- Select Fiber --']+$fabriclists),'',array('class' => 'selectpicker form-control input-sm tesco-care-fiber-class','id'=>'tesco_care_fiber_'.$j.'_'.$i, 'data-live-search' => 'true', 'name' => 'tesco_care_fiber[]')) }}
                                     <div class="help-block with-errors"></div>
                                 </div>
                         </div>
                         <div class="col-xs-4">
                             <div class="form-group has-feedback">
                                 <div class="input-group">
-                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error="Value must be <= 100">
+                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error="Value must be <= 100" readonly>
                                     <div class="input-group-addon">%</div>
                                 </div>
                                 <div class="help-block with-errors"></div>
@@ -1213,6 +1222,7 @@
 <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
 
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>
@@ -1367,13 +1377,6 @@
                 localStorage.setItem("buyer_id", $('.buyers-card.active-buyer.active').data("value"));
                 $('.selected-buyer').text('Selected Buyer : ' + $('.buyers-card.active-buyer.active').data("name"))
                 $('#buyerSelectionModalCenter').modal('hide');
-                // var buyer = localStorage.getItem("buyer");
-                // if (buyer === 'orchestra') 
-                // {
-                //     orders();
-                // } else if (buyer === 'tesco')  {
-                //     tescoOrders(reOrderTesco);
-                // }
             } else {
                 localStorage.removeItem("buyer");
                 localStorage.removeItem("buyer_id");
@@ -1415,7 +1418,7 @@
             $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
             var buyer = localStorage.getItem("buyer");
             if (buyer === 'orchestra') {
-                orders();
+                orders('admin');
             } else if (buyer === 'tesco') {
                 tescoOrders(reOrderTesco);
             } else {
@@ -1435,7 +1438,7 @@
                 $('.selected-buyer').text('Selected Buyer : ' + localStorage.getItem("buyer"));
                 var buyer = localStorage.getItem("buyer");
                 if (buyer === 'orchestra') {
-                    orders();
+                    orders('admin');
                 } else if (buyer === 'tesco') {
                     tescoOrders(reOrderTesco);
                 }

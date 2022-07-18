@@ -101,28 +101,32 @@
     });
     $('.order-details-div').html(hidden_html);
 
-    var disp_modes_options = '';
+    jcPageSelectbox(data)
+}
+
+const jcPageSelectbox = (data) => {
+    var disp_modes_options = '<option value="" selected="selected">-- Select Dispatch Mode --</option>';
     $.each(data.disp_modes, function (key, item) {
         disp_modes_options += '<option value="' + key + '">' + item + '</option>';
     });
-    $('#disp_mode').append(disp_modes_options);
+    $('#disp_mode').html(disp_modes_options);
 
-    var machine_options = '';
+    var machine_options = '<option value="" selected="selected">-- Select Machine --</option>';
     $.each(data.machines, function (key, item) {
         machine_options += '<option value="' + key + '">' + item + '</option>';
     });
-    $('#machine').append(machine_options);
+    $('#machine').html(machine_options);
 
-    var teeth_no_options = '';
+    var teeth_no_options = '<option value="" selected="selected">-- Select Teeth No --</option>';
     $.each(data.teeth_nos, function (key, item) {
         teeth_no_options += '<option value="' + key + '">' + item + '</option>';
     });
-    $('#teeth_no').append(teeth_no_options);
+    $('#teeth_no').html(teeth_no_options);
 
-    var finish_type_options = '';
+    var finish_type_options = '<option value="" selected="selected">-- Select Finish Type --</option>';
     $.each(data.finish_types, function (key, item) {
         finish_type_options += '<option value="' + key + '">' + item + '</option>';
     });
-    $('#finish_type').append(finish_type_options);
+    $('#finish_type').html(finish_type_options);
     $('.selectpicker').selectpicker('refresh');
 }

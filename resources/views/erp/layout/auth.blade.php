@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel Multi Auth Guard') }}</title>
+    <title>{{ config('app.name', 'JGA') }}</title>
 
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
@@ -42,7 +42,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/erp') }}">
-                    {{ config('app.name', 'Laravel Multi Auth Guard') }}
+                    {{ config('app.name', 'JGA') }}
                 </a>
             </div>
 
