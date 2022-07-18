@@ -170,7 +170,7 @@ function template_list() {
                 if (data.instance.is_leaf(data.node)) {
                     var template_id = data.node.id;
                     $.ajax({
-                        url: base_url + "/admin/non-artwork-template/template-view/",
+                        url: base_url + "/admin/non-artwork-template/template-view",
                         type: "Post",
                         dataType: "json",
                         data: {
