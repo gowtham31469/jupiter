@@ -107,8 +107,7 @@ class UpdateCreateJobcardMainTable
             
             foreach($jobcard_data as $key => $data)
             {
-                $history_id = History::where('erp_order_details_id', $data->id)
-                ->update([
+                $history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
                     $request['crud_operation_type']  => $current_timestamp,
                     'disp_mode_id'         => $request['disp_mode']
                 ]);
