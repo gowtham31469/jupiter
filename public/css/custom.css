@@ -1678,3 +1678,10 @@ li.year-nav-menu div.selected-year button:focus{
     border-color: #26323800;
     margin-top: 2px;
 }
+#nat_tab_logic{
+    max-width: unset!important;
+        width: 150%!important;
+}
+#nat_tab_logic .form-control:hover {
+     border: unset !important; 
+}

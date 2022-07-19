@@ -1,4 +1,4 @@
-@extends('layouts.Admin.app') @if (Auth::guard("web")->user()) 
+@extends('layouts.Erp.app')
 <style type="text/css">
 	.table{max-width: unset!important;
 		width: 150%!important;}
@@ -233,11 +233,6 @@
   </div>
 </div>
 @endsection
-@else
-<script type="text/javascript">
-	window.location = "{{ url('/admin') }}";
-</script>
-@endif
 
 @section('jqueryIncludes')
 
@@ -284,7 +279,7 @@
 			$('#tab_logic').append('<tr id="addr'+(row_index+1)+'" class="clonable"></tr>');
 			$('#addr'+row_index).html(row_to_duplicate).find('td:first-child').html('<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck'+(row_index+1)+'"><label class="custom-control-label">&nbsp;&nbsp;'+(row_index+1)+'</label></div>')
 			row_index++;
-			$(".selectpicker").selectpicker('refresh')
+			$('*:not(.bootstrap-select) > .selectpicker').selectpicker('refresh');
 
 		});   
 
@@ -337,7 +332,7 @@
 					$("#item_td").html(data.items)
 					$(".reference_select").find('option').remove();
 					reset_input()
-					$(".selectpicker").selectpicker('refresh')
+					$('*:not(.bootstrap-select) > .selectpicker').selectpicker('refresh');
 				}
 			});
 		});
@@ -369,7 +364,7 @@
 				{
 					$target.html('')
 					$target.html(data.reference)
-					$(".selectpicker").selectpicker('refresh')
+					$('*:not(.bootstrap-select) > .selectpicker').selectpicker('refresh');
 				}
 			});
 		});

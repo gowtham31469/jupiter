@@ -251,7 +251,7 @@ class NonArtworkTemplateController extends Controller
                     // dd($request->all());
 
                     $reference_name = DB::table($template_table)
-                                        ->where('id',$request->reference[$key])
+                                        ->where('item_id',$request->reference[$key])
                                         ->first()
                                         ->template_name;
 
@@ -297,7 +297,7 @@ class NonArtworkTemplateController extends Controller
                         'style_no'              => $request->style[$key],
                         'order_quantity'        => $request->quantity[$key],
                         'pending_orders'        => $request->quantity[$key],
-                        'size'                  => $request->size[$key],
+                        'size'                  => $size,
                         'delivery_date'         => Carbon::parse($request->due_date)->toDateString(),
                         'order_qnty_table_name' => "non_artwork_orders_quanty",
                         'order_qnty_table_id'   => $nat_qty->id,
@@ -313,7 +313,7 @@ class NonArtworkTemplateController extends Controller
                         'order_type'            => "newOrder",
                         'created_at'            => Carbon::parse($request->current_date)
                                                     ->toDateTimeString(),
-                        'order_status_id'       => 3,
+                        'order_status_id'       => 4,
                         'order_date'            => Carbon::parse($request->current_date)
                                                     ->toDateTimeString(),
                         'aw_date'               => $request->approve_date[$key]!=null ?
