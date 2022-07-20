@@ -82,15 +82,7 @@ class NonArtworkTemplateController extends Controller
 
     public function nonArtworkOrders()
     {   
-            // $module_var = new Modules();
-            // $get_main_module = $module_var->getMainModules();
-            // $get_sub_module = $module_var->getSubModules(9);
-            
-            // View::composer('layouts.Admin.navbar', function($view) use ($get_main_module,$get_sub_module) {
-            //     return $view->with(['modules' => $get_main_module,'sub_modules' => $get_sub_module]);
-            // });
-            
-            $buyers = Buyer::where('artwork_flag','=',1)->where('is_active','=',1)->pluck('buyer_name','id');
+            $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
             
@@ -143,7 +135,7 @@ class NonArtworkTemplateController extends Controller
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
         }
-        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select">'.$opt.'</select>';
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference">'.$opt.'</select>';
 
         return response()->json(['reference'=>$reference_select]);
 
@@ -579,6 +571,17 @@ class NonArtworkTemplateController extends Controller
         
        }                            
        return response()->json(['rate'=>0]);
+    }
+
+
+    public function getHsn(Request $request)
+    {
+        $buyer = Buyer::where('id',$request->buyer_id)->first()->buyer_name;
+        $template_table = strtolower($buyer)."_template";
+        $row = DB::table($template_table)
+                                        ->where('item_id',$request->item_id)
+                                        ->first();
+        return response()->json(['hsn'=>$row->hsn_code,'tax'=>$row->tax]);
     }
 
 }
