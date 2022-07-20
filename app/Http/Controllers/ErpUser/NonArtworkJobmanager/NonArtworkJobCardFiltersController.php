@@ -307,7 +307,7 @@ class NonArtworkJobCardFiltersController extends Controller
      */
     public function getFilteredNatOrders(Request $request)
     {
-        if(!$request['erp_id'] && !$request['customer_po']){
+        if(!$request['erp_id'] & !$request['customer_po']){
             $buyer_name = DB::table('buyers')
             ->where('id', $request['buyer_id'])
             ->value('buyer_name');
@@ -330,24 +330,34 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(function($query) use ($request){
                 if($request['style_number'])
                 {
-                        $query->orWhereIn('erp_order_details.style_no', $request['style_number']);
+                    $query->orWhereIn('erp_order_details.style_no', $request['style_number']);
                 }
                 if($request['ocn_number'])
                 {
-                        $query->orWhereIn('erp_order_details.ocn_number', $request['ocn_number']);
+                    $query->orWhereIn('erp_order_details.ocn_number', $request['ocn_number']);
                 }
                 if($request['buyer_po_number'])
                 {
-                        $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
+                    $query->orWhereIn('erp_order_details.buyer_po_number', $request['buyer_po_number']);
                 }
             })
             ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type', 'erp_order_details.order_status_id')
             ->select('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name as customer', DB::raw("'".$buyer_name."'".' as "buyer"'), 'erp_orders.po_no as customer_po', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name as item_name', DB::raw("SUM(erp_order_details.order_quantity) as quantity"), 'erp_order_details.order_type', 'erp_order_details.order_status_id')
             ->get();
         } else {
+            
             $buyer_name = DB::table('erp_orders')
             ->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
-            ->where('erp_orders.erp_id', $request['erp_id'][0])
+            ->where(function($query) use ($request){
+                if($request['erp_id'])
+                {
+                    $query->orWhere('erp_orders.erp_id', $request['erp_id'][0]);
+                }
+                if($request['customer_po'])
+                {
+                    $query->orWhere('erp_orders.po_no', $request['customer_po'][0]);
+                }
+            })
             ->value('buyer_name');
 
             $nat_jc_filtered_data = DB::table('erp_orders')->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
@@ -364,11 +374,11 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(function($query) use ($request){
                 if($request['erp_id'])
                 {
-                        $query->orWhereIn('erp_orders.erp_id', $request['erp_id']);
+                    $query->orWhereIn('erp_orders.erp_id', $request['erp_id']);
                 }
                 if($request['customer_po'])
                 {
-                        $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
+                    $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
                 }
             })
             ->groupBy('erp_orders.id', 'erp_orders.erp_id', 'customers.company_name', 'erp_orders.po_no', 'erp_order_details.buyer_po_number', 'erp_order_details.style_no', 'erp_order_details.reference_name', 'erp_order_details.ocn_number', 'erp_order_details.uuid', 'erp_order_details.template_id', 'non_artwork_orders.color', 'non_artwork_orders.composition', 'reports_template_level_name.name', 'erp_orders.buyer_id', 'erp_order_details.order_type', 'erp_order_details.order_status_id')
