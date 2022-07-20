@@ -1,5 +1,6 @@
 	$(document).ready(function()
 	{   
+		
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
@@ -7,7 +8,7 @@
 		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
 		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
 		var row_index=1;  
-
+		var hsn_arr = [];
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -84,6 +85,58 @@
 			});
 		}
 
+		function getHsn(item_id,ref_td)
+		{
+			$.ajax({
+				method:'POST',
+				type:'json',
+				url: "/erp/get-hsn-tax",
+				data: { 'item_id' : item_id ,'buyer_id' : $("#buyer").val()},
+				success:function(data)
+				{
+					if(data.hsn)
+					{
+						$("#hsn_code").val(data.hsn)
+						$("#tax").html(data.tax)
+						temp_hsn = data.hsn
+						hsn_arr.push(data.hsn)
+						if(hsn_arr.length > 1)
+						{
+							if(hsn_arr[0]!=hsn_arr[hsn_arr.length-1])
+							{	
+								console.log(hsn_arr)
+								if($(ref_td).closest('tr').attr('id') == "addr0")
+								{
+									$("#dynamic_field").find("tr:gt(0) .reference_td").each(function(i,v)
+										{
+											$(this).find('select').val('')
+										});	
+										hsn_arr=[]
+										hsn_arr.push(temp_hsn)
+										$('.selectpicker').selectpicker('refresh')
+								}
+								else
+								{
+									hsn_arr.pop()
+									$(ref_td).find('select').val('')
+									$('.selectpicker').selectpicker('refresh')
+									$('.snackbar_span').html('Different Hsn entry found for this selection,Please try again!!!');
+									showSnackbar();
+								}
+								
+							}
+						}
+					}
+					else
+					{
+						$('.snackbar_span').html('Hsn code not found!!!');
+						showSnackbar();
+					}
+				}
+			});
+
+		}
+
 		$('#add_single_row').click(function()
 		{  	
 			row_ids = ['addr0'];
@@ -106,9 +159,9 @@
 
 		$(document).on("click","#delete_selected",function()
 		{
-			$('input[type=checkbox]:checked').each(function () 
+			$('#dynamic_field input[type=checkbox]:checked').each(function () 
 			{
-				if($('#dynamic_field tr ').length > 1)
+				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
 				}
@@ -157,7 +210,8 @@
 		$(document).on("changed.bs.select",".item_select",function(e){	
 			e.stopImmediatePropagation()
 			if($("#buyer").val().length == 0)
-			{
+			{	$(this).val('')
+				$(".selectpicker").selectpicker('refresh')
 				$('.snackbar_span').html('Please select the buyer first !!!');
 					showSnackbar();
 			}
@@ -187,6 +241,8 @@
 		$(document).on("changed.bs.select",".reference_select",function(e)
 			{	e.stopImmediatePropagation()
 
+				var _item = $(this).val()
+				var _target = $(this).closest('td')
 				if($(this).closest('tr').find('td.quantity_td input[type=number]').val() > 0)
 				{
 					calculate_rate($(this).val(),$(this).closest('tr').find('td.quantity_td input[type=number]').val(),$(this).closest('tr').find('td.rate_td input[type=number]'),$(this).closest('tr').find('td.value_td input[type=number]'))	
@@ -195,10 +251,24 @@
 				{
 					$(this).closest('tr').find('td.value_td input[type=number]').val(0)
 				}
+
+				getHsn(_item,_target);
 			});
 
 		$(document).on("keyup change",".quantity",function()
 		{	
+			if($("#customer").val().length == 0)
+			{
+				$('.snackbar_span').html('Please select a customer!!!');
+			    showSnackbar();
+			    $(this).val('')
+			}
+			if($(this).closest('tr').find('td.reference_td .selectpicker option:selected').val().length == 0)
+			{
+				$('.snackbar_span').html('Please select a reference!!!');
+			    showSnackbar();
+			    $(this).val('')
+			}
 			if($(this).val() > 0)
 			{
 				calculate_rate($(this).closest('tr').find('td.reference_td .selectpicker option:selected').val(),$(this).val(),$(this).closest('tr').find('td.rate_td input[type=number]'),$(this).closest('tr').find('td.value_td input[type=number]'))
@@ -236,8 +306,8 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(.18 * total_value))
-					$("#tax_value_total").val(Math.round((.18 * total_value) + total_value))
+					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 				}
 			});
 		}
@@ -331,8 +401,8 @@
 				});
 				$("#qty_total").val(total_qty)
 				$("#value_total").val(total_value)
-				$("#tax_value").val(Math.round(.18 * total_value))
-				$("#tax_value_total").val(Math.round((.18 * total_value) + total_value))
+				$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+				$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 			}
 		});
 	});
