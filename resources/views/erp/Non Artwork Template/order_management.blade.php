@@ -60,6 +60,18 @@
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
+			<div class="col-md-3">
+				<div class="form-group has-feedback">
+					<label for="due_date">Due Date</label>
+					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
+						<input value="" id="due_date" name="due_date" type="text" class="form-control" required="" placeholder="Select Due Date">
+						<div class="input-group-addon">
+							<span class="glyphicon glyphicon-th"> </span >
+						</div >
+					</div >
+					<div class="help-block with-errors"></div>
+				</div>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-3">
@@ -78,13 +90,8 @@
 			</div>
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
-					<label for="due_date">Due Date</label>
-					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="due_date" name="due_date" type="text" class="form-control" required="" placeholder="Select Due Date">
-						<div class="input-group-addon">
-							<span class="glyphicon glyphicon-th"> </span >
-						</div >
-					</div >
+					<label for="hsn_code">HSN Code</label>
+					<input type="text" class="form-control" name="hsn_code" id="hsn_code" required="" readonly placeholder="Enter HSN Code"  maxlength="7">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -203,7 +210,7 @@
 						</tr>
 						<tr>
 							<td>Tax</td>
-							<td>18%</td>
+							<td id="tax">18%</td>
 							<td><input type="text" id="tax_value" class="form-control" name="" placeholder="Tax value" readonly></td>
 						</tr>
 						<tr>
