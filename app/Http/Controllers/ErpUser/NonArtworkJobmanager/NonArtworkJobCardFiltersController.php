@@ -476,7 +476,7 @@ class NonArtworkJobCardFiltersController extends Controller
         }
     }
 
-    public function createNatJcOrderDetails(NonartworkJCRequest $request)
+    public function storeNatJcOrderDetails(NonartworkJCRequest $request)
     {
 
         $request->validated();

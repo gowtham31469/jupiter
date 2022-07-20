@@ -10,13 +10,11 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use App\OrderManagementHistory;
-use App\Classes\TescoMaterialQuery;
 
 class OrderManagementController extends Controller
 {
 	private $order_status_id;
 	private $current_date;
-	private $tesco_material_obj;
     /**
      * Create a new controller instance.
      *
@@ -29,7 +27,6 @@ class OrderManagementController extends Controller
 		$this->order_status_id  = DB::table('orders_status')->select('id')->where('status_name', 'ilike', 'Order Cancelled')->first();
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
-		$this->tesco_material_obj = new TescoMaterialQuery();
 	}
 
 
@@ -74,7 +71,11 @@ class OrderManagementController extends Controller
 
         switch($request->val){
 			case 1:
-				$erp_order_details = \App\ErpOrderDetails::where('erp_order_details.id', $request->id)->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')->first();
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_details.id', $request->id)
+				->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+				->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
+				->first();
+
 				$erp_order_id = $erp_order_details->erp_order_id;
 
 				\App\ErpOrderDetails::where('erp_order_details.id', $request->id)->update([
@@ -92,116 +93,11 @@ class OrderManagementController extends Controller
 
 				// Writing history data for hold order reports
 				$action_id  = DB::table('actions')->where('action', 'ilike', 'Hold')->value('id');
+				$history_id = \App\History::where('erp_order_details_id', $erp_order_details->id)->value('id');
 				
-				$buyer_id       = $erp_order_details->buyer_id;
-				$buyer          = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
-				$template       = 'Not Available';
-				$qty_row_id     = $erp_order_details->order_qnty_table_id;
-				$qnty_table     = $erp_order_details->order_qnty_table_name;
-				$customer_id    = $erp_order_details->customer_id;
-
-				$customer       = DB::table('customers')->select('pi_required', 'po_required')->where('id', $customer_id)->first();
-
-				if($buyer->buyer_name === 'Tesco'){
-					$template       = 'Available';
-					$main_table     = str_replace("_quanty","",$qnty_table);
-					$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-					$order_details  = DB::table($qnty_table)
-										->select($main_table.'.*')
-										->where($qnty_table.'.id', $qty_row_id)
-										->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-										->first();
-					$season  = $main_table === 'tesco_swingticket_orders'?DB::table('tesco_season_codes')->where('id', $order_details->season_code_id)->value('name'):$order_details->season_code;
-					$country        = $order_details->zone;
-					$style_zone     = strtolower($country).'_style_ref';
-					$template_id    = $order_details->template_id;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-					
-					$material_name  = $template_level->material;
-					$material_sub   = $template_level->material_sub;
-					$material_ref   = $template_level->ref;
-
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->purchase_order_no;
-					}
-
-					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-					$ocn_number     = $order_details->ocn_number;
-					
-
-				} else if($buyer->buyer_name === 'Orchestra'){
-					$template       = 'Available';
-					$main_table     = str_replace("_qty","",$qnty_table);
-					$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-					$qnty_id        = '';
-					foreach (explode(' ', $result_str) as $word)
-					{
-					   $qnty_id .= strtolower($word[0]);
-					}
-					
-					$order_details  = DB::table($qnty_table)
-					->select($main_table.'.*')
-					->where($qnty_table.'.id', $qty_row_id)
-					->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-					->first();
-					
-					// template front and back id storing in orchestra_hang_tag_orders table
-					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-					$template_data = DB::table('orchestra_item_master')
-					->where('orchestra_item_master.id', $template_id)
-					->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')
-					->first();
-
-					$material_name  = DB::table('orchestra_item_master')
-					->where('id', '=', $template_data->material_id)
-					->value('item_name');
-					
-					$material_sub  = DB::table('orchestra_item_master')
-					->where('id', '=', $template_data->sub_material_id)
-					->value('item_name');
-
-					$material_ref   = $template_data->item_name;
-
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->po_number;
-					}
-
-					$buyer_po       = $order_details->po;
-					$style          = $order_details->uvc;
-					$ocn_number     = null;
-					$season         = $order_details->season_code;
-					$country        = null;
-
-				}
-
-				$history_id = \App\History::updateOrCreate(['erp_order_details_id' => $erp_order_details->id], [
-					'buyer_id'             => $buyer_id,
-					'template'             => $template,
-					'season'               => $season,
-					'country'              => $country,
-					'customer_id'          => $customer_id,
-					'material'             => $material_name,
-					'mat_sub'              => $material_sub,
-					'reference'            => $material_ref,
-					'style'                => $style,
-					'po'                   => $customer_po,
-					'buyer_po'             => $buyer_po,
-					'ocn'                  => $ocn_number,
-					'created_at'           => $this->current_date,
-					'updated_at'           => $this->current_date,
-				]);
-
 				DB::table('event_history')
 				->insert([
-					'history_id'  => $history_id->id,
+					'history_id'  => $history_id,
 					'action_id'   => $action_id,
 					'created_by'  => $erp_user,
 					'created_at'  => $this->current_date,
@@ -213,7 +109,11 @@ class OrderManagementController extends Controller
 			case 2:
 				\App\ErpOrderDetails::where('id', $request->id)->restore();
 				
-				$erp_order_details = \App\ErpOrderDetails::where('erp_order_details.id', $request->id)->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')->first();
+				$erp_order_details = \App\ErpOrderDetails::where('erp_order_details.id', $request->id)
+				->join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
+				->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.buyer_id')
+				->first();
+
 				$erp_order_id = $erp_order_details->erp_order_id;
 				
 				// Writing history data for cancelled order reports
@@ -225,41 +125,11 @@ class OrderManagementController extends Controller
 				$order_qnty_table_id = $erp_order_details->order_qnty_table_id;
 				$buyer_id            = $erp_order_details->buyer_id;
 				$buyer               = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
-				$template            = 'Not Available';
-				$customer_id         = $erp_order_details->customer_id;
-				$customer            = DB::table('customers')->select('pi_required', 'po_required')->where('id', $customer_id)->first();
 
 				// make orders cancelled in artwork table
 				if($buyer->buyer_name === 'Tesco')
 				{
-					$template            = 'Available';
-					$qnty_id  =  str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$order_qty_table));
 					$main_table  = str_replace("_quanty","",$order_qty_table);
-					$order_details  = DB::table($order_qty_table)
-										->select($main_table.'.*')
-										->where($order_qty_table.'.id', $order_qnty_table_id)
-										->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id)
-										->first();
-					$season  = $main_table === 'tesco_swingticket_orders'?DB::table('tesco_season_codes')->where('id', $order_details->season_code_id)->value('name'):$order_details->season_code;
-					$country        = $order_details->zone;
-					$style_zone     = strtolower($country).'_style_ref';
-					$template_id    = $order_details->template_id;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-					
-					$material_name  = $template_level->material;
-					$material_sub   = $template_level->material_sub;
-					$material_ref   = $template_level->ref;
-
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->purchase_order_no;
-					}
-
-					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-					$ocn_number     = $order_details->ocn_number;
 
 					// update individual row quanity to 0 in artworks orders table.
 					if(in_array($main_table, ['tesco_washcare_orders', 'tesco_swingticket_orders'])){
@@ -268,69 +138,17 @@ class OrderManagementController extends Controller
 						DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['count' => 0]);
 					}
 
-				} else if($buyer->buyer_name === 'Orchestra') {
-					$template            = 'Available';
-					// get the first letter of each word for a given string
-					$result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
-					$qnty_id = '';
-					foreach (explode(' ', $result_str) as $word)
-					{
-						$qnty_id .= strtolower($word[0]);
-					}
-					$main_table  = str_replace("_qty","",$order_qty_table);
-					
-					$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
-									->first();
-					
-					// template front and back id storing in orchestra_hang_tag_orders table
-					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-					$template_data = DB::table('orchestra_item_master')
-									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-					$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
-					$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
-
-					$material_ref   = $template_data->item_name;
-					
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->po_number;
-					}
-
-					$buyer_po       = $order_details->po;
-					$style          = $order_details->uvc;
-					$ocn_number     = null;
-					$season         = $order_details->season_code;
-					$country        = null;
-
+				} else {
 					// update individual row quanity to 0 in artworks orders table.
 					DB::table($order_qty_table)->where('id',$order_qnty_table_id)->update(['quantity' => 0]);
 
 				}
 
-				$history_id = \App\History::updateOrCreate(['erp_order_details_id' => $erp_order_details->id], [
-					'buyer_id'             => $buyer_id,
-					'template'             => $template,
-					'season'               => $season,
-					'country'              => $country,
-					'customer_id'          => $customer_id,
-					'material'             => $material_name,
-					'mat_sub'              => $material_sub,
-					'reference'            => $material_ref,
-					'style'                => $style,
-					'po'                   => $customer_po,
-					'buyer_po'             => $buyer_po,
-					'ocn'                  => $ocn_number,
-					'created_at'           => $this->current_date,
-					'updated_at'           => $this->current_date,
-				]);
+				$history_id = \App\History::where('erp_order_details_id', $erp_order_details->id)->value('id');
 
 				DB::table('event_history')
 				->insert([
-					'history_id'  => $history_id->id,
+					'history_id'  => $history_id,
 					'action_id'   => $action_id,
 					'created_by'  => $erp_user,
 					'created_at'  => $this->current_date,
@@ -422,110 +240,11 @@ class OrderManagementController extends Controller
 				$action_id  = DB::table('actions')->where('action', 'ilike', 'Hold')->value('id');
 				foreach($erp_order_details as $erp_data)
 				{
-					$buyer_id       = $erp_data->buyer_id;
-					$buyer          = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-					$template       = 'Available';
-					$qty_row_id     = $erp_data->order_qnty_table_id;
-					$qnty_table     = $erp_data->order_qnty_table_name;
-					$customer_id    = $erp_data->customer_id;
-
-					$customer       = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
-
-					if($buyer->buyer_name === 'Tesco'){
-
-						$main_table     = str_replace("_quanty","",$qnty_table);
-						$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-						$order_details  = DB::table($qnty_table)
-											->select($main_table.'.*')
-											->where($qnty_table.'.id', $qty_row_id)
-											->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-											->first();
-						$season  = $main_table === 'tesco_swingticket_orders'?DB::table('tesco_season_codes')->where('id', $order_details->season_code_id)->value('name'):$order_details->season_code;
-						$country        = $order_details->zone;
-						$style_zone     = strtolower($country).'_style_ref';
-						$template_id    = $order_details->template_id;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-						
-						$material_name  = $template_level->material;
-						$material_sub   = $template_level->material_sub;
-						$material_ref   = $template_level->ref;
-						
-						if ($customer->pi_required == 1 && $customer->po_required== 0) {
-							$customer_po  = $order_details->pi_id;
-						}
-						else if($customer->po_required== 1){
-							$customer_po  = $order_details->purchase_order_no;
-						}
-
-						$buyer_po       = $order_details->po_number;
-						$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-						$ocn_number     = $order_details->ocn_number;
-						
-
-					} else if($buyer->buyer_name === 'Orchestra'){
-
-						$main_table     = str_replace("_qty","",$qnty_table);
-						$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-						$qnty_id        = '';
-						foreach (explode(' ', $result_str) as $word)
-						{
-						$qnty_id .= strtolower($word[0]);
-						}
-						
-						$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-										->first();
-						
-						// template front and back id storing in orchestra_hang_tag_orders table
-						$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-						$template_data = DB::table('orchestra_item_master')
-									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-						$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-						$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
-
-						$material_ref   = $template_data->item_name;
-						
-						if ($customer->pi_required == 1 && $customer->po_required== 0) {
-							$customer_po  = $order_details->pi_id;
-						}
-						else if($customer->po_required== 1){
-							$customer_po  = $order_details->po_number;
-						}
-
-						$buyer_po       = $order_details->po;
-						$style          = $order_details->uvc;
-						$ocn_number     = null;
-						$season         = $order_details->season_code;
-						$country        = null;
-
-					} else {
-
-						$template       = 'Not Available';
-
-					}
-
-
-					$history_id = \App\History::updateOrCreate(['erp_order_details_id' => $erp_data->id], [
-						'buyer_id'             => $buyer_id,
-						'template'             => $template,
-						'season'               => $season,
-						'country'              => $country,
-						'customer_id'          => $customer_id,
-						'material'             => $material_name,
-						'mat_sub'              => $material_sub,
-						'reference'            => $material_ref,
-						'style'                => $style,
-						'po'                   => $customer_po,
-						'buyer_po'             => $buyer_po,
-						'ocn'                  => $ocn_number,
-						'created_at'           => $this->current_date,
-						'updated_at'           => $this->current_date,
-					]);
+					$history_id = \App\History::where('erp_order_details_id', $erp_data->id)->value('id');
 
 					DB::table('event_history')
 					->insert([
-						'history_id'  => $history_id->id,
+						'history_id'  => $history_id,
 						'action_id'   => $action_id,
 						'created_by'  => $erp_user,
 						'created_at'  => $this->current_date,
@@ -560,47 +279,10 @@ class OrderManagementController extends Controller
 				{
 					$order_qty_table     = $erp_data->order_qnty_table_name;
 					$order_qnty_table_id = $erp_data->order_qnty_table_id;
-					$buyer_id            = $erp_data->buyer_id;
-					$buyer               = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-					$template            = 'Available';
-					$customer_id         = $erp_data->customer_id;
-
-					$customer 			 = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
+					$buyer               = DB::table('buyers')->select('buyer_name')->where('id', $erp_data->buyer_id)->value('buyer_name');
 
 					// make orders cancelled in artwork table
-					if($buyer->buyer_name === 'Tesco')
-					{
-						$qnty_id  =  str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$order_qty_table));
-						$main_table  = str_replace("_quanty","",$order_qty_table);
-						$order_details  = DB::table($order_qty_table)
-											->select($main_table.'.*')
-											->where($order_qty_table.'.id', $order_qnty_table_id)
-											->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id)
-											->first();
-						$order_qty_field = $qnty_id;
-						$order_status_field = 'order_status';
-						$season  = $main_table === 'tesco_swingticket_orders'?DB::table('tesco_season_codes')->where('id', $order_details->season_code_id)->value('name'):$order_details->season_code;
-						$country        = $order_details->zone;
-						$style_zone     = strtolower($country).'_style_ref';
-						$template_id    = $order_details->template_id;
-						$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-						
-						$material_name  = $template_level->material;
-						$material_sub   = $template_level->material_sub;
-						$material_ref   = $template_level->ref;
-						
-						if ($customer->pi_required == 1 && $customer->po_required== 0) {
-							$customer_po  = $order_details->pi_id;
-						}
-						else if($customer->po_required== 1){
-							$customer_po  = $order_details->purchase_order_no;
-						}
-
-						$buyer_po       = $order_details->po_number;
-						$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-						$ocn_number     = $order_details->ocn_number;
-
-				    } else if($buyer->buyer_name === 'Orchestra') {
+					if($buyer === 'Orchestra') {
 
 						// get the first letter of each word for a given string
 						$result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
@@ -612,60 +294,17 @@ class OrderManagementController extends Controller
 						$main_table  = str_replace("_qty","",$order_qty_table);
 						$order_qty_field = $qnty_id.'_id';
 						$order_status_field = 'status';
-						
-						$order_details  = DB::table($order_qty_table)->select($main_table.'.*')->where($order_qty_table.'.id', $order_qnty_table_id)->join($main_table, $main_table.'.id', $order_qty_table.'.'.$qnty_id.'_id')
-										->first();
-						
-						// template front and back id storing in orchestra_hang_tag_orders table
-						$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-						$template_data = DB::table('orchestra_item_master')
-									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-						$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-						$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
-						
-						$material_ref   = $template_data->item_name;
-						
-						if ($customer->pi_required == 1 && $customer->po_required== 0) {
-							$customer_po  = $order_details->pi_id;
-						}
-						else if($customer->po_required== 1){
-							$customer_po  = $order_details->po_number;
-						}
-
-						$buyer_po       = $order_details->po;
-						$style          = $order_details->uvc;
-						$ocn_number     = null;
-						$season         = $order_details->season_code;
-						$country        = null;
-
 					} else {
-
-						$template       = 'Not Available';
-
+						$order_qty_field  =  str_replace("_orders_quanty","_order_id",str_replace(strtolower($buyer)."_","",$order_qty_table));
+						$main_table  = str_replace("_quanty","",$order_qty_table);
+						$order_status_field = 'order_status';
 					}
 
-					$history_id = \App\History::updateOrCreate(['erp_order_details_id' => $erp_data->id], [
-						'buyer_id'             => $buyer_id,
-						'template'             => $template,
-						'season'               => $season,
-						'country'              => $country,
-						'customer_id'          => $customer_id,
-						'material'             => $material_name,
-						'mat_sub'              => $material_sub,
-						'reference'            => $material_ref,
-						'style'                => $style,
-						'po'                   => $customer_po,
-						'buyer_po'             => $buyer_po,
-						'ocn'                  => $ocn_number,
-						'created_at'           => $this->current_date,
-						'updated_at'           => $this->current_date,
-					]);
+					$history_id = \App\History::where('erp_order_details_id', $erp_data->id)->value('id');
 	
 					DB::table('event_history')
 					->insert([
-						'history_id'  => $history_id->id,
+						'history_id'  => $history_id,
 						'action_id'   => $action_id,
 						'created_by'  => $erp_user,
 						'created_at'  => $this->current_date,

@@ -20,12 +20,13 @@ use PDF;
 use App\Classes\Invoice;
 use App\InvoiceAddress;
 use Elibyy\TCPDF\Facades\TCPDF;
-use App\Classes\invoiceTCPDF;
+use App\Classes\invoiceTCPDF;   
 use App\EventHistory;
 use App\History;
 use Carbon\Carbon;
 use App\FinancialYearResetDate;
 use App\Classes\InvoiceIDGenerator;
+use App\OrderManagementHistory;
 
 class InvoiceController extends Controller
 {
@@ -333,6 +334,7 @@ class InvoiceController extends Controller
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'       => $pendingQnty,
                             'status'               => $status,
+                            'order_status_id'      => 7,
                             'invoice_number'       => $invoiceNo,
                             'invoice_created_by'   => Auth::guard('erpuser')->id(),
                             'invoice_created_date' => $this->current_date
@@ -344,14 +346,46 @@ class InvoiceController extends Controller
                     ]);
 
 
-                $historyId = History::where('erp_order_details_id',ErpOrderDetails::where('erp_order_id',$orders[0]['erpid'])->first()->id)->first()->id;
+                    $erp_order_details = ErpOrderDetails::where('id',$value['id'])->first();
 
-                $invAction = EventHistory::create([
-                'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
-                'history_id'   => $historyId,
-                'created_by'   => Auth::guard('erpuser')->id(),
-                ]);
+                    $historyId = \App\History::where('erp_order_details_id', $erp_order_details->id)->value('id');
+                    
+                    EventHistory::create([
+                        'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                        'history_id'   => $historyId,
+                        'created_by'   => Auth::guard('erpuser')->id(),
+                    ]);
 
+                    $order_qty_table     = $erp_order_details->order_qnty_table_name;
+					$order_qnty_table_id = $erp_order_details->order_qnty_table_id;
+
+					// make orders cancelled in artwork table
+					if($value['buyer_name'] === 'Orchestra') {
+
+						// get the first letter of each word for a given string
+						$result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
+						$qnty_id = '';
+						foreach (explode(' ', $result_str) as $word)
+						{
+							$qnty_id .= strtolower($word[0]);
+						}
+						$main_table  = str_replace("_qty","",$order_qty_table);
+						$order_qty_field = $qnty_id.'_id';
+						$order_status_field = 'status';
+					} else {
+						$order_qty_field  =  str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table));
+						$main_table  = str_replace("_quanty","",$order_qty_table);
+						$order_status_field = 'order_status';
+					}
+
+					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
+
+					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => "Order Dispatched"]);
+					
+					 // update order status as "Order Cancelled" in order management history table
+					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
+						'order_status' => 7,
+					]);
 
                 }
                 $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
