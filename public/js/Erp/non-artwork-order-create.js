@@ -159,9 +159,9 @@
 
 		$(document).on("click","#delete_selected",function()
 		{
-			$('input[type=checkbox]:checked').each(function () 
+			$('#dynamic_field input[type=checkbox]:checked').each(function () 
 			{
-				if($('#dynamic_field tr ').length > 1)
+				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
 				}
