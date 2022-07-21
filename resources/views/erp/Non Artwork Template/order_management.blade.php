@@ -91,7 +91,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="hsn_code">HSN Code</label>
-					<input type="text" class="form-control" name="hsn_code" id="hsn_code" required="" readonly placeholder="Enter HSN Code"  maxlength="7">
+					<input type="text" class="form-control" name="hsn_code" id="hsn_code" readonly placeholder="Enter HSN Code"  maxlength="7">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -154,7 +154,7 @@
 							<td width="150">
 								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 							</td>	
-							<td width="100" class="selectpicker_td">
+							<td width="100" class="selectpicker_td item_td">
 								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
 							</td>
 							<td width="150" class="reference_td selectpicker_td">

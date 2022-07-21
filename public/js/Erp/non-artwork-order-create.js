@@ -87,6 +87,7 @@
 
 		function getHsn(item_id,ref_td)
 		{
+			console.log(ref_td)
 			$.ajax({
 				method:'POST',
 				type:'json',
@@ -104,7 +105,6 @@
 						{
 							if(hsn_arr[0]!=hsn_arr[hsn_arr.length-1])
 							{	
-								console.log(hsn_arr)
 								if($(ref_td).closest('tr').attr('id') == "addr0")
 								{
 									$("#dynamic_field").find("tr:gt(0) .reference_td").each(function(i,v)
@@ -175,8 +175,8 @@
 		})
 
 
-		$(document).on("change","#buyer",function(){	
-
+		$(document).on("change","#buyer",function()
+		{	
 			$.ajax({
 				method:'POST',
 				type:'json',
@@ -184,9 +184,10 @@
 				data: { 'buyer_id' : $("#buyer").val() },
 				success:function(data)
 				{
-					$("#item_td").html('')
-					$("#item_td").html(data.items)
-					$(".reference_select").find('option').remove();
+					$(".item_td").each(function(i,v)
+					{
+						$(this).html(data.items)
+					});
 					reset_input()
 					$(".selectpicker").selectpicker('refresh')
 				}
@@ -224,7 +225,7 @@
 				url: "/erp/get-reference-nat",
 				data: { 'buyer_id' : $("#buyer").val() ,'item_id' : item_id },
 				success:function(data)
-				{
+				{	
 					$target.html('')
 					$target.html(data.reference)
 					$(".selectpicker").selectpicker('refresh')
@@ -342,10 +343,11 @@
 						$("#nat_tab_logic").find("tr:gt(1)").remove();
 						$(".print-success-msg").find("ul").html('');
 						$(".print-error-msg").css('display','none');
-						$(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
-						$('.print-success-msg').css('display','block').delay(1000).fadeOut('slow/400/fast', function() {
+						$('.snackbar_span').html('Order created successfully !!!');
+							showSnackbar();
+						setTimeout(function () {
 							location.reload(true);
-						});
+						}, 2500);
 					}
 				}  
 			});  
@@ -354,7 +356,6 @@
 
 	$("#getOrderDetails").on('click', function () 
 	{
-
 		$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 		$("#save_data").attr('data-action', 'update');
 
@@ -364,12 +365,16 @@
 			data:{id:$("#order_id").val()},
 			success:function(data)
 			{
-				// console.log(data)
+				if(data.result)
+				{
+				hsn_arr = [];
+				hsn_arr.push(data.hsn)
 				row_index= data.last_row_index
 				$('select[name=buyer]').val(data.row['buyer_id']);
 				$('select[name=customer]').val(data.row['supplier_id']);
 				$("#tesco_po_number").val(data.row['purchase_order_no'])
 				$("#order_to_edit").val(data.row['id'])
+				$("#hsn_code").val(data.hsn)
 				$("#dynamic_field").find("tr:gt(0)").remove();
 				$("#dynamic_field").html('')
 				$("#dynamic_field").html(data.td)
@@ -404,6 +409,12 @@
 				$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
 				$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 			}
+			else
+			{
+				$('.snackbar_span').html('No entry found for this order-id, Please try a different one!!!');
+				showSnackbar();
+			}
+		}
 		});
 	});
 });  
