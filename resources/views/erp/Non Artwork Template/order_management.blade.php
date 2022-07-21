@@ -205,7 +205,7 @@
 					<tbody>
 						<tr>
 							<td>Qty Total</td>
-							<td><input type="text" class="form-control" name="" placeholder="Qty total" readonly id="qty_total"></td>
+							<td><input type="text" class="form-control" name="qty_total" placeholder="Qty total" readonly id="qty_total"></td>
 							<td><input type="text" id="value_total" class="form-control" name="" placeholder="Value total" readonly></td>
 						</tr>
 						<tr>
