@@ -30,7 +30,7 @@
 				<div class="form-group has-feedback">
 					<label for="order_">Order ID</label>
 					<div class="input-group tesco_manufacture_date date">
-						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="">
+						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="220700001">
 						<div class="input-group-addon" id="getOrderDetails">
 							<span class="glyphicon glyphicon-search"> </span >
 						</div >
@@ -210,7 +210,7 @@
 						</tr>
 						<tr>
 							<td>Tax</td>
-							<td id="tax">18%</td>
+							<td id="tax"></td>
 							<td><input type="text" id="tax_value" class="form-control" name="" placeholder="Tax value" readonly></td>
 						</tr>
 						<tr>

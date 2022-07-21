@@ -432,9 +432,9 @@ class NonArtworkTemplateController extends Controller
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
 
-            $hsn_code = DB::table($template_table)
+            $hsn_tax = DB::table($template_table)
                     ->where('item_id',$value->template_id)
-                    ->first()->hsn_code;
+                    ->first();
 
             $data = DB::table($template_table)
             ->where('name_in_reports',$value->item_id)
@@ -480,7 +480,7 @@ class NonArtworkTemplateController extends Controller
             
             }
 
-            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select">'.$opt.'</select>';
+            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference">'.$opt.'</select>';
 
             $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
             $html.='<tr id="addr'.$key.'" class="clonable">
@@ -543,7 +543,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_code]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax]);
        }
        else{
         return response()->json(['result'=>0]);
