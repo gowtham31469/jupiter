@@ -145,7 +145,8 @@ class NonArtworkTemplateController extends Controller
     }
 
     public function saveNonArtworkOrders(Request $request)
-    {
+    {   
+        // dd($request->all());
         $rules = [
             'current_date' => 'required',
             'buyer' => 'required',
@@ -153,6 +154,7 @@ class NonArtworkTemplateController extends Controller
             'po_number' => 'required',
             'due_date' => 'required',
             'ocn.*' => 'required',
+            'uom.*' => 'required',
             'bpo.*' => 'required',
             'style.*' => 'required',
             'list.*' => 'required',
@@ -372,7 +374,7 @@ class NonArtworkTemplateController extends Controller
 
            // NonArtworkOrder::whereIn('id', $created_rows)
            //                          ->update(['order_id' => $max_batch_id]);
-           return response()->json(['success'=>'done']);
+           return response()->json(['success'=>'done','action'=>$request->action]);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
