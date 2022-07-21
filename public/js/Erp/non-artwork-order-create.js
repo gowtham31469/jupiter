@@ -346,8 +346,14 @@
 						$("#nat_tab_logic").find("tr:gt(1)").remove();
 						$(".print-success-msg").find("ul").html('');
 						$(".print-error-msg").css('display','none');
-						$('.snackbar_span').html('Order created successfully !!!');
-							showSnackbar();
+						if(data.action=="update")
+						{
+							$('.snackbar_span').html('Order updated successfully !!!');
+						}
+						else{
+							$('.snackbar_span').html('Order created successfully !!!');
+						}
+						showSnackbar();
 						setTimeout(function () {
 							location.reload(true);
 						}, 2500);
