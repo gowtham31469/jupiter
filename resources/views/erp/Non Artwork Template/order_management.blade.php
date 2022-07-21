@@ -30,7 +30,7 @@
 				<div class="form-group has-feedback">
 					<label for="order_">Order ID</label>
 					<div class="input-group tesco_manufacture_date date">
-						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="">
+						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="220700001">
 						<div class="input-group-addon" id="getOrderDetails">
 							<span class="glyphicon glyphicon-search"> </span >
 						</div >
@@ -167,7 +167,7 @@
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 							</td>
 							<td width="150" class="selectpicker_td">
-								<select class="selectpicker aw_status" name="A_W_Status">
+								<select class="selectpicker aw_status" name="A_W_Status[]">
 									<option value="0">Not Approved</option>
 									<option value="1" selected>Approved</option>
 								</select>
@@ -187,7 +187,7 @@
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
 							</td>
 							<td width="150" class="selectpicker_td">
-								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true']) !!}
+								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true','title'=>'Select uom']) !!}
 							</td>
 							<td width="150" class="rate_td">
 								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>
@@ -210,7 +210,7 @@
 						</tr>
 						<tr>
 							<td>Tax</td>
-							<td id="tax">18%</td>
+							<td id="tax"></td>
 							<td><input type="text" id="tax_value" class="form-control" name="" placeholder="Tax value" readonly></td>
 						</tr>
 						<tr>

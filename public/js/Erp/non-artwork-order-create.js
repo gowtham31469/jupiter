@@ -87,7 +87,7 @@
 
 		function getHsn(item_id,ref_td)
 		{
-			console.log(ref_td)
+			console.log(hsn_arr)
 			$.ajax({
 				method:'POST',
 				type:'json',
@@ -96,7 +96,7 @@
 				success:function(data)
 				{
 					if(data.hsn)
-					{
+					{	
 						$("#hsn_code").val(data.hsn)
 						$("#tax").html(data.tax)
 						temp_hsn = data.hsn
@@ -106,24 +106,27 @@
 							if(hsn_arr[0]!=hsn_arr[hsn_arr.length-1])
 							{	
 								if($(ref_td).closest('tr').attr('id') == "addr0")
-								{
+								{	
 									$("#dynamic_field").find("tr:gt(0) .reference_td").each(function(i,v)
 										{
 											$(this).find('select').val('')
 										});	
 										hsn_arr=[]
 										hsn_arr.push(temp_hsn)
-										$('.selectpicker').selectpicker('refresh')
+										
 								}
 								else
-								{
-									hsn_arr.pop()
+								{	
+									if(hsn_arr.length > 1)
+									{
+										hsn_arr.pop()
+									}
 									$(ref_td).find('select').val('')
-									$('.selectpicker').selectpicker('refresh')
-									$('.snackbar_span').html('Different Hsn entry found for this selection,Please try again!!!');
+									$('.snackbar_span').html("Hsn code doesn't match for this selection,Please try again!!!");
 									showSnackbar();
 								}
 								
+								$('.selectpicker').selectpicker('refresh')
 							}
 						}
 					}
@@ -375,6 +378,7 @@
 				$("#tesco_po_number").val(data.row['purchase_order_no'])
 				$("#order_to_edit").val(data.row['id'])
 				$("#hsn_code").val(data.hsn)
+				$("#tax").html(data.tax)
 				$("#dynamic_field").find("tr:gt(0)").remove();
 				$("#dynamic_field").html('')
 				$("#dynamic_field").html(data.td)
