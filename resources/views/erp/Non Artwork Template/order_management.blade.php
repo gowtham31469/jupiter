@@ -167,7 +167,7 @@
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 							</td>
 							<td width="150" class="selectpicker_td">
-								<select class="selectpicker aw_status" name="A_W_Status">
+								<select class="selectpicker aw_status" name="A_W_Status[]">
 									<option value="0">Not Approved</option>
 									<option value="1" selected>Approved</option>
 								</select>
@@ -187,7 +187,7 @@
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
 							</td>
 							<td width="150" class="selectpicker_td">
-								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true']) !!}
+								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true','title'=>'Select uom']) !!}
 							</td>
 							<td width="150" class="rate_td">
 								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>

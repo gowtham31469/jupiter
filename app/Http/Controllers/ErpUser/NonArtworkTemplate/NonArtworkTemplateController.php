@@ -146,7 +146,6 @@ class NonArtworkTemplateController extends Controller
 
     public function saveNonArtworkOrders(Request $request)
     {
-        // dd($request->all());
         $rules = [
             'current_date' => 'required',
             'buyer' => 'required',
@@ -157,6 +156,12 @@ class NonArtworkTemplateController extends Controller
             'bpo.*' => 'required',
             'style.*' => 'required',
             'list.*' => 'required',
+            'item.*' => 'required',
+            'reference.*' => 'required',
+            'color.*' => 'required',
+            'size.*' => 'required',
+            'composition.*' => 'required',
+            'A_W_Status.*' => 'required',
             'quantity.*' => 'required',
         ];
 
@@ -516,7 +521,7 @@ class NonArtworkTemplateController extends Controller
                                         <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition">
                                     </td>
                                     <td width="150" class="selectpicker_td">
-                                        <select class="selectpicker aw_status" name="A_W_Status">
+                                        <select class="selectpicker aw_status" name="A_W_Status[]">
                                             <option value="0" '.$approved_flag.' >Not Approved</option>
                                             <option value="1" '.$approved_flag.'>Approved</option>
                                         </select>
@@ -533,7 +538,7 @@ class NonArtworkTemplateController extends Controller
                                     <td width="150" class="quantity_td">
                                         <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
                                     </td>
-                                    <td width="150" class="selectpicker_td">'.$uom_select.'</td>
+                                    <td width="150" class="selectpicker_td" title="Select uom">'.$uom_select.'</td>
                                     <td width="150" class="rate_td">
                                     <input type="number" name="rate[]" class="form-control input-sm label-ean-field" placeholder="Rate" value="'.$quantity_table_data[$key]->rate.'" readonly>
                                     </td>
