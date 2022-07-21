@@ -107,9 +107,12 @@ class NonArtworkTemplateController extends Controller
         $opt = "";
 
         foreach ($data as $key => $value) {
-           $opt.='<option value='.$key.'>'.$value.'</option>';
+           if($value)
+           {
+                $opt.='<option value='.$key.'>'.$value.'</option>';
+           }
+           
         }
-
         $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select form-control input-group" title="Select item">'.$opt.'</select>';
 
         return response()->json(['items'=>$item_select]);
