@@ -206,7 +206,7 @@ function template_list() {
                                             });
                                             var tax = "";
                                             $.each(companydata.tax, function (index2, value2) {
-                                                tax += "<option value=" + value2.id + ">" + value2.tax + "</option>";
+                                                tax += "<option value=" + value2.tax + ">" + value2.tax + "</option>";
                                             });
                                             var material = "";
                                             $.each(companydata.material, function (index3, value3) {
