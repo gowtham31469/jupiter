@@ -1013,6 +1013,7 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::post('get-reference-nat', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getReference')->name('get-reference-nat');
 
+	Route::post('get-hsn-tax', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@getHsn')->name('get-hsn-tax');
 
 	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 

@@ -170,7 +170,7 @@ function template_list() {
                 if (data.instance.is_leaf(data.node)) {
                     var template_id = data.node.id;
                     $.ajax({
-                        url: base_url + "/admin/non-artwork-template/template-view/",
+                        url: base_url + "/admin/non-artwork-template/template-view",
                         type: "Post",
                         dataType: "json",
                         data: {
@@ -206,7 +206,7 @@ function template_list() {
                                             });
                                             var tax = "";
                                             $.each(companydata.tax, function (index2, value2) {
-                                                tax += "<option value=" + value2.id + ">" + value2.tax + "</option>";
+                                                tax += "<option value=" + value2.tax + ">" + value2.tax + "</option>";
                                             });
                                             var material = "";
                                             $.each(companydata.material, function (index3, value3) {

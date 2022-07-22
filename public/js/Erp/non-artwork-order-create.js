@@ -1,5 +1,6 @@
 	$(document).ready(function()
 	{   
+		
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
@@ -7,7 +8,7 @@
 		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
 		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
 		var row_index=1;  
-
+		var hsn_arr = [];
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -84,6 +85,61 @@
 			});
 		}
 
+		function getHsn(item_id,ref_td)
+		{
+			console.log(hsn_arr)
+			$.ajax({
+				method:'POST',
+				type:'json',
+				url: "/erp/get-hsn-tax",
+				data: { 'item_id' : item_id ,'buyer_id' : $("#buyer").val()},
+				success:function(data)
+				{
+					if(data.hsn)
+					{	
+						$("#hsn_code").val(data.hsn)
+						$("#tax").html(data.tax)
+						temp_hsn = data.hsn
+						hsn_arr.push(data.hsn)
+						if(hsn_arr.length > 1)
+						{
+							if(hsn_arr[0]!=hsn_arr[hsn_arr.length-1])
+							{	
+								if($(ref_td).closest('tr').attr('id') == "addr0")
+								{	
+									$("#dynamic_field").find("tr:gt(0) .reference_td").each(function(i,v)
+										{
+											$(this).find('select').val('')
+										});	
+										hsn_arr=[]
+										hsn_arr.push(temp_hsn)
+										
+								}
+								else
+								{	
+									if(hsn_arr.length > 1)
+									{
+										hsn_arr.pop()
+									}
+									$(ref_td).find('select').val('')
+									$('.snackbar_span').html("Hsn code doesn't match for this selection,Please try again!!!");
+									showSnackbar();
+								}
+								
+								$('.selectpicker').selectpicker('refresh')
+							}
+						}
+					}
+					else
+					{
+						$('.snackbar_span').html('Hsn code not found!!!');
+						showSnackbar();
+					}
+				}
+			});
+
+		}
+
 		$('#add_single_row').click(function()
 		{  	
 			row_ids = ['addr0'];
@@ -106,9 +162,9 @@
 
 		$(document).on("click","#delete_selected",function()
 		{
-			$('input[type=checkbox]:checked').each(function () 
+			$('#dynamic_field input[type=checkbox]:checked').each(function () 
 			{
-				if($('#dynamic_field tr ').length > 1)
+				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
 				}
@@ -122,8 +178,8 @@
 		})
 
 
-		$(document).on("change","#buyer",function(){	
-
+		$(document).on("change","#buyer",function()
+		{	
 			$.ajax({
 				method:'POST',
 				type:'json',
@@ -131,9 +187,10 @@
 				data: { 'buyer_id' : $("#buyer").val() },
 				success:function(data)
 				{
-					$("#item_td").html('')
-					$("#item_td").html(data.items)
-					$(".reference_select").find('option').remove();
+					$(".item_td").each(function(i,v)
+					{
+						$(this).html(data.items)
+					});
 					reset_input()
 					$(".selectpicker").selectpicker('refresh')
 				}
@@ -157,7 +214,8 @@
 		$(document).on("changed.bs.select",".item_select",function(e){	
 			e.stopImmediatePropagation()
 			if($("#buyer").val().length == 0)
-			{
+			{	$(this).val('')
+				$(".selectpicker").selectpicker('refresh')
 				$('.snackbar_span').html('Please select the buyer first !!!');
 					showSnackbar();
 			}
@@ -170,7 +228,7 @@
 				url: "/erp/get-reference-nat",
 				data: { 'buyer_id' : $("#buyer").val() ,'item_id' : item_id },
 				success:function(data)
-				{
+				{	
 					$target.html('')
 					$target.html(data.reference)
 					$(".selectpicker").selectpicker('refresh')
@@ -187,6 +245,8 @@
 		$(document).on("changed.bs.select",".reference_select",function(e)
 			{	e.stopImmediatePropagation()
 
+				var _item = $(this).val()
+				var _target = $(this).closest('td')
 				if($(this).closest('tr').find('td.quantity_td input[type=number]').val() > 0)
 				{
 					calculate_rate($(this).val(),$(this).closest('tr').find('td.quantity_td input[type=number]').val(),$(this).closest('tr').find('td.rate_td input[type=number]'),$(this).closest('tr').find('td.value_td input[type=number]'))	
@@ -195,10 +255,24 @@
 				{
 					$(this).closest('tr').find('td.value_td input[type=number]').val(0)
 				}
+
+				getHsn(_item,_target);
 			});
 
 		$(document).on("keyup change",".quantity",function()
 		{	
+			if($("#customer").val().length == 0)
+			{
+				$('.snackbar_span').html('Please select a customer!!!');
+			    showSnackbar();
+			    $(this).val('')
+			}
+			if($(this).closest('tr').find('td.reference_td .selectpicker option:selected').val().length == 0)
+			{
+				$('.snackbar_span').html('Please select a reference!!!');
+			    showSnackbar();
+			    $(this).val('')
+			}
 			if($(this).val() > 0)
 			{
 				calculate_rate($(this).closest('tr').find('td.reference_td .selectpicker option:selected').val(),$(this).val(),$(this).closest('tr').find('td.rate_td input[type=number]'),$(this).closest('tr').find('td.value_td input[type=number]'))
@@ -236,8 +310,8 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(.18 * total_value))
-					$("#tax_value_total").val(Math.round((.18 * total_value) + total_value))
+					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 				}
 			});
 		}
@@ -272,10 +346,17 @@
 						$("#nat_tab_logic").find("tr:gt(1)").remove();
 						$(".print-success-msg").find("ul").html('');
 						$(".print-error-msg").css('display','none');
-						$(".print-success-msg").find("ul").append('<li>Record Inserted Successfully.</li>');
-						$('.print-success-msg').css('display','block').delay(1000).fadeOut('slow/400/fast', function() {
+						if(data.action=="update")
+						{
+							$('.snackbar_span').html('Order updated successfully !!!');
+						}
+						else{
+							$('.snackbar_span').html('Order created successfully !!!');
+						}
+						showSnackbar();
+						setTimeout(function () {
 							location.reload(true);
-						});
+						}, 2500);
 					}
 				}  
 			});  
@@ -284,7 +365,6 @@
 
 	$("#getOrderDetails").on('click', function () 
 	{
-
 		$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 		$("#save_data").attr('data-action', 'update');
 
@@ -294,12 +374,17 @@
 			data:{id:$("#order_id").val()},
 			success:function(data)
 			{
-				// console.log(data)
+				if(data.result)
+				{
+				hsn_arr = [];
+				hsn_arr.push(data.hsn)
 				row_index= data.last_row_index
 				$('select[name=buyer]').val(data.row['buyer_id']);
 				$('select[name=customer]').val(data.row['supplier_id']);
 				$("#tesco_po_number").val(data.row['purchase_order_no'])
 				$("#order_to_edit").val(data.row['id'])
+				$("#hsn_code").val(data.hsn)
+				$("#tax").html(data.tax)
 				$("#dynamic_field").find("tr:gt(0)").remove();
 				$("#dynamic_field").html('')
 				$("#dynamic_field").html(data.td)
@@ -331,9 +416,15 @@
 				});
 				$("#qty_total").val(total_qty)
 				$("#value_total").val(total_value)
-				$("#tax_value").val(Math.round(.18 * total_value))
-				$("#tax_value_total").val(Math.round((.18 * total_value) + total_value))
+				$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+				$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 			}
+			else
+			{
+				$('.snackbar_span').html('No entry found for this order-id, Please try a different one!!!');
+				showSnackbar();
+			}
+		}
 		});
 	});
 });  
