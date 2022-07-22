@@ -2114,7 +2114,8 @@ class OrderController extends Controller
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "single"
+					 			'template_type'       => "single",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $j=0;
                 foreach($tot_qty_poly as $value)
@@ -2197,7 +2198,8 @@ class OrderController extends Controller
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "single"
+					 			'template_type'       => "single",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -2358,7 +2360,8 @@ class OrderController extends Controller
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "ratio"
+					 			'template_type'       => "ratio",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
 				$j=0;
 				StandardPolyStickersQty::create([
@@ -2446,7 +2449,8 @@ class OrderController extends Controller
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "ratio"
+					 			'template_type'       => "ratio",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
 			
 				$j=0;

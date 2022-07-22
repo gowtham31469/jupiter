@@ -11,9 +11,7 @@ class OrchestraTemplateSeeder extends Seeder
      */
     public function run()
     {
-        if( !count(\App\OrchestraTemplate::all()) )
-        {
-
+        
             \App\OrchestraTemplate::create([
                 'item_id' => 4,
                 'template_name' => "Orchestra Label",
@@ -1398,7 +1396,6 @@ class OrchestraTemplateSeeder extends Seeder
                 'flag' => 0,
                 'hierarchy_id' => 105,
                 ]);
-        }
             
     }
 }

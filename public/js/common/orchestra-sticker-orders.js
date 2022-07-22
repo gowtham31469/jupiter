@@ -10,7 +10,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po,user_typ
         var thead = '<thead><tr><th>UVC_TCO	</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th><th>Size</th><th>Ratio</th></tr></thead>';
         $.each(data.orchestra_parcel_details, function (index, value) {
             tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="barcode">' + data.orchestra_parcel_details[0].ParcelBarCode + '</td><td class="size">' + value.Size + '</td><td class="qty">' + value.Sum + '</td><input type="hidden" class="size_break" value="'+value.Size_Breakdown+'"></tr>';
-			itemtotal += value.Sum ;
+			itemtotal += parseInt(value.Sum);
 
         });
 

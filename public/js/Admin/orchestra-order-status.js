@@ -130,8 +130,17 @@ function orchestraStatusTable(data, path) {
 
                         var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
                     }
+
                     //New changes start
-                    tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    {
+                        tr += '<td> - </td>'
+                    }
+                    else
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    }
+                    
 
                     if (value['Artwork Status'] == "Order Approved") {
                         var str = value[key];
@@ -191,9 +200,17 @@ function orchestraStatusTable(data, path) {
 						tr += '<td align="center"> '+value.TemplateName+' </td>';
 					}
                 } else if (key == "Print Proof") {
-                    //New changes start
-                    tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
-                    //New changes end
+
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    {
+                        tr += '<td> - </td>'
+                    }
+                    else
+                    {
+                        //New changes start
+                        tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                        //New changes end
+                    }
                 } else if (key == "Actions") {
                     //New changes start
                     var po_file = value['po_file'];

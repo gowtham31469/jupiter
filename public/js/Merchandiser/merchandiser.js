@@ -15,7 +15,7 @@ function viewWcl(id){
              data:{id:id},
              success: function(data){
              	$('#wcl_id').val(id);
-             	var table = '<table class="table table-bordered"><thead><tr><th>UVC TCO</th><th>Size(ANS)</th><th>Qty(Nos)</th></tr></thead><tbody>';
+             	var table = '<table style="font-size:12px" class="table table-bordered"><thead><tr><th>UVC TCO</th><th>Size(ANS)</th><th>Qty(Nos)</th></tr></thead><tbody>';
 	             $.each(data.wcl_orders_qty, function(i, item){
 	              var index = i+1;
 	              table += '<tr id='+id+'><td>'+item.uvc_tco+'</td><td>'+item.size+'</td><td>'+item.quantity+'</td></tr>';
