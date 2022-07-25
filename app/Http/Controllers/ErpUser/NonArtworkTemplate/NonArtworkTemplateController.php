@@ -138,7 +138,7 @@ class NonArtworkTemplateController extends Controller
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
         }
-        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference">'.$opt.'</select>';
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
 
         return response()->json(['reference'=>$reference_select]);
 
@@ -147,7 +147,40 @@ class NonArtworkTemplateController extends Controller
     public function saveNonArtworkOrders(Request $request)
     {   
         // dd($request->all());
-        $rules = [
+        // $rules = [
+        //     'current_date' => 'required',
+        //     'buyer' => 'required',
+        //     'customer.*' => 'required',
+        //     'po_number' => 'required',
+        //     'due_date' => 'required',
+        //     'ocn.*' => 'required',
+        //     'uom.*' => 'required',
+        //     'bpo.*' => 'required',
+        //     'style.*' => 'required',
+        //     'list.*' => 'required',
+        //     'item.*' => 'required',
+        //     'reference.*' => 'required',
+        //     'color.*' => 'required',
+        //     'size.*' => 'required',
+        //     'composition.*' => 'required',
+        //     'A_W_Status.*' => 'required',
+        //     'quantity.*' => 'required',
+        // ];
+
+
+        $erp_id = $this->erp_id_gen_obj->generateErpID(
+                $this->financial_year_start,
+                $this->today_date,
+                $this->financial_year,
+                $this->month
+            );
+
+        $buyer = Buyer::where('id',$request->buyer)->first()->buyer_name;
+        $template_table = strtolower($buyer)."_template";
+        $master_table = strtolower($buyer)."_item_master";
+
+        $validator = Validator::make($request->all(), 
+           [
             'current_date' => 'required',
             'buyer' => 'required',
             'customer.*' => 'required',
@@ -164,21 +197,20 @@ class NonArtworkTemplateController extends Controller
             'size.*' => 'required',
             'composition.*' => 'required',
             'A_W_Status.*' => 'required',
-            'quantity.*' => 'required',
-        ];
+            'quantity.*' => 'required'
+            ],
+            [
+                'ocn.*'=>'Please fill up ocn values on all the rows',
+                'uom.*'=>'Please select uom on all the rows',
+                'bpo.*'=>'Please fill up bpo values on all the rows',
+                'style.*'=>'Please fill up style values on all the rows',
+                'item.*'=>'Please select item on all the rows',
+                'quantity.*'=>'Please fill up quantity values on all the rows',
+                'reference.*'=>'Please select reference item on all the rows',
+                'color.*'=>'Please fill up color values on all the rows',
+                'composition.*'=>'Please fill up composition values on all the rows',
+            ]);
 
-
-        $erp_id = $this->erp_id_gen_obj->generateErpID(
-                $this->financial_year_start,
-                $this->today_date,
-                $this->financial_year,
-                $this->month
-            );
-
-        $buyer = Buyer::where('id',$request->buyer)->first()->buyer_name;
-        $template_table = strtolower($buyer)."_template";
-        $master_table = strtolower($buyer)."_item_master";
-        $validator = Validator::make($request->all(), $rules);
         $created_rows = [];
 
         if ($validator->passes()) 
@@ -211,6 +243,20 @@ class NonArtworkTemplateController extends Controller
 
             foreach ($request->ocn as $key => $value) 
             {
+
+                $custom_ref_name = DB::table('price_taxation')
+                        ->where([
+                        'customer_id' => $request->customer,
+                        'buyer_id' => $request->buyer,
+                        'template_id' => $request->reference[$key]
+                        ])->value('custom_name');
+                     // dd($request->customer,$request->buyer,$request->reference[$key]);
+                if($custom_ref_name == null)
+                {   
+                    return response()->json(['error'=>[0=>"Price taxation entry not found !!!"]]);
+                }
+
+
                 $already_created_nat = NonArtworkOrder::where('ocn_number',$value)
                                       ->where('style_ref', $request->quantity[$key])  
                                       ->where('color', $request->color[$key])  
@@ -277,18 +323,7 @@ class NonArtworkTemplateController extends Controller
 
                     $unique_id = 'ERP-'.$reference_name.'-'.$erp_id.'-'.$request->style[$key].'-'.$request->bpo[$key].'-'."newOrder".'-'.$request->item[$key].'-'.$request->color[$key].'-'.$request->composition[$key].'-'.$value;
 
-                    $custom_ref_name = DB::table('price_taxation')
-                        ->where([
-                        'customer_id' => $request->customer,
-                        'buyer_id' => $request->buyer,
-                        'template_id' => $request->reference[$key]
-                        ])->value('custom_name');
-                     // dd($request->customer,$request->buyer,$request->reference[$key]);
-                        if($custom_ref_name == null)
-                        {   
-                            return response()->json(['error'=>[0=>"Price taxation entry not found !!!"]]);
-                        }
-
+                    
                     DB::table('erp_order_details')
                     ->where([
                     'order_qnty_table_name' => "non_artwork_orders_quanty",
