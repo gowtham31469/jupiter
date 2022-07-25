@@ -17,8 +17,13 @@
 		</div>
 	</div>
 	<div class="main-content">
-		<div class="alert alert-danger print-error-msg" style="display:none">
-			<ul></ul>
+		<div class="error-bag">
+			<div class="alert alert-danger print-error-msg alert-dismissable" style="display:none">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<ul></ul>
+			</div>
 		</div>
 		<div class="alert alert-success print-success-msg" style="display:none">
 			<ul></ul>
@@ -108,10 +113,10 @@
 				</p>                                        
 			</div>
 		</div>
+
 		<div class="row clearfix">
-			<div class="col-md-12" style="overflow-x: scroll;">
+			<div class="col-md-12 bs-example">
 				<table class="table table-bordered" id="nat_tab_logic">
-					
 					<thead>
 						<tr>
 							<th class="text-center">Sl.No</th>
@@ -158,7 +163,7 @@
 								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
 							</td>
 							<td width="150" class="reference_td selectpicker_td">
-								<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference"></select>
+								<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5"></select>
 							</td>
 							<td width="150">
 								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
