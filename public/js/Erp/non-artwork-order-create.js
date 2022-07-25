@@ -1,6 +1,9 @@
 	$(document).ready(function()
 	{   
-		
+		$('.selectpicker').selectpicker({
+		dropupAuto: false
+		});
+
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
@@ -79,7 +82,10 @@
 			$(".error-bag").html('')
 			window.scrollTo(0, 0);
 			$li = ''
-			$.each( msg, function( key, value ) {
+			var filtered_messages = msg.filter(function(elem, index, self) {
+				return index === self.indexOf(elem);
+			});
+			$.each( filtered_messages, function( key, value ) {
 				$li+='<li>'+value+'</li>'
 			});
 
