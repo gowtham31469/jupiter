@@ -139,13 +139,13 @@
 					</thead>
 					<tbody id="dynamic_field">
 						<tr id='addr0' class="clonable">
-							<td>
+							<td width="30">
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck1">
 									<label class="custom-control-label">&nbsp;1</label>
 								</div>
 							</td>
-							<td>
+							<td width="20">
 								<div class="form-group has-feedback label-ean-feedback">
 									<p>-</p>
 								</div>
