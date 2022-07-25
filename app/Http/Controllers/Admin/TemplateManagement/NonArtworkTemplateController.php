@@ -51,7 +51,7 @@ class NonArtworkTemplateController extends Controller
             $buyers = DB::table('buyers')->select('*')->where('is_active','=',1)->get();
             $buyer_count = count($buyers);
             $company = DB::table("company")->pluck('name', 'id');
-            $tax = DB::table("tax_code")->distinct()->pluck('tax', 'id');
+            $tax = DB::table("tax_code")->where('is_enabled','=',true)->pluck('tax', 'tax');
             $material = DB::table("raw_material_master")->where('is_enabled','=',true)->pluck('material_name_employee', 'id');
             $name_in_reports = DB::table("reports_template_level_name")->pluck('name', 'id');
             
@@ -145,7 +145,7 @@ class NonArtworkTemplateController extends Controller
                             ->get();
         $items['tax'] = DB::table("tax_code")
                             ->select('id', 'tax')
-                            ->distinct()
+                            ->where('is_enabled','=',true)
                             ->get();
         $items['material'] = DB::table("raw_material_master")
                             ->select('id','material_name_employee')

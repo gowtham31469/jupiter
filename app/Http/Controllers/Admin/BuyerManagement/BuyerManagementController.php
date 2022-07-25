@@ -246,13 +246,17 @@ class BuyerManagementController extends Controller
                 }
                 else
                 {
+                  $buyer = strtolower($name);
                   $inserted = Buyer::create([
                                 'buyer_name' => $name,
                                 'buyer_email'      => $email,
                                 'buyer_phone'      => $phone,
                                 'buyer_address'    => $address,
                                 'is_active'        => 0,
-                                'logo'             => $destination_path_insert
+                                'logo'             => $destination_path_insert,
+                                'template_table'   => $buyer.'_template',
+                                'item_master_table' => $buyer.'_item_master',
+                                'material_master_table' => $buyer.'_material_masters'
                               ]);
                   
                   $item_master_creation = $this->createItemMaster($name);
