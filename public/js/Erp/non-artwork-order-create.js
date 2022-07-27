@@ -1,6 +1,9 @@
 	$(document).ready(function()
 	{   
-		
+		$('.selectpicker').selectpicker({
+		dropupAuto: false
+		});
+
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
@@ -31,12 +34,11 @@
     			var row_id = "addr" + ++index  
     			$('tbody').append('<tr id='+row_id+' class="clonable"></tr>')
 				$("#"+row_ids[i]).find('td').each (function() 
-				{
+				{	
+					var $item = $(this).clone()
 					if($(this).hasClass('selectpicker_td'))
-					{
-						var $item = $(this).clone()
+					{	
 						$item.attr("id", "item_select" + index);
-             				//$item.attr("name", "item_select" + index);
 
 						var selectedValue = $(this).find('option:selected').val()
 						$("#"+row_id).append($item)
@@ -53,10 +55,12 @@
 					else{
 						if(action[0] == "clone")
 						{
-							$("#"+row_id).append($(this).clone())
+							$("#"+row_id).append($item)
 						}
-						else{
-							$("#"+row_id).append($(this).clone().find("input").val("").end())
+						else
+						{
+							$("#"+row_id).append($item.find("input").val("").end())
+							$item.closest('.aw_td').css('pointer-events','auto')
 						}
 						
 					}
@@ -75,14 +79,17 @@
 
 		function printErrorMsg (msg) 
 		{
-			$(".print-error-msg").find("ul").html('');
+			$(".error-bag").html('')
 			window.scrollTo(0, 0);
-			$(".print-error-msg").css('display','block').delay(1000).fadeOut('slow/1000/fast', function() {
+			$li = ''
+			var filtered_messages = msg.filter(function(elem, index, self) {
+				return index === self.indexOf(elem);
 			});
-			$(".print-success-msg").css('display','none');
-			$.each( msg, function( key, value ) {
-			$(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+			$.each( filtered_messages, function( key, value ) {
+				$li+='<li>'+value+'</li>'
 			});
+
+			$(".error-bag").html('<div class="alert alert-danger print-error-msg alert-dismissable"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> <ul>'+$li+'</ul> </div>')
 		}
 
 		function getHsn(item_id,ref_td)
