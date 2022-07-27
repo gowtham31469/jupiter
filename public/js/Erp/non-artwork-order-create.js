@@ -1,5 +1,10 @@
 	$(document).ready(function()
 	{   
+		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
+		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
+		var row_index=1;  
+		var hsn_arr = [];
+		
 		$('.table-responsive').on('show.bs.dropdown', function () {
 			$('body').css( "overflow-x", "hidden" );
 		$('.table-responsive').css( "overflow", "inherit" );
@@ -26,10 +31,6 @@
 		});
 
 
-		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
-		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
-		var row_index=1;  
-		var hsn_arr = [];
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -322,7 +322,9 @@ class NonArtworkTemplateController extends Controller
                     $nat_qty->rate_value = $request->rate_value[$key];
                     $nat_qty->save();
 
-                    $unique_id = 'ERP-'.$reference_name.'-'.$erp_id.'-'.$request->style[$key].'-'.$request->bpo[$key].'-'."newOrder".'-'.$request->item[$key].'-'.$request->color[$key].'-'.$request->composition[$key].'-'.$value;
+                    $_reference = preg_replace('#[ -]+#', '-', $reference_name);
+
+                    $unique_id = 'ERP-'.$_reference.'-'.$erp_id.'-'.$request->style[$key].'-'.$request->bpo[$key].'-'."newOrder".'-'.$request->item[$key].'-'.$request->color[$key].'-'.$request->composition[$key].'-'.$value;
 
                     
                     DB::table('erp_order_details')
@@ -623,7 +625,7 @@ class NonArtworkTemplateController extends Controller
                         ->get();
         if($price_range->count())
         {
-            return response()->json(['rate'=>$price_range[0]->price,'moq'=>30]);
+            return response()->json(['rate'=>$price_range[0]->price,'moq'=>$row->moq]);
         }
         else
         {
