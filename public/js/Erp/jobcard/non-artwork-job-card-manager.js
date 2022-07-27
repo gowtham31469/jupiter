@@ -648,7 +648,7 @@ const getMachineExcess = () => {
             $(row).parent().next().find(`div input`).val('');
 
             $.each(response,  (indexInArray, valueOfElement) => { 
-                 if (_.inRange(order_qty, valueOfElement.min_range, valueOfElement.max_range)) {
+                 if ( order_qty >= valueOfElement.min_range && order_qty <= valueOfElement.max_range ) {
                     switch (valueOfElement.excess_unit) {
                         case 'percentage':
                             let total_excess = parseFloat(order_qty * (valueOfElement.excess*1/100)).toFixed(2);
