@@ -1685,3 +1685,19 @@ li.year-nav-menu div.selected-year button:focus{
 #nat_tab_logic .form-control:hover {
      border: unset !important; 
 }
+.bs-example
+{
+    height: 300px;
+    padding-bottom: 180px;
+    overflow-x:scroll;
+}
+/*div.dropdown-menu.open
+    {
+        max-height:100px !important;
+        overflow:hidden;
+    }
+    ul.dropdown-menu.inner
+    {
+        max-height:100px !important;
+        overflow-y:auto;
+    }*/
