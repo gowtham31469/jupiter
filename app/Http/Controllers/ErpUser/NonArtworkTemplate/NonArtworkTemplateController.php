@@ -113,7 +113,7 @@ class NonArtworkTemplateController extends Controller
            }
            
         }
-        $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select form-control input-group" title="Select item">'.$opt.'</select>';
+        $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select form-control input-group" title="Select item" data-container="body">'.$opt.'</select>';
 
         return response()->json(['items'=>$item_select]);
 
@@ -138,7 +138,10 @@ class NonArtworkTemplateController extends Controller
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
         }
-        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
+
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select form-control input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
+
+        // $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" title="Select reference" data-size="5" data-container=".main-content">'.$opt.'</select>';
 
         return response()->json(['reference'=>$reference_select]);
 
@@ -355,7 +358,7 @@ class NonArtworkTemplateController extends Controller
                         'order_type'            => "newOrder",
                         'created_at'            => Carbon::parse($request->current_date)
                                                     ->toDateTimeString(),
-                        'order_status_id'       => 4,
+                        'order_status_id'       => $request->approve_date[$key] ==null ? 2 : 4,
                         'order_date'            => Carbon::parse($request->current_date)
                                                     ->toDateTimeString(),
                         'aw_date'               => $request->approve_date[$key]!=null ?
@@ -470,7 +473,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select uom" name="uom[]">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
@@ -520,7 +523,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $item_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="item[]">"'.$item_options.'"</select>';
+            $item_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="item[]" data-container=".main-content">"'.$item_options.'"</select>';
 
             $arr = [];
             $opt = "";
@@ -539,7 +542,9 @@ class NonArtworkTemplateController extends Controller
             
             }
 
-            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
+            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select form-control input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
+            
+            // $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5" data-container=".main-content">'.$opt.'</select>';
 
             $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
             $html.='<tr id="addr'.$key.'" class="clonable">
@@ -572,7 +577,7 @@ class NonArtworkTemplateController extends Controller
                                         <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition">
                                     </td>
                                     <td width="150" class="selectpicker_td">
-                                        <select class="selectpicker aw_status" name="A_W_Status[]">
+                                        <select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
                                             <option value="0" '.$approved_flag.' >Not Approved</option>
                                             <option value="1" '.$approved_flag.'>Approved</option>
                                         </select>
