@@ -138,7 +138,7 @@ class NonArtworkTemplateController extends Controller
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
         }
-        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
+        $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
 
         return response()->json(['reference'=>$reference_select]);
 
@@ -205,6 +205,7 @@ class NonArtworkTemplateController extends Controller
                 'bpo.*'=>'Please fill up bpo values on all the rows',
                 'style.*'=>'Please fill up style values on all the rows',
                 'item.*'=>'Please select item on all the rows',
+                'approve_date.*'=>'Please select appr on all the rows',
                 'quantity.*'=>'Please fill up quantity values on all the rows',
                 'reference.*'=>'Please select reference item on all the rows',
                 'color.*'=>'Please fill up color values on all the rows',
@@ -425,9 +426,10 @@ class NonArtworkTemplateController extends Controller
     public function getNonArtworkOrders(Request $request)
     {
         $html='';
+        $is_editable = 1;
 
         if($request->id > 0)
-        {
+        {   
            $order_table_data = NonArtworkOrder::where('order_id',$request->id)->get();
            if(count($order_table_data)){
            $order = $order_table_data->take(1)[0];
@@ -435,6 +437,14 @@ class NonArtworkTemplateController extends Controller
          
            $quantity_table_data = DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$order_ids)->get();
 
+           $erp_data = ErpOrderDetails::where('order_qnty_table_name','non_artwork_orders_quanty')
+            ->whereIn('order_qnty_table_id',$quantity_table_data->pluck('id'))
+            ->pluck('status');
+
+            if (in_array(8, $erp_data->toArray())){
+                $is_editable = 0;
+            }
+           
            $approved_dates = $order_table_data->pluck('order_approved_at');
 
            $uom = DB::table('non_artwork_uom')->pluck('uom','id');
@@ -474,7 +484,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $size_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="size[]">"'.$size_options.'"</select>';
+            $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
@@ -527,7 +537,7 @@ class NonArtworkTemplateController extends Controller
             
             }
 
-            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference">'.$opt.'</select>';
+            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5">'.$opt.'</select>';
 
             $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
             $html.='<tr id="addr'.$key.'" class="clonable">
@@ -589,8 +599,8 @@ class NonArtworkTemplateController extends Controller
            $last = $key+1;
            }
 
-           $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax]);
+           // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable]);
        }
        else{
         return response()->json(['result'=>0]);
@@ -611,18 +621,17 @@ class NonArtworkTemplateController extends Controller
                         ->where('volume_from','<=',$request->quantity)
                         ->where('volume_to','>=',$request->quantity)
                         ->get();
-                        // dd($price_range);
         if($price_range->count())
         {
-            return response()->json(['rate'=>$price_range[0]->price]);
+            return response()->json(['rate'=>$price_range[0]->price,'moq'=>30]);
         }
         else
         {
-            return response()->json(['rate'=>0]);
+            return response()->json(['rate'=>0,'moq'=>0]);
         }
         
        }                            
-       return response()->json(['rate'=>0]);
+       return response()->json(['rate'=>0,'moq'=>0]);
     }
 
 

@@ -28,6 +28,7 @@
 		<div class="alert alert-success print-success-msg" style="display:none">
 			<ul></ul>
 		</div>
+	
 		{!! Form::open(['id' => 'non_artwork_orders','data-toggle' => 'validator','role' => 'form']) !!}
 		<input type="hidden" name="order_to_edit" id="order_to_edit">
 		<div class="row">
@@ -114,9 +115,10 @@
 			</div>
 		</div>
 
-		<div class="row clearfix">
-			<div class="col-md-12 bs-example">
-				<table class="table table-bordered" id="nat_tab_logic">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="nat-table_">
+				<table class="table table-bordered table-responsive" id="nat_tab_logic">
 					<thead>
 						<tr>
 							<th class="text-center">Sl.No</th>
@@ -139,45 +141,45 @@
 					</thead>
 					<tbody id="dynamic_field">
 						<tr id='addr0' class="clonable">
-							<td width="30">
+							<td>
 								<div class="custom-control custom-checkbox">
 									<input type="checkbox" class="custom-control-input select_row_to_clone" name="customCheck1">
 									<label class="custom-control-label">&nbsp;1</label>
 								</div>
 							</td>
-							<td width="20">
+							<td>
 								<div class="form-group has-feedback label-ean-feedback">
 									<p>-</p>
 								</div>
 							</td>
-							<td width="150">
+							<td>
 								<input type="number" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
 							</td>
-							<td width="150">
+							<td>
 								<input type="number" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
 							</td>
-							<td width="150">
+							<td>
 								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 							</td>	
-							<td width="100" class="selectpicker_td item_td">
+							<td class="selectpicker_td item_td">
 								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
 							</td>
-							<td width="150" class="reference_td selectpicker_td">
-								<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5"></select>
+							<td class="reference_td selectpicker_td">
+								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" title="Select reference" data-size="5"></select>
 							</td>
-							<td width="150">
+							<td>
 								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
 							</td>
-							<td width="150">
+							<td>
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 							</td>
-							<td width="150" class="selectpicker_td">
+							<td class="selectpicker_td">
 								<select class="selectpicker aw_status" name="A_W_Status[]">
-									<option value="0">Not Approved</option>
 									<option value="1" selected>Approved</option>
+									<option value="0">Not Approved</option>
 								</select>
 							</td>
-							<td width="170" class="aw_td">
+							<td class="aw_td">
 								<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
 									<input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
 									<div class="input-group-addon">
@@ -185,24 +187,25 @@
 									</div >
 								</div >
 							</td>
-							<td width="150">
+							<td>
 								{!! Form::select('size[]', $sizes, null, ['class' => 'form-control input-sm label-ean-field']) !!}
 							</td>
-							<td width="150" class="quantity_td">
+							<td class="quantity_td">
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
 							</td>
-							<td width="150" class="selectpicker_td">
+							<td class="selectpicker_td">
 								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true','title'=>'Select uom']) !!}
 							</td>
-							<td width="150" class="rate_td">
+							<td class="rate_td">
 								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>
 							</td>
-							<td width="150" class="value_td">
+							<td class="value_td">
 								<input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value" placeholder="qty*rate" readonly>
 							</td>
 						</tr>
 					</tbody>
 				</table>
+				</div>
 				</div>
 				<div class="col-md-8"></div>
 				<div class="col-md-4 calculations">
