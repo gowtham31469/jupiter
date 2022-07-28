@@ -1,14 +1,23 @@
 	$(document).ready(function()
 	{   
+		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
+		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
+		var row_index=1;  
+		var hsn_arr = [];
+
 		$('.table-responsive').on('show.bs.dropdown', function () {
 			$('body').css( "overflow-x", "hidden" );
-		$('.table-responsive').css( "overflow", "inherit" );
+		// $('.table-responsive').css( "overflow", "inherit" );
 		});
 
 		$('.table-responsive').on('hide.bs.dropdown', function () {
 			$('body').css( "overflow-x", "auto" );
-		$('.table-responsive').css( "overflow", "auto" );
+		// $('.table-responsive').css( "overflow", "auto" );
 		})
+
+		// $(document).on('show.bs.select','.reference_select ,.item_select', function (e, clickedIndex, isSelected, previousValue) {
+		// 	console.log($(this).closest('.dropdown-menu').addClass('asdasd'))
+		// });
 
 		$('.reference_select').selectpicker({
 		dropupAuto: false
@@ -18,18 +27,14 @@
 			format: 'dd-mm-yyyy'
 		}); 
 
-		$(document).on('shown.bs.select','.reference_select', function (e, clickedIndex, isSelected, previousValue) {
-			if($(this).hasClass('dropup'))
-			{
-				$(this).removeClass('dropup').addClass('dropdown')
-			}
+		$(document).on('rendered.bs.select','.reference_select', function (e, clickedIndex, isSelected, previousValue) {
+			// if($(this).hasClass('dropup'))
+			// {
+				// $(this).removeClass('dropup')
+			// }
 		});
 
 
-		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
-		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
-		var row_index=1;  
-		var hsn_arr = [];
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -56,7 +61,7 @@
 					var $item = $(this).clone()
 					if($(this).hasClass('selectpicker_td'))
 					{	
-						$item.attr("id", "item_select" + index);
+						// $item.attr("id", "item_select" + index);
 
 						var selectedValue = $(this).find('option:selected').val()
 						$("#"+row_id).append($item)

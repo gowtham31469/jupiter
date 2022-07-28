@@ -1713,3 +1713,8 @@ min-width: 130px;
 .table-bordered>thead>tr>th:nth-child(2) {
   min-width: 30px !important;
 }
+
+.item_select .dropdown-menu{min-width: 10%!important;}
+.reference_select .dropdown-menu{min-width: 10%!important;}
+.aw_status .dropdown-menu{min-width: 10%!important;}
+.uom_select .dropdown-menu{min-width: 10%!important;}
