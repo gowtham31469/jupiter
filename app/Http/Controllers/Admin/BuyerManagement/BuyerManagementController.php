@@ -258,8 +258,8 @@ class BuyerManagementController extends Controller
                                 'item_master_table' => $buyer.'_item_master',
                                 'material_master_table' => $buyer.'_material_masters'
                               ]);
-                  
                   $item_master_creation = $this->createItemMaster($name);
+                  $template_creation = $this->createTemplateTable($name);
                   $template_creation = $this->createTemplateTable($name);
                     
                   $result = $inserted != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
