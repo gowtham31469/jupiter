@@ -117,7 +117,7 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<div class="nat-table_">
+				<div class="nat-table">
 				<table class="table table-bordered table-responsive" id="nat_tab_logic">
 					<thead>
 						<tr>
@@ -162,11 +162,14 @@
 								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 							</td>	
 							<td class="selectpicker_td item_td">
-								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
+								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item','data-container' =>'body']) !!}
 							</td>
-							<td class="reference_td selectpicker_td">
-								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" title="Select reference" data-size="5"></select>
+							<td class="selectpicker_td reference_td">
+								{!! Form::select('reference[]', [], null, ['class' => 'selectpicker reference_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select reference','data-container' =>'body']) !!}
 							</td>
+							<!-- <td class="reference_td selectpicker_td">
+								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" data-container="body" title="Select reference"></select>
+							</td> -->
 							<td>
 								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
 							</td>
@@ -174,7 +177,7 @@
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 							</td>
 							<td class="selectpicker_td">
-								<select class="selectpicker aw_status" name="A_W_Status[]">
+								<select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
 									<option value="1" selected>Approved</option>
 									<option value="0">Not Approved</option>
 								</select>
@@ -194,7 +197,7 @@
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
 							</td>
 							<td class="selectpicker_td">
-								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true','title'=>'Select uom']) !!}
+								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker uom_select','data-live-search'=>'true','title'=>'Select uom','data-container'=>'.main-content']) !!}
 							</td>
 							<td class="rate_td">
 								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>
