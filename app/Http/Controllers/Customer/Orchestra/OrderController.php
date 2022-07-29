@@ -794,6 +794,7 @@ class OrderController extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
         $template_back_id = $request->template_back_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -848,6 +849,7 @@ class OrderController extends Controller
                     'uvc' => $uvc,
                     'template_front_id'      => $template_front_id,
                     'template_back_id'      => $template_back_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'customer_id'    => $factory{0}->id,
@@ -926,6 +928,7 @@ class OrderController extends Controller
 										'uvc' => $uvc,
 										'template_front_id'      => $template_front_id,
 										'template_back_id'      => $template_back_id,
+                                        'ocn_number'      => $ocn_number,
 										'svg_path'    => "", 
 										'status'    => $status,
 										'customer_id'    => $factory{0}->id,
@@ -934,7 +937,8 @@ class OrderController extends Controller
 										'pi_status'           => $pi_status,
 										'po_status'           => $po_status,
 					 					'color_code'          => $value1['Color_Code'],
-					 					'template_type'       => "single"
+					 					'template_type'       => "single",
+                                        'order_placed_by' => Auth::guard('web_customer')->id()
 							 ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1326,6 +1330,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1377,6 +1382,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1453,6 +1459,7 @@ class OrderController extends Controller
              	$inserted = HeatTransferOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1461,7 +1468,8 @@ class OrderController extends Controller
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
 					 				'color_code'           => $value1['Color_Code'],
-					 				'template_type'       => "single"
+					 				'template_type'       => "single",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1501,6 +1509,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = $request->tot_qty_table;
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1550,6 +1559,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1624,6 +1634,7 @@ class OrderController extends Controller
              	$inserted = MainLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1632,7 +1643,8 @@ class OrderController extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'template_type'       => "ratio"
+					 				'template_type'       => "ratio",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
            
                  MainLabelOrdersQty::create([
@@ -1665,6 +1677,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1717,6 +1730,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1793,6 +1807,7 @@ class OrderController extends Controller
              $inserted = SizeLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1801,7 +1816,8 @@ class OrderController extends Controller
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
 					 				'color_code'           => $value1['Color_Code'],
-					 				'template_type'       => "single"
+					 				'template_type'       => "single",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -1840,6 +1856,7 @@ class OrderController extends Controller
     public function setSpecialTag(Request $request)
     {
         $delivery_date = $request->delivery_date;
+        $ocn_number = $request->ocn_number;
         $template_front_id = $request->template_front_id;
         $tot_qty_table = $request->tot_qty_table;
 		//$final_qty =$request->tot_qty_table;
@@ -1890,6 +1907,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id, 
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "",
                     'final_qty'    => $tot_qty_table, 
                     'customer_id'    => $factory{0}->id,
@@ -1962,6 +1980,7 @@ class OrderController extends Controller
              	$inserted = SpecialTagOrders::create([
                                     'uvc' => $uvc,
                                     'template_id'      => $template_front_id, 
+                                    'ocn_number'      => $ocn_number,
                                     'svg_path'    => "", 
 				 					'final_qty'    => $value,
                         			'customer_id'    => $factory{0}->id,
@@ -1971,7 +1990,8 @@ class OrderController extends Controller
 									'season_code'    => $season_code,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
-					 				'template_type'       => "ratio"
+					 				'template_type'       => "ratio",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
             
                  SpecialTagOrdersQty::create([
@@ -2845,6 +2865,7 @@ class OrderController extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
         $template_name = $request->template_name;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -2911,6 +2932,7 @@ class OrderController extends Controller
                         'template_id'      => $template_front_id,
                         //'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
+                        'ocn_number'      => $ocn_number,
                         'washing_id'      => $washing_select,
                         'whitening_id'      => $whitening_select,
                         'dryer_id'      => $dryer_select,
@@ -2988,6 +3010,7 @@ class OrderController extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
+                                'ocn_number'      => $ocn_number,
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -3005,6 +3028,7 @@ class OrderController extends Controller
 								'season_code'    => $season_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -3062,6 +3086,7 @@ class OrderController extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
+                                'ocn_number'      => $ocn_number,
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -3079,6 +3104,7 @@ class OrderController extends Controller
 								'season_code'    => $season_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -3135,6 +3161,7 @@ class OrderController extends Controller
         
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
+        $ocn_number = $request->ocn_number;
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -3199,6 +3226,7 @@ class OrderController extends Controller
             ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id,
+                    'ocn_number'      => $ocn_number,
                     //'merchandisers_id'      => $merchandisers,
                     'template_name'      => $template_name,
                     'washing_id'      => $washing_select,
@@ -3313,6 +3341,7 @@ class OrderController extends Controller
                $inserted = WashLabelOrders::create([
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
+                                'ocn_number'      => $ocn_number,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
                                 'washing_id'      => $washing_select,

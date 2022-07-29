@@ -19,6 +19,13 @@ class ChangeRateToNonArtworkOrdersQuantyTable extends Migration
         Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
             $table->decimal('rate',8,2)->nullable();
         });
+
+	Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
+		    $table->dropColumn('rate_value');
+        });
+        Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
+            $table->decimal('rate_value',8,2)->nullable();
+        });
     }
 
     /**
@@ -33,6 +40,13 @@ class ChangeRateToNonArtworkOrdersQuantyTable extends Migration
         });
         Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
 	        $table->integer('rate')->nullable();
+        });
+
+	Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
+            $table->dropColumn('rate_value');
+        });
+        Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
+	        $table->integer('rate_value')->nullable();
         });
     }
 }
