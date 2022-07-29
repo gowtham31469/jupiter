@@ -473,7 +473,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
@@ -489,7 +489,9 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
+            // $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
+
+            $size_select = '<select class="selectpicker form-control input-group size_select" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
@@ -543,7 +545,7 @@ class NonArtworkTemplateController extends Controller
             }
 
             $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select form-control input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
-            
+
             // $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5" data-container=".main-content">'.$opt.'</select>';
 
             $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
@@ -590,7 +592,7 @@ class NonArtworkTemplateController extends Controller
                                             </div>
                                         </div>
                                     </td>
-                                    <td width="150">'.$size_select.'</td>
+                                    <td width="150" class="selectpicker_td">'.$size_select.'</td>
                                     <td width="150" class="quantity_td">
                                         <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
                                     </td>
