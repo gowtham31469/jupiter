@@ -190,8 +190,11 @@
 									</div >
 								</div >
 							</td>
-							<td>
+							<!-- <td>
 								{!! Form::select('size[]', $sizes, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+							</td> -->
+							<td class="selectpicker_td">
+								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker form-control input-group size_select', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
 							</td>
 							<td class="quantity_td">
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
