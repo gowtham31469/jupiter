@@ -36,7 +36,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="buyer">Seacrh For Order ID</label>
-					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id']) !!}
+					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
