@@ -663,8 +663,11 @@ class NonArtworkTemplateController extends Controller
 
     public function truncate()
     {
-        $erp_ids = NonArtworkOrder::pluck('order_id');
-        DB::table('erp_orders')->whereIn('erp_id',$erp_ids)->delete();
+        $erp_ids = DB::table('erp_order_details')
+                ->where('order_qnty_table_name','non_artwork_orders_quanty')
+                ->pluck('erp_order_id');
+   
+        DB::table('erp_orders')->whereIn('id',$erp_ids)->delete();
         return response()->json('Data cleared successfully !!!');
     }
 }
