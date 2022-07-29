@@ -46,7 +46,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="buyer">Buyer</label>
-					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'id'=>'buyer','required']) !!}
+					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -79,7 +79,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
-					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required']) !!}
+					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>

@@ -15,10 +15,6 @@
 		// $('.table-responsive').css( "overflow", "auto" );
 		})
 
-		// $(document).on('show.bs.select','.reference_select ,.item_select', function (e, clickedIndex, isSelected, previousValue) {
-		// 	console.log($(this).closest('.dropdown-menu').addClass('asdasd'))
-		// });
-
 		$('.reference_select').selectpicker({
 		dropupAuto: false
 		});
@@ -26,14 +22,6 @@
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
-
-		$(document).on('shown.bs.select','.item_select', function (e, clickedIndex, isSelected, previousValue) {
-			// if($(this).hasClass('dropup'))
-			// {
-				// $(this).addClass('dropup')
-			// }
-		});
-
 
 		$.ajaxSetup({
 			headers: {
