@@ -661,4 +661,10 @@ class NonArtworkTemplateController extends Controller
         return response()->json(['hsn'=>$row->hsn_code,'tax'=>$row->tax]);
     }
 
+    public function truncate()
+    {
+        $erp_ids = NonArtworkOrder::pluck('order_id');
+        DB::table('erp_orders')->whereIn('erp_id',$erp_ids)->delete();
+        return response()->json('Data cleared successfully !!!');
+    }
 }
