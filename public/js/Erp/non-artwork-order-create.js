@@ -1,14 +1,28 @@
 	$(document).ready(function()
 	{   
-		
-		$('.datepicker').datepicker({
-			format: 'dd-mm-yyyy'
-		}); 
-
 		var getDetailsURL = "<?php echo url('erp/get-non-artwork-order-details'); ?>";
 		postURL = "<?php echo url('erp/save-non-artwork'); ?>"
 		var row_index=1;  
 		var hsn_arr = [];
+
+		$('.table-responsive').on('show.bs.dropdown', function () {
+			$('body').css( "overflow-x", "hidden" );
+		// $('.table-responsive').css( "overflow", "inherit" );
+		});
+
+		$('.table-responsive').on('hide.bs.dropdown', function () {
+			$('body').css( "overflow-x", "auto" );
+		// $('.table-responsive').css( "overflow", "auto" );
+		})
+
+		$('.reference_select').selectpicker({
+		dropupAuto: false
+		});
+
+		$('.datepicker').datepicker({
+			format: 'dd-mm-yyyy'
+		}); 
+
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -35,7 +49,7 @@
 					var $item = $(this).clone()
 					if($(this).hasClass('selectpicker_td'))
 					{	
-						$item.attr("id", "item_select" + index);
+						// $item.attr("id", "item_select" + index);
 
 						var selectedValue = $(this).find('option:selected').val()
 						$("#"+row_id).append($item)
@@ -56,8 +70,10 @@
 						}
 						else
 						{
-							$("#"+row_id).append($item.find("input").val("").end())
+							$("#"+row_id).append($item).find(":input").val('')
 							$item.closest('.aw_td').css('pointer-events','auto')
+							$("#"+row_id).find('.aw_status').selectpicker('val','1');
+							$("#"+row_id).find('.selectpicker').selectpicker('refresh');
 						}
 						
 					}
@@ -79,7 +95,10 @@
 			$(".error-bag").html('')
 			window.scrollTo(0, 0);
 			$li = ''
-			$.each( msg, function( key, value ) {
+			var filtered_messages = msg.filter(function(elem, index, self) {
+				return index === self.indexOf(elem);
+			});
+			$.each( filtered_messages, function( key, value ) {
 				$li+='<li>'+value+'</li>'
 			});
 
@@ -199,9 +218,9 @@
 		});
 
 
-		$(document).on("change",".aw_status",function(e)
-		{	
-			if($('.aw_status option:selected').val() == 0)
+		$(document).on("changed.bs.select",".aw_status",function(e)
+		{	e.stopImmediatePropagation()
+			if($(this).val() == 0)
 			{
 				$(this).closest('tr').find('td.aw_td').css("pointer-events",'none')
 				$(this).closest('tr').find('td.aw_td .aw_date').val('')
@@ -299,6 +318,8 @@
 				data: { 'buyer_id' : $("#buyer").val() ,'template_id' : ref ,'customer_id' : $("#customer").val(),'quantity' : qty},
 				success:function(data)
 				{
+					if(qty >= data.moq)
+					{
 					rate_td.val(data.rate)
 					value_td.val(Math.round(data.rate * qty))
 					total_qty = 0
@@ -313,17 +334,52 @@
 					$("#value_total").val(total_value)
 					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
 					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+					}
+					else
+					{
+						$('.snackbar_span').html('Quantity cannot be less than '+data.moq+'(Moq)');
+			   	 		showSnackbar();
+			   	 		rate_td.val('')
+					}
 				}
 			});
 		}
 
 
 		$('#non_artwork_orders').validator().on('submit', function (e) {
-			if (e.isDefaultPrevented()) {
+				if (e.isDefaultPrevented()) {
 
-			} else {
-				e.preventDefault();
-				submitNonArtworkOrder();
+				} else {
+					e.preventDefault();
+
+				var can_submit = 1;
+				var artwork_dates_filled = 1;
+
+				$(".rate_value").each(function(i,v){
+
+					if($(this).val() == 0)
+					{
+						can_submit = 0
+						$('.snackbar_span').html('Please make sure values provided are non-zero !!!');
+						showSnackbar();
+					}
+				});
+
+				$(".aw_date").each(function(i,v)
+				{
+					if($(this).css('pointer-events') == 'auto' && $(this).val() == "")
+						{
+							$('.snackbar_span').html('Please make sure that approved dates are provided is Aw status is aproved !!!');
+							showSnackbar();
+							can_submit = 0
+						}
+				});
+
+
+				if(can_submit && artwork_dates_filled)
+				{
+					submitNonArtworkOrder();
+				}
 			}
 		});
 
@@ -360,65 +416,76 @@
 						}, 2500);
 					}
 				}  
-			});  
+			}); 
 		}
 
 
-	$("#getOrderDetails").on('click', function () 
+	// $("#getOrderDetails").on('click', function () 
+	$(document).on("changed.bs.select","#order_id",function(e)
 	{
-		$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
-		$("#save_data").attr('data-action', 'update');
-
 		$.ajax({
 			type:'POST',
 			url: "/erp/get-non-artwork-order-details",
-			data:{id:$("#order_id").val()},
+			data:{id:$(this).val()},
 			success:function(data)
 			{
 				if(data.result)
 				{
-				hsn_arr = [];
-				hsn_arr.push(data.hsn)
-				row_index= data.last_row_index
-				$('select[name=buyer]').val(data.row['buyer_id']);
-				$('select[name=customer]').val(data.row['supplier_id']);
-				$("#tesco_po_number").val(data.row['purchase_order_no'])
-				$("#order_to_edit").val(data.row['id'])
-				$("#hsn_code").val(data.hsn)
-				$("#tax").html(data.tax)
-				$("#dynamic_field").find("tr:gt(0)").remove();
-				$("#dynamic_field").html('')
-				$("#dynamic_field").html(data.td)
-				$('.selectpicker').selectpicker('refresh')
-				$('#current_date').datepicker("setDate", new Date(data.row['order_created_at']) );
-				$('#due_date').datepicker("setDate", new Date(data.row['delivery_date']) );
+					hsn_arr = [];
+					hsn_arr.push(data.hsn)
+					row_index= data.last_row_index
+					$('select[name=buyer]').val(data.row['buyer_id']);
+					$('select[name=customer]').val(data.row['supplier_id']);
+					$("#tesco_po_number").val(data.row['purchase_order_no'])
+					$("#order_to_edit").val(data.row['id'])
+					$("#hsn_code").val(data.hsn)
+					$("#tax").html(data.tax)
+					$("#dynamic_field").find("tr:gt(0)").remove();
+					$("#dynamic_field").html('')
+					$("#dynamic_field").html(data.td)
+					$('.selectpicker').selectpicker('refresh')
+					$('#current_date').datepicker("setDate", new Date(data.row['order_created_at']) );
+					$('#due_date').datepicker("setDate", new Date(data.row['delivery_date']) );
 
-				$(".aw_date").each(function(i,v)
-				{	
-					if(data.approved_dates[i] == null)
+					$(".aw_date").each(function(i,v)
+					{	
+						if(data.approved_dates[i] == null)
+						{
+							$(this).datepicker("setDate", null);
+							$(this).parent().parent().css("pointer-events",'none')
+						}
+						else
+						{
+							$(this).datepicker("setDate", new Date(data.approved_dates[i]))
+						}
+						
+					})
+
+					total_qty = 0
+					total_value = 0
+					$(".quantity").each(function(i,v){
+					total_qty+=+$(this).val()
+					});
+					$(".rate_value").each(function(i,v){
+					total_value+=+$(this).val()
+					});
+					$("#qty_total").val(total_qty)
+					$("#value_total").val(total_value)
+					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+
+					if(data.is_editable)
 					{
-						$(this).datepicker("setDate", null);
-						$(this).parent().parent().css("pointer-events",'none')
+						$("#save_data").removeClass('hidden')
+						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
+						$("#save_data").attr('data-action', 'update');
 					}
 					else
 					{
-						$(this).datepicker("setDate", new Date(data.approved_dates[i]))
+						$("#save_data").addClass('hidden')
+						$('.snackbar_span').html('This order cannot be edited as JobCard creation for this order is in progress !!!');
+						showSnackbar();
 					}
-					
-				})
-
-				total_qty = 0
-				total_value = 0
-				$(".quantity").each(function(i,v){
-				total_qty+=+$(this).val()
-				});
-				$(".rate_value").each(function(i,v){
-				total_value+=+$(this).val()
-				});
-				$("#qty_total").val(total_qty)
-				$("#value_total").val(total_value)
-				$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
-				$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
 			}
 			else
 			{

@@ -28,18 +28,15 @@
 		<div class="alert alert-success print-success-msg" style="display:none">
 			<ul></ul>
 		</div>
+	
 		{!! Form::open(['id' => 'non_artwork_orders','data-toggle' => 'validator','role' => 'form']) !!}
 		<input type="hidden" name="order_to_edit" id="order_to_edit">
 		<div class="row">
+
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
-					<label for="order_">Order ID</label>
-					<div class="input-group tesco_manufacture_date date">
-						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="220700001">
-						<div class="input-group-addon" id="getOrderDetails">
-							<span class="glyphicon glyphicon-search"> </span >
-						</div >
-					</div >
+					<label for="buyer">Seacrh For Order ID</label>
+					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -49,7 +46,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="buyer">Buyer</label>
-					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'id'=>'buyer','required']) !!}
+					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -82,7 +79,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
-					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required']) !!}
+					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -114,9 +111,10 @@
 			</div>
 		</div>
 
-		<div class="row clearfix">
-			<div class="col-md-12 bs-example">
-				<table class="table table-bordered" id="nat_tab_logic">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="nat-table">
+				<table class="table table-bordered table-responsive" id="nat_tab_logic">
 					<thead>
 						<tr>
 							<th class="text-center">Sl.No</th>
@@ -150,34 +148,37 @@
 									<p>-</p>
 								</div>
 							</td>
-							<td width="150">
+							<td>
 								<input type="number" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
 							</td>
-							<td width="150">
+							<td>
 								<input type="number" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
 							</td>
-							<td width="150">
+							<td>
 								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 							</td>	
-							<td width="100" class="selectpicker_td item_td">
-								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item']) !!}
+							<td class="selectpicker_td item_td">
+								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item','data-container' =>'body']) !!}
 							</td>
-							<td width="150" class="reference_td selectpicker_td">
-								<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5"></select>
+							<td class="selectpicker_td reference_td">
+								{!! Form::select('reference[]', [], null, ['class' => 'selectpicker reference_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select reference','data-container' =>'body']) !!}
 							</td>
-							<td width="150">
+							<!-- <td class="reference_td selectpicker_td">
+								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" data-container="body" title="Select reference"></select>
+							</td> -->
+							<td>
 								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
 							</td>
-							<td width="150">
+							<td>
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
 							</td>
-							<td width="150" class="selectpicker_td">
-								<select class="selectpicker aw_status" name="A_W_Status[]">
-									<option value="0">Not Approved</option>
+							<td class="selectpicker_td">
+								<select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
 									<option value="1" selected>Approved</option>
+									<option value="0">Not Approved</option>
 								</select>
 							</td>
-							<td width="170" class="aw_td">
+							<td class="aw_td">
 								<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
 									<input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
 									<div class="input-group-addon">
@@ -185,24 +186,28 @@
 									</div >
 								</div >
 							</td>
-							<td width="150">
+							<!-- <td>
 								{!! Form::select('size[]', $sizes, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+							</td> -->
+							<td class="selectpicker_td">
+								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker form-control input-group size_select', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
 							</td>
-							<td width="150" class="quantity_td">
+							<td class="quantity_td">
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
 							</td>
-							<td width="150" class="selectpicker_td">
-								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker','data-live-search'=>'true','title'=>'Select uom']) !!}
+							<td class="selectpicker_td">
+								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker uom_select','data-live-search'=>'true','title'=>'Select uom','data-container'=>'.main-content']) !!}
 							</td>
-							<td width="150" class="rate_td">
+							<td class="rate_td">
 								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>
 							</td>
-							<td width="150" class="value_td">
+							<td class="value_td">
 								<input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value" placeholder="qty*rate" readonly>
 							</td>
 						</tr>
 					</tbody>
 				</table>
+				</div>
 				</div>
 				<div class="col-md-8"></div>
 				<div class="col-md-4 calculations">

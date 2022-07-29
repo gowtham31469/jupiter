@@ -1678,26 +1678,44 @@ li.year-nav-menu div.selected-year button:focus{
     border-color: #26323800;
     margin-top: 2px;
 }
-#nat_tab_logic{
+/*#nat_tab_logic{
     max-width: unset!important;
         width: 150%!important;
-}
-#nat_tab_logic .form-control:hover {
+}*/
+#nat_tab_logic .bootstrap-select:hover {
      border: unset !important; 
 }
-.bs-example
+/*.bs-example
 {
-    height: 300px;
-    padding-bottom: 180px;
-    overflow-x:scroll;
+    overflow-x:auto;
 }
-/*div.dropdown-menu.open
-    {
-        max-height:100px !important;
-        overflow:hidden;
-    }
-    ul.dropdown-menu.inner
-    {
-        max-height:100px !important;
-        overflow-y:auto;
-    }*/
+#nat_tab_logic{margin-bottom: 0!important;}*/
+
+#nat_tab_logic{display: inherit;}
+/*.nat-table::-webkit-scrollbar {
+width: 1px;
+height: 8px;
+background-color: #F5F5F5;
+transition: 0.5s ease;
+}
+.nat-table::-webkit-scrollbar-thumb {
+background-color: grey;
+}
+*/
+#nat_tab_logic.table-bordered>thead>tr>th {
+min-width: 130px;
+}
+
+#nat_tab_logic.table-bordered>thead>tr>th:nth-child(1) {
+  min-width: 50px !important;
+}
+
+#nat_tab_logic.table-bordered>thead>tr>th:nth-child(2) {
+  min-width: 30px !important;
+}
+
+.item_select .dropdown-menu{min-width: 10%!important;}
+.reference_select .dropdown-menu{min-width: 10%!important;}
+.aw_status .dropdown-menu{min-width: 10%!important;}
+.uom_select .dropdown-menu{min-width: 10%!important;}
+.size_select .dropdown-menu{min-width: 10%!important;}
