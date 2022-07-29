@@ -432,12 +432,13 @@
 		}
 
 
-	$("#getOrderDetails").on('click', function () 
+	// $("#getOrderDetails").on('click', function () 
+	$(document).on("changed.bs.select","#order_id",function(e)
 	{
 		$.ajax({
 			type:'POST',
 			url: "/erp/get-non-artwork-order-details",
-			data:{id:$("#order_id").val()},
+			data:{id:$(this).val()},
 			success:function(data)
 			{
 				if(data.result)

@@ -85,13 +85,13 @@ class NonArtworkTemplateController extends Controller
             $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
-            
+            $order_id = NonArtworkOrder::pluck('order_id','order_id');
             $buyer_count = count($buyers);
 
             $select_item_data = DB::table('reports_template_level_name')->pluck('name','id');
             $uom = DB::table('non_artwork_uom')->pluck('uom','id');
             $size_chart = DB::table('non_artwork_size_chart')->pluck('size','id');
-            return view('erp/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart]);
+            return view('erp/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart,'order_id'=>$order_id]);
     }
 
     public function getItem(Request $request)
