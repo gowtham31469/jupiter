@@ -1702,15 +1702,15 @@ transition: 0.5s ease;
 background-color: grey;
 }
 */
-.table-bordered>thead>tr>th {
+#nat_tab_logic.table-bordered>thead>tr>th {
 min-width: 130px;
 }
 
-.table-bordered>thead>tr>th:nth-child(1) {
+#nat_tab_logic.table-bordered>thead>tr>th:nth-child(1) {
   min-width: 50px !important;
 }
 
-.table-bordered>thead>tr>th:nth-child(2) {
+#nat_tab_logic.table-bordered>thead>tr>th:nth-child(2) {
   min-width: 30px !important;
 }
 
@@ -1718,3 +1718,4 @@ min-width: 130px;
 .reference_select .dropdown-menu{min-width: 10%!important;}
 .aw_status .dropdown-menu{min-width: 10%!important;}
 .uom_select .dropdown-menu{min-width: 10%!important;}
+.size_select .dropdown-menu{min-width: 10%!important;}
