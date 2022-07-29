@@ -32,15 +32,11 @@
 		{!! Form::open(['id' => 'non_artwork_orders','data-toggle' => 'validator','role' => 'form']) !!}
 		<input type="hidden" name="order_to_edit" id="order_to_edit">
 		<div class="row">
+
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
-					<label for="order_">Order ID</label>
-					<div class="input-group tesco_manufacture_date date">
-						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="220700001">
-						<div class="input-group-addon" id="getOrderDetails">
-							<span class="glyphicon glyphicon-search"> </span >
-						</div >
-					</div >
+					<label for="buyer">Seacrh For Order ID</label>
+					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
