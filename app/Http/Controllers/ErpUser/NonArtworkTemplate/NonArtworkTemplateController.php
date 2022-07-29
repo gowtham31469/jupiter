@@ -85,7 +85,14 @@ class NonArtworkTemplateController extends Controller
             $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
-            $order_id = NonArtworkOrder::pluck('order_id','order_id');
+
+            $all_orders = NonArtworkOrder::whereBetween('order_created_at', [
+                            Carbon::now()->startOfYear(),
+                            Carbon::now()->endOfYear(),
+                            ])->select('order_id')
+                            ->orderBy('order_id','DESC')
+                            ->get();
+            $order_id = $all_orders->pluck('order_id','order_id');
             $buyer_count = count($buyers);
 
             $select_item_data = DB::table('reports_template_level_name')->pluck('name','id');
