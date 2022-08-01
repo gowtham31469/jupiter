@@ -28,7 +28,8 @@ const getNATCustomersList = (evt) => {
             url: base_url + "/erp/non-artwork-job-manager/get-customers-filter",
             data: {
                 'buyer_id': selected_buyer_id,
-                _token: csrf_token
+                _token: csrf_token,
+                'jobcard_created' : true
             },
             dataType: "json",
             beforeSend:  () => {
