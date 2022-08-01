@@ -32,15 +32,11 @@
 		{!! Form::open(['id' => 'non_artwork_orders','data-toggle' => 'validator','role' => 'form']) !!}
 		<input type="hidden" name="order_to_edit" id="order_to_edit">
 		<div class="row">
+
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
-					<label for="order_">Order ID</label>
-					<div class="input-group tesco_manufacture_date date">
-						<input type="text" class="form-control" name="order_id" id="order_id" placeholder="Enter Order ID" maxlength="10" value="220700001">
-						<div class="input-group-addon" id="getOrderDetails">
-							<span class="glyphicon glyphicon-search"> </span >
-						</div >
-					</div >
+					<label for="buyer">Seacrh For Order ID</label>
+					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -50,7 +46,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="buyer">Buyer</label>
-					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'id'=>'buyer','required']) !!}
+					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -83,7 +79,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
-					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required']) !!}
+					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -190,8 +186,11 @@
 									</div >
 								</div >
 							</td>
-							<td>
+							<!-- <td>
 								{!! Form::select('size[]', $sizes, null, ['class' => 'form-control input-sm label-ean-field']) !!}
+							</td> -->
+							<td class="selectpicker_td">
+								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker form-control input-group size_select', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
 							</td>
 							<td class="quantity_td">
 								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">

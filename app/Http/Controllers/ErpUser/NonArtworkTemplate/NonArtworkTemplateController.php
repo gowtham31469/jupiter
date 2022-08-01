@@ -85,13 +85,20 @@ class NonArtworkTemplateController extends Controller
             $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
-            
+
+            $all_orders = NonArtworkOrder::whereBetween('order_created_at', [
+                            Carbon::now()->startOfYear(),
+                            Carbon::now()->endOfYear(),
+                            ])->select('order_id')
+                            ->orderBy('order_id','DESC')
+                            ->get();
+            $order_id = $all_orders->pluck('order_id','order_id');
             $buyer_count = count($buyers);
 
             $select_item_data = DB::table('reports_template_level_name')->pluck('name','id');
             $uom = DB::table('non_artwork_uom')->pluck('uom','id');
             $size_chart = DB::table('non_artwork_size_chart')->pluck('size','id');
-            return view('erp/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart]);
+            return view('erp/Non Artwork Template/order_management',['buyers' => $buyers,'buyer_count' => $buyer_count,'orders' => $orders,'select_item_data'=>$select_item_data,'customers'=>$customers,'uom'=>$uom,'sizes'=>$size_chart,'order_id'=>$order_id]);
     }
 
     public function getItem(Request $request)
@@ -473,7 +480,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
@@ -489,7 +496,9 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
+            // $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
+
+            $size_select = '<select class="selectpicker form-control input-group size_select" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
@@ -543,7 +552,7 @@ class NonArtworkTemplateController extends Controller
             }
 
             $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select form-control input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
-            
+
             // $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5" data-container=".main-content">'.$opt.'</select>';
 
             $approved_flag = $value->order_approved_at == null ? "" : 'selected="selected"';
@@ -590,7 +599,7 @@ class NonArtworkTemplateController extends Controller
                                             </div>
                                         </div>
                                     </td>
-                                    <td width="150">'.$size_select.'</td>
+                                    <td width="150" class="selectpicker_td">'.$size_select.'</td>
                                     <td width="150" class="quantity_td">
                                         <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
                                     </td>
@@ -652,4 +661,13 @@ class NonArtworkTemplateController extends Controller
         return response()->json(['hsn'=>$row->hsn_code,'tax'=>$row->tax]);
     }
 
+    public function truncate()
+    {
+        $erp_ids = DB::table('erp_order_details')
+                ->where('order_qnty_table_name','non_artwork_orders_quanty')
+                ->pluck('erp_order_id');
+   
+        DB::table('erp_orders')->whereIn('id',$erp_ids)->delete();
+        return response()->json('Data cleared successfully !!!');
+    }
 }

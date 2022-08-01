@@ -15,10 +15,6 @@
 		// $('.table-responsive').css( "overflow", "auto" );
 		})
 
-		// $(document).on('show.bs.select','.reference_select ,.item_select', function (e, clickedIndex, isSelected, previousValue) {
-		// 	console.log($(this).closest('.dropdown-menu').addClass('asdasd'))
-		// });
-
 		$('.reference_select').selectpicker({
 		dropupAuto: false
 		});
@@ -26,14 +22,6 @@
 		$('.datepicker').datepicker({
 			format: 'dd-mm-yyyy'
 		}); 
-
-		$(document).on('rendered.bs.select','.reference_select', function (e, clickedIndex, isSelected, previousValue) {
-			// if($(this).hasClass('dropup'))
-			// {
-				// $(this).removeClass('dropup')
-			// }
-		});
-
 
 		$.ajaxSetup({
 			headers: {
@@ -367,12 +355,12 @@
 				var can_submit = 1;
 				var artwork_dates_filled = 1;
 
-				$(".rates").each(function(i,v){
+				$(".rate_value").each(function(i,v){
 
 					if($(this).val() == 0)
 					{
 						can_submit = 0
-						$('.snackbar_span').html('Please make sure rate values are non-zero !!!');
+						$('.snackbar_span').html('Please make sure values provided are non-zero !!!');
 						showSnackbar();
 					}
 				});
@@ -397,50 +385,48 @@
 
 		function submitNonArtworkOrder()
 		{
-				$("#save_data").attr('data-action') == "save" ? action ="save" : action ="update"
-				order_id = $("#order_id").val()
-				$.ajax({  
-					url: "/erp/save-non-artwork",
-					method:"POST",  
-					data:$('#non_artwork_orders').serialize()+ '&action=' + action+ '&order_id=' + order_id,
-					type:'json',
-					success:function(data)  
-					{
-						if(data.error){
-							printErrorMsg(data.error);
-						}else{
-							row_index=1;
-							$('.dynamic-added').remove();
-							$('#non_artwork_orders')[0].reset();
-							$("#nat_tab_logic").find("tr:gt(1)").remove();
-							$(".print-success-msg").find("ul").html('');
-							$(".print-error-msg").css('display','none');
-							if(data.action=="update")
-							{
-								$('.snackbar_span').html('Order updated successfully !!!');
-							}
-							else{
-								$('.snackbar_span').html('Order created successfully !!!');
-							}
-							showSnackbar();
-							setTimeout(function () {
-								location.reload(true);
-							}, 2500);
+			$("#save_data").attr('data-action') == "save" ? action ="save" : action ="update"
+			order_id = $("#order_id").val()
+			$.ajax({  
+				url: "/erp/save-non-artwork",
+				method:"POST",  
+				data:$('#non_artwork_orders').serialize()+ '&action=' + action+ '&order_id=' + order_id,
+				type:'json',
+				success:function(data)  
+				{
+					if(data.error){
+						printErrorMsg(data.error);
+					}else{
+						row_index=1;
+						$('.dynamic-added').remove();
+						$('#non_artwork_orders')[0].reset();
+						$("#nat_tab_logic").find("tr:gt(1)").remove();
+						$(".print-success-msg").find("ul").html('');
+						$(".print-error-msg").css('display','none');
+						if(data.action=="update")
+						{
+							$('.snackbar_span').html('Order updated successfully !!!');
 						}
-					}  
-				}); 
-		
+						else{
+							$('.snackbar_span').html('Order created successfully !!!');
+						}
+						showSnackbar();
+						setTimeout(function () {
+							location.reload(true);
+						}, 2500);
+					}
+				}  
+			}); 
 		}
 
 
-	$("#getOrderDetails").on('click', function () 
+	// $("#getOrderDetails").on('click', function () 
+	$(document).on("changed.bs.select","#order_id",function(e)
 	{
-		
-
 		$.ajax({
 			type:'POST',
 			url: "/erp/get-non-artwork-order-details",
-			data:{id:$("#order_id").val()},
+			data:{id:$(this).val()},
 			success:function(data)
 			{
 				if(data.result)

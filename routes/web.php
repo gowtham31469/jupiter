@@ -1015,6 +1015,8 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 
+	Route::get('truncate-data', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@truncate')->name('truncate-data');
+
 });
 
 //Orchestra Order Management - customer
