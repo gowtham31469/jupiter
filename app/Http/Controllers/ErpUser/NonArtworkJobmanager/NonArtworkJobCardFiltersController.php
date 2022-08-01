@@ -129,9 +129,14 @@ class NonArtworkJobCardFiltersController extends Controller
         $customers = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
         ->join('customers', 'erp_orders.customer_id', 'customers.id')
         ->where(['erp_order_details.deleted_at' => null,
-                'erp_order_details.status' => $this->erp_jc_status_id,
                 'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
                 'erp_orders.buyer_id' => $request['buyer_id']])
+        ->where(function($query) use ($request) {
+            if($request['jobcard_created'] === 'false')
+            {
+                $query->where('erp_order_details.status', $this->erp_jc_status_id);
+            }
+        })
         ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
         ->select('customers.company_name', 'customers.id')
         ->distinct('customers.id')
