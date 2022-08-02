@@ -300,6 +300,8 @@ class InvoiceController extends Controller
                     $size = $value['size'] == ""?"null":$value['size'];
                     $hsn_code = $value['hsn_code']==""?0: $value['hsn_code'];
                     $status = $pendingQnty==0?5:6;
+                    $order_status = $pendingQnty==0?7:8;
+                    $order_status_text = $pendingQnty==0?"Order Dispatched":"Partially Dispatched";
                     if ($status==5) {
                         $par_count++;
                     }
@@ -331,7 +333,7 @@ class InvoiceController extends Controller
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'       => $pendingQnty,
                             'status'               => $status,
-                            'order_status_id'      => 7,
+                            'order_status_id'      => $order_status,
                             'invoice_number'       => $invoiceNo,
                             'invoice_created_by'   => Auth::guard('erpuser')->id(),
                             'invoice_created_date' => $this->current_date
@@ -376,12 +378,13 @@ class InvoiceController extends Controller
 					}
 
 					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
+                    
 
-					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => "Order Dispatched"]);
+					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => $order_status_text]);
 					
-					 // update order status as "Order Cancelled" in order management history table
+					 // update order status as "Order dispatched" in order management history table
 					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
-						'order_status' => 7,
+						'order_status' => $order_status,
 					]);
 
                 }
