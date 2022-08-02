@@ -255,8 +255,7 @@ class BuyerManagementController extends Controller
                                 'is_active'        => 0,
                                 'logo'             => $destination_path_insert,
                                 'template_table'   => $buyer.'_template',
-                                'item_master_table' => $buyer.'_item_master',
-                                'material_master_table' => $buyer.'_material_masters'
+                                'item_master_table' => $buyer.'_item_master'
                               ]);
                   $item_master_creation = $this->createItemMaster($name);
                   $template_creation = $this->createTemplateTable($name);
