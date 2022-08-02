@@ -152,6 +152,7 @@ class JobManagerController extends Controller
 											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
 											->where(['erp_order_details.template_id' => $valuess,
 											         'erp_order_details.deleted_at' => null,
+													 'erp_order_details.company_id' => session()->get('company'),
 											         'erp_order_details.status' => $this->erp_jc_status_id,
 											         'erp_order_details.order_status_id' => $this->order_ap_status_id,
 											         'buyers.id' => $buyer_id])

@@ -45,10 +45,15 @@ class OrdersStatusTableSeeder extends Seeder
 				'status_desc' => 'Order quantity is 0.'
 		   ]);
 		   \App\OrdersStatus::create([
-			'id' =>7,
-			'status_name' => 'Order Dispatched',
-			'status_desc' => 'Order Dispatched'
-	   ]);
+				'id' =>7,
+				'status_name' => 'Order Dispatched',
+				'status_desc' => 'Order Dispatched'
+			]);
+			\App\OrdersStatus::create([
+				'id' =>8,
+				'status_name' => 'Partially Dispatched',
+				'status_desc' => 'Partially Dispatched'
+			]);
 		}
     }
 }
