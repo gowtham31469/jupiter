@@ -36,12 +36,12 @@ class ErpStatusTableSeeder extends Seeder
 			]);
 			\App\ErpStatus::create([
 				'id' =>5,
-				'status_name' => 'Invoice Generated',
+				'status_name' => 'Order Dispatched',
           			'status_desc' => 'Invoice Generated and successfully send to the customer'
 			]);
 			\App\ErpStatus::create([
 				'id' =>6,
-				'status_name' => 'Partial Invoice',
+				'status_name' => 'Partially Dispatched',
           			'status_desc' => 'Invoice generated Partially'
 			]);
 			\App\ErpStatus::create([

@@ -95,7 +95,6 @@ class InvoiceController extends Controller
             $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
                             ->whereIn('erp_order_details.status',[6,8])
-                            // ->whereIn('erp_orders.status',[6,8])
                             ->where('erp_order_details.company_id',session()->get('company'))
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
@@ -119,7 +118,6 @@ class InvoiceController extends Controller
     public function erpOrderList(Request $request)
     {
         try {
-            $customer_id = Auth::guard('erpuser')->id(); 
             $erp_id      = $request->erp_id;
             $orderlist   = ErpOrderDetails::whereIn('erp_order_id',$erp_id)
                             ->join('company','erp_order_details.company_id','company.id')
@@ -129,7 +127,6 @@ class InvoiceController extends Controller
                             ->leftjoin('freight_terms','freight_terms.id','customers.freight_type')
                             ->where('erp_order_details.pending_orders','!=' , 0)
                             ->where('erp_order_details.company_id',session()->get('company'))
-                            //->whereIn('erp_orders.status',[6,8])
                             ->whereIn('erp_order_details.status',[6,8])
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'))
 							->orderBy('erp_order_details.id', 'asc')
@@ -303,6 +300,8 @@ class InvoiceController extends Controller
                     $size = $value['size'] == ""?"null":$value['size'];
                     $hsn_code = $value['hsn_code']==""?0: $value['hsn_code'];
                     $status = $pendingQnty==0?5:6;
+                    $order_status = $pendingQnty==0?7:8;
+                    $order_status_text = $pendingQnty==0?"Order Dispatched":"Partially Dispatched";
                     if ($status==5) {
                         $par_count++;
                     }
@@ -334,7 +333,7 @@ class InvoiceController extends Controller
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'       => $pendingQnty,
                             'status'               => $status,
-                            'order_status_id'      => 7,
+                            'order_status_id'      => $order_status,
                             'invoice_number'       => $invoiceNo,
                             'invoice_created_by'   => Auth::guard('erpuser')->id(),
                             'invoice_created_date' => $this->current_date
@@ -379,12 +378,13 @@ class InvoiceController extends Controller
 					}
 
 					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
+                    
 
-					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => "Order Dispatched"]);
+					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => $order_status_text]);
 					
-					 // update order status as "Order Cancelled" in order management history table
+					 // update order status as "Order dispatched" in order management history table
 					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
-						'order_status' => 7,
+						'order_status' => $order_status,
 					]);
 
                 }
