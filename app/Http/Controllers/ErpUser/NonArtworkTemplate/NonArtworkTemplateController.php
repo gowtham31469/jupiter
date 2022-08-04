@@ -157,6 +157,15 @@ class NonArtworkTemplateController extends Controller
     public function saveNonArtworkOrders(Request $request)
     {   
         // dd($request->all());
+
+         // $collection = collect($request->ocn);
+         // $matrix = $collection->crossJoin($request->bpo,$request->style);
+         // dd($matrix->all());
+         // dd(array_unique($matrix->all(), SORT_REGULAR));
+         // dd(count($matrix->unique()),$matrix->unique());
+
+         
+
         // $rules = [
         //     'current_date' => 'required',
         //     'buyer' => 'required',
@@ -215,6 +224,7 @@ class NonArtworkTemplateController extends Controller
                 'bpo.*'=>'Please fill up bpo values on all the rows',
                 'style.*'=>'Please fill up style values on all the rows',
                 'item.*'=>'Please select item on all the rows',
+                'size.*'=>'Please select size on all the rows',
                 'approve_date.*'=>'Please select appr on all the rows',
                 'quantity.*'=>'Please fill up quantity values on all the rows',
                 'reference.*'=>'Please select reference item on all the rows',
@@ -226,19 +236,35 @@ class NonArtworkTemplateController extends Controller
 
         if ($validator->passes()) 
         {
+            
+            $matrix = [];
+            foreach($request->ocn as $key=>$value)
+            {
+            $arr = [];
+            array_push($arr,$value);
+            array_push($arr,$request->bpo[$key]);
+            array_push($arr,$request->style[$key]);
+            array_push($matrix,$arr);
+            }
+            if(count($request->ocn) != count(array_unique($matrix, SORT_REGULAR)))
+            {
+                return response()->json(['error'=>[0=>"Duplicate entries found,please update the values entered !!!"]]);
+            }
+
             if($request->action == "update")
             {  
 
                 $nat_orders = NonArtworkOrder::where('order_id',$request->order_id)->get();
+
                 $nat_ids = $nat_orders->pluck('id');
                 $erp_ids = [];
-
-                Erp::where('erp_id',$nat_orders[0]->order_id)->first()->delete();
+                
+                $erp_entry = Erp::where('erp_id',$nat_orders[0]->order_id)->pluck('id');
+                Erp::whereIn('id',$erp_entry)->delete();
                 foreach ($nat_orders as $key => $value) {
                     array_push($erp_ids,$value->order_id);
                     $value->delete();
                 }
-
                 DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$nat_ids)->delete();
             }
 
@@ -291,7 +317,7 @@ class NonArtworkTemplateController extends Controller
                                 [ 'buyer_id' => $request->buyer, 
                                   'order_id' => $erp_id,
                                   'order_flag' => "newOrder",
-                                  'order_status' => $request->approve_date[$key] == null ? 2 : 4,
+                                  'order_status' => $request->approve_date[$key] == null ? "Order Placed" : "Order Approved",
                                   'ocn_number' => $value,
                                   'supplier_id' => $request->customer,
                                   'purchase_order_no' => $request->po_number,
@@ -316,7 +342,7 @@ class NonArtworkTemplateController extends Controller
                                         ->first()
                                         ->template_name;
 
-                    $company_id = DB::table($master_table)->where('id',$request->item[$key])->first()->company_id; 
+                    $company_id = DB::table($master_table)->where('id',$request->reference[$key])->first()->company_id; 
 
                     $size = DB::table('non_artwork_size_chart')->where('id',$request->size[$key])->first()->size;
                     $uom = DB::table('non_artwork_uom')->where('id',$request->uom[$key])->first()->uom;
@@ -361,6 +387,7 @@ class NonArtworkTemplateController extends Controller
                         'template_type'         => "single",
                         'custom_ref_name'       => $custom_ref_name,
                         'buyer_po_number'       => $request->bpo[$key],
+                        'rate'                  => $request->rate[$key],
                         'zone'                  => null,
                         'order_type'            => "newOrder",
                         'created_at'            => Carbon::parse($request->current_date)
@@ -565,7 +592,7 @@ class NonArtworkTemplateController extends Controller
                                     </td>
                                     <td>
                                         <div class="form-group has-feedback label-ean-feedback">
-                                            <p>32123414</p>
+                                            <p>-</p>
                                         </div>
                                     </td>
                                     <td width="150">
