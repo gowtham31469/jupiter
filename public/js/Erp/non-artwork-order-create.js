@@ -11,7 +11,7 @@
 		});
 
 		$('.table-responsive').on('hide.bs.dropdown', function () {
-			$('body').css( "overflow-x", "auto" );
+			$('body').css( "overflow-x", "auto" );	
 		// $('.table-responsive').css( "overflow", "auto" );
 		})
 
@@ -19,9 +19,9 @@
 		dropupAuto: false
 		});
 
-		$('.datepicker').datepicker({
-			format: 'dd-mm-yyyy'
-		}); 
+		
+		$("#current_date").datepicker("setDate", new Date());
+	
 
 		$.ajaxSetup({
 			headers: {
@@ -369,7 +369,7 @@
 				{
 					if($(this).css('pointer-events') == 'auto' && $(this).val() == "")
 						{
-							$('.snackbar_span').html('Please make sure that approved dates are provided is Aw status is aproved !!!');
+							$('.snackbar_span').html('Please make sure that approved dates are provided if Aw status is aproved !!!');
 							showSnackbar();
 							can_submit = 0
 						}
