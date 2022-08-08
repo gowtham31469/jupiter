@@ -385,7 +385,7 @@ class PoManagerController extends Controller
 			$erp_user     = Auth::guard('erpuser')->id();
 
 			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
-			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated', 'Partial Invoice'])->pluck('id')->all();
+			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Order Dispatched', 'Partially Dispatched'])->pluck('id')->all();
 
 			$orderlist   = ErpOrderDetails::join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 					->where('erp_order_details.order_quantity', '!=' ,0)

@@ -116,6 +116,11 @@ function template_list() {
                                 "label": "Add Template",
                                 "icon": "fa fa-plus-square-o",
                                 "action": function (obj) {
+                                    
+                                    $('#addTemplateModal').on('hidden.bs.modal', function () {
+                                        $(this).find('form').trigger('reset');
+                                    });
+
                                     $('#addTemplateModal').modal('show');
                                 }
                             },
