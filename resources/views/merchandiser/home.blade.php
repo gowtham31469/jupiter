@@ -8,7 +8,7 @@
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="main-content">
-        <table class="table table-striped table-hover table-bordered" id="datatable-example-2">
+        <table class="table table-striped table-hover table-bordered" id="datatable-example-2" style="font-size:12px;">
             <thead>
                 <tr>
                     <th>UVC</th>
@@ -40,8 +40,8 @@
                     @else
                         <td>-</td>
                     @endif
-                    <td><span class="label label-Pending">{{  $order->Status }}</span></td>
-                    <td><a class="view-wcl" href="#"><span><i class="fa fa-eye fa-button" title="view"></i> View</span></a></td>
+                    <td><span class="label label-{{ str_replace(' ','',$order->Status)}}">{{  $order->Status }}</span></td>
+                    <td><a href="#" class="view-wcl" data-toggle="tooltip" title="View"><i class="fa fa-eye fa-button filterbtn options" aria-hidden="true"></i></a></td>
                 </tr>
                 @endforeach
 
@@ -68,13 +68,13 @@
                 {!! Form::hidden('wcl_id',$value = null, array('id'=>'wcl_id','class' => 'form-control input-sm')) !!}
                         <div class="form-group has-feedback">
                           {!! Form::label('comment', 'Comment', ['class' => 'form_label']) !!}
-                          {!! Form::textarea('comment',$value = '', array('class' => 'form-control ','placeholder' => 'Enter your comments here','required','style'=>'resize:none;','rows'=>10,'cols'=>50)) !!}
+                          {!! Form::textarea('comment',$value = '', array('class' => 'form-control ','placeholder' => 'Enter your comments here','required','style'=>'resize:none;','rows'=>5,'cols'=>50)) !!}
                           <div class="help-block with-errors"></div>
                         </div>
                         <div class="buttons pull-right" style="margin-top:10px;">
-			                {!! Form::submit('Approve', ['class' => 'btn btn-primary submitbutton','name' => 'approve'] ) !!}
-			                {!! Form::submit('Reject', ['class' => 'btn btn-warning submitbutton','name' => 'reject'] ) !!}
-			                {!! Form::button('Close', ['class' => 'btn btn-danger remove'] ) !!}
+			                {!! Form::button('Close', ['class' => 'btn btn-default input-sm remove'] ) !!}
+			                {!! Form::submit('Approve', ['class' => 'btn btn-primary input-sm submitbutton','name' => 'approve'] ) !!}
+			                {!! Form::submit('Reject', ['class' => 'btn btn-danger input-sm submitbutton','name' => 'reject'] ) !!}
 			            </div>
                {!! Form::close() !!}
                 </div>
@@ -91,10 +91,12 @@
 	    $("#datatable-example-2_filter input").attr('placeholder', 'Data Search');
 	    $('#datatable-example-2_length select').addClass('form-control input-sm');
 	    $('.selectpicker').selectpicker();
+		$('[data-toggle="tooltip"]').tooltip(); 
 	});
 
 	/** get edit buyer details **/
    $(document).on('click','.view-wcl',function(e){
+	$("[data-toggle='tooltip']").tooltip('hide');
    	$('.left-panel').show();
        var id = $(this).closest('tr').attr('id');
        e.preventDefault();

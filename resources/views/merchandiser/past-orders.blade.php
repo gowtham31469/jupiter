@@ -8,7 +8,7 @@
 </style>
 <div class="col-sm-12 col-md-12 main">
     <div class="main-content">
-        <table class="table table-striped table-hover table-bordered" id="past-orders-table">
+        <table style="font-size:12px" class="table table-striped table-hover table-bordered" id="past-orders-table">
             <thead>
                 <tr>
                     <th>UVC</th>

@@ -591,6 +591,11 @@ transform: scale(1);
 		var j = 0;
 		var error_msg = 0;
 
+		var id=[];
+		$('#order-details-table tbody tr').each(function () {
+			id.push($(this).attr('id'));
+		})
+
 		if ($('input[name=po-number-radio]:checked').val() == "not-ok") {
 			var po = true;
 			i++;
@@ -666,6 +671,7 @@ transform: scale(1);
 					reference: reference,
 					qty: qty,
 					price: price,
+					ids:id,
 					po_complete: po_complete,
 					comment: comment,
 					commenttext: commenttext,

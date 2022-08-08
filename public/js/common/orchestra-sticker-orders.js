@@ -10,7 +10,7 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po,user_typ
         var thead = '<thead><tr><th>UVC_TCO	</th><th>Barcode<br/><sub>(for parcel/carton & polybag)</sub></th><th>Size</th><th>Ratio</th></tr></thead>';
         $.each(data.orchestra_parcel_details, function (index, value) {
             tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="barcode">' + data.orchestra_parcel_details[0].ParcelBarCode + '</td><td class="size">' + value.Size + '</td><td class="qty">' + value.Sum + '</td><input type="hidden" class="size_break" value="'+value.Size_Breakdown+'"></tr>';
-			itemtotal += value.Sum ;
+			itemtotal += parseInt(value.Sum);
 
         });
 
@@ -248,18 +248,18 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po,user_typ
 
     if(user_type == "admin")
     {
-       var artwork_button = '<button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_print_button" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Proof</button><button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_proof_button" onclick=proofDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Print</button>';
+       var artwork_button = '<button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_print_button" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin","svg4","co","")>Generate Proof</button><button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_proof_button" onclick=proofDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Print</button>';
 
-       var carton_artwork_button = '<button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_print_button" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Proof</button><button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_proof_button" onclick=proofDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Print</button>';
+       var carton_artwork_button = '<button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_print_button" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin","svg3","co","")>Generate Proof</button><button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_proof_button" onclick=proofDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","admin")>Generate Print</button>';
     }
     else
     {
-        var artwork_button = '<button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_print_button" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","customer")>Download</button>';
+        var artwork_button = '<button type="button" class="btn btn-primary '+polybag_print_hidden+'" id="polybag_print_button" onclick=printDiv("svg4",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","customer","svg4","co","")>Download</button>';
 
-        var carton_artwork_button = '<button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_print_button" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","customer")>Download</button>';
+        var carton_artwork_button = '<button type="button" class="btn btn-primary '+carton_print_hidden+'" id="carton_print_button" onclick=printDiv("svg3",' + data.orchestra_parcel_details[0].IsSTD + ',"'+uvc+'","'+po+'","customer","svg3","co","")>Download</button>';
     }
     
-    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" '+edit_disable+' style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td colspan="3" class="text-right">Total</td><td>' + itemtotal + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" id="save_sticker_button" class="btn btn-xs btn-success '+save_hide_button+'"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button><button type="button" id="cancel_sticker_button" onclick=cancelStickerDiv(`'+user_type+'`) class="btn btn-xs hidden btn-danger '+cancel_hide_button+'"><i class="fa fa-floppy-o"></i>Cancel</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" onkeypress="return checkNumbersOnly(event)" value="' + $width + '" class="form-control input-sm" id="width" '+edit_disable+' placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false" '+edit_disable+' placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6" style="width: 130px;"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left:-135px;">/</span> <div class="col-md-6" style="width: 130px;"><input ' + disabled + ' data-toggle="modal" '+edit_disable+' value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" onkeypress="return checkNumbersOnly(event)" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div><div class="form-group"> <label>OCN Number</label><div class="row"><div class="col-md-6"><input type="text" '+edit_disable+' value="'+$ocn_number+'" id="ocn_number"  placeholder="OCN Number" class="form-control input-sm" placeholder=""></div></div></div>' + standard_div + ' </div></div>');
+    $('.top-content').append('<form id="solid_carton_form"><h3><i class="ion-ios-browsers-outline"></i> Sticker Order Details for UVC ' + uvc + ' and PO ' + po + '</h3><hr/><h5><div style="margin-bottom: 10px;"><label style="color:red" class="age_group_error hidden">Please Select Age Group</label></div><span class="sticker-details">Supplier: <strong><span id="supplier">' + data.orchestra_parcel_details[0].SupplierName + '</span></strong> </span> <span class="sticker-details">Style: <strong><span id="style">' + data.orchestra_parcel_details[0].NomApple + '</span></strong></span><span class="sticker-details">Color: <strong><span id="color">' + data.orchestra_parcel_details[0].colour_Code + '</span></strong></span><span class="sticker-details" style="display: inline-flex; white-space: nowrap;">Age Group: <strong><span id="ageGroup">  <select class="form-control" '+edit_disable+' style="margin-top: -9px; margin-left: 10px;" name="carlist" id="age" form="carform">' + option + '</select></span></strong> </span><span id="theme_reference" style="display:none">' + data.orchestra_parcel_details[0].Theme + '</span><span id="parcel_code" style="display:none">' + data.orchestra_parcel_details[0].ParcelCode + '</span></h5><hr/><div class="row"><div class="col-md-8 border-right"> <h4>' + head_qty + '</h4><div class="table-responsive"><table class="table table-condensed table-bordered table-hover" id="solidform">' + thead + '<tbody id="solidformtbody">' + tr + '</tbody><tfoot><tr class="strong"><td colspan="3" class="text-right">Total</td><td>' + itemtotal + '</td>' + ttotal + '</tr></tfoot></table><div class="bottom-bar"><div class="modal-footer"> <button onclick="'+onclick+'" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button> <button type="submit" id="save_sticker_button" class="btn btn-xs btn-success '+save_hide_button+'"><i class="fa fa-floppy-o"></i>Save</button><button type="button" class="btn btn-success  pull-right btn-xs" data-toggle="modal" id="'+po_file_upload_button+'" style="'+update_disabel_button+'" >Update PO</button><button type="button" id="cancel_sticker_button" onclick=cancelStickerDiv(`'+user_type+'`) class="btn btn-xs hidden btn-danger '+cancel_hide_button+'"><i class="fa fa-floppy-o"></i>Cancel</button></div></div></form></div></div><div class="col-md-4"><h4>' + head_qty1 + '</h4><div class="row"><div class="col-md-6"><div class="form-group"> <label>Length</label><div class="input-group"><input type="text" disabled value="600" class="form-control input-sm" placeholder="Length" id="length"  onkeypress="return event.charCode >= 48 && event.charCode <= 57"><span class="input-group-addon">mm</span></div></div></div><div class="col-md-6"><div class="form-group"><label>Width</label><div class="input-group"><input type="text" onkeypress="return checkNumbersOnly(event)" value="' + $width + '" class="form-control input-sm" id="width" '+edit_disable+' placeholder="Width" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> <span class="input-group-addon">mm</span></div> </div></div><div class="col-md-6"> <div class="form-group"><label>Height <sub>(Specify only if needed)</sub></label> <div class="input-group"> <input type="text" value="' + $height + '" class="form-control input-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false" '+edit_disable+' placeholder="Height" id="modal_height" onkeypress="return checkNumbersOnly(event)"> <span class="input-group-addon">mm</span></div></div> </div><div class="col-md-6"><h5 style="padding-top: 25px;">Parcel Volume : <strong><span id="parcelVolume">' + $parcelVolume + '</span></strong></h5></div></div><div class="form-group"> <label>Number of Cartons </label> <div class="row"><div class="col-md-6" style="width: 130px;"><input type="text" value="" disabled="disabled" class="form-control input-sm" placeholder=""></div><span style="font-size: 24px;margin-left:-135px;">/</span> <div class="col-md-6" style="width: 130px;"><input ' + disabled + ' data-toggle="modal" '+edit_disable+' value="' + $no_of_carton + '" id="needed_modal" data-backdrop="static" data-keyboard="false" onkeypress="return checkNumbersOnly(event)" type="text" value="" class="form-control input-sm" placeholder="Optional"></div>  </div> <sub>(Specify only if needed)</sub></div><div class="form-group"> <label>OCN Number</label><div class="row"><div class="col-md-6"><input type="text" '+edit_disable+' value="'+$ocn_number+'" id="ocn_number"  placeholder="OCN Number" class="form-control input-sm" placeholder=""></div></div></div>' + standard_div + ' </div></div>');
     $('#solid_carton_form');
 
     $('.main-content').html('<input type="hidden" value="' + data.std_carton_id + '" id="std_carton_id"><input type="hidden" value="' + data.std_poly_id + '" id="std_poly_id"><input type="hidden" value="' + data.carton_id + '" id="carton_id"><input type="hidden" value="' + data.poly_id + '" id="poly_id"><input type="hidden" value="' + data.carton_template_id + '" id="carton_template_id"><input type="hidden" value="' + data.polybag_template_id + '" id="polybag_template_id"><input type="hidden" value="' + uvc + '" id="uvc_id"><input type="hidden" value="' + data.orchestra_parcel_details[0].id + '" id="parcel_id"><input type="hidden" value="' + data.orchestra_parcel_details[0].Season_Code + '" id="season_code"><input type="hidden" value="' + data.orchestra_parcel_details[0].Color_Code + '" id="color_code"><input type="hidden" value="' + po + '" id="po"><hr/><h4>Carton and Polybag Stickers</h4><div class="row"> <div class="col-md-4"> <div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg" data-backdrop="static" data-keyboard="false"> <div class="card-title"> <p class="pull-right" style="cursor:pointer">Click to view</p> <h5>Carton Sticker</h5></div><div class="img_artwork"><object id="svg2" style="width:300px;height:200px; border:2px solid" class="center-block svg2" data="' + data.carton_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"> <div class="modal-content"><div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Carton Sticker</h4></div><div class="modal-body"><object id="svg3" style="width:575px;height:378;border: 2px #000 solid;" class="center-block" data="' + data.carton_template + '" type="image/svg+xml"></object></div><div id="svgdiv" style="display:none"><svg id="ean-13"></svg></div><div class="modal-footer">'+carton_artwork_button+'</div> </div> </div> </div><div class="col-md-4"><div class="card add-card" data-toggle="modal" data-target=".bs-example-modal-lg2" data-backdrop="static" data-keyboard="false"><div class="card-title"><p class="pull-right" style="cursor:pointer">Click to view</p><h5>Polybag Sticker</h5></div><div class="img_artwork"><object id="svg1" class="center-block" style="width:300px;height:200px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object></div></div> </div><div class="modal fade bs-example-modal-lg2 artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Polybag Sticker</h4></div><div class="modal-body"><object id="svg4" class="center-block" style="width:500px;height:330px;border:2px solid" data="' + data.polybag_template + '" type="image/svg+xml"></object> </div><div class="modal-footer">'+artwork_button+'</div></div></div></div> </div> </div> </div></div><div class="modal fade bs-example-modal-sm artworkCol" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"><div class="modal-dialog modal-sm" role="document"><div class="modal-content"><div class="modal-header alert-danger"><button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal_close"><span aria-hidden="true">&times;</span></button><p>Use this column only if needed</p></div></div>')
@@ -1001,7 +1001,6 @@ function orchestra_sticker_order_details(buyer, buyer_id, uvc, data, po,user_typ
         $('.final_solid_carton_qty').text(tot_qty_table_carton_final);
     });
 
-    console.log(user_type)
 
     if(user_type == "admin")
     {
@@ -2202,10 +2201,12 @@ function seasonCodeFilter(user_type,season_code_ls)
 	if(localStorage.getItem("buyer") == "orchestra") 
 	{
 			$('#financialYear').selectpicker('hide')
+			$('.season_code-nav-menu').css('display','block')
 	}
 	else
 	{
 			$('#financialYear').selectpicker('show')
+			$('.season_code-nav-menu').css('display','none')
 	}
 	$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	
@@ -2517,9 +2518,9 @@ function sticker_order_details(uvc, po, user_type) {
  * @return Pdf
  */
 
-function printDiv(data, isstd,uvc,po, user_type) {
+function printDiv(row_id, isstd,uvc,po, user_type,data,page_flag,table_id) {
 	if (data == "svg4" && isstd == "0") {
-		var a = document.getElementById(data);
+		var a = document.getElementById(row_id);
 		var svgDoc = a.contentDocument;
 		var name=uvc+"-SOL-PS";
 		var ajax_count = 0;
@@ -2571,12 +2572,12 @@ function printDiv(data, isstd,uvc,po, user_type) {
 		
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			Popupsmall(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type);
+			Popupsmall(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id);
 		}
 		
 		
 	} else if (data == "svg4" && isstd == "1") {
-		var a = document.getElementById(data);
+		var a = document.getElementById(row_id);
 		var svgDoc = a.contentDocument;
 		var svgRoot = svgDoc.documentElement;
 		if(user_type == "customer")
@@ -2584,9 +2585,9 @@ function printDiv(data, isstd,uvc,po, user_type) {
 			svgDoc.getElementById("watermark").innerHTML = "JGA";
 		}
 		var name=uvc+"-STD-PS";
-		PopupTable(svgRoot,name,uvc,po,svgDoc,user_type);
+		PopupTable(svgRoot,name,uvc,po,svgDoc,user_type,page_flag,table_id,"","","","");
 	} else if (data == "svg3" && isstd == "1") {
-		var a = document.getElementById(data);
+		var a = document.getElementById(row_id);
 		var svgDoc = a.contentDocument;
 		var svgRoot = svgDoc.documentElement;
 		if(user_type == "customer")
@@ -2594,9 +2595,9 @@ function printDiv(data, isstd,uvc,po, user_type) {
 			svgDoc.getElementById("watermark").innerHTML = "JGA";
 		}
 		var name=uvc+"-STD-CS";
-		Popup(svgRoot,name,uvc,po,svgDoc,user_type);
+		Popup(svgRoot,name,uvc,po,svgDoc,user_type,page_flag,table_id);
 	} else {
-		var a = document.getElementById(data);
+		var a = document.getElementById(row_id);
 		var svgDoc = a.contentDocument;
 		var name=uvc+"-SOL-CS";
 		var ajax_count = 0;
@@ -2645,10 +2646,281 @@ function printDiv(data, isstd,uvc,po, user_type) {
 		
 		if (ajax_count == document.getElementById("solidformtbody").rows.length) {
 			var svg_fin = svgarr.join(',_');
-			PopupArr(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type);
+			PopupArr(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id);
 		}
 	}
 
+}
+
+
+function printDivOs(row_id, isstd,uvc,po, user_type,data,page_flag,table_id,table_name,print_button) {
+	console.log(" user_type : " + user_type)
+	$.ajax({
+		url: base_url + "/"+user_type+"/orchestra/get-order-details",
+		type: "Post",
+		dataType: "json",
+		data: {
+			_token: csrf_token,
+			table_name: table_name,
+			table_id:table_id
+		},
+		beforeSend: function() {
+
+		},
+		success: function(data) {
+			var a = document.getElementById(row_id);
+			var svgDoc = a.contentDocument;
+
+			var ajax_count = 0;
+			var svgarr = [];
+			var index_arr = [];
+			if(table_name == "orchestra_solid_carton_sticker_orders")
+			{
+				var tu_size = data.orchestra_solid_carton_sticker_orders[0].size;
+				var name=uvc+"-SOL-CS";
+
+				// if(data.orchestra_solid_carton_sticker_orders[0].group_id != 6)
+				// {
+				// 	svgDoc.getElementById("round").style.fill = data.orchestra_solid_carton_sticker_orders[0].age_color;
+				// 	svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+				// 	svgDoc.getElementById("pmm").innerHTML = "";
+				// }
+				// else
+				// {
+				// 	svgDoc.getElementById("round").style.fill = "#FFFFFF"
+				// 	svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+				// 	svgDoc.getElementById("pmm").innerHTML = "PMM";
+				// }
+
+				var num = 600 *  data.orchestra_solid_carton_sticker_orders[0].width * data.orchestra_solid_carton_sticker_orders[0].height
+				var val = num / (1000 * 1000 * 1000)
+
+				svgDoc.getElementById("volume").innerHTML = val.toFixed(3);
+				svgDoc.getElementById("po").innerHTML = data.orchestra_solid_carton_sticker_orders[0].po;
+				svgDoc.getElementById("height").innerHTML = data.orchestra_solid_carton_sticker_orders[0].height;
+				svgDoc.getElementById("color").innerHTML = data.orchestra_solid_carton_sticker_orders[0].french_color;
+				svgDoc.getElementById("theme").innerHTML = data.orchestra_solid_carton_sticker_orders[0].theme_reference;
+
+				$(data.orchestra_solid_carton_sticker_orders).each(function(index,value){
+					var svgRoot = svgDoc.documentElement;
+					if(user_type == "customer")
+					{
+						svgDoc.getElementById("watermark").innerHTML = "JGA";
+					}
+					var size = value.size;
+					var barcode = value.barcode;
+					var SKU_Code = value.uvc_tco;
+					if(size == "NAISSANCE")
+					{
+						svgDoc.getElementById("size").style.fontSize = "8px";
+					}
+					else if(size == "PREMATURE")
+					{
+						svgDoc.getElementById("size").style.fontSize = "7px";
+					}
+					svgDoc.getElementById("size").innerHTML = size;
+					svgDoc.getElementById("parcelcode").innerHTML = SKU_Code;
+					jsbarcodesolidcartonA(barcode, 'barcode1', svgDoc)
+					jsbarcodesolidcartonB(barcode, 'barcode2', svgDoc)
+					if(size == "TAILLE UNIQUE")
+					{
+						svgDoc.getElementById("size").innerHTML = '<tspan xmlns="http://www.w3.org/2000/svg" dx="-12" dy="-5" text-anchor="start">TAILLE </tspan><tspan xmlns="http://www.w3.org/2000/svg" dx="-14" dy="9" text-anchor="middle">UNIQUE</tspan>';
+					}
+
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+					ajax_count++
+				})
+
+				if (ajax_count == data.orchestra_solid_carton_sticker_orders.length) {
+					var svg_fin = svgarr.join(',_');
+
+					if(print_button == "print")
+					{
+						PopupArr(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id);
+					}
+					else
+					{
+						ProofPopupArr(svg_fin, name,svgDoc,tu_size,user_type,page_flag,table_id);
+					}
+					
+				}
+			}
+			else if(table_name == "orchestra_solid_poly_bag_sticker_orders")
+			{
+				var tu_size = data.orchestra_solid_poly_bag_sticker_orders[0].size;
+				var name=uvc+"-SOL-PS";
+
+				$(data.orchestra_solid_poly_bag_sticker_orders).each(function(index,value){
+
+					var svgRoot = svgDoc.documentElement;
+					if(user_type == "customer")
+					{
+						svgDoc.getElementById("watermark").innerHTML = "JGA";
+					}
+					var size = value.size;
+					var barcode = value.barcode;
+					var SKU_Code = value.uvc_tco;
+					svgDoc.getElementById("size").innerHTML = size;
+					svgDoc.getElementById("color").innerHTML = data.orchestra_solid_poly_bag_sticker_orders[0].french_color;
+
+				    if(data.orchestra_solid_poly_bag_sticker_orders[0].group_id != 6)
+					{
+						var age_color = data.orchestra_solid_poly_bag_sticker_orders[0].age_color;
+						svgDoc.getElementById("round").style.fill = data.orchestra_solid_poly_bag_sticker_orders[0].age_color;
+						svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+						svgDoc.getElementById("pmm").innerHTML = "";
+					}
+					else
+					{
+						var age_color = "#FFFFFF";
+						svgDoc.getElementById("round").style.fill = "#FFFFFF"
+						svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+						svgDoc.getElementById("pmm").innerHTML = "PMM";
+					}
+
+					if(size == "NAISSANCE")
+					{
+						svgDoc.getElementById("size").style.fontSize = "16px";
+					}
+					else if(size == "PREMATURE")
+					{
+						svgDoc.getElementById("size").style.fontSize = "15.5px";
+					}
+					svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
+					jsbarcodesolidpoly(barcode, 'barcode', svgDoc)
+					if(size == "TAILLE UNIQUE")
+					{
+						svgDoc.getElementById("size").style.fontSize = "14px"
+						svgDoc.getElementById("size").setAttribute('transform','matrix(1 0 0 1 172.625 28.7874)');
+						svgDoc.getElementById("color").setAttribute('transform','matrix(1 0 0 1 173.625 45.3324)');
+					}
+					var s = new XMLSerializer();
+					var d = svgRoot;
+					var str = s.serializeToString(d);
+					var svg = encodeURI(str)
+					svgarr.push(svg)
+					ajax_count++
+				})
+				if (ajax_count == data.orchestra_solid_poly_bag_sticker_orders.length) {
+					var svg_fin = svgarr.join(',_');
+					if(print_button == "print")
+					{
+						Popupsmall(svg_fin, name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id);
+					}
+					else
+					{
+						ProofPopupsmall(svg_fin, name,svgDoc,age_colour,tu_size,user_type,page_flag,table_id);
+					}
+					
+				}
+			}
+			else if(table_name == "orchestra_standard_carton_sticker_orders")
+			{
+				var tu_size = data.orchestra_standard_carton_sticker_orders[0].size;
+				var a = document.getElementById(row_id);
+				var svgDoc = a.contentDocument;
+				var svgRoot = svgDoc.documentElement;
+
+				var num = 600 *  data.orchestra_standard_carton_sticker_orders[0].width * data.orchestra_standard_carton_sticker_orders[0].height
+				var val = num / (1000 * 1000 * 1000)
+
+				var barcode = data.orchestra_standard_carton_sticker_orders[0].barcode;
+				var SKU_Code = data.orchestra_standard_carton_sticker_orders[0].uvc_tco;
+				svgDoc.getElementById("volume").innerHTML = val.toFixed(3);
+				svgDoc.getElementById("po").innerHTML = data.orchestra_standard_carton_sticker_orders[0].po;
+				svgDoc.getElementById("height").innerHTML = data.orchestra_standard_carton_sticker_orders[0].height;
+				svgDoc.getElementById("color").innerHTML = data.orchestra_standard_carton_sticker_orders[0].french_color;
+				svgDoc.getElementById("theme").innerHTML = data.orchestra_standard_carton_sticker_orders[0].theme_reference;
+				svgDoc.getElementById("total_polybags_per_carton").innerHTML = data.orchestra_standard_carton_sticker_orders[0].total_polybag;
+				svgDoc.getElementById("no_of_cartons").innerHTML = data.orchestra_standard_carton_sticker_orders[0].no_of_carton;
+				svgDoc.getElementById("parcelcode").innerHTML = SKU_Code;
+
+				jsbarcodestdcartonA(barcode, 'barcode1', svgDoc)
+				jsbarcodestdcartonB(barcode, 'barcode2', svgDoc)
+		
+				if(user_type == "customer")
+				{
+					svgDoc.getElementById("watermark").innerHTML = "JGA";
+				}
+				var name=uvc+"-STD-CS";
+
+				if(print_button == "print")
+				{
+					Popup(svgRoot,name,uvc,po,svgDoc,user_type,page_flag,table_id);
+				}
+				else
+				{		
+					ProofPopup(svgRoot,name,svgDoc,user_type,page_flag,table_id);
+				}
+				
+			}
+			else if(table_name == "orchestra_standard_poly_bag_sticker_orders")
+			{
+				var tu_size = data.orchestra_standard_poly_bag_sticker_orders[0].size;
+				var a = document.getElementById(row_id);
+				var svgDoc = a.contentDocument;
+				var svgRoot = svgDoc.documentElement;
+
+				var size = [];
+				var qty = [];
+				var size_break = [];
+
+				$(data.orchestra_standard_poly_bag_sticker_orders[0].size_chart).each(function(index,value){
+					size.push(value.Size_Label);
+					qty.push(value.Quantity);
+					size_break.push(value.Size_Breakdown);
+				})
+
+
+				if(data.orchestra_standard_poly_bag_sticker_orders[0].group_id != 6)
+				{
+					var age_colour = data.orchestra_standard_poly_bag_sticker_orders[0].age_color;
+					svgDoc.getElementById("round").style.fill = data.orchestra_standard_poly_bag_sticker_orders[0].age_color;
+					svgDoc.getElementById("pmm").setAttribute('visibility','hidden');
+					svgDoc.getElementById("pmm").innerHTML = "";
+				}
+				else
+				{
+					var age_colour = "#FFFFFF";
+					svgDoc.getElementById("round").style.fill = "#FFFFFF"
+					svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
+					svgDoc.getElementById("pmm").innerHTML = "PMM";
+				}
+
+				var barcode = data.orchestra_standard_poly_bag_sticker_orders[0].barcode;
+				var SKU_Code = data.orchestra_standard_poly_bag_sticker_orders[0].uvc_tco;
+				svgDoc.getElementById("theme").innerHTML = data.orchestra_standard_poly_bag_sticker_orders[0].theme_reference;
+				svgDoc.getElementById("parcel_code").innerHTML = SKU_Code;
+				svgDoc.getElementById("cartontable").innerHTML = "";
+				jsbarcodestdpoly(barcode, 'barcode', svgDoc)
+
+				if(user_type == "customer")
+				{
+					svgDoc.getElementById("watermark").innerHTML = "JGA";
+				}
+				var name=uvc+"-STD-PS";
+				if(print_button == "print")
+				{
+					PopupTable(svgRoot,name,uvc,po,svgDoc,user_type,page_flag,table_id,size,qty,size_break,data.orchestra_standard_poly_bag_sticker_orders[0].color_code);
+				}
+				else
+				{
+					ProofPopupTable(svgRoot,name,svgDoc,age_colour,user_type,page_flag,table_id,size,qty,size_break,data.orchestra_standard_poly_bag_sticker_orders[0].color_code,uvc,po);
+				}
+			}
+			
+		},
+		error: function(data) {
+
+		},
+		complete: function() {
+
+		}
+		})
 }
 /**
  * This Function is used Print Stickers.
@@ -2718,7 +2990,7 @@ function proofDiv(data, isstd,uvc,buyer_po, user_type) {
 		svgDoc.getElementById("round").style.fill = "#FFFFFF"
 		var name=uvc+"-STD-PS-"+buyer_po;
 		var age_colour = $('#age option:selected').data('color');
-		ProofPopupTable(svgRoot,name,svgDoc,age_colour,user_type);
+		ProofPopupTable(svgRoot,name,svgDoc,age_colour,user_type,page_flag,table_id,"","","","","","");
 	} else if (data == "svg3" && isstd == "1") {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;
@@ -2861,8 +3133,15 @@ function cancelStickerDiv(user_type){
  * @return Pdf
  */
 
-function Popup(data,name,uvc,po,svgDoc,user_type) {
-	var id = $('#std_carton_id').val()
+function Popup(data,name,uvc,po,svgDoc,user_type,page_flag,table_id) {
+	if(page_flag == "co")
+	{
+		var id = $('#std_carton_id').val()
+	}
+	else
+	{
+		var id = table_id
+	}
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);
@@ -2903,8 +3182,16 @@ function Popup(data,name,uvc,po,svgDoc,user_type) {
  * @return Pdf
  */
 
-function PopupArr(data,name,svgDoc,uvc,po,svgDoc,tu_size,user_type) {
-	var id = $('#carton_id').val()
+function PopupArr(data,name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id) {
+	if(page_flag == "co")
+	{
+		var id = $('#carton_id').val()
+	}
+	else
+	{
+		var id = table_id
+	}
+	
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
@@ -2949,27 +3236,41 @@ function PopupArr(data,name,svgDoc,uvc,po,svgDoc,tu_size,user_type) {
  * @return Pdf
  */
 
-function PopupTable(data,name,uvc,po,svgDoc,user_type) {
-	var id = $('#std_poly_id').val()
+function PopupTable(data,name,uvc,po,svgDoc,user_type,page_flag,table_id,size,qty,size_break,color) {
+
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
 	var success = false;
 	var url = "";
-	var size = [];
-	var qty = [];
-	var size_break = [];
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 
-	$('#solidform tbody tr').each(function () {
-		size.push($(this).find('.size').text());
-		qty.push($(this).find('.qty').text());
-		size_break.push($(this).find('.size_break').val());
-	})
-	var sizefin = size.join(',')
-	var qtyfin = qty.join(',')
-	var size_breakfin = size_break.join(',')
+	if(page_flag == "co")
+	{
+
+		var size = [];
+		var qty = [];
+		var size_break = [];
+		var id = $('#std_poly_id').val()
+		$('#solidform tbody tr').each(function () {
+			size.push($(this).find('.size').text());
+			qty.push($(this).find('.qty').text());
+			size_break.push($(this).find('.size_break').val());
+		})
+		var sizefin = size.join(',')
+		var qtyfin = qty.join(',')
+		var size_breakfin = size_break.join(',')
+		var color_code = $('#color_code').val()
+	}
+	else
+	{
+		var id = table_id
+		var sizefin = size.join(',')
+		var qtyfin = qty.join(',')
+		var size_breakfin = size_break.join(',')
+		var color_code = color
+	}
 	
 	$.ajax({
 		url: base_url + "/"+user_type+"/order-management/print-pdf-table",
@@ -2981,7 +3282,7 @@ function PopupTable(data,name,uvc,po,svgDoc,user_type) {
 			qty: qtyfin,
 			size_break: size_breakfin,
 			name:name,
-			color:$('#color_code').val(),
+			color:color_code,
 			id : id,
 			style_no:uvc,
 			buyer_no:po
@@ -3006,12 +3307,21 @@ function PopupTable(data,name,uvc,po,svgDoc,user_type) {
  * @return Pdf
  */
 
-function Popupsmall(data,name,svgDoc,uvc,po,svgDoc,tu_size,user_type) {
+function Popupsmall(data,name,svgDoc,uvc,po,svgDoc,tu_size,user_type,page_flag,table_id) {
 //	var s = new XMLSerializer();
 //	var d = data;
 //	var str = s.serializeToString(d);
 //	var svg = encodeURI(str)
-	var id = $('#poly_id').val()
+
+	if(page_flag == "co")
+	{
+		var id = $('#poly_id').val()
+	}
+	else
+	{
+		var id = table_id
+	}
+
 	var success = false;
 //	var url = "";
 	
@@ -3134,26 +3444,40 @@ function ProofPopupArr(data,name,svgDoc,tu_size,user_type) {
  * @return Pdf
  */
 
-function ProofPopupTable(data,name,svgDoc,age_colour,user_type) {
+function ProofPopupTable(data,name,svgDoc,age_colour,user_type,page_flag,table_id,size,qty,size_break,color,uvc,po) {
 	var s = new XMLSerializer();
 	var d = data;
 	var str = s.serializeToString(d);
 	var svg = encodeURI(str)
 	var success = false;
 	var url = "";
-	var size = [];
-	var qty = [];
-	var size_break = [];
 	// window.open(base_url + "/admin/order-management/print-pdf?svg="+svg);
 
-	$('#solidform tbody tr').each(function () {
-		size.push($(this).find('.size').text());
-		qty.push($(this).find('.qty').text());
-		size_break.push($(this).find('.size_break').val());
-	})
-	var sizefin = size.join(',')
-	var qtyfin = qty.join(',')
-	var size_breakfin = size_break.join(',')
+	if(page_flag == "co")
+	{
+
+		var size = [];
+		var qty = [];
+		var size_break = [];
+		var id = $('#std_poly_id').val()
+		$('#solidform tbody tr').each(function () {
+			size.push($(this).find('.size').text());
+			qty.push($(this).find('.qty').text());
+			size_break.push($(this).find('.size_break').val());
+		})
+		var sizefin = size.join(',')
+		var qtyfin = qty.join(',')
+		var size_breakfin = size_break.join(',')
+		var color_code = $('#color_code').val()
+	}
+	else
+	{
+		var id = table_id
+		var sizefin = size.join(',')
+		var qtyfin = qty.join(',')
+		var size_breakfin = size_break.join(',')
+		var color_code = color
+	}
 	
 	$.ajax({
 		url: base_url + "/"+user_type+"/order-management/proof-pdf-table",
@@ -3165,7 +3489,10 @@ function ProofPopupTable(data,name,svgDoc,age_colour,user_type) {
 			qty: qtyfin,
 			size_break: size_breakfin,
 			name:name,
-			color:$('#color_code').val()
+			color:color_code,
+			id : id,
+			style_no:uvc,
+			buyer_no:po
 		},
 		async: false,
 		success: function (data) {
@@ -3603,6 +3930,8 @@ function setSolidStickers(user_type) {
 				polybag_template_id: $('#polybag_template_id').val(),
 				ocn_number: $('#ocn_number').val(),
 				height: $('#modal_height').val(),
+				theme_reference: $('#theme_reference').text(),
+				parcel_code: $('#parcel_code').text(),
 				width: $('#width').val(),
 				size: size_fin,
 				barcode: barcode_fin,
@@ -3695,6 +4024,8 @@ function setSolidStickers(user_type) {
 				polybag_template_id: $('#polybag_template_id').val(),
 				ocn_number: $('#ocn_number').val(),
 				height: $('#modal_height').val(),
+				theme_reference: $('#theme_reference').text(),
+				parcel_code: $('#parcel_code').text(),
 				width: $('#width').val(),
 				age: $('#age').val(),
 				parcel_id: $('#parcel_id').val(),
@@ -3739,7 +4070,6 @@ function setSolidStickers(user_type) {
 }
 
 editOrcStickerOrder = (options) => {
-	//console.log(options)
 	$("#"+options+" :input").prop("disabled", false);
 	$(".dropdown-toggle").css("background-color", "#fff");
 	$('.selectpicker').prop('disabled', false);

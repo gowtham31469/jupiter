@@ -372,6 +372,10 @@ background: rgba(0,0,0,0.2);
     .care_label_reorder.active {
     margin-right: 0%;
 }
+.season_code-nav-menu button{
+        background-color:#263238 !important;
+        color:#ffff !important;
+    }
 
 </style>
 <input type="hidden" id="status_flag">

@@ -119,13 +119,55 @@ class TemplateManagementCntrl extends Controller
     {
          $template_id = $request['template_id'];
          $customer_id = $request['customer_id'];
-         $data['treeviewData']= DB::table("orchestra_template")
+         $treeviewData = DB::table("orchestra_template")
                                 ->select('orchestra_template.*','orchestra_item_master.ref_no','orchestra_item_master.company_id','company.name as company_name')
                                 ->join('orchestra_item_master','orchestra_item_master.id','=','orchestra_template.item_id')
                                 ->join('company','company.id','=','orchestra_item_master.company_id')
                                 ->where('item_id',$template_id)->orderBy('orchestra_template.id','asc')
                                 ->get();
-		
+
+        $data['treeviewData'] = [];
+
+        if(count($treeviewData) > 0)
+        {
+            $template_file = explode(',',$treeviewData{0}->template_file);
+
+            if($treeviewData{0}->template_file != null)
+            {
+                foreach($template_file as $value)
+                {
+                    array_push($data['treeviewData'], (object)[
+                        'id' => $treeviewData{0}->id,
+                        'item_id' => $treeviewData{0}->item_id,
+                        'template_name' => $treeviewData{0}->template_name,
+                        'template_description' => $treeviewData{0}->template_description,
+                        'template_file' => $value,
+                        'disney' => $treeviewData{0}->disney,
+                        'tax' => $treeviewData{0}->tax,
+                        'position' => $treeviewData{0}->position,
+                        'created_at' => $treeviewData{0}->created_at,
+                        'updated_at' => $treeviewData{0}->updated_at,
+                        'sap_ref' => $treeviewData{0}->sap_ref,
+                        'gl_code' => $treeviewData{0}->gl_code,
+                        'hsn_code' => $treeviewData{0}->hsn_code,
+                        'color' => $treeviewData{0}->color,
+                        'dimension_height' => $treeviewData{0}->dimension_height,
+                        'dimension_width' => $treeviewData{0}->dimension_width,
+                        'gl_text' => $treeviewData{0}->gl_text,
+                        'material_id' => $treeviewData{0}->material_id,
+                        'flag' => $treeviewData{0}->flag,
+                        'hierarchy_id' => $treeviewData{0}->hierarchy_id,
+                        'name_in_reports' => $treeviewData{0}->name_in_reports,
+                        'ref_no' => $treeviewData{0}->ref_no,
+                        'company_id' => $treeviewData{0}->company_id,
+                        'company_name' => $treeviewData{0}->company_name,
+                    ]);
+                }
+            }
+        }
+
+        
+        
 		$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id)->where('buyer_id',1)->where('template_id',$template_id)->get();
 
 		if(count($carton_moq) > 0)
