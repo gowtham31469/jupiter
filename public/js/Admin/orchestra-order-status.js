@@ -12,14 +12,18 @@ function orchestraStatusTable(data, path) {
     var tr = "";
     var columnsIn = data[0];
     for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code") {
+        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code"  && key != "created_at" && key != "template_file") {
             if (key == "TemplateName") {
                 th += "<th style='text-align: center;'>Template Name</th>";
-            }else if (key == "BuyerPONo") {
+            } else if (key == "BuyerPONo") {
                 th += "<th style='text-align: center;'>BuyerPO No</th>";
-            }else if (key == "ArtworkType") {
+            } else if (key == "ArtworkType") {
                 th += "<th style='display:none'>Artwork Type</th>";
-            }else if (key == "SupplierName") {
+            } else if (key == "Artwork Status") {
+                //New changes start
+                th += "<th>Order Status</th><th>Artwork</th><th>Artwork Status</th>";
+                //New changes end
+            } else if (key == "SupplierName") {
                 th += "<th style='text-align: center;'>Supplier Name</th>";
             } else if (key == "OrderDate") {
                 th += "<th style='text-align: center;'>Order Date</th>";
@@ -39,8 +43,10 @@ function orchestraStatusTable(data, path) {
 
                 if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
                     var po_file = value['po_file'];
-                    let customer_po_number = value[key] === null ? '' : value[key];
-                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    let customer_po_number = value[key] === null ? ' - ' : value[key];
+                    //New changes start
+                    tr += '<td class="text-center">'+customer_po_number+'</td>';
+                    //New changes end
                 } else if (key == "OrderDate") {
                     if (value['is_order_count_empty'] == 0) {
                         var orderDate = value[key];
@@ -51,47 +57,128 @@ function orchestraStatusTable(data, path) {
 
 
                 } else if (key == "PI Status") {
+                    //New changes start
                     var str = value[key];
-                    if (str != null && str != "" && value['is_order_count_empty'] == 0) {
-                        if (str == "PI Approved") {
+
+                    if (value['pi_required'] == 1 && value['is_order_count_empty'] == 0) {
+                        if (str === 'PI Approved') {
                             action_status = true;
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
                         }
-                        $status = str.replace(/ /g, "");
-                        $status_text = '<span class="pi_class label label-' + $status + '">' + value[key] + '</span>';
+                        else if (str === 'PI Rejected') {
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
+                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
+                        } else {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                                status_text = '<span class="pi_class label label-PIApprovalPending"> PI Approval Pending </span>';
+                                tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
+                            } else {
+                                tr += '<td align="center"><span class="pi_class label label-default"> PI Pending </span></td>';
+                            }
+                        }
                     } else {
-                        $status_text = " - ";
+                        tr += '<td align="center"> - </td>';
                     }
-
-
-                    tr += '<td align="center">' + $status_text + '</td>';
-
+                    //New changes end
                 } else if (key == "Artwork Status") {
                     if (value['is_order_count_empty'] == 0) {
-                        var str = value[key];
-                        $status = str.replace(/ /g, "");
-
-                        tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                        if(value[key] == "Buyer Approval Pending")
+                        {
+                            var str = value[key];
+                            $status = str.replace(/ /g, "");
+    
+                            tr += '<td align="center"><span class="label label-OrderPlaced">Order Placed</span></td>';
+                        }
+                        else
+                        {
+                            var str = value[key];
+                            $status = str.replace(/ /g, "");
+    
+                            tr += '<td align="center"><span class="label label-' + $status + '">' + value[key] + '</span></td>';
+                        }
+                        
                     } else {
                         tr += '<td align="center"><span class="label label-CreateOrder">Create Order</span></td>';
                     }
 
-                } else if (key == "PO Status") {
-                    var str = value[key];
-                    var status_text = " - "
-                    if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
-                        if (str != null && str != "") {
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + value[key] + '</span>';
-                        } else {
-                            str = "PO Pending"
-                            status = str.replace(/ /g, "");
-                            status_text = '<span class="po_class label label-' + status + '">' + str + '</span>';
-                        }
-                    } else {
-                        status_text = " - ";
+                    var temp_file = value.template_file.split(',');
+                    
+                    if(value.ArtworkType == "Solid Carton Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg3","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg3","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Solid Poly Bag Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",0,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Standard Carton Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg3","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg3","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Standard Poly Bag Stickers")
+                    {
+                        var print_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","print")'
+
+                        var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
                     }
 
-                    tr += '<td align="center class="po_status">' + status_text + '</td>';
+                    //New changes start
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    {
+                        tr += '<td> - </td>'
+                    }
+                    else
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    }
+                    
+
+                    if (value['Artwork Status'] == "Order Approved") {
+                        var str = value[key];
+                        $status = str.replace(/ /g, "");
+
+                        tr += '<td align="center"><span class="label label-OrderApproved">Artwork Approved</span></td>';
+                    } else if (value['Artwork Status'] == "Order Placed"){
+                        tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
+                    } else if (value['Artwork Status'] == "Buyer Approval Pending"){
+                        tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
+                    }else {
+                        tr += '<td align="center"> - </td>';
+                    }
+
+                    //New changes end
+
+                } else if (key == "PO Status") {
+                    var str = value[key];
+                    var po_file = value['po_file'];
+                    var status_text = " - "
+                    if (value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
+                        if (value['PO Status'] === 'PO Uploaded') {
+                            status = str.replace(/ /g, "");
+                            status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
+                            tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUploaded(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","'+value['PO Number']+'","admin") > '+status_text+' </a></td>';
+                        } else {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                                status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
+                                tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","admin") > '+status_text+' </a></td>';
+                            } else {
+                                tr += '<td align="center class="po_status"><span class="po_class label label-default"> PO Pending </span></td>';
+                            }
+                        }
+                    } else {
+                        tr += '<td align="center class="po_status"> - </td>';
+                    }
+
+                    //tr += '<td align="center class="po_status">' + status_text + '</td>';
 
                 } else if (key == "UVC") {
                     var order_flag = value.order_flag;
@@ -103,7 +190,7 @@ function orchestraStatusTable(data, path) {
                         span_style = '<span title="Repeat Order" class="batch-reorder">R</span>'
                     }
                     tr += '<td align="center" data-id="' + value.tableID + '" data-artwork="' + value.ArtworkType + '" data-season="' + value.Season + '" data-uvc="' + value.UVC + '" data-table="' + value.tableName + '" data-buyer="' + value.BuyerPONo + '" data-color_code="' + value.color_code + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="updateArtworkOrc(this)">' + span_style + '' + value.UVC + '</a></td>';
-                }else if (key == "TemplateName") {
+                } else if (key == "TemplateName") {
 					if(value["color_code"] != "" && value["color_code"] != null)
 					{
 						tr += '<td align="center"> '+ value.color_code +' '+value.TemplateName+' </td>';
@@ -112,43 +199,39 @@ function orchestraStatusTable(data, path) {
 					{
 						tr += '<td align="center"> '+value.TemplateName+' </td>';
 					}
+                } else if (key == "Print Proof") {
+
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    {
+                        tr += '<td> - </td>'
+                    }
+                    else
+                    {
+                        //New changes start
+                        tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                        //New changes end
+                    }
                 } else if (key == "Actions") {
+                    //New changes start
                     var po_file = value['po_file'];
-                    if (po_file != null) {
-                        style_po = "style='border-color:#FFFFFF'"
-                    } else {
-                        style_po = "style='border-color:#FF0000'"
-                    }
-                    var pi_required = value['pi_required'];
-                    var po_required = value['po_required'];
-                    if (value["Artwork Status"] != "Order Cancelled" && value['is_order_count_empty'] == 0) {
-                        if (pi_required == 1 && po_required == 1) {
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a><a href="javascript:void(0)" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") class="po-style" ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (po_required == 1 && pi_required == 0) {
-
-                            tr += '<td align="center"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '") ><i class="fa fa-file-powerpoint-o fa-button po-view filterbtn options" data-placement="top" title="Purchase Order" ' + style_po + '></i></a></td>';
-                        } else if (pi_required == 1 && po_required == 0) {
-
-                            tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")><i class="fa fa-file-pdf-o fa-button pi-view filterbtn options" data-placement="top" title="Proforma Invoice"></i></a></td>';
-                        }
-                    } else {
-                        tr += '<td align="center"> - </td>';
-                    }
+                    let customer_po_number = value['PO Number'] === null ? '' : value['PO Number'];
+                    tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
+                    //New changes end
                 } else if (key == "ArtworkType") {
 					tr += '<td style="display:none">' + value[key] + '</td>';
                 } else if (key == "DeliveryDate") {
 
                     if (value['is_order_count_empty'] == 0) {
                         if (value[key] == null) {
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
+                            tr += '<td><span style=display:none;>' + value.created_at + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
                         } else {
 
-                            tr += '<td><span style=display:none;>' + value.OrderDate + '</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '") readonly></td>';
+                            tr += '<td><span style=display:none;>' + value.created_at + '</span><input value="' + value[key] + '"class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px;" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '") readonly></td>';
                         }
                     } else {
-                        tr += '<td><span style=display:none;>' + value.OrderDate + '</span> - </td>';
+                        tr += '<td><span style=display:none;>' + value.created_at + '</span> - </td>';
                     }
-                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code") {
+                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code" && key != "created_at" && key != "template_file") {
                     if (value[key] == "" || value[key] == null) {
                         tr += '<td> - </td>';
                     } else {
@@ -232,65 +315,6 @@ const orchestraSetPO = (obj, id, tableName, po_file) => {
         showSnackbar();
 		setTimeout(function(){ $(obj).removeAttr('disabled') }, 3000);
     }
-}
-/**
- * [orchestraPOUpload for customer po file upload]
- * @param  {[type]} obj [description]
- * @param  {[type]} id  [description]
- * @return {[type]}     [description]
- */
-const orchestraPOUpload = (obj, id, po_file, tableName) => {
-    
-    $.ajax({
-        url: base_url + "/admin/orchestra/get-erp-status",
-        type: 'get',
-        data: {
-            table_name: tableName,
-            id: id,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-            // erp_details array null , if order is not moved to erp tables
-            // only editable, if order status is "Hold For JC Queue" OR "Moved To ERP"
-            if (data.erp_details[0] != null) {
-                if (data.erp_details[0].status_name !== 'Hold For JC Queue' && data.erp_details[0].status_name !== 'Moved To ERP') {
-                    $('.update-po-file').hide();
-
-                    $('#error_msg_span').html('ERP Order Status : <strong>' + data.erp_details[0].status_name + '</strong>. You are not permitted to upload any more po files for this order.')
-                } else {
-                    $('.update-po-file').show();
-                    $('#error_msg_span').html('');
-                }
-            } else {
-                $('.update-po-file').show();
-                $('#error_msg_span').html('');
-            }
-        },
-        error: function (data) {
-
-        },
-        complete: function () {
-            $(".loader").hide();
-            if (po_file === "null") {
-                $('#po_upload').removeClass('hidden')
-                $('.upload-po').removeClass('hidden')
-                $('#po_file').addClass('hidden')
-            } else {
-                $('#po_upload').addClass('hidden')
-                $('.upload-po').addClass('hidden')
-                $('#po_file').removeClass('hidden')
-            }
-            var po_link = base_url + po_file
-            $('#po_link').attr("href", po_link);
-            $('#rowID').val(id);
-            $('#tableName').val(tableName);
-            $('#buyer_id').val(localStorage.getItem("buyer_id"));
-            $('#po-file-upload').modal('show')
-        }
-    })
 }
 
 $(".update-po-file").click(function () {
@@ -391,6 +415,8 @@ function updateArtworkOrc(obj) {
 							if (data.main_erp_details.status_name !== 'Hold For JC Queue' && data.main_erp_details.status_name !== 'Moved To ERP') {
 								$('.main_label_qty').prop("disabled", true);
 								$('#save_main_label_button').remove()
+								$('#edit_orc_ml_order_btn').remove()
+								$('#toggle_orch_edit_permission').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -1107,7 +1133,9 @@ function hangtagmodalOs(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
 		$print_button_class="hidden";
-		$save_button_class="";
+        $save_button_class="";
+        $ocn_number_hang = data.orchestra_hang_tag_orders[0].ocn_number;
+
     } else {
        
         $template_front_id = "";
@@ -1115,7 +1143,8 @@ function hangtagmodalOs(data) {
         $status="";
         $status_text="";
 		$print_button_class="hidden";
-		$save_button_class="";
+        $save_button_class="";
+        $ocn_number_hang = "";
     }
     var ttots = 0;
     var ttots_sum = 0;
@@ -1161,7 +1190,7 @@ function hangtagmodalOs(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.edit-orch-order-panel').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelos col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red;display: inherit;">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_hang_tag_orders","'+ data.orchestra_hang_tag_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelos col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" value="'+ $ocn_number_hang +'" id="ocn_number_hang" required value="" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red;display: inherit;">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_ht_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraHTOrder()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_hang_tag_orders","'+ data.orchestra_hang_tag_orders[0].id +'")>Enable Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  </form>');
 
 
 //$('.left').removeClass('disabled')
@@ -1794,6 +1823,15 @@ function hangtagmodalOs(data) {
         }
 
     });
+    $("#hangtagform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_ht_order_btn").prop("disabled", false);
+    $("#hangclose").prop("disabled", false);
+}
+
+editOrchestraHTOrder = () => {
+    $("#hangtagform :input").prop("disabled", false);
+    $("#save_hang_button").removeClass('disabled');
 }
 
 function specialtagsOs(data) {
@@ -1810,6 +1848,7 @@ function specialtagsOs(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
         $save_button_class="";
+        $ocn_number_special = data.orchestra_special_tag_orders[0].ocn_number;
     } else {
      
         $template_id = "";
@@ -1817,6 +1856,7 @@ function specialtagsOs(data) {
         $status="";
         $status_text="";
         $save_button_class="";
+        $ocn_number_special = "";
     }
     var st="";
     var option = "<option value=''>Select Option</option>";
@@ -1825,7 +1865,7 @@ function specialtagsOs(data) {
     });
 	$special_tag_count=data.orchestra_special_tag_orders_qty[0].quantity;
 	
-    $('.edit-orch-order-panel').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_special_tag_orders","'+ data.orchestra_special_tag_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_special" required value="'+$ocn_number_special+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_st_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSTOrder()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_special_tag_orders","'+ data.orchestra_special_tag_orders[0].id +'")>Enable Edit</button> <button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  </form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -1864,6 +1904,15 @@ function specialtagsOs(data) {
             setSpecialTagStatusOs()
         }
     })
+    $("#specialtagform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_st_order_btn").prop("disabled", false);
+    $("#specialclose").prop("disabled", false);
+}
+
+editOrchestraSTOrder = () => {
+    $("#specialtagform :input").prop("disabled", false);
+    $("#save_special_button").removeClass('disabled');
 }
 
 
@@ -1993,6 +2042,7 @@ function heatTransferOs(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
         $save_button_class="";
+        $ocn_number_heat = data.orchestra_heat_transfer_orders[0].ocn_number;
     } else {
      
         $template_id = "";
@@ -2001,6 +2051,7 @@ function heatTransferOs(data) {
         $status="";
         $status_text="";
         $save_button_class="";
+        $ocn_number_heat = "";
     }
     var ttots = 0;
 	var ttots_sum = 0;
@@ -2030,7 +2081,7 @@ function heatTransferOs(data) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
 
-    $('.edit-orch-order-panel').append('<form id="heat_transferform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="heat_transfer_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeht_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeht" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="heat_transfer_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentageheat" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tableheat_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_heat_transfer_orders","'+ data.orchestra_heat_transfer_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_heat_transfer_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="heat_transferclose">Close</button></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="heat_transferform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_heat" required value="'+$ocn_number_heat+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="heat_transfer_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeht_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeht" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Heat Transfer</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="heat_transfer_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentageheat" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tableheat_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_heat_transfer_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_he_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraHEOrder()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_heat_transfer_orders","'+ data.orchestra_heat_transfer_orders[0].id +'")>Enable Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="heat_transferclose">Close</button></div> </div>  </form>');
 
 	//$('.left').removeClass('disabled')
     $('#heat_transferform .tot_qty_tableheat').keyup(function () {
@@ -2093,9 +2144,18 @@ function heatTransferOs(data) {
 
         } else {
             e.preventDefault();
-            setheat_transferStatus(data.color_wcl)
+            setheat_transferStatusOs(data.color_wcl)
         }
     })
+    $("#heat_transferform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_he_order_btn").prop("disabled", false);
+    $("#heat_transferclose").prop("disabled", false);
+}
+
+editOrchestraHEOrder = () => {
+    $("#heat_transferform :input").prop("disabled", false);
+    $("#save_heat_transfer_button").removeClass('disabled');
 }
 
 function treestructureheat_transferOs(data, tree, template_id) {
@@ -2224,6 +2284,7 @@ function sizelabelsOs(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
         $save_button_class="";
+        $ocn_number_size = data.orchestra_size_label_orders[0].ocn_number;
     } else {
      
         $template_id = "";
@@ -2232,6 +2293,7 @@ function sizelabelsOs(data) {
         $status="";
         $status_text="";
         $save_button_class="";
+        $ocn_number_size = "";
     }
     var ttots = 0;
     var ttots_sum = 0;
@@ -2262,7 +2324,7 @@ function sizelabelsOs(data) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
 
-    $('.edit-orch-order-panel').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Size Label</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_size_label_orders","'+ data.orchestra_size_label_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Save</button> <button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_size" required value="'+$ocn_number_size+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Size Label</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_sl_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSLOrder()" type="button">Edit</button><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_size_label_orders","'+ data.orchestra_size_label_orders[0].id +'")>Enable Edit</button> <button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  </form>');
 
 	//$('.left').removeClass('disabled')
     $('#size_labelform .tot_qty_tablesize').keyup(function () {
@@ -2329,6 +2391,15 @@ function sizelabelsOs(data) {
             setSizeLabelStatusOs(data.color_wcl)
         }
     })
+    $("#size_labelform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_sl_order_btn").prop("disabled", false);
+    $("#size_labelclose").prop("disabled", false);
+}
+
+editOrchestraSLOrder = () => {
+    $("#size_labelform :input").prop("disabled", false);
+    $("#save_size_label_button").removeClass('disabled');
 }
 
 
@@ -2464,6 +2535,7 @@ function mainlabelsOs(data) {
         $status=str.replace(/ /g, "");
         $status_text=str;
         $save_button_class="";
+        $ocn_number_main = data.orchestra_main_label_orders[0].ocn_number;
     } else {
      
         $template_id = "";
@@ -2472,13 +2544,14 @@ function mainlabelsOs(data) {
         $status="";
         $status_text="";
         $save_button_class="";
+        $ocn_number_main = "";
     }
     
     var option = "<option value=''>Select Option</option>";
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.edit-orch-order-panel').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_main_label_orders","'+ data.orchestra_main_label_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_main" required value="'+$ocn_number_main+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_ml_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraMLOrder()" type="button">Edit</button> <button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_main_label_orders","'+ data.orchestra_main_label_orders[0].id +'")>Enable Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  </form>');
 	//$('.left').removeClass('disabled')
     $('#main_labelform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -2517,6 +2590,15 @@ function mainlabelsOs(data) {
             setMainLabelStatusOs()
         }
     })
+    $("#main_labelform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_ml_order_btn").prop("disabled", false);
+    $("#main_labelclose").prop("disabled", false);
+}
+
+editOrchestraMLOrder = () => {
+    $("#main_labelform :input").prop("disabled", false);
+    $("#save_main_label_button").removeClass('disabled');
 }
 
 
@@ -2724,6 +2806,7 @@ function washcarelabelsOs(data, dataid) {
             $status_text=str;
             $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
 			$template_id = data.orchestra_wash_care_label_orders[dataid1].template_id;
+		    $ocn_number_wash = data.orchestra_wash_care_label_orders[dataid1].ocn_number;
 			
 			$print_button_class = "hidden";
         } else {
@@ -2736,6 +2819,7 @@ function washcarelabelsOs(data, dataid) {
 			$template_id = "122";
 			$print_button_class = "hidden";
 			$save_button_class = "";
+            $ocn_number_wash = "";
         }
 
     } else {
@@ -2748,6 +2832,7 @@ function washcarelabelsOs(data, dataid) {
 		$template_id = "122";
 		$print_button_class = "hidden";
 		$save_button_class = "";
+        $ocn_number_wash = "";
     }
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_wash_care_label_orders != "") {
@@ -2824,7 +2909,7 @@ function washcarelabelsOs(data, dataid) {
 		var disney_flag="0";
 	}
 
-    $('.edit-orch-order-panel').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelos col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_tablewash_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_wash_care_label_orders","'+ data.orchestra_wash_care_label_orders[0].id +'")>Enable Edit</button><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button" style="margin-left:10px">Update</button> <button class="btn btn-default pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelos col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_wash' + dataid + '" required value="'+$ocn_number_wash+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_tablewash_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_label_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraLabelOrder()" type="button">Edit</button> <button class="btn btn-success  pull-right input-sm" id="toggle_orch_edit_permission" style="width: 82px;margin-left: 10px;" type="button" onclick =toggleOrchArtworkEditPermission("orchestra_wash_care_label_orders","'+ data.orchestra_wash_care_label_orders[0].id +'")>Enable Edit</button><button class="btn btn-default pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div>  </form>');
    //$('.left').removeClass('disabled')
 
     $('#washcarelabelform' + dataid + ' .tot_qty_tablewash').keyup(function () {
@@ -2839,14 +2924,7 @@ function washcarelabelsOs(data, dataid) {
 	
 	treestructurewash(data.treeviewwash,dataid, "tree_wash"+dataid, $template_id,data);
 	
-    $('#washcarelabelform' + dataid).validator().on('submit', function (e) {
-        if (e.isDefaultPrevented()) {
-
-        } else {
-            e.preventDefault();
-            setWashCareLabelStatusOs(dataid)
-        }
-    })
+    
 	
 	$('#washcarelabelform' + dataid+' .washonesizein').keyup(function () {
 		
@@ -2993,7 +3071,7 @@ function washcarelabelsOs(data, dataid) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
                         
                         if(value.parts_id != "")
                         {
@@ -3207,8 +3285,36 @@ function washcarelabelsOs(data, dataid) {
 		//alert(code)
         jsbarcodewashOs(code, 'barcode', svgDoc)
     }, false);
+
+    
+
+    $("#washcarelabelform :input").prop("disabled", true);
+    $("#toggle_orch_edit_permission").prop("disabled", false);
+    $("#edit_orc_label_order_btn").prop("disabled", false);
+    $("#close").prop("disabled", false);
+
+    $('.selectpicker').selectpicker('refresh')
+    
+    $('#washcarelabelform' + dataid).validator('update');
+
+
+    $('#washcarelabelform' + dataid).validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            setWashCareLabelStatusOs(dataid)
+        }
+    })
 }
 
+editOrchestraLabelOrder = () => {
+    $("#washcarelabelform :input").prop("disabled", false);
+    $(".add_to_composition").prop("disabled", true);
+    $("#save_wash_button").removeClass('disabled');
+    $(".pointer_anchor").css("pointer-events", "auto")
+    $('.selectpicker').selectpicker('refresh')
+}
 
 function jsbarcodewashOs(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
@@ -3286,6 +3392,10 @@ function setWashCareLabelStatusOs(dataid) {
             $("#washcarelabelform" + dataid + " .right-panelos").removeClass('active');
             $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
             $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            location.reload()
         }
         else {
             $('#wash_composition_page_error' + dataid).removeClass('hidden')
@@ -3337,6 +3447,7 @@ function setWashLabelOs(index, dataid, id) {
 		var washonesizecm = $('#washcarelabelform' + dataid+' .washonesizecm').val();
 		var washonesizein = $('#washcarelabelform' + dataid+' .washonesizein').val();
         var template_name = $('#wcl_name' + dataid).val();
+        var ocn_number = $('#ocn_number_wash').val();
         var washing_select = $('.washing_select' + dataid + ' option:selected').attr('data-id');
         var whitening_select = $('.whitening_select' + dataid + ' option:selected').attr('data-id');
         var dryer_select = $('.dryer_select' + dataid + ' option:selected').attr('data-id');
@@ -3378,6 +3489,7 @@ function setWashLabelOs(index, dataid, id) {
             data: {
                 
                 template_front_id: template_front_id,
+                ocn_number:ocn_number,
                 id: id,
                 template_name: template_name,
                 washing_select: washing_select,
@@ -3450,6 +3562,10 @@ function setSpecialTagStatusOs() {
         $("#specialtagform .right-panelos").removeClass('active');
         $("#specialtagform .backdrop").removeClass('active');
         $('#specialtagform .scalable').removeClass('active');
+        $('#snackbar').css('background-color', '#00b6ff');
+        $('.snackbar_span').html('Order updated Successfully');
+        showSnackbar();
+        location.reload()
     } else {
         $('#special_template_error').removeClass('hidden')
     }
@@ -3462,6 +3578,7 @@ function setSpecialTagOs(id) {
     
     var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
     template_front_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_special').val();
     var tot_qty_table = [];
     var uvc_tco = [];
     var size = [];
@@ -3484,6 +3601,7 @@ function setSpecialTagOs(id) {
         data: {
             
             template_front_id: template_front_id,
+            ocn_number:ocn_number,
             id: id,
             tot_qty_table: special_qty,
             uvc_tco: uvc_tco_fin,
@@ -3525,6 +3643,10 @@ function setMainLabelStatusOs() {
         $("#main_labelform .right-panelos").removeClass('active');
         $("#main_labelform .backdrop").removeClass('active');
         $('#main_labelform .scalable').removeClass('active');
+        $('#snackbar').css('background-color', '#00b6ff');
+        $('.snackbar_span').html('Order updated Successfully');
+        showSnackbar();
+        location.reload()
     } else {
         $('#main_label_template_error').removeClass('hidden')
     }
@@ -3538,6 +3660,7 @@ function setMainLabelOs(id) {
     
     var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
     template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_main').val();
     var tot_qty_table = [];
     var uvc_tco = [];
     var size = [];
@@ -3562,6 +3685,7 @@ function setMainLabelOs(id) {
             template_id: template_id,
             id: id,
             tot_qty_table: main_label_qty,
+            ocn_number:ocn_number,
             uvc_tco: uvc_tco_fin,
             uvc: $('#uvc_id').val(),
 			parcel_id: $('#parcel_id').val(),
@@ -3606,6 +3730,10 @@ function setSizeLabelStatusOs() {
         $("#size_labelform .right-panelos").removeClass('active');
         $("#size_labelform .backdrop").removeClass('active');
         $('#size_labelform .scalable').removeClass('active');
+        $('#snackbar').css('background-color', '#00b6ff');
+        $('.snackbar_span').html('Order updated Successfully');
+        showSnackbar();
+        location.reload()
     } else {
         $('#size_label_template_error').removeClass('hidden')
     }
@@ -3622,6 +3750,7 @@ function setSizeLabelOs(id) {
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
 	console.log(template_id)
 	template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_size').val();
 	
 	var tot_qty_tablesize = [];
 	var uvc_tco = [];
@@ -3652,6 +3781,7 @@ function setSizeLabelOs(id) {
 			
 			template_id: template_id,
 			tot_qty_table: tot_qty_tablesize_fin,
+            ocn_number:ocn_number,
 			id: id,
 			size_id: size_id_fin,
 			main_id: main_id_fin,
@@ -3699,6 +3829,10 @@ function setheat_transferStatusOs() {
         $("#heat_transferform .right-panelos").removeClass('active');
         $("#heat_transferform .backdrop").removeClass('active');
         $('#heat_transferform .scalable').removeClass('active');
+        $('#snackbar').css('background-color', '#00b6ff');
+        $('.snackbar_span').html('Order updated Successfully');
+        showSnackbar();
+        location.reload()
     } else {
         $('#heat_transfer_template_error').removeClass('hidden')
     }
@@ -3709,6 +3843,7 @@ function setHeatTransferOs(id) {
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
 	console.log(template_id)
 	template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_heat').val();
 	
 	var tot_qty_tableheat = [];
 	var uvc_tco = [];
@@ -3739,6 +3874,7 @@ function setHeatTransferOs(id) {
 			
 			template_id: template_id,
 			tot_qty_table: tot_qty_tableheat_fin,
+            ocn_number:ocn_number,
 			id: id,
 			size_id: size_id_fin,
 			main_id: main_id_fin,
@@ -3781,6 +3917,10 @@ function setHangTagStatusOs() {
         $("#hangtagform .right-panelos").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
+        $('#snackbar').css('background-color', '#00b6ff');
+        $('.snackbar_span').html('Order updated Successfully');
+        showSnackbar();
+        location.reload()
     } else {
         $('#hang_template_error').removeClass('hidden')
     }
@@ -3791,6 +3931,7 @@ function setHangTagOs(id) {
 	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
 	template_front_id = template_id[0].id;
 	var template_back_id = $('#hang_tag_id').val();
+	var ocn_number = $('#ocn_number_hang').val();
 	var onesizecm = $('.onesizecm').val();
 	var onesizein = $('.onesizein').val();
 	
@@ -3831,7 +3972,8 @@ function setHangTagOs(id) {
 			
 			template_front_id: template_front_id,
 			template_back_id: template_back_id,
-			tot_qty_table: tot_qty_tablehang_fin,
+            tot_qty_table: tot_qty_tablehang_fin,
+            ocn_number:ocn_number,
 			id: id,
 			cm:onesizecm,
 			in:onesizein,
