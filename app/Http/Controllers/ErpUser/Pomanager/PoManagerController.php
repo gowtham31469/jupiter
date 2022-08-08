@@ -116,6 +116,7 @@ class PoManagerController extends Controller
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
+										 ->where('erp_order_details.company_id',session()->get('company'))
 										 ->where('erp_order_details.template_id',$valuess)
 										 ->where('erp_orders.buyer_id', $buyer_id)
 										 ->where(function($q) {
@@ -378,6 +379,7 @@ class PoManagerController extends Controller
 			$count = $request->count_i;
 			$count_j = $request->count_j;
 			$erp_order_id = $request->erp_order_id;
+			$erp_od_ids = $request->ids;
 			$purchase_order_number = $request->purchase_order_number;
 			$customer_name = $request->customer_name;
 			$erp_user     = Auth::guard('erpuser')->id();
@@ -389,6 +391,7 @@ class PoManagerController extends Controller
 					->where('erp_order_details.order_quantity', '!=' ,0)
 					->where('erp_order_details.erp_order_id', $erp_order_id)
 					->whereNotIn('erp_order_details.status', $erp_status_ids)
+					->whereIn('erp_order_details.id', $erp_od_ids)
 					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.po_no', 'erp_orders.buyer_id')
 					->get();
 

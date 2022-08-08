@@ -19,7 +19,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/WCL/sticker1.svg,/storage/app/template/Orchestra/WCL/sticker2.svg,/storage/app/template/Orchestra/WCL/sticker3.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 2,
             ]);
 
@@ -30,7 +30,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/WCL/sticker1-disney.svg,/storage/app/template/Orchestra/WCL/sticker2.svg,/storage/app/template/Orchestra/WCL/sticker3.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 2,
             ]);
 
@@ -41,7 +41,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 2,
             ]);
 
@@ -53,7 +53,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 2,
             ]);
 
@@ -65,7 +65,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 2,
             ]);
 
@@ -80,7 +80,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01A-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01A-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -91,7 +91,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01B-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01B-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -102,7 +102,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01C-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01C-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -113,7 +113,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01D-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T01D-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
                 
@@ -137,7 +137,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02A-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02A-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -148,7 +148,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02B-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02B-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -159,7 +159,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02C-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02C-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -170,7 +170,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02D-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T02D-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -181,7 +181,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -192,7 +192,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05A-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05A-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -203,7 +203,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05B-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05B-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -214,7 +214,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05C-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05C-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
                 
@@ -225,7 +225,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05D-01.svg,/storage/app/template/Orchestra/Tags/ORC_DEPARTMENT_TAG/T05D-02.svg",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 103,
                 ]);
 
@@ -237,7 +237,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/DBB1/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/DBB1/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -248,7 +248,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/DBB2/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/DBB2/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -259,7 +259,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/DBB3/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/DBB3/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -270,7 +270,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD1/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD1/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -281,7 +281,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD2/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD2/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -292,7 +292,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD2X/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD2X/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -303,7 +303,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD3/front.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD3/back.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -314,7 +314,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD1/front_girl.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD1/back_girl.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -325,7 +325,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD2/front_girl.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD2/back_girl.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -336,7 +336,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD2X/front_girl.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD2X/back_girl.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -347,7 +347,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "/storage/app/template/Orchestra/Tags/DISNESY/COD3/front_girl.svg,/storage/app/template/Orchestra/Tags/DISNESY/COD3/back_girl.svg",
                 'disney' => 1,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 155,
                 ]);
 
@@ -426,7 +426,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 183,
                 ]);
 
@@ -448,7 +448,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 183,
                 ]);
 
@@ -481,7 +481,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
@@ -492,7 +492,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
@@ -503,7 +503,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
@@ -514,7 +514,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
@@ -525,7 +525,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
@@ -536,7 +536,7 @@ class OrchestraTemplateSeeder extends Seeder
                 'template_file' => "",
                 'disney' => 0,
                 'tax' => 0,
-                'flag' => 1,
+                'flag' => 0,
                 'hierarchy_id' => 192,
                 ]);
 
