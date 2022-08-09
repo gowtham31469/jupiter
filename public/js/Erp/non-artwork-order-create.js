@@ -207,6 +207,15 @@
 				data: { 'buyer_id' : $("#buyer").val() },
 				success:function(data)
 				{
+					
+					$("#customer").empty();
+					$.each(data.customers, function(key, value) {
+						$('#customer')
+						.append($("<option></option>")
+						.attr("value",key)
+						.text(value));
+					});
+
 					$(".item_td").each(function(i,v)
 					{
 						$(this).html(data.items)
