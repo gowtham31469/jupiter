@@ -1261,7 +1261,7 @@ class OrchestraSettings extends Controller
           $cofreet_extension = $cofreet_symbols->getClientOriginalExtension();
           $astms_extension = $astms_symbol->getClientOriginalExtension();
 
-          if($cofreet_extension === 'png' && $astms_extension === 'png')
+          if($cofreet_extension === 'svg' && $astms_extension === 'svg')
           {
             $cofreet_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $cofreet_symbols_orname));
             $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
