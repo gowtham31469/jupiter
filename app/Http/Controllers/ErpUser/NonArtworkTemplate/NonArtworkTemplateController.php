@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ErpUser\NonArtworkTemplate;
 
 use DB;
 use View;
+use Auth;
 use Validator;
 use App\Buyer;
 use App\History;
@@ -106,15 +107,18 @@ class NonArtworkTemplateController extends Controller
         $buyer = Buyer::where('id',$request->buyer_id)->first()->buyer_name;
         $template_table = strtolower($buyer)."_template";
 
+        $customer_buyer = DB::table('customer_buyers')->where('buyer_id',$request->buyer_id)->pluck('customer_id');
+
+        $customers = Customer::whereIn('id',$customer_buyer)->where('is_active',1)->pluck('company_name','id');
+
         $data = DB::table($template_table)
                         ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
                         ->select($template_table.'.id','template_name','name_in_reports','name')
                         ->pluck('name','name_in_reports');
-        $arr = [];
-        $opt = "";
 
+        $opt='';
         foreach ($data as $key => $value) {
-           if($value)
+           if($value!=' ')
            {
                 $opt.='<option value='.$key.'>'.$value.'</option>';
            }
@@ -122,25 +126,39 @@ class NonArtworkTemplateController extends Controller
         }
         $item_select = '<select data-live-search="true" name="item[]" class="selectpicker item_select form-control input-group" title="Select item" data-container="body">'.$opt.'</select>';
 
-        return response()->json(['items'=>$item_select]);
+        return response()->json(['items'=>$item_select,'customers'=>$customers]);
 
     }
 
 
     public function getReference(Request $request)
     {
-        // dd($request->all());
+        $erp_user_id = Auth::guard('erpuser')->id();
+        $heirarchy_ids = DB::table('erpusers_template_mapping')
+                            ->where('erp_user',$erp_user_id)
+                            ->where('buyer',$request->buyer_id)
+                            ->where('company',session()->get('company'))
+                            ->pluck('templates');
 
+                            
         $buyer = Buyer::where('id',$request->buyer_id)->first()->buyer_name;
         $template_table = strtolower($buyer)."_template";
 
         $data = DB::table($template_table)
                         ->where('name_in_reports',$request->item_id)
+                        ->where(function ($query) use($erp_user_id)
+                            {
+                            if ($erp_user_id != 1) 
+                            {
+                                $query->whereIn('hierarchy_id',$heirarchy_ids);
+                            }
+                        })
                         ->leftJoin('reports_template_level_name','name_in_reports','reports_template_level_name.id')    
                         ->pluck('template_name','item_id')
                         ->toArray();
         $arr = [];
         $opt = "";
+        
         foreach ($data as $key => $value) {
      
            $opt.='<option value='.$key.'>'.$value.'</option>';
