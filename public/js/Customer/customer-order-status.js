@@ -196,7 +196,10 @@ function tescoOrderStatus() {
                 `);
 
                 $(data.data).each(function(index,value){
-                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                    if(value.season_code != null)
+                    {
+                        $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                    }
                 })
 
                 var already_array = [];
@@ -295,19 +298,57 @@ function tescoOrderStatus() {
                                 $("#stylenoos").html("");
 
                                 $(data.data).each(function(index,value){
-                                    $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                                    if(value.season_code != null)
+                                    {
+                                        $("#seasonos").append("<option value='"+ value.season_code + "'>" + value.season_code + "</option>");
+                                    }
                                 })
                 
+                                var already_array = [];
                                 $(data.style_no).each(function(index,value){
-                                    if (value.zone == "CE") {
-                                        if (uniqueNames.indexOf(value.ce_style_ref) === -1) {
-                                            $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
-                                        }
-                                    } else {
-                                        if (uniqueNames.indexOf(value.uk_style_ref) === -1) {
-                                            $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                    if(value.type == "stickers")	
+                                    {
+                                        if (value.zone == "CE") {
+                                            if(already_array.includes(value.ce_style_ref) != true)
+                                            {
+                                                $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                                already_array.push(value.ce_style_ref)
+                                            }
+                                        } else {
+                                            if(already_array.includes(value.uk_style_ref) != true)
+                                            {
+                                                $("#ukstylenoos").append("<option data-id='UK' value='"+ value.uk_style_ref + "'>" + value.uk_style_ref + "</option>");
+                                                already_array.push(value.uk_style_ref)
+                                            }
                                         }
                                     }
+                                    else if(value.type == "labels")
+                                    {
+                                        if(already_array.includes(value.uk_style_ref +"/"+ value.ce_style_ref) != true)
+                                        {
+                                            $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                                            already_array.push(value.uk_style_ref +"/"+ value.ce_style_ref)
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (value.uk_style_ref != "" && value.uk_style_ref != null) {
+                                            if(already_array.includes(value.uk_style_ref +"/"+ value.ce_style_ref) != true)
+                                            {
+                                                $("#ukstylenoos").append("<option data-id='labels' value='"+ value.uk_style_ref +"/"+ value.ce_style_ref + "'>"+ value.uk_style_ref +"/"+ value.ce_style_ref + "</option>");
+                                                already_array.push(value.uk_style_ref +"/"+ value.ce_style_ref)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if(already_array.includes(value.ce_style_ref) != true)
+                                            {
+                                                $("#ukstylenoos").append("<option data-id='CE' value='"+ value.ce_style_ref + "'>" + value.ce_style_ref + "</option>");
+                                                already_array.push(value.ce_style_ref)
+                                            }
+                                        }
+                                    }
+                                    
                                 })
                                 $(".selectpicker").val('');
                                 $('.selectpicker').selectpicker('refresh');

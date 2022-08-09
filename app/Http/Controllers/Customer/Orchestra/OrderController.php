@@ -41,6 +41,7 @@ use Carbon\Carbon;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use App\Classes\EditErpOrders;
+use App\Classes\OrchestraOrderStatus;
 use App\ErpOrders as Erp;
 use App\ErpOrderDetails;
 use App\Classes\CleanString;
@@ -59,6 +60,7 @@ class OrderController extends Controller
     {
         $this->middleware('customer_auth');
         $this->edit_erp_obj    = new EditErpOrders();
+        $this->orchestra_order_status_obj    = new OrchestraOrderStatus();
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
@@ -792,6 +794,7 @@ class OrderController extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
         $template_back_id = $request->template_back_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -846,6 +849,7 @@ class OrderController extends Controller
                     'uvc' => $uvc,
                     'template_front_id'      => $template_front_id,
                     'template_back_id'      => $template_back_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'customer_id'    => $factory{0}->id,
@@ -924,6 +928,7 @@ class OrderController extends Controller
 										'uvc' => $uvc,
 										'template_front_id'      => $template_front_id,
 										'template_back_id'      => $template_back_id,
+                                        'ocn_number'      => $ocn_number,
 										'svg_path'    => "", 
 										'status'    => $status,
 										'customer_id'    => $factory{0}->id,
@@ -932,7 +937,8 @@ class OrderController extends Controller
 										'pi_status'           => $pi_status,
 										'po_status'           => $po_status,
 					 					'color_code'          => $value1['Color_Code'],
-					 					'template_type'       => "single"
+					 					'template_type'       => "single",
+                                        'order_placed_by' => Auth::guard('web_customer')->id()
 							 ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1324,6 +1330,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1375,6 +1382,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1451,6 +1459,7 @@ class OrderController extends Controller
              	$inserted = HeatTransferOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1459,7 +1468,8 @@ class OrderController extends Controller
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
 					 				'color_code'           => $value1['Color_Code'],
-					 				'template_type'       => "single"
+					 				'template_type'       => "single",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1499,6 +1509,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = $request->tot_qty_table;
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1548,6 +1559,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1622,6 +1634,7 @@ class OrderController extends Controller
              	$inserted = MainLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1630,7 +1643,8 @@ class OrderController extends Controller
 									'customer_id'    => $factory{0}->id,
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
-					 				'template_type'       => "ratio"
+					 				'template_type'       => "ratio",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
            
                  MainLabelOrdersQty::create([
@@ -1663,6 +1677,7 @@ class OrderController extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1715,6 +1730,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1791,6 +1807,7 @@ class OrderController extends Controller
              $inserted = SizeLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1799,7 +1816,8 @@ class OrderController extends Controller
 									'pi_status'           => $pi_status,
 									'po_status'           => $po_status,
 					 				'color_code'           => $value1['Color_Code'],
-					 				'template_type'       => "single"
+					 				'template_type'       => "single",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
             $i=0;
             foreach($tot_qty_table as $value)
@@ -1838,6 +1856,7 @@ class OrderController extends Controller
     public function setSpecialTag(Request $request)
     {
         $delivery_date = $request->delivery_date;
+        $ocn_number = $request->ocn_number;
         $template_front_id = $request->template_front_id;
         $tot_qty_table = $request->tot_qty_table;
 		//$final_qty =$request->tot_qty_table;
@@ -1888,6 +1907,7 @@ class OrderController extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id, 
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "",
                     'final_qty'    => $tot_qty_table, 
                     'customer_id'    => $factory{0}->id,
@@ -1960,6 +1980,7 @@ class OrderController extends Controller
              	$inserted = SpecialTagOrders::create([
                                     'uvc' => $uvc,
                                     'template_id'      => $template_front_id, 
+                                    'ocn_number'      => $ocn_number,
                                     'svg_path'    => "", 
 				 					'final_qty'    => $value,
                         			'customer_id'    => $factory{0}->id,
@@ -1969,7 +1990,8 @@ class OrderController extends Controller
 									'season_code'    => $season_code,
 				 					'pi_status'           => $pi_status,
 				 					'po_status'           => $po_status,
-					 				'template_type'       => "ratio"
+					 				'template_type'       => "ratio",
+                                    'order_placed_by' => Auth::guard('web_customer')->id()
                          ]);
             
                  SpecialTagOrdersQty::create([
@@ -2112,7 +2134,8 @@ class OrderController extends Controller
 				  				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "single"
+					 			'template_type'       => "single",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $j=0;
                 foreach($tot_qty_poly as $value)
@@ -2195,7 +2218,8 @@ class OrderController extends Controller
 				   				'pi_status'           => $pi_status,
 				 				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "single"
+					 			'template_type'       => "single",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_carton as $value)
@@ -2356,7 +2380,8 @@ class OrderController extends Controller
 						  		'pi_status'           => $pi_status,
 								'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "ratio"
+					 			'template_type'       => "ratio",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
 				$j=0;
 				StandardPolyStickersQty::create([
@@ -2444,7 +2469,8 @@ class OrderController extends Controller
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
                                 'group_id'    => $age,
-					 			'template_type'       => "ratio"
+					 			'template_type'       => "ratio",
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
 			
 				$j=0;
@@ -2839,6 +2865,7 @@ class OrderController extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
         $template_name = $request->template_name;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -2905,6 +2932,7 @@ class OrderController extends Controller
                         'template_id'      => $template_front_id,
                         //'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
+                        'ocn_number'      => $ocn_number,
                         'washing_id'      => $washing_select,
                         'whitening_id'      => $whitening_select,
                         'dryer_id'      => $dryer_select,
@@ -2982,6 +3010,7 @@ class OrderController extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
+                                'ocn_number'      => $ocn_number,
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -2999,6 +3028,7 @@ class OrderController extends Controller
 								'season_code'    => $season_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -3056,6 +3086,7 @@ class OrderController extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
+                                'ocn_number'      => $ocn_number,
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -3073,6 +3104,7 @@ class OrderController extends Controller
 								'season_code'    => $season_code,
 				   				'pi_status'           => $pi_status,
 				   				'po_status'           => $po_status,
+                                'order_placed_by' => Auth::guard('web_customer')->id()
                      ]);
                 $i=0;
                 foreach($tot_qty_table as $value)
@@ -3129,6 +3161,7 @@ class OrderController extends Controller
         
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
+        $ocn_number = $request->ocn_number;
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -3193,6 +3226,7 @@ class OrderController extends Controller
             ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id,
+                    'ocn_number'      => $ocn_number,
                     //'merchandisers_id'      => $merchandisers,
                     'template_name'      => $template_name,
                     'washing_id'      => $washing_select,
@@ -3307,6 +3341,7 @@ class OrderController extends Controller
                $inserted = WashLabelOrders::create([
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
+                                'ocn_number'      => $ocn_number,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
                                 'washing_id'      => $washing_select,
@@ -3481,6 +3516,7 @@ class OrderController extends Controller
         try 
         {
             $erp_obj    = new ErpOrders();
+            $po_number      = $request->po_number_updation;
             $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
@@ -3522,6 +3558,7 @@ class OrderController extends Controller
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
                           'po_file' => $destination_path_insert,
+                          'po_number' => $po_number,
                           'po_status' => $po_status,
                           'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
@@ -3837,28 +3874,9 @@ class OrderController extends Controller
 	
     public function getExistingLabelOrderStatusPo(Request $request)
     {
-		 $uvc        =   $request->uvc;
-          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->where('orchestra_hang_tag_orders.status','!=','Order Cancelled')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Hang Tag' as \"TemplateName\""),DB::raw("'Hang Tag' as \"TemplateType\""),DB::raw("'orchestra_hang_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->where('orchestra_special_tag_orders.status','!=','Order Cancelled')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->where('orchestra_main_label_orders.status','!=','Order Cancelled')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id',DB::raw("'Main Label' as \"TemplateName\""),DB::raw("'Main Label' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_size_label_orders.template_id')->where('orchestra_size_label_orders.status','!=','Order Cancelled')->select('orchestra_size_label_orders.*','orchestra_item_master.company_id',DB::raw("'Size Label' as \"TemplateName\""),DB::raw("'Size Label' as \"TemplateType\""),DB::raw("'orchestra_size_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();		
-		
-		  $data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_heat_transfer_orders.template_id')->where('orchestra_heat_transfer_orders.status','!=','Order Cancelled')->select('orchestra_heat_transfer_orders.*','orchestra_item_master.company_id',DB::raw("'Heat Transfer' as \"TemplateName\""),DB::raw("'Heat Transfer' as \"TemplateType\""),DB::raw("'orchestra_heat_transfer_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		
-		 echo json_encode($data);
+		$uvc        =   $request->uvc;
+        $data       =   $this->orchestra_order_status_obj->getExistingLabelOrderStatusPo($uvc);		
+		echo json_encode($data);
     } 
 
     /**

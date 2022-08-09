@@ -96,7 +96,8 @@ class NonArtworkJobCardFiltersController extends Controller
                 'erp_order_details.deleted_at' => null,
                 'erp_order_details.status' => $this->erp_jc_status_id,
                 'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
-                'erp_orders.buyer_id' => $buyer_id
+                'erp_orders.buyer_id' => $buyer_id,
+                'erp_order_details.company_id' => session()->get('company'),
             ])
             ->whereIn('erp_order_details.template_id', $values)
             ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
@@ -130,6 +131,7 @@ class NonArtworkJobCardFiltersController extends Controller
         ->join('customers', 'erp_orders.customer_id', 'customers.id')
         ->where(['erp_order_details.deleted_at' => null,
                 'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
+                'erp_order_details.company_id' => session()->get('company'),
                 'erp_orders.buyer_id' => $request['buyer_id']])
         ->where(function($query) use ($request) {
             if($request['jobcard_created'] === 'false')
@@ -166,6 +168,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
+                    'erp_order_details.company_id' => session()->get('company'),
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id']])
             ->whereIn('erp_order_details.template_id', $values)
@@ -207,6 +210,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
+                    'erp_order_details.company_id' => session()->get('company'),
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id']])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
@@ -249,6 +253,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
+                    'erp_order_details.company_id' => session()->get('company'),
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id'],])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
@@ -327,6 +332,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty',
+                    'erp_order_details.company_id' => session()->get('company'),
                     'erp_orders.buyer_id' => $request['buyer_id'],
                     'erp_orders.customer_id' => $request['customer_id'],])
             ->whereIn(strtolower($buyer_name).'_template.name_in_reports', $request['item_name_id'])
@@ -374,6 +380,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->join('non_artwork_orders', 'non_artwork_orders.id', 'non_artwork_orders_quanty.non_artwork_order_id')
             ->where(['erp_order_details.deleted_at' => null,
                     'erp_order_details.status' => $this->erp_jc_status_id,
+                    'erp_order_details.company_id' => session()->get('company'),
                     'erp_order_details.order_qnty_table_name' => 'non_artwork_orders_quanty'])
             ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->where(function($query) use ($request){

@@ -20,7 +20,7 @@
                             <div class="row">
                                 <div class="col-md-2"> <img width="30px" id="add_wee_symbol" src="/not-available.png"
                                     alt="symbol"></div>
-                                    <div class="col-md-10"> {{ Form::file('wee_symbol', ['required', 'accept' => 'image/svg']) }}
+                                    <div class="col-md-10"> {{ Form::file('wee_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                                     </div>
                                 </div>
                                 <div class="help-block with-errors"></div>
@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div class="col-md-2"> <img width="30px" id="edit_wee_symbol_image" src="/not-available.png"
                                     alt="symbol"></div>
-                                    <div class="col-md-8"> {{ Form::file('edit_wee_symbol', ['required', 'accept' => 'image/svg']) }}
+                                    <div class="col-md-8"> {{ Form::file('edit_wee_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                                     </div>
                                     <div class="col-md-2">
                                         <img id="wee_symbol_image" style="width:30px;height:30px">

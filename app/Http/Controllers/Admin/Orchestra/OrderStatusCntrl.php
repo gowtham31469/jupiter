@@ -724,6 +724,35 @@ class OrderStatusCntrl extends Controller
         
     }
 
+    public function getOrderDetails(Request $request)
+	{
+        $table_name        =   $request->table_name;
+        $table_id          =   $request->table_id;
+        
+        if($table_name == "orchestra_solid_carton_sticker_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.oscs_id',$table_name.'.id')->join('orchestra_age_group','orchestra_age_group.id',$table_name.'.group_id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_age_group.color as age_color','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();
+        }
+        else if($table_name == "orchestra_solid_poly_bag_sticker_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.ospbs_id',$table_name.'.id')->join('orchestra_age_group','orchestra_age_group.id',$table_name.'.group_id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_age_group.color as age_color','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();
+        }
+        else if($table_name == "orchestra_standard_carton_sticker_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.oscs_id',$table_name.'.id')->join('orchestra_age_group','orchestra_age_group.id',$table_name.'.group_id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_age_group.color as age_color','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();
+        }
+        else if($table_name == "orchestra_standard_poly_bag_sticker_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.ospbs_id',$table_name.'.id')->join('orchestra_age_group','orchestra_age_group.id',$table_name.'.group_id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_age_group.color as age_color','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();
+
+            
+            $parcel_details = DB::table('orchestra_parcel_details')->where('UVC',$data[$table_name][0]->uvc)->where('BuyerPONo',$data[$table_name][0]->po)->where('Color_Code',$data[$table_name][0]->color_code)->select('*')->get();
+
+            $data[$table_name][0]->size_chart = $parcel_details;
+        }
+        
+        echo json_encode($data);
+    }
     /**
      * This function is used to toggle the artwork edit permission for customer
      * 

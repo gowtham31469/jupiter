@@ -1268,20 +1268,20 @@
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
+                         {!! Form::label('cofreet_symbol', 'Cofreet Symbol (*.svg only)', ['class' => 'form_label']) !!}
                          <div class="row">
                          <div class="col-md-2"> <img width="30px" id="add_cofreet_symbol" src="/not-available.png" alt="symbol"></div>
-                         <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         <div class="col-md-10"> {{ Form::file('cofreet_symbol', ['id' => 'cofreet_symbol','required', 'accept' => 'image/svg+xml']) }}</div>
                          </div>
                       
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
+                         {!! Form::label('astms_symbol', 'Astms Symbol (*.svg only)', ['class' => 'form_label']) !!}
                          <div class="row">
-                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="/not-available.png" alt="symbol"></div>
-                         <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/png']) }}</div>
+                         <div class="col-md-2"><img width="30px" id="add_orc_astms_symbol" src="/not-available.png" alt="symbol"></div>
+                         <div class="col-md-10">{{ Form::file('orc_astms_symbol', ['id' => 'orc_astms_symbol','required', 'accept' => 'image/svg+xml']) }}</div>
                          </div>
                          
                       <div class="help-block with-errors"></div>
@@ -1290,7 +1290,7 @@
                      
                          {!! Form::label('care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
                          
-                         {{ Form::textarea('care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                         {{ Form::textarea('orc_care_instruction', null,  ['id' => 'orc_care_instruction','class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
                       <div class="help-block with-errors"></div>
                     </div>
                     
@@ -2688,7 +2688,7 @@
            makeOrchestraSizeChartDisabled(id,csrf_token)
        });
           /** Add orchestra symbols form validation **/
-         $('#add_orchestra_symbols_form').validator().on('submit', function (e) {
+         $('#add_orchestra_symbols_form').validator().on('submit', function (e) { 
            if (e.isDefaultPrevented())
            {
 
@@ -2697,9 +2697,9 @@
            {
               e.preventDefault();
               var cofreet_file = $('#cofreet_symbol')[0].files[0];
-              var astms_file = $('#astms_symbol')[0].files[0];
+              var astms_file = $('#orc_astms_symbol')[0].files[0];
               var symbol_category = $('#symbol_category option:selected').val();
-              var care_instruction = $('#care_instruction').val();
+              var care_instruction = $('#orc_care_instruction').val();
               
               /* call addOrchestraSymbols function from orchestra-settings.js*/
               addOrchestraSymbols(cofreet_file, astms_file, symbol_category, care_instruction);

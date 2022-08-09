@@ -258,7 +258,7 @@
                     <div id="map_po_div_status" class="hidden">
                         <h4>Mapping to Exist PO : </h4>
                         <label style="color:red" id="select_error_status" class="hidden">Please Select PO</label>
-                        <div class="form-group" id="selectpo_status">
+                        <div class="form-group" id="po_select_div">
                             <label>Select PO</label>
                             <select id="select_po_status" class="form-control">
                                 <option>1</option>
@@ -779,6 +779,8 @@
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-order-status-common.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
     <script type="text/javascript">
         $('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
