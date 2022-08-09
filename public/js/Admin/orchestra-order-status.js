@@ -2691,8 +2691,8 @@ function treestructuremain_labelOs(data, tree, template_id) {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
                     
-                    $('#treeml > ul > li').each( function() {
-                        disable( 'treeml',this.id );        
+                    $('#'+tree+' >ul > li').each( function() {	
+                        disable( tree,this.id );        	
                     })
 
 
