@@ -25,7 +25,7 @@
                     <div class="row">
                         <div class="col-md-2"> <img width="30px" id="add_iso_symbol" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-10"> {{ Form::file('iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-10"> {{ Form::file('iso_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-md-2"><img width="30px" id="add_astms_symbol" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-10">{{ Form::file('astms_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -45,7 +45,7 @@
                     <div class="row">
                         <div class="col-md-2"> <img width="30px" id="add_white_iso_symbol" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-10"> {{ Form::file('white_iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-10"> {{ Form::file('white_iso_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -55,7 +55,7 @@
                     <div class="row">
                         <div class="col-md-2"><img width="30px" id="add_white_astms_symbol" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-10">{{ Form::file('white_astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-10">{{ Form::file('white_astms_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -105,7 +105,7 @@
                     <div class="row">
                         <div class="col-md-2"> <img width="30px" id="edit_iso_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-8"> {{ Form::file('edit_iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-8"> {{ Form::file('edit_iso_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                         <div class="col-md-2">
                             <img id="iso_image" style="width:30px;height:30px">
@@ -118,7 +118,7 @@
                     <div class="row">
                         <div class="col-md-2"><img width="30px" id="edit_astms_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-8">{{ Form::file('edit_astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-8">{{ Form::file('edit_astms_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                         <div class="col-md-2">
                             <img id="astm_image" style="width:30px;height:30px">
@@ -131,7 +131,7 @@
                     <div class="row">
                         <div class="col-md-2"> <img width="30px" id="edit_white_iso_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-8"> {{ Form::file('edit_white_iso_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-8"> {{ Form::file('edit_white_iso_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                         <div class="col-md-2">
                             <img id="white_iso_image" style="width:30px;height:30px">
@@ -144,7 +144,7 @@
                     <div class="row">
                         <div class="col-md-2"><img width="30px" id="edit_white_astms_symbol_image" src="/not-available.png"
                                 alt="symbol"></div>
-                        <div class="col-md-8">{{ Form::file('edit_white_astms_symbol', ['required', 'accept' => 'image/svg']) }}
+                        <div class="col-md-8">{{ Form::file('edit_white_astms_symbol', ['required', 'accept' => 'image/svg+xml']) }}
                         </div>
                         <div class="col-md-2">
                             <img id="white_astm_image" style="width:30px;height:30px">

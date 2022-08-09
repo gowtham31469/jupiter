@@ -2902,7 +2902,7 @@ function readeditwoolURL(input) {
 }
 
 
-$("#cofreet_symbol").add("#astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
+$("#cofreet_symbol").add("#astms_symbol").add("#orc_astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
     readURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
