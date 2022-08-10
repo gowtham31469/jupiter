@@ -2582,7 +2582,7 @@ function orchestraSymbols() {
                     } else {
                         orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_symbols_enabled" data-placement="left"></i></a>';
                     }
-                    orchestra_metadata += '</td></tr>';
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-orchestra-symbols" aria-hidden="true" title="Edit Symbol" id="edit-orchestra-symbols" data-placement="left"></i></a></td></tr>';
                 });
                 orchestra_metadata += '</tbody></table></div>';
                 $('.content').html(orchestra_metadata)
@@ -2718,7 +2718,7 @@ function editOrchestraSymbols(id, cofreet_symbols, astms_symbol, category_id, ca
  * @param id,csrf_token
  * @author <praveen>
  */
-function makeSymbolEnabled(id, csrf_token) {
+function makeOrcSymbolEnabled(id, csrf_token) {
     try {
         if (isSubmitting) {
             return;
@@ -2760,7 +2760,7 @@ function makeSymbolEnabled(id, csrf_token) {
  * @param id,csrf_token
  * @author <praveen>
  */
-function makeSymbolDisabled(id, csrf_token) {
+function makeOrcSymbolDisabled(id, csrf_token) {
     try {
         if (isSubmitting) {
             return;
@@ -2815,8 +2815,8 @@ $(document).on("click", ".edit-orchestra-symbols", function() {
     $('#editOrchestraSymbolsModal').modal('show');
     // $('#myModal').modal('hide');
     $('#edit_orchestra_symbols_id').val(trid);
-    $('#edit_symbol_category').val(cat_id);
-    $('#edit_care_instruction').val(cat_text);
+    $('#edit_orc_symbol_category').val(cat_id);
+    $('#edit_orc_care_instruction').val(cat_text);
     $('#astms_image').attr('src', astms_img);
     $('#cofreet_image').attr('src', cofreet_img);
 });
@@ -2902,7 +2902,7 @@ function readeditwoolURL(input) {
 }
 
 
-$("#cofreet_symbol").add("#astms_symbol").add("#orc_astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
+$("#cofreet_symbol").add("#edit_orc_astms_symbol").add("#edit_cofreet_symbol").add("#astms_symbol").add("#orc_astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
     readURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
@@ -2942,7 +2942,7 @@ $("#edit_woolmark_logo").change(function() {
 
 });
 
-$("#edit_cofreet_symbol").add("#edit_astms_symbol").add("#edit_iso_symbol").add("#edit_white_iso_symbol").add("#edit_white_astms_symbol").change(function() {
+$("#edit_astms_symbol").add("#edit_iso_symbol").add("#edit_white_iso_symbol").add("#edit_white_astms_symbol").change(function() {
     editreadURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
