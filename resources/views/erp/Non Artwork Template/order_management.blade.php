@@ -79,7 +79,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
-					{!! Form::select('customer',$customers, null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
+					{!! Form::select('customer',[], null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
