@@ -1374,7 +1374,12 @@ class OrchestraSettings extends Controller
              } else {
 
               $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('astms_symbol');
-              unlink(ltrim($old_cof, '/'));
+
+              if (file_exists(ltrim($old_cof, '/'))) {
+                unlink(ltrim($old_cof, '/'));
+              }
+
+              
               DB::table('orchestra_care_symbols')->where("id",$request->id)->update([
                 'astms_symbol'     =>  $astms_path_insert
               ]);
@@ -1384,7 +1389,10 @@ class OrchestraSettings extends Controller
               
              } else {
               $old_cof = DB::table('orchestra_care_symbols')->where("id",$request->id)->value('cofreet_symbols');
-              unlink(ltrim($old_cof, '/'));
+              
+              if (file_exists(ltrim($old_cof, '/'))) {
+                unlink(ltrim($old_cof, '/'));
+              }
 
               DB::table('orchestra_care_symbols')->where("id",$request->id)->update([
                 'cofreet_symbols'     =>  $cofreet_path_insert
