@@ -577,29 +577,11 @@ class TescoSettings extends Controller
     try {
       $destination_path='images/WashCareSymbols/tesco/';
       $destination_path_db='/images/WashCareSymbols/tesco/';
-      $iso_symbols= $request->file('iso_symbols');
-      $astms_symbol= $request->file('astms_symbol');
-      $white_iso_symbols= $request->file('white_iso_symbols');
-      $white_astms_symbol= $request->file('white_astms_symbol');
       $care_degree = $request->input('care_degree');
       $id = $request->input('id');
 
-      $iso_symbols_orname = $iso_symbols->getClientOriginalName();
-      $astms_symbol_orname = $astms_symbol->getClientOriginalName();
-      $white_iso_symbols_orname = $white_iso_symbols->getClientOriginalName();
-      $white_astms_symbol_orname = $white_astms_symbol->getClientOriginalName();
-
-      $iso_extension = $iso_symbols->getClientOriginalExtension();
-      $astms_extension = $astms_symbol->getClientOriginalExtension();
-      $white_iso_extension = $white_iso_symbols->getClientOriginalExtension();
-      $white_astms_extension = $white_astms_symbol->getClientOriginalExtension();
-
-      if($iso_extension === 'svg' && $astms_extension === 'svg' && $white_iso_extension === 'svg' && $white_astms_extension === 'svg')
-      {
-        $iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $iso_symbols_orname));
-        $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
-        $white_iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $white_iso_symbols_orname));
-        $white_astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $white_astms_symbol_orname));
+      // if($iso_extension === 'svg' && $astms_extension === 'svg' && $white_iso_extension === 'svg' && $white_astms_extension === 'svg')
+      // {
 
           switch($request->category_id){
             case 1:
@@ -622,30 +604,100 @@ class TescoSettings extends Controller
               break;
           }
 
-          $iso_symbols->move($destination_path.$upload_path,$iso_symbols_filename);
-          $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
-          $white_iso_symbols->move($destination_path.$upload_path,$white_iso_symbols_filename);
-          $white_astms_symbol->move($destination_path.$upload_path,$white_astms_symbol_filename);
+          if($request->file('iso_symbols') == ""){	
+            	
+          }else {
+            $iso_symbols= $request->file('iso_symbols');
+            $iso_symbols_orname = $iso_symbols->getClientOriginalName();
+            $iso_extension = $iso_symbols->getClientOriginalExtension();
+            $iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $iso_symbols_orname));
+            $iso_symbols->move($destination_path.$upload_path,$iso_symbols_filename);$iso_path_insert=$destination_path_db.$upload_path.$iso_symbols_filename;
 
-          $iso_path_insert=$destination_path_db.$upload_path.$iso_symbols_filename;
-          $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;$white_iso_path_insert=$destination_path_db.$upload_path.$white_iso_symbols_filename;
-          $white_astms_path_insert=$destination_path_db.$upload_path.$white_astms_symbol_filename;
+            $old_cof = DB::table('tesco_care_symbols')->where("id",$request->id)->value('iso_symbols');	
+            if (file_exists(ltrim($old_cof, '/'))) {	
+              unlink(ltrim($old_cof, '/'));	
+            }
+
+            TescoCareSymbols::find($id)
+               ->update([
+                'iso_symbols'     =>  $iso_path_insert
+              ]);
+          }
+
+
+          if($request->file('astms_symbol') == ""){	
+            	
+          }else {
+            $astms_symbol= $request->file('astms_symbol');
+            $astms_symbol_orname = $astms_symbol->getClientOriginalName();
+            $astms_extension = $astms_symbol->getClientOriginalExtension();
+            $astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $astms_symbol_orname));
+            $astms_symbol->move($destination_path.$upload_path,$astms_symbol_filename);
+            $astms_path_insert=$destination_path_db.$upload_path.$astms_symbol_filename;
+
+            $old_cof = DB::table('tesco_care_symbols')->where("id",$request->id)->value('astms_symbol');	
+            if (file_exists(ltrim($old_cof, '/'))) {	
+              unlink(ltrim($old_cof, '/'));	
+            }
+
+            TescoCareSymbols::find($id)
+               ->update([
+                'astms_symbol'    =>  $astms_path_insert
+              ]);
+          }
+
+          if($request->file('white_iso_symbols') == ""){	
+            	
+          }else {
+            $white_iso_symbols= $request->file('white_iso_symbols');
+            $white_iso_symbols_orname = $white_iso_symbols->getClientOriginalName();
+            $white_iso_extension = $white_iso_symbols->getClientOriginalExtension();
+            $white_iso_symbols_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $white_iso_symbols_orname));
+            $white_iso_symbols->move($destination_path.$upload_path,$white_iso_symbols_filename);$white_iso_path_insert=$destination_path_db.$upload_path.$white_iso_symbols_filename;
+
+            $old_cof = DB::table('tesco_care_symbols')->where("id",$request->id)->value('white_iso_symbols');	
+            if (file_exists(ltrim($old_cof, '/'))) {	
+              unlink(ltrim($old_cof, '/'));	
+            }
+
+            TescoCareSymbols::find($id)
+               ->update([
+                'white_iso_symbols'     =>  $white_iso_path_insert
+              ]);
+          }
+
+          if($request->file('white_astms_symbol') == ""){	
+            	
+          }else {
+            $white_astms_symbol= $request->file('white_astms_symbol');
+            $white_astms_symbol_orname = $white_astms_symbol->getClientOriginalName();
+            $white_astms_extension = $white_astms_symbol->getClientOriginalExtension();
+            $white_astms_symbol_filename= str_random(6).'_'.preg_replace('/#[^\s]+/','',preg_replace('/\s+/', '-', $white_astms_symbol_orname));
+            $white_astms_symbol->move($destination_path.$upload_path,$white_astms_symbol_filename);
+            $white_astms_path_insert=$destination_path_db.$upload_path.$white_astms_symbol_filename;
+
+            $old_cof = DB::table('tesco_care_symbols')->where("id",$request->id)->value('white_astms_symbol');	
+            if (file_exists(ltrim($old_cof, '/'))) {	
+              unlink(ltrim($old_cof, '/'));	
+            }
+
+            TescoCareSymbols::find($id)
+               ->update([
+                'white_astms_symbol'    =>  $white_astms_path_insert
+              ]);
+          }
 
           $updated = TescoCareSymbols::find($id)
                ->update([
                 'category_id'     =>  $request->category_id,
-                'iso_symbols'     =>  $iso_path_insert,
-                'astms_symbol'    =>  $astms_path_insert,
-                'white_iso_symbols'     =>  $white_iso_path_insert,
-                'white_astms_symbol'    =>  $white_astms_path_insert,
                 'care_instruction'=>  $request->care_instruction,
                 'degree'          =>  $care_degree
               ]);
-      }
-      else   
-      {
-        $updated = '';
-      }
+      // }
+      // else   
+      // {
+      //   $updated = '';
+      // }
 
       $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Unprocessable Format'],422);
         
