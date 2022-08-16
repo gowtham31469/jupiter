@@ -1306,7 +1306,7 @@
 
 {{-- Edit Symbol --}}
 
-{{-- <div class="modal fade" id="editOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ <div class="modal fade" id="editOrchestraSymbolsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
        <div class="modal-dialog" role="document">
            <div class="modal-content">
                <div class="modal-header">
@@ -1318,14 +1318,14 @@
                      {!! Form::hidden('edit_orchestra_symbols_id',$value = null, array('id'=>'edit_orchestra_symbols_id','class' => 'form-control input-sm')) !!}
                      <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_symbol_category', 'Category', ['class' => 'form_label']) !!}
-                         {{ Form::select('edit_symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
+                         {!! Form::label('edit_orc_symbol_category', 'Category', ['class' => 'form_label']) !!}
+                         {{ Form::select('edit_orc_symbol_category', $category, '', ['class' => 'form-control input-sm','required']) }}
                       <div class="help-block with-errors"></div>
                     </div>
                     
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol (*.png only)', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_cofreet_symbol', 'Cofreet Symbol (*.svg only)', ['class' => 'form_label']) !!}
                         
                          <div class="row">
                          <div class="col-md-2"> <img width="30px" id="cofreet_image" src="" alt="Null"></div>
@@ -1333,21 +1333,21 @@
                          <div class="col-md-1"><span class="glyphicon glyphicon-arrow-right"></span></div>
                          <div class="col-md-1"><img width="30px" id="add_edit_cofreet_symbol" src="" alt="Null"></div>
                          </div>
-                         <div class="col-md-8"> {{ Form::file('edit_cofreet_symbol', ['accept' => 'image/png']) }}</div>
+                         <div class="col-md-8"> {{ Form::file('edit_cofreet_symbol', ['accept' => 'image/svg+xml']) }}</div>
                          </div>
                         
                       <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_astms_symbol', 'Astms Symbol (*.png only)', ['class' => 'form_label']) !!}
+                         {!! Form::label('edit_orc_astms_symbol', 'Astms Symbol (*.svg only)', ['class' => 'form_label']) !!}
                          <div class="row">
                          <div class="col-md-2"><img width="30px" id="astms_image" src="" alt="Null"></div>
-                         <div class="hidden hidden_edit_astms_symbol">
+                         <div class="hidden hidden_edit_orc_astms_symbol">
                          <div class="col-md-1"><span class="glyphicon glyphicon-arrow-right"></span></div>
-                         <div class="col-md-1"><img width="30px" id="add_edit_astms_symbol" src="" alt="Null"></div>
+                         <div class="col-md-1"><img width="30px" id="add_edit_orc_astms_symbol" src="" alt="Null"></div>
                          </div>
-                         <div class="col-md-8">{{ Form::file('edit_astms_symbol', ['accept' => 'image/png']) }}</div>
+                         <div class="col-md-8">{{ Form::file('edit_orc_astms_symbol', ['accept' => 'image/svg+xml']) }}</div>
                          </div>
                          
                          
@@ -1355,8 +1355,8 @@
                     </div>
                     <div class="form-group has-feedback">
                      
-                         {!! Form::label('edit_care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
-                         {{ Form::textarea('edit_care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
+                         {!! Form::label('edit_orc_care_instruction', 'Care Instruction', ['class' => 'form_label']) !!}
+                         {{ Form::textarea('edit_orc_care_instruction', null,  ['class' => 'form-control', 'maxlength' => '255', 'minlength' => '1', 'style' => 'resize: none;', 'rows' => '5','required']) }}
                       <div class="help-block with-errors"></div>
                     </div>
                    </div>
@@ -1368,7 +1368,7 @@
            
        </div>
    </div>
-   </div> --}}
+   </div> 
 
    {{-- Add Orchestra Code Modal  --}}
    <div class="modal fade" id="addOrchestraColorCodeModal" tabindex="-1" role="dialog" aria-labelledby="orchestraColorCodeModal">
@@ -3117,15 +3117,15 @@
            {
               e.preventDefault();
               var cofreet_file = $('#edit_cofreet_symbol')[0].files[0];
-              var astms_file = $('#edit_astms_symbol')[0].files[0];
+              var astms_file = $('#edit_orc_astms_symbol')[0].files[0];
               if(astms_file === undefined){
                astms_file = "";
               }
               if(cofreet_file === undefined){
                cofreet_file = "";
               }
-              var symbol_category = $('#edit_symbol_category option:selected').val();
-              var care_instruction = $('#edit_care_instruction').val();
+              var symbol_category = $('#edit_orc_symbol_category option:selected').val();
+              var care_instruction = $('#edit_orc_care_instruction').val();
               var id = $('#edit_orchestra_symbols_id').val();
 
               /* call editOrchestraSymbols function from orchestra-settings.js*/
@@ -3137,7 +3137,7 @@
            var id = $(this).closest('tr').attr('id');
            
            /* call makeSymbolEnabled function from orchestra-settings.js*/
-           makeSymbolEnabled(id,csrf_token)
+           makeOrcSymbolEnabled(id,csrf_token)
        });
 
        /** To disable symbols  on click **/
@@ -3145,7 +3145,7 @@
            var id = $(this).closest('tr').attr('id');
            
            /* call makeSymbolDisabled function from orchestra-settings.js*/
-           makeSymbolDisabled(id,csrf_token)
+           makeOrcSymbolDisabled(id,csrf_token)
        });
        
        /** Add Tesco Brand form validation **/
