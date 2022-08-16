@@ -82,8 +82,9 @@ class NonArtworkTemplateController extends Controller
     }
 
     public function nonArtworkOrders()
-    {   
-            $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
+    {       
+            $buyer_ids = DB::table('erpuser_buyer')->where('erp_user',Auth::guard('erpuser')->id())->pluck('buyer');
+            $buyers = Buyer::whereIn('id',$buyer_ids)->where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
 
