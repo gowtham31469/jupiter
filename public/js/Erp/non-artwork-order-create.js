@@ -439,12 +439,20 @@
 			success:function(data)
 			{
 				if(data.result)
-				{
+				{	console.log(data)
 					hsn_arr = [];
 					hsn_arr.push(data.hsn)
 					row_index= data.last_row_index
+					// $("#customer").empty();
+					$.each(data.customers, function(key, value) {
+						$('#customer')
+						.append($("<option></option>")
+						.attr("value",key)
+						.text(value));
+					});
+					$("#customer").val(data.row['supplier_id']);
 					$('select[name=buyer]').val(data.row['buyer_id']);
-					$('select[name=customer]').val(data.row['supplier_id']);
+					
 					$("#tesco_po_number").val(data.row['purchase_order_no'])
 					$("#order_to_edit").val(data.row['id'])
 					$("#hsn_code").val(data.hsn)

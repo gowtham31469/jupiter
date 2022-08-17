@@ -82,7 +82,8 @@ class NonArtworkTemplateController extends Controller
     }
 
     public function nonArtworkOrders()
-    {       
+    {       $erp_user_id = Auth::guard('erpuser')->id();
+
             $buyer_ids = DB::table('erpuser_buyer')->where('erp_user',Auth::guard('erpuser')->id())->pluck('buyer');
             $buyers = Buyer::whereIn('id',$buyer_ids)->where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
@@ -147,7 +148,7 @@ class NonArtworkTemplateController extends Controller
 
         $data = DB::table($template_table)
                         ->where('name_in_reports',$request->item_id)
-                        ->where(function ($query) use($erp_user_id)
+                        ->where(function ($query) use($erp_user_id,$heirarchy_ids)
                             {
                             if ($erp_user_id != 1) 
                             {
@@ -549,6 +550,10 @@ class NonArtworkTemplateController extends Controller
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
 
+            $customer_buyer = DB::table('customer_buyers')->where('buyer_id',$value->buyer_id)->pluck('customer_id');
+
+            $customers = Customer::whereIn('id',$customer_buyer)->where('is_active',1)->pluck('company_name','id');
+
             $hsn_tax = DB::table($template_table)
                     ->where('item_id',$value->template_id)
                     ->first();
@@ -662,7 +667,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers]);
        }
        else{
         return response()->json(['result'=>0]);
