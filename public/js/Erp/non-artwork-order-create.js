@@ -35,6 +35,23 @@
 			$(".rates").val('')
 		}
 
+		function sync_calculations()
+		{
+
+			total_qty = 0
+					total_value = 0
+					$(".quantity").each(function(i,v){
+					total_qty+=+$(this).val()
+					});
+					$(".rate_value").each(function(i,v){
+					total_value+=+$(this).val()
+					});
+					$("#qty_total").val(total_qty)
+					$("#value_total").val(total_value)
+					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+		}
+
 		function clone_row()
     	{
     		var index = $(".main-content select").length + 1;
@@ -80,6 +97,7 @@
 				});                       
     		}
     		set_row_index()
+    		sync_calculations()
 		}
 
 		function set_row_index()
@@ -194,6 +212,7 @@
 					showSnackbar();
 				}
 			});
+			sync_calculations()
 			set_row_index()
 		})
 

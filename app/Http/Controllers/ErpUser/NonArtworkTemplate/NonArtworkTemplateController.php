@@ -92,7 +92,9 @@ class NonArtworkTemplateController extends Controller
             $all_orders = NonArtworkOrder::whereBetween('order_created_at', [
                             Carbon::now()->startOfYear(),
                             Carbon::now()->endOfYear(),
-                            ])->select('order_id')
+                            ])
+                            ->where('created_by',$erp_user_id)
+                            ->select('order_id')
                             ->orderBy('order_id','DESC')
                             ->get();
             $order_id = $all_orders->pluck('order_id','order_id');
@@ -351,6 +353,7 @@ class NonArtworkTemplateController extends Controller
                                   'delivery_date' => Carbon::parse($request->due_date)->toDateString(),
                                   'order_created_at' => Carbon::parse($request->current_date)->toDateTimeString(),
                                   'order_approved_at' => $request->approve_date[$key]!=null ? Carbon::parse($request->approve_date[$key])->toDateTimeString():null,
+                                  'created_by' => Auth::guard('erpuser')->id()
                                 ]
                                 );
 
