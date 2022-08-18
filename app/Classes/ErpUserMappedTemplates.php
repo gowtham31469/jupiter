@@ -5,9 +5,9 @@ use DB,Auth;
 
 class ErpUserMappedTemplates
 {
-    public function getPermittedTemplates()
+    public function erpUserTemplateMap()
     {
-        $erp_user_data  = DB::table('erpusers_template_mapping')
+        return DB::table('erpusers_template_mapping')
         ->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
         ->where('erpusers_template_mapping.company',session()->get('company'))
         ->where(function ($query) {
@@ -18,6 +18,11 @@ class ErpUserMappedTemplates
         ->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table', 'buyers.item_master_table')
         ->distinct('erpusers_template_mapping.templates')
         ->get();
+    }
+    
+    public function getPermittedTemplates()
+    {
+        $erp_user_data  = $this->erpUserTemplateMap();
 
         $new_orders = array();
         $i = 1;
