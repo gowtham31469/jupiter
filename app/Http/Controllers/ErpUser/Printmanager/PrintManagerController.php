@@ -1,19 +1,20 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Printmanager;
 
+use DB;
+use Auth;
+use View;
+use Session;
+use Response;
+use Carbon\Carbon;
+use App\ErpOrders as Erp;
 use Illuminate\Http\Request;
+use App\Classes\ErpCompanySession;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Response;
-use View;
-use Auth;
-use DB;
-use Session;
-use App\ErpOrders as Erp;
 use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
 
 class PrintManagerController extends Controller
 {
@@ -28,43 +29,20 @@ class PrintManagerController extends Controller
 		$role = "PRINT MANAGER";
         $this->middleware('role_permission:'.$role);
         $this->middleware('erpuser');
-   
     }
 	
 	public function index()
     {
 		 try {
-				$customer_id = Auth::guard('erpuser')->id();
-				
-				$companies   = 	DB::table('erpuser_company_mapping')
-										->join('company','erpuser_company_mapping.company','company.id')
-										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
-										->get();
-				if($companies)
-				{
-					$company_id   = DB::table('company')
-									->select('company.*')
-									->where('company.id', '=', $companies{0}->company)
-									->first();
-				}
-				else
-				{
-					return view('erp.home');
-				}
-				
-				
-				if(session()->get('company') == "" && session()->get('company') == null)
-				{
-					session()->put('company', $company_id->id);
-					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-				}
+				$set_company_session = new ErpCompanySession();
+        
+        		$companies = $set_company_session->setCompanySession();
 				/**
 				 * Dropdown values
 				 */
 				$buyers  = 	DB::table('erpuser_buyer')
 								->join('buyers','buyers.id','erpuser_buyer.buyer')
-								->where('erpuser_buyer.erp_user',$customer_id)
+								->where('erpuser_buyer.erp_user', Auth::guard('erpuser')->id())
 								->pluck('buyers.buyer_name','buyers.id')
 								->all();
 				
@@ -88,11 +66,6 @@ class PrintManagerController extends Controller
     {
         try {
 				$buyer_id = $request['selected_buyer_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
 
 				if($buyer_id == null)
 				{
@@ -127,11 +100,6 @@ class PrintManagerController extends Controller
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
 
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
-
 				if($buyer_id == null || $customer_id == null)
 				{
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
@@ -162,11 +130,6 @@ class PrintManagerController extends Controller
 
 				$customer_id = $request['selected_customer_id'];
 				$erp_id = $request['erp_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
 
 				if($buyer_id == null || $customer_id == null)
 				{

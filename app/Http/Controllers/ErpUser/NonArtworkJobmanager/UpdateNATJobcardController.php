@@ -7,6 +7,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Classes\JobcardMetadata;
+use App\Classes\ErpCompanySession;
 use App\Http\Controllers\Controller;
 use App\Classes\ErpUserMappedTemplates;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,26 +17,11 @@ class UpdateNATJobcardController extends Controller
     public function getNonArtworkJobcardList()
     {
 
-        $companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',Auth::guard('erpuser')->id())
-									->select('erpuser_company_mapping.*','company.name', 'company.logo')
-									->get();
-        if(!$companies){
-            return view('erp.home');
-        }
-                      
-        if(session()->get('company') == "" && session()->get('company') == null){
-            $company_data   = DB::table('company')
-                            ->where('company.id', $companies[0]->company)
-                            ->select('company.id', 'company.name')
-                            ->first();
-
-            session()->put('company', $company_data->id);
-            session()->put('company_name', strtolower( str_replace(' ','',$company_data->name)) );
-        }
-        
 		$erp_user_mapped_template_obj = new ErpUserMappedTemplates();
+		$set_company_session = new ErpCompanySession();
+        
+        $companies = $set_company_session->setCompanySession();
+        
         $new_orders = $erp_user_mapped_template_obj->getPermittedTemplates();
         $buyers_array = array();
 
@@ -46,7 +32,11 @@ class UpdateNATJobcardController extends Controller
             $buyers_array[$buyer_id] = $this->buyer_name;
         }
 
-        return view('erp.Non-Artwork-Jobmanager.non-artwork-jobcards-list', ['buyers' => $buyers_array, 'companies' => $companies]);	
+        return view('erp.Non-Artwork-Jobmanager.non-artwork-jobcards-list', 
+        [
+            'buyers' => $buyers_array, 
+            'companies' => $companies
+        ]);	
     }
 
     	/**
@@ -57,10 +47,6 @@ class UpdateNATJobcardController extends Controller
 	 */  
 	public function getNatJobcardIdListByBuyerCustomerId(Request $request)
 	{
-        
-        if(session()->get('company') == "" || session()->get('company') == null){
-            return view('erp.home');
-        }
 
         if($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null){
             return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
@@ -86,9 +72,6 @@ class UpdateNATJobcardController extends Controller
 	public function getNatJobcardsListByBuyerCustomerJobcardId(Request $request)
 	{
 		try {
-            if(session()->get('company') == "" || session()->get('company') == null){
-                return view('erp.home');
-            }
 
             if($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null || $request['selected_jobcard_id'] == null){
                 return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
@@ -125,12 +108,6 @@ class UpdateNATJobcardController extends Controller
                 $jc_metadata = new JobcardMetadata();
                 $metadata = $jc_metadata->erpJobcardMetaData();
 
-				$erpuser_id = Auth::guard('erpuser')->id();
-
-				if(session()->get('company') == "" || session()->get('company') == null || $erpuser_id == null) {
-					return view('erp.home');
-				}
-				
                 $jobcard_data  = DB::table('jobcard_main_table')
 										->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo', 'jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
 										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')

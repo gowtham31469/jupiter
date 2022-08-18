@@ -6,30 +6,6 @@ use App\Invoices;
 
 class Invoice
 {
-	public function setCompany()
-	{
-		$customer_id = Auth::guard('erpuser')->id();
-            
-        $companies   =  DB::table('erpuser_company_mapping')
-                                ->join('company','erpuser_company_mapping.company','company.id')
-                                ->where('erpuser_company_mapping.erp_user',$customer_id)
-                                ->select('erpuser_company_mapping.*','company.name', 'company.logo')
-                                ->get();
-        
-        $company_id = DB::table('company')
-                                ->select('company.*')
-                                ->first();
-        
-        
-        if(session()->get('company') == "" && session()->get('company') == null)
-        {
-            session()->put('company', $company_id->id);
-            session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-        }
-    
-        return $companies;
-	}
-
     public function getInvoiceDetails($inv_id){
         $ddmmyy="DD/MM/YYYY";
         $inv_details = Invoices::where('invoice.id',$inv_id)
