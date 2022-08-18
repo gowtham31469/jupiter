@@ -530,7 +530,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker uom_select" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
