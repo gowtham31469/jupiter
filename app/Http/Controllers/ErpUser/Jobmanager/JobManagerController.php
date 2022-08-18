@@ -24,6 +24,7 @@ use App\FinancialYearResetDate;
 use App\OrchestraParcelDetails;
 use App\Classes\JobcardMetadata;
 use App\OrchestraStdPolySticker;
+use App\Classes\ErpCompanySession;
 use App\OrchestraSolidPolySticker;
 use App\OrchestraStdCartonSticker;
 use App\Classes\JobcardCommonClass;
@@ -36,6 +37,7 @@ use Illuminate\Support\Facades\Mail;
 use App\OrchestraSolidPolyStickerQty;
 use App\OrchestraStdCartonStickerQty;
 use Illuminate\Support\Facades\Input;
+use App\Classes\ErpUserMappedTemplates;
 use App\Classes\JobcardPDFHeaderFooter;
 use App\OrchestraSolidCartonStickerQty;
 use Illuminate\Support\Facades\Validator;
@@ -49,7 +51,8 @@ class JobManagerController extends Controller
 	private $order_ap_status_id;
 	private $tesco_material_obj;
 	private $jobcard_id_gen_obj;
-
+    private $erp_user_mapped_template_obj;
+    private $set_company_session;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -72,6 +75,8 @@ class JobManagerController extends Controller
 
 		$this->tesco_material_obj = new TescoMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
+		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
+        $this->set_company_session = new ErpCompanySession();
 	}
 		
 	/**
@@ -81,174 +86,119 @@ class JobManagerController extends Controller
 	 */
 	public function index()
 	{
-		try {
-			$erp_user_id = Auth::guard('erpuser')->id();
-			
-			$companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',$erp_user_id)
-									->select('erpuser_company_mapping.*','company.name', 'company.logo')
-									->get();
+		$companies = $this->set_company_session->setCompanySession();
 
-			if(!$companies)
+		// full access to erp admin
+		$new_orders = $this->erp_user_mapped_template_obj->getPermittedTemplates();
+		
+		$orders_erp = array();
+		foreach($new_orders as $key => $values)
+		{
+			$split_key = explode('-', $key);
+			$buyer_id = $split_key[0];
+			$this->buyer_name = strtolower(DB::table('buyers')->where('id', $buyer_id)->value('buyer_name'));
+			
+			foreach($values as $valuess)
 			{
-				return view('erp.home');
+				$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+										->join('customers', 'erp_orders.customer_id', 'customers.id')
+										->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
+										->join('erp_status', 'erp_orders.status', 'erp_status.id')
+										->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
+										->where(['erp_order_details.template_id' => $valuess,
+													'erp_order_details.deleted_at' => null,
+													'erp_order_details.company_id' => session()->get('company'),
+													'erp_order_details.status' => $this->erp_jc_status_id,
+													'erp_order_details.order_status_id' => $this->order_ap_status_id,
+													'buyers.id' => $buyer_id])
+										->where('erp_order_details.order_qnty_table_name', '<>', 'non_artwork_orders_quanty')
+										// ->where('erp_orders.status', '=', $erp_status_id)
+										->orderBy('erp_order_details.erp_order_id', 'asc')
+										->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
+										->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
+										->get()->toArray();
 				
-			}
-
-			$company_id   = DB::table('company')
-								->select('company.*')
-								->where('company.id', $companies[0]->company)
-								->first();
-
-			if(session()->get('company') == "" && session()->get('company') == null)
-			{
-				session()->put('company', $company_id->id);
-				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-			}
-
-			// full access to erp admin
-			$templates   = 		DB::table('erpusers_template_mapping')
-								->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-								->where('erpusers_template_mapping.company',session()->get('company'))
-								->where(function ($query) use ($erp_user_id) {
-									if ($erp_user_id != 1) {
-												$query->where('erpusers_template_mapping.erp_user',$erp_user_id);
-										}
-								})
-								->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
-								->distinct('erpusers_template_mapping.templates')
-								->get();
-			
-			$new_orders = array();
-			$i=1;
-			foreach($templates as $value)
-			{
-				$arr_template =  DB::table($value->template_table)
-								->where('hierarchy_id',$value->templates)
-								//->where('flag',1)
-								->distinct('hierarchy_id')
-								->pluck('item_id');
-				if($arr_template)
+				if(count($erp_order_details) > 0)
 				{
-					$new_orders[$value->buyer_id."-".$i] = $arr_template;
-				}
-				$i++;
-			}
-			
-			$orders_erp = array();
-			foreach($new_orders as $key => $values)
-			{
-				$split_key = explode('-', $key);
-				$buyer_id = $split_key[0];
-				$this->buyer_name = strtolower(DB::table('buyers')->where('id', $buyer_id)->value('buyer_name'));
-				
-				foreach($values as $valuess)
-				{
-					$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-											->join('customers', 'erp_orders.customer_id', 'customers.id')
-											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
-											->join('erp_status', 'erp_orders.status', 'erp_status.id')
-											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where(['erp_order_details.template_id' => $valuess,
-											         'erp_order_details.deleted_at' => null,
-													 'erp_order_details.company_id' => session()->get('company'),
-											         'erp_order_details.status' => $this->erp_jc_status_id,
-											         'erp_order_details.order_status_id' => $this->order_ap_status_id,
-											         'buyers.id' => $buyer_id])
-											->where('erp_order_details.order_qnty_table_name', '<>', 'non_artwork_orders_quanty')
-											// ->where('erp_orders.status', '=', $erp_status_id)
-											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
-											->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
-											->get()->toArray();
-					
-					if(count($erp_order_details) > 0)
+					foreach($erp_order_details as $erp_order_det)
 					{
-						foreach($erp_order_details as $erp_order_det)
+						// format delivery date to dd-mm-yyyy
+						if($erp_order_det["delivery_date"] != null)
 						{
-							// format delivery date to dd-mm-yyyy
-							if($erp_order_det["delivery_date"] != null)
-							{
-                                 $erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
-							}
-							
-							if($erp_order_det["order_qnty_table_name"] == "orchestra_hang_tag_orders_qty")
-							{
-								$fkey = DB::table('orchestra_hang_tag_orders_qty')
-								->where('id',$erp_order_det["order_qnty_table_id"])
-								->first()
-								->oht_id;
-
-								$row = DB::table('orchestra_hang_tag_orders')
-								->where('id',$fkey)->first();
-								
-								$disney = DB::table('orchestra_parcel_details')
-								->where('id',$row->orchestra_parcel_details_id)->first();
-								
-								$erp_order_det["Disney"] = $disney->Licence_Code;
-								
-								$erp_order_det["frontPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_front_id)
-								->where('flag',1)
-								->first()
-								->template_file;
-
-								$erp_order_det["backPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_front_id)
-								->where('flag',0)
-								->first()
-								->template_file;
-								
-							}
-							
-							if($erp_order_det["order_qnty_table_name"] == "orchestra_wash_care_label_orders_qty")
-							{
-								$fkey = DB::table('orchestra_wash_care_label_orders_qty')
-								->where('id',$erp_order_det["order_qnty_table_id"])
-								->first()
-								->owcl_id;
-
-								$row = DB::table('orchestra_wash_care_label_orders')
-								->where('id',$fkey)->first();
-								
-								$disney = DB::table('orchestra_parcel_details')
-								->where('id',$row->orchestra_parcel_details_id)->first();
-								
-								$erp_order_det["Disney"] = $disney->Licence_Code;
-								
-								$erp_order_det["frontPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_id)
-								->where('flag',1)
-								->first()
-								->template_file;
-
-								$erp_order_det["backPath"]='/storage/app/template/Orchestra/WCL/sticker2.svg';
-								$erp_order_det["middlePath"]='/storage/app/template/Orchestra/WCL/sticker3.svg';
-							}
-
-							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
+								$erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
 						}
 						
+						if($erp_order_det["order_qnty_table_name"] == "orchestra_hang_tag_orders_qty")
+						{
+							$fkey = DB::table('orchestra_hang_tag_orders_qty')
+							->where('id',$erp_order_det["order_qnty_table_id"])
+							->first()
+							->oht_id;
+
+							$row = DB::table('orchestra_hang_tag_orders')
+							->where('id',$fkey)->first();
+							
+							$disney = DB::table('orchestra_parcel_details')
+							->where('id',$row->orchestra_parcel_details_id)->first();
+							
+							$erp_order_det["Disney"] = $disney->Licence_Code;
+							
+							$erp_order_det["frontPath"] = DB::table('orchestra_template')
+							->where('item_id',$row->template_front_id)
+							->where('flag',1)
+							->first()
+							->template_file;
+
+							$erp_order_det["backPath"] = DB::table('orchestra_template')
+							->where('item_id',$row->template_front_id)
+							->where('flag',0)
+							->first()
+							->template_file;
+							
+						}
+						
+						if($erp_order_det["order_qnty_table_name"] == "orchestra_wash_care_label_orders_qty")
+						{
+							$fkey = DB::table('orchestra_wash_care_label_orders_qty')
+							->where('id',$erp_order_det["order_qnty_table_id"])
+							->first()
+							->owcl_id;
+
+							$row = DB::table('orchestra_wash_care_label_orders')
+							->where('id',$fkey)->first();
+							
+							$disney = DB::table('orchestra_parcel_details')
+							->where('id',$row->orchestra_parcel_details_id)->first();
+							
+							$erp_order_det["Disney"] = $disney->Licence_Code;
+							
+							$erp_order_det["frontPath"] = DB::table('orchestra_template')
+							->where('item_id',$row->template_id)
+							->where('flag',1)
+							->first()
+							->template_file;
+
+							$erp_order_det["backPath"]='/storage/app/template/Orchestra/WCL/sticker2.svg';
+							$erp_order_det["middlePath"]='/storage/app/template/Orchestra/WCL/sticker3.svg';
+						}
+
+						$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
 					}
+					
 				}
-				
 			}
-
-			asort($orders_erp);
-
-			return view(
-				'erp.Jobmanager.jobmanager',
-				[
-					'orders' => $orders_erp,
-					'companies' => $companies,
-				]
-			);
+			
 		}
-		catch (\Exception $e)
-		{
-		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-		}
+
+		asort($orders_erp);
+
+		return view(
+			'erp.Jobmanager.jobmanager',
+			[
+				'orders' => $orders_erp,
+				'companies' => $companies,
+			]
+		);
 	}
 	/**
 	 * Get order deatils.
@@ -2974,31 +2924,10 @@ class JobManagerController extends Controller
 	public function getJobcards()
 	{
 		try {
-				$erpuser_id = Auth::guard('erpuser')->id();
-				
-				$companies   = 	DB::table('erpuser_company_mapping')
-										->join('company','erpuser_company_mapping.company','company.id')
-										->where('erpuser_company_mapping.erp_user',$erpuser_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
-										->get();
-				if($companies)
-				{
-					$company_id   = DB::table('company')
-									->select('company.*')
-									->where('company.id', '=', $companies[0]->company)
-									->first();
-				}
-				else
-				{
-					return view('erp.home');
-				}
-				
-				
-				if(session()->get('company') == "" && session()->get('company') == null)
-				{
-					session()->put('company', $company_id->id);
-					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-				}
+				$set_company_session = new ErpCompanySession();
+        
+       			$companies = $set_company_session->setCompanySession();
+
 				/**
 				 * Dropdown values
 				 */
@@ -3027,44 +2956,35 @@ class JobManagerController extends Controller
 				$jc_metadata = new JobcardMetadata();
                 $metadata = $jc_metadata->erpJobcardMetaData();
 
-				$erpuser_id = Auth::guard('erpuser')->id();
+				$jobcard_data  = DB::table('jobcard_main_table')
+									->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
+									->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+									->join('company', 'company.id', 'jobcard_main_table.company_id')
+									->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+									->where('jobcard_main_table.id', '=', $id)
+									->first();
+				$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+				$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+				$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+				$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+				$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
 
-				if(session()->get('company') == "" || session()->get('company') == null || $erpuser_id == null)
-				{
-					return view('erp.home');
-				}
-				else
-				{
-					$jobcard_data  = DB::table('jobcard_main_table')
-										->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
-										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-										->join('company', 'company.id', 'jobcard_main_table.company_id')
-										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-										->where('jobcard_main_table.id', '=', $id)
-										->first();
-					$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
-					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
-					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
-					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+				$jobcard_details  = DB::table('jobcard_excess_details')
+									->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
+									->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
+									->get();
+				$jobcard_data->additional_details = $jobcard_details;	
 
-					$jobcard_details  = DB::table('jobcard_excess_details')
-										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
-										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
-										->get();
-					$jobcard_data->additional_details = $jobcard_details;	
+				return response()->json([
+					'error'=> false,
+					'message' =>'Success', 
+					'jobcard_data' => $jobcard_data,
+					'disp_modes' => $metadata['erp_dispatch_mode'],
+					'finish_types' => $metadata['erp_finish_type'],
+					'machines' => $metadata['erp_machines'],
+					'teeth_nos' => $metadata['erp_teeth_no'],
 
-					return response()->json([
-						'error'=> false,
-						'message' =>'Success', 
-						'jobcard_data' => $jobcard_data,
-						'disp_modes' => $metadata['erp_dispatch_mode'],
-                        'finish_types' => $metadata['erp_finish_type'],
-                        'machines' => $metadata['erp_machines'],
-                        'teeth_nos' => $metadata['erp_teeth_no'],
-
-					], 200);
-				}
+				], 200);
 	
 			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -3315,10 +3235,6 @@ class JobManagerController extends Controller
 	public function getCustomersListByBuyerId(Request $request)
 	{
 		try {
-				if(session()->get('company') == "" || session()->get('company') == null){
-					return view('erp.home');
-				}
-
 				if($request['selected_buyer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
@@ -3349,10 +3265,6 @@ class JobManagerController extends Controller
 		try {
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null){
-					return view('erp.home');
-				}
 
 				if($buyer_id == null || $customer_id == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
@@ -3385,10 +3297,6 @@ class JobManagerController extends Controller
 				$buyer_id    = $request['selected_buyer_id'];
 				$customer_id = $request['selected_customer_id'];
 				$jobcard_id  = $request['selected_jobcard_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null){
-					return view('erp.home');
-				}
 
 				if($buyer_id == null || $customer_id == null || $jobcard_id == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
