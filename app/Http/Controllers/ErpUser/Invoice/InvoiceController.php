@@ -1,32 +1,33 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Invoice;
 
+use DB;
+use PDF;
+use Auth;
+use Mail;
+use View;
+use Response;
+use App\History;
+use App\Invoices;
+use Carbon\Carbon;
+use App\EventHistory;
+use App\InvoiceAddress;
+use App\InvoiceDetails;
+use App\Classes\Invoice;
+use App\ErpOrderDetails;
+use App\InvExtraCharges;
+use App\ErpOrders as Erp;
+use App\ErpOrdersInvoice; 
 use Illuminate\Http\Request;
+use App\FinancialYearResetDate;
+use App\OrderManagementHistory;
+use Elibyy\TCPDF\Facades\TCPDF;
+use App\Classes\invoiceTCPDF;   
+use App\Classes\ErpCompanySession;
+use App\Classes\InvoiceIDGenerator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Response;
-use View;
-use DB;
-use Auth;
-use Mail;
-use App\ErpOrders as Erp;
-use App\ErpOrderDetails;
-use App\ErpOrdersInvoice; 
-use App\Invoices;
-use App\InvoiceDetails;
-use App\InvExtraCharges;
-use PDF;
-use App\Classes\Invoice;
-use App\InvoiceAddress;
-use Elibyy\TCPDF\Facades\TCPDF;
-use App\Classes\invoiceTCPDF;   
-use App\EventHistory;
-use App\History;
-use Carbon\Carbon;
-use App\FinancialYearResetDate;
-use App\Classes\InvoiceIDGenerator;
-use App\OrderManagementHistory;
 
 class InvoiceController extends Controller
 {
@@ -54,9 +55,10 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        $set_company_session = new ErpCompanySession();
         
-        $objInv     = new Invoice();
-        $companies  = $objInv->setCompany();
+        $companies = $set_company_session->setCompanySession();
+        
         $invoices   = Invoices::join('customers','invoice.customer_id','customers.id')
                             ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                             ->join('buyers','invoice.buyer_id','buyers.id')
@@ -72,8 +74,10 @@ class InvoiceController extends Controller
      * @return create invoice view
      */
     public function create(){
-        $objInv     = new Invoice();
-        $companies  = $objInv->setCompany();
+        $set_company_session = new ErpCompanySession();
+        
+        $companies = $set_company_session->setCompanySession();
+
         $customers  = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\ErpOrders as Erp;
 use Illuminate\Http\Request;
 use App\Classes\JobcardMetadata;
+use App\Classes\ErpCompanySession;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
@@ -26,6 +27,7 @@ class NonArtworkJobCardFiltersController extends Controller
     private $jobcard_id_gen_obj;
 	private $current_date;
     private $erp_user_mapped_template_obj;
+    private $set_company_session;
 
 	/**
 	 * Create a new controller instance.
@@ -54,6 +56,7 @@ class NonArtworkJobCardFiltersController extends Controller
                                     ->all();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
+        $this->set_company_session = new ErpCompanySession();
 	}
 
     /**
@@ -63,24 +66,7 @@ class NonArtworkJobCardFiltersController extends Controller
 	 */
     public function index()
     {
-        $companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',Auth::guard('erpuser')->id())
-									->select('erpuser_company_mapping.*','company.name', 'company.logo')
-									->get();
-        if(!$companies){
-            return view('erp.home');
-        }
-                      
-        if(session()->get('company') == "" && session()->get('company') == null){
-            $company_data   = DB::table('company')
-                            ->where('company.id', $companies[0]->company)
-                            ->select('company.id', 'company.name')
-                            ->first();
-
-            session()->put('company', $company_data->id);
-            session()->put('company_name', strtolower( str_replace(' ','',$company_data->name)) );
-        }
+        $companies = $this->set_company_session->setCompanySession();
         
         $new_orders = $this->erp_user_mapped_template_obj->getPermittedTemplates();
         $buyers_array = array();
@@ -115,10 +101,13 @@ class NonArtworkJobCardFiltersController extends Controller
             }
         }
 
+        $erp_po_ids = $erpid_collection->all();
+        asort($erp_po_ids);
+
         return view(
             'erp.Non-Artwork-Jobmanager.non-artwork-jobcard-home',
             [
-                'erp_po_ids' => $erpid_collection->all(),
+                'erp_po_ids' => $erp_po_ids,
                 'buyers' => $buyers_array,
                 'companies' => $companies
             ]
