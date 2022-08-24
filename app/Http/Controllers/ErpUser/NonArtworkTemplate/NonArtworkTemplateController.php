@@ -141,7 +141,7 @@ class NonArtworkTemplateController extends Controller
         $heirarchy_ids = DB::table('erpusers_template_mapping')
                             ->where('erp_user',$erp_user_id)
                             ->where('buyer',$request->buyer_id)
-                            ->where('company',session()->get('company'))
+                            // ->where('company',session()->get('company'))
                             ->pluck('templates');
 
                             
