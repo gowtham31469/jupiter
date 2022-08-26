@@ -3,19 +3,12 @@
 <head>
 
 <style>
-
-  /* .tabl-design{
-    text-align: center !important;
-   }*/
    td {
             height: 12px;  
       }
 
     th {
         height: 9px;
-        /*vertical-align: middle;*/
-        /*width: 45px;*/
-        /*text-align: center !important;*/
     }
 
     table {
@@ -27,19 +20,6 @@
         text-align: center !important;
     }
 
-    .thead-design th{
-
-        /*border-right-width: 1px !important;*/
-        /*border-bottom: 1px !important;*/
-        /*border-left-width: 1px !important;*/
-         /*border-top: 1px !important;*/
-        /*border-left: 1px solid #DDD !important;*/
-        /*border-top: 1px solid #eee !important;*/
-        /*border-right: 1px solid #DDD !important;*/
-        /*border-bottom: 1px solid #eee !important; */
-       /*border-bottom :1px solid black !important;*/
-
-    }
     .tdheight{
          height: 5px !important;
     }

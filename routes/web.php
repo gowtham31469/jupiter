@@ -100,14 +100,11 @@ Route::get('admin/tesco/template-details', 'Admin\TemplateManagement\TemplateCon
 Route::post('admin/tesco/update-notes', 'Admin\TemplateManagement\TemplateController@setTemplateNotes');
 
 Route::post('admin/template-management/template-hierarchy', 'Admin\TemplateManagement\TemplateController@templateHierarchy');
-
-
 Route::post('admin/template-management/save-taxation', 'Admin\TemplateManagement\TemplateController@saveTax');
-
 Route::post('admin/template-management/add-template', 'Admin\TemplateManagement\TemplateController@addTemplate');
-
 Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
 Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
+Route::get('admin/template-management/get-spectrra-company-metadata', 'Admin\TemplateManagement\SpectrraMetadataController@getSpectrraMetadata');
 
 
 Route::post('admin/orchestra/template-management/template-list-view', 'Admin\Orchestra\TemplateManagementCntrl@templateListView');

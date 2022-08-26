@@ -125,17 +125,99 @@ function template_list() {
 												var color = value[0].color === null?'':value[0].color;
 												var hsn_code = value[0].hsn_code === null?'':value[0].hsn_code;
 												if(value[0].type == "Labels")
-                        {
-                            //alert()
-                            var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="margin-left: 350px;height: 500px;"></div><div class="col-md-2"><img style="margin-left: 300px;height: 500px;" src="/images/BACK.png"></div>';
-                        }
-                        else
-                        {
-                            var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
-                        }
-												$('.viewDiv').append('<div class="col-md-12"><div class="row">'+object_ref+'</div><div class="row" style="margin-top:15px;"><form role="form" id = "update_tesco_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_' + temp_id + '">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="' + value[0].template_name + '" name="ref_' + temp_id + '" id="ref_' + temp_id + '" required disabled> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_' + temp_id + '">Company Name :</label> <select class="form-control input-sm " name="company_' + temp_id + '" id="company_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_' + temp_id + '">Taxation Value (%):</label> <select class="form-control input-sm " name="tax_' + temp_id + '" id="tax_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_' + temp_id + '">Material :</label> <select class="form-control input-sm " name="material_' + temp_id + '" id="material_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a material</option>'+ material +'</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_text_' + temp_id + '">GL Text :</label> <input class="form-control input-sm" placeholder="GL Text" required type="text" value="' + gl_text + '" name="gl_text_' + temp_id + '" id="gl_text_' + temp_id + '" maxlength = "25"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_' + temp_id + '">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="' + value[0].gl_code + '" name="gl_code_' + temp_id + '" id="gl_code_' + temp_id + '" maxlength = "15" onkeypress = "return isNumber(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_' + temp_id + '">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="' + color + '" name="color_' + temp_id + '" id="color_' + temp_id + '" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_' + temp_id + '">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="' + hsn_code + '" name="hsn_code_' + temp_id + '" id="hsn_code_' + temp_id + '" maxlength = "10" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_' + temp_id + '">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="' + value[0].dimension_height + '" name="dimension_height_' + temp_id + '" id="dimension_height_' + temp_id + '" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_' + temp_id + '">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="' + value[0].dimension_width + '" name="dimension_width_' + temp_id + '" id="dimension_width_' + temp_id + '" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <label class="pull-left" for=name_in_reports_' + temp_id + '">Name in reports:</label> <select class="form-control input-sm " name="name_in_reports_' + temp_id + '" id="name_in_reports_' + temp_id + '" style="width: 100%;" required=""><option value="">Select a name</option>'+ name_in_reports +'</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="' + temp_id + '" >Save</button><button class="btn btn-primary btn-sm " type="button" onclick="showMoreDetails(' + temp_id + ')"> + More Details</button> </div><div class="clearfix"></div></form></div></div></div></div></div>')
+											{
+												//alert()
+												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="margin-left: 350px;height: 500px;"></div><div class="col-md-2"><img style="margin-left: 300px;height: 500px;" src="/images/BACK.png"></div>';
+											}
+											else
+											{
+												var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
+											}
+												$('.viewDiv').append(`<div class="col-md-12">
+														<div class="row">` + object_ref + `</div>
+															<div class="row" style="margin-top:15px;">
+																<form role="form" id="update_tesco_template_data_form" data-toggle="validator">
+																	<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left"
+																			for="ref_` + temp_id + `">Reference No :</label> <input class="form-control input-sm "
+																			placeholder="Enter Reference No" type="text" value="` + value[0].template_name + `"
+																			name="ref_` + temp_id + `" id="ref_` + temp_id + `" required disabled>
+																		<div class="help-block with-errors"></div>
+																	</div>
+																	<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left"
+																			for="company_` + temp_id + `">Company Name :</label> <select class="form-control input-sm "
+																			name="company_` + temp_id + `" id="company_` + temp_id + `" style="width: 100%;" required="" onchange="spectrraMetadata(this)">
+																			<option value="">Select a company</option>` + company + `
+																		</select>
+																		<div class="help-block with-errors"></div>
+																	</div>
+																	<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left"
+																			for="tax_` + temp_id + `">Taxation Value (%):</label> <select class="form-control input-sm "
+																			name="tax_` + temp_id + `" id="tax_` + temp_id + `" style="width: 100%;" required="">
+																			<option value="">Select a taxation value</option>` + tax + `
+																		</select>
+																		<div class="help-block with-errors"></div>
+																	</div>
+																	<div class="clearfix"></div>
+																	<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left"
+																			for="material_` + temp_id + `">Material :</label> <select class="form-control input-sm "
+																			name="material_` + temp_id + `" id="material_` + temp_id + `" style="width: 100%;" required="">
+																			<option value="">Select a material</option> ` + material + `
+																		</select>
+																		<div class="help-block with-errors"></div>
+																	</div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for=gl_text_` + temp_id + `">GL Text :</label> 
+																			<input class="form-control input-sm" placeholder="GL Text" required type="text" value="` + gl_text + `" name="gl_text_` + temp_id + `" id="gl_text_` + temp_id + `" maxlength = "25">
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for=gl_code_` + temp_id + `">GL Code :</label> 
+																			<input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="` + value[0].gl_code + `" name="gl_code_` + temp_id + `" id="gl_code_` + temp_id + `" maxlength = "15" onkeypress = "return isNumber(event)"> 
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="clearfix"></div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for="color_` + temp_id + `">Color :</label> 
+																			<input class="form-control input-sm " placeholder="Color" required type="text" value="` + color + `" name="color_` + temp_id + `" id="color_` + temp_id + `" maxlength = "10">
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for="hsn_code_` + temp_id + `">HSN Code :</label>
+																			<input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="` + hsn_code + `" name="hsn_code_` + temp_id + `" id="hsn_code_` + temp_id + `" maxlength = "10" > 
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for=dimension_height_` + temp_id + `">Height (mm):</label> 
+																			<input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="` + value[0].dimension_height + `" name="dimension_height_` + temp_id + `" id="dimension_height_` + temp_id + `" maxlength = "5" > 
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="clearfix"></div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for=dimension_width_` + temp_id + `">Width (mm):</label> 
+																			<input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="` + value[0].dimension_width + `" name="dimension_width_` + temp_id + `" id="dimension_width_` + temp_id + `" maxlength = "5" > 
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> 
+																			<label class="pull-left" for=name_in_reports_` + temp_id + `">Name in reports:</label> 
+																			<select class="form-control input-sm " name="name_in_reports_` + temp_id + `" id="name_in_reports_` + temp_id + `" style="width: 100%;" required="">
+																			<option value="">Select a name</option>` + name_in_reports + `</select>
+																			<div class="help-block with-errors"></div>
+																		</div>
+																		<div class="clearfix"></div>
+																	<div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6"> </div>
+																	<div class="form-group col-xs-10 col-sm-6 col-md-6 col-lg-6"> 
+																		<button class="btn btn-primary btn-sm pull-right" style="margin-left: 10px;" type="submit" id="` + temp_id + `">Save</button>
+																		<button class="btn btn-primary btn-sm pull-right" style="margin-left: 10px;" type="button" onclick="showMoreDetails(` + temp_id + `)"> + More Details</button> 
+																		<button class="btn btn-primary btn-sm pull-right spectrra-metadata-btn hidden" style="margin-left: 10px;" type="button" onclick="getSpectrraErpMetadata(` + temp_id + `)"> + Erp Metadata</button> 
+																	</div>
+																	<div class="clearfix"></div>
+																</form>
+															</div>
+														</div>
+													</div>
+												</div>
+												</div>`);
 												
-												//$('#'+temp_id).prop('disabled',false)
 												$('#company_' + temp_id).val(value[0].company_id)
 												$('#tax_' + temp_id).val(value[0].tax)
 												$('#material_' + temp_id).val(value[0].material_id)
@@ -517,7 +599,7 @@ function template_list() {
 												name_in_reports += "<option value=" + index4 + ">" + value4 + "</option>";
 											});
 
-//											alert()
+
 									$('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "add_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_new">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="" name="ref_new" id="ref_new" required> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_new">Company Name :</label> <select class="form-control input-sm " name="company_new" id="company_new" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_new">Taxation Value (%):</label> <select class="form-control input-sm " name="tax_new" id="tax_new" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_new">Material :</label> <select class="form-control input-sm " name="material_new" id="material_new" style="width: 100%;" required=""><option value="">Select a material</option>'+ material +'</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_text_new">GL Text :</label> <input class="form-control input-sm" placeholder="GL Text" required type="text" value="" name="gl_text_new" id="gl_text_new" maxlength = "25"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_new">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="" name="gl_code_new" id="gl_code_new" maxlength = "15" onkeypress = "return isNumber(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_new">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="" name="color_new" id="color_new" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_new">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="" name="hsn_code_new" id="hsn_code_new" maxlength = "10" > <div class="help-block with-errors"></div></div> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_new">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="" name="dimension_height_new" id="dimension_height_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_new">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="" name="dimension_width_new" id="dimension_width_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <label class="pull-left" for=name_in_reports_new">Name in reports:</label> <select class="form-control input-sm " name="name_in_reports_new" id="name_in_reports_new" style="width: 100%;" required=""><option value="">Select a name</option>'+ name_in_reports +'</select> <div class="help-block with-errors"></div> </div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="new" >Add</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
 									$('.descriptionDiv').css('margin-top', '20px')
 									$('.viewDiv').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
@@ -591,7 +673,7 @@ function template_list() {
 												
 												name_in_reports += "<option value=" + index4 + ">" + value4 + "</option>";
 											});
-//											alert()
+
 									$('.descriptionDiv').html('<div class="col-md-12"><div class="row" style="margin-top:15px;"><form role="form" id = "add_template_data_form" data-toggle= "validator"> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="ref_new">Reference No :</label> <input class="form-control input-sm " placeholder="Enter Reference No" type="text" value="" name="ref_new" id="ref_new" required> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="company_new">Company Name :</label> <select class="form-control input-sm " name="company_new" id="company_new" style="width: 100%;" required=""><option value="">Select a company</option>' + company + '</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="tax_new">Taxation Value (%):</label> <select class="form-control input-sm " name="tax_new" id="tax_new" style="width: 100%;" required=""><option value="">Select a taxation value</option>' + tax + '</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="material_new">Material :</label> <select class="form-control input-sm " name="material_new" id="material_new" style="width: 100%;" required=""><option value="">Select a material</option>'+ material +'</select> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_text_new">GL Text :</label> <input class="form-control input-sm" placeholder="GL Text" required type="text" value="" name="gl_text_new" id="gl_text_new" maxlength = "25"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=gl_code_new">GL Code :</label> <input class="form-control input-sm" placeholder="GL Code" required type="number" min="1" value="" name="gl_code_new" id="gl_code_new" maxlength = "15" onkeypress = "return isNumber(event)"> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="color_new">Color :</label> <input class="form-control input-sm " placeholder="Color" required type="text" value="" name="color_new" id="color_new" maxlength = "10"> <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for="hsn_code_new">HSN Code :</label> <input class="form-control input-sm" placeholder="HSN Code" required type="number" min="1" value="" name="hsn_code_new" id="hsn_code_new" maxlength = "10" > <div class="help-block with-errors"></div></div> <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_height_new">Height (mm):</label> <input class="form-control input-sm" placeholder="Height in mm" required type="number" min="1" value="" name="dimension_height_new" id="dimension_height_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback"> <label class="pull-left" for=dimension_width_new">Width (mm):</label> <input class="form-control input-sm" placeholder="Width in mm" required type="number" min="1" value="" name="dimension_width_new" id="dimension_width_new" maxlength = "5" > <div class="help-block with-errors"></div></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <label class="pull-left" for=name_in_reports_new">Name in reports:</label> <select class="form-control input-sm " name="name_in_reports_new" id="name_in_reports_new" style="width: 100%;" required=""><option value="">Select a name</option>'+ name_in_reports +'</select> <div class="help-block with-errors"></div></div><div class="clearfix"></div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> </div><div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4"> <button class="btn btn-primary btn-sm pull-right" type="submit" id="new" >Add</button></div><div class="clearfix"></div></form></div></div></div></div></div>')
 									$('.descriptionDiv').css('margin-top', '20px')
 									$('.viewDiv').css('margin-top', '0px')
@@ -748,39 +830,39 @@ function addTemplate(template_id) {
 		var buyer = localStorage.getItem("buyer");
 		
 		$.ajax({
-		url: base_url + "/admin/" + buyer + "/template-details",
-		type: "GET",
-		dataType: "json",
-		data: {
-			template_id: id,
-			_token: csrf_token
-		},
-		beforeSend: function () {
-			$(".loader").show();
-			$(".loader").css('margin-top', '12%');
-		},
-		success: function (data) {
-			$('.featuresDiv').html('')
-			if (data.data.length > 0) {
-				$(data.data).each(function (key, index) {
-					
-                	$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' style='resize: vertical;min-height:10vh;' required>"+data.data[key].notes+"</textarea></div>");
-           		});
+			url: base_url + "/admin/" + buyer + "/template-details",
+			type: "GET",
+			dataType: "json",
+			data: {
+				template_id: id,
+				_token: csrf_token
+			},
+			beforeSend: function () {
+				$(".loader").show();
+				$(".loader").css('margin-top', '12%');
+			},
+			success: function (data) {
+				$('.featuresDiv').html('')
+				if (data.data.length > 0) {
+					$(data.data).each(function (key, index) {
+						
+						$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' style='resize: vertical;min-height:10vh;' required>"+data.data[key].notes+"</textarea></div>");
+					});
+				}
+				else{
+					$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details' style='resize: vertical;min-height:10vh;'required></textarea></div>");
+				}
+				
+			},
+			error: function (data) {
+				$('.snackbar_span').html('Something went wrong!!');
+				showSnackbar();
+			},
+			complete: function () {
+				$(".loader").hide();
+				$(".loader").css('margin-top', '0%');
 			}
-			else{
-				$('.featuresDiv').append("<div class='form-group'><textarea class='form-control input-sm' name='edit_details[]' placeholder='Enter details' style='resize: vertical;min-height:10vh;'required></textarea></div>");
-			}
-			
-		},
-		error: function (data) {
-			$('.snackbar_span').html('Something went wrong!!');
-			showSnackbar();
-		},
-		complete: function () {
-			$(".loader").hide();
-			$(".loader").css('margin-top', '0%');
-		}
-	});
+		});
 
 		$('#moreDetails').modal("show");
 		$('#moreDetails').removeData('.modal');
