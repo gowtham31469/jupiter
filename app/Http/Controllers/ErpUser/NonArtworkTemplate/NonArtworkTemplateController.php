@@ -449,7 +449,7 @@ class NonArtworkTemplateController extends Controller
                         'customer_id'          => $request->customer,
                         'material'             => $material_name,
                         'mat_sub'              => $material_sub,
-                        'reference'            => $request->reference[$key],
+                        'reference'            => $material_ref,
                         'style'                => $request->style[$key],
                         'po'                   => $request->po_number,
                         'buyer_po'             => $request->bpo[$key],
