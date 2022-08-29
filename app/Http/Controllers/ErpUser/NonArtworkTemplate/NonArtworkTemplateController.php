@@ -262,11 +262,16 @@ class NonArtworkTemplateController extends Controller
             $matrix = [];
             foreach($request->ocn as $key=>$value)
             {
-            $arr = [];
-            array_push($arr,$value);
-            array_push($arr,$request->bpo[$key]);
-            array_push($arr,$request->style[$key]);
-            array_push($matrix,$arr);
+                $arr = [];
+                array_push($arr,$value);
+                array_push($arr,$request->bpo[$key]);
+                array_push($arr,$request->style[$key]);
+                array_push($arr,$request->size[$key]);
+                array_push($arr,$request->item[$key]);
+                array_push($arr,$request->reference[$key]);
+                array_push($arr,$request->color[$key]);
+                array_push($arr,$request->composition[$key]);
+                array_push($matrix,$arr);
             }
             if(count($request->ocn) != count(array_unique($matrix, SORT_REGULAR)))
             {
