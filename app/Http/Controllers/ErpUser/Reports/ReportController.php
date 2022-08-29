@@ -96,20 +96,29 @@ public function index()
     $invoice = Action::where('type','Invoice')->pluck('action','id')->toArray();
     $invoice=$invoice+$tax;
     $templates = array_filter(array_unique(History::all()->sortBy('template')->pluck('template')->toArray()));
+    // dd($templates);
+    $template_type = ['template'=>'Template','non_template'=>'Non Template'];
     $seasons =array_filter(array_unique(History::all()->sortBy('season')->pluck('season')->toArray()));
     $countries = array_filter(array_unique(History::all()->sortBy('country')->pluck('country')->toArray()));
-    return view('erp.Report.reportgenerator',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates'));
+    return view('erp.Report.reportgenerator',compact('buyers','actions','po','jc','jc','order','invoice','allActions','action_as_id','countries','seasons','templates','template_type'));
 
 }
 
 public function level1Filter(Request $request)
 {
+    // dd($request->all());
 
     $result = History::whereIn('buyer_id',$request->buyer)
     ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
-    ->whereIn('season',$request->season)
-    ->whereIn('template',$request->template)
-    ->whereIn('country',$request->country)
+    ->where(function($q)use($request){
+        $request->has('season') ? $q->whereIn('season',$request->season) : '' ;
+    })
+    ->where(function($q)use($request){
+        $request->has('country') ? $q->whereIn('country',$request->country) : '' ;
+    })
+    // ->whereIn('season',$request->season)
+    // ->whereIn('template',$request->template)
+    // ->whereIn('country',$request->country)
     ->whereBetween('event_history.created_at', [$request->date_start.' 00:00:00', $request->date_end.' 23:59:59'])
     ->select('material','customer_id','style','mat_sub')
     ->get();
@@ -128,9 +137,15 @@ public function level2Filter(Request $request)
 {  
     $result = History::whereIn('buyer_id',$request->buyer)
     ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
-    ->whereIn('season',$request->season)
-    ->whereIn('template',$request->template)
-    ->whereIn('country',$request->country)
+    // ->whereIn('season',$request->season)
+    // ->whereIn('template',$request->template)
+    // ->whereIn('country',$request->country)
+    ->where(function($q)use($request){
+        $request->has('season') ? $q->whereIn('season',$request->season) : '' ;
+    })
+    ->where(function($q)use($request){
+        $request->has('country') ? $q->whereIn('country',$request->country) : '' ;
+    })
     ->whereIn('customer_id',$request->customers)
     ->whereIn('material',$request->materials)
     ->whereIn('style',$request->styles)
@@ -434,9 +449,15 @@ public function setUpDatatable(Request $request)
 
       $result = History::whereIn('buyer_id',$request->buyer)
         ->leftJoin("event_history",'history.id', '=', 'event_history.history_id')
-        ->whereIn('season',$request->season)
-        ->whereIn('template',$request->template)
-        ->whereIn('country',$request->country)
+        ->where(function($q)use($request){
+        $request->has('season') ? $q->whereIn('season',$request->season) : '' ;
+        })
+        ->where(function($q)use($request){
+        $request->has('country') ? $q->whereIn('country',$request->country) : '' ;
+        })
+        // ->whereIn('season',$request->season)
+        // ->whereIn('template',$request->template)
+        // ->whereIn('country',$request->country)
         ->whereIn('customer_id',$request->customers)
         ->whereIn('material',$request->materials)
         ->whereIn('style',$request->styles)
