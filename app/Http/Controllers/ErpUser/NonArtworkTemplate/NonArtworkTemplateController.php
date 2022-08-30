@@ -141,7 +141,7 @@ class NonArtworkTemplateController extends Controller
         $heirarchy_ids = DB::table('erpusers_template_mapping')
                             ->where('erp_user',$erp_user_id)
                             ->where('buyer',$request->buyer_id)
-                            ->where('company',session()->get('company'))
+                            // ->where('company',session()->get('company'))
                             ->pluck('templates');
 
                             
@@ -262,11 +262,16 @@ class NonArtworkTemplateController extends Controller
             $matrix = [];
             foreach($request->ocn as $key=>$value)
             {
-            $arr = [];
-            array_push($arr,$value);
-            array_push($arr,$request->bpo[$key]);
-            array_push($arr,$request->style[$key]);
-            array_push($matrix,$arr);
+                $arr = [];
+                array_push($arr,$value);
+                array_push($arr,$request->bpo[$key]);
+                array_push($arr,$request->style[$key]);
+                array_push($arr,$request->size[$key]);
+                array_push($arr,$request->item[$key]);
+                array_push($arr,$request->reference[$key]);
+                array_push($arr,$request->color[$key]);
+                array_push($arr,$request->composition[$key]);
+                array_push($matrix,$arr);
             }
             if(count($request->ocn) != count(array_unique($matrix, SORT_REGULAR)))
             {
@@ -449,7 +454,7 @@ class NonArtworkTemplateController extends Controller
                         'customer_id'          => $request->customer,
                         'material'             => $material_name,
                         'mat_sub'              => $material_sub,
-                        'reference'            => $request->reference[$key],
+                        'reference'            => $material_ref,
                         'style'                => $request->style[$key],
                         'po'                   => $request->po_number,
                         'buyer_po'             => $request->bpo[$key],
@@ -718,7 +723,7 @@ class NonArtworkTemplateController extends Controller
     public function truncate()
     {
         $erp_ids = DB::table('erp_order_details')
-                ->where('order_qnty_table_name','non_artwork_orders_quanty')
+                ->whereIn('order_qnty_table_name',['non_artwork_orders_quanty','orchestra_hang_tag_orders_qty','orchestra_heat_transfer_orders_qty','orchestra_main_label_orders_qty','orchestra_size_label_orders_qty','orchestra_solid_carton_sticker_orders_qty','orchestra_solid_poly_bag_sticker_orders_qty','orchestra_special_tag_orders_qty','orchestra_standard_carton_sticker_orders_qty','orchestra_standard_poly_bag_sticker_orders_qty','orchestra_wash_care_label_orders_qty'])
                 ->pluck('erp_order_id');
    
         DB::table('erp_orders')->whereIn('id',$erp_ids)->delete();
