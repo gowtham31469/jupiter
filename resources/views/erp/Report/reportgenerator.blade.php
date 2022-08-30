@@ -107,7 +107,7 @@
 							</div>
 							<div class="col-md-2 filters">
 								<label>Select Template</label>
-								{!! Form::select('sel_1[]',$templates,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
+								{!! Form::select('sel_1[]',$template_type,null,['class' => 'multiselect filterLevel1','required','data-size'=>"10",'multiple','data-actions-box'=>"true","title"=>'Select Template','id'=>'template']) !!}
 
 							</div>
 							<div class="col-md-2 filters">
@@ -231,12 +231,39 @@
 <script type="text/javascript" src="{{ asset('js/Erp/report/report.js') }}"></script>
 <script type="text/javascript">
 
+	var validated = 0
+
 	function triggerLevel1()
 	{	
 
+		
+
 		if($("#txtFrom").val().length > 0 && $("#txtTo").val().length > 0)
 		{
-			if($("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+			if($("#template").val().length > 0)
+			{
+				if($.inArray("non_template", $("#template").val()) !== -1)
+				{
+					if($("#buyer").val().length > 0 )
+					{
+						validated = 1;
+					}
+				}
+				else
+				{
+					if($("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+					{
+						validated = 1;
+					}
+				}
+
+			}
+			else
+			{
+				$('.snackbar_span').html("Please select a template type");
+				showSnackbar();
+			}
+			if(validated == 1)
 			{
 				$("#loader1").removeClass('hidden')
 				countries = [];
@@ -364,15 +391,15 @@
 function triggerLevel2()
 {
 
-	if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && $("#season").val().length > 0 && $("#template").val().length > 0 && $("#country").val().length > 0)
+	if($("#customer").val().length > 0 && $("#material").val().length > 0 && $("#style").val().length > 0 && $("#mat_sub").val().length > 0 && $("#buyer").val().length > 0 && validated == 1)
 	{
 		$("#loader2").removeClass('hidden')
 		material = [];
 		style = [];
 		mat_sub = [];
 
-		$.each($("#material option:selected"), function(){            
-			material.push($(this).html());
+		$.each($("#material option:selected"), function(){    
+			material.push($(this).val());
 		});
 
 		$.each($("#style option:selected"), function(){            

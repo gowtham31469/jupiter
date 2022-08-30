@@ -82,15 +82,19 @@ class NonArtworkTemplateController extends Controller
     }
 
     public function nonArtworkOrders()
-    {   
-            $buyers = Buyer::where('is_active','=',1)->pluck('buyer_name','id');
+    {       $erp_user_id = Auth::guard('erpuser')->id();
+
+            $buyer_ids = DB::table('erpuser_buyer')->where('erp_user',Auth::guard('erpuser')->id())->pluck('buyer');
+            $buyers = Buyer::whereIn('id',$buyer_ids)->where('is_active','=',1)->pluck('buyer_name','id');
             $customers = Customer::where('is_active',1)->pluck('company_name','id');
             $orders = DB::table('non_artwork_orders')->select('*')->get();
 
             $all_orders = NonArtworkOrder::whereBetween('order_created_at', [
                             Carbon::now()->startOfYear(),
                             Carbon::now()->endOfYear(),
-                            ])->select('order_id')
+                            ])
+                            ->where('created_by',$erp_user_id)
+                            ->select('order_id')
                             ->orderBy('order_id','DESC')
                             ->get();
             $order_id = $all_orders->pluck('order_id','order_id');
@@ -137,7 +141,7 @@ class NonArtworkTemplateController extends Controller
         $heirarchy_ids = DB::table('erpusers_template_mapping')
                             ->where('erp_user',$erp_user_id)
                             ->where('buyer',$request->buyer_id)
-                            ->where('company',session()->get('company'))
+                            // ->where('company',session()->get('company'))
                             ->pluck('templates');
 
                             
@@ -146,7 +150,7 @@ class NonArtworkTemplateController extends Controller
 
         $data = DB::table($template_table)
                         ->where('name_in_reports',$request->item_id)
-                        ->where(function ($query) use($erp_user_id)
+                        ->where(function ($query) use($erp_user_id,$heirarchy_ids)
                             {
                             if ($erp_user_id != 1) 
                             {
@@ -258,11 +262,16 @@ class NonArtworkTemplateController extends Controller
             $matrix = [];
             foreach($request->ocn as $key=>$value)
             {
-            $arr = [];
-            array_push($arr,$value);
-            array_push($arr,$request->bpo[$key]);
-            array_push($arr,$request->style[$key]);
-            array_push($matrix,$arr);
+                $arr = [];
+                array_push($arr,$value);
+                array_push($arr,$request->bpo[$key]);
+                array_push($arr,$request->style[$key]);
+                array_push($arr,$request->size[$key]);
+                array_push($arr,$request->item[$key]);
+                array_push($arr,$request->reference[$key]);
+                array_push($arr,$request->color[$key]);
+                array_push($arr,$request->composition[$key]);
+                array_push($matrix,$arr);
             }
             if(count($request->ocn) != count(array_unique($matrix, SORT_REGULAR)))
             {
@@ -349,6 +358,7 @@ class NonArtworkTemplateController extends Controller
                                   'delivery_date' => Carbon::parse($request->due_date)->toDateString(),
                                   'order_created_at' => Carbon::parse($request->current_date)->toDateTimeString(),
                                   'order_approved_at' => $request->approve_date[$key]!=null ? Carbon::parse($request->approve_date[$key])->toDateTimeString():null,
+                                  'created_by' => Auth::guard('erpuser')->id()
                                 ]
                                 );
 
@@ -444,7 +454,7 @@ class NonArtworkTemplateController extends Controller
                         'customer_id'          => $request->customer,
                         'material'             => $material_name,
                         'mat_sub'              => $material_sub,
-                        'reference'            => $request->reference[$key],
+                        'reference'            => $material_ref,
                         'style'                => $request->style[$key],
                         'po'                   => $request->po_number,
                         'buyer_po'             => $request->bpo[$key],
@@ -525,7 +535,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $uom_select = '<select class="selectpicker form-control input-group" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
+            $uom_select = '<select class="selectpicker uom_select" data-live-search="true" title="Select uom" name="uom[]" data-container=".main-content">"'.$uom_options.'"</select>';
 
             $size_options='';
             foreach ($size_chart as $j => $q) 
@@ -547,6 +557,10 @@ class NonArtworkTemplateController extends Controller
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
+
+            $customer_buyer = DB::table('customer_buyers')->where('buyer_id',$value->buyer_id)->pluck('customer_id');
+
+            $customers = Customer::whereIn('id',$customer_buyer)->where('is_active',1)->pluck('company_name','id');
 
             $hsn_tax = DB::table($template_table)
                     ->where('item_id',$value->template_id)
@@ -661,7 +675,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers]);
        }
        else{
         return response()->json(['result'=>0]);
