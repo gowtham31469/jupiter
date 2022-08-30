@@ -300,7 +300,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 lamination-spec-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('lamination_spec', 'Lamination Spec:', ['class' => 'form_label']) !!}
                     {{ Form::select('lamination_spec',(['' => '-- Select Lamination Spec --', 'matt' => 'Matt', 'gloss' => 'Gloss']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'lamination_spec','required')) }}
@@ -314,7 +314,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 pasting-board-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('pasting_board', 'Board :', ['class' => 'form_label']) !!}
                     {{ Form::select('pasting_board',(['' => '-- Select Board --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'board','required')) }}
@@ -335,7 +335,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 window-patch-gsm-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('window_patch_gsm', 'GSM :', ['class' => 'form_label']) !!}
                     {!! Form::number('window_patch_gsm',$value = '', array('class' => 'form-control input-sm', 'min' => '1','max' => '999', 'data-max-error' => 'Value should be <= 999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '1', 'placeholder' => 'GSM','required')) !!}
@@ -377,7 +377,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 hole-size-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('hole_size', 'Hole Size ( in mm ):', ['class' => 'form_label']) !!}
                     {!! Form::number('hole_size',$value = '', array('class' => 'form-control input-sm', 'min' => '1','max' => '999', 'data-max-error' => 'Value should be <= 999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '1', 'placeholder' => 'Hole Size', 'required')) !!}
@@ -391,7 +391,7 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 eyelet-spec-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('eyelet_spec', 'Eyelet Spec:', ['class' => 'form_label']) !!}
                     {!! Form::text('eyelet_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Eyelet Spec', 'required')) !!}
@@ -400,12 +400,12 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
-                    {!! Form::label('string', 'String:', ['class' => 'form_label']) !!}
-                    {{ Form::select('string',(['' => '-- Select String --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'string','required')) }}
+                    {!! Form::label('string_required', 'String:', ['class' => 'form_label']) !!}
+                    {{ Form::select('string_required',(['' => '-- Select String --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'string_required','required')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 string-spec-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('string_spec', 'String Spec:', ['class' => 'form_label']) !!}
                     {!! Form::text('string_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'String Spec', 'required')) !!}

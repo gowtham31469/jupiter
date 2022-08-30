@@ -196,8 +196,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Update Metadata</h4>
                 </div>
-                <div class="modal-body">
-                {!! Form::open(['method' => 'post', 'id' => 'submit_spectrra_metadata_form','data-toggle' => 'validator','role' => 'form']) !!}
+                <div class="modal-body spectrra-metadata-modal-body">
+                {!! Form::open(['method' => 'post', 'id' => 'spectrra_metadata_form','data-toggle' => 'validator','role' => 'form']) !!}
                 @include('Admin.Template Management.spectrra-metadata')
                 </div>
                 <div class="modal-footer">

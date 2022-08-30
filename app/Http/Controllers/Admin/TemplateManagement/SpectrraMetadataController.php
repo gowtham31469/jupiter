@@ -15,8 +15,22 @@ class SpectrraMetadataController extends Controller
 
     public function getSpectrraMetadata(Request $request)
     {
+        $board_category = DB::table('board_category')
+        ->pluck('name', 'id')
+        ->all();
+
+        $boards = DB::table('boards')
+        ->pluck('name', 'id')
+        ->all();
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Success',
+            'board_category' => $board_category,
+            'boards' => $boards,
+        ], 200);
 
         // $radio = $request->get('radion_button', 0);
-        return DB::table($request['buyer'].'_template')->where('id', $request['template_id'])->get();
+        // return DB::table($request['buyer'].'_template')->where('id', $request['template_id'])->get();
     }
 }
