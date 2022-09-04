@@ -125,14 +125,14 @@ function template_list() {
 												var color = value[0].color === null?'':value[0].color;
 												var hsn_code = value[0].hsn_code === null?'':value[0].hsn_code;
 												if(value[0].type == "Labels")
-											{
-												//alert()
-												var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="margin-left: 350px;height: 500px;"></div><div class="col-md-2"><img style="margin-left: 300px;height: 500px;" src="/images/BACK.png"></div>';
-											}
-											else
-											{
-												var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
-											}
+												{
+													//alert()
+													var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="margin-left: 350px;height: 500px;"></div><div class="col-md-2"><img style="margin-left: 300px;height: 500px;" src="/images/BACK.png"></div>';
+												}
+												else
+												{
+													var object_ref = '<object style="border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object>';
+												}
 												$('.viewDiv').append(`<div class="col-md-12">
 														<div class="row">` + object_ref + `</div>
 															<div class="row" style="margin-top:15px;">

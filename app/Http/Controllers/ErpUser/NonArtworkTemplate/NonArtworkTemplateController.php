@@ -728,7 +728,7 @@ class NonArtworkTemplateController extends Controller
     public function truncate()
     {
         $erp_ids = DB::table('erp_order_details')
-                ->where('order_qnty_table_name','non_artwork_orders_quanty')
+                ->whereIn('order_qnty_table_name',['non_artwork_orders_quanty','orchestra_hang_tag_orders_qty','orchestra_heat_transfer_orders_qty','orchestra_main_label_orders_qty','orchestra_size_label_orders_qty','orchestra_solid_carton_sticker_orders_qty','orchestra_solid_poly_bag_sticker_orders_qty','orchestra_special_tag_orders_qty','orchestra_standard_carton_sticker_orders_qty','orchestra_standard_poly_bag_sticker_orders_qty','orchestra_wash_care_label_orders_qty'])
                 ->pluck('erp_order_id');
    
         DB::table('erp_orders')->whereIn('id',$erp_ids)->delete();
