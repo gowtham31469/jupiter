@@ -508,6 +508,11 @@ class NonArtworkTemplateController extends Controller
             ->whereIn('order_qnty_table_id',$quantity_table_data->pluck('id'))
             ->pluck('status');
 
+            $current_order_status = DB::table('erp_status')
+                                        ->where('id',$erp_data[0])
+                                        ->first()
+                                        ->status_name;
+
             if (in_array(8, $erp_data->toArray())){
                 $is_editable = 0;
             }
@@ -675,7 +680,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers,'current_order_status'=>$current_order_status]);
        }
        else{
         return response()->json(['result'=>0]);
