@@ -427,10 +427,10 @@
 					if(data.error){
 						printErrorMsg(data.error);
 					}else{
-						row_index=1;
-						$('.dynamic-added').remove();
-						$('#non_artwork_orders')[0].reset();
-						$("#nat_tab_logic").find("tr:gt(1)").remove();
+						// row_index=1;
+						// $('.dynamic-added').remove();
+						// $('#non_artwork_orders')[0].reset();
+						// $("#nat_tab_logic").find("tr:gt(1)").remove();
 						$(".print-success-msg").find("ul").html('');
 						$(".print-error-msg").css('display','none');
 						if(data.action=="update")
