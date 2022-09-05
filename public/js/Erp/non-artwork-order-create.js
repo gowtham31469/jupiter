@@ -48,8 +48,8 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
-					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 		}
 
 		function clone_row()
@@ -125,7 +125,7 @@
 
 		function getHsn(item_id,ref_td)
 		{
-			console.log(hsn_arr)
+			
 			$.ajax({
 				method:'POST',
 				type:'json',
@@ -133,10 +133,12 @@
 				data: { 'item_id' : item_id ,'buyer_id' : $("#buyer").val()},
 				success:function(data)
 				{
+					console.log(data)
 					if(data.hsn)
 					{	
 						$("#hsn_code").val(data.hsn)
-						$("#tax").html(data.tax)
+						$("#_tax_value").val(data.tax)
+						$("#tax").html(data.tax+" %")
 						temp_hsn = data.hsn
 						hsn_arr.push(data.hsn)
 						if(hsn_arr.length > 1)
@@ -360,8 +362,8 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
-					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 					}
 					else
 					{
@@ -425,10 +427,10 @@
 					if(data.error){
 						printErrorMsg(data.error);
 					}else{
-						row_index=1;
-						$('.dynamic-added').remove();
-						$('#non_artwork_orders')[0].reset();
-						$("#nat_tab_logic").find("tr:gt(1)").remove();
+						// row_index=1;
+						// $('.dynamic-added').remove();
+						// $('#non_artwork_orders')[0].reset();
+						// $("#nat_tab_logic").find("tr:gt(1)").remove();
 						$(".print-success-msg").find("ul").html('');
 						$(".print-error-msg").css('display','none');
 						if(data.action=="update")
@@ -439,9 +441,9 @@
 							$('.snackbar_span').html('Order created successfully !!!');
 						}
 						showSnackbar();
-						setTimeout(function () {
-							location.reload(true);
-						}, 2500);
+						// setTimeout(function () {
+						// 	location.reload(true);
+						// }, 2500);
 					}
 				}  
 			}); 
@@ -458,7 +460,7 @@
 			success:function(data)
 			{
 				if(data.result)
-				{	console.log(data)
+				{	
 					hsn_arr = [];
 					hsn_arr.push(data.hsn)
 					row_index= data.last_row_index
@@ -474,8 +476,10 @@
 					
 					$("#tesco_po_number").val(data.row['purchase_order_no'])
 					$("#order_to_edit").val(data.row['id'])
+					$("#_order_status").html(data.current_order_status)
 					$("#hsn_code").val(data.hsn)
-					$("#tax").html(data.tax)
+					$("#tax").html(data.tax+" %")
+					$("#_tax_value").html(data.tax)
 					$("#dynamic_field").find("tr:gt(0)").remove();
 					$("#dynamic_field").html('')
 					$("#dynamic_field").html(data.td)
@@ -507,8 +511,8 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#tax").html()/100) * total_value))
-					$("#tax_value_total").val(Math.round((($("#tax").html()/100) * total_value) + total_value))
+					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 
 					if(data.is_editable)
 					{

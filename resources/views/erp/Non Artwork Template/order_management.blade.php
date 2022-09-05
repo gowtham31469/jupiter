@@ -43,14 +43,16 @@
 		</div>
 		<hr>
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-9">
+		<div class="row">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="buyer">Buyer</label>
 					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="current_date">Current Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
@@ -62,7 +64,7 @@
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="due_date">Due Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
@@ -76,21 +78,21 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
 					{!! Form::select('customer',[], null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="tesco_po_number">PO Number</label>
 					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="7">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="hsn_code">HSN Code</label>
 					<input type="text" class="form-control" name="hsn_code" id="hsn_code" readonly placeholder="Enter HSN Code"  maxlength="7">
@@ -98,6 +100,29 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="row">
+			<div class="col-md-1">
+			</div>
+			<div class="col-md-10">
+				<div class="card order_status_card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-3">
+								{{ Html::image('images/status_img.png', 'alt text', array('class' => 'status-img-class')) }}
+							</div>
+							<div class="col-md-9">
+								<h5 class="card-title">Order Status</h5>
+								<h4 class="card-title" id="_order_status">In Progress</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	 			
+		</div>
+	</div>
+</div>
 		<div class="row">
 			<div class="col-md-12">                                            
 				<hr>                                            
@@ -245,6 +270,7 @@
   </div>
 </div>
 <div id="snackbar"><span class="snackbar_span"></span></div>
+<input type="hidden" id="_tax_value">
 @endsection
 @section('jqueryIncludes')
 <script src="{{ asset('js/Erp/non-artwork-order-create.js') }}"></script>
