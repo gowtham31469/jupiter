@@ -23,11 +23,16 @@ class SpectrraMetadataController extends Controller
         ->pluck('name', 'id')
         ->all();
 
+        $color_match = DB::table('color_match')
+        ->pluck('name', 'id')
+        ->all();
+
         return response()->json([
             'error' => false,
             'message' => 'Success',
             'board_category' => $board_category,
             'boards' => $boards,
+            'color_match' => $color_match,
         ], 200);
 
         // $radio = $request->get('radion_button', 0);

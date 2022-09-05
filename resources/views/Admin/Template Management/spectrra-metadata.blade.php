@@ -70,23 +70,9 @@
                 <div class="form-group has-feedback">
                     {!! Form::label('match_to', 'Match To :', ['class' => 'form_label']) !!}
                     
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input match-to-checkbox" id="cust_sample">
-                        <label class="custom-control-label" for="cust_sample">Cust Sample</label>
+                    <div class="custom-control custom-checkbox color-match-checkboxes">
+                        
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input match-to-checkbox" id="shade_card">
-                        <label class="custom-control-label" for="shade_card">Shade Card</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input match-to-checkbox" id="delta_e">
-                        <label class="custom-control-label" for="delta_e">Delta E</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input match-to-checkbox" id="mellow">
-                        <label class="custom-control-label" for="mellow">Mellow</label>
-                    </div>
-                    
                         <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -317,7 +303,7 @@
             <div class="col-md-3 pasting-board-div hidden">
                 <div class="form-group has-feedback">
                     {!! Form::label('pasting_board', 'Board :', ['class' => 'form_label']) !!}
-                    {{ Form::select('pasting_board',(['' => '-- Select Board --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'board','required')) }}
+                    {{ Form::select('pasting_board',(['' => '-- Select Board --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'board')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>

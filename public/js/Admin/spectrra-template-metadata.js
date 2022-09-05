@@ -141,20 +141,9 @@ const getSpectrraErpMetadata = (temp_id) => {
       $(".loader").css("margin-top", "12%");
     },
     success: function (data) {
-      var board_category_options =
-        '<option value="" selected="selected">-- Select Board Category --</option>';
-      $.each(data.board_category, function (key, item) {
-        board_category_options +=
-          '<option value="' + key + '">' + item + "</option>";
-      });
-      $("#board_category").html(board_category_options);
-
-      var boards_options =
-        '<option value="" selected="selected">-- Select Board Name --</option>';
-      $.each(data.boards, function (key, item) {
-        boards_options += '<option value="' + key + '">' + item + "</option>";
-      });
-      $("#board_name").html(boards_options);
+      board_category_dropdown(data.board_category);
+      boards_dropdown(data.boards);
+      color_match_checkboxes(data.color_match);
       $(".selectpicker").selectpicker("refresh");
     },
     error: function (data) {
@@ -162,14 +151,47 @@ const getSpectrraErpMetadata = (temp_id) => {
       showSnackbar();
     },
     complete: function () {
+
       $(".loader").hide();
       $(".loader").css("margin-top", "0%");
+
+      $("#spectrraMetadataModal").modal("show");
+      $("#spectrraMetadataModal").removeData(".modal");
     },
   });
 
-  $("#spectrraMetadataModal").modal("show");
-  $("#spectrraMetadataModal").removeData(".modal");
 };
+
+const board_category_dropdown = (board_category) => {
+  var board_category_options =
+    '<option value="" selected="selected">-- Select Board Category --</option>';
+  $.each(board_category, function (key, item) {
+    board_category_options +=
+      '<option value="' + key + '">' + item + "</option>";
+  });
+  $("#board_category").html(board_category_options);
+}
+
+const boards_dropdown = (boards) => {
+  var boards_options =
+    '<option value="" selected="selected">-- Select Board Name --</option>';
+  $.each(boards, function (key, item) {
+    boards_options += '<option value="' + key + '">' + item + "</option>";
+  });
+  $("#board_name").html(boards_options);
+}
+
+const color_match_checkboxes = (color_match) => {
+  var color_match_checkbox = ``;
+  $.each(color_match, function (key, item) {
+    color_match_checkbox +=
+      `<div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input match-to-checkbox" id="color_match_${key}" name="color_match_${key}">
+           <label class="custom-control-label" for="color_match_${key}">${item}</label>
+           </div>`;
+  });
+  $(".color-match-checkboxes").html(color_match_checkbox);
+}
 
 const storeSpectrraMetadata = (form) => {
   console.log(form.serialize());
