@@ -1719,3 +1719,11 @@ min-width: 130px;
 .aw_status .dropdown-menu{min-width: 10%!important;}
 .uom_select .dropdown-menu{min-width: 10%!important;}
 .size_select .dropdown-menu{min-width: 10%!important;}
+.order_status_card{
+                  width: 101%;
+                  margin-left: 11%;
+                  min-height: unset!important;
+                  margin-top: 2%;
+                  padding: 5%!important;
+                  margin-top: 12%;}
+.status-img-class{height: 40px;}
