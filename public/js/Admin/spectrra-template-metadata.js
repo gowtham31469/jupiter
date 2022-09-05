@@ -144,6 +144,9 @@ const getSpectrraErpMetadata = (temp_id) => {
       board_category_dropdown(data.board_category);
       boards_dropdown(data.boards);
       color_match_checkboxes(data.color_match);
+      $('#template_id_spectrra').val(temp_id);
+      $('#buyer_spectrra').val(buyer);
+      if(data.spectrra_template_data.length > 0) render_spectrra_template_data(data.spectrra_template_data.length);
       $(".selectpicker").selectpicker("refresh");
     },
     error: function (data) {
@@ -182,67 +185,90 @@ const boards_dropdown = (boards) => {
 }
 
 const color_match_checkboxes = (color_match) => {
-  var color_match_checkbox = ``;
+  var color_match_options =``;
   $.each(color_match, function (key, item) {
-    color_match_checkbox +=
-      `<div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input match-to-checkbox" id="color_match_${key}" name="color_match_${key}">
-           <label class="custom-control-label" for="color_match_${key}">${item}</label>
-           </div>`;
+    color_match_options += '<option value="' + key + '">' + item + "</option>";
   });
-  $(".color-match-checkboxes").html(color_match_checkbox);
+  $("#color_match").html(color_match_options);
+}
+
+const render_spectrra_template_data = (data) => {
+  $('#color_bar').prop('checked',data.color_bar);
+  $('#print_spec_bar').prop('checked',data.print_spec_bar);
+  $('#tone_bar').prop('checked',data.tone_bar);
+  $('#board_category').val(data.board_category_id);
+  $('#board_name').val(data.board_id);
+  $('#fsc_non_fsc').val(data.fsc_non_fsc);
+  $('#gsm').val(data.gsm_value);
+  $('#thickness').val(data.thickness);
+  $('#board_size_length').val(data.board_size_length);
+  $('#board_size_width').val(data.board_size_width);
+  $('#print_size_length').val(data.print_size_length);
+  $('#print_size_width').val(data.print_size_width);
+  $('#design_size_length').val(data.design_size_length);
+  $('#design_size_width').val(data.design_size_width);
+  $('#cut_as_1').val(data.cut_as.split("/")[0]);
+  $('#cut_as_2').val(data.cut_as.split("/")[1]);
+  $('#front_color_count').val(data.front_color_count);
+  $('#back_color_count').val(data.back_color_count);
+  $('#repeats').val(data.repeats);
+  $('#no_of_plates').val(data.no_of_plates);
+  $('#cutting').val(data.cutting);
+  $('#printing').val(data.printing);
+  $('#coating').val(data.coating);
+  $('#uv').val(data.uv);
+  $('#lamination').val(data.lamination);
+  $('#lamination_spec').val(data.lamination_spec);
+  $('#pasting').val(data.pasting);
+  $('#pasting_board').val(data.pasting_board);
+  $('#die_cutting').val(data.die_cutting);
+  $('#window_patch').val(data.window_patch);
+  $('#window_patch_gsm').val(data.window_patch_gsm);
+  $('#folder_gluer').val(data.folder_gluer);
+  $('#embossing').val(data.embossing);
+  $('#debossing').val(data.debossing);
+  $('#perforation').val(data.perforation);
+  $('#hole').val(data.hole);
+  $('#hole_size').val(data.hole_size);
+  $('#eyelet').val(data.eyelet);
+  $('#eyelet_spec').val(data.eyelet_spec);
+  $('#string_required').val(data.string_required);
+  $('#string_spec').val(data.string_spec);
+  $('#foil').val(data.foil);
 }
 
 const storeSpectrraMetadata = (form) => {
-  console.log(form.serialize());
-  // $.ajax({
-  //     type: "post",
-  //     url: base_url + "/admin/template-management/submit-spectrra-metadata",
-  //     data: form.serialize(),
-  //     headers: {
-  //         'X-CSRF-TOKEN': csrf_token
-  //     },
-  //     dataType: "json",
-  //     beforeSend: function () {
-  //         $(".loader").show();
-  //         $('.swing-ticket-order-submit-btn').prop('disabled', true);
-  //     },
-  //     statusCode: {
-  //         200: function (response) {
-
-  //                 $('#hidden_id').val(response.data.last_insertion);
-
-  //                 $emptyQty = $('.tesco-quantity-field').filter((index, quantity) => quantity.value != '' );
-  //                 $emptyBarcode = $('.swing-ticket-ean').filter((index, ean) => ean.value != '');
-
-  //                 if($emptyQty.length == 0 || $emptyBarcode.length == 0){
-  //                     $('.create-download-artwork').remove();
-  //                 } else  {
-  //                     $('.create-download-artwork').css('display','inline-block');
-  //                 }
-
-  //                 $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
-
-  //                 $('.order-cancel-btn').show();
-  //                 $(window).scrollTop(0);
-  //                 postSwingTicketOrderSubmit(user_type, response.data);
-  //             },
-  //             400: function (error) {
-  //                 $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-  //                 $('.swing-ticket-order-submit-btn').prop('disabled', false);
-  //             },
-  //             422: function (errorXHR) {
-  //                 var error_msg = ``;
-  //                 $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
-  //                     error_msg += `<li>` + valueOfElement + `</li>`;
-  //                 });
-  //                 $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-  //                 $('.swing-ticket-order-submit-btn').prop('disabled', false);
-  //                 $(window).scrollTop(0);
-  //             },
-  //     },
-  //     complete: function () {
-  //         $(".loader").hide();
-  //     }
-  // });
+  $.ajax({
+    type: "post",
+    url: base_url + "/admin/template-management/submit-spectrra-metadata",
+    data: form.serialize(),
+    headers: {
+      'X-CSRF-TOKEN': csrf_token
+    },
+    dataType: "json",
+    beforeSend: function () {
+      $(".loader").show();
+      $('#update_spectrra_metadata_btn').prop('disabled', true);
+    },
+    statusCode: {
+      200: function (response) {
+        $('#spectrra_template_result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Template data updated successfully</div>');
+      },
+      400: function (error) {
+        $('#spectrra_template_result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+        $('#update_spectrra_metadata_btn').prop('disabled', false);
+      },
+      422: function (errorXHR) {
+        var error_msg = ``;
+        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+          error_msg += `<li>` + valueOfElement + `</li>`;
+        });
+        $('#spectrra_template_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+        $('#update_spectrra_metadata_btn').prop('disabled', false);
+      },
+    },
+    complete: function () {
+      $(".loader").hide();
+    }
+  });
 }

@@ -104,7 +104,8 @@ Route::post('admin/template-management/save-taxation', 'Admin\TemplateManagement
 Route::post('admin/template-management/add-template', 'Admin\TemplateManagement\TemplateController@addTemplate');
 Route::post('admin/template-management/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
 Route::get('admin/template-management/get-company-list', 'Admin\TemplateManagement\TemplateController@getCompanyList');
-Route::get('admin/template-management/get-spectrra-company-metadata', 'Admin\TemplateManagement\SpectrraMetadataController@getSpectrraMetadata');
+Route::get('admin/template-management/get-spectrra-company-metadata', 'Admin\TemplateManagement\SpectrraMetadataController@getSpectrraTemplateDetails');
+Route::post('admin/template-management/submit-spectrra-metadata', 'Admin\TemplateManagement\SpectrraMetadataController@storeSpectrraTemplateDetails');
 
 
 Route::post('admin/orchestra/template-management/template-list-view', 'Admin\Orchestra\TemplateManagementCntrl@templateListView');

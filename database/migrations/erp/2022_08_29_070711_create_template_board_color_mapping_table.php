@@ -15,6 +15,8 @@ class CreateTemplateBoardColorMappingTable extends Migration
     {
         Schema::create('template_board_color_mapping', function (Blueprint $table) {
             $table->increments('id');
+            $table->bigInteger('template_id')->nullable(true)->index();
+            $table->string('buyer_template_table')->nullable(true);
             $table->boolean('color_bar')->default(false);
             $table->boolean('print_spec_bar')->default(false);
             $table->boolean('tone_bar')->default(false);
