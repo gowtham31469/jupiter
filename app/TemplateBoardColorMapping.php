@@ -57,13 +57,41 @@ class TemplateBoardColorMapping extends Model
         'foil',
     ];
 
+    protected $casts = [
+        'color_bar' => 'integer',
+        'print_spec_bar' => 'integer',
+        'tone_bar' => 'integer',
+        'fsc_non_fsc' => 'integer',
+        'cutting' => 'integer',
+        'printing' => 'integer',
+        'uv' => 'integer',
+        'lamination' => 'integer',
+        'pasting' => 'integer',
+        'die_cutting' => 'integer',
+        'window_patch' => 'integer',
+        'folder_gluer' => 'integer',
+        'embossing' => 'integer',
+        'debossing' => 'integer',
+        'perforation' => 'integer',
+        'hole' => 'integer',
+        'eyelet' => 'integer',
+        'string_required' => 'integer',
+        'foil' => 'integer',
+    ];
+
     public function colorMatches()
     {
-        return $this->hasMany('App\TemplateColorMatchMapping', 'template_board_color_id')->orderBy('id');
+        return $this->hasMany('App\TemplateColorMatchMapping', 'template_board_color_id')->select([
+            'template_board_color_id',
+            'color_match_text',
+        ]);
     }
 
     public function frontColors()
     {
-        return $this->hasMany('App\template_front_colors_list','template_board_color_id')->orderBy('id');
+        return $this->hasMany('App\TemplateFrontColorsList','template_board_color_id')->select([
+            'template_board_color_id',
+            'front_color_text',
+        ]);
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin\TemplateManagement;
 
 use App\Classes\SpectrraTemplateMetadata;
+use App\Classes\StoreSpectrraTemplateMetadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\TemplateBoardColorMapping;
+use App\Http\Requests\SpectrraTemplateMetadataRequest;
 use DB;
 
 class SpectrraMetadataController extends Controller
@@ -17,10 +19,10 @@ class SpectrraMetadataController extends Controller
 
     public function getSpectrraCompanyTemplateData($request)
     {
-        return TemplateBoardColorMapping::with('colorMatches', 'frontColors')
+        return TemplateBoardColorMapping::with(['colorMatches', 'frontColors'])
         ->where('buyer_template_table', $request['buyer'].'_template')
         ->where('template_id', $request['template_id'])
-        ->get();
+        ->first();
     }
 
     public function getSpectrraTemplateDetails(Request $request)
@@ -35,12 +37,22 @@ class SpectrraMetadataController extends Controller
             'color_match' => $spectrra_metadata->getColorMatches(),
             'spectrra_template_data' => $this->getSpectrraCompanyTemplateData($request),
         ], 200);
-
-        // $radio = $request->get('radion_button', 0);
     }
 
-    public function storeSpectrraTemplateDetails(Request $request)
+    public function storeSpectrraTemplateDetails(SpectrraTemplateMetadataRequest $request)
     {
-        dd($request->get('print_spec_bar', 0));
+        if ($request->ajax()) {
+
+            $request->validated();
+
+            $store_spectrra_metadata = new StoreSpectrraTemplateMetadata();
+
+            $store_spectrra_metadata->storeTemplateData($request);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'success'
+            ], 200);
+        }
     }
 }

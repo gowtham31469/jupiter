@@ -17,12 +17,12 @@ $(function () {
 
   //front color count Change event
   front_color_count.on("change", function (e) {
-    dynamicColorsDiv(e.target.value, "Front");
+    dynamicColorsDiv(e.target.value, "Front", []);
   });
 
   //back color count Change event
   back_color_count.on("change", function (e) {
-    dynamicColorsDiv(e.target.value, "Back");
+    dynamicColorsDiv(e.target.value, "Back", []);
   });
 
   //lamination Change event
@@ -68,7 +68,7 @@ $(function () {
   });
 
   //Form submit
-  form.on("submit", function (e) {
+  form.validator().on('submit', function (e) {
     if (e.isDefaultPrevented()) {
     } else {
       e.preventDefault();
@@ -79,6 +79,7 @@ $(function () {
   /** To refresh modal and form data**/
   $('#spectrraMetadataModal').on('hidden.bs.modal', function () {
       $(this).find('form').trigger('reset');
+      $('#spectrra_template_result').html('');
   });
 });
 
@@ -94,8 +95,9 @@ const checkboxValidator = (group, form, goal) => {
   form.validator("destroy").validator();
 };
 
-const dynamicColorsDiv = (color_count, side) => {
+const dynamicColorsDiv = (color_count, side, color_data) => {
   var lower_side = side.toLowerCase();
+  var side_text = `${lower_side}_color_text`;
   var html = ``;
 
   for (let index = 0; index < color_count; index++) {
@@ -106,7 +108,7 @@ const dynamicColorsDiv = (color_count, side) => {
     }" class="form_label">${side} Color ${index + 1} :</label>
                 <input class="form-control input-sm" placeholder="${side} Color" name="${lower_side}_color_${
       index + 1
-    }" type="text" value="" id="${lower_side}_color_${
+    }" type="text" value="${color_data.length > 0 ? color_data[index][side_text]:``}" id="${lower_side}_color_${
       index + 1
     }" spellcheck="false" data-ms-editor="true">
                 <div class="help-block with-errors"></div>
@@ -146,7 +148,7 @@ const getSpectrraErpMetadata = (temp_id) => {
       color_match_checkboxes(data.color_match);
       $('#template_id_spectrra').val(temp_id);
       $('#buyer_spectrra').val(buyer);
-      if(data.spectrra_template_data.length > 0) render_spectrra_template_data(data.spectrra_template_data.length);
+      if(!$.isEmptyObject(data.spectrra_template_data)) render_spectrra_template_data(data.spectrra_template_data);
       $(".selectpicker").selectpicker("refresh");
     },
     error: function (data) {
@@ -154,12 +156,11 @@ const getSpectrraErpMetadata = (temp_id) => {
       showSnackbar();
     },
     complete: function () {
-
       $(".loader").hide();
       $(".loader").css("margin-top", "0%");
-
+      
       $("#spectrraMetadataModal").modal("show");
-      $("#spectrraMetadataModal").removeData(".modal");
+      $('.label-order-submit-btn').prop('disabled', false);
     },
   });
 
@@ -193,9 +194,22 @@ const color_match_checkboxes = (color_match) => {
 }
 
 const render_spectrra_template_data = (data) => {
-  $('#color_bar').prop('checked',data.color_bar);
-  $('#print_spec_bar').prop('checked',data.print_spec_bar);
-  $('#tone_bar').prop('checked',data.tone_bar);
+
+  $('#template_id_spectrra').val(data.template_id);
+  $('#buyer_spectrra').val(localStorage.getItem("buyer"));
+
+  data.color_bar === 1 
+  ? $('#color_bar_yes').prop('checked', true) 
+  : $('#color_bar_no').prop('checked', true);
+
+  data.print_spec_bar === 1 
+  ? $('#print_spec_bar_yes').prop('checked', true) 
+  : $('#print_spec_bar_no').prop('checked', true);
+
+  data.tone_bar === 1 
+  ? $('#tone_bar_yes').prop('checked', true) 
+  : $('#tone_bar_no').prop('checked', true);
+
   $('#board_category').val(data.board_category_id);
   $('#board_name').val(data.board_id);
   $('#fsc_non_fsc').val(data.fsc_non_fsc);
@@ -235,6 +249,13 @@ const render_spectrra_template_data = (data) => {
   $('#string_required').val(data.string_required);
   $('#string_spec').val(data.string_spec);
   $('#foil').val(data.foil);
+
+  $.each(data.color_matches, function(key, item) {
+      $('#color_match option:contains('+ item.color_match_text +')').prop('selected', true);
+  });
+
+  dynamicColorsDiv(data.front_color_count, "Front", data.front_colors);
+  dynamicColorsDiv(data.back_color_count, "Back", [{'back_color_text': data.back_color_text}]);
 }
 
 const storeSpectrraMetadata = (form) => {
@@ -256,7 +277,6 @@ const storeSpectrraMetadata = (form) => {
       },
       400: function (error) {
         $('#spectrra_template_result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-        $('#update_spectrra_metadata_btn').prop('disabled', false);
       },
       422: function (errorXHR) {
         var error_msg = ``;
@@ -264,11 +284,12 @@ const storeSpectrraMetadata = (form) => {
           error_msg += `<li>` + valueOfElement + `</li>`;
         });
         $('#spectrra_template_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-        $('#update_spectrra_metadata_btn').prop('disabled', false);
       },
     },
     complete: function () {
       $(".loader").hide();
+      $('#update_spectrra_metadata_btn').prop('disabled', false);
+      $(window).scrollTop(0);
     }
   });
 }

@@ -11,14 +11,14 @@
                         <input type="hidden" name="buyer_spectrra" id="buyer_spectrra">
                         <div class="custom-control custom-radio">
                             <label class="custom-control custom-radio">
-                                <input name="color_bar" type="radio" class="custom-control-input" id="yes" value="1">
+                                <input name="color_bar" type="radio" class="custom-control-input" id="color_bar_yes" value="1">
                                 <span class="custom-control-description">Yes</span>
                             </label>
                         </div>
 
                         <div class="custom-control custom-radio">
                             <label class="custom-control custom-radio">
-                                <input name="color_bar" type="radio" class="custom-control-input" id="no" value="0" checked>
+                                <input name="color_bar" type="radio" class="custom-control-input" id="color_bar_no" value="0" checked>
                                 <span class="custom-control-description">No</span>
                             </label>
                         </div>
@@ -32,14 +32,14 @@
                     
                     <div class="custom-control custom-radio">
                         <label class="custom-control custom-radio">
-                            <input name="print_spec_bar" type="radio" class="custom-control-input" id="yes" value="1">
+                            <input name="print_spec_bar" type="radio" class="custom-control-input" id="print_spec_bar_yes" value="1">
                             <span class="custom-control-description">Yes</span>
                         </label>
                     </div>
 
                     <div class="custom-control custom-radio">
                         <label class="custom-control custom-radio">
-                            <input name="print_spec_bar" type="radio" class="custom-control-input" id="no" value="0" checked>
+                            <input name="print_spec_bar" type="radio" class="custom-control-input" id="print_spec_bar_no" value="0" checked>
                             <span class="custom-control-description">No</span>
                         </label>
                     </div>
@@ -53,14 +53,14 @@
                     
                     <div class="custom-control custom-radio">
                         <label class="custom-control custom-radio">
-                            <input name="tone_bar" type="radio" class="custom-control-input" id="yes" value="1">
+                            <input name="tone_bar" type="radio" class="custom-control-input" id="tone_bar_yes" value="1">
                             <span class="custom-control-description">Yes</span>
                         </label>
                     </div>
 
                     <div class="custom-control custom-radio">
                         <label class="custom-control custom-radio">
-                            <input name="tone_bar" type="radio" class="custom-control-input" id="no" value="0" checked>
+                            <input name="tone_bar" type="radio" class="custom-control-input" id="tone_bar_no" value="0" checked>
                             <span class="custom-control-description">No</span>
                         </label>
                     </div>
@@ -71,7 +71,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('color_match', 'Color Match :', ['class' => 'form_label']) !!}
-                    {{ Form::select('color_match',([]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'color_match','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...')) }}
+                    {{ Form::select('color_match',([]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'color_match','data-actions-box' => 'true', 'data-width' => '100%','multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...', 'name' => 'color_match[]')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('fsc_non_fsc', 'FSC / Non Fsc :', ['class' => 'form_label']) !!}
-                    {{ Form::select('fsc_non_fsc',(['' => '-- Select FSC / Non Fsc --', 'yes' => 'Yes', 'no' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'fsc_non_fsc')) }}
+                    {{ Form::select('fsc_non_fsc',(['' => '-- Select FSC / Non Fsc --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'fsc_non_fsc', 'required')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -253,14 +253,14 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('cutting', 'Cutting :', ['class' => 'form_label']) !!}
-                    {{ Form::select('cutting',(['' => '-- Select Cutting --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'cutting')) }}
+                    {{ Form::select('cutting',(['' => '-- Select Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'cutting')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('printing', 'Printing :', ['class' => 'form_label']) !!}
-                    {{ Form::select('printing',(['' => '-- Select Printing --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'printing')) }}
+                    {{ Form::select('printing',(['' => '-- Select Printing --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'printing')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -274,14 +274,14 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('uv', 'UV :', ['class' => 'form_label']) !!}
-                    {{ Form::select('uv',(['' => '-- Select UV --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'uv')) }}
+                    {{ Form::select('uv',(['' => '-- Select UV --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'uv')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('lamination', 'Lamination :', ['class' => 'form_label']) !!}
-                    {{ Form::select('lamination',(['' => '-- Select Lamination --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'lamination')) }}
+                    {{ Form::select('lamination',(['' => '-- Select Lamination --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'lamination')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -295,7 +295,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('pasting', 'Pasting :', ['class' => 'form_label']) !!}
-                    {{ Form::select('pasting',(['' => '-- Select Pasting --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'pasting')) }}
+                    {{ Form::select('pasting',(['' => '-- Select Pasting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'pasting')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -309,14 +309,14 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('die_cutting', 'Die Cutting :', ['class' => 'form_label']) !!}
-                    {{ Form::select('die_cutting',(['' => '-- Select Die Cutting --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'die_cutting')) }}
+                    {{ Form::select('die_cutting',(['' => '-- Select Die Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'die_cutting')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('window_patch', 'Window Patch :', ['class' => 'form_label']) !!}
-                    {{ Form::select('window_patch',(['' => '-- Select Window Patch --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'window_patch')) }}
+                    {{ Form::select('window_patch',(['' => '-- Select Window Patch --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'window_patch')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -330,35 +330,35 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('folder_gluer', 'Folder Gluer :', ['class' => 'form_label']) !!}
-                    {{ Form::select('folder_gluer',(['' => '-- Select Folder Gluer --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'folder_gluer')) }}
+                    {{ Form::select('folder_gluer',(['' => '-- Select Folder Gluer --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'folder_gluer')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('embossing', 'Embossing :', ['class' => 'form_label']) !!}
-                    {{ Form::select('embossing',(['' => '-- Select Embossing --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'embossing')) }}
+                    {{ Form::select('embossing',(['' => '-- Select Embossing --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'embossing')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('debossing', 'Debossing :', ['class' => 'form_label']) !!}
-                    {{ Form::select('debossing',(['' => '-- Select Debossing --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'debossing')) }}
+                    {{ Form::select('debossing',(['' => '-- Select Debossing --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'debossing')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('perforation', 'Perforation :', ['class' => 'form_label']) !!}
-                    {{ Form::select('perforation',(['' => '-- Select Perforation --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'perforation')) }}
+                    {{ Form::select('perforation',(['' => '-- Select Perforation --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'perforation')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('hole', 'Hole :', ['class' => 'form_label']) !!}
-                    {{ Form::select('hole',(['' => '-- Select Hole --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'hole')) }}
+                    {{ Form::select('hole',(['' => '-- Select Hole --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'hole')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -372,7 +372,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('eyelet', 'Eyelet:', ['class' => 'form_label']) !!}
-                    {{ Form::select('eyelet',(['' => '-- Select Eyelet --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'eyelet')) }}
+                    {{ Form::select('eyelet',(['' => '-- Select Eyelet --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'eyelet')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -386,7 +386,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('string_required', 'String:', ['class' => 'form_label']) !!}
-                    {{ Form::select('string_required',(['' => '-- Select String --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'string_required')) }}
+                    {{ Form::select('string_required',(['' => '-- Select String --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'string_required')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -400,7 +400,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('foil', 'Foil:', ['class' => 'form_label']) !!}
-                    {{ Form::select('foil',(['' => '-- Select Foil --', 'yes' => 'Yes', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'foil')) }}
+                    {{ Form::select('foil',(['' => '-- Select Foil --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'foil')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
