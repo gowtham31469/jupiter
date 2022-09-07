@@ -213,8 +213,6 @@ function generateJobcard(){
             dataType:"json",
             method:"get",
             data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
-            tryCount : 0,
-            retryLimit : 2,
             beforeSend: function () {
               $(".loader").show();
             },
