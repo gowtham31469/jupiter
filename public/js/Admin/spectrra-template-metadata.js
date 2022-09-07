@@ -1,6 +1,5 @@
 $(function () {
   var form = $("#spectrra_metadata_form");
-  var chk = $("input.match-to-checkbox");
   var front_color_count = $("#front_color_count");
   var back_color_count = $("#back_color_count");
   var lamination = $("#lamination");
@@ -9,11 +8,6 @@ $(function () {
   var hole = $("#hole");
   var eyelet = $("#eyelet");
   var string_required = $("#string_required");
-
-  //match to checkbox Change event
-  chk.on("change", function (e) {
-    checkboxValidator(chk, form, 1);
-  });
 
   //front color count Change event
   front_color_count.on("change", function (e) {
@@ -83,18 +77,6 @@ $(function () {
   });
 });
 
-const checkboxValidator = (group, form, goal) => {
-  var isChecked = false;
-  var goal = goal || 1; //Default at least one checkbox
-
-  if (group.filter(":checked").length >= goal) {
-    isChecked = true;
-  }
-
-  group.not(":checked").prop("required", !isChecked);
-  form.validator("destroy").validator();
-};
-
 const dynamicColorsDiv = (color_count, side, color_data) => {
   var lower_side = side.toLowerCase();
   var side_text = `${lower_side}_color_text`;
@@ -118,11 +100,18 @@ const dynamicColorsDiv = (color_count, side, color_data) => {
   $(`.${lower_side}-colors-div`).html(html);
 };
 
-const spectrraMetadata = (obj) => {
+const spectrraMetadata = (company) => {
   // spectrra prints id 2
-  obj.value == 2
+  company == 2
     ? $(".spectrra-metadata-btn").removeClass("hidden")
     : $(".spectrra-metadata-btn").addClass("hidden");
+};
+
+const toggleDisabledSpectrraBtn = (company) => {
+  // spectrra prints id 2
+  company == 2
+    ? $(".spectrra-metadata-btn").prop("disabled", false)
+    : $(".spectrra-metadata-btn").prop("disabled", true);
 };
 
 const getSpectrraErpMetadata = (temp_id) => {
@@ -145,7 +134,7 @@ const getSpectrraErpMetadata = (temp_id) => {
     success: function (data) {
       board_category_dropdown(data.board_category);
       boards_dropdown(data.boards);
-      color_match_checkboxes(data.color_match);
+      color_match_dropdown(data.color_match);
       $('#template_id_spectrra').val(temp_id);
       $('#buyer_spectrra').val(buyer);
       if(!$.isEmptyObject(data.spectrra_template_data)) render_spectrra_template_data(data.spectrra_template_data);
@@ -185,7 +174,7 @@ const boards_dropdown = (boards) => {
   $("#board_name").html(boards_options);
 }
 
-const color_match_checkboxes = (color_match) => {
+const color_match_dropdown = (color_match) => {
   var color_match_options =``;
   $.each(color_match, function (key, item) {
     color_match_options += '<option value="' + key + '">' + item + "</option>";

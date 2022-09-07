@@ -9,6 +9,7 @@ use View;
 use DB;
 use App\TemplateNotes;
 use App\OrchestraTemplate;
+use App\Classes\ClearSpectrraTemplateMetadata;
 
 class TemplateController extends Controller
 {
@@ -130,6 +131,8 @@ class TemplateController extends Controller
             						   'company_id' => $company,
             						   'ref_no' => $ref
                         ]);
+            $clear_spectrra_data = new ClearSpectrraTemplateMetadata();
+            $clear_spectrra_data->clearSpectrraData($buyer, $template_id, $company);
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         catch (\Exception $e)
