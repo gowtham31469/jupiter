@@ -21,42 +21,42 @@ $(function () {
 
   //lamination Change event
   lamination.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".lamination-spec-div").removeClass("hidden")
       : $(".lamination-spec-div").addClass("hidden");
   });
 
   //pasting Change event
   pasting.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".pasting-board-div").removeClass("hidden")
       : $(".pasting-board-div").addClass("hidden");
   });
 
   //window patch gsm Change event
   window_patch.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".window-patch-gsm-div").removeClass("hidden")
       : $(".window-patch-gsm-div").addClass("hidden");
   });
 
   //hole Change event
   hole.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".hole-size-div").removeClass("hidden")
       : $(".hole-size-div").addClass("hidden");
   });
 
   //eyelet Change event
   eyelet.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".eyelet-spec-div").removeClass("hidden")
       : $(".eyelet-spec-div").addClass("hidden");
   });
 
   //string  Change event
   string_required.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".string-spec-div").removeClass("hidden")
       : $(".string-spec-div").addClass("hidden");
   });
