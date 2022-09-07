@@ -67,6 +67,7 @@ class StoreSpectrraTemplateMetadata
             'foil' => $request['foil'], 
         ]);
 
+        $front_color_array = [];
         for ($i=0; $i < $request['front_color_count']; $i++) { 
             $front_color_array[] = array(
                 'template_board_color_id' => $row_id->id,
@@ -77,6 +78,7 @@ class StoreSpectrraTemplateMetadata
         TemplateFrontColorsList::where('template_board_color_id', $row_id->id)->delete();
         TemplateFrontColorsList::insert($front_color_array);
 
+        $color_match_array = [];
         for ($i=0; $i < sizeof($request['color_match']); $i++) { 
             $color_match_array[] = array(
                 'template_board_color_id' => $row_id->id,

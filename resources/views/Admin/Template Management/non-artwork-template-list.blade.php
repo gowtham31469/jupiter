@@ -285,6 +285,27 @@
   </div>
 </div>
 
+<div class="modal fade" id="spectrraMetadataModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Update Metadata</h4>
+          </div>
+          <div class="modal-body spectrra-metadata-modal-body">
+          <span id="spectrra_template_result"></span>
+          {!! Form::open(['method' => 'post', 'id' => 'spectrra_metadata_form','data-toggle' => 'validator','role' => 'form']) !!}
+          @include('Admin.Template Management.spectrra-metadata')
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right', 'id' => 'update_spectrra_metadata_btn')) }}
+          </div>
+          {!! Form::close() !!}
+      </div>
+  </div>
+</div>
+
 
   <!--  Modal -->
   <div class="modal new-buyer-selection-modal fade" id="newBuyerSelectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -314,6 +335,7 @@
     </script>
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/non-artwork-template.js') }}"></script>
+    <script src="{{ asset('js/Admin/spectrra-template-metadata.js') }}"></script>
     <script>
       $(document).on('click', '#preview', function(event) {
         event.preventDefault();
