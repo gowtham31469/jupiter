@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Modules;
 use View;
 use DB;
+use App\Classes\ClearSpectrraTemplateMetadata;
  
 class NonArtworkTemplateController extends Controller
 {
@@ -201,6 +202,10 @@ class NonArtworkTemplateController extends Controller
             						   'company_id' => $company,
             						   'ref_no' => $ref
                         ]);
+            
+            $clear_spectrra_data = new ClearSpectrraTemplateMetadata();
+            $clear_spectrra_data->clearSpectrraData($buyer, $template_id, $company);
+
             $result = response()->json(['error'=> false,'message' =>'success'],200);
         }
         catch (\Exception $e)
