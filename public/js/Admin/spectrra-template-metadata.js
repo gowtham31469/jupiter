@@ -1,6 +1,5 @@
 $(function () {
   var form = $("#spectrra_metadata_form");
-  var chk = $("input.match-to-checkbox");
   var front_color_count = $("#front_color_count");
   var back_color_count = $("#back_color_count");
   var lamination = $("#lamination");
@@ -10,65 +9,60 @@ $(function () {
   var eyelet = $("#eyelet");
   var string_required = $("#string_required");
 
-  //match to checkbox Change event
-  chk.on("change", function (e) {
-    checkboxValidator(chk, form, 1);
-  });
-
   //front color count Change event
   front_color_count.on("change", function (e) {
-    dynamicColorsDiv(e.target.value, "Front");
+    dynamicColorsDiv(e.target.value, "Front", []);
   });
 
   //back color count Change event
   back_color_count.on("change", function (e) {
-    dynamicColorsDiv(e.target.value, "Back");
+    dynamicColorsDiv(e.target.value, "Back", []);
   });
 
   //lamination Change event
   lamination.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".lamination-spec-div").removeClass("hidden")
       : $(".lamination-spec-div").addClass("hidden");
   });
 
   //pasting Change event
   pasting.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".pasting-board-div").removeClass("hidden")
       : $(".pasting-board-div").addClass("hidden");
   });
 
   //window patch gsm Change event
   window_patch.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".window-patch-gsm-div").removeClass("hidden")
       : $(".window-patch-gsm-div").addClass("hidden");
   });
 
   //hole Change event
   hole.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".hole-size-div").removeClass("hidden")
       : $(".hole-size-div").addClass("hidden");
   });
 
   //eyelet Change event
   eyelet.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".eyelet-spec-div").removeClass("hidden")
       : $(".eyelet-spec-div").addClass("hidden");
   });
 
   //string  Change event
   string_required.on("change", function (e) {
-    e.target.value === "yes"
+    e.target.value === "1"
       ? $(".string-spec-div").removeClass("hidden")
       : $(".string-spec-div").addClass("hidden");
   });
 
   //Form submit
-  form.on("submit", function (e) {
+  form.validator().on('submit', function (e) {
     if (e.isDefaultPrevented()) {
     } else {
       e.preventDefault();
@@ -79,23 +73,13 @@ $(function () {
   /** To refresh modal and form data**/
   $('#spectrraMetadataModal').on('hidden.bs.modal', function () {
       $(this).find('form').trigger('reset');
+      $('#spectrra_template_result').html('');
   });
 });
 
-const checkboxValidator = (group, form, goal) => {
-  var isChecked = false;
-  var goal = goal || 1; //Default at least one checkbox
-
-  if (group.filter(":checked").length >= goal) {
-    isChecked = true;
-  }
-
-  group.not(":checked").prop("required", !isChecked);
-  form.validator("destroy").validator();
-};
-
-const dynamicColorsDiv = (color_count, side) => {
+const dynamicColorsDiv = (color_count, side, color_data) => {
   var lower_side = side.toLowerCase();
+  var side_text = `${lower_side}_color_text`;
   var html = ``;
 
   for (let index = 0; index < color_count; index++) {
@@ -106,7 +90,7 @@ const dynamicColorsDiv = (color_count, side) => {
     }" class="form_label">${side} Color ${index + 1} :</label>
                 <input class="form-control input-sm" placeholder="${side} Color" name="${lower_side}_color_${
       index + 1
-    }" type="text" value="" id="${lower_side}_color_${
+    }" type="text" value="${color_data.length > 0 ? color_data[index][side_text]:``}" id="${lower_side}_color_${
       index + 1
     }" spellcheck="false" data-ms-editor="true">
                 <div class="help-block with-errors"></div>
@@ -116,11 +100,18 @@ const dynamicColorsDiv = (color_count, side) => {
   $(`.${lower_side}-colors-div`).html(html);
 };
 
-const spectrraMetadata = (obj) => {
+const spectrraMetadata = (company) => {
   // spectrra prints id 2
-  obj.value == 2
+  company == 2
     ? $(".spectrra-metadata-btn").removeClass("hidden")
     : $(".spectrra-metadata-btn").addClass("hidden");
+};
+
+const toggleDisabledSpectrraBtn = (company) => {
+  // spectrra prints id 2
+  company == 2
+    ? $(".spectrra-metadata-btn").prop("disabled", false)
+    : $(".spectrra-metadata-btn").prop("disabled", true);
 };
 
 const getSpectrraErpMetadata = (temp_id) => {
@@ -141,20 +132,12 @@ const getSpectrraErpMetadata = (temp_id) => {
       $(".loader").css("margin-top", "12%");
     },
     success: function (data) {
-      var board_category_options =
-        '<option value="" selected="selected">-- Select Board Category --</option>';
-      $.each(data.board_category, function (key, item) {
-        board_category_options +=
-          '<option value="' + key + '">' + item + "</option>";
-      });
-      $("#board_category").html(board_category_options);
-
-      var boards_options =
-        '<option value="" selected="selected">-- Select Board Name --</option>';
-      $.each(data.boards, function (key, item) {
-        boards_options += '<option value="' + key + '">' + item + "</option>";
-      });
-      $("#board_name").html(boards_options);
+      board_category_dropdown(data.board_category);
+      boards_dropdown(data.boards);
+      color_match_dropdown(data.color_match);
+      $('#template_id_spectrra').val(temp_id);
+      $('#buyer_spectrra').val(buyer);
+      if(!$.isEmptyObject(data.spectrra_template_data)) render_spectrra_template_data(data.spectrra_template_data);
       $(".selectpicker").selectpicker("refresh");
     },
     error: function (data) {
@@ -164,63 +147,138 @@ const getSpectrraErpMetadata = (temp_id) => {
     complete: function () {
       $(".loader").hide();
       $(".loader").css("margin-top", "0%");
+      
+      $("#spectrraMetadataModal").modal("show");
+      $('.label-order-submit-btn').prop('disabled', false);
     },
   });
 
-  $("#spectrraMetadataModal").modal("show");
-  $("#spectrraMetadataModal").removeData(".modal");
 };
 
+const board_category_dropdown = (board_category) => {
+  var board_category_options =
+    '<option value="" selected="selected">-- Select Board Category --</option>';
+  $.each(board_category, function (key, item) {
+    board_category_options +=
+      '<option value="' + key + '">' + item + "</option>";
+  });
+  $("#board_category").html(board_category_options);
+}
+
+const boards_dropdown = (boards) => {
+  var boards_options =
+    '<option value="" selected="selected">-- Select Board Name --</option>';
+  $.each(boards, function (key, item) {
+    boards_options += '<option value="' + key + '">' + item + "</option>";
+  });
+  $("#board_name").html(boards_options);
+}
+
+const color_match_dropdown = (color_match) => {
+  var color_match_options =``;
+  $.each(color_match, function (key, item) {
+    color_match_options += '<option value="' + key + '">' + item + "</option>";
+  });
+  $("#color_match").html(color_match_options);
+}
+
+const render_spectrra_template_data = (data) => {
+
+  $('#template_id_spectrra').val(data.template_id);
+  $('#buyer_spectrra').val(localStorage.getItem("buyer"));
+
+  data.color_bar === 1 
+  ? $('#color_bar_yes').prop('checked', true) 
+  : $('#color_bar_no').prop('checked', true);
+
+  data.print_spec_bar === 1 
+  ? $('#print_spec_bar_yes').prop('checked', true) 
+  : $('#print_spec_bar_no').prop('checked', true);
+
+  data.tone_bar === 1 
+  ? $('#tone_bar_yes').prop('checked', true) 
+  : $('#tone_bar_no').prop('checked', true);
+
+  $('#board_category').val(data.board_category_id);
+  $('#board_name').val(data.board_id);
+  $('#fsc_non_fsc').val(data.fsc_non_fsc);
+  $('#gsm').val(data.gsm_value);
+  $('#thickness').val(data.thickness);
+  $('#board_size_length').val(data.board_size_length);
+  $('#board_size_width').val(data.board_size_width);
+  $('#print_size_length').val(data.print_size_length);
+  $('#print_size_width').val(data.print_size_width);
+  $('#design_size_length').val(data.design_size_length);
+  $('#design_size_width').val(data.design_size_width);
+  $('#cut_as_1').val(data.cut_as.split("/")[0]);
+  $('#cut_as_2').val(data.cut_as.split("/")[1]);
+  $('#front_color_count').val(data.front_color_count);
+  $('#back_color_count').val(data.back_color_count);
+  $('#repeats').val(data.repeats);
+  $('#no_of_plates').val(data.no_of_plates);
+  $('#cutting').val(data.cutting);
+  $('#printing').val(data.printing);
+  $('#coating').val(data.coating);
+  $('#uv').val(data.uv);
+  $('#lamination').val(data.lamination);
+  $('#lamination_spec').val(data.lamination_spec);
+  $('#pasting').val(data.pasting);
+  $('#pasting_board').val(data.pasting_board);
+  $('#die_cutting').val(data.die_cutting);
+  $('#window_patch').val(data.window_patch);
+  $('#window_patch_gsm').val(data.window_patch_gsm);
+  $('#folder_gluer').val(data.folder_gluer);
+  $('#embossing').val(data.embossing);
+  $('#debossing').val(data.debossing);
+  $('#perforation').val(data.perforation);
+  $('#hole').val(data.hole);
+  $('#hole_size').val(data.hole_size);
+  $('#eyelet').val(data.eyelet);
+  $('#eyelet_spec').val(data.eyelet_spec);
+  $('#string_required').val(data.string_required);
+  $('#string_spec').val(data.string_spec);
+  $('#foil').val(data.foil);
+
+  $.each(data.color_matches, function(key, item) {
+      $('#color_match option:contains('+ item.color_match_text +')').prop('selected', true);
+  });
+
+  dynamicColorsDiv(data.front_color_count, "Front", data.front_colors);
+  dynamicColorsDiv(data.back_color_count, "Back", [{'back_color_text': data.back_color_text}]);
+}
+
 const storeSpectrraMetadata = (form) => {
-  console.log(form.serialize());
-  // $.ajax({
-  //     type: "post",
-  //     url: base_url + "/admin/template-management/submit-spectrra-metadata",
-  //     data: form.serialize(),
-  //     headers: {
-  //         'X-CSRF-TOKEN': csrf_token
-  //     },
-  //     dataType: "json",
-  //     beforeSend: function () {
-  //         $(".loader").show();
-  //         $('.swing-ticket-order-submit-btn').prop('disabled', true);
-  //     },
-  //     statusCode: {
-  //         200: function (response) {
-
-  //                 $('#hidden_id').val(response.data.last_insertion);
-
-  //                 $emptyQty = $('.tesco-quantity-field').filter((index, quantity) => quantity.value != '' );
-  //                 $emptyBarcode = $('.swing-ticket-ean').filter((index, ean) => ean.value != '');
-
-  //                 if($emptyQty.length == 0 || $emptyBarcode.length == 0){
-  //                     $('.create-download-artwork').remove();
-  //                 } else  {
-  //                     $('.create-download-artwork').css('display','inline-block');
-  //                 }
-
-  //                 $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
-
-  //                 $('.order-cancel-btn').show();
-  //                 $(window).scrollTop(0);
-  //                 postSwingTicketOrderSubmit(user_type, response.data);
-  //             },
-  //             400: function (error) {
-  //                 $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-  //                 $('.swing-ticket-order-submit-btn').prop('disabled', false);
-  //             },
-  //             422: function (errorXHR) {
-  //                 var error_msg = ``;
-  //                 $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
-  //                     error_msg += `<li>` + valueOfElement + `</li>`;
-  //                 });
-  //                 $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-  //                 $('.swing-ticket-order-submit-btn').prop('disabled', false);
-  //                 $(window).scrollTop(0);
-  //             },
-  //     },
-  //     complete: function () {
-  //         $(".loader").hide();
-  //     }
-  // });
+  $.ajax({
+    type: "post",
+    url: base_url + "/admin/template-management/submit-spectrra-metadata",
+    data: form.serialize(),
+    headers: {
+      'X-CSRF-TOKEN': csrf_token
+    },
+    dataType: "json",
+    beforeSend: function () {
+      $(".loader").show();
+      $('#update_spectrra_metadata_btn').prop('disabled', true);
+    },
+    statusCode: {
+      200: function (response) {
+        $('#spectrra_template_result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Template data updated successfully</div>');
+      },
+      400: function (error) {
+        $('#spectrra_template_result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+      },
+      422: function (errorXHR) {
+        var error_msg = ``;
+        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+          error_msg += `<li>` + valueOfElement + `</li>`;
+        });
+        $('#spectrra_template_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+      },
+    },
+    complete: function () {
+      $(".loader").hide();
+      $('#update_spectrra_metadata_btn').prop('disabled', false);
+      $(window).scrollTop(0);
+    }
+  });
 }

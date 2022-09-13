@@ -1720,10 +1720,8 @@ min-width: 130px;
 .uom_select .dropdown-menu{min-width: 10%!important;}
 .size_select .dropdown-menu{min-width: 10%!important;}
 .order_status_card{
-                  width: 101%;
-                  margin-left: 11%;
+                  margin-left: 1%;
                   min-height: unset!important;
-                  margin-top: 2%;
-                  padding: 5%!important;
-                  margin-top: 12%;}
-.status-img-class{height: 40px;}
+                  padding: 6%!important;
+                  margin-top: 8.5%;}
+.status-img-class{height: 75px;width: 75px;}

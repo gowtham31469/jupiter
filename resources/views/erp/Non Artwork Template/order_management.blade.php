@@ -103,18 +103,18 @@
 	</div>
 	<div class="col-md-3">
 		<div class="row">
-			<div class="col-md-1">
-			</div>
-			<div class="col-md-10">
+			<div class="col-md-12">
 				<div class="card order_status_card">
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-3">
+							<div class="col-md-4">
 								{{ Html::image('images/status_img.png', 'alt text', array('class' => 'status-img-class')) }}
 							</div>
-							<div class="col-md-9">
+							<div class="col-md-8">
 								<h5 class="card-title">Order Status</h5>
-								<h4 class="card-title" id="_order_status">In Progress</h4>
+								<h4 class="card-title" id="_order_status">
+									<label style="margin-left: 14%;">- Nil -</label>
+								</h4>
 							</div>
 						</div>
 					</div>
@@ -174,19 +174,19 @@
 								</div>
 							</td>
 							<td>
-								<input type="number" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
+								<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
 							</td>
 							<td>
-								<input type="number" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
+								<input type="text" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
 							</td>
 							<td>
 								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
 							</td>	
 							<td class="selectpicker_td item_td">
-								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select item','data-container' =>'body']) !!}
+								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select input-group', 'data-live-search' => 'true', 'title' =>'Select item','data-container' =>'body']) !!}
 							</td>
 							<td class="selectpicker_td reference_td">
-								{!! Form::select('reference[]', [], null, ['class' => 'selectpicker reference_select form-control input-group', 'data-live-search' => 'true', 'title' =>'Select reference','data-container' =>'body']) !!}
+								{!! Form::select('reference[]', [], null, ['class' => 'selectpicker reference_select input-group', 'data-live-search' => 'true', 'title' =>'Select reference','data-container' =>'body']) !!}
 							</td>
 							<!-- <td class="reference_td selectpicker_td">
 								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" data-container="body" title="Select reference"></select>
@@ -215,10 +215,10 @@
 								{!! Form::select('size[]', $sizes, null, ['class' => 'form-control input-sm label-ean-field']) !!}
 							</td> -->
 							<td class="selectpicker_td">
-								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker form-control input-group size_select', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
+								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker input-group size_select no_clone', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
 							</td>
 							<td class="quantity_td">
-								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" placeholder="Quantity">
+								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" placeholder="Quantity">
 							</td>
 							<td class="selectpicker_td">
 								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker uom_select','data-live-search'=>'true','title'=>'Select uom','data-container'=>'.main-content']) !!}

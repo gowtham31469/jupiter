@@ -33,6 +33,8 @@
 		{
 			$(".rate_value").val('')
 			$(".rates").val('')
+			$(".quantity").val('')
+			sync_calculations()
 		}
 
 		function sync_calculations()
@@ -83,16 +85,16 @@
 					else{
 						if(action[0] == "clone")
 						{
-							$("#"+row_id).append($item)
+							$("#"+row_id).append($item).find(".no_clone").val('')
 						}
 						else
 						{
 							$("#"+row_id).append($item).find(":input").val('')
 							$item.closest('.aw_td').css('pointer-events','auto')
 							$("#"+row_id).find('.aw_status').selectpicker('val','1');
-							$("#"+row_id).find('.selectpicker').selectpicker('refresh');
+							// $("#"+row_id).find('.selectpicker').selectpicker('refresh');
 						}
-						
+						$("#"+row_id).find('.selectpicker').selectpicker('refresh');
 					}
 				});                       
     		}
@@ -427,6 +429,15 @@
 					if(data.error){
 						printErrorMsg(data.error);
 					}else{
+						$('#order_id').append('<option value="'+data.order_id+'">'+data.order_id+'</option>');
+						$("#order_id").val(data.order_id);
+						$("#order_id").selectpicker("refresh");
+						$("#_order_status").html("Moved To JC Queue");
+
+						$("#save_data").removeClass('hidden')
+						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
+						$("#save_data").attr('data-action', 'update');
+
 						// row_index=1;
 						// $('.dynamic-added').remove();
 						// $('#non_artwork_orders')[0].reset();

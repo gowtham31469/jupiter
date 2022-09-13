@@ -280,18 +280,23 @@ class NonArtworkTemplateController extends Controller
 
             if($request->action == "update")
             {  
+                
 
                 $nat_orders = NonArtworkOrder::where('order_id',$request->order_id)->get();
 
                 $nat_ids = $nat_orders->pluck('id');
+
                 $erp_ids = [];
                 
                 $erp_entry = Erp::where('erp_id',$nat_orders[0]->order_id)->pluck('id');
-                Erp::whereIn('id',$erp_entry)->delete();
+
+                Erp::whereIn('id',$erp_entry)->forceDelete();
+
                 foreach ($nat_orders as $key => $value) {
                     array_push($erp_ids,$value->order_id);
-                    $value->delete();
+                    $value->forceDelete();
                 }
+
                 DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$nat_ids)->delete();
             }
 
@@ -475,11 +480,11 @@ class NonArtworkTemplateController extends Controller
                 }
             }
 
-           // $max_batch_id = NonArtworkOrder::max('order_id')+1;
+           $last_created_order_id = NonArtworkOrder::where('id',$newly_created_nat_id)->first()->order_id;
 
            // NonArtworkOrder::whereIn('id', $created_rows)
            //                          ->update(['order_id' => $max_batch_id]);
-           return response()->json(['success'=>'done','action'=>$request->action]);
+           return response()->json(['success'=>'done','action'=>$request->action,'order_id'=>$last_created_order_id]);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
@@ -558,7 +563,7 @@ class NonArtworkTemplateController extends Controller
 
             // $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
 
-            $size_select = '<select class="selectpicker form-control input-group size_select" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
+            $size_select = '<select class="selectpicker input-group size_select" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
@@ -596,7 +601,7 @@ class NonArtworkTemplateController extends Controller
                 
             }
 
-            $item_select = '<select class="selectpicker item_select form-control input-group" data-live-search="true" title="Select item" name="item[]" data-container=".main-content">"'.$item_options.'"</select>';
+            $item_select = '<select class="selectpicker item_select input-group" data-live-search="true" title="Select item" name="item[]" data-container=".main-content">"'.$item_options.'"</select>';
 
             $arr = [];
             $opt = "";
@@ -615,7 +620,7 @@ class NonArtworkTemplateController extends Controller
             
             }
 
-            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select form-control input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
+            $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select input-group" title="Select reference" data-container="body" data-size="5">'.$opt.'</select>';
 
             // $reference_select = '<select data-live-search="true" name="reference[]" class="selectpicker reference_select" title="Select reference" data-size="5" data-container=".main-content">'.$opt.'</select>';
 
@@ -633,7 +638,7 @@ class NonArtworkTemplateController extends Controller
                                         </div>
                                     </td>
                                     <td width="150">
-                                        <input type="number" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number">
+                                        <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number">
                                     </td>
                                     <td width="150">
                                         <input type="text" name="bpo[]" class="form-control input-sm label-ean-field" value="'.$value->po_number.'" placeholder="BPO Number">
@@ -727,11 +732,15 @@ class NonArtworkTemplateController extends Controller
 
     public function truncate()
     {
-        $erp_ids = DB::table('erp_order_details')
-                ->whereIn('order_qnty_table_name',['non_artwork_orders_quanty','orchestra_hang_tag_orders_qty','orchestra_heat_transfer_orders_qty','orchestra_main_label_orders_qty','orchestra_size_label_orders_qty','orchestra_solid_carton_sticker_orders_qty','orchestra_solid_poly_bag_sticker_orders_qty','orchestra_special_tag_orders_qty','orchestra_standard_carton_sticker_orders_qty','orchestra_standard_poly_bag_sticker_orders_qty','orchestra_wash_care_label_orders_qty'])
-                ->pluck('erp_order_id');
+        // ERP::truncate();
+
+        // $erp_ids = DB::table('erp_order_details')
+        //         ->whereIn('order_qnty_table_name',['non_artwork_orders_quanty','orchestra_hang_tag_orders_qty','orchestra_heat_transfer_orders_qty','orchestra_main_label_orders_qty','orchestra_size_label_orders_qty','orchestra_solid_carton_sticker_orders_qty','orchestra_solid_poly_bag_sticker_orders_qty','orchestra_special_tag_orders_qty','orchestra_standard_carton_sticker_orders_qty','orchestra_standard_poly_bag_sticker_orders_qty','orchestra_wash_care_label_orders_qty'])
+        //         ->pluck('erp_order_id');
    
-        DB::table('erp_orders')->whereIn('id',$erp_ids)->delete();
+        DB::table('erp_orders')->where('id','>',0)->delete();
+        DB::table('erp_order_details')->where('id','>',0)->delete();
+        DB::table('non_artwork_orders')->where('id','>',0)->delete();
         return response()->json('Data cleared successfully !!!');
     }
 }
