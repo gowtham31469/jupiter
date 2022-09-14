@@ -59,7 +59,7 @@ class SpectrraTemplateMetadataRequest extends FormRequest
             'pasting_board'         => ['sometimes'], 
             'die_cutting'           => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'window_patch'          => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
-            'window_patch_gsm'      => ['sometimes', 'numeric', 'nullable'], 
+            'window_patch_film'      => ['sometimes', 'numeric', 'nullable'], 
             'folder_gluer'          => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'embossing'             => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'debossing'             => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
