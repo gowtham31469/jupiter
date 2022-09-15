@@ -412,8 +412,7 @@ function generateJobcard(){
                     $('#jc_print_btn').prop('disabled', false);
                 },
                 406: function(data) {
-                     $('.snackbar_span').html(data.responseJSON.message);
-                     showSnackbar();
+                     $('#createSpectrraJCModal').modal('show');
                 },
                 404: function(data) {
                     $('.snackbar_span').html(data.responseJSON.message);
