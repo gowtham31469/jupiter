@@ -88,7 +88,7 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="tesco_po_number">PO Number</label>
-					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="7">
+					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="20">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -224,10 +224,10 @@
 								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker uom_select','data-live-search'=>'true','title'=>'Select uom','data-container'=>'.main-content']) !!}
 							</td>
 							<td class="rate_td">
-								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates" placeholder="rate" readonly>
+								<input type="number" name="rate[]" class="form-control input-sm label-ean-field rates no_clone" placeholder="rate" readonly>
 							</td>
 							<td class="value_td">
-								<input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value" placeholder="qty*rate" readonly>
+								<input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value no_clone" placeholder="qty*rate" readonly>
 							</td>
 						</tr>
 					</tbody>
@@ -260,9 +260,13 @@
 		</div>
 		<div class="row clearfix" style="height: 50px;"></div>
 		<div class="bottom-bar">
-			<div class="modal-footer">
-				<button type="submit" id="save_data" class="btn btn-xs btn-success" data-flag="1" data-action="save"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
-				<button class="btn btn-xs btn-danger reload-btn" type="button"><i class="fa fa-refresh" aria-hidden="true"></i> Reload</button>
+			<div class="modal-footer" id="action_buttons">
+				<button type="submit" id="save_data" class="btn btn-xs btn-success" data-flag="1" data-action="save">
+					<i class="fa fa-save" aria-hidden="true"></i> 
+				Save</button>
+				<button class="btn btn-xs btn-info reload-btn" type="button">
+					<i class="fa fa-refresh" aria-hidden="true"></i> 
+				Reload</button>
 			</div>
 		</div>
 		{{Form::close()}}
