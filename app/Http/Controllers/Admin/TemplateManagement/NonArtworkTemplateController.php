@@ -97,8 +97,10 @@ class NonArtworkTemplateController extends Controller
                             'is_qrcode_required' => 0,
                             'is_non_artwork_template' => 1
                     ]);
-    
+
+        $temp_auto_inc_id = DB::table($buyer.'_template')->max('id');           
         DB::table($buyer.'_template')->insertGetId([
+                            'id' => $temp_auto_inc_id + 1,
                             'item_id'          => $item_id,
                             'tax'              => $taxation,
                             'template_name'    => $ref,
