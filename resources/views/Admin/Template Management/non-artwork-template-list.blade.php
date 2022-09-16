@@ -293,12 +293,14 @@
               <h4 class="modal-title">Update Metadata</h4>
           </div>
           <div class="modal-body spectrra-metadata-modal-body">
-          <span id="spectrra_template_result"></span>
-          {!! Form::open(['method' => 'post', 'id' => 'spectrra_metadata_form','data-toggle' => 'validator','role' => 'form']) !!}
-          @include('Admin.Template Management.spectrra-metadata')
+            <div class="container-fluid">
+              <span id="spectrra_template_result"></span>
+              {!! Form::open(['method' => 'post', 'id' => 'spectrra_metadata_form','data-toggle' => 'validator','role' => 'form']) !!}
+              @include('Admin.Template Management.spectrra-metadata')
+            </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
               {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right', 'id' => 'update_spectrra_metadata_btn')) }}
           </div>
           {!! Form::close() !!}
