@@ -129,7 +129,7 @@
                       <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('gl_code_new', 'GL Code :', ['class' => 'form_label pull-left']) !!}
-                        {!! Form::text('gl_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;', 'onkeypress'=> 'return isNumber(event)')) !!}
+                        {!! Form::number('gl_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;', 'onkeypress'=> 'return isNumber(event)')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
