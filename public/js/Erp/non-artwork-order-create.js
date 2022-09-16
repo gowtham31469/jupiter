@@ -50,7 +50,7 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value").val((($("#_tax_value").val()/100) * total_value))
 					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 		}
 
@@ -340,6 +340,22 @@
 			location.reload();
 		});
 
+		$(document).on("click","#cancel_order",function()
+		{
+			$.ajax({
+				method:'POST',
+				type:'json',
+				url: "/erp/cancel-order",
+				data: {'order_id':$("#order_id").val() },
+				success:function(data)
+				{
+					$("#_order_status").html(data.order_status);
+					$('.snackbar_span').html('Order cancelled successfully!!!');
+					showSnackbar();
+				}
+			});
+		})
+
 
 		function calculate_rate(ref,qty,rate_td,value_td)
 		{
@@ -353,7 +369,7 @@
 					if(qty >= data.moq)
 					{
 					rate_td.val(data.rate)
-					value_td.val(Math.round(data.rate * qty))
+					value_td.val((data.rate * qty))
 					total_qty = 0
 					total_value = 0
 					$(".quantity").each(function(i,v){
@@ -364,7 +380,7 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value").val((($("#_tax_value").val()/100) * total_value))
 					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 					}
 					else
@@ -437,6 +453,7 @@
 						$("#save_data").removeClass('hidden')
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
+						$("#action_buttons").prepend('<button type="button" id="cancel_order" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Cancel Order</button>')
 
 						// row_index=1;
 						// $('.dynamic-added').remove();
@@ -471,7 +488,7 @@
 			success:function(data)
 			{
 				if(data.result)
-				{	
+				{	console.log(data)
 					hsn_arr = [];
 					hsn_arr.push(data.hsn)
 					row_index= data.last_row_index
@@ -490,7 +507,7 @@
 					$("#_order_status").html(data.current_order_status)
 					$("#hsn_code").val(data.hsn)
 					$("#tax").html(data.tax+" %")
-					$("#_tax_value").html(data.tax)
+					$("#_tax_value").val(data.tax)
 					$("#dynamic_field").find("tr:gt(0)").remove();
 					$("#dynamic_field").html('')
 					$("#dynamic_field").html(data.td)
@@ -522,12 +539,13 @@
 					});
 					$("#qty_total").val(total_qty)
 					$("#value_total").val(total_value)
-					$("#tax_value").val(Math.round(($("#_tax_value").val()/100) * total_value))
+					$("#tax_value").val((($("#_tax_value").val()/100) * total_value))
 					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
 
 					if(data.is_editable)
 					{
 						$("#save_data").removeClass('hidden')
+						$("#action_buttons").prepend('<button type="button" id="cancel_order" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Cancel Order</button>')
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
 					}

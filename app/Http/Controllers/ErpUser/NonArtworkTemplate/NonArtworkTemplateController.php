@@ -300,6 +300,8 @@ class NonArtworkTemplateController extends Controller
                 DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$nat_ids)->delete();
             }
 
+            $erp_id = $request->action == "update" ? $erp_ids[0]:$erp_id;
+
             $new_erp_order = Erp::create([
                         'buyer_id'         => $request->buyer,
                         'customer_id'      => $request->customer,
@@ -344,7 +346,7 @@ class NonArtworkTemplateController extends Controller
                 else
                 {   
                     // dd($erp_ids[$key]);
-                    $erp_id = $request->action == "update" ? $erp_ids[0]:$erp_id;
+                    
                     $newly_created_nat_id = NonArtworkOrder::insertGetId(
                                 [ 'buyer_id' => $request->buyer, 
                                   'order_id' => $erp_id,
@@ -563,7 +565,7 @@ class NonArtworkTemplateController extends Controller
 
             // $size_select = '<select class="form-control input-sm label-ean-field" name="size[]">"'.$size_options.'"</select>';
 
-            $size_select = '<select class="selectpicker input-group size_select" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
+            $size_select = '<select class="selectpicker input-group size_select no_clone" data-live-search="true" title="Select size" name="size[]" data-container=".main-content">"'.$size_options.'"</select>';
 
             $buyer = Buyer::where('id',$value->buyer_id)->first()->buyer_name;
             $template_table = strtolower($buyer)."_template";
@@ -670,14 +672,14 @@ class NonArtworkTemplateController extends Controller
                                     </td>
                                     <td width="150" class="selectpicker_td">'.$size_select.'</td>
                                     <td width="150" class="quantity_td">
-                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
+                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
                                     </td>
                                     <td width="150" class="selectpicker_td" title="Select uom">'.$uom_select.'</td>
                                     <td width="150" class="rate_td">
-                                    <input type="number" name="rate[]" class="form-control input-sm label-ean-field" placeholder="Rate" value="'.$quantity_table_data[$key]->rate.'" readonly>
+                                    <input type="number" name="rate[]" class="form-control input-sm label-ean-field rates no_clone" placeholder="Rate" value="'.$quantity_table_data[$key]->rate.'" readonly>
                                     </td>
                                     <td width="150" class="value_td">
-                                         <input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value" value="'.$quantity_table_data[$key]->rate_value.'" placeholder="qty*rate" readonly>
+                                         <input type="number" name="rate_value[]" class="form-control input-sm label-ean-field rate_value no_clone" value="'.$quantity_table_data[$key]->rate_value.'" placeholder="qty*rate" readonly>
                                     </td>
                                 </tr>';
 
@@ -728,6 +730,19 @@ class NonArtworkTemplateController extends Controller
                     ->where('item_id',$request->item_id)
                     ->first();
         return response()->json(['hsn'=>$row->hsn_code,'tax'=>$row->tax]);
+    }
+
+    public function cancelOrder(Request $request)
+    {
+        $erp_order = Erp::where('erp_id',$request->order_id)->first();
+        $erp_order->status = 4;
+        $erp_order->save();
+
+        ErpOrderDetails::where('erp_order_id',$erp_order->id)
+                        ->update(['status'=>4]);
+
+        return response()->json(["msg"=>"Order cancelled successfully !!!",'order_status'=>"Cancelled"]);
+
     }
 
     public function truncate()
