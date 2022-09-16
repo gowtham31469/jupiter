@@ -1015,6 +1015,8 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::post('calculate-nat-rate', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@calculateRate')->name('calculate-nat-rate');
 
+	Route::post('cancel-order', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@cancelOrder')->name('cancel-order');
+
 	Route::get('truncate-data', 'ErpUser\NonArtworkTemplate\NonArtworkTemplateController@truncate')->name('truncate-data');
 
 });

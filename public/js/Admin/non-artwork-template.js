@@ -72,7 +72,13 @@ function add_template(template_id) {
 		}
 	});
 }
+function showAddTemplatePopUp() {
+    $('#addTemplateModal').on('hidden.bs.modal', function () {
+        $(this).find('form').trigger('reset');
+    });
 
+    $('#addTemplateModal').modal('show');
+}
 
 function template_list() {
     var buyer = localStorage.getItem("buyer");
@@ -109,6 +115,7 @@ function template_list() {
                 "contextmenu": {
                     "items": function ($node) {
                         var tree = $("#tree1").jstree(true);
+                        
 
                             return {
                                 "Create": {
@@ -117,23 +124,18 @@ function template_list() {
                                     "label": "Add Template",
                                     "icon": "fa fa-plus-square-o",
                                     "action": function (obj) {
-                                        
-                                        $('#addTemplateModal').on('hidden.bs.modal', function () {
-                                            $(this).find('form').trigger('reset');
-                                        });
-
-                                        $('#addTemplateModal').modal('show');
+                                        showAddTemplatePopUp();
                                     }
                                 },
-                                "Rename": {
-                                    "separator_before": false,
-                                    "separator_after": false,
-                                    "label": "Rename Template",
-                                    "icon": "fa fa-pencil-square-o",
-                                    "action": function (obj) { 
-                                        tree.edit($node);
-                                    }
-                                },  
+                                // "Rename": {
+                                //     "separator_before": false,
+                                //     "separator_after": false,
+                                //     "label": "Rename Template",
+                                //     "icon": "fa fa-pencil-square-o",
+                                //     "action": function (obj) { 
+                                //         tree.edit($node);
+                                //     }
+                                // },  
                                 // "Remove": {
                                 //     "separator_before": false,
                                 //     "separator_after": false,
@@ -147,8 +149,9 @@ function template_list() {
                 },
                 "plugins": ["types", "search", "contextmenu" ]
             }).on('show_contextmenu.jstree', function(e, reference, element) {
+                console.log(element)
                 if ( reference.node.parents.length !== 2 ) {
-                    $('.vakata-context').remove();
+                     $('.vakata-context').hide();
                 }
             
             }).on('rename_node.jstree', function(e, data) {
