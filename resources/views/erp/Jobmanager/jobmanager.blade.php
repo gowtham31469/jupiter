@@ -228,6 +228,29 @@
 </div>
 <div id="splitdiv" style="opacity: 0;position:absolute;">
  </div>
+
+ <div class="modal fade" id="createSpectrraJCModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content create-spectrra-jc-modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create Jobcard</h4>
+                </div>
+                <div class="modal-body create-spectrra-jc-modal-body">
+					<div class="container-fluid">
+						<span id="spectrra_template_result"></span>
+						{!! Form::open(['method' => 'post', 'id' => 'create_spectrra_jc_form','data-toggle' => 'validator','role' => 'form']) !!}
+						@include('erp.Jobmanager.create-spectrra-jc-modal')
+					</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                    {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right', 'id' => 'create_spectrra_jc_btn')) }}
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
 <!-- company selection Modal -->
 @include('erp.components.company-selection-modal')
 <!-- Job card creation Modal -->
@@ -598,7 +621,8 @@
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
-@endsection @section('jqueryIncludes')
+@endsection
+@section('jqueryIncludes')
 <script>
 $(document).ready(function() {
 	// disable mousewheel on a input number field when in focus
