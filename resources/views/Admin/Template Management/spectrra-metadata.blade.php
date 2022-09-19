@@ -306,6 +306,13 @@
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
+            <div class="col-md-3 pasting-board-div hidden">
+                <div class="form-group has-feedback">
+                    {!! Form::label('pasting_gsm', 'GSM :', ['class' => 'form_label']) !!}
+                    {!! Form::number('pasting_gsm',$value = '', array('class' => 'form-control input-sm', 'min' => '1','max' => '999', 'data-max-error' => 'Value should be <= 999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '1', 'placeholder' => 'GSM')) !!}
+                    <div class="help-block with-errors"></div>
+                </div>
+            </div>
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('die_cutting', 'Die Cutting :', ['class' => 'form_label']) !!}
@@ -322,8 +329,8 @@
             </div>
             <div class="col-md-3 window-patch-gsm-div hidden">
                 <div class="form-group has-feedback">
-                    {!! Form::label('window_patch_gsm', 'GSM :', ['class' => 'form_label']) !!}
-                    {!! Form::number('window_patch_gsm',$value = '', array('class' => 'form-control input-sm', 'min' => '1','max' => '999', 'data-max-error' => 'Value should be <= 999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '1', 'placeholder' => 'GSM')) !!}
+                    {!! Form::label('window_patch_film', 'Film (in microns):', ['class' => 'form_label']) !!}
+                    {!! Form::number('window_patch_film',$value = '', array('class' => 'form-control input-sm', 'min' => '1','max' => '999', 'data-max-error' => 'Value should be <= 999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '1', 'placeholder' => 'Film Micron')) !!}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>

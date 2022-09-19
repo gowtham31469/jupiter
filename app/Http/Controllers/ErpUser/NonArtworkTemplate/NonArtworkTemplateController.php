@@ -500,6 +500,7 @@ class NonArtworkTemplateController extends Controller
     public function getNonArtworkOrders(Request $request)
     {
         $html='';
+        $message = '';
         $is_editable = 1;
 
         if($request->id > 0)
@@ -522,6 +523,11 @@ class NonArtworkTemplateController extends Controller
 
             if (in_array(8, $erp_data->toArray())){
                 $is_editable = 0;
+                $message = 'This order cannot be edited as JobCard creation for this order is in progress !!!';
+            }
+            if (in_array(4, $erp_data->toArray())){
+                $is_editable = 0;
+                $message ='This order has been cancelled and cannot be edited !!!';
             }
            
            $approved_dates = $order_table_data->pluck('order_approved_at');
@@ -687,7 +693,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers,'current_order_status'=>$current_order_status]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers,'current_order_status'=>$current_order_status,'message'=>$message]);
        }
        else{
         return response()->json(['result'=>0]);

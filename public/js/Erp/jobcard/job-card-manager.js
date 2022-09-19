@@ -213,8 +213,6 @@ function generateJobcard(){
             dataType:"json",
             method:"get",
             data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
-            tryCount : 0,
-            retryLimit : 2,
             beforeSend: function () {
               $(".loader").show();
             },
@@ -414,8 +412,7 @@ function generateJobcard(){
                     $('#jc_print_btn').prop('disabled', false);
                 },
                 406: function(data) {
-                     $('.snackbar_span').html(data.responseJSON.message);
-                     showSnackbar();
+                     $('#createSpectrraJCModal').modal('show');
                 },
                 404: function(data) {
                     $('.snackbar_span').html(data.responseJSON.message);
