@@ -11,8 +11,9 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
-    return view('welcome');
+	return view('welcome');
 });
 
 $this->get('admin', 'Auth\LoginController@showLoginForm')->name('login');
@@ -31,7 +32,7 @@ Route::post('feedback-mail/send', 'Mail\MailController@sendFeedback');
 
 // Update financial year in session
 Route::post('jga/set-financial-year-session', function (Request $request) {
-	Session::put('fiscal-year', $request['year']);  
+	Session::put('fiscal-year', $request['year']);
 	return response()->json(['message' => 'success'], 200);
 });
 
@@ -44,16 +45,16 @@ Route::prefix('admin')->group(function () {
 	Route::post('/upload-translation-csv', 'Admin\UploadCSV\UploadCsvController@uploadTranslationCsv');
 	Route::get('/upload-size-chart', 'Admin\UploadCSV\UploadCsvController@uploadSizeChart');
 	Route::post('/upload-size-chart-csv', 'Admin\UploadCSV\UploadCsvController@uploadSizeChartCsv');
-	Route::post('/upload-orchestra-order-csv-files','Admin\UploadCSV\UploadOrchestraCSVController@uploadOrchestraOrderCSVFile');
+	Route::post('/upload-orchestra-order-csv-files', 'Admin\UploadCSV\UploadOrchestraCSVController@uploadOrchestraOrderCSVFile');
 	Route::get('/csv-conflicts', 'Admin\UploadCSV\CSVDataHandlingController@conflictsCSV');
 	Route::get('/csv-conflicts-data', 'Admin\UploadCSV\CSVDataHandlingController@getConflictsCSVData')->name('csv-conflicts-data');
 	Route::get('/partial-csv', 'Admin\UploadCSV\CSVDataHandlingController@partialCSV');
 	Route::get('/partial-csv-data', 'Admin\UploadCSV\CSVDataHandlingController@getPartialCSVData')->name('partial-csv-data');
 	Route::get('/get-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@getDataByUVC');
-	Route::post('/confirm-uvc-data','Admin\UploadCSV\CSVDataHandlingController@confirmUVCOrders');
-	Route::post('/cancel-uvc-data','Admin\UploadCSV\CSVDataHandlingController@cancelUVCOrders');
-	Route::get('/csv-conflicts-page','Admin\UploadCSV\CSVDataHandlingController@orderChangesPage');
-	Route::get('/get-order-changes-data','Admin\UploadCSV\CSVDataHandlingController@getOrderChangesData');
+	Route::post('/confirm-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@confirmUVCOrders');
+	Route::post('/cancel-uvc-data', 'Admin\UploadCSV\CSVDataHandlingController@cancelUVCOrders');
+	Route::get('/csv-conflicts-page', 'Admin\UploadCSV\CSVDataHandlingController@orderChangesPage');
+	Route::get('/get-order-changes-data', 'Admin\UploadCSV\CSVDataHandlingController@getOrderChangesData');
 	Route::get('/common-settings', 'Admin\Settings\SettingsController@index');
 	Route::post('/settings/orchestra/add-color-code', 'Admin\Settings\Orchestra\OrchestraSettings@addOrchestraColorCode');
 	/**orchestra Settings Page**/
@@ -71,8 +72,8 @@ Route::prefix('admin')->group(function () {
 	/** admin role Management **/
 	Route::get('/audit-trail', 'Admin\AuditTrail\AuditTrailController@index');
 	Route::get('/audit-trail/get-comparison-details', 'Admin\AuditTrail\AuditTrailController@getComparisonDataById');
-	
-    Route::prefix('/order-management')->group(function () {
+
+	Route::prefix('/order-management')->group(function () {
 		Route::get('/', 'Admin\OrderManagement\OrderController@dashboard');
 		Route::post('/new_orders', 'Admin\OrderManagement\DashboardController@newOrders');
 		Route::post('/aowp', 'Admin\OrderManagement\DashboardController@aowp');
@@ -126,8 +127,8 @@ Route::prefix('admin')->group(function () {
 		Route::get('/get-customers', 'Admin\CustomerManagement\CustomerManagementController@getCustomerById');
 		Route::put('/update-customer', 'Admin\CustomerManagement\CustomerManagementController@updateCustomer');
 		Route::get('/company', 'Admin\CustomerManagement\CustomerManagementController@customers');
-		Route::get('/pricing-taxation','Admin\CustomerManagement\CustomerManagementController@custumerPriceList');
-		Route::get('/get-buyers-customers','Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
+		Route::get('/pricing-taxation', 'Admin\CustomerManagement\CustomerManagementController@custumerPriceList');
+		Route::get('/get-buyers-customers', 'Admin\CustomerManagement\CustomerManagementController@getBuyersCustomers');
 		Route::post('/save-price-tax', 'Admin\CustomerManagement\CustomerManagementController@savePriceTax');
 		Route::get('/get-price-tax', 'Admin\CustomerManagement\CustomerManagementController@getPriceTax');
 		Route::get('/get-customer-details', 'Admin\CustomerManagement\CustomerManagementController@getCustomerDetailsById');
@@ -220,7 +221,7 @@ Route::prefix('admin')->group(function () {
 		Route::post('/orchestra-orders-filter-by-daterange', 'Admin\Orchestra\OrderStatusFilters@orchestraOrdersFilterByDateRange');
 		Route::post('/get-orchestra-orders', 'Admin\Orchestra\OrderStatusFilters@getOrchestraOrders');
 		Route::post('/toggle-orchestra-edit-permission', 'Admin\Orchestra\OrderStatusCntrl@toggleArtworkEditPermission');
-		
+
 		Route::post('/get-order-details', 'Admin\Orchestra\OrderStatusCntrl@getOrderDetails');
 		Route::post('/edit-artwork', 'Admin\Orchestra\OrderStatusCntrl@editArtwork');
 		Route::post('/settings/garments', 'Admin\Settings\Orchestra\OrchestraSettings@orchestraGarments');
@@ -342,7 +343,7 @@ Route::prefix('admin')->group(function () {
 		Route::put('/save-uk-ratio-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKRatioOrders');
 		Route::put('/save-uk-single-template-orders', 'Admin\Tesco\OrderManagementCntrl@saveUKSingleOrders');
 		Route::put('/cancel-tesco-order', 'Admin\Tesco\OrderManagementCntrl@cancelTescoOrder');
-		
+
 		Route::post('/generatebarcodetsl1', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl1');
 		Route::post('/generatebarcodetsl3', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeTsl3');
 		Route::post('/generatebarcodeeanbig', 'Admin\Tesco\OrderManagementCntrl@generateBarcodeEanBig');
@@ -403,7 +404,7 @@ Route::prefix('admin')->group(function () {
 		Route::put('/enable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@enableTescoPrimarySizeChart');
 		Route::put('/disable-tesco-size-chart', 'Admin\Settings\Tesco\TescoSettings@disableTescoPrimarySizeChart');
 		Route::get('/get-tesco-primary-size-details', 'Admin\Settings\Tesco\TescoSettings@getTescoPrimarySizeById');
-		Route::get('/updateStatusFlag', ['as'=>'updateStatusFlag','uses'=>'Admin\Settings\Tesco\TescoSettings@updateStatusFlag']);
+		Route::get('/updateStatusFlag', ['as' => 'updateStatusFlag', 'uses' => 'Admin\Settings\Tesco\TescoSettings@updateStatusFlag']);
 
 		/**tesco Settings Page**/
 		Route::post('/settings/season-codes', 'Admin\Settings\Tesco\TescoSettings@tescoSeasonCodes');
@@ -550,11 +551,11 @@ Route::prefix('admin')->group(function () {
 		Route::post('/po-upload-labels', 'Admin\Tesco\CareLabelOrdersController@createLabelOrders');
 		Route::post('/po-upload-swing-tickets', 'Admin\Tesco\SwingTicketOrdersController@createSwingTicketOrders');
 		Route::get('/swing-size-chart', 'Admin\Tesco\SwingTicketOrdersController@getSwingSizeChart');
-	
+
 		// Tesco TCL5 and TSL2 orders admin routes
 		Route::post('/store-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@submitSingleStickerOrder');
 		Route::post('/save-single-sticker-orders', 'Admin\Tesco\SingleStickerOrdersController@saveSingleStickerOrder');
-	
+
 		// Tesco care label orders admin routes
 		Route::get('/swing-ticket-orders', 'Admin\Tesco\SwingTicketOrdersController@index')->name('tesco-swing-ticket-order');
 		Route::post('/submit-swing-ticket-order',  'Admin\Tesco\SwingTicketOrdersController@submitSwingTicketOrder')->name('tesco-swing-ticket-order.submit');
@@ -576,8 +577,7 @@ Route::group(['middleware' => 'customer_guest', 'prefix' => 'customer'], functio
 });
 
 //Only logged in Customers can access or send requests to these pages
-Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function()
-{
+Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function () {
 	Route::post('/logout', 'CustomerAuth\LoginController@logout')->name('customer.logout');
 	Route::get('/dashboard', 'Customer\HomeController@index')->name('customer');
 	Route::get('/order-status', 'Customer\HomeController@customerOrderStatus');
@@ -588,7 +588,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function
 	Route::put('/update-customer-profile-details', 'Customer\CustomerProfile\CustomerProfileController@updateCustomerDetailsById');
 	Route::get('/customers', 'Customer\CustomerController@customers');
 	Route::get('/reorder', 'Customer\HomeController@reorder');
-	
+
 	//ORCHESTRA STATUS
 	Route::prefix('/orchestra')->group(function () {
 		Route::post('/order-management/show-orchestra-pi', 'Customer\Orchestra\OrderController@getOrchestraPI');
@@ -598,7 +598,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function
 		Route::post('/orchestra-orders-filter', 'Customer\Orchestra\CustomerOrderStatusFilter@orchestraOrdersFilter');
 		Route::post('/orchestra-orders-filter-by-daterange', 'Customer\Orchestra\CustomerOrderStatusFilter@orchestraOrdersFilterByDateRange');
 		Route::post('/get-orchestra-orders', 'Customer\Orchestra\CustomerOrderStatusFilter@getOrchestraOrders');
-		
+
 		Route::post('/edit-artwork', 'Customer\Orchestra\OrderStatusCntrl@editArtwork');
 		Route::post('/get-order-details', 'Customer\Orchestra\OrderStatusCntrl@getOrderDetails');
 
@@ -643,7 +643,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function
 		Route::get('/get-erp-status', 'Customer\Orchestra\OrderController@checkERPStatus');
 		Route::post('/template-management/template-view', 'Customer\Orchestra\TemplateManagementCntrl@templateView');
 	});
-	
+
 	Route::prefix('/customer-management')->group(function () {
 		Route::put('/make-customer-profile-active', 'Customer\CustomerController@makeCustomerProfileActive');
 		Route::put('/make-customer-profile-inactive', 'Customer\CustomerController@makeCustomerProfileInactive');
@@ -654,101 +654,101 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function
 	});
 
 	Route::prefix('/tesco')->group(function () {
-			//TESCO VIEW ORDER
-			Route::post('/view-order', 'Customer\Tesco\OrderController@viewOrders');
-			//TESCO ORDER STATUS
-			Route::post('/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
-			Route::put('/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
-			Route::post('/tesco-orders-filter', 'Customer\Tesco\OrderStatusController@tescoFilter');
-			Route::post('/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');
-			Route::post('/tesco-submit-os', 'Customer\Tesco\OrderStatusController@tescoSubmitOs');
-			Route::post('/print-div-tescoos', 'Customer\Tesco\OrderStatusController@printDivTesco');
-			Route::post('/print-div-tesco-smallos', 'Customer\Tesco\OrderStatusController@printDivTescoSmall');
-			Route::post('/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
-			Route::post('/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
-			Route::post('/edit-artwork', 'Customer\Tesco\OrderStatusController@editArtwork');
-			Route::get('/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
-			Route::post('/approve-artworks-bulk', 'Customer\Tesco\OrderStatusController@approveArtworkBulk');
-			Route::get('/get-approve-artworks', 'Customer\Tesco\OrderStatusController@getApproveArtwork');
-			Route::post('/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
-			Route::post('/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
-			Route::post('/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
-			Route::post('/download-tesco-pi', 'Customer\Tesco\OrderStatusController@downloadTescoPI');
-			Route::post('/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
-			Route::post('/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
-			Route::post('/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
-			Route::post('/get-order-details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
-			Route::get('/get-erp-status', 'Customer\Tesco\OrderStatusController@checkERPStatus');
-			Route::get('/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
-			Route::post('/template-view', 'Customer\Tesco\OrderController@templateView');
-			Route::post('/po-upload', 'Customer\Tesco\OrderController@createStickerOrders');
-			Route::get('/get-tsl-size', 'Customer\Tesco\OrderController@getTescoTSLSizechart');
-			Route::post('/set-ce-ratio-template-orders', 'Customer\Tesco\OrderController@setCERatioOrders');
-			Route::post('/set-ce-single-template-orders', 'Customer\Tesco\OrderController@setCESingleOrders');
-			Route::post('/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
-			Route::post('/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
-			Route::post('/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
-			Route::put('/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
-			Route::put('/save-ce-single-template-orders', 'Customer\Tesco\OrderController@saveCESingleOrders');
-			Route::put('/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
-			Route::put('/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
-			Route::put('/cancel-tesco-order', 'Customer\Tesco\OrderController@cancelTescoOrder');
-			Route::get('/create-order', 'Customer\Tesco\OrderController@createOrder');
-			Route::post('/reorder', 'Customer\Tesco\ReorderController@reOrder');
-			Route::post('/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
-			Route::post('/repeatorder-artwork', 'Customer\Tesco\ReorderController@repeatOrderArtwork');
-			Route::post('/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
-			Route::post('/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
-			Route::post('/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
-			Route::post('/extra-quantity-st-tesco', 'Customer\Tesco\ReorderController@extraQuantityStTesco');
-			Route::post('/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
-			Route::post('/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
-			Route::post('/edit-check-exist-po-repeat', 'Customer\Tesco\ReorderController@editCheckExistPoRepeat');
-			Route::get('/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
-			//Customer Print Option
-			Route::post('/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
-			Route::post('/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
-			Route::post('/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
-			Route::post('/proof-div-tescoticketos', 'Customer\Tesco\PrintController@proofDivTescoTicketos');
+		//TESCO VIEW ORDER
+		Route::post('/view-order', 'Customer\Tesco\OrderController@viewOrders');
+		//TESCO ORDER STATUS
+		Route::post('/tesco-orders', 'Customer\Tesco\OrderStatusController@index');
+		Route::put('/approve-tesco-artwork', 'Customer\Tesco\OrderStatusController@approveTescoArtwork');
+		Route::post('/tesco-orders-filter', 'Customer\Tesco\OrderStatusController@tescoFilter');
+		Route::post('/tesco-orders-submit-filter', 'Customer\Tesco\OrderStatusController@tescoOrdersSubmitFilter');
+		Route::post('/tesco-submit-os', 'Customer\Tesco\OrderStatusController@tescoSubmitOs');
+		Route::post('/print-div-tescoos', 'Customer\Tesco\OrderStatusController@printDivTesco');
+		Route::post('/print-div-tesco-smallos', 'Customer\Tesco\OrderStatusController@printDivTescoSmall');
+		Route::post('/approve-tesco-pi', 'Customer\Tesco\OrderStatusController@approveTescoPI');
+		Route::post('/reject-tesco-pi', 'Customer\Tesco\OrderStatusController@rejectTescoPI');
+		Route::post('/edit-artwork', 'Customer\Tesco\OrderStatusController@editArtwork');
+		Route::get('/get-artworks', 'Customer\Tesco\OrderStatusController@getArtwork');
+		Route::post('/approve-artworks-bulk', 'Customer\Tesco\OrderStatusController@approveArtworkBulk');
+		Route::get('/get-approve-artworks', 'Customer\Tesco\OrderStatusController@getApproveArtwork');
+		Route::post('/update-po', 'Customer\Tesco\OrderStatusController@updateArtworkPO');
+		Route::post('/copy-po', 'Customer\Tesco\OrderStatusController@copyArtworkPO');
+		Route::post('/get-po-file', 'Customer\Tesco\OrderStatusController@getPOFile');
+		Route::post('/download-tesco-pi', 'Customer\Tesco\OrderStatusController@downloadTescoPI');
+		Route::post('/update-delivery-date', 'Customer\Tesco\OrderStatusController@updateDeliveryDate');
+		Route::post('/set-tesco-order-status', 'Customer\Tesco\OrderStatusController@setTescoOrderStatus');
+		Route::post('/set-po-file', 'Customer\Tesco\OrderStatusController@setCustomerPOFile');
+		Route::post('/get-order-details', 'Customer\Tesco\OrderStatusController@getOrderDetails');
+		Route::get('/get-erp-status', 'Customer\Tesco\OrderStatusController@checkERPStatus');
+		Route::get('/templates-details', 'Customer\Tesco\OrderController@getTescoTemplateDetails');
+		Route::post('/template-view', 'Customer\Tesco\OrderController@templateView');
+		Route::post('/po-upload', 'Customer\Tesco\OrderController@createStickerOrders');
+		Route::get('/get-tsl-size', 'Customer\Tesco\OrderController@getTescoTSLSizechart');
+		Route::post('/set-ce-ratio-template-orders', 'Customer\Tesco\OrderController@setCERatioOrders');
+		Route::post('/set-ce-single-template-orders', 'Customer\Tesco\OrderController@setCESingleOrders');
+		Route::post('/set-uk-ratio-template-orders', 'Customer\Tesco\OrderController@setUKRatioOrders');
+		Route::post('/set-uk-single-template-orders', 'Customer\Tesco\OrderController@setUKSingleOrders');
+		Route::post('/upload-tesco-combined-po-file', 'Customer\Tesco\OrderController@uploadCombinedOrdersPO');
+		Route::put('/save-ce-ratio-template-orders', 'Customer\Tesco\OrderController@saveCERatioOrders');
+		Route::put('/save-ce-single-template-orders', 'Customer\Tesco\OrderController@saveCESingleOrders');
+		Route::put('/save-uk-ratio-template-orders', 'Customer\Tesco\OrderController@saveUKRatioOrders');
+		Route::put('/save-uk-single-template-orders', 'Customer\Tesco\OrderController@saveUKSingleOrders');
+		Route::put('/cancel-tesco-order', 'Customer\Tesco\OrderController@cancelTescoOrder');
+		Route::get('/create-order', 'Customer\Tesco\OrderController@createOrder');
+		Route::post('/reorder', 'Customer\Tesco\ReorderController@reOrder');
+		Route::post('/reorder-artwork', 'Customer\Tesco\ReorderController@reOrderArtwork');
+		Route::post('/repeatorder-artwork', 'Customer\Tesco\ReorderController@repeatOrderArtwork');
+		Route::post('/extra-quantity', 'Customer\Tesco\ReorderController@extraQuantity');
+		Route::post('/extra-quantity-label-tesco', 'Customer\Tesco\ReorderController@extraQuantityLabelTesco');
+		Route::post('/extra-quantity-reorder', 'Customer\Tesco\ReorderController@extraQuantityReorder');
+		Route::post('/extra-quantity-st-tesco', 'Customer\Tesco\ReorderController@extraQuantityStTesco');
+		Route::post('/set-tesco-reorder', 'Customer\Tesco\ReorderController@setTescoReorder');
+		Route::post('/set-tesco-repeat-order', 'Customer\Tesco\ReorderController@setTescoRepeatorder');
+		Route::post('/edit-check-exist-po-repeat', 'Customer\Tesco\ReorderController@editCheckExistPoRepeat');
+		Route::get('/get-tsl-size', 'Customer\Tesco\ReorderController@getTescoTSLSizechart');
+		//Customer Print Option
+		Route::post('/print-div-tesco', 'Customer\Tesco\PrintController@printDivTesco');
+		Route::post('/print-div-tesco-small', 'Customer\Tesco\PrintController@printDivTescoSmall');
+		Route::post('/proof-div-tescolabelos', 'Customer\Tesco\PrintController@proofDivTescoLabelos');
+		Route::post('/proof-div-tescoticketos', 'Customer\Tesco\PrintController@proofDivTescoTicketos');
 
-			Route::prefix('/order-management')->group(function () {
-				Route::post('/approved-orders', 'Customer\HomeController@getApprovedOrdersList');
-				Route::post('/viewed-approved', 'Customer\HomeController@viewedApprovedOrder');
-				Route::post('/viewed-selected-approved', 'Customer\HomeController@viewedSelectedApprovedOrder');
-				Route::post('/pending-orders', 'Customer\HomeController@getPendingOrdersList');
-				Route::post('/viewed-pending', 'Customer\HomeController@viewedPendingOrder');
-				Route::post('/viewed-selected-pending', 'Customer\HomeController@viewedSelectedPendingOrder');
-				Route::post('/cancelled-orders', 'Customer\HomeController@getCancelledOrdersList');
-				Route::post('/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
-				Route::post('/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
-				Route::post('/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
-				Route::post('/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
-				Route::post('/orders', 'Customer\Tesco\OrderController@Orders');
-				//Customer Repeat Order
-				Route::post('/extra-quantity-label-tesco-repeatOrder', 'Customer\Tesco\RepeatOrderController@extraQuantityLabelTescoRepeatOrder');
-			});
+		Route::prefix('/order-management')->group(function () {
+			Route::post('/approved-orders', 'Customer\HomeController@getApprovedOrdersList');
+			Route::post('/viewed-approved', 'Customer\HomeController@viewedApprovedOrder');
+			Route::post('/viewed-selected-approved', 'Customer\HomeController@viewedSelectedApprovedOrder');
+			Route::post('/pending-orders', 'Customer\HomeController@getPendingOrdersList');
+			Route::post('/viewed-pending', 'Customer\HomeController@viewedPendingOrder');
+			Route::post('/viewed-selected-pending', 'Customer\HomeController@viewedSelectedPendingOrder');
+			Route::post('/cancelled-orders', 'Customer\HomeController@getCancelledOrdersList');
+			Route::post('/viewed-cancelled', 'Customer\HomeController@viewedCancelledOrder');
+			Route::post('/viewed-selected-cancelled', 'Customer\HomeController@viewedSelectedCancelledOrder');
+			Route::post('/set-po-number', 'Customer\Tesco\OrderStatusController@setPONumber');
+			Route::post('/show-tesco-pi', 'Customer\Tesco\OrderStatusController@getTescoPI');
+			Route::post('/orders', 'Customer\Tesco\OrderController@Orders');
+			//Customer Repeat Order
+			Route::post('/extra-quantity-label-tesco-repeatOrder', 'Customer\Tesco\RepeatOrderController@extraQuantityLabelTescoRepeatOrder');
+		});
 
-			// Tesco care label orders customer routes
-			Route::get('/care-label-orders', 'Customer\Tesco\CareLabelOrdersCustomerController@index');
-			Route::get('/care-label-fiber-components', 'Customer\Tesco\CareLabelOrdersCustomerController@getFiberComponentsMeta');
-			Route::get('/care-size-lists', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeListsBySizeCategoryID');
-			Route::post('/submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
-			Route::get('/get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
-			Route::get('/get-care-label-order-details', 'Customer\Tesco\CareLabelOrdersCustomerController@getCareLabelOrderDetail');
-			Route::put('/update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
-			Route::post('/po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
+		// Tesco care label orders customer routes
+		Route::get('/care-label-orders', 'Customer\Tesco\CareLabelOrdersCustomerController@index');
+		Route::get('/care-label-fiber-components', 'Customer\Tesco\CareLabelOrdersCustomerController@getFiberComponentsMeta');
+		Route::get('/care-size-lists', 'Customer\Tesco\CareLabelOrdersCustomerController@getSecondarySizeListsBySizeCategoryID');
+		Route::post('/submit-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@submitCareLabelOrder');
+		Route::get('/get-moq-value', 'Customer\Tesco\CareLabelOrdersCustomerController@getTescoTemplateMoq');
+		Route::get('/get-care-label-order-details', 'Customer\Tesco\CareLabelOrdersCustomerController@getCareLabelOrderDetail');
+		Route::put('/update-care-label-order',  'Customer\Tesco\CareLabelOrdersCustomerController@updateCareLabelOrder')->name('tesco-care-label-order.update');
+		Route::post('/po-upload-labels', 'Customer\Tesco\CareLabelOrdersCustomerController@createLabelOrders');
 
-			// Tesco TCL5 and TSL2 orders admin routes
-			Route::post('/store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
-			Route::post('/save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
+		// Tesco TCL5 and TSL2 orders admin routes
+		Route::post('/store-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@submitSingleStickerOrder');
+		Route::post('/save-single-sticker-orders', 'Customer\Tesco\SingleStickerOrdersCustomerController@saveSingleStickerOrder');
 
-			// Tesco care label orders admin routes
-			Route::get('/swing-ticket-orders', 'Customer\Tesco\SwingTicketOrdersCustomerController@index');
-			Route::post('/submit-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@submitSwingTicketOrder');
-			Route::get('/get-swing-ticket-order-details', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingTicketOrderDetail');
-			Route::put('/update-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@updateSwingTicketOrder');
-			Route::post('/po-upload-swing-tickets', 'Customer\Tesco\SwingTicketOrdersCustomerController@createSwingTicketOrders');
-			Route::get('/swing-size-chart', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingSizeChart');
+		// Tesco care label orders admin routes
+		Route::get('/swing-ticket-orders', 'Customer\Tesco\SwingTicketOrdersCustomerController@index');
+		Route::post('/submit-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@submitSwingTicketOrder');
+		Route::get('/get-swing-ticket-order-details', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingTicketOrderDetail');
+		Route::put('/update-swing-ticket-order',  'Customer\Tesco\SwingTicketOrdersCustomerController@updateSwingTicketOrder');
+		Route::post('/po-upload-swing-tickets', 'Customer\Tesco\SwingTicketOrdersCustomerController@createSwingTicketOrders');
+		Route::get('/swing-size-chart', 'Customer\Tesco\SwingTicketOrdersCustomerController@getSwingSizeChart');
 	});
 
 	Route::prefix('/order-management')->group(function () {
@@ -763,8 +763,7 @@ Route::group(['middleware' => 'customer_auth', 'prefix' => 'customer'], function
 	});
 });
 
-Route::group(['middleware' => 'merchandiser_guest', 'prefix' => 'merchandiser'], function()
-{
+Route::group(['middleware' => 'merchandiser_guest', 'prefix' => 'merchandiser'], function () {
 	Route::get('/', 'MerchandiserAuth\LoginController@showLoginForm')->name('merchandiser.login');
 	Route::post('/', 'MerchandiserAuth\LoginController@login');
 	// Password Reset Routes for merchandiser...
@@ -774,8 +773,7 @@ Route::group(['middleware' => 'merchandiser_guest', 'prefix' => 'merchandiser'],
 	Route::post('/password/reset', 'MerchandiserAuth\ResetPasswordController@reset');
 });
 
-Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], function()
-{
+Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], function () {
 	Route::post('/logout', 'MerchandiserAuth\LoginController@logout')->name('merchandiser.logout');
 	Route::get('/pending-orders', 'Merchandiser\HomeController@index');
 	Route::get('/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
@@ -786,12 +784,11 @@ Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], 
 	Route::get('/get-profile-details', 'Merchandiser\MerchandiserProfileController@getMerchandiserDetailsById');
 	Route::put('/update-merchandiser-profile-details', 'Merchandiser\MerchandiserProfileController@updateMerchandiserById');
 	Route::put('/update-merchandiser-password', 'Merchandiser\MerchandiserProfileController@updateMerchandiserPassword');
-
 });
 
 /* ERP Related Routes */
 Route::group(['prefix' => 'erp'], function () {
-	Route::get('report-generator','ErpUser\Reports\ReportController@index')->name('report-generator');
+	Route::get('report-generator', 'ErpUser\Reports\ReportController@index')->name('report-generator');
 	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
 	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
 	Route::get('/login', 'ErpuserAuth\LoginController@showLoginForm')->name('erp.login');
@@ -820,39 +817,39 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::delete('erp-order', 'ErpUser\Admin\OrderManagementController@destroy')->name('erp.admin.order.delete');
 	/* Routes for Admin - Order Item Management */
 	Route::put('erp-order-item', 'ErpUser\Admin\OrderManagementController@update')->name('erp.admin.order-item.update');
-	
+
 	/* Routes for Invoice Management */
-	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice'); 
-	Route::get('/setinvoicecustrefname', 'ErpUser\Invoice\InvoiceController@setInvoiceCustRefName')->name('invoice'); 
+	Route::get('/invoice', 'ErpUser\Invoice\InvoiceController@index')->name('invoice');
+	Route::get('/setinvoicecustrefname', 'ErpUser\Invoice\InvoiceController@setInvoiceCustRefName')->name('invoice');
 	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('create-invoice');
 	Route::post('/update-invoice', 'ErpUser\Invoice\InvoiceController@updateInvoice')->name('update-invoice');
-	
+
 	/* Routes for PO Manager Module */
-	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po'); 
+	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po');
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('save-invoice');
 	Route::get('/get-invoice-details', 'ErpUser\Invoice\InvoiceController@getInvoiceDetails')->name('get-invoice-details');
 	Route::get('/get-invoice', 'ErpUser\Invoice\InvoiceController@getInvoice')->name('get-invoice');
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');
-	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession'); 
+	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession');
 	/* Routes for Print Manager Module */
-	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager'); 
+	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager');
 
 	Route::prefix('/po-manager')->group(function () {
-		Route::get('/', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager'); 	
+		Route::get('/', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager');
 		Route::Post('/get-order-details', 'ErpUser\Pomanager\PoManagerController@getOrderDetails');
 		Route::post('/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
-		Route::post('/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify'); 
-		Route::post('/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus'); 
+		Route::post('/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify');
+		Route::post('/change_po_updated_status', 'ErpUser\Pomanager\PoManagerController@changePoUpdatedStatus');
 	});
 
 	Route::prefix('job-manager')->group(function () {
 		/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
-		Route::get('/', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager'); 
-		Route::post('/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails'); 
-		Route::get('/jga/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds'); 
-		Route::post('/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData'); 
+		Route::get('/', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager');
+		Route::post('/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails');
+		Route::get('/jga/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds');
+		Route::post('/store-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@storeJobcardData');
 		Route::post('/tesco/print-div-tesco', 'ErpUser\Jobmanager\JobManagerController@printDivTesco');
 		Route::post('/tesco/print-div-tesco-small', 'ErpUser\Jobmanager\JobManagerController@printDivTescoSmall');
 		Route::post('/tesco/proof-div-tescoticketos', 'ErpUser\Jobmanager\JobManagerController@proofDivTescoTicketos');
@@ -871,13 +868,13 @@ Route::group(['prefix' => 'erp'], function () {
 		Route::post('/generatebarcodeitfbig', 'ErpUser\Jobmanager\JobManagerController@generateBarcodeItfBig');
 		Route::get('/tesco/get-tsl-size', 'ErpUser\Jobmanager\JobManagerController@getTescoTSLSizechart');
 		Route::get('/script-check-orders', 'ErpUser\Jobmanager\JobManagerController@scriptCheckOrder');
-		Route::get('/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list'); 
-		Route::get('/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');  
-		Route::put('/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById'); 
-		Route::get('/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId'); 
-		Route::get('/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId'); 
-		Route::get('/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId'); 
-		Route::post('/pdf-merge', 'ErpUser\Jobmanager\JobManagerController@pdfMerge'); 
+		Route::get('/jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcards')->name('jobcards-list');
+		Route::get('/jobcard-details', 'ErpUser\Jobmanager\JobManagerController@getJobcardDetailsById');
+		Route::put('/update-jobcard-details', 'ErpUser\Jobmanager\JobManagerController@updateJobcardById');
+		Route::get('/get-customers-list', 'ErpUser\Jobmanager\JobManagerController@getCustomersListByBuyerId');
+		Route::get('/get-jobcard-id-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardIdListByBuyerCustomerId');
+		Route::get('/get-jobcards-list', 'ErpUser\Jobmanager\JobManagerController@getJobcardsListByBuyerCustomerJobcardId');
+		Route::post('/pdf-merge', 'ErpUser\Jobmanager\JobManagerController@pdfMerge');
 		Route::get('/script-update-uuid', 'ErpUser\Jobmanager\JobManagerController@scriptUpdateUUID');
 		/* Orchestra Print Manager*/
 		Route::post('/orchestra/print-pdf', 'ErpUser\Jobmanager\JobManagerController@printPdf');
@@ -894,22 +891,22 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::prefix('non-artwork-job-manager')->group(function () {
 		/* Routes for Non artwork jobcards */
-		Route::get('/', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager'); 
-		Route::post('/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId'); 
-		Route::post('/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId'); 
-		Route::post('/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName'); 
-		Route::post('/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName'); 
+		Route::get('/', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager');
+		Route::post('/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId');
+		Route::post('/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId');
+		Route::post('/get-references-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getReferencesByItemName');
+		Route::post('/get-style-ocn-po-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getStyleOcnBuyerPoByItemName');
 		Route::post('/get-nat-filtered-orders', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getFilteredNatOrders')->name('nat-filtered-orders');
 		Route::get('/get-nat-jc-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getNatJcOrderDetails');
 		Route::post('/store-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@storeNatJcOrderDetails');
 		Route::get('/get-machine-excess-data', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getMachineExcessDetailsById');
 
-		Route::get('/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list'); 
+		Route::get('/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list');
 		Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
 		Route::get('/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
 		Route::get('/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
 	});
-	
+
 	/* Routes for ERP-Settings Management */
 	Route::prefix('/settings')->group(function () {
 		Route::get('/', 'ErpUser\ERPSettings\ERPSettingsController@home')->name('erp-settings');
@@ -957,28 +954,28 @@ Route::group(['prefix' => 'erp'], function () {
 });
 
 // Routes for report generation
-Route::get('reportGenerator','ErpUser\Reports\ReportController@index')->name('reportGenerator');
-Route::post('level1Filter','ErpUser\Reports\ReportController@level1Filter');
-Route::post('/level2Filter','ErpUser\Reports\ReportController@level2Filter');
-Route::get('getTableFields','ErpUser\Reports\ReportController@getTableFields');
-Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable' )->name('setUpDatatable');
+Route::get('reportGenerator', 'ErpUser\Reports\ReportController@index')->name('reportGenerator');
+Route::post('level1Filter', 'ErpUser\Reports\ReportController@level1Filter');
+Route::post('/level2Filter', 'ErpUser\Reports\ReportController@level2Filter');
+Route::get('getTableFields', 'ErpUser\Reports\ReportController@getTableFields');
+Route::post('setUpDatatable', 'ErpUser\Reports\ReportController@setUpDatatable')->name('setUpDatatable');
 
 // Routes for admin report generation
-Route::get('testQuery','Admin\Report\ReportController@testQuery')->name('testQuery');
-Route::get('admin/generate-report','Admin\Report\ReportController@index')->name('generate-report');
-Route::post('filter_level1','Admin\Report\ReportController@level1Filter')->name('filter_level1');
-Route::post('admin_level2Filter','Admin\Report\ReportController@level2Filter')->name('filter_level2');
-Route::post('admin_getTableFields','Admin\Report\ReportController@admin_getTableFields')->name('admin_getTableFields');
-Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable' )
-													  ->name('admin_setUpDatatable');
+Route::get('testQuery', 'Admin\Report\ReportController@testQuery')->name('testQuery');
+Route::get('admin/generate-report', 'Admin\Report\ReportController@index')->name('generate-report');
+Route::post('filter_level1', 'Admin\Report\ReportController@level1Filter')->name('filter_level1');
+Route::post('admin_level2Filter', 'Admin\Report\ReportController@level2Filter')->name('filter_level2');
+Route::post('admin_getTableFields', 'Admin\Report\ReportController@admin_getTableFields')->name('admin_getTableFields');
+Route::post('admin_setUpDatatable', 'Admin\Report\ReportController@admin_setUpDatatable')
+	->name('admin_setUpDatatable');
 
 // Routes for customer report generation
-Route::get('customer/generate-report','Customer\Report\ReportController@index');
-Route::post('customer_filter_level1','Customer\Report\ReportController@level1Filter')->name('customer_filter_level1');
-Route::post('customer_filter_level2','Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
-Route::post('customer_getTableFields','Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
-Route::post('customer_setUpDatatable','Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
+Route::get('customer/generate-report', 'Customer\Report\ReportController@index');
+Route::post('customer_filter_level1', 'Customer\Report\ReportController@level1Filter')->name('customer_filter_level1');
+Route::post('customer_filter_level2', 'Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
+Route::post('customer_getTableFields', 'Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
+Route::post('customer_setUpDatatable', 'Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
 
-Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId'); 
-Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId'); 
-Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId'); 
+Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId');
+Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId');
+Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId');
