@@ -94,7 +94,7 @@
 							$("#"+row_id).find('.aw_status').selectpicker('val','1');
 							$("#"+row_id).find('.reference_select').find("option").remove()
 						}
-						
+
 						$("#"+row_id).find('.selectpicker').selectpicker('refresh');
 					}
 				});                       
@@ -210,6 +210,8 @@
 				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
+					$('.snackbar_span').html('Row removed !!!');
+					showSnackbar();
 				}
 				else
 				{

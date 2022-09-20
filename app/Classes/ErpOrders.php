@@ -140,7 +140,7 @@ class ErpOrders
 				$this->financial_year_start,
 				$this->today_date,
 				$this->financial_year,
-				$this->month
+				$this->month,null
 			);
 			
 			$new_erp_order = Erp::create([
@@ -394,7 +394,7 @@ class ErpOrders
 					$this->financial_year_start,
 					$this->today_date,
 					$this->financial_year,
-					$this->month
+					$this->month,null
 				);
 
 				$erp_orders = Erp::create([
