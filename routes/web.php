@@ -823,8 +823,6 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::get('/setinvoicecustrefname', 'ErpUser\Invoice\InvoiceController@setInvoiceCustRefName')->name('invoice');
 	Route::get('/create-invoice', 'ErpUser\Invoice\InvoiceController@create')->name('create-invoice');
 	Route::post('/update-invoice', 'ErpUser\Invoice\InvoiceController@updateInvoice')->name('update-invoice');
-
-	/* Routes for PO Manager Module */
 	Route::get('/erp-po-list', 'ErpUser\Invoice\InvoiceController@erpPOList')->name('erp-po');
 	Route::get('/erp-order-list', 'ErpUser\Invoice\InvoiceController@erpOrderList')->name('erp-orders');
 	Route::post('/save-invoice', 'ErpUser\Invoice\InvoiceController@setInvoice')->name('save-invoice');
@@ -833,8 +831,13 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::post('/download-invoice', 'ErpUser\Invoice\InvoiceController@downloadInvoice')->name('download-invoice');
 	Route::get('/po-orders-list', 'ErpUser\Pomanager\PoManagerController@poOrdersList')->name('po-orders-list');
 	Route::post('/set-erp-company-session', 'ErpUser\ProfileController@setCompanySession');
-	/* Routes for Print Manager Module */
-	Route::get('/print-manager', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager');
+	
+	Route::prefix('/print-manager')->group(function () {
+		Route::get('/', 'ErpUser\Printmanager\PrintManagerController@index')->name('print-manager');
+		Route::get('/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId');
+		Route::get('/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId');
+		Route::get('/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId');
+	});
 
 	Route::prefix('/po-manager')->group(function () {
 		Route::get('/', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager');
@@ -975,7 +978,3 @@ Route::post('customer_filter_level1', 'Customer\Report\ReportController@level1Fi
 Route::post('customer_filter_level2', 'Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
 Route::post('customer_getTableFields', 'Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
 Route::post('customer_setUpDatatable', 'Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
-
-Route::get('print-manager/get-customers-list', 'ErpUser\Printmanager\PrintManagerController@getCustomersListByBuyerId');
-Route::get('print-manager/get-style-list', 'ErpUser\Printmanager\PrintManagerController@getStyleListByBuyerCustomerId');
-Route::get('print-manager/get-erporder-list', 'ErpUser\Printmanager\PrintManagerController@getErpOrderListByBuyerCustomerId');
