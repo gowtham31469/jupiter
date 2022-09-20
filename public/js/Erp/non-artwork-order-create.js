@@ -581,11 +581,13 @@
 						$("#cancel_order").removeClass("hidden")
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
+						$(".row_btns").prop('disabled',false)
 					}
 					else
 					{
 						$("#save_data").addClass('hidden')
 						$("#cancel_order").addClass("hidden")
+						$(".row_btns").prop('disabled',true)
 						$('.snackbar_span').html(data.message);
 						showSnackbar();
 					}
