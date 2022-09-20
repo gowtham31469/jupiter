@@ -92,8 +92,9 @@
 							$("#"+row_id).append($item).find(":input").val('')
 							$item.closest('.aw_td').css('pointer-events','auto')
 							$("#"+row_id).find('.aw_status').selectpicker('val','1');
-							// $("#"+row_id).find('.selectpicker').selectpicker('refresh');
+							$("#"+row_id).find('.reference_select').find("option").remove()
 						}
+
 						$("#"+row_id).find('.selectpicker').selectpicker('refresh');
 					}
 				});                       
@@ -209,6 +210,8 @@
 				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
+					$('.snackbar_span').html('Row removed !!!');
+					showSnackbar();
 				}
 				else
 				{
@@ -244,6 +247,7 @@
 						$(this).html(data.items)
 					});
 					reset_input()
+					resetSelect('reference_select')
 					$(".selectpicker").selectpicker('refresh')
 				}
 			});
@@ -340,7 +344,23 @@
 			location.reload();
 		});
 
-		$(document).on("click","#cancel_order",function()
+
+		$(document).on("click","#cancel_order",function(e){
+			e.preventDefault();
+			$('#confirmCancellation').modal({
+				backdrop: 'static',
+				keyboard: false
+			})
+			.on('click', '#confirm', function(e) {
+				confirmOrderCancellation()
+			});
+			$("#cancel_cancellation").on('click',function(e){
+				e.preventDefault();
+				$('#confirmCancellation').modal('hide');
+			});
+		});
+
+		function confirmOrderCancellation()
 		{
 			$.ajax({
 				method:'POST',
@@ -349,12 +369,21 @@
 				data: {'order_id':$("#order_id").val() },
 				success:function(data)
 				{
+					$("#save_data").addClass('hidden')
+					$("#cancel_order").addClass("hidden")
 					$("#_order_status").html(data.order_status);
 					$('.snackbar_span').html('Order cancelled successfully!!!');
 					showSnackbar();
 				}
 			});
-		})
+		}
+
+		function resetSelect(select_class)
+		{
+			$("."+select_class).val('')
+			$("."+select_class).find("option").remove()
+			$("."+select_class).selectpicker("refresh");
+		}
 
 
 		function calculate_rate(ref,qty,rate_td,value_td)
@@ -369,7 +398,7 @@
 					if(qty >= data.moq)
 					{
 					rate_td.val(data.rate)
-					value_td.val((data.rate * qty))
+					value_td.val((data.rate * qty).toFixed(2))
 					total_qty = 0
 					total_value = 0
 					$(".quantity").each(function(i,v){
@@ -379,9 +408,9 @@
 						total_value+=+$(this).val()
 					});
 					$("#qty_total").val(total_qty)
-					$("#value_total").val(total_value)
-					$("#tax_value").val((($("#_tax_value").val()/100) * total_value))
-					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
+					$("#value_total").val(total_value.toFixed(2))
+					$("#tax_value").val((($("#_tax_value").val()/100) * total_value).toFixed(2))
+					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value).toFixed(2))
 					}
 					else
 					{
@@ -442,19 +471,23 @@
 				type:'json',
 				success:function(data)  
 				{
+					console.log(data)
 					if(data.error){
 						printErrorMsg(data.error);
 					}else{
-						$('#order_id').append('<option value="'+data.order_id+'">'+data.order_id+'</option>');
-						$("#order_id").val(data.order_id);
-						$("#order_id").selectpicker("refresh");
+						if(data.action == "save")
+						{
+							$("#order_id").prepend('<option value='+data.order_id+'>'+data.order_id+'</option>');
+							$("#order_id").val(data.order_id);
+							$("#order_id").selectpicker("refresh");
+						}
+						
 						$("#_order_status").html("Moved To JC Queue");
 
 						$("#save_data").removeClass('hidden')
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
-						$("#action_buttons").prepend('<button type="button" id="cancel_order" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Cancel Order</button>')
-
+						$("#cancel_order").removeClass("hidden")
 						// row_index=1;
 						// $('.dynamic-added').remove();
 						// $('#non_artwork_orders')[0].reset();
@@ -488,7 +521,7 @@
 			success:function(data)
 			{
 				if(data.result)
-				{	console.log(data)
+				{	
 					hsn_arr = [];
 					hsn_arr.push(data.hsn)
 					row_index= data.last_row_index
@@ -538,21 +571,24 @@
 					total_value+=+$(this).val()
 					});
 					$("#qty_total").val(total_qty)
-					$("#value_total").val(total_value)
-					$("#tax_value").val((($("#_tax_value").val()/100) * total_value))
-					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value))
+					$("#value_total").val(total_value.toFixed(2))
+					$("#tax_value").val((($("#_tax_value").val()/100) * total_value).toFixed(2))
+					$("#tax_value_total").val(Math.round((($("#_tax_value").val()/100) * total_value) + total_value).toFixed(2))
 
 					if(data.is_editable)
 					{
 						$("#save_data").removeClass('hidden')
-						$("#action_buttons").prepend('<button type="button" id="cancel_order" class="btn btn-xs btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>Cancel Order</button>')
+						$("#cancel_order").removeClass("hidden")
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
+						$(".row_btns").prop('disabled',false)
 					}
 					else
 					{
 						$("#save_data").addClass('hidden')
-						$('.snackbar_span').html('This order cannot be edited as JobCard creation for this order is in progress !!!');
+						$("#cancel_order").addClass("hidden")
+						$(".row_btns").prop('disabled',true)
+						$('.snackbar_span').html(data.message);
 						showSnackbar();
 					}
 			}

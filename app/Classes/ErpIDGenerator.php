@@ -8,14 +8,28 @@ class ErpIDGenerator
      * Generate Erp ID 
      * @return $erp_id
     */
-	public function generateErpID($from, $today_date, $financial_year, $month)
+	public function generateErpID($from, $today_date, $financial_year, $month, $order_table)
 	{
 		try
 		{	
             // Logic for resetting ERP ID format for new financial year	
 				// check if already order placed in new financial year or not.
+
+			if($order_table == "nat")
+			{
+				$already_order_placed = Erp::orderBy('erp_id','DESC')
+							->whereBetween('created_at', [$from, $today_date])
+							->orWhereDate('created_at', '=',$today_date)
+							->select('erp_id')
+							->first();
+			}
+			else
+			{
 				$already_order_placed = Erp::select('erp_id')->find(Erp::whereBetween('created_at', [$from, $today_date])->orWhereDate('created_at', '=',$today_date)->max('id'));
+			}
 				
+				// dd($nat,$already_order_placed);
+				// dd($already_order_placed);
 				// if old orders exists, then generate erpid based on old data
 				// else start new erpid from initial value(00001)
 				if($already_order_placed){
