@@ -82,7 +82,9 @@ class NonArtworkTemplateController extends Controller
     }
 
     public function nonArtworkOrders()
-    {       $erp_user_id = Auth::guard('erpuser')->id();
+    {      
+
+            $erp_user_id = Auth::guard('erpuser')->id();
 
             $buyer_ids = DB::table('erpuser_buyer')->where('erp_user',Auth::guard('erpuser')->id())->pluck('buyer');
             $buyers = Buyer::whereIn('id',$buyer_ids)->where('is_active','=',1)->pluck('buyer_name','id');
@@ -213,7 +215,7 @@ class NonArtworkTemplateController extends Controller
                 $this->financial_year_start,
                 $this->today_date,
                 $this->financial_year,
-                $this->month
+                $this->month,"nat"
             );
 
         $buyer = Buyer::where('id',$request->buyer)->first()->buyer_name;
@@ -284,6 +286,7 @@ class NonArtworkTemplateController extends Controller
 
                 $nat_orders = NonArtworkOrder::where('order_id',$request->order_id)->get();
 
+                $erp_id = $nat_orders->first()->order_id;
                 $nat_ids = $nat_orders->pluck('id');
 
                 $erp_ids = [];
@@ -300,8 +303,8 @@ class NonArtworkTemplateController extends Controller
                 DB::table('non_artwork_orders_quanty')->whereIn('non_artwork_order_id',$nat_ids)->delete();
             }
 
-            $erp_id = $request->action == "update" ? $erp_ids[0]:$erp_id;
-
+            // $erp_id = $request->action == "update" ? $erp_ids[0]:$erp_id;
+            // dd($erp_id);
             $new_erp_order = Erp::create([
                         'buyer_id'         => $request->buyer,
                         'customer_id'      => $request->customer,
@@ -402,8 +405,7 @@ class NonArtworkTemplateController extends Controller
                     ->where([
                     'order_qnty_table_name' => "non_artwork_orders_quanty",
                     'order_qnty_table_id' => $nat_qty->id
-                    ])
-                    ->delete();
+                    ])->delete();
 
                     $erp_order_details_id = ErpOrderDetails::create([
                         'erp_order_id'          => $new_erp_order->id,

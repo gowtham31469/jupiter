@@ -94,7 +94,7 @@
 							$("#"+row_id).find('.aw_status').selectpicker('val','1');
 							$("#"+row_id).find('.reference_select').find("option").remove()
 						}
-						
+
 						$("#"+row_id).find('.selectpicker').selectpicker('refresh');
 					}
 				});                       
@@ -210,6 +210,8 @@
 				if($(this).closest('tr').attr('id') != "addr0")
 				{
 					$(this).parents("tr").remove()
+					$('.snackbar_span').html('Row removed !!!');
+					showSnackbar();
 				}
 				else
 				{
@@ -579,11 +581,13 @@
 						$("#cancel_order").removeClass("hidden")
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
+						$(".row_btns").prop('disabled',false)
 					}
 					else
 					{
 						$("#save_data").addClass('hidden')
 						$("#cancel_order").addClass("hidden")
+						$(".row_btns").prop('disabled',true)
 						$('.snackbar_span').html(data.message);
 						showSnackbar();
 					}

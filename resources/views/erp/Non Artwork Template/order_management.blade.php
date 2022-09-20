@@ -128,9 +128,9 @@
 				<hr>                                            
 				<h4>Order Quantity</h4>                                            
 				<p>                                                
-					<button type="button" id="add_single_row" class="btn btn-default add-row-btn clone"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
-					<button type="button" id="clone_selected"  class="btn btn-default add-row-btn"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
-					<button type="button" id="delete_selected" class="btn btn-default add-row-btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
+					<button type="button" id="add_single_row" class="btn btn-default add-row-btn clone row_btns"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
+					<button type="button" id="clone_selected"  class="btn btn-default add-row-btn row_btns"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
+					<button type="button" id="delete_selected" class="btn btn-default add-row-btn row_btns"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
 					
 				</p>                                        
 			</div>
