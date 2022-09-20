@@ -10,613 +10,615 @@
 
 @endsection @section('content')
 <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12 col-md-12" style="padding-top: 25px;">
-              <div class="top-content">
-              </div>
-              <div class="main-sub-menu">
-			    <div class="company-nav-div hidden">
-			    	<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
+	<div class="row">
+		<div class="col-sm-12 col-md-12" style="padding-top: 25px;">
+			<div class="top-content">
+			</div>
+			<div class="main-sub-menu">
+				<div class="company-nav-div hidden">
+					<a class="dropdown-toggle profile-dropdown-admin selected-buyer" style="text-transform:capitalize;cursor: pointer;">Select Company</a>
 				</div>
-                <div class="action-group pull-right sub-menu-button">
-                  <button class=" btn btn-primary btn-sm" onclick="generateJobcard()">
-                   Create Jobcard
-				  </button>
-                </div>
-              </div>
-          <div class="clearfix"></div>
-                <div class="main-content">
-                    <div class="loader"  style="display:none;">
-					    <div class=" fa-3x">
-						  <i class="fa fa-spinner fa-pulse"></i>
-						</div>
+				<div class="action-group pull-right sub-menu-button">
+					<button class=" btn btn-primary btn-sm" onclick="generateJobcard()">
+						Create Jobcard
+					</button>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="main-content">
+				<div class="loader" style="display:none;">
+					<div class=" fa-3x">
+						<i class="fa fa-spinner fa-pulse"></i>
 					</div>
-                    <div class="col" id="approved-orders-table">
-						<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
-						<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
-						<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
-							<thead>
-								<tr>
-									<th>Sl. No</th>
-									<th>ERP ID</th>
-									<th>Customer Name</th>
-									<th>Buyer Name</th>
-									<th>Customer PO Number</th>
-									<th>Buyer PO Number</th>
-									<th>Style Number</th>
-									<th>Reference Number</th>
-									<th>Delivery Date</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($orders as $key => $value)
-								@php $ref_name = str_replace(" ","",$value['reference_name']) @endphp
-								@if ($value['buyer_name'] == 'Orchestra')
-									@if ($value['order_qnty_table_name'] == 'orchestra_hang_tag_orders_qty')
-										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-template-name="hang_tag" data-iteration="{{ $loop->iteration }}" data-disney="{{$value['Disney']}}" data-front-path="{{$value['frontPath']}}" data-back-path="{{$value['backPath']}}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
-											<td>
-												<div class="form-check">
-												<a href="javascript:void(0)">
-													<label>
-														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-												</a>
-												</div>
-											</td>
-											<td>{{$value['erp_id']}}</td>
-											<td>{{$value['company_name']}}</td>
-											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
-											<td>{{$value['po_no']}}</td>
-											@if ($value['buyer_po_number'] != '')
-												<td>{{$value['buyer_po_number']}}</td>
-											@else
-												<td>-</td>
-											@endif
-											<td>{{$value['style_no']}}</td>
-											<td>{{$value['reference_name']}}</td>
-											@if ($value['delivery_date'] != '')
-												<td>{{$value['delivery_date']}}</td>
-											@else
-												<td>-</td>
-											@endif
-
-											<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_modal_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
-										    <object style="opacity:0;width:0px;height:0px" id="orchestra_modal_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','hang_tag','{{$value['template_id']}}','{{$value['Disney']}}','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-										</tr>
-									@elseif($value['order_qnty_table_name'] == 'orchestra_wash_care_label_orders_qty')
-										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="{{$value['Disney']}}" data-template-name="wash_care" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-front-path="{{$value['frontPath']}}" data-back-path="{{$value['backPath']}}" data-middle-path="{{$value['middlePath']}}" data-uuid="{{ $value['uuid'] }}">
-											<td>
-												<div class="form-check">
-												<a href="javascript:void(0)">
-													<label>
-														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-												</a>
-												</div>
-											</td>
-											<td>{{$value['erp_id']}}</td>
-											<td>{{$value['company_name']}}</td>
-											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
-											<td>{{$value['po_no']}}</td>
-											@if ($value['buyer_po_number'] != '')
-												<td>{{$value['buyer_po_number']}}</td>
-											@else
-												<td>-</td>
-											@endif
-											<td>{{$value['style_no']}}</td>
-											<td>{{$value['reference_name']}}</td>
-											@if ($value['delivery_date'] != '')
-												<td>{{$value['delivery_date']}}</td>
-											@else
-												<td>-</td>
-											@endif
-
-											<td> <object style="opacity:0;width:0px;height:0px" id="washcare_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
-										    <object style="opacity:0;width:0px;height:0px" id="washcare_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object>
-										    <object style="opacity:0;width:0px;height:0px" id="washcare_middle{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['middlePath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','wash_care','{{$value['template_id']}}','{{$value['Disney']}}','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-										</tr>
-									@else
-								
-										@if($value['order_qnty_table_name'] == 'orchestra_heat_transfer_orders_qty')
-											@php 
-												$template_name="heat_transfer";
-											@endphp
-										@elseif($value['order_qnty_table_name'] == 'orchestra_special_tag_orders_qty')
-											@php 
-												$template_name="special_tag";
-											@endphp
-										@elseif($value['order_qnty_table_name'] == 'orchestra_main_label_orders_qty')
-											@php 
-												$template_name="main_label";
-											@endphp
-										@elseif($value['order_qnty_table_name'] == 'orchestra_size_label_orders_qty')
-											@php 
-												$template_name="size_label";
-											@endphp
-										@else
-											@php 
-												$template_name="stickers";
-											@endphp
-										@endif
-										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="" data-template-name="{{$template_name}}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
-											<td>
-												<div class="form-check">
-												<a href="javascript:void(0)">
-													<label>
-														<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-												</a>
-												</div>
-											</td>
-											<td>{{$value['erp_id']}}</td>
-											<td>{{$value['company_name']}}</td>
-											<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
-											<td>{{$value['po_no']}}</td>
-											@if ($value['buyer_po_number'] != '')
-												<td>{{$value['buyer_po_number']}}</td>
-											@else
-												<td>-</td>
-											@endif
-											<td>{{$value['style_no']}}</td>
-											<td>{{$value['reference_name']}}</td>
-											@if ($value['delivery_date'] != '')
-												<td>{{$value['delivery_date']}}</td>
-											@else
-												<td>-</td>
-											@endif
-											@if ($value['order_qnty_table_name'] == 'orchestra_heat_transfer_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_special_tag_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_main_label_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_size_label_orders_qty')
-												<td> </td>
-											@else
-												<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-											@endif
-											
-										</tr>
-									@endif
+				</div>
+				<div class="col" id="approved-orders-table">
+					<input type="hidden" value="{{ session()->get('company') }}" id="company_id">
+					<input type="hidden" value="{{ session()->get('company_name') }}" id="company_name">
+					<table id="approved-order-list" class="table table-bordered table-responsive table-hover " style="font-size: 12px;">
+						<thead>
+							<tr>
+								<th>Sl. No</th>
+								<th>ERP ID</th>
+								<th>Customer Name</th>
+								<th>Buyer Name</th>
+								<th>Customer PO Number</th>
+								<th>Buyer PO Number</th>
+								<th>Style Number</th>
+								<th>Reference Number</th>
+								<th>Delivery Date</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($orders as $key => $value)
+							@php $ref_name = str_replace(" ","",$value['reference_name']) @endphp
+							@if ($value['buyer_name'] == 'Orchestra')
+							@if ($value['order_qnty_table_name'] == 'orchestra_hang_tag_orders_qty')
+							<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-template-name="hang_tag" data-iteration="{{ $loop->iteration }}" data-disney="{{$value['Disney']}}" data-front-path="{{$value['frontPath']}}" data-back-path="{{$value['backPath']}}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+								<td>
+									<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+									</div>
+								</td>
+								<td>{{$value['erp_id']}}</td>
+								<td>{{$value['company_name']}}</td>
+								<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+								<td>{{$value['po_no']}}</td>
+								@if ($value['buyer_po_number'] != '')
+								<td>{{$value['buyer_po_number']}}</td>
 								@else
-									@if($value['order_qnty_table_name'] == 'tesco_washcare_orders_quanty')
-										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="" data-template-name="tesco_care_labels" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
-									@else
-										<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
-									@endif		
-										<td>
-											<div class="form-check">
-											<a href="javascript:void(0)">
-												<label>
-													<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
-											</a>
-											</div>
-										</td>
-										<td>{{$value['erp_id']}}</td>
-										<td>{{$value['company_name']}}</td>
-										<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
-										<td>{{$value['po_no']}}</td>
-										@if ($value['buyer_po_number'] != '')
-											<td>{{$value['buyer_po_number']}}</td>
-										@else
-											<td>-</td>
-										@endif
-										<td>{{$value['style_no']}}</td>
-										<td>{{$value['reference_name']}}</td>
-										@if ($value['delivery_date'] != '')
-											<td>{{$value['delivery_date']}}</td>
-										@else
-											<td>-</td>
-										@endif
-
-										@if($value['order_qnty_table_name'] == 'tesco_washcare_orders_quanty')
-										<?php
-												$temp = explode(',',$value['template_file']);
-											?>
-											<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$temp[0]}}" type="image/svg+xml"></object>  <object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[1]}}" type="image/svg+xml"></object>  <object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[2]}}" type="image/svg+xml"></object>  <object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[3]}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-										@else
-											<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
-										@endif
-									</tr>
+								<td>-</td>
 								@endif
-								@endforeach
-							</tbody>
-						</table>
-				     </div>
-                 </div>
-                </div>
-            </div>
-        </div>
-    </div>
+								<td>{{$value['style_no']}}</td>
+								<td>{{$value['reference_name']}}</td>
+								@if ($value['delivery_date'] != '')
+								<td>{{$value['delivery_date']}}</td>
+								@else
+								<td>-</td>
+								@endif
+
+								<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_modal_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
+									<object style="opacity:0;width:0px;height:0px" id="orchestra_modal_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','hang_tag','{{$value['template_id']}}','{{$value['Disney']}}','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a>
+								</td>
+							</tr>
+							@elseif($value['order_qnty_table_name'] == 'orchestra_wash_care_label_orders_qty')
+							<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="{{$value['Disney']}}" data-template-name="wash_care" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-front-path="{{$value['frontPath']}}" data-back-path="{{$value['backPath']}}" data-middle-path="{{$value['middlePath']}}" data-uuid="{{ $value['uuid'] }}">
+								<td>
+									<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+									</div>
+								</td>
+								<td>{{$value['erp_id']}}</td>
+								<td>{{$value['company_name']}}</td>
+								<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+								<td>{{$value['po_no']}}</td>
+								@if ($value['buyer_po_number'] != '')
+								<td>{{$value['buyer_po_number']}}</td>
+								@else
+								<td>-</td>
+								@endif
+								<td>{{$value['style_no']}}</td>
+								<td>{{$value['reference_name']}}</td>
+								@if ($value['delivery_date'] != '')
+								<td>{{$value['delivery_date']}}</td>
+								@else
+								<td>-</td>
+								@endif
+
+								<td> <object style="opacity:0;width:0px;height:0px" id="washcare_front{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['frontPath']}}" type="image/svg+xml"></object>
+									<object style="opacity:0;width:0px;height:0px" id="washcare_back{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['backPath']}}" type="image/svg+xml"></object>
+									<object style="opacity:0;width:0px;height:0px" id="washcare_middle{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['middlePath']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','wash_care','{{$value['template_id']}}','{{$value['Disney']}}','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a>
+								</td>
+							</tr>
+							@else
+
+							@if($value['order_qnty_table_name'] == 'orchestra_heat_transfer_orders_qty')
+							@php
+							$template_name="heat_transfer";
+							@endphp
+							@elseif($value['order_qnty_table_name'] == 'orchestra_special_tag_orders_qty')
+							@php
+							$template_name="special_tag";
+							@endphp
+							@elseif($value['order_qnty_table_name'] == 'orchestra_main_label_orders_qty')
+							@php
+							$template_name="main_label";
+							@endphp
+							@elseif($value['order_qnty_table_name'] == 'orchestra_size_label_orders_qty')
+							@php
+							$template_name="size_label";
+							@endphp
+							@else
+							@php
+							$template_name="stickers";
+							@endphp
+							@endif
+							<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="" data-template-name="{{$template_name}}" data-iteration="{{ $loop->iteration }}" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+								<td>
+									<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+									</div>
+								</td>
+								<td>{{$value['erp_id']}}</td>
+								<td>{{$value['company_name']}}</td>
+								<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+								<td>{{$value['po_no']}}</td>
+								@if ($value['buyer_po_number'] != '')
+								<td>{{$value['buyer_po_number']}}</td>
+								@else
+								<td>-</td>
+								@endif
+								<td>{{$value['style_no']}}</td>
+								<td>{{$value['reference_name']}}</td>
+								@if ($value['delivery_date'] != '')
+								<td>{{$value['delivery_date']}}</td>
+								@else
+								<td>-</td>
+								@endif
+								@if ($value['order_qnty_table_name'] == 'orchestra_heat_transfer_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_special_tag_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_main_label_orders_qty' || $value['order_qnty_table_name'] == 'orchestra_size_label_orders_qty')
+								<td> </td>
+								@else
+								<td> <object style="opacity:0;width:0px;height:0px" id="orchestra_svg_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$value['reference_name']}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print_orchestra','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+								@endif
+
+							</tr>
+							@endif
+							@else
+							@if($value['order_qnty_table_name'] == 'tesco_washcare_orders_quanty')
+							<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-template-id="{{ $value['template_id'] }}" data-disney="" data-template-name="tesco_care_labels" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+								@else
+							<tr id="{{$value['id']}}" data-refname="{{ $value['reference_name'] }}" data-buyer-po="{{ $value['buyer_po_number'] }}" data-order-type="{{ $value['order_type'] }}" data-created-at="{{ $value['created_at'] }}" data-style-no="{{ $value['style_no'] }}" data-template-file="{{ $value['template_file'] }}" data-iteration="{{ $loop->iteration }}" data-disney="" data-zone="{{ $value['zone'] }}" data-uuid="{{ $value['uuid'] }}">
+								@endif
+								<td>
+									<div class="form-check">
+										<a href="javascript:void(0)">
+											<label>
+												<input class="row-checkbox" type="checkbox" data-customer-name="{{$value['company_name']}}" style="margin-right: 10px;" onchange="return selectOrders(this)" data-buyer-name="{{$value['buyer_name']}}"> <span class="label-text" class="hidden-val">{{ $loop->iteration }}</label>
+										</a>
+									</div>
+								</td>
+								<td>{{$value['erp_id']}}</td>
+								<td>{{$value['company_name']}}</td>
+								<td data-buyer-id="{{$value['buyer_id']}}">{{$value['buyer_name']}}</td>
+								<td>{{$value['po_no']}}</td>
+								@if ($value['buyer_po_number'] != '')
+								<td>{{$value['buyer_po_number']}}</td>
+								@else
+								<td>-</td>
+								@endif
+								<td>{{$value['style_no']}}</td>
+								<td>{{$value['reference_name']}}</td>
+								@if ($value['delivery_date'] != '')
+								<td>{{$value['delivery_date']}}</td>
+								@else
+								<td>-</td>
+								@endif
+
+								@if($value['order_qnty_table_name'] == 'tesco_washcare_orders_quanty')
+								<?php
+								$temp = explode(',', $value['template_file']);
+								?>
+								<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$temp[0]}}" type="image/svg+xml"></object> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[1]}}" type="image/svg+xml"></object> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_back_text_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[2]}}" type="image/svg+xml"></object> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_front_modal{{ $loop->iteration }}" class="center-block tesco_svg{{ $loop->iteration }}" data="{{$temp[3]}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+								@else
+								<td> <object style="opacity:0;width:0px;height:0px" id="tesco_svg_modal{{$loop->iteration}}" class="center-block tesco_svg{{$loop->iteration}}" data="{{$value['template_file']}}" type="image/svg+xml"></object><a class="artork_download" href="javascript:void(0)" onclick="openmodaltesco('{{$ref_name}}','{{ $loop->iteration }}','{{$value['template_file']}}','{{$value['style_no']}}','{{$value['buyer_po_number']}}','{{$value['id']}}','{{$value['order_type']}}','{{$value['created_at']}}','print','stickers','{{$value['template_id']}}','','{{ $value['order_qnty_table_name'] }}')"><i class="fa fa-file-pdf-o fa-button preview-pdf" data-placement="left" title="Download Artwork" data-original-title="Download Artwork"></i></a></td>
+								@endif
+							</tr>
+							@endif
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
 {{-- Hidden div for svg rendering --}}
 <div id="modaldiv">
 	<div id="svgdiv" style="position:absolute;visibility:hidden">\
-	 <svg id="ean-13"></svg>\
-   </div>
+		<svg id="ean-13"></svg>\
+	</div>
 </div>
 <div id="splitdiv" style="opacity: 0;position:absolute;">
- </div>
+</div>
 
- <div class="modal fade" id="createSpectrraJCModal" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content create-spectrra-jc-modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Create Jobcard</h4>
-                </div>
-                <div class="modal-body create-spectrra-jc-modal-body">
-					<div class="container-fluid">
-						<span id="spectrra_template_result"></span>
-						{!! Form::open(['method' => 'post', 'id' => 'create_spectrra_jc_form','data-toggle' => 'validator','role' => 'form']) !!}
-						@include('erp.Jobmanager.create-spectrra-jc-modal')
-					</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                    {{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right', 'id' => 'create_spectrra_jc_btn')) }}
-                </div>
-                {!! Form::close() !!}
-            </div>
-        </div>
-    </div>
+<div class="modal fade" id="createSpectrraJCModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content create-spectrra-jc-modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Create Jobcard</h4>
+			</div>
+			<div class="modal-body create-spectrra-jc-modal-body">
+				<div class="container-fluid">
+					<span id="spectrra_template_result"></span>
+					{!! Form::open(['method' => 'post', 'id' => 'create_spectrra_jc_form','data-toggle' => 'validator','role' => 'form']) !!}
+					@include('erp.Jobmanager.create-spectrra-jc-modal')
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+				{{ Form::submit('Save', array('class' => 'btn btn-primary btn-sm pull-right', 'id' => 'create_spectrra_jc_btn')) }}
+			</div>
+			{!! Form::close() !!}
+		</div>
+	</div>
+</div>
 <!-- company selection Modal -->
 @include('erp.components.company-selection-modal')
 <!-- Job card creation Modal -->
 <div class="modal jobcard-creation-modal fade" id="jobcardCreationModalCenter" tabindex="-1" role="dialog" aria-labelledby="jobcardCreationModalCenter">
-     <div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
-         <div class="modal-content jobcard-creation-modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title jobcard-modal-title" id="jobcardCreationModalCenter">Create Jobcard</h4>
-                 </div>
-				 {!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
-                 <div class="modal-body jobcard-creation-modal-body">
-                    <div class="container-fluid">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-4">
-									<p><strong id="jc_company_name"></strong></p>
-									<p id="company_address"></p>
-								</div>
-								<div class="col-md-4">
-								</div>
-								<div class="col-md-4">
-								     <img src="" class="pull-right " id="company_logo" style="width: 150px;height: 60px;">
-								</div>
+	<div class="modal-dialog modal-lg jobcard-creation-modal-dialog" role="document">
+		<div class="modal-content jobcard-creation-modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title jobcard-modal-title" id="jobcardCreationModalCenter">Create Jobcard</h4>
+			</div>
+			{!! Form::open(['id' => 'create_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
+			<div class="modal-body jobcard-creation-modal-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<p><strong id="jc_company_name"></strong></p>
+								<p id="company_address"></p>
+							</div>
+							<div class="col-md-4">
+							</div>
+							<div class="col-md-4">
+								<img src="" class="pull-right " id="company_logo" style="width: 150px;height: 60px;">
 							</div>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-4">
-									{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
-								    <span id="work_order"></span>
-								</div>
-								<div class="col-md-4">
-								</div>
-								<div class="col-md-4">
-									 {!! Form::label('today_date', 'DATE :', ['class' => 'form_label']) !!}
-								    <span id="today_date"></span>
-								</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								{!! Form::label('work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
+								<span id="work_order"></span>
 							</div>
-							<div class="col-md-12">
-								<div class="col-md-4">
-									{!! Form::label('article', 'ARTICLE :', ['class' => 'form_label']) !!}
-								    <span id="article"></span>
-								</div>
-								<div class="col-md-4">
-								</div>
-								<div class="col-md-4">
-								    <div class="form-group has-feedback">
-										{!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
-										{!! Form::text('material',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MATERIAL','required','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
+							<div class="col-md-4">
+							</div>
+							<div class="col-md-4">
+								{!! Form::label('today_date', 'DATE :', ['class' => 'form_label']) !!}
+								<span id="today_date"></span>
 							</div>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-4">
-									{!! Form::label('customer', 'CUST NAME :', ['class' => 'form_label']) !!}
-								    <span id="customer"></span>	
-								</div>
-								<div class="col-md-4">
-									<div class="form-group has-feedback">
-										{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
-										{!! Form::text('style_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									 </div>		
-								</div>
-								<div class="col-md-4">
-									 {!! Form::label('order_type', 'ORDER TYPE :', ['class' => 'form_label']) !!}
-								    <span  id="order_type" ></span>	
-								</div>
+						<div class="col-md-12">
+							<div class="col-md-4">
+								{!! Form::label('article', 'ARTICLE :', ['class' => 'form_label']) !!}
+								<span id="article"></span>
 							</div>
-							<div class="col-md-12">
-								<div class="col-md-4">
-									{!! Form::label('buyer', 'BUYER :', ['class' => 'form_label']) !!}
-								    <span id="buyer"></span>	
-								</div>
-								<div class="col-md-4">
-									<div class="form-group has-feedback">
-										{!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
-										{!! Form::text('reference',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REFERENCE', 'maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									 </div>	
-								</div>
-								<div class="col-md-4">
-									 <div class="form-group has-feedback">
-										{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
-										{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
-										<div class="help-block with-errors"></div>
-									 </div>
-								</div>
+							<div class="col-md-4">
 							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-3">
-									{!! Form::label('order_date', 'ORDER DT :', ['class' => 'form_label']) !!}
-								    <span id="order_date"></span>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
-									{!! Form::number('length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
+							<div class="col-md-4">
+								<div class="form-group has-feedback">
+									{!! Form::label('material', 'MATERIAL :', ['class' => 'form_label']) !!}
+									{!! Form::text('material',$value = '', array('class' => 'form-control input-sm','placeholder' => 'MATERIAL','required','maxlength' => '20')) !!}
 									<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
-										{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
-										{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="col-md-3">
-								   <div class="form-group has-feedback">
-									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
-									<div class="input-group cus_del_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control input-sm " required="" placeholder="CUS D.DT">
-										<div class="input-group-addon input-sm">
-										<span class="glyphicon glyphicon-th"> </span >
-									</div >
-								  </div>
-								  <div class="help-block with-errors"></div>
-								  </div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
-									{!! Form::number('width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'WIDTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
-									<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
-										{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
-										<div class="help-block with-errors"></div>
-								    </div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
-										{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="col-md-3">
-								   <div class="form-group has-feedback">
-									{!! Form::label('invoice_date', 'INVOICE DATE :', ['class' => 'form_label']) !!}
-									<div class="input-group invoice_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="invoice_date" name="invoice_date" type="text" class="form-control input-sm " placeholder="INVOICE DATE">
-										<div class="input-group-addon input-sm">
-										<span class="glyphicon glyphicon-th"> </span >
-									</div >
-								  </div>
-								  <div class="help-block with-errors"></div>
-								  </div>
-								</div>
-								<div class="col-md-3">
-								   <div class="form-group has-feedback">
-										{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
-										{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
-										<div class="help-block with-errors"></div>
-								   </div>
-								</div>
-								<div class="col-md-3">
-							        <div class="form-group has-feedback">
-										{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
-										{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-										{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
-										<div class="help-block with-errors"></div>
-								    </div>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
-										{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
-										{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error' => 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-								    <div class="form-group has-feedback">
-										{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
-										{{ Form::select('finish_type',(['' => '-- Select Finish Type --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12 common-data-div hidden">
-							   <div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('tint_color', 'TINT COLORS :', ['class' => 'form_label']) !!}
-										{!! Form::text('tint_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TINT COLORS', 'maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>		
-							   </div>
-							   <div class="col-md-3">
-									{!! Form::label('customer_po', 'CUSTOMER PO :', ['class' => 'form_label']) !!}
-								    <span id="customer_po"></span>
-							   </div>
-							   <div class="col-md-6">
-							   </div>
-							</div>
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12 ratio-list-table-div">
-							</div>
-						</div>
-						<div class="order-details-div">
-						</div>
-						<div class="row">
-							<div class="col-md-12 single-list-table-div">
-							</div>
-						</div>
-						<div class="row meter-calculation-div">
-						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-									    @php $login_user = Auth::guard('erpuser')->user()->name; @endphp
-										{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('compiled_by',$value = $login_user, array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
-										{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('operator', 'OPERATOR :', ['class' => 'form_label']) !!}
-										{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('checker', 'CHECKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
-										{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('packer', 'PACKER :', ['class' => 'form_label']) !!}
-										{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
-										<div class="input-group approval_date date datepicker" data-provide="datepicker" id="datePicker1">
-											<input value="" id="approval_date" name="approval_date" type="text" class="form-control input-sm "  placeholder="APPROVAL DT">
-											<div class="input-group-addon input-sm">
-											 <span class="glyphicon glyphicon-th"> </span >
-										    </div >
-									    </div>
-									    <div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
-										{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('cutter', 'CUTTER :', ['class' => 'form_label']) !!}
-										{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group has-feedback">
-										{!! Form::label('cartons', 'CARTONS :', ['class' => 'form_label']) !!}
-										{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','maxlength' => '20')) !!}
-										<div class="help-block with-errors"></div>
-									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-                 </div>
-                 <div class="modal-footer jobcard-creation-modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-					 {!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								{!! Form::label('customer', 'CUST NAME :', ['class' => 'form_label']) !!}
+								<span id="customer"></span>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group has-feedback">
+									{!! Form::label('style_no', 'STYLENUM :', ['class' => 'form_label']) !!}
+									{!! Form::text('style_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'STYLENUM', 'maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								{!! Form::label('order_type', 'ORDER TYPE :', ['class' => 'form_label']) !!}
+								<span id="order_type"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-4">
+								{!! Form::label('buyer', 'BUYER :', ['class' => 'form_label']) !!}
+								<span id="buyer"></span>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group has-feedback">
+									{!! Form::label('reference', 'REFERENCE :', ['class' => 'form_label']) !!}
+									{!! Form::text('reference',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REFERENCE', 'maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group has-feedback">
+									{!! Form::label('disp_mode', 'DISP MODE :', ['class' => 'form_label']) !!}
+									{{ Form::select('disp_mode',(['' => '-- Select Dispatch Mode --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'disp_mode','required')) }}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								{!! Form::label('order_date', 'ORDER DT :', ['class' => 'form_label']) !!}
+								<span id="order_date"></span>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('length', 'LENGTH :', ['class' => 'form_label']) !!}
+									{!! Form::number('length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('repeat_gap', 'REPEAT GAP :', ['class' => 'form_label']) !!}
+									{!! Form::number('repeat_gap',$value = '', array('class' => 'form-control input-sm','placeholder' => 'REPEAT GAP', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('machine', 'MACHINE :', ['class' => 'form_label']) !!}
+									{{ Form::select('machine',(['' => '-- Select Machine --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'machine','required')) }}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('cus_del_date', 'CUS D.DT :', ['class' => 'form_label']) !!}
+									<div class="input-group cus_del_date date datepicker" data-provide="datepicker" id="datePicker1">
+										<input value="" id="cus_del_date" name="cus_del_date" type="text" class="form-control input-sm " required="" placeholder="CUS D.DT">
+										<div class="input-group-addon input-sm">
+											<span class="glyphicon glyphicon-th"> </span>
+										</div>
+									</div>
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('width', 'WIDTH :', ['class' => 'form_label']) !!}
+									{!! Form::number('width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'WIDTH', 'min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeypress' => 'return isNumberKey(event)', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('roll_width', 'ROLL WIDTH :', ['class' => 'form_label']) !!}
+									{!! Form::number('roll_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL WIDTH','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('film_no', 'FILM NO :', ['class' => 'form_label']) !!}
+									{!! Form::number('film_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'FILM NO','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumber(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('invoice_date', 'INVOICE DATE :', ['class' => 'form_label']) !!}
+									<div class="input-group invoice_date date datepicker" data-provide="datepicker" id="datePicker1">
+										<input value="" id="invoice_date" name="invoice_date" type="text" class="form-control input-sm " placeholder="INVOICE DATE">
+										<div class="input-group-addon input-sm">
+											<span class="glyphicon glyphicon-th"> </span>
+										</div>
+									</div>
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('length_side', 'LENGTH SIDE :', ['class' => 'form_label']) !!}
+									{!! Form::number('length_side',$value = '', array('class' => 'form-control input-sm','placeholder' => 'LENGTH SIDE','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'step' => '0.01', 'data-step-error' => 'Max 2 decimal places allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('excess', 'EXCESS % :', ['class' => 'form_label']) !!}
+									{!! Form::number('excess',$value = '', array('class' => 'form-control input-sm','placeholder' => 'EXCESS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'onkeyup' => 'return calculateExcess(this)', 'data-step-error' => 'Decimal values not allowed.', 'onkeypress' => 'return isNumberKey(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
+									{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('inv_no', 'INV NO :', ['class' => 'form_label']) !!}
+									{!! Form::text('inv_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'INV NO','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('no_sticker', 'NO OF STICKERS :', ['class' => 'form_label']) !!}
+									{!! Form::number('no_sticker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'NO OF STICKERS','min' => '1','max' => '99999', 'data-max-error' => 'Value should be <= 99999', 'data-min-error'=> 'Value should be greater than 0', 'data-step-error' => 'Decimal values not allowed.', 'onkeyup' => 'return mtrsForStickers()', 'onkeypress' => 'return isNumber(event)')) !!}
+										<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('finish_type', 'FINISH TYPE :', ['class' => 'form_label']) !!}
+									{{ Form::select('finish_type',(['' => '-- Select Finish Type --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'finish_type','required')) }}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('print_color', 'PRINT COLORS :', ['class' => 'form_label']) !!}
+									{!! Form::text('print_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PRINT COLORS', 'maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-12 common-data-div hidden">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('tint_color', 'TINT COLORS :', ['class' => 'form_label']) !!}
+									{!! Form::text('tint_color',$value = '', array('class' => 'form-control input-sm','placeholder' => 'TINT COLORS', 'maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								{!! Form::label('customer_po', 'CUSTOMER PO :', ['class' => 'form_label']) !!}
+								<span id="customer_po"></span>
+							</div>
+							<div class="col-md-6">
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12 ratio-list-table-div">
+						</div>
+					</div>
+					<div class="order-details-div">
+					</div>
+					<div class="row">
+						<div class="col-md-12 single-list-table-div">
+						</div>
+					</div>
+					<div class="row meter-calculation-div">
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									@php $login_user = Auth::guard('erpuser')->user()->name; @endphp
+									{!! Form::label('compiled_by', 'COMPILED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('compiled_by',$value = $login_user, array('class' => 'form-control input-sm','placeholder' => 'COMPILED BY','required','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('barcode_read', 'BARCODE READ :', ['class' => 'form_label']) !!}
+									{!! Form::text('barcode_read',$value = '', array('class' => 'form-control input-sm','placeholder' => 'BARCODE READ','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('operator', 'OPERATOR :', ['class' => 'form_label']) !!}
+									{!! Form::text('operator',$value = '', array('class' => 'form-control input-sm','placeholder' => 'OPERATOR','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('checker', 'CHECKER :', ['class' => 'form_label']) !!}
+									{!! Form::text('checker',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CHECKER','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('author', 'AUTHORIZED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('author',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AUTHORIZED BY','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('axicon_verifier', 'AXICON VERIFIER :', ['class' => 'form_label']) !!}
+									{!! Form::text('axicon_verifier',$value = '', array('class' => 'form-control input-sm','placeholder' => 'AXICON VERIFIER','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('approved_by', 'APPROVED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('approved_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'APPROVED BY','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('packer', 'PACKER :', ['class' => 'form_label']) !!}
+									{!! Form::text('packer',$value = '', array('class' => 'form-control input-sm','placeholder' => 'PACKER','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('approval_date', 'APPROVAL DT :', ['class' => 'form_label']) !!}
+									<div class="input-group approval_date date datepicker" data-provide="datepicker" id="datePicker1">
+										<input value="" id="approval_date" name="approval_date" type="text" class="form-control input-sm " placeholder="APPROVAL DT">
+										<div class="input-group-addon input-sm">
+											<span class="glyphicon glyphicon-th"> </span>
+										</div>
+									</div>
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('roll_issued_by', 'ROLL ISSUED BY :', ['class' => 'form_label']) !!}
+									{!! Form::text('roll_issued_by',$value = '', array('class' => 'form-control input-sm','placeholder' => 'ROLL ISSUED BY','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('cutter', 'CUTTER :', ['class' => 'form_label']) !!}
+									{!! Form::text('cutter',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CUTTER','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group has-feedback">
+									{!! Form::label('cartons', 'CARTONS :', ['class' => 'form_label']) !!}
+									{!! Form::text('cartons',$value = '', array('class' => 'form-control input-sm','placeholder' => 'CARTONS','maxlength' => '20')) !!}
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer jobcard-creation-modal-footer">
+				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
+				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn'] ) !!}
+			</div>
+			{!! Form::close() !!}
+		</div>
+	</div>
 </div>
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
@@ -624,83 +626,79 @@
 @endsection
 @section('jqueryIncludes')
 <script>
-$(document).ready(function() {
-	// disable mousewheel on a input number field when in focus
-    // (to prevent Chromium browsers change the value when scrolling)
+	$(document).ready(function() {
+		// disable mousewheel on a input number field when in focus
+		// (to prevent Chromium browsers change the value when scrolling)
 
-    $(document).on("wheel", "input[type=number]", function (e) {
-        $(this).blur();
-    });
-	localStorage.removeItem('file_path')
+		$(document).on("wheel", "input[type=number]", function(e) {
+			$(this).blur();
+		});
+		localStorage.removeItem('file_path')
 
-	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').val('');
-	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('val', 1);
-	$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('refresh');
-	$('#finish_type, #teeth_no, #machine, #disp_mode').selectpicker('refresh');
+		$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').val('');
+		$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('val', 1);
+		$('#erp_id_filter, #customer_name_filter, #po_number_filter, #style_number_filter, #ref_number_filter, #delivery_date_filter').selectpicker('refresh');
+		$('#finish_type, #teeth_no, #machine, #disp_mode').selectpicker('refresh');
 
-	/** [ Toggle bootstrap tooltip ] */
-	$('.preview-pdf').tooltip('show');
-	$('.preview-pdf').tooltip('toggle');
-	
-	/** [ Make companies card active ] */
-	$('div.buyers-card').click(function(){
+		/** [ Toggle bootstrap tooltip ] */
+		$('.preview-pdf').tooltip('show');
+		$('.preview-pdf').tooltip('toggle');
 
-		  $('div.buyers-card').removeClass("active");
-		  $(this).addClass("active");
-		  $('#hidden-buyer-div').hide();
+		/** [ Make companies card active ] */
+		$('div.buyers-card').click(function() {
 
-		  /* Save selected company into localdb */
-	      if ($('.buyers-card.active-buyer.active').length != 0) 
-	      {
-         	var company_id = $('.buyers-card.active-buyer.active').data("value"); 
-		  	var company_name = $('.buyers-card.active-buyer.active').attr("id");
-         	 $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-          	$('#buyerSelectionModalCenter').modal('hide');
-		  
-			$.ajax({
-				url: base_url + "/erp/set-erp-company-session",
-				type: "Post",
-				dataType: "json",
-				data: {
-					_token: csrf_token,
-					company_id: company_id,
-					company_name:company_name
-				},
-				beforeSend: function() {
-					
-				//	location.reload();
-				},
-				success: function(data) {
-					location.reload();
-				},
-				error: function(data) {
+			$('div.buyers-card').removeClass("active");
+			$(this).addClass("active");
+			$('#hidden-buyer-div').hide();
 
-				},
-				complete: function() {
+			/* Save selected company into localdb */
+			if ($('.buyers-card.active-buyer.active').length != 0) {
+				var company_id = $('.buyers-card.active-buyer.active').data("value");
+				var company_name = $('.buyers-card.active-buyer.active').attr("id");
+				$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
+				$('#buyerSelectionModalCenter').modal('hide');
 
-				}
-			})
-	      }
-	  
+				$.ajax({
+					url: base_url + "/erp/set-erp-company-session",
+					type: "Post",
+					dataType: "json",
+					data: {
+						_token: csrf_token,
+						company_id: company_id,
+						company_name: company_name
+					},
+					beforeSend: function() {
+
+						//	location.reload();
+					},
+					success: function(data) {
+						location.reload();
+					},
+					error: function(data) {
+
+					},
+					complete: function() {
+
+					}
+				})
+			}
+
+		});
+
+		/** [ Show already selected(active) buyer on clicking company menu] */
+		$('.company-nav-menu').on('click', function() {
+			$("#buyerSelectionModalCenter").modal("show");
+		});
+
+		if ($('#company_name').val() != null && $('#company_name').val() != "") {
+			$('#' + $('#company_name').val()).addClass('active');
+		} else {
+			$('div.buyers-card').first().addClass("active");
+		}
+
+		$('.selected-buyer').text('Selected Company : ' + $('.buyers-card.active-buyer.active').data("name"))
+
+		$('.company-nav-menu').html($('.company-nav-div').html());
 	});
-	
-	/** [ Show already selected(active) buyer on clicking company menu] */
-	$('.company-nav-menu').on('click', function() {
-	    $("#buyerSelectionModalCenter").modal("show");
-	});
-
-	if($('#company_name').val() != null && $('#company_name').val() != "")
-	{
-		$('#'+$('#company_name').val()).addClass('active');
-	}
-	else
-	{
-		$('div.buyers-card').first().addClass("active");
-	}
-   
-    $('.selected-buyer').text('Selected Company : '+$('.buyers-card.active-buyer.active').data("name"))
-	
-	$('.company-nav-menu').html($('.company-nav-div').html());
-});
 </script>
 @endsection

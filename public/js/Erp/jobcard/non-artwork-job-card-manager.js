@@ -395,7 +395,7 @@ function selectNatOrders(event)
 
 
 const generateNatJobcard = () => {
-    var checked_count = $("input[name='nat-row-checkbox']:checked").length;
+    var checked_count = $("input[name='row-checkbox']:checked").length;
     
     if (checked_count < 1) {
         $('.snackbar_span').html("Please select at least 1 order.");
@@ -409,11 +409,23 @@ const generateNatJobcard = () => {
         return false;
     }
     
+    if (
+        $(".buyers-card.active-buyer.active").attr("id") ===
+        "jupitergarmentsaccessories"
+      ) {
+        getNatJGAOrderDetails();
+      } else {
+        getSpectrraOrderDetails();
+      }
+    
+}
+
+const getNatJGAOrderDetails = () => {
     var buyerArray = [];
     var customerArray = [];
     var uuid_array = [];
     var erp_id_array = [];
-    $('input[name="nat-row-checkbox"]').each(function (i, item) {
+    $('input[name="row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
             buyerArray.push($(this).data('buyer-name'));
             customerArray.push($(this).data('customer-name'));
@@ -954,7 +966,7 @@ const storeNatJobcard = () => {
     uuid_array = [];
     jsonArray = [];
     /** [ Create json object of selected orders ] */
-    $('input[name="nat-row-checkbox"]').each(function (i, item) {
+    $('input[name="row-checkbox"]').each(function (i, item) {
         erp_order_details_obj = {};
         
         if ($(this).is(':checked')) {

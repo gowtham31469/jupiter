@@ -175,263 +175,272 @@ function showFilter() {
  * @author <Praveen> [praveen@wizroots.com]
  */
 function generateJobcard(){
-    if ($("input[class='row-checkbox']:checked", allPages).length === 0)
-    {
-        $('.snackbar_span').html("Select atleast one order.");
-		showSnackbar();
+    if ($("input[class='row-checkbox']:checked", allPages).length === 0) {
+      $(".snackbar_span").html("Select atleast one order.");
+      showSnackbar();
+      return false;
     }
-    else
-    {
-        // remove file_path from local-storage
-        localStorage.removeItem('file_path');
+    
+    if (
+      $(".buyers-card.active-buyer.active").attr("id") ===
+      "jupitergarmentsaccessories"
+    ) {
+      getJGAOrderDetails();
+    } else {
+      getSpectrraOrderDetails();
+    }
+}
+
+const getJGAOrderDetails = () => {
+    // remove file_path from local-storage
+    localStorage.removeItem('file_path');
         
-        orders = [];
-        ref_array = [];
-        buyer_po_array = [];
-        order_type_array = [];
-        uuid_array = [];
+    orders = [];
+    ref_array = [];
+    buyer_po_array = [];
+    order_type_array = [];
+    uuid_array = [];
 
-        /** [ Create array of orders selected ] */
-        $('.row-checkbox', allPages).each(function (i, item) {
-            if ($(this).is(':checked')) {
-                orders.push($(this).closest('tr').attr('id')); 
-                ref_array.push($(this).closest('tr').data('refname'));
-                buyer_po_array.push($(this).closest('tr').data('buyer-po'));
-                order_type_array.push($(this).closest('tr').data('order-type'));
-                uuid_array.push($(this).closest('tr').data('uuid')); 
-            }
-        });
-        
-        orders   = orders.join(',');
-        ref_array   = ref_array.join(',');
-        buyer_po_array   = buyer_po_array.join(',');
-        order_type_array   = order_type_array.join(',');
-        uuid_array   = uuid_array.join(',');
+    /** [ Create array of orders selected ] */
+    $('.row-checkbox', allPages).each(function (i, item) {
+        if ($(this).is(':checked')) {
+            orders.push($(this).closest('tr').attr('id')); 
+            ref_array.push($(this).closest('tr').data('refname'));
+            buyer_po_array.push($(this).closest('tr').data('buyer-po'));
+            order_type_array.push($(this).closest('tr').data('order-type'));
+            uuid_array.push($(this).closest('tr').data('uuid')); 
+        }
+    });
+    
+    orders   = orders.join(',');
+    ref_array   = ref_array.join(',');
+    buyer_po_array   = buyer_po_array.join(',');
+    order_type_array   = order_type_array.join(',');
+    uuid_array   = uuid_array.join(',');
 
-        $.ajax({
-            url:base_url + "/erp/job-manager/get-jobcard-order-details",
-            dataType:"json",
-            method:"get",
-            data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
-            beforeSend: function () {
-              $(".loader").show();
-            },
-            statusCode: {
-                /** [Show response status based on HTTP status code] */
-                200: function(data) {
+    $.ajax({
+        url:base_url + "/erp/job-manager/jga/get-jobcard-order-details",
+        dataType:"json",
+        method:"get",
+        data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
+        beforeSend: function () {
+          $(".loader").show();
+        },
+        statusCode: {
+            /** [Show response status based on HTTP status code] */
+            200: function(data) {
 
-                    if (data.error === false) {
-                        
-                        renderCommonJCView(data);
-                        
-                        /** Show ratio templates dynamic table */
-                        var ratio_table_html = '';
-                        if (data.template_data.ratio.length != 0) {
-                            $.each(data.template_data.ratio, function (key, template) {
-                                var total = 0;
-                                ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="' + key + '"  border="0.2">\
-                                                        <thead>\
-                                                            <tr>\
-                                                                <th>REF.NO</th>\
-                                                                <th>PO.NO</th>\
-                                                                <th>ID.NO</th>\
-                                                                <th>OCN</th>\
-                                                                <th>QNTY</th>\
-                                                                <th>P.QNTY</th>\
-                                                            </tr>\
-                                                        </thead>\
-                                                        <tbody>';
-                                template.sort(function (a, b) {
-                                    return a.qty_table_id - b.qty_table_id;
-                                });
-                                $.each(template, function (ratio_table_row, row) {
-                                    if (row.hasOwnProperty('ratio_pack_type')) {
-                                        var ratio_pack_type = ' ' + row.ratio_pack_type;
-                                    } else {
-                                        var ratio_pack_type = '';
-                                    }
-                                    total += parseInt(row.order_quantity);
-                                    let buyer_po_number = (row.buyer_po_number === null || "") ? '-' : row.buyer_po_number;
-                                    let ocn_number = (row.ocn_number === null || "") ? '-' : row.ocn_number;
-                                    ratio_table_html += '<tr class="tr-' + row.reference_name.replace(/ /g, '-') + '" id=' + row.id + ' data-template-id=' + row.template_id + '>\
-                                                            <td id="ratio_tr_refname_' + ratio_table_row + '">' + row.reference_name + '' + ratio_pack_type + '</td>\
-                                                            <td id="ratio_tr_buyer_po_' + ratio_table_row + '">' + buyer_po_number + '</td>\
-                                                            <td id="ratio_tr_erp_id_' + ratio_table_row + '">' + row.erp_id + '</td>\
-                                                            <td id="ratio_tr_ocn_' + ratio_table_row + '">' + ocn_number + '</td>\
-                                                            <td id="ratio_tr_qty_' + ratio_table_row + '">' + row.order_quantity + '</td>\
-                                                            <td></td>\
-                                                            </tr>';
-                                    ratio_table_row++;
-                                });
-                                ratio_table_html += '<tr>\
-                                                            <th class="highlight_row" colspan="4">Total</th>\
-                                                            <td><strong>' + total + '</strong></td>\
-                                                            <td></td>\
-                                                        </tr>\
-                                                    </tbody>\
-                                                </table>';
-                            });
-                            $('.ratio-list-table-div').html(ratio_table_html);
-                        } else {
-                            $('.ratio-list-table-div').html(ratio_table_html);
-                        }
-
-                        /** Show single templates dynamic table */
-                        var single_table_html = '';
-                        var meters_div_html = '';
-                        if (data.template_data.single.length != 0) {
-                            var row = 0;
-                            var table = 0;
-                            $.each(data.template_data.single, function (key, erpid) {
-                                single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_' + table + '"  border="0.2">\
-                                <tbody id="single_list_table_body"><tr>\
-                                <th width="80px">ID.NO</th>';
-                                $.each(erpid.order_data, function (index, common_data) {
-                                    single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
-                                });
-                                var template_name = key.split("_");
-                                single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="' + template_name[0] + '">REFNUM  : ' + template_name[0] + '</td></tr>\
-                                                            <tr>\
-                                                                <th width="80px">B.PO.NO</th>';
-                                $.each(erpid.order_data, function (index, common_data) {
-                                    let buyer_po_no = (common_data.buyer_po_number === null || "") ? '-' : common_data.buyer_po_number;
-                                    single_table_html += '<td colspan="2" class="single-buyer-po-' + index + '">' + buyer_po_no + '</td>';
-                                });
-                                single_table_html += '</tr>\
-                                                            <tr>\
-                                                                <th width="80px">OCN</th>';
-                                $.each(erpid.order_data, function (index, common_data) {
-                                    let ocn_no = (common_data.ocn_number === null || "") ? '-' : common_data.ocn_number;
-                                    single_table_html += '<td colspan="2" class="single-ocn-' + index + '">' + ocn_no + '</td>';
-                                });
-
-                                single_table_html += '</tr>\
-                                                      <th width="80px">SIZE /PRICE</th>';
-                                $.each(erpid.order_data, function (index, common_data) {
-                                    single_table_html += '<th>O.QNT</th>\
-                                    <th>P.QNT</th>';
-                                });
-                                single_table_html += '<th>TOTAL</th>\
-                                                                <th width="180px">EXCESS</th>\
-                                                                <th>MTRS</th>\
-                                                                <th>STOCK</th>\
-                                                            </tr>';
-                                var total_quantity_final = 0;
-                                var sum = [];
-                                $.each(erpid.size, function (index2, quantity_data) {
-                                    var total_qty_sizewise = 0;
-                                    var size_text = index2.split("_");
-                                    var col = 0;
-                                    single_table_html += '<tr><td class="single-size-row">' + size_text[0] + '</td>';
-
-                                    $.each(quantity_data, function (index3, qty) {
-                                        total_qty_sizewise += parseInt(qty);
-                                        single_table_html += '<td class="quantity-' + col + ' quantity-td" data-size-value="' + size_text[0] + '">' + parseInt(qty) + '</td><td></td>';
-                                        /** Column wise total quantity calculation */
-                                        sum[col] = parseInt(qty) + (sum[col] || 0);
-                                        col++;
-                                    });
-
-                                    single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
-
-                                    total_quantity_final += parseInt(total_qty_sizewise);
-                                    row++;
-                                });
-
-                                single_table_html += '<tr>\
-                                                      <th class="highlight_row total-text" data-ref-name = "' + template_name[0].replace(/ |\//g, '_') + '">TOTAL</th>';
-                                var total_col = 0;
-                                $.each(erpid.order_data, function (index, common_data) {
-                                    single_table_html += '<td class="total-quantity-col-' + total_col + '"><strong>' + sum[total_col] + '</strong></td>\
-                                                          <td></td>';
-                                    total_col++;
-                                });
-
-                                single_table_html += '<td><strong class="total-qty-' + template_name[0].replace(/ |\//g, '_') + '">' + parseInt(total_quantity_final) + '</strong></td>\
-                                                        <td class="total-excess-col-table-' + table + ' total-excess-' + template_name[0].replace(/ |\//g, '_') + '"></td>\
-                                                        <td></td>\
-                                                        <td></td>\
-                                                    </tr>';
-                                single_table_html += ' </tbody>\
-                                                </table>';
-                                table++;
-                                /** Show actual excess % and meters div only once for each references */
-                                if (template_name[1] === '0') {
-                                    meters_div_html += '<div class="col-md-12">\
-                                                <div class="col-md-3">\
-                                                    <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % (' + template_name[0] + '):</label>\
-                                                    <span class="act-excess" data-act-excess-ref="' + template_name[0] + '" id="act_excess_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                    <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >STKRS MTRS (' + template_name[0] + '):</label>\
-                                                    <span class="sticker-mtrs" id="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                <div class="form-group has-feedback">\
-                                                    <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS (' + template_name[0] + ') :</label>\
-                                                    <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
-                                                    <div class="help-block with-errors"></div>\
-                                                </div>\
-                                                </div>\
-                                                <div class="col-md-3">\
-                                                <label for="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" >TOTAL MTRS (' + template_name[0] + '):</label>\
-                                                <span id="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" data-tem-ref-name="' + template_name[0].replace(/ |\//g, '_') + '" class="total-meters"></span>\
-                                                </div>\
-                                            </div>';
-                                }
-                            });
-
-                            $('.single-list-table-div').html(single_table_html);
-                            $('.meter-calculation-div').html(meters_div_html);
-                        } else {
-                            $('.single-list-table-div').html(single_table_html);
-                            $('.meter-calculation-div').html(meters_div_html);
-                        }
-                        
-                    }
-                    else
-                    {
-                        $('.snackbar_span').html("Something went wrong");
-                        showSnackbar();
-                    }
-                       
+                if (data.error === false) {
                     
-                    /** [ Backdrop for bootstrap modal ] */
-                    $('#jobcardCreationModalCenter').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
+                    renderCommonJCView(data);
+                    
+                    /** Show ratio templates dynamic table */
+                    var ratio_table_html = '';
+                    if (data.template_data.ratio.length != 0) {
+                        $.each(data.template_data.ratio, function (key, template) {
+                            var total = 0;
+                            ratio_table_html += '<table class="table table-bordered table-responsive ratio-list-table"  style="font-size: 12px;" id="ratio_list_table" data-ratio-ref-table="' + key + '"  border="0.2">\
+                                                    <thead>\
+                                                        <tr>\
+                                                            <th>REF.NO</th>\
+                                                            <th>PO.NO</th>\
+                                                            <th>ID.NO</th>\
+                                                            <th>OCN</th>\
+                                                            <th>QNTY</th>\
+                                                            <th>P.QNTY</th>\
+                                                        </tr>\
+                                                    </thead>\
+                                                    <tbody>';
+                            template.sort(function (a, b) {
+                                return a.qty_table_id - b.qty_table_id;
+                            });
+                            $.each(template, function (ratio_table_row, row) {
+                                if (row.hasOwnProperty('ratio_pack_type')) {
+                                    var ratio_pack_type = ' ' + row.ratio_pack_type;
+                                } else {
+                                    var ratio_pack_type = '';
+                                }
+                                total += parseInt(row.order_quantity);
+                                let buyer_po_number = (row.buyer_po_number === null || "") ? '-' : row.buyer_po_number;
+                                let ocn_number = (row.ocn_number === null || "") ? '-' : row.ocn_number;
+                                ratio_table_html += '<tr class="tr-' + row.reference_name.replace(/ /g, '-') + '" id=' + row.id + ' data-template-id=' + row.template_id + '>\
+                                                        <td id="ratio_tr_refname_' + ratio_table_row + '">' + row.reference_name + '' + ratio_pack_type + '</td>\
+                                                        <td id="ratio_tr_buyer_po_' + ratio_table_row + '">' + buyer_po_number + '</td>\
+                                                        <td id="ratio_tr_erp_id_' + ratio_table_row + '">' + row.erp_id + '</td>\
+                                                        <td id="ratio_tr_ocn_' + ratio_table_row + '">' + ocn_number + '</td>\
+                                                        <td id="ratio_tr_qty_' + ratio_table_row + '">' + row.order_quantity + '</td>\
+                                                        <td></td>\
+                                                        </tr>';
+                                ratio_table_row++;
+                            });
+                            ratio_table_html += '<tr>\
+                                                        <th class="highlight_row" colspan="4">Total</th>\
+                                                        <td><strong>' + total + '</strong></td>\
+                                                        <td></td>\
+                                                    </tr>\
+                                                </tbody>\
+                                            </table>';
+                        });
+                        $('.ratio-list-table-div').html(ratio_table_html);
+                    } else {
+                        $('.ratio-list-table-div').html(ratio_table_html);
+                    }
 
-                    /** [ Validate create_jobcard form using bootstrap validator ] */
-                    $('#create_jobcard').validator('update');
-                    $('#jobcardCreationModalCenter').modal('show');
-                    $('.datepicker').datepicker({
-                        format: 'dd-mm-yyyy'
-                    });
-                    // enable print button (for old version browsers)
-                    $('#jc_print_btn').prop('disabled', false);
-                },
-                406: function(data) {
-                     $('#createSpectrraJCModal').modal('show');
-                },
-                404: function(data) {
-                    $('.snackbar_span').html(data.responseJSON.message);
-                    showSnackbar();
-               },
-                400: function() {
+                    /** Show single templates dynamic table */
+                    var single_table_html = '';
+                    var meters_div_html = '';
+                    if (data.template_data.single.length != 0) {
+                        var row = 0;
+                        var table = 0;
+                        $.each(data.template_data.single, function (key, erpid) {
+                            single_table_html += '<table class="table table-bordered table-responsive single-list-table"  style="font-size: 12px;" id="single_list_table_' + table + '"  border="0.2">\
+                            <tbody id="single_list_table_body"><tr>\
+                            <th width="80px">ID.NO</th>';
+                            $.each(erpid.order_data, function (index, common_data) {
+                                single_table_html += '<td colspan="2" data-template-id="' + common_data.template_id + '" class="single-erpid-' + index + '">' + common_data.erp_id + '</td>';
+                            });
+                            var template_name = key.split("_");
+                            single_table_html += '<td colspan="4" class="highlight_row" rowspan="3" data-single-ref-name ="' + template_name[0] + '">REFNUM  : ' + template_name[0] + '</td></tr>\
+                                                        <tr>\
+                                                            <th width="80px">B.PO.NO</th>';
+                            $.each(erpid.order_data, function (index, common_data) {
+                                let buyer_po_no = (common_data.buyer_po_number === null || "") ? '-' : common_data.buyer_po_number;
+                                single_table_html += '<td colspan="2" class="single-buyer-po-' + index + '">' + buyer_po_no + '</td>';
+                            });
+                            single_table_html += '</tr>\
+                                                        <tr>\
+                                                            <th width="80px">OCN</th>';
+                            $.each(erpid.order_data, function (index, common_data) {
+                                let ocn_no = (common_data.ocn_number === null || "") ? '-' : common_data.ocn_number;
+                                single_table_html += '<td colspan="2" class="single-ocn-' + index + '">' + ocn_no + '</td>';
+                            });
+
+                            single_table_html += '</tr>\
+                                                  <th width="80px">SIZE /PRICE</th>';
+                            $.each(erpid.order_data, function (index, common_data) {
+                                single_table_html += '<th>O.QNT</th>\
+                                <th>P.QNT</th>';
+                            });
+                            single_table_html += '<th>TOTAL</th>\
+                                                            <th width="180px">EXCESS</th>\
+                                                            <th>MTRS</th>\
+                                                            <th>STOCK</th>\
+                                                        </tr>';
+                            var total_quantity_final = 0;
+                            var sum = [];
+                            $.each(erpid.size, function (index2, quantity_data) {
+                                var total_qty_sizewise = 0;
+                                var size_text = index2.split("_");
+                                var col = 0;
+                                single_table_html += '<tr><td class="single-size-row">' + size_text[0] + '</td>';
+
+                                $.each(quantity_data, function (index3, qty) {
+                                    total_qty_sizewise += parseInt(qty);
+                                    single_table_html += '<td class="quantity-' + col + ' quantity-td" data-size-value="' + size_text[0] + '">' + parseInt(qty) + '</td><td></td>';
+                                    /** Column wise total quantity calculation */
+                                    sum[col] = parseInt(qty) + (sum[col] || 0);
+                                    col++;
+                                });
+
+                                single_table_html += '<td class="total-quantity-class total-quantity-row-' + row + '"><strong>' + parseInt(total_qty_sizewise) + '</strong></td><td class="total-excess"><div class="form-group has-feedback"><input type="number" data-step-error="Decimal values not allowed." min="0" data-min-error="Value must be >= 0" class="form-control input-sm total-excess-row-table-' + table + '" id="total_excess_row_table_' + row + '" data-required-error="Mandatory Field." name="total_excess_row_table_' + row + '"" placeholder="Excess %" onkeyup="return totalExcess()" ><div class="help-block with-errors"></div></div></td><td></td><td></td></tr>';
+
+                                total_quantity_final += parseInt(total_qty_sizewise);
+                                row++;
+                            });
+
+                            single_table_html += '<tr>\
+                                                  <th class="highlight_row total-text" data-ref-name = "' + template_name[0].replace(/ |\//g, '_') + '">TOTAL</th>';
+                            var total_col = 0;
+                            $.each(erpid.order_data, function (index, common_data) {
+                                single_table_html += '<td class="total-quantity-col-' + total_col + '"><strong>' + sum[total_col] + '</strong></td>\
+                                                      <td></td>';
+                                total_col++;
+                            });
+
+                            single_table_html += '<td><strong class="total-qty-' + template_name[0].replace(/ |\//g, '_') + '">' + parseInt(total_quantity_final) + '</strong></td>\
+                                                    <td class="total-excess-col-table-' + table + ' total-excess-' + template_name[0].replace(/ |\//g, '_') + '"></td>\
+                                                    <td></td>\
+                                                    <td></td>\
+                                                </tr>';
+                            single_table_html += ' </tbody>\
+                                            </table>';
+                            table++;
+                            /** Show actual excess % and meters div only once for each references */
+                            if (template_name[1] === '0') {
+                                meters_div_html += '<div class="col-md-12">\
+                                            <div class="col-md-3">\
+                                                <label for="act_excess_' + template_name[0].replace(/ |\//g, '_') + '" >ACT EXCESS % (' + template_name[0] + '):</label>\
+                                                <span class="act-excess" data-act-excess-ref="' + template_name[0] + '" id="act_excess_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                                <label for="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '" >STKRS MTRS (' + template_name[0] + '):</label>\
+                                                <span class="sticker-mtrs" id="sticker_mtr_' + template_name[0].replace(/ |\//g, '_') + '"></span>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <div class="form-group has-feedback">\
+                                                <label for="settings_' + template_name[0].replace(/ |\//g, '_') + '" >SETTINGS (' + template_name[0] + ') :</label>\
+                                                <input type="number" min="0" data-step-error="Decimal values not allowed." data-min-error="Value must be >= 0" class="form-control input-sm settings"  name="settings_' + template_name[0].replace(/ |\//g, '_') + '" placeholder="SETTINGS" id="settings_' + template_name[0].replace(/ |\//g, '_') + '" onkeyup="return totalMeters()" max="99999"  data-max-error="Value should be <= 99999">\
+                                                <div class="help-block with-errors"></div>\
+                                            </div>\
+                                            </div>\
+                                            <div class="col-md-3">\
+                                            <label for="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" >TOTAL MTRS (' + template_name[0] + '):</label>\
+                                            <span id="total_mtrs_' + template_name[0].replace(/ |\//g, '_') + '" data-tem-ref-name="' + template_name[0].replace(/ |\//g, '_') + '" class="total-meters"></span>\
+                                            </div>\
+                                        </div>';
+                            }
+                        });
+
+                        $('.single-list-table-div').html(single_table_html);
+                        $('.meter-calculation-div').html(meters_div_html);
+                    } else {
+                        $('.single-list-table-div').html(single_table_html);
+                        $('.meter-calculation-div').html(meters_div_html);
+                    }
+                    
+                }
+                else
+                {
                     $('.snackbar_span').html("Something went wrong");
                     showSnackbar();
                 }
-           },
-            error: function(errorXHR, errorStatus, errorThrown) {
-                console.log(errorThrown);
+                   
+                
+                /** [ Backdrop for bootstrap modal ] */
+                $('#jobcardCreationModalCenter').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+
+                /** [ Validate create_jobcard form using bootstrap validator ] */
+                $('#create_jobcard').validator('update');
+                $('#jobcardCreationModalCenter').modal('show');
+                $('.datepicker').datepicker({
+                    format: 'dd-mm-yyyy'
+                });
+                // enable print button (for old version browsers)
+                $('#jc_print_btn').prop('disabled', false);
             },
-            complete: function () {
-                $(".loader").hide();
+            406: function(data) {
+                $('.snackbar_span').html(data.responseJSON.message);
+                showSnackbar();
+            },
+            404: function(data) {
+                $('.snackbar_span').html(data.responseJSON.message);
+                showSnackbar();
+           },
+            400: function() {
+                $('.snackbar_span').html("Something went wrong");
+                showSnackbar();
             }
-        })
-        
-    }
+       },
+        error: function(errorXHR, errorStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+        complete: function () {
+            $(".loader").hide();
+        }
+    })
 }
 
 /**
