@@ -11,12 +11,19 @@ $(function () {
   });
 });
 
-const getSpectrraOrderDetails = () => {
+const getSpectrraOrderDetails = (checked_count) => {
+
+  if(checked_count > 1) {
+      $('.snackbar_span').html("Please select only a maximum of 1 orders.");
+      showSnackbar();
+      return false;
+  }
+
   var buyerArray = [];
   var customerArray = [];
   var uuid_array = [];
   var erp_id_array = [];
-  $('input[name="row-checkbox"]').each(function (i, item) {
+  $('input[class="row-checkbox"]').each(function (i, item) {
     if ($(this).is(":checked")) {
       buyerArray.push($(this).data("buyer-name"));
       customerArray.push($(this).data("customer-name"));
@@ -41,5 +48,20 @@ const getSpectrraOrderDetails = () => {
     return false;
   }
 
-  $("#createSpectrraJCModal").modal("show");
+  $.ajax({
+    type: "get",
+    url: "url",
+    data: "data",
+    dataType: "dataType",
+    success: function (response) {
+      
+    }
+  });
+
+  $('#createSpectrraJCModal').modal({
+      backdrop: 'static',
+      keyboard: false
+  });
+  $('#create_spectrra_jc_form').validator('update');
+  $('#createSpectrraJCModal').modal('show');
 };

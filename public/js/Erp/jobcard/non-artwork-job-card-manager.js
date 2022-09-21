@@ -402,25 +402,26 @@ const generateNatJobcard = () => {
         showSnackbar();
         return false;
     }
+    
+    if (
+        $(".buyers-card.active-buyer.active").attr("id") ===
+        "jupitergarmentsaccessories"
+      ) {
+        getNatJGAOrderDetails(checked_count);
+      } else {
+        getSpectrraOrderDetails(checked_count);
+      }
+    
+}
+
+const getNatJGAOrderDetails = (checked_count) => {
 
     if(checked_count > 3) {
         $('.snackbar_span').html("Please select only a maximum of 3 orders.");
         showSnackbar();
         return false;
     }
-    
-    if (
-        $(".buyers-card.active-buyer.active").attr("id") ===
-        "jupitergarmentsaccessories"
-      ) {
-        getNatJGAOrderDetails();
-      } else {
-        getSpectrraOrderDetails();
-      }
-    
-}
 
-const getNatJGAOrderDetails = () => {
     var buyerArray = [];
     var customerArray = [];
     var uuid_array = [];
