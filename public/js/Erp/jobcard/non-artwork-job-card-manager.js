@@ -396,8 +396,8 @@ function selectNatOrders(event)
 
 const generateNatJobcard = () => {
     var checked_count = $("input[class='row-checkbox']:checked").length;
-    
-    if (checked_count < 1) {
+
+    if ( checked_count < 1 ) {
         $('.snackbar_span').html("Please select at least 1 order.");
         showSnackbar();
         return false;
