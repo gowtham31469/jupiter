@@ -175,7 +175,9 @@ function showFilter() {
  * @author <Praveen> [praveen@wizroots.com]
  */
 function generateJobcard(){
-    if ($("input[class='row-checkbox']:checked", allPages).length === 0) {
+    var checked_count = $("input[class='row-checkbox']:checked", allPages).length;
+
+    if (checked_count < 1) {
       $(".snackbar_span").html("Select atleast one order.");
       showSnackbar();
       return false;
@@ -187,7 +189,7 @@ function generateJobcard(){
     ) {
       getJGAOrderDetails();
     } else {
-      getSpectrraOrderDetails();
+      getSpectrraOrderDetails(checked_count);
     }
 }
 
