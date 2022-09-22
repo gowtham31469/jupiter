@@ -499,7 +499,7 @@ function getCustomersList(evt)
         if (selected_buyer_id != '') 
         {
             $.ajax({
-                url: base_url + "/print-manager/get-customers-list",
+                url: base_url + "/erp/print-manager/get-customers-list",
                 type: 'GET',
                 data: {
                     selected_buyer_id: selected_buyer_id
@@ -554,7 +554,7 @@ function getJobcardIDList(evt)
         if (selected_customer_id != '') 
         {
             $.ajax({
-                url: base_url + "/print-manager/get-style-list",
+                url: base_url + "/erp/print-manager/get-style-list",
                 type: 'GET',
                 data: {
                     selected_customer_id: selected_customer_id,
@@ -620,7 +620,7 @@ function getErpOrderList()
         if (selected_customer_id != '') 
         {
             $.ajax({
-                url: base_url + "/print-manager/get-erporder-list",
+                url: base_url + "/erp/print-manager/get-erporder-list",
                 type: 'GET',
                 data: {
                     selected_customer_id: selected_customer_id,
