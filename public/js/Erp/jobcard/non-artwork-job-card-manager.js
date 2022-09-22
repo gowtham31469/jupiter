@@ -395,16 +395,10 @@ function selectNatOrders(event)
 
 
 const generateNatJobcard = () => {
-    var checked_count = $("input[name='row-checkbox']:checked").length;
+    var checked_count = $("input[class='row-checkbox']:checked").length;
     
     if (checked_count < 1) {
         $('.snackbar_span').html("Please select at least 1 order.");
-        showSnackbar();
-        return false;
-    }
-
-    if(checked_count > 3) {
-        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
         showSnackbar();
         return false;
     }
@@ -413,19 +407,26 @@ const generateNatJobcard = () => {
         $(".buyers-card.active-buyer.active").attr("id") ===
         "jupitergarmentsaccessories"
       ) {
-        getNatJGAOrderDetails();
+        getNatJGAOrderDetails(checked_count);
       } else {
-        getSpectrraOrderDetails();
+        getSpectrraOrderDetails(checked_count);
       }
     
 }
 
-const getNatJGAOrderDetails = () => {
+const getNatJGAOrderDetails = (checked_count) => {
+
+    if(checked_count > 3) {
+        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
+        showSnackbar();
+        return false;
+    }
+
     var buyerArray = [];
     var customerArray = [];
     var uuid_array = [];
     var erp_id_array = [];
-    $('input[name="row-checkbox"]').each(function (i, item) {
+    $('input[class="row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
             buyerArray.push($(this).data('buyer-name'));
             customerArray.push($(this).data('customer-name'));
@@ -966,7 +967,7 @@ const storeNatJobcard = () => {
     uuid_array = [];
     jsonArray = [];
     /** [ Create json object of selected orders ] */
-    $('input[name="row-checkbox"]').each(function (i, item) {
+    $('input[class="row-checkbox"]').each(function (i, item) {
         erp_order_details_obj = {};
         
         if ($(this).is(':checked')) {

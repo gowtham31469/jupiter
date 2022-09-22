@@ -407,84 +407,81 @@ class NonArtworkJobCardFiltersController extends Controller
 
     public function getNatJcOrderDetails(Request  $request)
     {
-        if (session()->get('company_name') === "jupitergarmentsaccessories") {
-            $jc_metadata = new JobcardMetadata();
-            $jc_class_obj = new JobcardCommonClass();
-            $metadata = $jc_metadata->erpJobcardMetaData();
+        $jc_metadata = new JobcardMetadata();
+        $jc_class_obj = new JobcardCommonClass();
+        $metadata = $jc_metadata->erpJobcardMetaData();
 
-            $uuid_array         = explode(',', $request['uuid_array']);
-            $erp_orders_ids     = explode(',', $request['erp_id_array']);
-            $template_data      = array();
-            $ratio_templates    = array();
-            $color_code         = array();
-            $tint_color         = array();
+        $uuid_array         = explode(',', $request['uuid_array']);
+        $erp_orders_ids     = explode(',', $request['erp_id_array']);
+        $template_data      = array();
+        $ratio_templates    = array();
+        $color_code         = array();
+        $tint_color         = array();
 
-            if(sizeof($uuid_array) > 3) {
-                return response()->json(['error' => true, 'message' => 'Please select only a maximum of 3 orders.'], 400);
-            }
-
-            /** Get erp order details table ids from erp orders table id */
-            list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
-
-            list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array) = $jc_class_obj->createOrderDataArray($order_details_collection);
-
-            if (empty($temp_id_array)) {
-                return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
-            }
-
-            /** Get templates metadata details */
-            list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
-
-            /** Different size breakup value handling */
-            $final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
-
-            $company_array = $jc_class_obj->companyData($order_details_collection[0]);
-
-            // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-            // if multiple order IDs are selected for Job Card, use the first id for WO number
-            $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]);
-
-            $metadata  = $jc_metadata->erpJobcardMetaData();
-
-            /** Push all array values into template_data array */
-            $template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
-            $template_data['cus_del_date']     = $delivery_dt_array;
-            $template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
-            $template_data['workorder_id']     = $workorder_id;
-            $template_data['company']          = $company_array;
-            $template_data['customer']         = $order_details_collection[0]->customer;
-            $template_data['buyer']            = $order_details_collection[0]->buyer;
-            $template_data['ordertype_array']  = $ordertype_array;
-            $template_data['style_array']      = $style_array;
-            $template_data['refnum_array']     = $distinct_ref_array;
-            $template_data['color']            = $print_color_array;
-            $template_data['material']         = $material_array;
-            $template_data['article']          = $name_in_reports_array;
-            $template_data['material_hierarchy'] = $article_array;
-            $template_data['length']           = $length_array;
-            $template_data['width']            = $width_array;
-            $template_data['template_type']    = $type_array;
-            $template_data['ratio']            = $ratio_templates;
-            $template_data['single']           = $final_chunk;
-            $template_data['order_detail_ids'] = $order_detail_ids;
-            $template_data['customer_po_array'] = $customer_po_array;
-            $template_data['color_code']       = $color_code;
-            $template_data['tint_color']       = $tint_color;
-
-            return response()->json([
-                'error' => false,
-                'message' => 'Success',
-                'template_data' => $template_data,
-                'disp_modes' => $metadata['erp_dispatch_mode'],
-                'finish_types' => $metadata['erp_finish_type'],
-                'machines' => $metadata['erp_machines'],
-                'teeth_nos' => $metadata['erp_teeth_no'],
-                'modal_title' => 'Create Jobcard'
-
-            ], 200);
-        } else {
-            return response()->json(['error' => true, 'message' => 'Jobcard for Spectrra Printers currently not available !!'], 406);
+        if(sizeof($uuid_array) > 3) {
+            return response()->json(['error' => true, 'message' => 'Please select only a maximum of 3 orders.'], 400);
         }
+
+        /** Get erp order details table ids from erp orders table id */
+        list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
+
+        list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array) = $jc_class_obj->createOrderDataArray($order_details_collection);
+
+        if (empty($temp_id_array)) {
+            return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
+        }
+
+        /** Get templates metadata details */
+        list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array) = $jc_class_obj->getTemplateData($order_details_collection[0]['buyer'], $temp_id_array);
+
+        /** Different size breakup value handling */
+        $final_chunk = $jc_class_obj->manipulateSizeData($single_templates, $erp_id_array);
+
+        $company_array = $jc_class_obj->companyData($order_details_collection[0]);
+
+        // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+        // if multiple order IDs are selected for Job Card, use the first id for WO number
+        $workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, [$erp_orders_ids[0]]);
+
+        $metadata  = $jc_metadata->erpJobcardMetaData();
+
+        /** Push all array values into template_data array */
+        $template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+        $template_data['cus_del_date']     = $delivery_dt_array;
+        $template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
+        $template_data['workorder_id']     = $workorder_id;
+        $template_data['company']          = $company_array;
+        $template_data['customer']         = $order_details_collection[0]->customer;
+        $template_data['buyer']            = $order_details_collection[0]->buyer;
+        $template_data['ordertype_array']  = $ordertype_array;
+        $template_data['style_array']      = $style_array;
+        $template_data['refnum_array']     = $distinct_ref_array;
+        $template_data['color']            = $print_color_array;
+        $template_data['material']         = $material_array;
+        $template_data['article']          = $name_in_reports_array;
+        $template_data['material_hierarchy'] = $article_array;
+        $template_data['length']           = $length_array;
+        $template_data['width']            = $width_array;
+        $template_data['template_type']    = $type_array;
+        $template_data['ratio']            = $ratio_templates;
+        $template_data['single']           = $final_chunk;
+        $template_data['order_detail_ids'] = $order_detail_ids;
+        $template_data['customer_po_array'] = $customer_po_array;
+        $template_data['color_code']       = $color_code;
+        $template_data['tint_color']       = $tint_color;
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Success',
+            'template_data' => $template_data,
+            'disp_modes' => $metadata['erp_dispatch_mode'],
+            'finish_types' => $metadata['erp_finish_type'],
+            'machines' => $metadata['erp_machines'],
+            'teeth_nos' => $metadata['erp_teeth_no'],
+            'modal_title' => 'Create Jobcard'
+
+        ], 200);
+       
     }
 
     public function storeNatJcOrderDetails(NonartworkJCRequest $request)

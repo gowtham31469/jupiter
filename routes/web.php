@@ -787,7 +787,7 @@ Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], 
 });
 
 /* ERP Related Routes */
-Route::group(['prefix' => 'erp'], function () {
+Route::group(['prefix' => 'erp', 'middleware' => 'erpuser'], function () {
 	Route::get('report-generator', 'ErpUser\Reports\ReportController@index')->name('report-generator');
 	Route::get('/', 'ErpUser\Admin\UserController@index')->name('erp');
 	Route::get('/home', 'ErpUser\Admin\UserController@index')->name('home');
