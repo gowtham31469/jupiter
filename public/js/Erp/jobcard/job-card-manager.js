@@ -182,21 +182,7 @@ function generateJobcard(){
       showSnackbar();
       return false;
     }
-    
-    if (
-      $(".buyers-card.active-buyer.active").attr("id") ===
-      "jupitergarmentsaccessories"
-    ) {
-      getJGAOrderDetails();
-    } else {
-      getSpectrraOrderDetails(checked_count);
-    }
-}
 
-const getJGAOrderDetails = () => {
-    // remove file_path from local-storage
-    localStorage.removeItem('file_path');
-        
     orders = [];
     ref_array = [];
     buyer_po_array = [];
@@ -219,12 +205,26 @@ const getJGAOrderDetails = () => {
     buyer_po_array   = buyer_po_array.join(',');
     order_type_array   = order_type_array.join(',');
     uuid_array   = uuid_array.join(',');
+    
+    if (
+      $(".buyers-card.active-buyer.active").attr("id") ===
+      "jupitergarmentsaccessories"
+    ) {
+      getJGAOrderDetails(orders, ref_array, buyer_po_array, order_type_array, uuid_array);
+    } else {
+      getSpectrraOrderDetails(checked_count, orders, uuid_array);
+    }
+}
+
+const getJGAOrderDetails = (orders, ref_array, buyer_po_array, order_type_array, uuid_array) => {
+    // remove file_path from local-storage
+    localStorage.removeItem('file_path');
 
     $.ajax({
         url:base_url + "/erp/job-manager/jga/get-jobcard-order-details",
         dataType:"json",
         method:"get",
-        data:{orders:orders, ref_array:ref_array, buyer_po_array:buyer_po_array,order_type_array:order_type_array,uuid_array:uuid_array},
+        data:{orders, ref_array, buyer_po_array,order_type_array,uuid_array},
         beforeSend: function () {
           $(".loader").show();
         },

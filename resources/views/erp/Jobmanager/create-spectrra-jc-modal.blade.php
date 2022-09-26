@@ -62,8 +62,6 @@
                                 {!! Form::label('sp_work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
                                 <span id="sp_work_order" name="sp_work_order"></span>
                             </div>
-                            <!-- <div class="col-md-4">
-                            </div> -->
                             <div class="col-md-3">
                                     {!! Form::label('sp_today_date', 'DATE :', ['class' => 'form_label']) !!}
                                 <span id="sp_today_date" name="sp_today_date"></span>

@@ -11,7 +11,7 @@ $(function () {
   });
 });
 
-const getSpectrraOrderDetails = (checked_count) => {
+const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
 
   if(checked_count > 1) {
       $('.snackbar_span').html("Please select only a maximum of 1 orders.");
@@ -19,42 +19,51 @@ const getSpectrraOrderDetails = (checked_count) => {
       return false;
   }
 
-  var buyerArray = [];
-  var customerArray = [];
-  var uuid_array = [];
-  var erp_id_array = [];
-  $('input[class="row-checkbox"]').each(function (i, item) {
-    if ($(this).is(":checked")) {
-      buyerArray.push($(this).data("buyer-name"));
-      customerArray.push($(this).data("customer-name"));
-
-      uuid_array.push($(this).data("uuid"));
-      erp_id_array.push($(this).data("erp-id"));
-    }
-  });
-
-  uuid_array = uuid_array.join(",");
-  erp_id_array = erp_id_array.join(",");
-
-  if ([...new Set(buyerArray)].length != 1) {
-    $(".snackbar_span").html("Please select the same buyer orders.");
-    showSnackbar();
-    return false;
-  }
-
-  if ([...new Set(customerArray)].length != 1) {
-    $(".snackbar_span").html("Please select the same customer orders.");
-    showSnackbar();
-    return false;
-  }
-
   $.ajax({
     type: "get",
-    url: "url",
-    data: "data",
-    dataType: "dataType",
-    success: function (response) {
-      
+    url: base_url + "/erp/spectrra-job-manager/get-spectrra-order-details",
+    data: {uuid_array, erp_id_array},
+    dataType: "json",
+    beforeSend: function () {
+      $(".loader").show();
+    },
+    statusCode: {
+        200: function(data) {
+
+          // $('#nat_template_type').val(data.template_data.template_type[0]);
+          // $('.nat-jobcard-modal-title').text(data.modal_title);
+          // $('#crud_operation_type').text('created_at');
+          // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+
+          $('#createSpectrraJCModal').modal({
+              backdrop: 'static',
+              keyboard: false
+          });
+          $('#create_spectrra_jc_form').validator('update');
+          $('#createSpectrraJCModal').modal('show');
+          // enable print button (for old version browsers)
+          $('#jc_print_btn').prop('disabled', false);
+          
+        },
+        400: function() {
+            $('.snackbar_span').html("Parameter is missing !!!");
+            showSnackbar();
+        },
+        422: function (errorXHR) {
+            var error_msg = ``;
+            $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                error_msg += `<li>` + valueOfElement + `</li>`;
+            });
+            $('#nat_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+            $('#jc_print_btn').prop('disabled', false);
+            $(window).scrollTop(0);
+        }
+    },
+    error: function (errorXHR, errorStatus, errorThrown) {
+        console.log(errorThrown);
+    },
+    complete: function () {
+        $(".loader").hide();
     }
   });
 
