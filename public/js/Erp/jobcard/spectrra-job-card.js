@@ -29,11 +29,7 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
     },
     statusCode: {
         200: function(data) {
-
-          // $('#nat_template_type').val(data.template_data.template_type[0]);
-          // $('.nat-jobcard-modal-title').text(data.modal_title);
-          // $('#crud_operation_type').text('created_at');
-          // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+          renderSpectrraOrderData(data);
 
           $('#createSpectrraJCModal').modal({
               backdrop: 'static',
@@ -74,3 +70,11 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
   $('#create_spectrra_jc_form').validator('update');
   $('#createSpectrraJCModal').modal('show');
 };
+
+const renderSpectrraOrderData = (order_data) => {
+  console.log(order_data);
+  // $('#nat_template_type').val(data.template_data.template_type[0]);
+  $('.spectrra-create-jc-modal-title').text(order_data.modal_title);
+  $('#crud_operation_type').text('created_at');
+  // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+}

@@ -49,7 +49,11 @@
                                 <p id="sp_company_address"></p>
                             </div>
                             <div class="col-md-4">
-                            </div>
+								<input type="hidden" value="" id="template_type">
+								<input type="hidden" value="" id="jobcard_id">
+								<input type="hidden" value="" id="crud_operation_type">
+								<input type="hidden" value="" id="material_hierarchy">
+							</div>
                             <div class="col-md-4">
                                     <img src="" class="pull-right " id="sp_company_logo" style="width: 150px;height: 60px;">
                             </div>
