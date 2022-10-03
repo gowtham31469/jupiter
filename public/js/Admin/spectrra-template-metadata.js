@@ -155,33 +155,6 @@ const getSpectrraErpMetadata = (temp_id) => {
 
 };
 
-const board_category_dropdown = (board_category) => {
-  var board_category_options =
-    '<option value="" selected="selected">-- Select Board Category --</option>';
-  $.each(board_category, function (key, item) {
-    board_category_options +=
-      '<option value="' + key + '">' + item + "</option>";
-  });
-  $("#board_category").html(board_category_options);
-}
-
-const boards_dropdown = (boards) => {
-  var boards_options =
-    '<option value="" selected="selected">-- Select Board Name --</option>';
-  $.each(boards, function (key, item) {
-    boards_options += '<option value="' + key + '">' + item + "</option>";
-  });
-  $("#board_name").html(boards_options);
-}
-
-const color_match_dropdown = (color_match) => {
-  var color_match_options =``;
-  $.each(color_match, function (key, item) {
-    color_match_options += '<option value="' + key + '">' + item + "</option>";
-  });
-  $("#color_match").html(color_match_options);
-}
-
 const render_spectrra_template_data = (data) => {
 
   $('#template_id_spectrra').val(data.template_id);
@@ -212,30 +185,31 @@ const render_spectrra_template_data = (data) => {
   $('#design_size_width').val(data.design_size_width);
   $('#cut_as_1').val(data.cut_as.split("/")[0]);
   $('#cut_as_2').val(data.cut_as.split("/")[1]);
-  $('#front_color_count').val(data.front_color_count);
-  $('#back_color_count').val(data.back_color_count);
+  $('#front_color_count').val(data.front_color_count).trigger('change');
+  $('#back_color_count').val(data.back_color_count).trigger('change');
   $('#repeats').val(data.repeats);
   $('#no_of_plates').val(data.no_of_plates);
   $('#cutting').val(data.cutting);
   $('#printing').val(data.printing);
   $('#coating').val(data.coating);
   $('#uv').val(data.uv);
-  $('#lamination').val(data.lamination);
+  $('#lamination').val(data.lamination).trigger('change');
   $('#lamination_spec').val(data.lamination_spec);
-  $('#pasting').val(data.pasting);
+  $('#pasting').val(data.pasting).trigger('change');
   $('#pasting_board').val(data.pasting_board);
+  $('#pasting_gsm').val(data.pasting_gsm);
   $('#die_cutting').val(data.die_cutting);
-  $('#window_patch').val(data.window_patch);
-  $('#window_patch_gsm').val(data.window_patch_gsm);
+  $('#window_patch').val(data.window_patch).trigger('change');
+  $('#window_patch_film').val(data.window_patch_film);
   $('#folder_gluer').val(data.folder_gluer);
   $('#embossing').val(data.embossing);
   $('#debossing').val(data.debossing);
   $('#perforation').val(data.perforation);
-  $('#hole').val(data.hole);
+  $('#hole').val(data.hole).trigger('change');
   $('#hole_size').val(data.hole_size);
-  $('#eyelet').val(data.eyelet);
+  $('#eyelet').val(data.eyelet).trigger('change');
   $('#eyelet_spec').val(data.eyelet_spec);
-  $('#string_required').val(data.string_required);
+  $('#string_required').val(data.string_required).trigger('change');
   $('#string_spec').val(data.string_spec);
   $('#foil').val(data.foil);
 

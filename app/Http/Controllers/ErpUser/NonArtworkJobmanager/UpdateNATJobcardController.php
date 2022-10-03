@@ -14,6 +14,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UpdateNATJobcardController extends Controller
 {
+	public function __construct()
+    {
+        $this->middleware('erpuser');
+   
+    }
+	
     public function getNonArtworkJobcardList()
     {
 

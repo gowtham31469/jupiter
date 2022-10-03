@@ -47,10 +47,10 @@ class CreateTemplateBoardColorMappingTable extends Migration
             $table->string('lamination_spec')->nullable(true);
             $table->boolean('pasting')->nullable(true)->default(false);
             $table->string('pasting_board')->nullable(true);
-
+            $table->integer('pasting_gsm')->nullable(true);
             $table->boolean('die_cutting')->nullable(true)->default(false);
             $table->boolean('window_patch')->nullable(true)->default(false);
-            $table->string('window_patch_gsm')->nullable(true);
+            $table->integer('window_patch_film')->nullable(true);
             $table->boolean('folder_gluer')->nullable(true)->default(false);
             $table->boolean('embossing')->nullable(true)->default(false);
             $table->boolean('debossing')->nullable(true)->default(false);

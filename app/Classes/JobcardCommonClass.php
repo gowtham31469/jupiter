@@ -34,7 +34,7 @@ class JobcardCommonClass
 		return array($order_details_collection, $order_detail_ids);
 	}
 
-	public function createOrderDataArray($order_details_collection){
+	public function createNatOrderDataArray($order_details_collection){
 		$order_dt_array     = array();
 		$delivery_dt_array  = array();
 		$style_array        = array();

@@ -19,7 +19,7 @@ class StoreSpectrraTemplateMetadata
 
         $row_id = TemplateBoardColorMapping::updateOrCreate([
             'template_id' => $request['template_id_spectrra'],
-            'buyer_template_table' => $request['buyer_spectrra'].'_template',
+            'buyer_template_table' => $request['buyer_spectrra'].'_item_master',
         ] ,  [
             'color_bar' =>  $request['color_bar'],
             'print_spec_bar' => $request['print_spec_bar'], 
@@ -51,9 +51,10 @@ class StoreSpectrraTemplateMetadata
             'lamination_spec' => $request['lamination_spec'], 
             'pasting' => $request['pasting'], 
             'pasting_board' => $request['pasting_board'], 
+            'pasting_gsm' => $request['pasting_gsm'], 
             'die_cutting' => $request['die_cutting'], 
             'window_patch' => $request['window_patch'], 
-            'window_patch_gsm' => $request['window_patch_gsm'], 
+            'window_patch_film' => $request['window_patch_film'], 
             'folder_gluer' => $request['folder_gluer'], 
             'embossing' => $request['embossing'], 
             'debossing' => $request['debossing'], 

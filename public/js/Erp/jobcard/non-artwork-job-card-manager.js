@@ -395,25 +395,19 @@ function selectNatOrders(event)
 
 
 const generateNatJobcard = () => {
-    var checked_count = $("input[name='nat-row-checkbox']:checked").length;
-    
-    if (checked_count < 1) {
+    var checked_count = $("input[class='row-checkbox']:checked").length;
+
+    if ( checked_count < 1 ) {
         $('.snackbar_span').html("Please select at least 1 order.");
         showSnackbar();
         return false;
     }
 
-    if(checked_count > 3) {
-        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
-        showSnackbar();
-        return false;
-    }
-    
     var buyerArray = [];
     var customerArray = [];
     var uuid_array = [];
     var erp_id_array = [];
-    $('input[name="nat-row-checkbox"]').each(function (i, item) {
+    $('input[class="row-checkbox"]').each(function (i, item) {
         if ($(this).is(':checked')) {
             buyerArray.push($(this).data('buyer-name'));
             customerArray.push($(this).data('customer-name'));
@@ -425,6 +419,25 @@ const generateNatJobcard = () => {
 
     uuid_array   = uuid_array.join(',');
     erp_id_array   = erp_id_array.join(',');
+    
+    if (
+        $(".buyers-card.active-buyer.active").attr("id") ===
+        "jupitergarmentsaccessories"
+      ) {
+        getNatJGAOrderDetails(checked_count, buyerArray, customerArray, uuid_array, erp_id_array);
+      } else {
+        getSpectrraOrderDetails(checked_count, uuid_array, erp_id_array);
+      }
+    
+}
+
+const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_array, erp_id_array) => {
+
+    if(checked_count > 3) {
+        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
+        showSnackbar();
+        return false;
+    }
 
     if([...new Set(buyerArray)].length != 1) {
         $('.snackbar_span').html("Please select the same buyer orders.");
@@ -442,7 +455,7 @@ const generateNatJobcard = () => {
         url:base_url + "/erp/non-artwork-job-manager/get-nat-jc-details",
         dataType:"json",
         method:"get",
-        data:{uuid_array:uuid_array, erp_id_array:erp_id_array},
+        data:{uuid_array, erp_id_array},
         tryCount : 0,
         retryLimit : 2,
         beforeSend: function () {
@@ -954,7 +967,7 @@ const storeNatJobcard = () => {
     uuid_array = [];
     jsonArray = [];
     /** [ Create json object of selected orders ] */
-    $('input[name="nat-row-checkbox"]').each(function (i, item) {
+    $('input[class="row-checkbox"]').each(function (i, item) {
         erp_order_details_obj = {};
         
         if ($(this).is(':checked')) {

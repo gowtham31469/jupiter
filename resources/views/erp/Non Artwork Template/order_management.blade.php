@@ -128,9 +128,9 @@
 				<hr>                                            
 				<h4>Order Quantity</h4>                                            
 				<p>                                                
-					<button type="button" id="add_single_row" class="btn btn-default add-row-btn clone"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
-					<button type="button" id="clone_selected"  class="btn btn-default add-row-btn"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
-					<button type="button" id="delete_selected" class="btn btn-default add-row-btn"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
+					<button type="button" id="add_single_row" class="btn btn-default add-row-btn clone row_btns"><i class="fa fa-plus" aria-hidden="true"></i> Add Row</button>
+					<button type="button" id="clone_selected"  class="btn btn-default add-row-btn row_btns"><i class="fa fa-clone" aria-hidden="true"></i> Clone Selected</button>
+					<button type="button" id="delete_selected" class="btn btn-default add-row-btn row_btns"><i class="fa fa-trash" aria-hidden="true"></i> Delete Selected</button>
 					
 				</p>                                        
 			</div>
@@ -261,6 +261,7 @@
 		<div class="row clearfix" style="height: 50px;"></div>
 		<div class="bottom-bar">
 			<div class="modal-footer" id="action_buttons">
+				<button type="button" id="cancel_order" class="btn btn-xs btn-danger hidden"><i class="fa fa-trash" aria-hidden="true"></i>Cancel Order</button>
 				<button type="submit" id="save_data" class="btn btn-xs btn-success" data-flag="1" data-action="save">
 					<i class="fa fa-save" aria-hidden="true"></i> 
 				Save</button>
@@ -275,6 +276,26 @@
 </div>
 <div id="snackbar"><span class="snackbar_span"></span></div>
 <input type="hidden" id="_tax_value">
+<div id="confirmCancellation" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cancel Order</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Please Confirm Order Cancellation !!!</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-danger" id="confirm">Confirm</button>
+    	<button type="button" data-dismiss="modal" class="btn btn-info" id="cancel_cancellation">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 @endsection
 @section('jqueryIncludes')
 <script src="{{ asset('js/Erp/non-artwork-order-create.js') }}"></script>
