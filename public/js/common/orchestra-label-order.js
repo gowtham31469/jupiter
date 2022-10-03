@@ -222,6 +222,45 @@ function label_order_details(uvc,user_type,season_code) {
 			
 			var mySVG_back = document.getElementById("washcare_svg_back"+washcare);
             var svgDocBack;
+
+            var mySVG_middle = document.getElementById("washcare_svg_middle" + washcare);
+            var svgDoc_middle;
+            
+            mySVG_middle.addEventListener("load", function () {
+                svgDoc_middle = mySVG_middle.contentDocument;
+                svgDoc_middle.getElementById("parts_composition").innerHTML ="";
+                $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                    if($(this).find('select').find(':selected').val() != "Select Option")
+                    {
+                        svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
+                    }
+                   
+                    var id=$(this).attr('id')
+                    var compo =$(this).find('.compositions_hidden').val();
+                    var compss = compo.split(',');
+                    $(compss).each(function (index1,value1) {
+                        var english = value1.split('_');
+  
+                        svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
+                  });
+                })
+              $('.composition_error_hidden').addClass('hidden')
+              var washcomp=[];
+              $('#composition_remove_qty' + washcare + ' tr').each(function () {
+                    var washcomp1=[];
+                    var id=$(this).attr('id')
+                    var value=$(this).find('select').find(':selected').val();
+                    var compo =$(this).find('.compositions_hidden').val();
+                    var compss = compo.split(',');
+                      $(compss).each(function (index1,value1){ 
+                          var english = value1.split('_');
+                          washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                      });
+                  washcomp.push(washcomp1)
+              })
+              var wash_finals = JSON.stringify(washcomp);
+              localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+            })
 			
             mySVG.addEventListener("load", function () {
                 svgDoc=mySVG.contentDocument;
@@ -254,38 +293,7 @@ function label_order_details(uvc,user_type,season_code) {
                     svgDocBack.getElementById("text_care_instruction").innerHTML += value;
                 });
                 
-                 svgDocBack.getElementById("parts_composition").innerHTML ="";
-              $('#composition_remove_qty' + washcare + ' tr').each(function () {
-                  if($(this).find('select').find(':selected').val() != "Select Option")
-                  {
-                       svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + $(this).attr('id') + '" id="composition_' + $(this).attr('id') + '">' +$(this).find('select').find(':selected').data('french')+ "-" + $(this).find('select').find(':selected').data('english')+ "-" +$(this).find('select').find(':selected').data('spanish')+ "-" + $(this).find('select').find(':selected').data('portuguese') + "-" + $(this).find('select').find(':selected').data('italian')  + "-" + $(this).find('select' ).find(':selected').data('dutch')  + "-" + $(this).find('select' ).find(':selected').data('german') + "-" +$(this).find('select' ).find(':selected').data('arabic') + "-" + $(this).find('select' ).find(':selected').data('greek') + '</p>';
-                  }
-                 
-                  var id=$(this).attr('id')
-                  var compo =$(this).find('.compositions_hidden').val();
-                  var compss = compo.split(',');
-                  $(compss).each(function (index1,value1) {
-                      var english = value1.split('_');
-
-                    svgDocBack.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + id + '" id="composition_' + id + '">' + english[9] + "% " + english[0]  + "-" +english[1] + "-" + english[2]+ "-" +english[3] + "-" + english[4] + "-" + english[5] + "-" +english[6] + "-" + english[7] + "-" + english[8]+ '</p>';
-                });
-              })
-            $('.composition_error_hidden').addClass('hidden')
-            var washcomp=[];
-            $('#composition_remove_qty' + washcare + ' tr').each(function () {
-                  var washcomp1=[];
-                  var id=$(this).attr('id')
-                  var value=$(this).find('select').find(':selected').val();
-                  var compo =$(this).find('.compositions_hidden').val();
-                  var compss = compo.split(',');
-                    $(compss).each(function (index1,value1){ 
-                        var english = value1.split('_');
-                        washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
-                    });
-                washcomp.push(washcomp1)
-            })
-            var wash_finals = JSON.stringify(washcomp);
-            localStorage.setItem('wash_composition_final'+washcare, wash_finals);
+                
 			});
         } else {
             if (washcare < 5) {
@@ -1530,7 +1538,15 @@ function washcarelabels(data, dataid,color_code,new_flag,user_type) {
 
         svgDoc_middle = mySVG_middle.contentDocument;
 
-        var page_id = 0;
+        if (data.orchestra_wash_care_label_orders != "") {
+            if (dataid != "") {
+                dataid1 = dataid;
+            } else {
+                dataid1 = 0;
+            }
+
+            if (data.orchestra_wash_care_label_orders.length > dataid1) {
+                var page_id = 0;
         //var comps="";
         $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
             if (value.page_id != page_id) {
@@ -1588,6 +1604,10 @@ function washcarelabels(data, dataid,color_code,new_flag,user_type) {
             page_id = value.page_id;
 
         });
+            }
+        }
+
+        
 
     }, false);
 
