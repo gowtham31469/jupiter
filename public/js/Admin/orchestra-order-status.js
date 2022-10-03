@@ -130,11 +130,22 @@ function orchestraStatusTable(data, path) {
 
                         var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","admin","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
                     }
+                    else if(value.ArtworkType == "WashCareLabel")
+                    {
+                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","os","'+value.tableID+'","'+value.tableName+'","print")'
+                        
+
+                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
 
                     //New changes start
                     if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
                     {
                         tr += '<td> - </td>'
+                    }
+                    else if(value.ArtworkType == "WashCareLabel")
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_middle_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_static_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
                     }
                     else
                     {
@@ -3082,6 +3093,7 @@ function washcarelabelsOs(data, dataid) {
                
 
                 var page_id = 0;
+                var s_no =1;
                 //var comps="";
                 $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
                     if (value.page_id != page_id) {
@@ -3103,7 +3115,7 @@ function washcarelabelsOs(data, dataid) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td> '+ s_no +'. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
                         
                         if(value.parts_id != "")
                         {
@@ -3132,12 +3144,11 @@ function washcarelabelsOs(data, dataid) {
                         if (value.parts_english != null) {
                             svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
                         }
-                        
+                        s_no++;
                     }
                     svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
 
                     page_id = value.page_id;
-
                 });
             }
 		

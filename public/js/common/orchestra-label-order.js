@@ -5,7 +5,7 @@
  * @return View
  */
 
-function label_order_details(uvc,user_type) {
+function label_order_details(uvc,user_type,season_code) {
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
     // var buyer = $('.buyer-select').find("option:selected").text().toLowerCase();
@@ -19,7 +19,8 @@ function label_order_details(uvc,user_type) {
         dataType: "json",
         data: {
             _token: csrf_token,
-            uvc: uvc
+            uvc: uvc,
+            season_code:season_code
         },
         beforeSend: function () {
             $(".loader").show();
@@ -1446,68 +1447,6 @@ function washcarelabels(data, dataid,color_code,new_flag,user_type) {
                         $(this).data('greek') + '</p>';
                     svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
                 });
-
-
-               
-
-                var page_id = 0;
-                //var comps="";
-                $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
-                    if (value.page_id != page_id) {
-                        var comps="";
-                        $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index1, value1) {
-                            if(value.page_id == value1.page_id)
-                            {
-                                if(comps != "")
-                                {
-                                    comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
-                                }
-                                else
-                                {
-                                    comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
-                                }
-                                
-                            }
-                            
-                        });
-                        
-                        add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
-                        
-                        if(value.parts_id != "")
-                        {
-                            $('.select_parts'+add_page_composition).val(value.parts_id)
-                        }
-                        
-                        
-                        var washcomp=[];
-                        $('#composition_remove_qty' + dataid + ' tr').each(function () {
-                              var washcomp1=[];
-                              var id=$(this).attr('id')
-                              var value=$(this).find('select').find(':selected').val();
-                              var compo =$(this).find('.compositions_hidden').val();
-                              var compss = compo.split(',');
-                                $(compss).each(function (index1,value1){ 
-                                    var english = value1.split('_');
-                                    washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
-                                });
-                            washcomp.push(washcomp1)
-                        })
-                        
-                        
-                        var wash_finals = JSON.stringify(washcomp);
-                        localStorage.setItem('wash_composition_final'+dataid, wash_finals);
-                        
-                        if (value.parts_english != null) {
-                            svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
-                        }
-                        
-                    }
-                    svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
-
-                    page_id = value.page_id;
-
-                });
             }
 		
 			svgDoc_back.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
@@ -1554,8 +1493,103 @@ function washcarelabels(data, dataid,color_code,new_flag,user_type) {
 
 
         });
+
+        var size = data.order_details[0].Size.split(" ")
+
+        if (size[1] == "ANS") {
+            var size1 = "years";
+        } else {
+            var size1 = "months";
+        }
+
+        if(size[0] == "TAILLE")
+		{
+        	svgDoc_back.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc_back.getElementById("size2").innerHTML = size;
+		}
+		else
+		{
+            svgDoc_back.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
+			svgDoc_back.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+		}
+
+        svgDoc_back.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
+        svgDoc_back.getElementById("season_code").innerHTML = data.order_details[0].Season_Code
+
+        svgDoc_back.getElementById("product_family").innerHTML = data.product_family[0].arabic;
+
+        var code = data.order_details[0].BarcodeForPricesTags.toString();
+        jsbarcodewash(code, 'barcode', svgDoc_back)
 		
 		}, false);
+
+    var mySVG_middle = document.getElementById("washcare_svg_middle" + dataid);
+    var svgDoc_middle;
+    
+    mySVG_middle.addEventListener("load", function () {
+
+        svgDoc_middle = mySVG_middle.contentDocument;
+
+        var page_id = 0;
+        //var comps="";
+        $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
+            if (value.page_id != page_id) {
+                var comps="";
+                $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index1, value1) {
+                    if(value.page_id == value1.page_id)
+                    {
+                        if(comps != "")
+                        {
+                            comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                        }
+                        else
+                        {
+                            comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                        }
+                        
+                    }
+                    
+                });
+                
+                add_page_composition += 1;
+                $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                
+                if(value.parts_id != "")
+                {
+                    $('.select_parts'+add_page_composition).val(value.parts_id)
+                }
+                
+                
+                var washcomp=[];
+                $('#composition_remove_qty' + dataid + ' tr').each(function () {
+                      var washcomp1=[];
+                      var id=$(this).attr('id')
+                      var value=$(this).find('select').find(':selected').val();
+                      var compo =$(this).find('.compositions_hidden').val();
+                      var compss = compo.split(',');
+                        $(compss).each(function (index1,value1){ 
+                            var english = value1.split('_');
+                            washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                        });
+                    washcomp.push(washcomp1)
+                })
+                
+                
+                var wash_finals = JSON.stringify(washcomp);
+                localStorage.setItem('wash_composition_final'+dataid, wash_finals);
+                
+                if (value.parts_english != null) {
+                    svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
+                }
+                
+            }
+            svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
+
+            page_id = value.page_id;
+
+        });
+
+    }, false);
 
     var mySVG = document.getElementById("washcare_svg_front" + dataid);
     var svgDoc;
@@ -1681,33 +1715,20 @@ function washcarelabels(data, dataid,color_code,new_flag,user_type) {
         }
         svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
         //svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
-        svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
 		
 		//alert(data.order_details[0].Size)
 		
 		
 		if(size[0] == "TAILLE")
 		{
-			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
-			//var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
-			
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-        	svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 			svgDoc.getElementById("size1").innerHTML = size;
-			svgDoc.getElementById("size2").innerHTML = size;
 		}
 		else
 		{
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm";
-        svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
-			  svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-			  svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+			svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 		}
-      
-
-
-        var code = data.order_details[0].BarcodeForPricesTags.toString();
-        jsbarcodewash(code, 'barcode', svgDoc)
     }, false);
 }
 
@@ -1779,7 +1800,7 @@ function add_to_composition(dataid) {
         dataid = dataid;
     }
     composition_percentage_global = 0;
-    var mySVG = document.getElementById("washcare_svg_back" + dataid);
+    var mySVG = document.getElementById("washcare_svg_middle" + dataid);
     var svgDoc = mySVG.contentDocument;
     var a = [];
     var com = [];
@@ -1839,7 +1860,7 @@ function add_to_page(dataid) {
   } else {
     dataid = dataid;
   } 
-    var mySVG = document.getElementById("washcare_svg_back" + dataid);
+    var mySVG = document.getElementById("washcare_svg_middle" + dataid);
     var svgDoc = mySVG.contentDocument;
     
     var check=0;
@@ -1918,7 +1939,7 @@ function deleteComposition(obj, dataid) {
 	}
 	$(obj).parent().parent().remove();
 	var classname = $(obj).parent().parent().attr('id');
-	var mySVG = document.getElementById("washcare_svg_back" + dataid);
+	var mySVG = document.getElementById("washcare_svg_middle" + dataid);
 	var svgDoc = mySVG.contentDocument;
 	var list = svgDoc.getElementsByClassName("composition_" + classname);
 	for (var i = list.length - 1; 0 <= i; i--) {
@@ -1944,8 +1965,14 @@ function printWashDiv(data,data_back,data_middle,dataid,user_type) {
 	var a1 = document.getElementById(data);
 	var svgDoc1 = a1.contentDocument;
 	var svgRoot1 = svgDoc1.documentElement;
+
+    var a1_back = document.getElementById(data_back);
+    var svgDoc1_back = a1_back.contentDocument;
+    var svgRoot1_back = svgDoc1_back.documentElement;
+
 	var index_arr=[];
 	var svgarr = [];
+	var svgarr_back = [];
 	var i=0;
 	var ajax=0;
 		//alert('wash_care_label_table_'+dataid)
@@ -1978,36 +2005,59 @@ function printWashDiv(data,data_back,data_middle,dataid,user_type) {
 						retryLimit: 2,
 						success: function (data) {
 							//console.log(data)
+
+                            //console.log(uvc_tco)
 							if(size[0] == "TAILLE")
 							{
 								svgDoc1.getElementById("size1").innerHTML = size_txt;
-								svgDoc1.getElementById("size2").innerHTML = size_txt;
+								svgDoc1_back.getElementById("size2").innerHTML = size_txt;
 								svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
-								svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+								svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = "";
 							}
 							else
 							{
 								if(data.size_chart.length > 0 )
 								{
 									svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
-									svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
+									svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
 								}
 								else
 								{
 									svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
-									svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
+									svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = "";
 								}
 	
 								svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
-								svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
+								svgDoc1_back.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
 							}
 							
 							svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
-							svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
-							svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 135) rotate(270)');
+							svgDoc1_back.getElementById("parcel_code2").innerHTML = uvc_tco;
+
+                            svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("cofreet_symbol2").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("astm_symbol2").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("cofreet_symbol3").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("astm_symbol3").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("cofreet_symbol4").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("astm_symbol4").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("cofreet_symbol5").setAttribute('xlink:href', "");
+                            svgDoc1.getElementById("astm_symbol5").setAttribute('xlink:href', "");
+
+
+                            
+
+                            svgDoc1_back.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -37.5 154) rotate(270)');
+                            jsbarcodewash(code, 'barcode', svgDoc1_back)
+
+
+                            var s_back = new XMLSerializer();
+							var d_back = svgRoot1_back;
+							var str_back = s_back.serializeToString(d_back);
+							var svg_back = encodeURI(str_back)
+							svgarr_back.push(svg_back)
 							
-							
-							jsbarcodewash(code, 'barcode', svgDoc1)
 
 
 							var s = new XMLSerializer();
@@ -2030,23 +2080,28 @@ function printWashDiv(data,data_back,data_middle,dataid,user_type) {
 			
 		}
 	})
+
+    var washing_select = $('.washing_select' + dataid + ' option:selected').val();
+    var whitening_select = $('.whitening_select' + dataid + ' option:selected').val();
+    var dryer_select = $('.dryer_select' + dataid + ' option:selected').val();
+    var ironing_select = $('.ironing_select' + dataid + ' option:selected').val();
+    var cleaning_select = $('.cleaning_select' + dataid + ' option:selected').val();
 	
 	//alert(i)
 	//console.log(index_arr)
 	
 	
-	var a1_back = document.getElementById(data_back);
-	var svgDoc1_back = a1_back.contentDocument;
-	var svgRoot1_back = svgDoc1_back.documentElement;
+	
 	
 	var a1_middle = document.getElementById(data_middle);
 	var svgDoc1_middle = a1_middle.contentDocument;
 	var svgRoot1_middle = svgDoc1_middle.documentElement;
 	var svg_fin = svgarr.join(',_');
+	var svg_fin_back = svgarr_back.join(',_');
 	
 	if(i == ajax)
 	{
-		PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1,user_type);
+		PopupWash(svg_fin,svgRoot1_back,svgRoot1_middle, dataid,svgDoc1,user_type,svg_fin_back,svgDoc1_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select);
 	}
 	
 }
@@ -2196,7 +2251,7 @@ function cancelWashDiv(dataid,factorycode,user_type){
  * @return Pdf
  */
 
-function PopupWash(data,data_back,data_middle,dataid,svgDoc1,user_type) {
+function PopupWash(data,data_back,data_middle,dataid,svgDoc1,user_type,data_fin_back,svgDoc1_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select) {
 	
     if (dataid != undefined) {
         dataid=dataid;
@@ -2245,11 +2300,17 @@ function PopupWash(data,data_back,data_middle,dataid,svgDoc1,user_type) {
             svg: data,
             svg_back: svg_back,
             svg_middle: svg_middle,
+            data_fin_back:data_fin_back,
+            washing_select:washing_select,
+            whitening_select:whitening_select,
+            dryer_select:dryer_select,
+            ironing_select:ironing_select,
+            cleaning_select:cleaning_select,
             
         },
         async: false,
         success: function (data) {
-			svgDoc1.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 125.454) rotate(270)');
+			svgDoc1_back.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -21 138.454) rotate(270)');
             success = true;
             url = data;
         },
@@ -2797,8 +2858,8 @@ function jsbarcodewash(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '70px');
     svg.setAttribute('font-family', 'ocr-b-10bt');
-    svg.setAttribute('width', '92.1px');
-    svg.setAttribute('height', '133px');
+    svg.setAttribute('width', '36.1px');
+    svg.setAttribute('height', '77px');
     canvas.id = 'canvas';
     canvas.width = svg.getBoundingClientRect().width;
     canvas.height = svg.getBoundingClientRect().height;

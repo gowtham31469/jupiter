@@ -1138,6 +1138,7 @@ background: rgba(0,0,0,0.2);
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
 
 <script src="{{ asset('js/common/tesco-orders-common.js') }}"></script>
 <script>

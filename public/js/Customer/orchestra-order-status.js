@@ -3053,6 +3053,7 @@ function washcarelabelsOs(data, dataid) {
                
 
                 var page_id = 0;
+                var s_no =1;
                 //var comps="";
                 $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
                     if (value.page_id != page_id) {
@@ -3074,7 +3075,7 @@ function washcarelabelsOs(data, dataid) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td>Composition ' + add_page_composition + '</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td> '+ s_no +'. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
                         
                         if(value.parts_id != "")
                         {
@@ -3103,6 +3104,7 @@ function washcarelabelsOs(data, dataid) {
                         if (value.parts_english != null) {
                             svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
                         }
+                        s_no++;
                         
                     }
                     svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';

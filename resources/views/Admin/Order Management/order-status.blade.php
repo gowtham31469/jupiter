@@ -794,6 +794,7 @@
     <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-order-status-common.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
 
     <script>
         localStorage.removeItem("page_navigation");

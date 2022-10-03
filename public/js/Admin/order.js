@@ -141,6 +141,7 @@ function showSnackbar() {
 
 function order_details(uvc, po,obj) {
 
+	var season_code = $(obj).data('season_code')
 	$(obj).css('pointer-events','none')
 	$(obj).css('cursor','default')
 
@@ -156,7 +157,7 @@ function order_details(uvc, po,obj) {
     if (po != "-") {
         sticker_order_details(uvc, po,"admin")
     } else {
-        label_order_details(uvc,"admin")
+        label_order_details(uvc,"admin",season_code)
     }
 }
 

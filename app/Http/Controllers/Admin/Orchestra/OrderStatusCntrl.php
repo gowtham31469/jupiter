@@ -193,24 +193,26 @@ class OrderStatusCntrl extends Controller
 			{
 				if($color_code != null && $color_code != "null" && $color_code != "")
 				{
-					$data['order_details'] = DB::table('orchestra_parcel_details')
-                                        ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
-                                        ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
-                                        ->where('orchestra_parcel_details.UVC',$uvc)
-                                        ->where('orchestra_parcel_details.Color_Code',$color_code)->where('orchestra_parcel_details.Season_Code',$season)
-                                        ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
-                                        ->orderBy('orchestra_parcel_details.id')
-                                        ->get();
+					$data['order_details'] = DB::table('orchestra_parcel_details as opd')
+                                                                ->leftJoin('orchestra_size_chart','opd.Size_Label','=','orchestra_size_chart.age')
+                                                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code",DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""),DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
+                                                                ->where('UVC',$uvc)
+                                                                ->where('opd.Color_Code',$color_code)
+                                                                ->where('Season_Code',$season)
+                                                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC")
+                                                                ->orderBy(DB::raw('MIN(opd.id)'),'asc')
+                                                                ->get();
 				}
 				else
 				{
-					$data['order_details'] = DB::table('orchestra_parcel_details')
-                                        ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
-                                        ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
-                                        ->where('orchestra_parcel_details.UVC',$uvc)->where('orchestra_parcel_details.Season_Code',$season)
-                                        ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
-                                        ->orderBy('orchestra_parcel_details.id')
-                                        ->get();
+					$data['order_details'] = DB::table('orchestra_parcel_details as opd')
+                                                                ->leftJoin('orchestra_size_chart','opd.Size_Label','=','orchestra_size_chart.age')
+                                                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code",DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""),DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
+                                                                ->where('UVC',$uvc)
+                                                                ->where('Season_Code',$season)
+                                                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC")
+                                                                ->orderBy(DB::raw('MIN(opd.id)'),'asc')
+                                                                ->get();
 				}
 				
 				
@@ -749,6 +751,23 @@ class OrderStatusCntrl extends Controller
             $parcel_details = DB::table('orchestra_parcel_details')->where('UVC',$data[$table_name][0]->uvc)->where('BuyerPONo',$data[$table_name][0]->po)->where('Color_Code',$data[$table_name][0]->color_code)->select('*')->get();
 
             $data[$table_name][0]->size_chart = $parcel_details;
+        }
+        else if($table_name == "orchestra_wash_care_label_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.owcl_id',$table_name.'.id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();
+
+            
+            $parcel_details = DB::table('orchestra_parcel_details')->where('id',$data[$table_name][0]->orchestra_parcel_details_id)->select('*')->get();
+
+            $orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')->join('orchestra_compositions','orchestra_compositions.id','orchestra_wash_care_composition.composition_id')->where('owcl_id',$table_id)->select('orchestra_wash_care_composition.*','orchestra_compositions.english')->orderBy('orchestra_wash_care_composition.id')->get();
+
+            $orchestra_parts_comp = DB::table('orchestra_wash_care_composition')->where('owcl_id',$table_id)->select('orchestra_wash_care_composition.parts_id')->groupBy('orchestra_wash_care_composition.parts_id')->get();
+
+            $data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$parcel_details{0}->Family_Code)->get();
+            
+            $data[$table_name][0]->care_composition = $orchestra_wash_care_composition;
+            $data[$table_name][0]->parts_comp = $orchestra_parts_comp;
+            $data[$table_name][0]->product_family = $data['product_family'];
         }
         
         echo json_encode($data);

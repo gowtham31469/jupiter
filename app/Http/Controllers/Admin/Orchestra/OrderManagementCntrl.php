@@ -159,13 +159,15 @@ class OrderManagementCntrl extends Controller
     public function labelOrderDetails(Request $request)
     {
             $uvc=$request->uvc;
-            $data['order_details'] = DB::table('orchestra_parcel_details')
-                                        ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
-                                        ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
-                                        ->where('orchestra_parcel_details.UVC',$uvc)
-                                        ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
-                                        ->orderBy('orchestra_parcel_details.id','asc')
-                                        ->get();
+            $season_code=$request->season_code;
+            $data['order_details'] = DB::table('orchestra_parcel_details as opd')
+                                                                ->leftJoin('orchestra_size_chart','opd.Size_Label','=','orchestra_size_chart.age')
+                                                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code",DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""),DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
+                                                                ->where('UVC',$uvc)
+                                                                ->where('Season_Code',$season_code)
+                                                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC")
+                                                                ->orderBy(DB::raw('MIN(opd.id)'),'asc')
+                                                                ->get();
 		
 		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
 		
@@ -231,9 +233,10 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=5;
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1-disney.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
+                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
 				
                 $data['orchestra_wash_template_id']=5;
 				
@@ -303,9 +306,11 @@ class OrderManagementCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=4;
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
+                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+                
                 $data['orchestra_wash_template_id']=4;
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
