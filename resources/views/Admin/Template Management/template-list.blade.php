@@ -219,6 +219,7 @@
     @endif @section('jqueryIncludes')
     <script src="{{ asset('js/Admin/template.js') }}"></script>
     <script src="{{ asset('js/Admin/spectrra-template-metadata.js') }}"></script>
+    <script src="{{ asset('js/common/spectrra-metadata-dropdown.js') }}"></script>
     <script>
         $(document).on('click', '#preview', function(event) {
             event.preventDefault();

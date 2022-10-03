@@ -402,25 +402,6 @@ const generateNatJobcard = () => {
         showSnackbar();
         return false;
     }
-    
-    if (
-        $(".buyers-card.active-buyer.active").attr("id") ===
-        "jupitergarmentsaccessories"
-      ) {
-        getNatJGAOrderDetails(checked_count);
-      } else {
-        getSpectrraOrderDetails(checked_count);
-      }
-    
-}
-
-const getNatJGAOrderDetails = (checked_count) => {
-
-    if(checked_count > 3) {
-        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
-        showSnackbar();
-        return false;
-    }
 
     var buyerArray = [];
     var customerArray = [];
@@ -438,6 +419,25 @@ const getNatJGAOrderDetails = (checked_count) => {
 
     uuid_array   = uuid_array.join(',');
     erp_id_array   = erp_id_array.join(',');
+    
+    if (
+        $(".buyers-card.active-buyer.active").attr("id") ===
+        "jupitergarmentsaccessories"
+      ) {
+        getNatJGAOrderDetails(checked_count, buyerArray, customerArray, uuid_array, erp_id_array);
+      } else {
+        getSpectrraOrderDetails(checked_count, uuid_array, erp_id_array);
+      }
+    
+}
+
+const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_array, erp_id_array) => {
+
+    if(checked_count > 3) {
+        $('.snackbar_span').html("Please select only a maximum of 3 orders.");
+        showSnackbar();
+        return false;
+    }
 
     if([...new Set(buyerArray)].length != 1) {
         $('.snackbar_span').html("Please select the same buyer orders.");
@@ -455,7 +455,7 @@ const getNatJGAOrderDetails = (checked_count) => {
         url:base_url + "/erp/non-artwork-job-manager/get-nat-jc-details",
         dataType:"json",
         method:"get",
-        data:{uuid_array:uuid_array, erp_id_array:erp_id_array},
+        data:{uuid_array, erp_id_array},
         tryCount : 0,
         retryLimit : 2,
         beforeSend: function () {
