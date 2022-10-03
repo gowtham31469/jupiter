@@ -6,9 +6,9 @@ use Carbon\Carbon;
 use App\ErpOrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
 use App\Http\Controllers\Controller;
+use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
 
 class SpectrraJCController extends Controller
@@ -50,17 +50,18 @@ class SpectrraJCController extends Controller
     public function getSpectrraOrderDetails(Request $request)
     {
         $get_spectrra_metadata = new SpectrraCompanyTemplateData();
-        // $jc_class_obj = new JobcardCommonClass();
         $jobcard_id_gen_obj = new JobcardIDGenerator();
+        $spectrra_metadata = new SpectrraTemplateMetadata();
 
-        $order_details = ErpOrderDetails::with('orders:id,po_no,erp_id,customer_id,buyer_id', 'company:id,name,address,logo')->where([
+        $order_details = ErpOrderDetails::with('orders:id,po_no,erp_id,customer_id,buyer_id', 'company:id,name,address,logo')
+        ->where([
             'erp_order_details.uuid' => $request['uuid_array'],
             'erp_order_details.status' => $this->erp_jc_status_id,
         ])
-            ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
-            ->select('erp_order_details.style_no', 'erp_order_details.po_verified_date', 'erp_order_details.order_date', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id', 'erp_order_details.template_id', 'erp_order_details.company_id', 'erp_order_details.reference_name', DB::raw('SUM(order_quantity) as total_qty'))
-            ->groupBy('erp_order_details.style_no', 'erp_order_details.po_verified_date', 'erp_order_details.order_date', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id', 'erp_order_details.template_id', 'erp_order_details.company_id', 'erp_order_details.reference_name')
-            ->first();
+        ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
+        ->select('erp_order_details.style_no', 'erp_order_details.po_verified_date', 'erp_order_details.order_date', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id', 'erp_order_details.template_id', 'erp_order_details.company_id', 'erp_order_details.reference_name', DB::raw('SUM(order_quantity) as total_qty'))
+        ->groupBy('erp_order_details.style_no', 'erp_order_details.po_verified_date', 'erp_order_details.order_date', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id', 'erp_order_details.template_id', 'erp_order_details.company_id', 'erp_order_details.reference_name')
+        ->first();
 
         $data['template_id'] = $order_details['template_id'];
         $data['buyer'] = strtolower($order_details['orders']['buyer']['buyer_name']);
@@ -68,6 +69,9 @@ class SpectrraJCController extends Controller
         $erp_array = explode('|', $order_details['orders']['id']);
         $buyer_item_table = $order_details['orders']['buyer']['item_master_table'];
         $buyer_template_table = $order_details['orders']['buyer']['template_table'];
+        $order_details->po_verified_date = Carbon::parse($order_details->po_verified_date)->format('d-m-Y');
+        $order_details->order_date = Carbon::parse($order_details->order_date)->format('d-m-Y');
+        $order_details->delivery_date = Carbon::parse($order_details->delivery_date)->format('d-m-Y');
 
         $spectrra_template_data = $get_spectrra_metadata->getSpectrraCompanyTemplateData($data);
         
@@ -80,11 +84,8 @@ class SpectrraJCController extends Controller
                 ->orderBy($buyer_template_table . '.id')
                 ->first();
 
-        // list($print_color_array, $material_array, $article_array, $length_array, $width_array, $type_array, $name_in_reports_array) = $jc_class_obj->getTemplateData($order_details['orders']['buyer'], $temp_id_array);
-
         // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
         $article_array = explode('|', $template_details->article);
-        
         $workorder_id = $jobcard_id_gen_obj->generateJobcardID($article_array, $erp_array);
 
         return response()->json([
@@ -95,6 +96,10 @@ class SpectrraJCController extends Controller
             'modal_title' => 'Create Jobcard',
             'workorder_id' => $workorder_id,
             'template_details' => $template_details,
+            'today_date'       => Carbon::parse($this->current_date)->format('d-m-Y'),
+            'board_category' => $spectrra_metadata->getBoardCategories(),
+            'boards' => $spectrra_metadata->getBoards(),
+            'color_match' => $spectrra_metadata->getColorMatches(),
         ], 200);
     }
 }

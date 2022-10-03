@@ -14,7 +14,7 @@ class SpectrraCompanyTemplateData
     public function getSpectrraCompanyTemplateData($request)
     {
         return TemplateBoardColorMapping::with(['colorMatches', 'frontColors'])
-        ->where('buyer_template_table', $request['buyer'].'_template')
+        ->where('buyer_template_table', $request['buyer'].'_item_master')
         ->where('template_id', $request['template_id'])
         ->first();
     }

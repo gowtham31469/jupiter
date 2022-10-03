@@ -546,7 +546,7 @@
                                                 <p>Cust</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_customer_name" name="sp_customer_name">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -554,7 +554,7 @@
                                                 <p>StyleNum</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_style_no" name="sp_style_no">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -562,7 +562,7 @@
                                                 <p>PO No</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_customer_po" name="sp_customer_po">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -570,7 +570,7 @@
                                                 <p>PO Dt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_po_verify_date" name="sp_po_verify_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -578,7 +578,7 @@
                                                 <p>Buyer</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_buyer_name" name="sp_buyer_name">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -586,7 +586,7 @@
                                                 <p>Order No</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_no" name="sp_order_no">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -594,7 +594,7 @@
                                                 <p>Order Dt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_date" name="sp_order_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -602,7 +602,7 @@
                                                 <p>CustDelDt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_delivery_date" name="sp_delivery_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                     </table>
@@ -615,7 +615,7 @@
                                                 <p>Order Qnty</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_qty" name="sp_order_qty">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
