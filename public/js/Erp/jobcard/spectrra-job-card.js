@@ -97,52 +97,53 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_delivery_date').text(order_data.order_details.delivery_date);
   $('#sp_order_qty').text(order_data.order_details.total_qty);
 
-  $('#color_bar').val(order_data.spectrra_template_data.color_bar);
-  $('#print_spec_bar').val(order_data.spectrra_template_data.print_spec_bar);
-  $('#tone_bar').val(order_data.spectrra_template_data.tone_bar);
-  $('#back_colors').val(order_data.spectrra_template_data.back_color_text);
-  $('#board_category').val(order_data.spectrra_template_data.board_category_id);
-  $('#board_name').val(order_data.spectrra_template_data.board_id);
-  $('#fsc_non_fsc').val(order_data.spectrra_template_data.fsc_non_fsc);
-  $('#gsm_value').val(order_data.spectrra_template_data.gsm_value);
-  $('#thickness').val(order_data.spectrra_template_data.thickness);
-  $('#board_size_length').val(order_data.spectrra_template_data.board_size_length);
-  $('#board_size_width').val(order_data.spectrra_template_data.board_size_width);
-  $('#print_size_length').val(order_data.spectrra_template_data.print_size_length);
-  $('#print_size_width').val(order_data.spectrra_template_data.print_size_width);
-  $('#design_size_length').val(order_data.spectrra_template_data.design_size_length);
-  $('#design_size_width').val(order_data.spectrra_template_data.design_size_width);
-  $('#cut_as_1').val(order_data.spectrra_template_data.cut_as.split("/")[0]);
-  $('#cut_as_2').val(order_data.spectrra_template_data.cut_as.split("/")[1]);
-  $('#repeats').val(order_data.spectrra_template_data.repeats);
+  if ( order_data.spectrra_template_data != null ) {
+    $('#color_bar').val(order_data.spectrra_template_data.color_bar);
+    $('#print_spec_bar').val(order_data.spectrra_template_data.print_spec_bar);
+    $('#tone_bar').val(order_data.spectrra_template_data.tone_bar);
+    $('#back_colors').val(order_data.spectrra_template_data.back_color_text);
+    $('#board_category').val(order_data.spectrra_template_data.board_category_id);
+    $('#board_name').val(order_data.spectrra_template_data.board_id);
+    $('#fsc_non_fsc').val(order_data.spectrra_template_data.fsc_non_fsc);
+    $('#gsm_value').val(order_data.spectrra_template_data.gsm_value);
+    $('#thickness').val(order_data.spectrra_template_data.thickness);
+    $('#board_size_length').val(order_data.spectrra_template_data.board_size_length);
+    $('#board_size_width').val(order_data.spectrra_template_data.board_size_width);
+    $('#print_size_length').val(order_data.spectrra_template_data.print_size_length);
+    $('#print_size_width').val(order_data.spectrra_template_data.print_size_width);
+    $('#design_size_length').val(order_data.spectrra_template_data.design_size_length);
+    $('#design_size_width').val(order_data.spectrra_template_data.design_size_width);
+    $('#cut_as_1').val(order_data.spectrra_template_data.cut_as.split("/")[0]);
+    $('#cut_as_2').val(order_data.spectrra_template_data.cut_as.split("/")[1]);
+    $('#repeats').val(order_data.spectrra_template_data.repeats);
+    $('#cutting').val(order_data.spectrra_template_data.cutting);
+    $('#printing').val(order_data.spectrra_template_data.printing);
+    $('#coating').val(order_data.spectrra_template_data.coating);
+    $('#uv').val(order_data.spectrra_template_data.uv);
+    $('#lamination_spec').val(order_data.spectrra_template_data.lamination_spec);
+    $('#pasting_board').val(order_data.spectrra_template_data.pasting_board);
+    $('#pasting_gsm').val(order_data.spectrra_template_data.pasting_gsm);
+    $('#die_cutting').val(order_data.spectrra_template_data.die_cutting);
+    $('#window_patch').val(order_data.spectrra_template_data.window_patch_film);
+    $('#folder_gluer').val(order_data.spectrra_template_data.folder_gluer);
+    $('#embossing').val(order_data.spectrra_template_data.embossing);
+    $('#debossing').val(order_data.spectrra_template_data.debossing);
+    $('#perforation').val(order_data.spectrra_template_data.perforation);
+    $('#hole_size').val(order_data.spectrra_template_data.hole_size);
+    $('#eyelet_spec').val(order_data.spectrra_template_data.eyelet_spec);
+    $('#string_spec').val(order_data.spectrra_template_data.string_spec);
+    $('#foil').val(order_data.spectrra_template_data.foil);
 
-  $('#cutting').val(order_data.spectrra_template_data.cutting);
-  $('#printing').val(order_data.spectrra_template_data.printing);
-  $('#coating').val(order_data.spectrra_template_data.coating);
-  $('#uv').val(order_data.spectrra_template_data.uv);
-  $('#lamination_spec').val(order_data.spectrra_template_data.lamination_spec);
-  $('#pasting_board').val(order_data.spectrra_template_data.pasting_board);
-  $('#pasting_gsm').val(order_data.spectrra_template_data.pasting_gsm);
-  $('#die_cutting').val(order_data.spectrra_template_data.die_cutting);
-  $('#window_patch').val(order_data.spectrra_template_data.window_patch_film);
-  $('#folder_gluer').val(order_data.spectrra_template_data.folder_gluer);
-  $('#embossing').val(order_data.spectrra_template_data.embossing);
-  $('#debossing').val(order_data.spectrra_template_data.debossing);
-  $('#perforation').val(order_data.spectrra_template_data.perforation);
-  $('#hole_size').val(order_data.spectrra_template_data.hole_size);
-  $('#eyelet_spec').val(order_data.spectrra_template_data.eyelet_spec);
-  $('#string_spec').val(order_data.spectrra_template_data.string_spec);
-  $('#foil').val(order_data.spectrra_template_data.foil);
+    $.each(order_data.spectrra_template_data.color_matches, function (key, item) {
+      $('#color_match option:contains(' + item.color_match_text + ')').prop('selected', true);
+    });
 
-  $.each(order_data.spectrra_template_data.color_matches, function(key, item) {
-      $('#color_match option:contains('+ item.color_match_text +')').prop('selected', true);
-  });
-
-  var front_colors_string = '';
-  $.each(order_data.spectrra_template_data.front_colors, function(key, item) {
+    var front_colors_string = '';
+    $.each(order_data.spectrra_template_data.front_colors, function (key, item) {
       front_colors_string += `${item.front_color_text},`
-  });
-  $('#front_colors').val(front_colors_string.replace(/,\s*$/, ""));
+    });
+    $('#front_colors').val(front_colors_string.replace(/,\s*$/, ""));
+  }
 
 
   $('.selectpicker').selectpicker('refresh');

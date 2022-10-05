@@ -1160,7 +1160,7 @@ class JobManagerController extends Controller
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
-					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
 							->with([
 									'buyer' 		   => $buyer,
 									'customer' 		   => $customer,
@@ -2972,7 +2972,7 @@ class JobManagerController extends Controller
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
-					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
 								->with([
 										'buyer' 		   => $buyer,
 										'customer' 		   => $customer,

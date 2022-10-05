@@ -911,6 +911,7 @@ Route::group(['prefix' => 'erp'], function () {
 	Route::prefix('spectrra-job-manager')->group(function () {
 		Route::get('/get-spectrra-order-details', 'ErpUser\Jobmanager\SpectrraJCController@getSpectrraOrderDetails');
 		Route::post('/store-spectrra-jobcard', 'ErpUser\Jobmanager\SpectrraJCController@storeSpectrraJobCard');
+		Route::get('/view-spectrra-jobcard', 'ErpUser\Jobmanager\SpectrraJCController@generateSpectrraJCPdf');
 
 		// Route::get('/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list');
 		// Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
