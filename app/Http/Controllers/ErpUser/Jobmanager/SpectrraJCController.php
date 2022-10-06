@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
 use App\Classes\SpectrraJobcardPDFHeaderFooter;
+use SnappyPDF;
 
 class SpectrraJCController extends Controller
 {
@@ -108,10 +109,29 @@ class SpectrraJCController extends Controller
 
     public function generateSpectrraJCPdf()
     {
+
+        // Snappy pdf 
+        // $pdf = SnappyPDF::loadView('erp/Jobmanager/spectrra-jobcard-pdf-template', ["company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'company' => 'Spectrra Prints', 'workorder_id' => 'CS22000010023', 'article' => 'Swing Tickets', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022']);
+        // // $pdf->setOption('margin-top', 0);
+        // $pdf->setOption('margin-bottom', 0);
+        // $pdf->setOption('header-font-name', 'helvetica');
+        // $pdf->setOption('header-font-size', '8');
+        // $pdf->setOption('footer-font-name', 'helvetica');
+        // $pdf->setOption('header-font-size', '8');
+        // // Position at 5 mm from top
+        // // $pdf->SetY(10);
+        // // // Set font
+        // // $pdf->SetFont('helvetica', '', 8);
+        // return $pdf->inline();
+
+
+
+
+
         $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData();		
+        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => '/var/www/html/jupiter/public/images/spectrra-logo.png']);		
         $pdf->SetPrintHeader(true);
-        $pdf->SetPrintFooter(true);  
+        $pdf->SetPrintFooter(true); 
 
         //margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
@@ -146,8 +166,8 @@ class SpectrraJCController extends Controller
         ob_end_clean();
         $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
         $pdf->IncludeJS("print();");
-        $pdf->Output( public_path($file_path), 'F');
+        return $pdf->Output( public_path($file_path), 'I');
 
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+        // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
     }
 }
