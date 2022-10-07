@@ -3234,7 +3234,7 @@ class OrderManagementCntrl extends Controller
                 
             // get quantity_table ids.
             $quantity_table_ids = DB::table('orchestra_wash_care_label_orders_qty')->select('id')->where('owcl_id',$id)->get();
-        
+            
             WashLabelOrders::where('id',$id)
             ->update([
                     'uvc' => $uvc,
@@ -3248,7 +3248,7 @@ class OrderManagementCntrl extends Controller
                     'ironing_id'      => $ironing_select,
                     'cleaning_id'      => $cleaning_select,
                     'made_in_id'      => $made_in_select,
-                    'color_code'      => $color_code,
+                    //'color_code'      => $color_code,
                     'card_flag'      => $card_flag,
                     'po'    => $po_select,
                     'care_instruction_id'      => $care_instruction_select,

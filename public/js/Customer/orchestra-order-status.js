@@ -215,7 +215,7 @@ function orchestraStatusTable(data, path) {
                         tr += '<td><span style=display:none;>' + value.created_at + '</span> - </td>';
                     }
                 } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code" && key != "created_at" && key != "template_file") {
-                    if (value[key] == "" || value[key] == null) {
+                    if (value[key] == "" || value[key] == null || value[key] == "null") {
                         tr += '<td> - </td>';
                     } else {
                         tr += '<td>' + value[key] + '</td>';
@@ -2732,7 +2732,7 @@ function washcarelabelsOs(data, dataid) {
 
 
     $.each(data.orchestra_countries, function (index, value) {
-        made_option += "<option data-id='" + value.id + "'  data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+        made_option += '<option data-id="' + value.id + '"  data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
     });
     $.each(data.orchestra_care_instruction, function (index, value) {
         if(value.english.length > 31)
@@ -2743,13 +2743,13 @@ function washcarelabelsOs(data, dataid) {
 		{
 			var txtEng = value.english;
 		}
-        instruction_option += "<option data-id='" + value.id + "' data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + txtEng + "</option>";
+        instruction_option += '<option data-id="' + value.id + '" data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german  + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + txtEng + '</option>';
     });
     $.each(data.orchestra_parts, function (index, value) {
-        parts_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+        parts_option +=  '<option data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
     });
     $.each(data.orchestra_composition, function (index, value) {
-        composition_option += "<option data-french='" + value.french + "' data-english='" + value.english + "' data-spanish='" + value.spanish + "' data-portuguese='" + value.portuguese + "' data-italian='" + value.italian + "' data-dutch='" + value.dutch + "' data-german='" + value.german  + "' data-arabic='" + value.arabic + "' data-greek='" + value.greek + "' value=" + value.id + ">" + value.english + "</option>";
+        composition_option += '<option data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german  + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
     });
     $.each(data.orchestra_care_symbols, function (index, value) {
         if(value.care_instruction.length > 15)
@@ -3048,10 +3048,78 @@ function washcarelabelsOs(data, dataid) {
                         $(this).data('greek') + '</p>';
                     svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
                 });
+            }
+		
+			svgDoc_back.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
+
+        }
+		
+		 $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
+            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
+                svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
+                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
+                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
+                        $(this).data('arabic') + "-" +
+                        $(this).data('greek') + '</p>';
+                    svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
+                });
 
 
-               
+            } else {
 
+            }
+
+
+        });
+
+        var size = data.order_details[0].Size.split(" ")
+
+        if (size[1] == "ANS") {
+            var size1 = "years";
+        } else {
+            var size1 = "months";
+        }
+
+        if(size[0] == "TAILLE")
+		{
+        	svgDoc_back.getElementById("size_in_fr_en2").innerHTML = "";
+			svgDoc_back.getElementById("size2").innerHTML = size;
+		}
+		else
+		{
+            svgDoc_back.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
+			svgDoc_back.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+		}
+
+        svgDoc_back.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
+        svgDoc_back.getElementById("season_code").innerHTML = data.order_details[0].Season_Code
+
+        svgDoc_back.getElementById("product_family").innerHTML = data.product_family[0].arabic;
+
+
+        var code = data.order_details[0].BarcodeForPricesTags.toString();
+		//alert(code)
+        jsbarcodewashOs(code, 'barcode', svgDoc_back)
+		
+		}, false);
+
+
+    var mySVG_middle = document.getElementById("washcare_svg_middle" + dataid);
+    var svgDoc_middle;
+    
+    mySVG_middle.addEventListener("load", function () {
+
+        svgDoc_middle = mySVG_middle.contentDocument;
+
+        if (data.orchestra_wash_care_label_orders != "") {
+            if (dataid != "") {
+                dataid1 = dataid;
+            } else {
+                dataid1 = 0;
+            }
+
+            if (data.orchestra_wash_care_label_orders.length > dataid1) {
+                
                 var page_id = 0;
                 var s_no =1;
                 //var comps="";
@@ -3075,7 +3143,7 @@ function washcarelabelsOs(data, dataid) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td> '+ s_no +'. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
                         
                         if(value.parts_id != "")
                         {
@@ -3102,41 +3170,20 @@ function washcarelabelsOs(data, dataid) {
                         localStorage.setItem('wash_composition_final'+dataid, wash_finals);
                         
                         if (value.parts_english != null) {
-                            svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
+                            svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
                         }
                         s_no++;
-                        
                     }
-                    svgDoc_back.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
+                    svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
 
                     page_id = value.page_id;
-
                 });
             }
-		
-			svgDoc_back.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
 
         }
-		
-		 $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
-                svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
-                        $(this).data('arabic') + "-" +
-                        $(this).data('greek') + '</p>';
-                    svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
-                });
 
 
-            } else {
-
-            }
-
-
-        });
-		
-		}, false);
+    }, false);
 
     var mySVG = document.getElementById("washcare_svg_front" + dataid);
     var svgDoc;
@@ -3240,6 +3287,7 @@ function washcarelabelsOs(data, dataid) {
                 var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + "-" + $('select.made_in_select' + dataid).find(':selected').data('english') + "-" + $('select.made_in_select' + dataid).find(':selected').data('spanish') + "-" + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + dataid).find(':selected').data('italian') + "-" + $('select.made_in_select' + dataid).find(':selected').data('dutch') + "-" + $('select.made_in_select' + dataid).find(':selected').data('german') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('arabic') + "-" +
                     $('select.made_in_select' + dataid).find(':selected').data('greek');
+				//console.log(text_for_mad_in);
                 svgDoc.getElementById("country").innerHTML = text_for_mad_in;
 
             } else {
@@ -3261,7 +3309,7 @@ function washcarelabelsOs(data, dataid) {
         }
         svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
         //svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
-        svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
+        //svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
 		
         //alert(data.order_details[0].Size)
 		
@@ -3271,23 +3319,20 @@ function washcarelabelsOs(data, dataid) {
 			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
 			
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-            svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
+            //svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
 			svgDoc.getElementById("size1").innerHTML = size;
-			svgDoc.getElementById("size2").innerHTML = size;
+			//svgDoc.getElementById("size2").innerHTML = size;
 		}
 		else
 		{
 			svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm";
-            svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
+            //svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
 			svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-			svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
+			//svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
 		}
       
 
 
-        var code = data.order_details[0].BarcodeForPricesTags.toString();
-		//alert(code)
-        jsbarcodewashOs(code, 'barcode', svgDoc)
     }, false);
     $("#washcarelabelform :input").prop("disabled", true);
     $("#toggle_orch_edit_permission").prop("disabled", false);
@@ -3336,8 +3381,8 @@ function jsbarcodewashOs(code, id, svgDoc) {
     //    svg.setAttribute('width', '188.931023622px');
     svg.setAttribute('font-size', '70px');
     svg.setAttribute('font-family', 'ocr-b-10bt');
-    svg.setAttribute('width', '92.1px');
-    svg.setAttribute('height', '133px');
+    svg.setAttribute('width', '36.1px');
+    svg.setAttribute('height', '77px');
     canvas.id = 'canvas';
     canvas.width = svg.getBoundingClientRect().width;
     canvas.height = svg.getBoundingClientRect().height;

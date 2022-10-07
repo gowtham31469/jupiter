@@ -798,6 +798,7 @@
 
     <script>
         localStorage.removeItem("page_navigation");
+        localStorage.removeItem("wash_composition");
         var buyer_count = $('#invisible__count_id').val();
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
