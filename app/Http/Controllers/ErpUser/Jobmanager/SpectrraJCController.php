@@ -159,7 +159,7 @@ class SpectrraJCController extends Controller
         $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
 
         //append content to header
-        $pdf->SetXY(13.4,26.3);
+        $pdf->SetXY(13.4,25);
         $pdf->writeHTML($view->render());
 
         //Close and output PDF document

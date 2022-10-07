@@ -115,10 +115,10 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
                         </tr>
                     </table>
                     <table>
-                    <tr class="blank_row">
-                        <td rowspan="1"></td>
-                    </tr>
-                </table>';
+                        <tr class="blank_row">
+                            <td rowspan="1"></td>
+                        </tr>
+                    </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
 
