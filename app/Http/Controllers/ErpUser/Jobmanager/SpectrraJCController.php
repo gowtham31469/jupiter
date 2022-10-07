@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ErpUser\Jobmanager;
 
+use View;
 use Carbon\Carbon;
 use App\ErpOrderDetails;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Classes\JobcardIDGenerator;
 use App\Http\Controllers\Controller;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
+use App\Classes\SpectrraJobcardPDFHeaderFooter;
 
 class SpectrraJCController extends Controller
 {
@@ -101,5 +103,51 @@ class SpectrraJCController extends Controller
             'boards' => $spectrra_metadata->getBoards(),
             'color_match' => $spectrra_metadata->getColorMatches(),
         ], 200);
+    }
+
+
+    public function generateSpectrraJCPdf()
+    {
+        $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setData();		
+        $pdf->SetPrintHeader(true);
+        $pdf->SetPrintFooter(true);  
+
+        //margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        
+        // /** Handle Page break */
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, 40);
+
+        // set image scale factor
+        $pdf->setImageScale(1.8);
+
+        // set font
+        $pdf->SetFont('helvetica', '', 8);
+
+        // add a page
+        $pdf->AddPage('P', 'A4');
+
+        // set some text to print
+        $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
+
+        //append content to header
+        $pdf->SetXY(13.4,26.3);
+        $pdf->writeHTML($view->render());
+
+        //Close and output PDF document
+        ob_end_clean();
+        $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
+        $pdf->IncludeJS("print();");
+        $pdf->Output( public_path($file_path), 'F');
+
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
     }
 }
