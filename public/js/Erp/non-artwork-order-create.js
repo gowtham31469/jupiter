@@ -136,12 +136,14 @@
 				data: { 'item_id' : item_id ,'buyer_id' : $("#buyer").val()},
 				success:function(data)
 				{
-					console.log(data)
 					if(data.hsn)
 					{	
-						$("#hsn_code").val(data.hsn)
-						$("#_tax_value").val(data.tax)
-						$("#tax").html(data.tax+" %")
+						if($(ref_td).closest('tr').attr('id') == "addr0")
+						{
+							$("#hsn_code").val(data.hsn)
+							$("#_tax_value").val(data.tax)
+							$("#tax").html(data.tax+" %")
+						}
 						temp_hsn = data.hsn
 						hsn_arr.push(data.hsn)
 						if(hsn_arr.length > 1)
@@ -317,6 +319,11 @@
 
 		$(document).on("keyup change",".quantity",function()
 		{	
+			if($(this).val().length > 8)
+			{
+				qty = $(this).val().substring(0, 8)
+				$(this).val(qty)
+			}
 			if($("#customer").val().length == 0)
 			{
 				$('.snackbar_span').html('Please select a customer!!!');
