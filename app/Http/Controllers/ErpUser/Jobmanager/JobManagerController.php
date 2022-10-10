@@ -923,28 +923,22 @@ class JobManagerController extends Controller
 	 */
 	public function getOrderDetailsByIds(Request $request)
 	{
-	  try {
-			if(session()->get('company_name') === "jupitergarmentsaccessories"){
-				$jga_jc = new JobcardJGA();
-				list($template_data, $metadata) = $jga_jc->getOrderDataForJGAJC($request, $this->erp_jc_status_id, $this->order_ap_status_id);
-				return response()->json([
-					'error'=> false,
-					'message' =>'Success', 
-					'template_data' => $template_data,
-					'disp_modes' => $metadata['erp_dispatch_mode'],
-					'finish_types' => $metadata['erp_finish_type'],
-					'machines' => $metadata['erp_machines'],
-					'teeth_nos' => $metadata['erp_teeth_no']
-	
-				],200);
-			} else {
-				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
-			}
-  
-		  } catch (\Exception $e)
-		  {
-			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-		  }
+		try {
+			$jga_jc = new JobcardJGA();
+			list($template_data, $metadata) = $jga_jc->getOrderDataForJGAJC($request, $this->erp_jc_status_id, $this->order_ap_status_id);
+			return response()->json([
+				'error' => false,
+				'message' => 'Success',
+				'template_data' => $template_data,
+				'disp_modes' => $metadata['erp_dispatch_mode'],
+				'finish_types' => $metadata['erp_finish_type'],
+				'machines' => $metadata['erp_machines'],
+				'teeth_nos' => $metadata['erp_teeth_no']
+
+			], 200);
+		} catch (\Exception $e) {
+			return response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
 	}
 	
 	/**
@@ -1166,7 +1160,7 @@ class JobManagerController extends Controller
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
-					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
 							->with([
 									'buyer' 		   => $buyer,
 									'customer' 		   => $customer,
@@ -2978,7 +2972,7 @@ class JobManagerController extends Controller
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
-					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
 								->with([
 										'buyer' 		   => $buyer,
 										'customer' 		   => $customer,

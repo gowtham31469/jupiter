@@ -99,6 +99,7 @@
 	<script src="{{ asset('js/Erp/erp-settings.js') }}"></script>
 	<script src="{{ asset('js/Erp/jobcard/non-artwork-jc-edit.js') }}"></script>
 	<script src="{{ asset('js/Erp/jobcard/spectrra-job-card.js') }}"></script>
+    <script src="{{ asset('js/common/spectrra-metadata-dropdown.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');

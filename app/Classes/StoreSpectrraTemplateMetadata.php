@@ -19,7 +19,7 @@ class StoreSpectrraTemplateMetadata
 
         $row_id = TemplateBoardColorMapping::updateOrCreate([
             'template_id' => $request['template_id_spectrra'],
-            'buyer_template_table' => $request['buyer_spectrra'].'_template',
+            'buyer_template_table' => $request['buyer_spectrra'].'_item_master',
         ] ,  [
             'color_bar' =>  $request['color_bar'],
             'print_spec_bar' => $request['print_spec_bar'], 

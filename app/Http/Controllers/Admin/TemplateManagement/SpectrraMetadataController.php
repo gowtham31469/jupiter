@@ -6,7 +6,7 @@ use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\StoreSpectrraTemplateMetadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\TemplateBoardColorMapping;
+use App\Classes\SpectrraCompanyTemplateData;
 use App\Http\Requests\SpectrraTemplateMetadataRequest;
 use DB;
 
@@ -17,17 +17,10 @@ class SpectrraMetadataController extends Controller
        $this->middleware('auth');
     }
 
-    public function getSpectrraCompanyTemplateData($request)
-    {
-        return TemplateBoardColorMapping::with(['colorMatches', 'frontColors'])
-        ->where('buyer_template_table', $request['buyer'].'_template')
-        ->where('template_id', $request['template_id'])
-        ->first();
-    }
-
     public function getSpectrraTemplateDetails(Request $request)
     {
         $spectrra_metadata = new SpectrraTemplateMetadata();
+        $get_spectrra_metadata = new SpectrraCompanyTemplateData();
 
         return response()->json([
             'error' => false,
@@ -35,7 +28,7 @@ class SpectrraMetadataController extends Controller
             'board_category' => $spectrra_metadata->getBoardCategories(),
             'boards' => $spectrra_metadata->getBoards(),
             'color_match' => $spectrra_metadata->getColorMatches(),
-            'spectrra_template_data' => $this->getSpectrraCompanyTemplateData($request),
+            'spectrra_template_data' => $get_spectrra_metadata->getSpectrraCompanyTemplateData($request),
         ], 200);
     }
 
