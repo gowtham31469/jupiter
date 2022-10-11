@@ -3,12 +3,13 @@ namespace App\Classes;
 
 class SpectrraJobcardPDFHeaderFooter extends \TCPDF
 {
-    // public $company;
-    // public $workorder_id;
-    // public $created_date;
-    // public $article;
-    // public $compiled_by;
-    // public $barcode_read;
+    public $company;
+    public $workorder_id;
+    public $created_date;
+    public $article;
+    public $reference;
+    public $company_address;
+    public $logo;
     // public $operator;
     // public $checker;
     // public $authorized_by;
@@ -29,12 +30,14 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
     // public $invoice_date;
 
      
-    public function setData(){
-        // $this->company         = $company;
-        // $this->workorder_id    = $workorder_id;
-        // $this->created_date    = $created_date;
-        // $this->article         = $article;
-        // $this->compiled_by     = $compiled_by;
+    public function setData($data){
+        $this->company         = $data['company'];
+        $this->company_address         = $data['company_address'];
+        $this->workorder_id    = $data['workorder_id'];
+        $this->created_date    = $data['created_date'];
+        $this->article         = $data['article'];
+        $this->reference     = $data['reference'];
+        $this->logo     = $data['logo'];
         // $this->barcode_read    = $barcode_read;
         // $this->operator        = $operator;
         // $this->checker         = $checker;
@@ -72,40 +75,39 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
         $this->SetTopMargin(30);
         // Position at 5 mm from top
         $this->SetY(10);
+
+        $this->Image($this->logo, 17, 10.7, 20, 15, '', '', '', true, 150, '', false, false, 0, true, false, false);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $header = '<table width="100%" cellspacing="0" cellpadding="5" border="0">
+        $header = '<table width="100%" cellspacing="0" cellpadding="10" border="0">
                         <tr nobr="true">
-                            <td width="35%" style="border-top:1px solid #6f7072;border-left:1px solid #6f7072;border-bottom:1px solid #6f7072;font-size:18px;"><strong id="jc_company_name" >######</strong>
-                                <span>######</span>
+                            <td width="12%"  style="border-top: 1px solid #6f7072;border-bottom: 1px solid #6f7072;border-left: 1px solid #6f7072;font-size:18px;">
                             </td>
-                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
-                            <td width="20%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;">
-                              <strong bgcolor="#DCDCDC" style="letter-spacing:+0.254mm;text-align:center; align:top;font-size:22px;">WORKORDER</strong>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;font-size:18px;"><strong id="jc_company_name" >'.$this->company.'</strong>&nbsp;<br><span style="text-align:left;">'.$this->company_address.'</span>
                             </td>
-                            <td width="5%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
-                            <td width="35%" style="border-top:1px solid #6f7072;border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;">
+                            <td width="8%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="45%" style="border-top:1px solid #6f7072;border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;">
                             <table cellspacing="0" cellpadding="0">
                                 <tbody>
                                     <tr width="100%">
-                                        <th width="32%"><strong>WO No</strong></th>
+                                        <th width="30%"><strong>WORKORDER</strong></th>
                                         <td width="5%"><strong>:</strong></td>
-                                        <td width="63%" id="work_order" style="text-align:left;font-weight: bold">######</td>
+                                        <td width="65%" id="work_order" style="text-align:left;font-weight: bold">'.$this->workorder_id.'</td>
                                     </tr>
                                     <tr  width="100%">
-                                        <th  width="32%"><strong>ARTICLE</strong></th>
+                                        <th  width="30%"><strong>ARTICLE</strong></th>
                                         <td  width="5%"><strong>:</strong></td>
-                                        <td width="63%" id="article" style="text-align:left;font-weight: bold">######</td>
+                                        <td width="65%" id="article" style="text-align:left;font-weight: bold">'.$this->article.'</td>
                                     </tr>
                                     <tr  width="100%">
-                                        <th  width="32%"><strong>REFERENCE</strong></th>
+                                        <th  width="30%"><strong>REFERENCE</strong></th>
                                         <td  width="5%"><strong>:</strong></td>
-                                        <td width="63%" id="reference" style="text-align:left;font-weight: bold">######</td>
+                                        <td width="65%" id="reference" style="text-align:left;font-weight: bold">'.$this->reference.'</td>
                                     </tr>
                                     <tr  width="100%">
-                                        <th  width="32%"><strong>DATE</strong></th>
+                                        <th  width="30%"><strong>DATE</strong></th>
                                         <td  width="5%"><strong>:</strong></td>
-                                        <td width="63%" id="today_date" style="text-align:left;font-weight: bold">######</td>
+                                        <td width="65%" id="today_date" style="text-align:left;font-weight: bold">'.$this->created_date.'</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -113,10 +115,10 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
                         </tr>
                     </table>
                     <table>
-                    <tr class="blank_row">
-                        <td rowspan="1"></td>
-                    </tr>
-                </table>';
+                        <tr class="blank_row">
+                            <td rowspan="1"></td>
+                        </tr>
+                    </table>';
         // Title
         $this->writeHTML($header, false, false, true, false, '');
 

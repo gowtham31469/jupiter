@@ -55,7 +55,7 @@
 								<input type="hidden" value="" id="material_hierarchy">
 							</div>
                             <div class="col-md-4">
-                                    <img src="" class="pull-right " id="sp_company_logo" style="width: 150px;height: 60px;">
+                                    <img src="" class="pull-right " id="sp_company_logo" style="height: 78px;margin-right: 60px;margin-bottom: 0px;margin-top: -5px;">
                             </div>
                         </div>
                     </div>
