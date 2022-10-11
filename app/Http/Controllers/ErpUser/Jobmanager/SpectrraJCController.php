@@ -110,24 +110,6 @@ class SpectrraJCController extends Controller
     public function generateSpectrraJCPdf()
     {
 
-        // Snappy pdf 
-        // $pdf = SnappyPDF::loadView('erp/Jobmanager/spectrra-jobcard-pdf-template', ["company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'company' => 'Spectrra Prints', 'workorder_id' => 'CS22000010023', 'article' => 'Swing Tickets', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022']);
-        // // $pdf->setOption('margin-top', 0);
-        // $pdf->setOption('margin-bottom', 0);
-        // $pdf->setOption('header-font-name', 'helvetica');
-        // $pdf->setOption('header-font-size', '8');
-        // $pdf->setOption('footer-font-name', 'helvetica');
-        // $pdf->setOption('header-font-size', '8');
-        // // Position at 5 mm from top
-        // // $pdf->SetY(10);
-        // // // Set font
-        // // $pdf->SetFont('helvetica', '', 8);
-        // return $pdf->inline();
-
-
-
-
-
         $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => '/var/www/html/jupiter/public/images/spectrra-logo.png']);		
         $pdf->SetPrintHeader(true);
@@ -154,6 +136,18 @@ class SpectrraJCController extends Controller
 
         // add a page
         $pdf->AddPage('P', 'A4');
+
+        // Print 'Pasting' text 90 degree rotated.
+        $pdf->StartTransform();
+        $pdf->Rotate(90);
+
+        // Set some content to print
+        $html = '<strong>Pasting</strong>';
+
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell($w=0, $h=0, $x='-43', $y='96', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+        $pdf->StopTransform();
 
         // set some text to print
         $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
