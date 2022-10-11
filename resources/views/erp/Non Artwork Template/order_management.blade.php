@@ -88,7 +88,7 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="tesco_po_number">PO Number</label>
-					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="20">
+					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="15">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -174,13 +174,13 @@
 								</div>
 							</td>
 							<td>
-								<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" placeholder="OCN Number">
+								<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" maxlength="12" placeholder="OCN Number">
 							</td>
 							<td>
-								<input type="text" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number">
+								<input type="text" name="bpo[]" class="form-control input-sm label-ean-field" placeholder="BPO Number" maxlength="10">
 							</td>
 							<td>
-								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC">
+								<input type="text" name="style[]" class="form-control input-sm label-ean-field" placeholder="Style/UVC" maxlength="12">
 							</td>	
 							<td class="selectpicker_td item_td">
 								{!! Form::select('item[]', $select_item_data, null, ['class' => 'selectpicker item_select input-group', 'data-live-search' => 'true', 'title' =>'Select item','data-container' =>'body']) !!}
@@ -192,10 +192,10 @@
 								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" data-container="body" title="Select reference"></select>
 							</td> -->
 							<td>
-								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color">
+								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color" maxlength="8">
 							</td>
 							<td>
-								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition">
+								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition" maxlength="25">
 							</td>
 							<td class="selectpicker_td">
 								<select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
@@ -218,7 +218,7 @@
 								{!! Form::select('size[]', $sizes, null, ['class' => 'selectpicker input-group size_select no_clone', 'data-live-search' => 'true', 'title' =>'Select size','data-container' =>'body']) !!}
 							</td>
 							<td class="quantity_td">
-								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" placeholder="Quantity">
+								<input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" placeholder="Quantity" max="99999999">
 							</td>
 							<td class="selectpicker_td">
 								{!! Form::select('uom[]', $uom, null, ['class' => 'selectpicker uom_select','data-live-search'=>'true','title'=>'Select uom','data-container'=>'.main-content']) !!}
