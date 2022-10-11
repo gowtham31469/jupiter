@@ -10,25 +10,6 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
     public $reference;
     public $company_address;
     public $logo;
-    // public $operator;
-    // public $checker;
-    // public $authorized_by;
-    // public $axicon_verifier;
-    // public $approved_by;
-    // public $packer;
-    // public $approval_date;
-    // public $roll_issued_by;
-    // public $cutter;
-    // public $cartons;
-    // public $single_ref;
-    // public $act_excess;
-    // public $sticker_mtr;
-    // public $settings;
-    // public $total_mtrs;
-    // public $last_page_flag = false;
-    // public $inv_no;
-    // public $invoice_date;
-
      
     public function setData($data){
         $this->company         = $data['company'];
@@ -38,24 +19,6 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
         $this->article         = $data['article'];
         $this->reference     = $data['reference'];
         $this->logo     = $data['logo'];
-        // $this->barcode_read    = $barcode_read;
-        // $this->operator        = $operator;
-        // $this->checker         = $checker;
-        // $this->authorized_by   = $authorized_by;
-        // $this->axicon_verifier = $axicon_verifier;
-        // $this->approved_by     = $approved_by;
-        // $this->packer          = $packer;
-        // $this->approval_date   = $approval_date;
-        // $this->roll_issued_by  = $roll_issued_by;
-        // $this->cutter          = $cutter;
-        // $this->cartons         = $cartons;
-        // $this->single_ref      = $single_ref;
-        // $this->act_excess      = $act_excess;
-        // $this->sticker_mtr     = $sticker_mtr;
-        // $this->settings        = $settings;
-        // $this->total_mtrs      = $total_mtrs;
-        // $this->inv_no          = $inv_no;
-        // $this->invoice_date    = $invoice_date;
     }
 
     /**
@@ -73,7 +36,7 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
     */
     public function Header() {
         $this->SetTopMargin(30);
-        // Position at 5 mm from top
+        // Position at 10 mm from top
         $this->SetY(10);
 
         $this->Image($this->logo, 17, 10.7, 20, 15, '', '', '', true, 150, '', false, false, 0, true, false, false);
@@ -130,12 +93,12 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
     */
     public function Footer() {
 
-        // Position at 32 mm from bottom
+        // Position at -5 mm from bottom
         $this->SetY(-5);
         // Set font
         $this->SetFont('helvetica', '', 8);
 
-        $footer = '<table cellpadding="0" cellspacing="2"></table>';
+        $footer = '<table cellpadding="0" cellspacing="1"></table>';
         
         /** Add footer in last page */
         $this->writeHTML($footer, false, false, true, false, '');
