@@ -108,11 +108,11 @@
 
 
 <body>
-    <table class="main-table table-border">
+    <table class="main-table" width="100%" cellspacing="0" cellpadding="10" border="0">
         <tr>
             <td colspan="1" rowspan="1">
                 <p class="table-name text-center">DESIGN DETAILS</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="design-details-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="design-details-table">
                     <tr>
                         <th colspan="2" class="top-left-border table-field-name">ColorBar</th>
                         <th colspan="2" class="top-left-border table-field-name">Printspec Bar</th>
@@ -201,7 +201,7 @@
             </td>
             <td colspan="1" rowspan="1">
                 <p class="table-name text-center">PROCESS DETAILS</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="process-details-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="process-details-table">
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Cutting</td>
                         <td colspan="2" class="top-left-right-border"></td>
@@ -285,7 +285,7 @@
             </td>
             <td colspan="1" rowspan="1">
                 <p class="table-name text-center">CUST DETAILS</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="customer-details-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="customer-details-table">
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Cust</td>
                         <td colspan="2" class="top-left-right-border"></td>
@@ -325,7 +325,7 @@
                     </tr>
                 </table>
                 <p class="table-name text-center">FOR PRODUCTION</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="for-production-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="for-production-table">
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Order Qnty</td>
                         <td colspan="2" class="top-left-right-border"></td>
@@ -374,7 +374,7 @@
         <tr>
             <td colspan="1" rowspan="1" width="70%">
                 <p class="table-name text-center">PROCESS OUTPUT</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="process-output-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="process-output-table">
                     <tr>
                         <th colspan="1" class="top-left-border table-field-name">Process</th>
                         <th colspan="1" class="top-left-border table-field-name">Mc No</th>
@@ -443,7 +443,7 @@
 
             <td colspan="1" rowspan="1" width="30%">
                 <p class="table-name text-center">DISPATCH DETAILS</p>
-                <table cellspacing="0" cellpadding="2" nobr="true" class="dispatch-details-table" align="center">
+                <table cellspacing="0" cellpadding="2" class="dispatch-details-table">
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;PackingDt</td>
                         <td colspan="2" class="top-left-right-border"></td>
