@@ -7,7 +7,7 @@
     "require": {
         "php": ">=7.0.0",
         "appstract/laravel-opcache": "^2.0",
-        "doctrine/dbal": "^2.5",
+        "doctrine/dbal": "^2.4.2",
         "elibyy/tcpdf-laravel": "5.5.*",
         "fideloper/proxy": "~3.3",
         "hesto/multi-auth": "^2.0",

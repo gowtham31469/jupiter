@@ -848,7 +848,6 @@ Route::group(['prefix' => 'erp'], function () {
 	});
 
 	Route::prefix('job-manager')->group(function () {
-		/* Routes for job-manager/orchestra/proof-pdf-smallrd Manager Module */
 		Route::get('/', 'ErpUser\Jobmanager\JobManagerController@index')->name('jobcard-manager');
 		Route::post('/get-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetails');
 		Route::get('/jga/get-jobcard-order-details', 'ErpUser\Jobmanager\JobManagerController@getOrderDetailsByIds');
@@ -893,7 +892,6 @@ Route::group(['prefix' => 'erp'], function () {
 	});
 
 	Route::prefix('non-artwork-job-manager')->group(function () {
-		/* Routes for Non artwork jobcards */
 		Route::get('/', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@index')->name('non-artwork-jobcard-manager');
 		Route::post('/get-customers-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getCustomersByBuyerId');
 		Route::post('/get-item-names-filter', 'ErpUser\NonArtworkJobmanager\NonArtworkJobCardFiltersController@getItemNamesByCustomerId');
@@ -908,6 +906,17 @@ Route::group(['prefix' => 'erp'], function () {
 		Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
 		Route::get('/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
 		Route::get('/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+	});
+
+	Route::prefix('spectrra-job-manager')->group(function () {
+		Route::get('/get-spectrra-order-details', 'ErpUser\Jobmanager\SpectrraJCController@getSpectrraOrderDetails');
+		Route::post('/store-spectrra-jobcard', 'ErpUser\Jobmanager\SpectrraJCController@storeSpectrraJobCard');
+		Route::get('/view-spectrra-jobcard', 'ErpUser\Jobmanager\SpectrraJCController@generateSpectrraJCPdf');
+
+		// Route::get('/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list');
+		// Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
+		// Route::get('/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
+		// Route::get('/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
 	});
 
 	/* Routes for ERP-Settings Management */

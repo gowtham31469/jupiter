@@ -49,9 +49,13 @@
                                 <p id="sp_company_address"></p>
                             </div>
                             <div class="col-md-4">
-                            </div>
+								<input type="hidden" value="" id="template_type">
+								<input type="hidden" value="" id="jobcard_id">
+								<input type="hidden" value="" id="crud_operation_type">
+								<input type="hidden" value="" id="material_hierarchy">
+							</div>
                             <div class="col-md-4">
-                                    <img src="" class="pull-right " id="sp_company_logo" style="width: 150px;height: 60px;">
+                                    <img src="" class="pull-right " id="sp_company_logo" style="height: 78px;margin-right: 60px;margin-bottom: 0px;margin-top: -5px;">
                             </div>
                         </div>
                     </div>
@@ -62,8 +66,6 @@
                                 {!! Form::label('sp_work_order', 'WORKORDER :', ['class' => 'form_label']) !!}
                                 <span id="sp_work_order" name="sp_work_order"></span>
                             </div>
-                            <!-- <div class="col-md-4">
-                            </div> -->
                             <div class="col-md-3">
                                     {!! Form::label('sp_today_date', 'DATE :', ['class' => 'form_label']) !!}
                                 <span id="sp_today_date" name="sp_today_date"></span>
@@ -544,7 +546,7 @@
                                                 <p>Cust</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_customer_name" name="sp_customer_name">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -552,7 +554,7 @@
                                                 <p>StyleNum</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_style_no" name="sp_style_no">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -560,7 +562,7 @@
                                                 <p>PO No</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_customer_po" name="sp_customer_po">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -568,7 +570,7 @@
                                                 <p>PO Dt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_po_verify_date" name="sp_po_verify_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -576,7 +578,7 @@
                                                 <p>Buyer</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_buyer_name" name="sp_buyer_name">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -584,7 +586,7 @@
                                                 <p>Order No</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_no" name="sp_order_no">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -592,7 +594,7 @@
                                                 <p>Order Dt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_date" name="sp_order_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
@@ -600,7 +602,7 @@
                                                 <p>CustDelDt</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_delivery_date" name="sp_delivery_date">&nbsp;</p>
                                             </td>
                                         </tr>
                                     </table>
@@ -613,7 +615,7 @@
                                                 <p>Order Qnty</p>
                                             </td>
                                             <td colspan="1" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <p id="sp_order_qty" name="sp_order_qty">&nbsp;</p>
                                             </td>
                                         </tr>
                                         <tr>
