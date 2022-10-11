@@ -44,12 +44,12 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
         $this->SetFont('helvetica', '', 8);
         $header = '<table width="100%" cellspacing="0" cellpadding="10" border="0">
                         <tr nobr="true">
-                            <td width="12%"  style="border-top: 1px solid #DDD;border-bottom: 1px solid #DDD;border-left: 1px solid #DDD;font-size:18px;">
+                            <td width="12%"  style="border-top: 1px solid #6f7072;border-bottom: 1px solid #6f7072;border-left: 1px solid #6f7072;font-size:18px;">
                             </td>
-                            <td width="35%" style="border-top:1px solid #DDD;border-bottom:1px solid #DDD;font-size:18px;"><strong id="jc_company_name" >'.$this->company.'</strong>&nbsp;<br><span style="text-align:left;">'.$this->company_address.'</span>
+                            <td width="35%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;font-size:18px;"><strong id="jc_company_name" >'.$this->company.'</strong>&nbsp;<br><span style="text-align:left;">'.$this->company_address.'</span>
                             </td>
-                            <td width="8%" style="border-top:1px solid #DDD;border-bottom:1px solid #DDD;"></td>
-                            <td width="45%" style="border-top:1px solid #DDD;border-right:1px solid #DDD;border-bottom:1px solid #DDD;">
+                            <td width="8%" style="border-top:1px solid #6f7072;border-bottom:1px solid #6f7072;"></td>
+                            <td width="45%" style="border-top:1px solid #6f7072;border-right:1px solid #6f7072;border-bottom:1px solid #6f7072;">
                             <table cellspacing="0" cellpadding="0">
                                 <tbody>
                                     <tr width="100%">
