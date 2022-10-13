@@ -158,9 +158,9 @@ class SpectrraJCController extends Controller
 
         //Close and output PDF document
         ob_end_clean();
-        $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
-        $pdf->IncludeJS("print();");
-        return $pdf->Output( public_path($file_path), 'I');
+        // $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
+        // $pdf->IncludeJS("print();");
+        return $pdf->Output( "spectrra-test.pdf", 'I');
 
         // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
     }
