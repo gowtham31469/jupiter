@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
 use App\Classes\SpectrraJobcardPDFHeaderFooter;
+use SnappyPDF;
 
 class SpectrraJCController extends Controller
 {
@@ -108,10 +109,11 @@ class SpectrraJCController extends Controller
 
     public function generateSpectrraJCPdf()
     {
+
         $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData();		
+        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => '/var/www/html/jupiter/public/images/spectrra-logo.png']);		
         $pdf->SetPrintHeader(true);
-        $pdf->SetPrintFooter(true);  
+        $pdf->SetPrintFooter(true); 
 
         //margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
@@ -135,19 +137,31 @@ class SpectrraJCController extends Controller
         // add a page
         $pdf->AddPage('P', 'A4');
 
+        // Print 'Pasting' text 90 degree rotated.
+        $pdf->StartTransform();
+        $pdf->Rotate(90);
+
+        // Set some content to print
+        $html = '<strong>Pasting</strong>';
+
+        // Print text using writeHTMLCell()
+        $pdf->writeHTMLCell($w=0, $h=0, $x='-44', $y='96', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+        $pdf->StopTransform();
+
         // set some text to print
         $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
 
         //append content to header
-        $pdf->SetXY(13.4,26.3);
+        $pdf->SetXY(13.4,25);
         $pdf->writeHTML($view->render());
 
         //Close and output PDF document
         ob_end_clean();
         $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
         $pdf->IncludeJS("print();");
-        $pdf->Output( public_path($file_path), 'F');
+        return $pdf->Output( public_path($file_path), 'I');
 
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+        // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
     }
 }
