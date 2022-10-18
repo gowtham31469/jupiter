@@ -100,15 +100,17 @@ class HomeController extends Controller
 			
 				if($disney{0}->disney == 0)
 				{
-					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/sticker1.svg";
-					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/sticker2.svg";
-					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/sticker3.svg";
+					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				}
 				else
 				{
-					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/sticker1-disney.svg";
-					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/sticker2.svg";
-					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/sticker3.svg";
+					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				}
 			    
 				foreach($wcl_orders as $value1)
@@ -136,7 +138,7 @@ class HomeController extends Controller
 			    $product_family = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
 			
                 // $data['orchestra_wash_template_id']=2;
-                return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty,'order_details'=>$order_details,'care_instruction'=>$care_instruction,'orchestra_wash_care_label_orders'=>$wcl_orders,'product_family'=>$product_family,'made_in'=>$made_in,'orchestra_wash_template_front'=>$orchestra_wash_template_front,'orchestra_wash_template_back'=>$orchestra_wash_template_back,'orchestra_wash_template_middle'=>$orchestra_wash_template_middle,'washing'=>$washing,'whitening'=>$whitening,'dryer'=>$dryer,'ironing'=>$ironing,'cleaning'=>$cleaning],200);
+                return response()->json(['error'=>'false','message' =>'success', 'wcl_orders_qty' => $wcl_orders_qty,'order_details'=>$order_details,'care_instruction'=>$care_instruction,'orchestra_wash_care_label_orders'=>$wcl_orders,'product_family'=>$product_family,'made_in'=>$made_in,'orchestra_wash_template_front'=>$orchestra_wash_template_front,'orchestra_wash_template_last'=>$orchestra_wash_template_last,'orchestra_wash_template_back'=>$orchestra_wash_template_back,'orchestra_wash_template_middle'=>$orchestra_wash_template_middle,'washing'=>$washing,'whitening'=>$whitening,'dryer'=>$dryer,'ironing'=>$ironing,'cleaning'=>$cleaning],200);
             } catch (\Exception $e)
             {
               return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);

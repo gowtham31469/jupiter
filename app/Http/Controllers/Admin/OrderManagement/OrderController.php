@@ -1496,6 +1496,7 @@ class OrderController extends Controller
 	
 	public function printWashPdf(Request $request)
     {
+        
 		$svgarr = explode(',_',$request->svg);
 		$id = $request->id;
 		$owcl = DB::table('orchestra_wash_care_label_orders')->select('*')->where('id',$id)->first();
@@ -1718,80 +1719,210 @@ class OrderController extends Controller
 					 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		});
-		
+
         PDF::setImageScale(1);
-        // PDF::setPrintHeader(false);
-        // PDF::setPrintFooter(false);
-        PDF::SetFont('tahoma', '',  1.5, '', true);
-        PDF::AddPage();
-        //PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::SetFillColor(255, 255, 255);
-        //PDF::SetTextColor(0, 0, 0);
-		
-	
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
+
+
+        $data_fin_back=explode(',_',$request->data_fin_back); 
+
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
-		$tbl2="";
-		foreach($orchestra_care_instruction as $value)
+		$activity_label = $request->activity_label;
+
+
+		$orchestra_washing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->washing_select)->get();
+		$orchestra_whitening_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->whitening_select)->get();
+		$orchestra_dryer_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->dryer_select)->get();
+		$orchestra_ironing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->ironing_select)->get();
+		$orchestra_cleaning_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->cleaning_select)->get();
+
+		$wash_iso = $orchestra_washing_select{0}->cofreet_symbols;
+		$wash_astm = $orchestra_washing_select{0}->astms_symbol;
+
+		$whit_iso = $orchestra_whitening_select{0}->cofreet_symbols;
+		$whit_astm = $orchestra_whitening_select{0}->astms_symbol;
+
+		$dry_iso = $orchestra_dryer_select{0}->cofreet_symbols;
+		$dry_astm = $orchestra_dryer_select{0}->astms_symbol;
+
+		$iron_iso = $orchestra_ironing_select{0}->cofreet_symbols;
+		$iron_astm = $orchestra_ironing_select{0}->astms_symbol;
+
+		$clean_iso = $orchestra_cleaning_select{0}->cofreet_symbols;
+		$clean_astm = $orchestra_cleaning_select{0}->astms_symbol;
+
+		if($activity_label == "PUERICULTURE")
 		{
-			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+			$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->dutch.' - <br>'.$orchestra_countries{0}->german.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->greek.' - <br><span style="font-family:Tahoma"> - '.$orchestra_countries{0}->arabic.'</span></p>';
+			$tbl2="";
+			foreach($orchestra_care_instruction as $value)
+			{
+				$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->dutch.' - '.$value->german.' - '.$value->spanish.' - '.$value->greek.' - <span style="font-family:Tahoma">'.$value->arabic.'</span></p><br><br>';
+			}
+
+
+			//print_r($tbl2);
+			$tbl3="";
+			$composition = json_decode($request->composition);
+			//print_r($composition);
+			foreach($composition as $key => $value)
+			{
+				
+				$express_value = explode('_',$value[0]);
+				if($express_value[0] != "Select Option")
+				{
+						$exp_value = explode('_',$value[0]);
+						$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
+					
+						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->greek.' - <span style="font-family:Tahoma">'.$orchestra_parts{0}->arabic.'</span></p><br><br>';
+				}
+				foreach($value as $key1 => $value1)
+				{
+					$exp_val = explode('_',$value1);
+					$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+					
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->greek.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span></p><br><br>';
+				}
+			}
+
+			$xx=12.5;
+			$i=0;
+			$j=0;
+			foreach($svgarr as $value)
+			{
+				$svg=urldecode($value);
+				$svg_back=urldecode($data_fin_back[$j]);
+				PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg_back, $x=$xx + 27.5, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=153.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		
+				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=153.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($dry_astm),  $x=$xx+10.5, $y=153.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=153.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=153.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+				
+				PDF::writeHTMLCell('26', '40', $xx, '176', $tbl1, '', 0, 0, true, 'C', true);
+				PDF::writeHTMLCell('22', '40', $xx + 29.5, '62.5', $tbl2, '', 0, 0, true, 'C', true);
+				PDF::SetFillColor(255, 255, 255);
+				PDF::SetTextColor(0, 0, 0);
+				$xx += 65;
+				$i++;
+				
+				
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+				$j++;
+			}
+
+			PDF::AddPage();
+			PDF::ImageSVG('@' . $svg_middle, $x=75, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::writeHTMLCell('25', '40', 75.3, '142.5', $tbl3, '', 0, 0, true, 'C', true);
+			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/premaman_4.svg'), $x=105, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		}
+		else
+		{
+			$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+			$tbl2="";
+			foreach($orchestra_care_instruction as $value)
+			{
+				$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
+			}
+
+			//print_r($tbl2);
+			$tbl3="";
+			$composition = json_decode($request->composition);
+			//print_r($composition);
+			foreach($composition as $key => $value)
+			{
+				
+				$express_value = explode('_',$value[0]);
+				if($express_value[0] != "Select Option")
+				{
+						$exp_value = explode('_',$value[0]);
+						$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
+					
+						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+				}
+				foreach($value as $key1 => $value1)
+				{
+					$exp_val = explode('_',$value1);
+					$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+					
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				}
+			}
+
+
+			$xx=12.5;
+			$i=0;
+			$j=0;
+			foreach($svgarr as $value)
+			{
+				$svg=urldecode($value);
+				$svg_back=urldecode($data_fin_back[$j]);
+				PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg_back, $x=$xx + 27.5, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		
+				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+				
+				PDF::writeHTMLCell('26', '40', $xx, '192.5', $tbl1, '', 0, 0, true, 'C', true);
+				PDF::writeHTMLCell('22', '40', $xx + 29.5, '62.5', $tbl2, '', 0, 0, true, 'C', true);
+				PDF::SetFillColor(255, 255, 255);
+				PDF::SetTextColor(0, 0, 0);
+				$xx += 65;
+				$i++;
+				
+				
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+				$j++;
+			}
+
+			PDF::AddPage();
+			PDF::ImageSVG('@' . $svg_middle, $x=75, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::writeHTMLCell('25', '40', 75.3, '147.5', $tbl3, '', 0, 0, true, 'C', true);
+			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/wcl_4.svg'), $x=105, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
 		}
 		
-		//print_r($tbl2);
-		$tbl3="";
-		$composition = json_decode($request->composition);
-		//print_r($composition);
-		foreach($composition as $key => $value)
-		{
-			
-			$express_value = explode('_',$value[0]);
-			if($express_value[0] != "Select Option")
-			{
-					$exp_value = explode('_',$value[0]);
-					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
-				
-					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span>'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
-			}
-			foreach($value as $key1 => $value1)
-            {
-				$exp_val = explode('_',$value1);
-				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
-				
-				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
-			}
-		}
-		$xx=12.5;
-		$i=0;
-		foreach($svgarr as $value)
-		{
-			$svg=urldecode($value);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			PDF::SetFillColor(255, 255, 255);
-			PDF::SetTextColor(0, 0, 0);
-			PDF::writeHTMLCell('25.5', '40', $xx, '172.5', $tbl, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('26', '40', $xx, '191.8', $tbl1, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
-			$xx += 37.5;
-			$i++;
-			
-			if($i == 5)
-			{
-				PDF::AddPage();
-				$i=0;
-				$xx=12.5;
-			}
-		}
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-		PDF::ImageSVG('@' . $svg_back, $xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::writeHTMLCell('22', '40', $xx + 2.25, '62.5', $tbl2, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25', '40', $xx + 1, '147.5', $tbl3, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
-		PDF::AddPage();
-		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=50, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
-        PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+
+		
+
+		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
         print_r(url('/storage/app/template/solid1.pdf'));
     } 
 	

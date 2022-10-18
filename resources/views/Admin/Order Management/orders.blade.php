@@ -1227,6 +1227,7 @@
 <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
 <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+<script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
 
 <!-- Financial year selection script -->
 <script src="{{ asset('js/common/financial-year-switch.js') }}"></script>

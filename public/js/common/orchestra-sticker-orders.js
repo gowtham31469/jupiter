@@ -2331,7 +2331,7 @@ function table(data,path,user_type){
 					{
 						if($('.logo').text() == "Orders")
 						{
-							tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '",this)>' + value[key] + '</a></td>';
+							tr += '<td align="center"><a href="#" data-season_code = "'+ value['Season'] +'" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '",this)>' + value[key] + '</a></td>';
 						}
 						else
 						{
@@ -2342,7 +2342,7 @@ function table(data,path,user_type){
 					{
 						if($('#status_flag').val() == "Orders")
 						{
-							tr += '<td align="center"><a href="#" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '",this)>' + value[key] + '</a></td>';
+							tr += '<td align="center"><a href="#" data-season_code = "'+ value['Season'] +'" onclick=order_details("' + value[key] + '","' + value.BuyerPONo + '",this)>' + value[key] + '</a></td>';
 						}
 						else
 						{
