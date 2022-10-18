@@ -794,9 +794,11 @@
     <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-order-status-common.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
 
     <script>
         localStorage.removeItem("page_navigation");
+        localStorage.removeItem("wash_composition");
         var buyer_count = $('#invisible__count_id').val();
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()

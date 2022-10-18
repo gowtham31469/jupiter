@@ -781,7 +781,10 @@
     <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-order-status-common.js') }}"></script>
     <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
     <script type="text/javascript">
+
+        localStorage.removeItem("wash_composition");
         $('#status_flag').val("orderStatus")
         var buyer = localStorage.getItem("buyer");
         Dropzone.options.poUpload = {
