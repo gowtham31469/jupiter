@@ -312,8 +312,8 @@ class OrderStatusCntrl extends Controller
                 
                 $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
                 $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				
                 $data['orchestra_wash_template_id']=5;
 				
@@ -374,8 +374,8 @@ class OrderStatusCntrl extends Controller
                 
                 $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
                 $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
                 $data['orchestra_wash_template_id']=4;
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;

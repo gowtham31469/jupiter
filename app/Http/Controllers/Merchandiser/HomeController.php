@@ -102,15 +102,15 @@ class HomeController extends Controller
 				{
 					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/wcl_1.svg";
 					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				}
 				else
 				{
 					$orchestra_wash_template_front="/storage/app/template/Orchestra/WCL/wcl_1.svg";
 					$orchestra_wash_template_back="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+					$orchestra_wash_template_middle="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+					$orchestra_wash_template_last="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				}
 			    
 				foreach($wcl_orders as $value1)

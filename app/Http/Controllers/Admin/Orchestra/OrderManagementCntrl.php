@@ -162,10 +162,10 @@ class OrderManagementCntrl extends Controller
             $season_code=$request->season_code;
             $data['order_details'] = DB::table('orchestra_parcel_details as opd')
                                                                 ->leftJoin('orchestra_size_chart','opd.Size_Label','=','orchestra_size_chart.age')
-                                                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code",DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""),DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
+                                                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code","opd.Activity_Code","opd.Activity_Label",DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""),DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
                                                                 ->where('UVC',$uvc)
                                                                 ->where('Season_Code',$season_code)
-                                                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC")
+                                                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC","opd.Activity_Code","opd.Activity_Label")
                                                                 ->orderBy(DB::raw('MIN(opd.id)'),'asc')
                                                                 ->get();
 		
@@ -229,16 +229,33 @@ class OrderManagementCntrl extends Controller
             // Licence_Code = DI for disney
             if($total_qty{0}->Licence_Code === 'DI')
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
-                $data['orchestra_template']=$orchestra_template{0}->template_file;
-                $data['orchestra_template_id']=5;
+                if($data['order_details']{0}->Activity_Label == "PUERICULTURE")
+                {
+                    $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
+                    $data['orchestra_template']=$orchestra_template{0}->template_file;
+                    $data['orchestra_template_id']=5;
+                    
+                    $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/premaman_1.svg";
+                    $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/premaman_2.svg";
+                    $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
+                    $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+                    
+                    $data['orchestra_wash_template_id']=5;
+                }
+                else
+                {
+                    $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
+                    $data['orchestra_template']=$orchestra_template{0}->template_file;
+                    $data['orchestra_template_id']=5;
+                    
+                    $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                    $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                    $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                    $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
+                    
+                    $data['orchestra_wash_template_id']=5;
+                }
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
-				
-                $data['orchestra_wash_template_id']=5;
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
@@ -302,16 +319,33 @@ class OrderManagementCntrl extends Controller
             }
             else
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
-                $data['orchestra_template']=$orchestra_template{0}->template_file;
-                $data['orchestra_template_id']=4;
+                if($data['order_details']{0}->Activity_Label == "PUERICULTURE")
+                {
+                    $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
+                    $data['orchestra_template']=$orchestra_template{0}->template_file;
+                    $data['orchestra_template_id']=4;
+                    
+                    $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/premaman_1.svg";
+                    $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/premaman_2.svg";
+                    $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
+                    $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
+                    
+                    $data['orchestra_wash_template_id']=4;
+                }
+                else
+                {
+                    $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
+                    $data['orchestra_template']=$orchestra_template{0}->template_file;
+                    $data['orchestra_template_id']=4;
+                    
+                    $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                    $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                    $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                    $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
+                    
+                    $data['orchestra_wash_template_id']=4;
+                }
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/premaman_3.svg";
-                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/premaman_4.svg";
-                
-                $data['orchestra_wash_template_id']=4;
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
 				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
