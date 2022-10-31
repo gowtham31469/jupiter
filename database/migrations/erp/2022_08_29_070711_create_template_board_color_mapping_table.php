@@ -62,8 +62,10 @@ class CreateTemplateBoardColorMappingTable extends Migration
             $table->boolean('string_required')->nullable(true)->default(false);
             $table->string('string_spec')->nullable(true);
             $table->boolean('foil')->nullable(true)->default(false);
-
             $table->timestamps();
+
+            $table->foreign('board_category_id')->references('id')->on('board_category')->onDelete('cascade');
+            $table->foreign('board_id')->references('id')->on('boards')->onDelete('cascade');
         });
     }
 

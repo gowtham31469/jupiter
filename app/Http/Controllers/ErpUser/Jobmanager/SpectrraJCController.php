@@ -72,9 +72,9 @@ class SpectrraJCController extends Controller
         $erp_array = explode('|', $order_details['orders']['id']);
         $buyer_item_table = $order_details['orders']['buyer']['item_master_table'];
         $buyer_template_table = $order_details['orders']['buyer']['template_table'];
-        $order_details->po_verified_date = Carbon::parse($order_details->po_verified_date)->format('d-m-Y');
-        $order_details->order_date = Carbon::parse($order_details->order_date)->format('d-m-Y');
-        $order_details->delivery_date = Carbon::parse($order_details->delivery_date)->format('d-m-Y');
+        $order_details->po_verified_date = is_null($order_details['po_verified_date']) === true?$order_details['po_verified_date']:Carbon::parse($order_details['po_verified_date'])->format('d-m-Y');
+        $order_details->order_date = is_null($order_details['order_date']) === true?$order_details['order_date']:Carbon::parse($order_details['order_date'])->format('d-m-Y');;
+        $order_details->delivery_date = is_null($order_details['delivery_date']) === true?$order_details['delivery_date']:Carbon::parse($order_details['delivery_date'])->format('d-m-Y');;
 
         $spectrra_template_data = $get_spectrra_metadata->getSpectrraCompanyTemplateData($data);
         
@@ -111,7 +111,7 @@ class SpectrraJCController extends Controller
     {
 
         $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => '/var/www/html/jupiter/public/images/spectrra-logo.png']);		
+        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => public_path('/storage/app/public/images/spectrra-logo.png')]);		
         $pdf->SetPrintHeader(true);
         $pdf->SetPrintFooter(true); 
 
@@ -163,5 +163,10 @@ class SpectrraJCController extends Controller
         return $pdf->Output( "spectrra-test.pdf", 'I');
 
         // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+    }
+
+    public function storeSpectrraJobcard(Request $request)
+    {
+        dd($request);
     }
 }

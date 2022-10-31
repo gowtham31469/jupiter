@@ -5,8 +5,7 @@ $(function () {
     if (e.isDefaultPrevented()) {
     } else {
       e.preventDefault();
-      alert();
-      //   storeSpectrraMetadata(form);
+        storeSpectrraJobcard(form);
     }
   });
 });
@@ -83,8 +82,12 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_company_logo').attr('src', order_data.order_details.company.logo);
   $('#sp_jc_company_name').attr('data-company-id', order_data.order_details.company.id);
   $('#sp_work_order').text(order_data.workorder_id);
+  $('#sp_work_order').attr('data-wo-id', order_data.workorder_id);
+
   $('#sp_today_date').text(order_data.today_date);
+  $('#sp_today_date').attr('data-today-date', order_data.today_date);
   $('#sp_article').text(order_data.template_details.article);
+  $('#sp_article').attr('data-article', order_data.template_details.article);
   $('#sp_reference').val(order_data.order_details.reference_name);
 
   $('#sp_customer_name').text(order_data.order_details.orders.customer.short_name);
@@ -93,6 +96,7 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_po_verify_date').text(order_data.order_details.po_verified_date);
   $('#sp_buyer_name').text(order_data.order_details.orders.buyer.buyer_name);
   $('#sp_order_no').text(order_data.order_details.orders.erp_id);
+  $('#sp_order_no').attr('data-erpid', order_data.order_details.orders.erp_id);
   $('#sp_order_date').text(order_data.order_details.order_date);
   $('#sp_delivery_date').text(order_data.order_details.delivery_date);
   $('#sp_order_qty').text(order_data.order_details.total_qty);
@@ -151,4 +155,50 @@ const renderSpectrraOrderData = (order_data) => {
   $('.spectrra-create-jc-modal-title').text(order_data.modal_title);
   $('#crud_operation_type').text('created_at');
   // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+}
+
+const storeSpectrraJobcard = (form) => {
+    var form_obj = [{
+        "company_id": $('#sp_jc_company_name').data("company-id"),
+        "workorder_id": $('#sp_work_order').data("wo-id"),
+        "today_date": $('#sp_today_date').data("today-date"),
+        "article": $('#sp_article').data("article"),
+        "erp_id": $('#sp_order_no').data("erpid"),
+    }];
+
+    var formData = form.serialize() + '&' + $.param(form_obj[0]);
+
+  $.ajax({
+    type: "post",
+    url: base_url + "/erp/spectrra-job-manager/store-spectrra-jobcard",
+    data: formData,
+    headers: {
+      'X-CSRF-TOKEN': csrf_token
+    },
+    dataType: "json",
+    beforeSend: function () {
+      $(".loader").show();
+      // $('#update_spectrra_metadata_btn').prop('disabled', true);
+    },
+    statusCode: {
+      200: function (response) {
+        
+      },
+      400: function (error) {
+        
+      },
+      422: function (errorXHR) {
+        var error_msg = ``;
+        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+          error_msg += `<li>` + valueOfElement + `</li>`;
+        });
+        $('#spectrra_jobcard_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+      },
+    },
+    complete: function () {
+      $(".loader").hide();
+      // $('#update_spectrra_metadata_btn').prop('disabled', false);
+      $(window).scrollTop(0);
+    }
+  });
 }

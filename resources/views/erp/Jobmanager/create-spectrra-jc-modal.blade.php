@@ -40,7 +40,7 @@
 			</div>
 			<div class="modal-body create-spectrra-jc-modal-body">
 				<div class="container-fluid">
-					<span id="spectrra_template_result"></span>
+					<span id="spectrra_jobcard_result"></span>
 					{!! Form::open(['method' => 'post', 'id' => 'create_spectrra_jc_form','data-toggle' => 'validator','role' => 'form']) !!}
 					<div class="row">
                         <div class="col-md-12">
@@ -49,7 +49,7 @@
                                 <p id="sp_company_address"></p>
                             </div>
                             <div class="col-md-4">
-								<input type="hidden" value="" id="template_type">
+								<input type="hidden" value="" id="sp_erp_id">
 								<input type="hidden" value="" id="jobcard_id">
 								<input type="hidden" value="" id="crud_operation_type">
 								<input type="hidden" value="" id="material_hierarchy">
@@ -111,7 +111,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('print_spec_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'print_spec_bar','required', 'name' => 'color_bar')) }}
+                                                    {{ Form::select('print_spec_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'print_spec_bar','required', 'name' => 'print_spec_bar')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
