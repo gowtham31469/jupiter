@@ -229,31 +229,31 @@ class NonArtworkTemplateController extends Controller
             'customer.*' => 'required',
             'po_number' => 'required',
             'due_date' => 'required',
-            'ocn.*' => 'required',
+            // 'ocn.*' => 'required',
             'uom.*' => 'required',
-            'bpo.*' => 'required',
+            // 'bpo.*' => 'required',
             'style.*' => 'required',
             'list.*' => 'required',
             'item.*' => 'required',
             'reference.*' => 'required',
-            'color.*' => 'required',
+            // 'color.*' => 'required',
             'size.*' => 'required',
-            'composition.*' => 'required',
+            // 'composition.*' => 'required',
             'A_W_Status.*' => 'required',
             'quantity.*' => 'required'
             ],
             [
-                'ocn.*'=>'Please fill up ocn values on all the rows',
+                // 'ocn.*'=>'Please fill up ocn values on all the rows',
                 'uom.*'=>'Please select uom on all the rows',
-                'bpo.*'=>'Please fill up bpo values on all the rows',
+                // 'bpo.*'=>'Please fill up bpo values on all the rows',
                 'style.*'=>'Please fill up style values on all the rows',
                 'item.*'=>'Please select item on all the rows',
                 'size.*'=>'Please select size on all the rows',
                 'approve_date.*'=>'Please select appr on all the rows',
                 'quantity.*'=>'Please fill up quantity values on all the rows',
                 'reference.*'=>'Please select reference item on all the rows',
-                'color.*'=>'Please fill up color values on all the rows',
-                'composition.*'=>'Please fill up composition values on all the rows',
+                // 'color.*'=>'Please fill up color values on all the rows',
+                // 'composition.*'=>'Please fill up composition values on all the rows',
             ]);
 
         $created_rows = [];
@@ -648,21 +648,21 @@ class NonArtworkTemplateController extends Controller
                                         </div>
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number">
+                                        <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number" maxlength="12">
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="bpo[]" class="form-control input-sm label-ean-field" value="'.$value->po_number.'" placeholder="BPO Number">
+                                        <input type="text" name="bpo[]" class="form-control input-sm label-ean-field" value="'.$value->po_number.'" placeholder="BPO Number" maxlength="10">
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="style[]" class="form-control input-sm label-ean-field" value = "'.$value->style_ref.'" placeholder="Style/UVC">
+                                        <input type="text" name="style[]" class="form-control input-sm label-ean-field" value = "'.$value->style_ref.'" placeholder="Style/UVC" maxlength="12">
                                     </td>   
                                     <td width="100" class="selectpicker_td item_td">'.$item_select.'</td>
                                     <td width="150" class="reference_td selectpicker_td">'.$reference_select.'</td>
                                     <td width="150">
-                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color">
+                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color" maxlength="8">
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition">
+                                        <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition" maxlength="25">
                                     </td>
                                     <td width="150" class="selectpicker_td">
                                         <select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
@@ -680,7 +680,7 @@ class NonArtworkTemplateController extends Controller
                                     </td>
                                     <td width="150" class="selectpicker_td">'.$size_select.'</td>
                                     <td width="150" class="quantity_td">
-                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity">
+                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity" max="99999999">
                                     </td>
                                     <td width="150" class="selectpicker_td" title="Select uom">'.$uom_select.'</td>
                                     <td width="150" class="rate_td">

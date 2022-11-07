@@ -301,7 +301,7 @@ class OrderStatusCntrl extends Controller
 
             $data['barcode'] = DB::table('orchestra_parcel_details')->select('*')->where('UVC',$uvc)->where('Season_Code',$season)->groupBy('id','BuyerPONo')->get();
         
-           $total_qty = DB::table('orchestra_parcel_details')->select('*',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->where('Season_Code',$season)->groupBy('id','UVC')->get();
+            $total_qty = DB::table('orchestra_parcel_details')->select('Licence_Code',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->where('Season_Code',$season)->groupBy('UVC','Licence_Code')->get();
             $data['total_qty']=$total_qty{0}->total_qty;
             // Licence_Code = DI for disney
             if($total_qty{0}->Licence_Code === 'DI')
@@ -310,9 +310,10 @@ class OrderStatusCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=5;
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1-disney.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
+                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
 				
                 $data['orchestra_wash_template_id']=5;
 				
@@ -371,9 +372,10 @@ class OrderStatusCntrl extends Controller
                 $data['orchestra_template']=$orchestra_template{0}->template_file;
                 $data['orchestra_template_id']=4;
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
+                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/wcl_1.svg";
+                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/wcl_2.svg";
+                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/wcl_3.svg";
+                $data['orchestra_wash_template_last']="/storage/app/template/Orchestra/WCL/wcl_4.svg";
                 $data['orchestra_wash_template_id']=4;
 				
 				$factory_code = $data['order_details']{0}->FactoryCode;
