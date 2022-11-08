@@ -315,8 +315,14 @@ class NonArtworkTemplateController extends Controller
                         'erp_id'           => $erp_id
                     ]);
 
+            $jc_progress = 0 ;        
             foreach ($request->ocn as $key => $value) 
             {
+
+                if($request->status[$key] == 8)
+                {
+                    $jc_progress = 1 ;     
+                }
 
                 $custom_ref_name = DB::table('price_taxation')
                         ->where([
@@ -420,7 +426,7 @@ class NonArtworkTemplateController extends Controller
                         'company_id'            => $company_id,
                         'reference_name'        => $reference_name,
                         'ocn_number'            => $value,
-                        'status'                => 3,
+                        'status'                => $request->status[$key],
                         'template_type'         => "single",
                         'custom_ref_name'       => $custom_ref_name,
                         'buyer_po_number'       => $request->bpo[$key],
@@ -488,7 +494,7 @@ class NonArtworkTemplateController extends Controller
 
            // NonArtworkOrder::whereIn('id', $created_rows)
            //                          ->update(['order_id' => $max_batch_id]);
-           return response()->json(['success'=>'done','action'=>$request->action,'order_id'=>$last_created_order_id]);
+           return response()->json(['success'=>'done','action'=>$request->action,'order_id'=>$last_created_order_id,'jc_progress'=>$jc_progress]);
         }
         return response()->json(['error'=>$validator->errors()->all()]);
     }
@@ -504,7 +510,7 @@ class NonArtworkTemplateController extends Controller
         $html='';
         $message = '';
         $is_editable = 1;
-
+        $jc_progress = 0;
         if($request->id > 0)
         {   
            $order_table_data = NonArtworkOrder::where('order_id',$request->id)->get();
@@ -523,14 +529,22 @@ class NonArtworkTemplateController extends Controller
                                         ->first()
                                         ->status_name;
 
+            
             if (in_array(8, $erp_data->toArray())){
-                $is_editable = 0;
-                $message = 'This order cannot be edited as JobCard creation for this order is in progress !!!';
+                $is_editable = 1;
+                $jc_progress = 1;
+                $message = 'JobCard creation for this order is in progress,one or more orders may not be editable !!!';
+                if(array_count_values($erp_data->toArray())['8'] == count($erp_data->toArray()))
+                {
+                    $is_editable = 0;
+                    $message = 'JobCard created for this order and is not editable !!!';
+                }
             }
             if (in_array(4, $erp_data->toArray())){
                 $is_editable = 0;
                 $message ='This order has been cancelled and cannot be edited !!!';
             }
+            
            
            $approved_dates = $order_table_data->pluck('order_approved_at');
 
@@ -541,6 +555,9 @@ class NonArtworkTemplateController extends Controller
            {
             $index = $key+1;
             $uom_options='';
+            
+            $readonly = $value->jc_status == 8 ? "readonly" : '';
+            $readonly_class = $value->jc_status == 8 ? "readonly_class" : '';
 
             foreach ($uom as $j => $q) 
             {  
@@ -647,24 +664,27 @@ class NonArtworkTemplateController extends Controller
                                             <p>-</p>
                                         </div>
                                     </td>
-                                    <td width="150">
-                                        <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number" maxlength="12">
+                                    <td class="hidden">
+                                    <input type="text" name="status[]"  class="form-control input-sm label-ean-field" placeholder="Status" value="'.$value->jc_status.'">
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="bpo[]" class="form-control input-sm label-ean-field" value="'.$value->po_number.'" placeholder="BPO Number" maxlength="10">
+                                        <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number" maxlength="12" '.$readonly.'>
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="style[]" class="form-control input-sm label-ean-field" value = "'.$value->style_ref.'" placeholder="Style/UVC" maxlength="12">
+                                        <input type="text" name="bpo[]" class="form-control input-sm label-ean-field" value="'.$value->po_number.'" placeholder="BPO Number" maxlength="10" '.$readonly.'>
+                                    </td>
+                                    <td width="150">
+                                        <input type="text" name="style[]" class="form-control input-sm label-ean-field" value = "'.$value->style_ref.'" placeholder="Style/UVC" maxlength="12" '.$readonly.'>
                                     </td>   
-                                    <td width="100" class="selectpicker_td item_td">'.$item_select.'</td>
-                                    <td width="150" class="reference_td selectpicker_td">'.$reference_select.'</td>
+                                    <td width="100" class="selectpicker_td item_td '.$readonly_class.'">'.$item_select.'</td>
+                                    <td width="150" class="reference_td selectpicker_td '.$readonly_class.'">'.$reference_select.'</td>
                                     <td width="150">
-                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color" maxlength="8">
+                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color" maxlength="8" '.$readonly.'>
                                     </td>
                                     <td width="150">
-                                        <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition" maxlength="25">
+                                        <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition" maxlength="25" '.$readonly.'>
                                     </td>
-                                    <td width="150" class="selectpicker_td">
+                                    <td width="150" class="selectpicker_td '.$readonly_class.'">
                                         <select class="selectpicker aw_status" name="A_W_Status[]" data-container=".main-content">
                                             <option value="0" '.$approved_flag.' >Not Approved</option>
                                             <option value="1" '.$approved_flag.'>Approved</option>
@@ -672,17 +692,17 @@ class NonArtworkTemplateController extends Controller
                                     </td>
                                     <td width="170" class="aw_td">
                                         <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-                                            <input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
+                                            <input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date" '.$readonly.'>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"> </span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td width="150" class="selectpicker_td">'.$size_select.'</td>
+                                    <td width="150" class="selectpicker_td '.$readonly_class.'">'.$size_select.'</td>
                                     <td width="150" class="quantity_td">
-                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity" max="99999999">
+                                        <input type="number" name="quantity[]" class="form-control input-sm label-ean-field quantity no_clone" value="'.$quantity_table_data[$key]->quantity.'"placeholder="Quantity" max="99999999" '.$readonly.'>
                                     </td>
-                                    <td width="150" class="selectpicker_td" title="Select uom">'.$uom_select.'</td>
+                                    <td width="150" class="selectpicker_td '.$readonly_class.'" title="Select uom">'.$uom_select.'</td>
                                     <td width="150" class="rate_td">
                                     <input type="number" name="rate[]" class="form-control input-sm label-ean-field rates no_clone" placeholder="Rate" value="'.$quantity_table_data[$key]->rate.'" readonly>
                                     </td>
@@ -695,7 +715,7 @@ class NonArtworkTemplateController extends Controller
            }
 
            // $html= $html.'<tr id="addr'.$last.'" class="clonable"></tr>';
-           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers,'current_order_status'=>$current_order_status,'message'=>$message]);
+           return response()->json(['result'=>1,'row'=>$order,'td'=>$html,'approved_dates'=>$approved_dates,'last_row_index' =>$last,'hsn'=>$hsn_tax->hsn_code,'tax'=>$hsn_tax->tax,'is_editable'=>$is_editable,'customers'=>$customers,'current_order_status'=>$current_order_status,'message'=>$message,'jc_progress'=>$jc_progress]);
        }
        else{
         return response()->json(['result'=>0]);
