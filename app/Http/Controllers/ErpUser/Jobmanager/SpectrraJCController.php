@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
 use App\Classes\SpectrraJobcardPDFHeaderFooter;
+use App\Classes\StoreSpectrraJobcard;
 use SnappyPDF;
 
 class SpectrraJCController extends Controller
@@ -167,6 +168,8 @@ class SpectrraJCController extends Controller
 
     public function storeSpectrraJobcard(Request $request)
     {
-        dd($request);
+        $store_jc = new StoreSpectrraJobcard();
+        $store_jc->storeSpectrraJC($request);
+        
     }
 }

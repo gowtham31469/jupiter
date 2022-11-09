@@ -34,7 +34,7 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
               backdrop: 'static',
               keyboard: false
           });
-          $('#create_spectrra_jc_form').validator('update');
+          $('#create_spectrra_jc_form').validator('validate');
           $('#createSpectrraJCModal').modal('show');
           // enable print button (for old version browsers)
           $('#jc_print_btn').prop('disabled', false);
@@ -61,13 +61,6 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
         $(".loader").hide();
     }
   });
-
-  $('#createSpectrraJCModal').modal({
-      backdrop: 'static',
-      keyboard: false
-  });
-  $('#create_spectrra_jc_form').validator('update');
-  $('#createSpectrraJCModal').modal('show');
 };
 
 const renderSpectrraOrderData = (order_data) => {

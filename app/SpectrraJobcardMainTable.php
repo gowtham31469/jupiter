@@ -54,6 +54,7 @@ class SpectrraJobcardMainTable extends Model
             'design_size_width',
             'cut_as',
             'repeats',
+            'die_no',
             'cutting',
             'printing',
             'coating',

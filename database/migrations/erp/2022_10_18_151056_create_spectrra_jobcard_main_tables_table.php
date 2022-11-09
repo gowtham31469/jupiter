@@ -20,16 +20,16 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->string('customer_name'); 
             $table->string('buyer_name'); 
             $table->date('created_date'); 
-            $table->string('article')->nullable();
+            $table->string('article')->nullable(true);
             $table->string('style_number');
             $table->string('reference');
             $table->date('order_date'); 
-            $table->date('customer_del_date')->nullable();
-            $table->string('invoice_num')->nullable();
-            $table->date('invoice_date')->nullable();
+            $table->date('customer_del_date')->nullable(true);
+            $table->string('invoice_num')->nullable(true);
+            $table->date('invoice_date')->nullable(true);
             $table->string('customer_po_number');
             $table->string('erp_id');
-            $table->date('po_verified_date')->nullable();
+            $table->date('po_verified_date')->nullable(true);
 
             $table->boolean('color_bar')->default(false);
             $table->boolean('print_spec_bar')->default(false);
@@ -51,6 +51,7 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->integer('design_size_width')->nullable(true);
             $table->string('cut_as')->nullable(true);
             $table->integer('repeats')->nullable(true);
+            $table->string('die_no')->nullable(true);
             $table->boolean('cutting')->nullable(true)->default(false);
             $table->boolean('printing')->nullable(true)->default(false);
             $table->string('coating')->nullable(true);
