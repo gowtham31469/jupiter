@@ -36,7 +36,7 @@
 			<div class="col-md-3">
 				<div class="form-group has-feedback">
 					<label for="buyer">Seacrh For Order ID</label>
-					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id','data-size'=>'5']) !!}
+					{!! Form::select('order_id',$order_id, null, ['class' => ' selectpicker common_entry','data-live-search'=>"true",'title'=>"Select Order ID",'id'=>'order_id','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="buyer">Buyer</label>
-					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
+					{!! Form::select('buyer',$buyers, null, ['class' => ' selectpicker common_entry','data-live-search'=>"true",'title'=>"Select Buyer",'data-size'=>'5','id'=>'buyer','required']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -56,7 +56,7 @@
 				<div class="form-group has-feedback">
 					<label for="current_date">Current Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="current_date" name="current_date" type="text" class="form-control" required="" placeholder="Current Date">
+						<input value="" id="current_date" name="current_date" type="text" class="form-control common_entry date_entry" required="" placeholder="Current Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
 						</div >
@@ -68,7 +68,7 @@
 				<div class="form-group has-feedback">
 					<label for="due_date">Due Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="due_date" name="due_date" type="text" class="form-control" required="" placeholder="Select Due Date">
+						<input value="" id="due_date" name="due_date" type="text" class="form-control common_entry date_entry" required="" placeholder="Select Due Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
 						</div >
@@ -81,21 +81,21 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="customer_name">Customer Name</label>
-					{!! Form::select('customer',[], null, ['class' => ' selectpicker customer_select','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
+					{!! Form::select('customer',[], null, ['class' => ' selectpicker customer_select common_entry','id'=>'customer','data-live-search'=>"true",'title'=>"Select Customer Name",'required','data-size'=>'5']) !!}
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="tesco_po_number">PO Number</label>
-					<input type="text" class="form-control" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="15">
+					<input type="text" class="form-control common_entry" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="15">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="hsn_code">HSN Code</label>
-					<input type="text" class="form-control" name="hsn_code" id="hsn_code" readonly placeholder="Enter HSN Code"  maxlength="7">
+					<input type="text" class="form-control common_entry" name="hsn_code" id="hsn_code" readonly placeholder="Enter HSN Code"  maxlength="7">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
