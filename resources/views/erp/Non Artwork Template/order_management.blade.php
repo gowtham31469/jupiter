@@ -144,6 +144,7 @@
 						<tr>
 							<th class="text-center">Sl.No</th>
 							<th class="text-center">Jc No.</th>
+							<th class="text-center hidden">Status</th>
 							<th class="text-center">OCN</th>
 							<th class="text-center">B.Po. No.</th>
 							<th class="text-center">Style/UVC</th>
@@ -172,6 +173,9 @@
 								<div class="form-group has-feedback label-ean-feedback">
 									<p>-</p>
 								</div>
+							</td>
+							<td class="hidden">
+								<input type="text" name="status[]"  class="form-control input-sm label-ean-field" placeholder="Status" value="3">
 							</td>
 							<td>
 								<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" maxlength="12" placeholder="OCN Number">

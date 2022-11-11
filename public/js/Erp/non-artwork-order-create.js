@@ -494,7 +494,11 @@
 						$("#save_data").removeClass('hidden')
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
-						$("#cancel_order").removeClass("hidden")
+						if(data.jc_progress == 0)
+						{
+							$("#cancel_order").removeClass("hidden")
+						}
+						
 						// row_index=1;
 						// $('.dynamic-added').remove();
 						// $('#non_artwork_orders')[0].reset();
@@ -569,6 +573,12 @@
 						
 					})
 
+					$(".readonly_class").each(function(i,v)
+					{	
+						$(this).parent().css("pointer-events",'none')
+						$(this).find('button').css({'background-color':'#cccccc6b','border-color':'#ccc'})
+					})
+
 					total_qty = 0
 					total_value = 0
 					$(".quantity").each(function(i,v){
@@ -584,11 +594,20 @@
 
 					if(data.is_editable)
 					{
+						if(data.jc_progress == 0)
+						{
+							$("#cancel_order").removeClass("hidden")
+						}
+						else{
+							$("#cancel_order").addClass("hidden")
+							$('.snackbar_span').html(data.message);
+							showSnackbar();
+						}
 						$("#save_data").removeClass('hidden')
-						$("#cancel_order").removeClass("hidden")
 						$("#save_data").html('<i class="fa fa-save" aria-hidden="true"></i> Update')
 						$("#save_data").attr('data-action', 'update');
 						$(".row_btns").prop('disabled',false)
+						
 					}
 					else
 					{
