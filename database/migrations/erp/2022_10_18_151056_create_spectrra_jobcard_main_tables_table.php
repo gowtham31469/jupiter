@@ -69,6 +69,7 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->string('eyelet')->nullable(true);
             $table->string('string_spec')->nullable(true);
             $table->boolean('foil')->nullable(true)->default(false);
+            $table->string('file_path')->nullable();
             $table->boolean('is_non_artwork_template')->default(false);
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');

@@ -9,11 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardIDGenerator;
 use App\Http\Controllers\Controller;
+use App\Classes\StoreSpectrraJobcard;
+use App\Http\Requests\SpectrraJCRequest;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
-use App\Classes\SpectrraJobcardPDFHeaderFooter;
-use App\Classes\StoreSpectrraJobcard;
-use SnappyPDF;
 
 class SpectrraJCController extends Controller
 {
@@ -107,69 +106,14 @@ class SpectrraJCController extends Controller
         ], 200);
     }
 
-
-    public function generateSpectrraJCPdf()
+    public function storeSpectrraJobcard(SpectrraJCRequest $request)
     {
-
-        $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => public_path('/storage/app/public/images/spectrra-logo.png')]);		
-        $pdf->SetPrintHeader(true);
-        $pdf->SetPrintFooter(true); 
-
-        //margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $request->validated();
         
-        // set header and footer fonts
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        
-        // /** Handle Page break */
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, 40);
-
-        // set image scale factor
-        $pdf->setImageScale(1.8);
-
-        // set font
-        $pdf->SetFont('helvetica', '', 8);
-
-        // add a page
-        $pdf->AddPage('P', 'A4');
-
-        // Print 'Pasting' text 90 degree rotated.
-        $pdf->StartTransform();
-        $pdf->Rotate(90);
-
-        // Set some content to print
-        $html = '<strong>Pasting</strong>';
-
-        // Print text using writeHTMLCell()
-        $pdf->writeHTMLCell($w=0, $h=0, $x='-44', $y='96', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
-        $pdf->StopTransform();
-
-        // set some text to print
-        $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
-
-        //append content to header
-        $pdf->SetXY(13.4,25);
-        $pdf->writeHTML($view->render());
-
-        //Close and output PDF document
-        ob_end_clean();
-        // $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
-        // $pdf->IncludeJS("print();");
-        return $pdf->Output( "spectrra-test.pdf", 'I');
-
-        // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
-    }
-
-    public function storeSpectrraJobcard(Request $request)
-    {
         $store_jc = new StoreSpectrraJobcard();
-        $store_jc->storeSpectrraJC($request);
-        
+        $file_path = $store_jc->storeSpectrraJC($request);
+
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);
     }
+
 }

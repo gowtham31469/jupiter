@@ -11,7 +11,7 @@ class SpectrraJobcardMatchToTable extends Model
       *
       * @var string
       */
-      protected $table = 'spectrra_jobcard_main_tables';
+      protected $table = 'spectrra_jobcard_match_to_tables';
 
      /**
       * The attributes that are mass assignable.

@@ -89,7 +89,7 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_po_verify_date').text(order_data.order_details.po_verified_date);
   $('#sp_buyer_name').text(order_data.order_details.orders.buyer.buyer_name);
   $('#sp_order_no').text(order_data.order_details.orders.erp_id);
-  $('#sp_order_no').attr('data-erpid', order_data.order_details.orders.erp_id);
+  $('#sp_order_no').attr('data-erpid', order_data.order_details.erp_order_id);
   $('#sp_order_date').text(order_data.order_details.order_date);
   $('#sp_delivery_date').text(order_data.order_details.delivery_date);
   $('#sp_order_qty').text(order_data.order_details.total_qty);
@@ -147,7 +147,7 @@ const renderSpectrraOrderData = (order_data) => {
   // $('#nat_template_type').val(data.template_data.template_type[0]);
   $('.spectrra-create-jc-modal-title').text(order_data.modal_title);
   $('#crud_operation_type').text('created_at');
-  // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+  $('#material_hierarchy').text(order_data.template_details.article)
 }
 
 const storeSpectrraJobcard = (form) => {
@@ -157,6 +157,7 @@ const storeSpectrraJobcard = (form) => {
         "today_date": $('#sp_today_date').data("today-date"),
         "article": $('#sp_article').data("article"),
         "erp_id": $('#sp_order_no').data("erpid"),
+        "crud_operation_type": $('#crud_operation_type').text(),
     }];
 
     var formData = form.serialize() + '&' + $.param(form_obj[0]);
