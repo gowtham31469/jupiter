@@ -34,6 +34,7 @@ class SpectrraJobcardMainTable extends Model
             'customer_po_number',
             'erp_id',
             'po_verified_date',
+            'total_order_qty',
             'color_bar',
             'print_spec_bar',
             'tone_bar',

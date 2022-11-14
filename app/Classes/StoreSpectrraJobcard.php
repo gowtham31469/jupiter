@@ -20,6 +20,7 @@ class StoreSpectrraJobcard
 	private $jobcard_id_gen_obj;
     private $spectrra_erp_data;
     private $current_timestamp;
+    private $crud_jc_obj;
 
 	/**
 	 * Create a new controller instance.
@@ -39,42 +40,43 @@ class StoreSpectrraJobcard
 
         $article_array   = explode(', ', $request['article']);
         $erp_order_data = $this->spectrra_erp_data->getSpectrraERPOrderData($request['erp_id']);
-       
+
         // jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
         $workorder_id = $request['crud_operation_type'] === 'created_at'?$this->jobcard_id_gen_obj->generateJobcardID($article_array, [$request['erp_id']]):$request['workorder_id'];
 
-        $store_jobcard_id = $this->updateCreateSpectrraJC($request, $workorder_id, $this->current_timestamp, $request['crud_operation_type'], $erp_order_data);
+        $store_jobcard = $this->updateCreateSpectrraJC($request, $workorder_id, $this->current_timestamp, $request['crud_operation_type'], $erp_order_data);
         
         /** Store jobcard match to details**/
-        if($store_jobcard_id == ''){
+        if($store_jobcard == ''){
             return response()->json(['error'=> true,'message' =>'Error'],400);
         }
 
         $color_match_array = [];
         for ($i=0; $i < sizeof($request['color_match']); $i++) { 
             $color_match_array[] = array(
-                'spectrra_jobcard_main_id' => $store_jobcard_id->id,
+                'spectrra_jobcard_main_id' => $store_jobcard->id,
                 'color_match_text' => DB::table('color_match')->where('id', $request['color_match'][$i])->value('name')
             );
         }
+        // dd($color_match_array[0]['color_match_text']);
         
-        SpectrraJobcardMatchToTable::where('spectrra_jobcard_main_id', $store_jobcard_id->id)->delete();
+        SpectrraJobcardMatchToTable::where('spectrra_jobcard_main_id', $store_jobcard->id)->delete();
         SpectrraJobcardMatchToTable::insert($color_match_array);
 
         /** Update jobcard created status erp order details table */
-        // if($request['crud_operation_type'] === 'created_at'){
-        //     $crud_jc_obj->updateJCDataHistory($erp_orders_ids, $uuid, $workorder_id, $this->current_timestamp,$buyer, $request);
-        // }
+        if($request['crud_operation_type'] === 'created_at'){
+            $this->crud_jc_obj->updateJCDataHistory((array)$erp_order_data->erp_order_id, (array)$erp_order_data->uuid, $workorder_id, $this->current_timestamp,(array)$erp_order_data->orders->buyer->buyer_name, $request);
+        }
 
-        return $this->generateSpectrraJCPdf($request, $workorder_id, $erp_order_data, $store_jobcard_id->id);
+       return $this->generateSpectrraJCPdf($erp_order_data, $store_jobcard, $color_match_array);
 
     }
 
-    public function generateSpectrraJCPdf($request, $workorder_id, $erp_order_data, $spectrra_last_insert)
+    public function generateSpectrraJCPdf($erp_order_data, $store_jobcard, $color_match_array)
     {
 
         $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData(['company' => $erp_order_data->company->name, "company_address" => $erp_order_data->company->address, 'workorder_id' => $workorder_id, 'article' => $request['article'], 'reference' => $request['sp_reference'], 'created_date' => $request['today_date'], 'logo' => public_path($erp_order_data->company->logo)]);		
+        $pdf->setData(['company' => $erp_order_data->company->name, "company_address" => $erp_order_data->company->address, 'workorder_id' => $store_jobcard->work_order_id, 'article' => $store_jobcard->article, 'reference' => $store_jobcard->reference, 'created_date' => $store_jobcard->created_date, 'logo' => public_path($erp_order_data->company->logo)]);		
         $pdf->SetPrintHeader(true);
         $pdf->SetPrintFooter(true); 
 
@@ -89,7 +91,7 @@ class StoreSpectrraJobcard
         
         /** Handle Page break */
         // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, 40);
+        $pdf->SetAutoPageBreak(TRUE, 10);
 
         // set image scale factor
         $pdf->setImageScale(1.8);
@@ -113,7 +115,13 @@ class StoreSpectrraJobcard
         $pdf->StopTransform();
 
         // set some text to print
-        $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
+        $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template')
+        ->with([
+            'data' 		   => $store_jobcard,
+            'color_match' => $color_match_array,
+            'order_id'    => $erp_order_data->orders->erp_id,
+            'total_qty'    => $erp_order_data->total_qty,
+    ]);
 
         //append content to header
         $pdf->SetXY(13.4,25);
@@ -121,16 +129,15 @@ class StoreSpectrraJobcard
 
         //Close and output PDF document
         ob_end_clean();
-        $file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
+        $file_path =  "/storage/app/public/jobcards/".$store_jobcard->work_order_id."."."pdf";	
         $pdf->IncludeJS("print();");
         $pdf->Output( public_path($file_path), 'F');
 
-        DB::table('spectrra_jobcard_main_tables')->where('id', $spectrra_last_insert)
+        DB::table('spectrra_jobcard_main_tables')->where('id', $store_jobcard->id)
         ->update([
             'file_path'   => $file_path,
             'updated_at'  => $this->current_timestamp
         ]);
-        // return $pdf->Output( "spectrra-test.pdf", 'I');
 
         return $file_path;	
     }
@@ -162,6 +169,7 @@ class StoreSpectrraJobcard
                 'customer_po_number'        => $erp_order_data->orders->po_no,
                 'erp_id'                    => $request['erp_id'],
                 'po_verified_date'          => $po_verified_date,
+                'total_order_qty'           => $erp_order_data->total_qty,
                 'color_bar'                 => $request['color_bar'],
                 'print_spec_bar'            => $request['print_spec_bar'],
                 'tone_bar'                  => $request['tone_bar'],

@@ -172,14 +172,19 @@ const storeSpectrraJobcard = (form) => {
     dataType: "json",
     beforeSend: function () {
       $(".loader").show();
-      // $('#update_spectrra_metadata_btn').prop('disabled', true);
+      $('#create_spectrra_jc_btn').prop('disabled', true);
     },
     statusCode: {
       200: function (response) {
-        
-      },
-      400: function (error) {
-        
+        var resp = JSON.stringify(response.file_path); 
+        window.open(
+            base_url+JSON.parse(resp),
+            '_blank' // <- This is what makes it open in a new window.
+        ); 
+        $('.snackbar_span').html("Jobcard Created Successfully");
+        showSnackbar();
+        $('.modal').modal('hide');
+        location.reload();
       },
       422: function (errorXHR) {
         var error_msg = ``;
@@ -187,12 +192,12 @@ const storeSpectrraJobcard = (form) => {
           error_msg += `<li>` + valueOfElement + `</li>`;
         });
         $('#spectrra_jobcard_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+        $('#create_spectrra_jc_btn').prop('disabled', false);
+        $(window).scrollTop(0);
       },
     },
     complete: function () {
       $(".loader").hide();
-      // $('#update_spectrra_metadata_btn').prop('disabled', false);
-      $(window).scrollTop(0);
     }
   });
 }

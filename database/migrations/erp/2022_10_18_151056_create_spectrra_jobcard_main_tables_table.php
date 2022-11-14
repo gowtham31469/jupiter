@@ -30,6 +30,7 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->string('customer_po_number');
             $table->string('erp_id');
             $table->date('po_verified_date')->nullable(true);
+            $table->integer('total_order_qty');
 
             $table->boolean('color_bar')->default(false);
             $table->boolean('print_spec_bar')->default(false);

@@ -139,7 +139,7 @@
                                             </td>
                                             <td colspan="5" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('front_colors',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Front Colors','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'front_colors', 'id' => 'front_colors')) !!}
+                                                    {!! Form::text('front_colors',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Front Colors','required','data-required-error' => 'Required', 'name' => 'front_colors', 'id' => 'front_colors')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
