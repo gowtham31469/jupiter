@@ -92,6 +92,7 @@
 							$("#"+row_id).append($item).find(":input").val('')
 							$item.closest('.aw_td').css('pointer-events','auto')
 							$("#"+row_id).find('.aw_status').selectpicker('val','1');
+							$("#"+row_id).find('._jc_status').val(3);
 							$("#"+row_id).find('.reference_select').find("option").remove()
 						}
 
@@ -573,12 +574,6 @@
 						
 					})
 
-					$(".readonly_class").each(function(i,v)
-					{	
-						$(this).parent().css("pointer-events",'none')
-						$(this).find('button').css({'background-color':'#cccccc6b','border-color':'#ccc'})
-					})
-
 					total_qty = 0
 					total_value = 0
 					$(".quantity").each(function(i,v){
@@ -599,6 +594,7 @@
 							$("#cancel_order").removeClass("hidden")
 						}
 						else{
+							$(".common_entry").addClass('readonly_class')
 							$("#cancel_order").addClass("hidden")
 							$('.snackbar_span').html(data.message);
 							showSnackbar();
@@ -617,6 +613,20 @@
 						$('.snackbar_span').html(data.message);
 						showSnackbar();
 					}
+
+					$(".readonly_class").each(function(i,v)
+					{	
+						$(this).parent().css("pointer-events",'none')
+						if($(this).hasClass('set_readonly'))
+						{
+							$(this).css({'background-color':'#cccccc6b','border-color':'#ccc'})
+							$(this).next('div').css({'border-color':'#cccccc6b'})
+						}
+						else{
+							$(this).find('button').css({'background-color':'#cccccc6b','border-color':'#ccc'})
+						}
+						
+					})
 			}
 			else
 			{
