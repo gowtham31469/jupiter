@@ -56,7 +56,7 @@
 				<div class="form-group has-feedback">
 					<label for="current_date">Current Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="current_date" name="current_date" type="text" class="form-control common_entry date_entry" required="" placeholder="Current Date">
+						<input value="" id="current_date" name="current_date" type="text" class="form-control common_entry set_readonly " required="" placeholder="Current Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
 						</div >
@@ -68,7 +68,7 @@
 				<div class="form-group has-feedback">
 					<label for="due_date">Due Date</label>
 					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="due_date" name="due_date" type="text" class="form-control common_entry date_entry" required="" placeholder="Select Due Date">
+						<input value="" id="due_date" name="due_date" type="text" class="form-control common_entry set_readonly" required="" placeholder="Select Due Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
 						</div >
@@ -88,7 +88,7 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="tesco_po_number">PO Number</label>
-					<input type="text" class="form-control common_entry" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="15">
+					<input type="text" class="form-control common_entry set_readonly" name="po_number" id="tesco_po_number" required="" placeholder="Enter PO. Number"  maxlength="15">
 					<div class="help-block with-errors"></div>
 				</div>
 			</div>
@@ -175,7 +175,7 @@
 								</div>
 							</td>
 							<td class="hidden">
-								<input type="text" name="status[]"  class="form-control input-sm label-ean-field" placeholder="Status" value="3">
+								<input type="text" name="status[]"  class="form-control input-sm label-ean-field _jc_status" placeholder="Status" value="3">
 							</td>
 							<td>
 								<input type="text" name="ocn[]"  class="form-control input-sm label-ean-field" maxlength="12" placeholder="OCN Number">

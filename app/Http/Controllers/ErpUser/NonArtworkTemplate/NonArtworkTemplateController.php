@@ -665,7 +665,7 @@ class NonArtworkTemplateController extends Controller
                                         </div>
                                     </td>
                                     <td class="hidden">
-                                    <input type="text" name="status[]"  class="form-control input-sm label-ean-field" placeholder="Status" value="'.$value->jc_status.'">
+                                    <input type="text" name="status[]"  class="form-control input-sm label-ean-field _jc_status" placeholder="Status" value="'.$value->jc_status.'">
                                     </td>
                                     <td width="150">
                                         <input type="text" name="ocn[]" class="form-control input-sm label-ean-field " value = "'.$value->ocn_number.'" placeholder="OCN Number" maxlength="12" '.$readonly.'>
