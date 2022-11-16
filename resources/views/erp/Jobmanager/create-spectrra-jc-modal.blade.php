@@ -374,7 +374,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('coating',(['' => '-- Select Coating --', 'matt' => 'Matt', 'gloss' => 'Gloss', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'coating','name' => 'coating')) }}
+                                                    {{ Form::select('coating',(['' => '-- Select Coating --', 'Matt' => 'Matt', 'Gloss' => 'Gloss', 'No' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'coating','name' => 'coating')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
