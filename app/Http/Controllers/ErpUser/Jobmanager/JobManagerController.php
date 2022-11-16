@@ -2759,15 +2759,14 @@ class JobManagerController extends Controller
         
        			$companies = $set_company_session->setCompanySession();
 
-				/**
-				 * Dropdown values
-				 */
-				$buyers  = 	DB::table('buyers')
-								->join('jobcard_main_table', 'jobcard_main_table.buyer_id', 'buyers.id')
-								->where('jobcard_main_table.company_id', '=', session()->get('company'))
+				$jc_main_table = session()->get('company_name') == 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
+
+				$buyers  = 	DB::table($jc_main_table)
+								->join('buyers', $jc_main_table.'.buyer_id', 'buyers.id')
+								->where($jc_main_table.'.company_id',  session()->get('company'))
+								->where($jc_main_table.'.is_non_artwork_template', 0)
 								->pluck('buyers.buyer_name','buyers.id')
 								->all();
-				
 				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies]);	
 			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -3133,7 +3132,15 @@ class JobManagerController extends Controller
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
 
-				$jobcards_list  = DB::table('jobcard_main_table')
+				if(session()->get('company_name') == 'spectrraprints') {
+					$jobcards_list  = DB::table('spectrra_jobcard_main_tables')
+									->where('spectrra_jobcard_main_tables.company_id', '=', session()->get('company'))
+									->where('spectrra_jobcard_main_tables.id', '=', $jobcard_id)
+									->where('spectrra_jobcard_main_tables.is_non_artwork_template', 0)
+									->select('spectrra_jobcard_main_tables.id as jobcard_id', 'spectrra_jobcard_main_tables.work_order_id','spectrra_jobcard_main_tables.buyer_name')
+									->first();
+				} else {
+					$jobcards_list  = DB::table('jobcard_main_table')
 										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
 										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
 										->where('jobcard_main_table.company_id', '=', session()->get('company'))
@@ -3143,6 +3150,7 @@ class JobManagerController extends Controller
 										->where('jobcard_main_table.is_non_artwork_template', 0)
 										->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
 										->first();
+				}
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
 					
 	

@@ -17,7 +17,9 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->increments('id');
             $table->string('work_order_id');  
             $table->integer('company_id')->unsigned();          
+            $table->integer('customer_id')->unsigned();          
             $table->string('customer_name'); 
+            $table->integer('buyer_id')->unsigned();          
             $table->string('buyer_name'); 
             $table->date('created_date'); 
             $table->string('article')->nullable(true);
@@ -74,6 +76,8 @@ class CreateSpectrraJobcardMainTablesTable extends Migration
             $table->boolean('is_non_artwork_template')->default(false);
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
+            $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('board_category_id')->references('id')->on('board_category')->onDelete('cascade');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete('cascade');
         });

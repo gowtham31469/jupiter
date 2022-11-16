@@ -21,7 +21,9 @@ class SpectrraJobcardMainTable extends Model
       protected $fillable = [
             'work_order_id',  
             'company_id',          
+            'customer_id',          
             'customer_name', 
+            'buyer_id', 
             'buyer_name', 
             'created_date', 
             'article',

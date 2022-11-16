@@ -58,7 +58,6 @@ class StoreSpectrraJobcard
                 'color_match_text' => DB::table('color_match')->where('id', $request['color_match'][$i])->value('name')
             );
         }
-        // dd($color_match_array[0]['color_match_text']);
         
         SpectrraJobcardMatchToTable::where('spectrra_jobcard_main_id', $store_jobcard->id)->delete();
         SpectrraJobcardMatchToTable::insert($color_match_array);
@@ -157,8 +156,10 @@ class StoreSpectrraJobcard
         return SpectrraJobcardMainTable::updateOrCreate(
             [   'work_order_id' => $workorder_id,],
             [  
-                'company_id'                => $erp_order_data->company_id,          
+                'company_id'                => $erp_order_data->company_id,  
+                'customer_id'               => $erp_order_data->orders->customer_id,        
                 'customer_name'             => $erp_order_data->orders->customer->short_name, 
+                'buyer_id'                  => $erp_order_data->orders->buyer_id,        
                 'buyer_name'                => $erp_order_data->orders->buyer->buyer_name, 
                 'created_date'              => Carbon::now('Asia/Kolkata')->toDateString(), 
                 'article'                   => $request['article'],
@@ -208,7 +209,7 @@ class StoreSpectrraJobcard
                 'eyelet'                    => $request['eyelet_spec'],
                 'string_spec'               => $request['string_spec'],
                 'foil'                      => $request['foil'],
-                'is_non_artwork_template'   => $erp_order_data->orders->buyer->artwork_flag,
+                'is_non_artwork_template'   => $erp_order_data->orders->buyer->artwork_flag == null?0:1,
                 $crud_type                  => $current_timestamp,
             ]
         );

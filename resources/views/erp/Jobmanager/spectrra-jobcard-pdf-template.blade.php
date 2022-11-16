@@ -165,7 +165,7 @@
                     <tr>
                         <td colspan="3" class="top-left-border table-field-name">&nbsp;&nbsp;GSM/Thickness</td>
                         <td colspan="2" class="top-left-border" style="text-align:center !important">{{ $data['gsm_value'] }}</td>
-                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['thickness'] }}&micro;</td>
+                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['thickness'] }} &micro;</td>
                     </tr>
                     <tr>
                         <td colspan="3" class="top-left-border table-field-name">&nbsp;&nbsp;Brd Size(in)</td>
@@ -247,7 +247,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Window Patch</td>
-                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['window_patch'] }}</td>
+                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['window_patch'] }} &micro;</td>
                     </tr>
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Folder Gluer</td>
