@@ -5,8 +5,7 @@ $(function () {
     if (e.isDefaultPrevented()) {
     } else {
       e.preventDefault();
-      alert();
-      //   storeSpectrraMetadata(form);
+        storeSpectrraJobcard(form);
     }
   });
 });
@@ -35,7 +34,7 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
               backdrop: 'static',
               keyboard: false
           });
-          $('#create_spectrra_jc_form').validator('update');
+          $('#create_spectrra_jc_form').validator('validate');
           $('#createSpectrraJCModal').modal('show');
           // enable print button (for old version browsers)
           $('#jc_print_btn').prop('disabled', false);
@@ -62,17 +61,9 @@ const getSpectrraOrderDetails = (checked_count, erp_id_array, uuid_array) => {
         $(".loader").hide();
     }
   });
-
-  $('#createSpectrraJCModal').modal({
-      backdrop: 'static',
-      keyboard: false
-  });
-  $('#create_spectrra_jc_form').validator('update');
-  $('#createSpectrraJCModal').modal('show');
 };
 
 const renderSpectrraOrderData = (order_data) => {
-  console.log(order_data);
 
   board_category_dropdown(order_data.board_category);
   boards_dropdown(order_data.boards);
@@ -83,8 +74,12 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_company_logo').attr('src', order_data.order_details.company.logo);
   $('#sp_jc_company_name').attr('data-company-id', order_data.order_details.company.id);
   $('#sp_work_order').text(order_data.workorder_id);
+  $('#sp_work_order').attr('data-wo-id', order_data.workorder_id);
+
   $('#sp_today_date').text(order_data.today_date);
+  $('#sp_today_date').attr('data-today-date', order_data.today_date);
   $('#sp_article').text(order_data.template_details.article);
+  $('#sp_article').attr('data-article', order_data.template_details.article);
   $('#sp_reference').val(order_data.order_details.reference_name);
 
   $('#sp_customer_name').text(order_data.order_details.orders.customer.short_name);
@@ -93,6 +88,7 @@ const renderSpectrraOrderData = (order_data) => {
   $('#sp_po_verify_date').text(order_data.order_details.po_verified_date);
   $('#sp_buyer_name').text(order_data.order_details.orders.buyer.buyer_name);
   $('#sp_order_no').text(order_data.order_details.orders.erp_id);
+  $('#sp_order_no').attr('data-erpid', order_data.order_details.erp_order_id);
   $('#sp_order_date').text(order_data.order_details.order_date);
   $('#sp_delivery_date').text(order_data.order_details.delivery_date);
   $('#sp_order_qty').text(order_data.order_details.total_qty);
@@ -150,5 +146,164 @@ const renderSpectrraOrderData = (order_data) => {
   // $('#nat_template_type').val(data.template_data.template_type[0]);
   $('.spectrra-create-jc-modal-title').text(order_data.modal_title);
   $('#crud_operation_type').text('created_at');
-  // $('#material_hierarchy').text(data.template_data.material_hierarchy)
+  $('#material_hierarchy').text(order_data.template_details.article)
+}
+
+const storeSpectrraJobcard = (form) => {
+    var form_obj = [{
+        "company_id": $('#sp_jc_company_name').data("company-id"),
+        "workorder_id": $('#sp_work_order').data("wo-id"),
+        "today_date": $('#sp_today_date').data("today-date"),
+        "article": $('#sp_article').data("article"),
+        "erp_id": $('#sp_order_no').data("erpid"),
+        "crud_operation_type": $('#crud_operation_type').text(),
+    }];
+
+    var formData = form.serialize() + '&' + $.param(form_obj[0]);
+
+  $.ajax({
+    type: "post",
+    url: base_url + "/erp/spectrra-job-manager/store-spectrra-jobcard",
+    data: formData,
+    headers: {
+      'X-CSRF-TOKEN': csrf_token
+    },
+    dataType: "json",
+    beforeSend: function () {
+      $(".loader").show();
+      $('#create_spectrra_jc_btn').prop('disabled', true);
+    },
+    statusCode: {
+      200: function (response) {
+        var resp = JSON.stringify(response.file_path); 
+        window.open(
+            base_url+JSON.parse(resp),
+            '_blank' // <- This is what makes it open in a new window.
+        ); 
+        $('.snackbar_span').html("Jobcard Created Successfully");
+        showSnackbar();
+        $('.modal').modal('hide');
+        location.reload();
+      },
+      422: function (errorXHR) {
+        var error_msg = ``;
+        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+          error_msg += `<li>` + valueOfElement + `</li>`;
+        });
+        $('#spectrra_jobcard_result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+        $('#create_spectrra_jc_btn').prop('disabled', false);
+        $(window).scrollTop(0);
+      },
+    },
+    complete: function () {
+      $(".loader").hide();
+    }
+  });
+}
+
+const getSpectrraJobcardDetails = (jc_id) => {
+  $.ajax({
+      url:base_url + "/erp/spectrra-job-manager/get-spectrra-jobcard-details",
+      dataType:"json",
+      method:"get",
+      data:{jc_id},
+      beforeSend: function () {
+        $(".loader").show();
+      },
+      success: function(order_data){
+        console.log(order_data);
+        console.log(order_data.order_details.fsc_non_fsc);
+        board_category_dropdown(order_data.board_category);
+        boards_dropdown(order_data.boards);
+        color_match_dropdown(order_data.color_match);
+
+        $('#sp_jc_company_name').text(order_data.order_details.company.name);
+        $('#sp_company_address').text(order_data.order_details.company.address);
+        $('#sp_company_logo').attr('src', order_data.order_details.company.logo);
+        $('#sp_jc_company_name').attr('data-company-id', order_data.order_details.company.id);
+
+        $('#sp_work_order').text(order_data.order_details.work_order_id);
+        $('#sp_work_order').attr('data-wo-id', order_data.order_details.work_order_id);
+
+        $('#sp_today_date').text(order_data.order_details.created_date);
+        $('#sp_today_date').attr('data-today-date', order_data.order_details.created_date);
+        $('#sp_article').text(order_data.order_details.article);
+        $('#sp_article').attr('data-article', order_data.order_details.article);
+        $('#sp_reference').val(order_data.order_details.reference);
+
+        $('#sp_customer_name').text(order_data.order_details.customer_name);
+        $('#sp_style_no').text(order_data.order_details.style_number);
+        $('#sp_customer_po').text(order_data.order_details.customer_po_number);
+        $('#sp_po_verify_date').text(order_data.order_details.po_verified_date);
+        $('#sp_buyer_name').text(order_data.order_details.buyer_name);
+        $('#sp_order_no').text(order_data.order_details.erp_order.erp_id);
+        $('#sp_order_no').attr('data-erpid', order_data.order_details.erp_id);
+        $('#sp_order_date').text(order_data.order_details.order_date);
+        $('#sp_delivery_date').text(order_data.order_details.customer_del_date);
+        $('#sp_order_qty').text(order_data.order_details.total_order_qty);
+
+        $('#color_bar').val(order_data.order_details.color_bar).trigger('change');
+        $('#print_spec_bar').val(order_data.order_details.print_spec_bar).trigger('change');
+        $('#tone_bar').val(order_data.order_details.tone_bar).trigger('change');
+        $('#back_colors').val(order_data.order_details.back_color);
+        $('#board_category').val(order_data.order_details.board_category_id).trigger('change');
+        $('#board_name').val(order_data.order_details.board_id).trigger('change');
+        $('#fsc_non_fsc').val(order_data.order_details.fsc_non_fsc).trigger('change');
+        $('#gsm_value').val(order_data.order_details.gsm_value);
+        $('#thickness').val(order_data.order_details.thickness);
+        $('#board_size_length').val(order_data.order_details.board_size_length);
+        $('#board_size_width').val(order_data.order_details.board_size_width);
+        $('#print_size_length').val(order_data.order_details.print_size_length);
+        $('#print_size_width').val(order_data.order_details.print_size_width);
+        $('#design_size_length').val(order_data.order_details.design_size_length);
+        $('#design_size_width').val(order_data.order_details.design_size_width);
+        $('#cut_as_1').val(order_data.order_details.cut_as.split("/")[0]);
+        $('#cut_as_2').val(order_data.order_details.cut_as.split("/")[1]);
+        $('#repeats').val(order_data.order_details.repeats);
+        $('#die_no').val(order_data.order_details.die_no);
+        $('#cutting').val(order_data.order_details.cutting).trigger('change');
+        $('#printing').val(order_data.order_details.printing).trigger('change');
+        $('#coating').val(order_data.order_details.coating).trigger('change');
+        $('#uv').val(order_data.order_details.uv).trigger('change');
+        $('#lamination_spec').val(order_data.order_details.lamination);
+        $('#pasting_board').val(order_data.order_details.pasting_board).trigger('change');
+        $('#pasting_gsm').val(order_data.order_details.pasting_gsm);
+        $('#die_cutting').val(order_data.order_details.die_cutting);
+        $('#window_patch').val(order_data.order_details.window_patch);
+        $('#folder_gluer').val(order_data.order_details.folder_gluer).trigger('change');
+        $('#embossing').val(order_data.order_details.embossing).trigger('change');
+        $('#debossing').val(order_data.order_details.debossing).trigger('change');
+        $('#perforation').val(order_data.order_details.perforation).trigger('change');
+        $('#hole_size').val(order_data.order_details.hole_size);
+        $('#eyelet_spec').val(order_data.order_details.eyelet);
+        $('#string_spec').val(order_data.order_details.string_spec);
+        $('#foil').val(order_data.order_details.foil).trigger('change');
+        $('#front_colors').val(order_data.order_details.front_colors);
+
+        $.each(order_data.order_details.color_matches, function (key, item) {
+          $('#color_match option:contains(' + item.color_match_text + ')').prop('selected', true);
+        });
+
+        $('.selectpicker').selectpicker('refresh');
+        // $('#nat_template_type').val(data.template_data.template_type[0]);
+        $('.spectrra-create-jc-modal-title').text(order_data.modal_title);
+        $('#crud_operation_type').text('updated_at');
+        // $('#material_hierarchy').text(order_data.template_details.article)
+
+        $('#createSpectrraJCModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#create_spectrra_jc_form').validator('validate');
+        $('#createSpectrraJCModal').modal('show');
+        // enable print button (for old version browsers)
+        $('#jc_print_btn').prop('disabled', false);
+      },
+      error: function(errorXHR, errorStatus, errorThrown) {
+        console.log(errorThrown);
+      },
+      complete: function () {
+          $(".loader").hide();
+      }
+  })
 }

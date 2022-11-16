@@ -40,7 +40,7 @@
 			</div>
 			<div class="modal-body create-spectrra-jc-modal-body">
 				<div class="container-fluid">
-					<span id="spectrra_template_result"></span>
+					<span id="spectrra_jobcard_result"></span>
 					{!! Form::open(['method' => 'post', 'id' => 'create_spectrra_jc_form','data-toggle' => 'validator','role' => 'form']) !!}
 					<div class="row">
                         <div class="col-md-12">
@@ -49,7 +49,7 @@
                                 <p id="sp_company_address"></p>
                             </div>
                             <div class="col-md-4">
-								<input type="hidden" value="" id="template_type">
+								<input type="hidden" value="" id="sp_erp_id">
 								<input type="hidden" value="" id="jobcard_id">
 								<input type="hidden" value="" id="crud_operation_type">
 								<input type="hidden" value="" id="material_hierarchy">
@@ -111,13 +111,13 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('print_spec_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'print_spec_bar','required', 'name' => 'color_bar')) }}
+                                                    {{ Form::select('print_spec_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'print_spec_bar','name' => 'print_spec_bar')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
                                             <td colspan="4" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('tone_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'tone_bar','required', 'name' => 'tone_bar')) }}
+                                                    {{ Form::select('tone_bar',(['1' => 'Yes', '0' => 'No']),'',array('class' => 'form-control input-sm selectpicker','id' => 'tone_bar','name' => 'tone_bar')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -128,7 +128,7 @@
                                             </td>
                                             <td colspan="5" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('color_match',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'color_match','data-actions-box' => 'true', 'multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...', 'name' => 'color_match[]')) }}
+                                                    {{ Form::select('color_match',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'color_match','data-actions-box' => 'true', 'multiple' =>'true','data-live-search'=>'true','multiple title'=>'Choose one of the following...', 'name' => 'color_match[]', 'required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -139,7 +139,7 @@
                                             </td>
                                             <td colspan="5" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('front_colors',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Front Colors','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'front_colors', 'id' => 'front_colors')) !!}
+                                                    {!! Form::text('front_colors',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Front Colors','required','data-required-error' => 'Required', 'name' => 'front_colors', 'id' => 'front_colors')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -166,7 +166,7 @@
                                             </td>
                                             <td colspan="5" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('board_category',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'board_category','data-live-search'=>'true', 'name' => 'board_category')) }}
+                                                    {{ Form::select('board_category',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'board_category','data-live-search'=>'true', 'name' => 'board_category', 'required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -177,7 +177,7 @@
                                             </td>
                                             <td colspan="5" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('board_name',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'board_name','data-live-search'=>'true', 'name' => 'board_name')) }}
+                                                    {{ Form::select('board_name',([]),'',array('class' => 'form-control input-sm selectpicker','id' => 'board_name','data-live-search'=>'true', 'name' => 'board_name', 'required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -216,13 +216,13 @@
                                             </td>
                                             <td colspan="3" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('board_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'board_size_length', 'id' => 'board_size_length')) !!}
+                                                    {!! Form::text('board_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','maxlength' => '20', 'name' => 'board_size_length', 'id' => 'board_size_length')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                {!! Form::text('board_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'board_size_width', 'id' => 'board_size_width')) !!}
+                                                {!! Form::text('board_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','maxlength' => '20', 'name' => 'board_size_width', 'id' => 'board_size_width')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -233,13 +233,13 @@
                                             </td>
                                             <td colspan="3" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('print_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'print_size_length', 'id' => 'print_size_length')) !!}
+                                                    {!! Form::text('print_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','maxlength' => '20', 'name' => 'print_size_length', 'id' => 'print_size_length')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('print_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'print_size_width', 'id' => 'print_size_width')) !!}
+                                                    {!! Form::text('print_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','maxlength' => '20', 'name' => 'print_size_width', 'id' => 'print_size_width')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -250,13 +250,13 @@
                                             </td>
                                             <td colspan="3" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('design_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'design_size_length', 'id' => 'design_size_length')) !!}
+                                                    {!! Form::text('design_size_length',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Length','maxlength' => '20', 'name' => 'design_size_length', 'id' => 'design_size_length')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('design_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'design_size_width', 'id' => 'design_size_width')) !!}
+                                                    {!! Form::text('design_size_width',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Width','maxlength' => '20', 'name' => 'design_size_width', 'id' => 'design_size_width')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -267,7 +267,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('cut_as_1',$value = '', array('class' => 'form-control input-sm','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'cut_as_1', 'id' => 'cut_as_1')) !!}
+                                                    {!! Form::text('cut_as_1',$value = '', array('class' => 'form-control input-sm','maxlength' => '20', 'name' => 'cut_as_1', 'id' => 'cut_as_1')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -276,7 +276,7 @@
                                             </td>
                                             <td colspan="1" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('cut_as_2',$value = '', array('class' => 'form-control input-sm','required','maxlength' => '20', 'data-required-error' => 'Required', 'name' => 'cut_as_2', 'id' => 'cut_as_2')) !!}
+                                                    {!! Form::text('cut_as_2',$value = '', array('class' => 'form-control input-sm','maxlength' => '20', 'name' => 'cut_as_2', 'id' => 'cut_as_2')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -324,7 +324,10 @@
                                                 <p>Die No.</p>
                                             </td>
                                             <td colspan="5" rowspan="1">
-                                                <p>&nbsp;</p>
+                                                <div class="form-group has-feedback">
+                                                    {!! Form::text('die_no',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Die No','required','maxlength' => '10', 'data-required-error' => 'Required', 'name' => 'die_no', 'id' => 'die_no')) !!}
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
                                             </td>
                                         </tr>
                                     </table>
@@ -338,7 +341,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('cutting',(['' => '-- Select Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'cutting', 'name' => 'cutting')) }}
+                                                    {{ Form::select('cutting',(['' => '-- Select Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'cutting', 'name' => 'cutting', 'data-required-error' => 'Required','required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -349,7 +352,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('printing',(['' => '-- Select Printing --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'printing', 'name' => 'printing')) }}
+                                                    {{ Form::select('printing',(['' => '-- Select Printing --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'printing', 'name' => 'printing', 'data-required-error' => 'Required','required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -382,7 +385,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('lamination_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Lamination','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'lamination_spec','name' => 'lamination_spec')) !!}
+                                                    {!! Form::text('lamination_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Lamination','maxlength' => '20','id' => 'lamination_spec','name' => 'lamination_spec')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -407,7 +410,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('pasting_gsm',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Gsm','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'pasting_gsm','name' => 'pasting_gsm')) !!}
+                                                    {!! Form::text('pasting_gsm',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Gsm','maxlength' => '20','id' => 'pasting_gsm','name' => 'pasting_gsm')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -418,7 +421,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('window_patch',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Window Patch','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'window_patch','name' => 'window_patch')) !!}
+                                                    {!! Form::text('window_patch',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Window Patch','maxlength' => '20','id' => 'window_patch','name' => 'window_patch')) !!}
                                                     
                                                     <div class="help-block with-errors"></div>
                                                 </div>
@@ -441,7 +444,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {{ Form::select('die_cutting',(['' => '-- Select Die Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'die_cutting','name' => 'die_cutting')) }}
+                                                    {{ Form::select('die_cutting',(['' => '-- Select Die Cutting --', '1' => 'Yes', '0' => 'No' ]),'',array('class' => 'form-control input-sm selectpicker','id' => 'die_cutting','name' => 'die_cutting', 'data-required-error' => 'Required','required')) }}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -480,7 +483,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('hole_size',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Hole Size','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'hole_size','name' => 'hole_size')) !!}
+                                                    {!! Form::text('hole_size',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Hole Size','maxlength' => '20','id' => 'hole_size','name' => 'hole_size')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -502,7 +505,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('string_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'String','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'string_spec','name' => 'string_spec')) !!}
+                                                    {!! Form::text('string_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'String','maxlength' => '20','id' => 'string_spec','name' => 'string_spec')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>
@@ -513,7 +516,7 @@
                                             </td>
                                             <td colspan="2" rowspan="1">
                                                 <div class="form-group has-feedback">
-                                                    {!! Form::text('eyelet_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Eyelet','required','maxlength' => '20', 'data-required-error' => 'Required','id' => 'eyelet_spec','name' => 'eyelet_spec')) !!}
+                                                    {!! Form::text('eyelet_spec',$value = '', array('class' => 'form-control input-sm','placeholder' => 'Eyelet','maxlength' => '20','id' => 'eyelet_spec','name' => 'eyelet_spec')) !!}
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </td>

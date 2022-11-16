@@ -26,7 +26,7 @@ class ErpOrderDetails extends Model
      */
     public function orders()
     {
-        return $this->belongsTo('App\ErpOrders', 'erp_order_id')->with(['customer:id,short_name', 'buyer:id,buyer_name,template_table,item_master_table']);
+        return $this->belongsTo('App\ErpOrders', 'erp_order_id')->with(['customer:id,short_name', 'buyer:id,buyer_name,template_table,item_master_table,artwork_flag']);
     }
     /**
      * Get the Company.

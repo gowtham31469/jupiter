@@ -131,8 +131,13 @@ $(document).ready(function() {
     $(document).on('click','.edit-jobcard',function(e){
         var id = $(this).closest('tr').attr('id');
         e.preventDefault();
-        /* call getBuyer function from buyers.js*/
-        getJobcardDetails(id);
+       
+        if($('.buyers-card.active-buyer.active').attr("id") === 'spectrraprints'){
+            getSpectrraJobcardDetails(id);
+        } else {
+            getJobcardDetails(id);
+        }
+        
     });
     /** edit job card form validation **/
     $('#edit_jobcard').validator().on('submit', function (e) {
