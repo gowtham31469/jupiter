@@ -209,7 +209,7 @@ class StoreSpectrraJobcard
                 'eyelet'                    => $request['eyelet_spec'],
                 'string_spec'               => $request['string_spec'],
                 'foil'                      => $request['foil'],
-                'is_non_artwork_template'   => $erp_order_data->orders->buyer->artwork_flag == null?0:1,
+                'is_non_artwork_template'   => $erp_order_data->orders->buyer->artwork_flag == 1?0:1,
                 $crud_type                  => $current_timestamp,
             ]
         );

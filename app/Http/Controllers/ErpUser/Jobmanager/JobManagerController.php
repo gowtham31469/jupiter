@@ -2758,8 +2758,7 @@ class JobManagerController extends Controller
 				$set_company_session = new ErpCompanySession();
         
        			$companies = $set_company_session->setCompanySession();
-
-				$jc_main_table = session()->get('company_name') == 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
 
 				$buyers  = 	DB::table($jc_main_table)
 								->join('buyers', $jc_main_table.'.buyer_id', 'buyers.id')
@@ -3068,14 +3067,16 @@ class JobManagerController extends Controller
 				if($request['selected_buyer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				
-				$customers_list  = 	DB::table('customers')
-										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
-										->where('jobcard_main_table.company_id', session()->get('company'))
-										->where('jobcard_main_table.buyer_id', $request['selected_buyer_id'])
-										->pluck('customers.company_name','customers.id')
-										->all();
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
 
+				$customers_list  = 	DB::table($jc_main_table)
+								->join('customers', $jc_main_table.'.customer_id', 'customers.id')
+								->where($jc_main_table.'.company_id',  session()->get('company'))
+								->where($jc_main_table.'.buyer_id', $request['selected_buyer_id'])
+								->where($jc_main_table.'.is_non_artwork_template', 0)
+								->pluck('customers.company_name','customers.id')
+								->all();
+				
 				return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
 					
 	
@@ -3093,19 +3094,17 @@ class JobManagerController extends Controller
 	public function getJobcardIdListByBuyerCustomerId(Request $request)
 	{
 		try {
-				$buyer_id    = $request['selected_buyer_id'];
-				$customer_id = $request['selected_customer_id'];
-
-				if($buyer_id == null || $customer_id == null){
+				if($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
 
-				$jobcard_id_list  = DB::table('jobcard_main_table')
-										->where('jobcard_main_table.company_id', '=', session()->get('company'))
-										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-										->where('jobcard_main_table.customer_id', '=', $customer_id)
-										->where('jobcard_main_table.is_non_artwork_template', 0)
-										->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
+				$jobcard_id_list  = DB::table($jc_main_table)
+										->where($jc_main_table.'.company_id',  session()->get('company'))
+										->where($jc_main_table.'.buyer_id',  $request['selected_buyer_id'])
+										->where($jc_main_table.'.customer_id',  $request['selected_customer_id'])
+										->where($jc_main_table.'.is_non_artwork_template', 0)
+										->pluck($jc_main_table.'.work_order_id',$jc_main_table.'.id')
 										->all();
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 					
@@ -3132,25 +3131,18 @@ class JobManagerController extends Controller
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
 
-				if(session()->get('company_name') == 'spectrraprints') {
-					$jobcards_list  = DB::table('spectrra_jobcard_main_tables')
-									->where('spectrra_jobcard_main_tables.company_id', '=', session()->get('company'))
-									->where('spectrra_jobcard_main_tables.id', '=', $jobcard_id)
-									->where('spectrra_jobcard_main_tables.is_non_artwork_template', 0)
-									->select('spectrra_jobcard_main_tables.id as jobcard_id', 'spectrra_jobcard_main_tables.work_order_id','spectrra_jobcard_main_tables.buyer_name')
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
+
+				$jobcards_list  = DB::table($jc_main_table)
+									->join('customers', $jc_main_table.'.customer_id', 'customers.id')
+									->join('buyers', $jc_main_table.'.buyer_id', 'buyers.id')
+									->where($jc_main_table.'.company_id', '=', session()->get('company'))
+									->where($jc_main_table.'.buyer_id', '=', $buyer_id)
+									->where($jc_main_table.'.customer_id', '=', $customer_id)
+									->where($jc_main_table.'.id', '=', $jobcard_id)
+									->where($jc_main_table.'.is_non_artwork_template', 0)
+									->select($jc_main_table.'.id as jobcard_id', $jc_main_table.'.work_order_id', 'customers.company_name', 'buyers.buyer_name')
 									->first();
-				} else {
-					$jobcards_list  = DB::table('jobcard_main_table')
-										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-										->where('jobcard_main_table.company_id', '=', session()->get('company'))
-										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-										->where('jobcard_main_table.customer_id', '=', $customer_id)
-										->where('jobcard_main_table.id', '=', $jobcard_id)
-										->where('jobcard_main_table.is_non_artwork_template', 0)
-										->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
-										->first();
-				}
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
 					
 	

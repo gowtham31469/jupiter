@@ -78,6 +78,22 @@ class SpectrraJobcardMainTable extends Model
             'is_non_artwork_template',
       ];
 
+      protected $casts = [
+            'color_bar'      => 'integer',
+            'print_spec_bar' => 'integer',
+            'tone_bar'       => 'integer',
+            'fsc_non_fsc'    => 'integer',
+            'cutting'        => 'integer',
+            'printing'       => 'integer',
+            'uv'             => 'integer',
+            'folder_gluer'   => 'integer',
+            'die_cutting'    => 'integer',
+            'embossing'      => 'integer',
+            'debossing'      => 'integer',
+            'perforation'    => 'integer',
+            'foil'           => 'integer',
+      ];
+
       public function colorMatches()
       {
             return $this->hasMany('App\SpectrraJobcardMatchToTable', 'spectrra_jobcard_main_id')->select([
@@ -85,4 +101,17 @@ class SpectrraJobcardMainTable extends Model
                   'color_match_text',
             ]);
       }
+
+      /**
+       * Get the Company.
+       */
+      public function company()
+      {
+            return $this->belongsTo('App\Company');
+      }
+
+      public function erpOrder()
+    {
+        return $this->belongsTo('App\ErpOrders', 'erp_id');
+    }
 }

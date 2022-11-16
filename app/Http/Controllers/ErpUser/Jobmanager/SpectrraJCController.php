@@ -6,6 +6,7 @@ use View;
 use Carbon\Carbon;
 use App\ErpOrderDetails;
 use Illuminate\Http\Request;
+use App\SpectrraJobcardMainTable;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardIDGenerator;
 use App\Http\Controllers\Controller;
@@ -114,6 +115,31 @@ class SpectrraJCController extends Controller
         $file_path = $store_jc->storeSpectrraJC($request);
 
         return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);
+    }
+
+    public function getSpectrraJCDetails(Request $request)
+    {
+        $spectrra_metadata = new SpectrraTemplateMetadata();
+
+        $jobcard_data  = SpectrraJobcardMainTable::with('company:id,name,address,logo', 'colorMatches', 'erpOrder')
+        ->where('spectrra_jobcard_main_tables.id', '=', $request['jc_id'])
+        ->first();
+
+        $jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+        $jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+        $jobcard_data->po_verified_date =	$jobcard_data->po_verified_date == ''?NULL:Carbon::parse($jobcard_data->po_verified_date)->format('d-m-Y');
+        $jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+        $jobcard_data->customer_del_date      =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+
+        return response()->json([
+            'error' => false,
+            'message' => 'success',
+            'modal_title' => 'Update Jobcard',
+            'order_details'  => $jobcard_data,
+            'board_category' => $spectrra_metadata->getBoardCategories(),
+            'boards' => $spectrra_metadata->getBoards(),
+            'color_match' => $spectrra_metadata->getColorMatches(),
+        ], 200);
     }
 
 }
