@@ -533,10 +533,12 @@ class NonArtworkTemplateController extends Controller
             if (in_array(8, $erp_data->toArray())){
                 $is_editable = 1;
                 $jc_progress = 1;
+                $current_order_status = "Job Card Creation In Progress" ;
                 $message = 'JobCard creation for this order is in progress,one or more orders may not be editable !!!';
                 if(array_count_values($erp_data->toArray())['8'] == count($erp_data->toArray()))
                 {
                     $is_editable = 0;
+                    $current_order_status = "Jobcard Has Been Created Successfully" ;
                     $message = 'JobCard created for this order and is not editable !!!';
                 }
             }
