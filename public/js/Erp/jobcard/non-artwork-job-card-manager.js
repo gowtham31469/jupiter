@@ -426,7 +426,7 @@ const generateNatJobcard = () => {
       ) {
         getNatJGAOrderDetails(checked_count, buyerArray, customerArray, uuid_array, erp_id_array);
       } else {
-        getSpectrraOrderDetails(checked_count, uuid_array, erp_id_array);
+        getSpectrraOrderDetails(checked_count, erp_id_array, uuid_array);
       }
     
 }

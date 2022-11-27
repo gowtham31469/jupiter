@@ -6,13 +6,14 @@ use View;
 use Carbon\Carbon;
 use App\ErpOrderDetails;
 use Illuminate\Http\Request;
+use App\SpectrraJobcardMainTable;
 use Illuminate\Support\Facades\DB;
 use App\Classes\JobcardIDGenerator;
 use App\Http\Controllers\Controller;
+use App\Classes\StoreSpectrraJobcard;
+use App\Http\Requests\SpectrraJCRequest;
 use App\Classes\SpectrraTemplateMetadata;
 use App\Classes\SpectrraCompanyTemplateData;
-use App\Classes\SpectrraJobcardPDFHeaderFooter;
-use SnappyPDF;
 
 class SpectrraJCController extends Controller
 {
@@ -72,9 +73,9 @@ class SpectrraJCController extends Controller
         $erp_array = explode('|', $order_details['orders']['id']);
         $buyer_item_table = $order_details['orders']['buyer']['item_master_table'];
         $buyer_template_table = $order_details['orders']['buyer']['template_table'];
-        $order_details->po_verified_date = Carbon::parse($order_details->po_verified_date)->format('d-m-Y');
-        $order_details->order_date = Carbon::parse($order_details->order_date)->format('d-m-Y');
-        $order_details->delivery_date = Carbon::parse($order_details->delivery_date)->format('d-m-Y');
+        $order_details->po_verified_date = is_null($order_details['po_verified_date']) === true?$order_details['po_verified_date']:Carbon::parse($order_details['po_verified_date'])->format('d-m-Y');
+        $order_details->order_date = is_null($order_details['order_date']) === true?$order_details['order_date']:Carbon::parse($order_details['order_date'])->format('d-m-Y');;
+        $order_details->delivery_date = is_null($order_details['delivery_date']) === true?$order_details['delivery_date']:Carbon::parse($order_details['delivery_date'])->format('d-m-Y');;
 
         $spectrra_template_data = $get_spectrra_metadata->getSpectrraCompanyTemplateData($data);
         
@@ -106,62 +107,39 @@ class SpectrraJCController extends Controller
         ], 200);
     }
 
-
-    public function generateSpectrraJCPdf()
+    public function storeSpectrraJobcard(SpectrraJCRequest $request)
     {
-
-        $pdf = new SpectrraJobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->setData(['company' => 'Spectrra Prints', "company_address" => "1-J-26, Jupiter Avenue, Anupparpalayam, Tirupur -641652", 'workorder_id' => 'CS22000010023', 'article' => 'Carton & Polybag Stickers', 'reference' => 'FFC/01/M13020C', 'created_date' => '08-09-2022', 'logo' => '/var/www/html/jupiter/public/images/spectrra-logo.png']);		
-        $pdf->SetPrintHeader(true);
-        $pdf->SetPrintFooter(true); 
-
-        //margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $request->validated();
         
-        // set header and footer fonts
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        
-        // /** Handle Page break */
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, 40);
+        $store_jc = new StoreSpectrraJobcard();
+        $file_path = $store_jc->storeSpectrraJC($request);
 
-        // set image scale factor
-        $pdf->setImageScale(1.8);
-
-        // set font
-        $pdf->SetFont('helvetica', '', 8);
-
-        // add a page
-        $pdf->AddPage('P', 'A4');
-
-        // Print 'Pasting' text 90 degree rotated.
-        $pdf->StartTransform();
-        $pdf->Rotate(90);
-
-        // Set some content to print
-        $html = '<strong>Pasting</strong>';
-
-        // Print text using writeHTMLCell()
-        $pdf->writeHTMLCell($w=0, $h=0, $x='-44', $y='96', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
-        $pdf->StopTransform();
-
-        // set some text to print
-        $view = View::make('erp/Jobmanager/spectrra-jobcard-pdf-template');
-
-        //append content to header
-        $pdf->SetXY(13.4,25);
-        $pdf->writeHTML($view->render());
-
-        //Close and output PDF document
-        ob_end_clean();
-        $file_path =  "/storage/app/public/jobcards/spectrra-test."."pdf";	
-        $pdf->IncludeJS("print();");
-        return $pdf->Output( public_path($file_path), 'I');
-
-        // return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);	
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);
     }
+
+    public function getSpectrraJCDetails(Request $request)
+    {
+        $spectrra_metadata = new SpectrraTemplateMetadata();
+
+        $jobcard_data  = SpectrraJobcardMainTable::with('company:id,name,address,logo', 'colorMatches', 'erpOrder')
+        ->where('spectrra_jobcard_main_tables.id', '=', $request['jc_id'])
+        ->first();
+
+        $jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+        $jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+        $jobcard_data->po_verified_date =	$jobcard_data->po_verified_date == ''?NULL:Carbon::parse($jobcard_data->po_verified_date)->format('d-m-Y');
+        $jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+        $jobcard_data->customer_del_date      =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+
+        return response()->json([
+            'error' => false,
+            'message' => 'success',
+            'modal_title' => 'Update Jobcard',
+            'order_details'  => $jobcard_data,
+            'board_category' => $spectrra_metadata->getBoardCategories(),
+            'boards' => $spectrra_metadata->getBoards(),
+            'color_match' => $spectrra_metadata->getColorMatches(),
+        ], 200);
+    }
+
 }

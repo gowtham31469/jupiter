@@ -70,7 +70,7 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
                                     <tr  width="100%">
                                         <th  width="30%"><strong>DATE</strong></th>
                                         <td  width="5%"><strong>:</strong></td>
-                                        <td width="65%" id="today_date" style="text-align:left;font-weight: bold">'.$this->created_date.'</td>
+                                        <td width="65%" id="today_date" style="text-align:left;font-weight: bold">'.date('d-m-Y', strtotime($this->created_date)) .'</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -102,6 +102,7 @@ class SpectrraJobcardPDFHeaderFooter extends \TCPDF
         
         /** Add footer in last page */
         $this->writeHTML($footer, false, false, true, false, '');
+        
         $this->Cell(0, 0, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
     }

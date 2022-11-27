@@ -267,7 +267,7 @@
             <div class="col-md-3">
                 <div class="form-group has-feedback">
                     {!! Form::label('coating', 'Coating :', ['class' => 'form_label']) !!}
-                    {{ Form::select('coating',(['' => '-- Select Coating --', 'matt' => 'Matt', 'gloss' => 'Gloss', 'no' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'coating')) }}
+                    {{ Form::select('coating',(['' => '-- Select Coating --', 'Matt' => 'Matt', 'Gloss' => 'Gloss', 'No' => 'No']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'coating')) }}
                     <div class="help-block with-errors"></div>
                 </div>
             </div>

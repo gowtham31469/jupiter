@@ -122,25 +122,25 @@ class UpdateNATJobcardController extends Controller
 										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
 										->where('jobcard_main_table.id', $id)
 										->first();
-					$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
-					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
-					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
-					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
-					$jobcard_data->act_del_date     =	$jobcard_data->act_del_date == ''?NULL:Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
-					$jobcard_data->aw_approve_date     =	$jobcard_data->aw_approve_date == ''?NULL:Carbon::parse($jobcard_data->aw_approve_date)->format('d-m-Y');
+                $jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+                $jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+                $jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+                $jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+                $jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+                $jobcard_data->act_del_date     =	$jobcard_data->act_del_date == ''?NULL:Carbon::parse($jobcard_data->act_del_date)->format('d-m-Y');
+                $jobcard_data->aw_approve_date     =	$jobcard_data->aw_approve_date == ''?NULL:Carbon::parse($jobcard_data->aw_approve_date)->format('d-m-Y');
 
-					return response()->json([
-						'error'=> false,
-						'message' =>'Success', 
-						'jobcard_data' => $jobcard_data,
-						'disp_modes' => $metadata['erp_dispatch_mode'],
-                        'finish_types' => $metadata['erp_finish_type'],
-                        'machines' => $metadata['erp_machines'],
-                        'teeth_nos' => $metadata['erp_teeth_no'],
-                        'modal_title' => 'Update Jobcard'
+                return response()->json([
+                    'error'=> false,
+                    'message' =>'Success', 
+                    'jobcard_data' => $jobcard_data,
+                    'disp_modes' => $metadata['erp_dispatch_mode'],
+                    'finish_types' => $metadata['erp_finish_type'],
+                    'machines' => $metadata['erp_machines'],
+                    'teeth_nos' => $metadata['erp_teeth_no'],
+                    'modal_title' => 'Update Jobcard'
 
-					], 200);
+                ], 200);
 	
 			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
