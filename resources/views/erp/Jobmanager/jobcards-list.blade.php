@@ -96,6 +96,8 @@
 </div>
 </div>
 
+<!-- Job card creation Modal -->
+@include('erp.Jobmanager.create-spectrra-jc-modal')
 
 <!-- company selection Modal -->
 @include('erp.components.company-selection-modal')

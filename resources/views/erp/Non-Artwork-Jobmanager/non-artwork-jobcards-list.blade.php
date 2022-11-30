@@ -103,6 +103,9 @@
 <!-- Job card creation Modal -->
 @include('erp.Non-Artwork-Jobmanager.create-jobcard-modal')
 
+<!-- Job card creation Modal -->
+@include('erp.Jobmanager.create-spectrra-jc-modal')
+
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 

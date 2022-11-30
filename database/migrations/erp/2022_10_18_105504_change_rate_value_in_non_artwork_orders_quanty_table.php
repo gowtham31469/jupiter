@@ -46,7 +46,7 @@ class ChangeRateValueInNonArtworkOrdersQuantyTable extends Migration
             $table->dropColumn('rate_value');
         });
         Schema::table('non_artwork_orders_quanty', function (Blueprint $table) {
-	        $table->decimal('rate',8,2)->nullable();
+	        $table->decimal('rate_value',8,2)->nullable();
         });
     }
 }

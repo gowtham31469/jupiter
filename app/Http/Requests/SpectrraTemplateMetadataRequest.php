@@ -51,7 +51,7 @@ class SpectrraTemplateMetadataRequest extends FormRequest
             'no_of_plates'          => ['sometimes', 'nullable', 'numeric'], 
             'cutting'               => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'printing'              => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
-            'coating'               => ['sometimes', 'nullable', Rule::in(['matt', 'gloss', 'no'])], 
+            'coating'               => ['sometimes', 'nullable', Rule::in(['Matt', 'Gloss', 'No'])], 
             'uv'                    => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'lamination'            => ['sometimes', 'nullable', Rule::in(['0', '1'])], 
             'lamination_spec'       => ['sometimes', Rule::in(['matt', 'gloss']), 'nullable'], 
