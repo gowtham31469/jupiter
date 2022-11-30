@@ -914,10 +914,7 @@ Route::group(['prefix' => 'erp'], function () {
 		Route::get('/view-spectrra-jobcard', 'ErpUser\Jobmanager\SpectrraJCController@generateSpectrraJCPdf');
 		Route::get('/get-spectrra-jobcard-details', 'ErpUser\Jobmanager\SpectrraJCController@getSpectrraJCDetails');
 
-		// Route::get('/nat-jobcards-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNonArtworkJobcardList')->name('nat-jobcards-list');
-		// Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
-		// Route::get('/get-nat-jobcard-list', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardsListByBuyerCustomerJobcardId');
-		// Route::get('/get-nat-jobcard-details', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardDetailsById');
+		Route::get('/get-nat-jobcard-ids', 'ErpUser\NonArtworkJobmanager\UpdateNATJobcardController@getNatJobcardIdListByBuyerCustomerId');
 	});
 
 	/* Routes for ERP-Settings Management */

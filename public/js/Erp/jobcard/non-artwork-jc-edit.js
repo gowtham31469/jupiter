@@ -169,7 +169,7 @@ function getNatJobcardsList()
                         <td>'+data.jobcards_list.work_order_id+'</td>\
                         <td>'+data.jobcards_list.company_name+'</td>\
                         <td>'+data.jobcards_list.buyer_name+'</td>\
-                        <td><a onclick="getNatJobcardDetails('+jc_id+')" href="#"><i class="fa fa-pencil fa-button filterbtn options" title="Edit Jobcard" data-placement="left"></i></a></td>\
+                        <td><a href="#"><i class="fa fa-pencil fa-button filterbtn options edit-nat-jobcard" title="Edit Jobcard" data-placement="left"></i></a></td>\
                         </tr>';
                         $('#jobcard_list_table_body').html(html);            
                     },
@@ -195,6 +195,19 @@ function getNatJobcardsList()
         console.log("Error:"+e)
     }
 }
+
+/** Get edit jobcard details on click**/
+$(document).on('click','.edit-nat-jobcard',function(e){
+    var id = $(this).closest('tr').attr('id');
+    e.preventDefault();
+    
+    if($('.buyers-card.active-buyer.active').attr("id") === 'spectrraprints'){
+        getSpectrraJobcardDetails(id);
+    } else {
+        getNatJobcardDetails(id);
+    }
+    
+});
 
 /**
    * Function for get jobcard details for editing(for JGA company)
