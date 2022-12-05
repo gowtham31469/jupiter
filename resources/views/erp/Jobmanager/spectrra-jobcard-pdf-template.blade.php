@@ -247,7 +247,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Window Patch</td>
-                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['window_patch'] }} &micro;</td>
+                        <td colspan="2" class="top-left-right-border" style="text-align:center !important">{{ $data['window_patch'] }} @if ( $data['window_patch'] ) &micro; @endif</td>
                     </tr>
                     <tr>
                         <td colspan="2" class="top-left-border table-field-name">&nbsp;&nbsp;Folder Gluer</td>
