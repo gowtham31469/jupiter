@@ -17,6 +17,7 @@ use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
 use App\OrchestraWashCare;
 use App\Classes\FPDF_Merge;
+use App\Classes\JobcardJGA;
 use App\OrchestraHangTagQty;
 use Illuminate\Http\Request;
 use App\OrchestraWashCareQty;
@@ -41,9 +42,9 @@ use App\Classes\ErpUserMappedTemplates;
 use App\Classes\JobcardPDFHeaderFooter;
 use App\OrchestraSolidCartonStickerQty;
 use Illuminate\Support\Facades\Validator;
+use App\Classes\JobcardIDByCustomerBuyerId;
 use App\ErpOrderDetails as ErpOrderDetails;
 use App\Classes\UpdateCreateJobcardMainTable;
-use App\Classes\JobcardJGA;
 
 class JobManagerController extends Controller
 {
@@ -54,6 +55,7 @@ class JobManagerController extends Controller
 	private $jobcard_id_gen_obj;
     private $erp_user_mapped_template_obj;
     private $set_company_session;
+    private $jobcard_ids_obj;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -76,6 +78,7 @@ class JobManagerController extends Controller
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
 		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
         $this->set_company_session = new ErpCompanySession();
+		$this->jobcard_ids_obj = new JobcardIDByCustomerBuyerId();
 	}
 		
 	/**
@@ -3097,15 +3100,9 @@ class JobManagerController extends Controller
 				if($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
 
-				$jobcard_id_list  = DB::table($jc_main_table)
-										->where($jc_main_table.'.company_id',  session()->get('company'))
-										->where($jc_main_table.'.buyer_id',  $request['selected_buyer_id'])
-										->where($jc_main_table.'.customer_id',  $request['selected_customer_id'])
-										->where($jc_main_table.'.is_non_artwork_template', 0)
-										->pluck($jc_main_table.'.work_order_id',$jc_main_table.'.id')
-										->all();
+        		$jobcard_id_list  = $this->jobcard_ids_obj->getJobcardIds($request, 0);
+
 				return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 					
 	
@@ -3119,36 +3116,20 @@ class JobManagerController extends Controller
 	 * @author <Praveen>
 	 * @param  $buyer_id, $customer_id, $jobcard_id
 	 * @return equivalent jobcard list
-	 */  
+	 */
 	public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
 	{
 		try {
-				$buyer_id    = $request['selected_buyer_id'];
-				$customer_id = $request['selected_customer_id'];
-				$jobcard_id  = $request['selected_jobcard_id'];
-
-				if($buyer_id == null || $customer_id == null || $jobcard_id == null){
-					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
-				}
-
-				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
-
-				$jobcards_list  = DB::table($jc_main_table)
-									->join('customers', $jc_main_table.'.customer_id', 'customers.id')
-									->join('buyers', $jc_main_table.'.buyer_id', 'buyers.id')
-									->where($jc_main_table.'.company_id', '=', session()->get('company'))
-									->where($jc_main_table.'.buyer_id', '=', $buyer_id)
-									->where($jc_main_table.'.customer_id', '=', $customer_id)
-									->where($jc_main_table.'.id', '=', $jobcard_id)
-									->where($jc_main_table.'.is_non_artwork_template', 0)
-									->select($jc_main_table.'.id as jobcard_id', $jc_main_table.'.work_order_id', 'customers.company_name', 'buyers.buyer_name')
-									->first();
-				return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
-					
-	
-			} catch (\Exception $e) {
-				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			if ($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null || $request['selected_jobcard_id'] == null) {
+				return response()->json(['error' => true, 'message' => 'Parameter Missing'], 400);
 			}
+
+			$jobcards_list  = $this->jobcard_ids_obj->getJobcardList($request, 0);
+
+			return response()->json(['error' => false, 'message' => 'Success', 'jobcards_list' => $jobcards_list], 200);
+		} catch (\Exception $e) {
+			return response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
 	}
 	 public function generateDivTesco(Request $request)
 	{

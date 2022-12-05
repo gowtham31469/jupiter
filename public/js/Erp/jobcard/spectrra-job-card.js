@@ -211,8 +211,6 @@ const getSpectrraJobcardDetails = (jc_id) => {
         $(".loader").show();
       },
       success: function(order_data){
-        console.log(order_data);
-        console.log(order_data.order_details.fsc_non_fsc);
         board_category_dropdown(order_data.board_category);
         boards_dropdown(order_data.boards);
         color_match_dropdown(order_data.color_match);
