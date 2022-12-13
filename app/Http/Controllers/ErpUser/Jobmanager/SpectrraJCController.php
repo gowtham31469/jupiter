@@ -125,6 +125,15 @@ class SpectrraJCController extends Controller
         ->where('spectrra_jobcard_main_tables.id', '=', $request['jc_id'])
         ->first();
 
+        $job_card_number = $jobcard_data->work_order_id;
+
+        $erp_order_details = ErpOrderDetails::join('tesco_template','erp_order_details.template_id','=','tesco_template.item_id')
+        ->where('erp_order_details.jc_number', $job_card_number)
+        ->select('erp_order_details.jc_number','erp_order_details.order_type','erp_order_details.buyer_po_number','erp_order_details.reference_name','erp_order_details.template_id','erp_order_details.style_no','erp_order_details.uuid','erp_order_details.created_at','erp_order_details.erp_order_id','erp_order_details.order_qnty_table_name','tesco_template.template_file')
+        ->groupBy('erp_order_details.jc_number','erp_order_details.order_type','erp_order_details.buyer_po_number','erp_order_details.reference_name','erp_order_details.template_id','erp_order_details.style_no','erp_order_details.uuid','erp_order_details.created_at','erp_order_details.erp_order_id','erp_order_details.order_qnty_table_name','tesco_template.template_file')
+        ->get();
+
+
         $jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
         $jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
         $jobcard_data->po_verified_date =	$jobcard_data->po_verified_date == ''?NULL:Carbon::parse($jobcard_data->po_verified_date)->format('d-m-Y');
@@ -136,6 +145,7 @@ class SpectrraJCController extends Controller
             'message' => 'success',
             'modal_title' => 'Update Jobcard',
             'order_details'  => $jobcard_data,
+            'erp_order_details' => $erp_order_details,
             'board_category' => $spectrra_metadata->getBoardCategories(),
             'boards' => $spectrra_metadata->getBoards(),
             'color_match' => $spectrra_metadata->getColorMatches(),
