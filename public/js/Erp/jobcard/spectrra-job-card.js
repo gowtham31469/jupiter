@@ -176,14 +176,68 @@ const storeSpectrraJobcard = (form) => {
     statusCode: {
       200: function (response) {
         var resp = JSON.stringify(response.file_path); 
-        window.open(
-            base_url+JSON.parse(resp),
-            '_blank' // <- This is what makes it open in a new window.
-        ); 
-        $('.snackbar_span').html("Jobcard Created Successfully");
-        showSnackbar();
-        $('.modal').modal('hide');
-        location.reload();
+
+        localStorage.setItem('file_path',response.file_path)
+
+        if($('#crud_operation_type').text() == "created_at")
+        {
+          var isEdit        = false;
+          $('.row-checkbox', allPages).each(function (i, item) {
+          
+              if ($(this).is(':checked')) {
+                  refname       = $(this).closest('tr').data('refname'); 
+                  id            = $(this).closest('tr').attr('id');
+                  buyer_po_no   = $(this).closest('tr').data('buyer-po');
+                  order_type    = $(this).closest('tr').data('order-type');
+                  created_at    = $(this).closest('tr').data('created-at');
+                  style_no      = $(this).closest('tr').data('style-no');
+                  loop          = $(this).closest('tr').data('iteration');
+                  template_name = $(this).closest('tr').data('template-name');
+                  template_id = $(this).closest('tr').data('template-id');
+                  disney = $(this).closest('tr').data('disney');
+                  modal_name    = refname.replace(/ /g, '');
+
+                  if(template_name == "tesco_swingticket_orders")
+                  {
+                      openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_swing_tickets',template_name,template_id,disney,refname,$(this));
+                  }
+                  
+              }
+          });
+        }
+        else
+        {
+          var isEdit = "spectra_print";
+          
+          created_at = $('.edit-spectra-erp-details').data('created-at')  
+          order_type = $('.edit-spectra-erp-details').data('order-type') 
+          buyer_po_no= $('.edit-spectra-erp-details').data('buyer-po') 
+          refname    = $('.edit-spectra-erp-details').data('ref-name') 
+          id         = $('.edit-spectra-erp-details').data('erp-id')
+          template_name = $('.edit-spectra-erp-details').data('template-name')
+          template_id   = $('.edit-spectra-erp-details').data('template-id')
+          disney 		  = "";
+          style_no   = $('.edit-spectra-erp-details').data('style-no')
+          modal_name = refname.replace(/ /g, '');
+
+          if(template_name == "tesco_swingticket_orders_quanty")
+          {
+              openmodaltescopreview(modal_name, "loop", style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_swing_tickets',"tesco_swingticket_orders",template_id,disney,refname,$(this));
+          }
+        }
+        
+
+
+        
+
+        // window.open(
+        //     base_url+JSON.parse(resp),
+        //     '_blank' // <- This is what makes it open in a new window.
+        // ); 
+        // $('.snackbar_span').html("Jobcard Created Successfully");
+        // showSnackbar();
+        // $('.modal').modal('hide');
+        // location.reload();
       },
       422: function (errorXHR) {
         var error_msg = ``;
@@ -281,6 +335,13 @@ const getSpectrraJobcardDetails = (jc_id) => {
         $.each(order_data.order_details.color_matches, function (key, item) {
           $('#color_match option:contains(' + item.color_match_text + ')').prop('selected', true);
         });
+
+        $temp = order_data.erp_order_details[0].template_file.split(",");
+
+        $erp_details_div_html = '<div hidden class="edit-spectra-erp-details" data-erp-id="'+order_data.erp_order_details[0].erp_order_id+'" data-ref-name="'+order_data.erp_order_details[0].reference_name+'" data-template-id="'+order_data.erp_order_details[0].template_id+'" data-order-type="'+order_data.erp_order_details[0].order_type+'" data-template-name="'+order_data.erp_order_details[0].order_qnty_table_name+'" data-buyer-po="'+order_data.erp_order_details[0].buyer_po_number+'" data-created-at="'+order_data.erp_order_details[0].created_at+'"  data-style-no="'+order_data.erp_order_details[0].style_no+'" data-template-file="'+order_data.erp_order_details[0].template_file+'" data-uuid="'+order_data.erp_order_details[0].uuid+'"></div><object style="opacity:0;width:0px;height:0px" id="'+order_data.erp_order_details[0].reference_name+'_'+order_data.erp_order_details[0].template_id+'_modal" class="center-block tesco_svg" data="'+$temp[0]+'" type="image/svg+xml"></object> <object style="opacity:0;width:0px;height:0px" id="'+order_data.erp_order_details[0].reference_name+'_'+order_data.erp_order_details[0].template_id+'_back_modal" class="center-block tesco_svg" data="'+$temp[1]+'" type="image/svg+xml"></object>'
+                               
+                            
+        $('.edit-spectra-order-details-div').html($erp_details_div_html);
 
         $('.selectpicker').selectpicker('refresh');
         // $('#nat_template_type').val(data.template_data.template_type[0]);
