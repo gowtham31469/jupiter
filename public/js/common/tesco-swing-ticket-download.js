@@ -1,5 +1,5 @@
 
-function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,table_name_print,art_type,buyer_type) {
+function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,art_temp_id,table_name_print,art_type,buyer_type,jc_type,isEdit) {
 
     if(buyer_type == "admin")
     {
@@ -358,7 +358,15 @@ function downloadArtworkTickets(data, name,style_no,buyer_no,id,order_type,obj,a
                 }
                 else
                 {
-                    PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file,data.order_details[0].tesco_size_department);
+                    if(jc_type == "JC")
+                    {
+                        PopupTescoTicketsProofManagerPreview(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file,data.order_details[0].tesco_size_department,isEdit);
+                    }
+                    else
+                    {
+                        PopupTescoTicketsProofManager(svg_fin,svg_fin_back,data.order_details[0].po_number,data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,data.order_details[0].woolmark_logo_file,data.order_details[0].tesco_size_department);
+                    }
+                    
                 }
                 
             }

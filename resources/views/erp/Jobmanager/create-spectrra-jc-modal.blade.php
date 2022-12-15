@@ -922,6 +922,7 @@
                         </div>
                     </div>
 				</div>
+                <div class="edit-spectra-order-details-div"></div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>

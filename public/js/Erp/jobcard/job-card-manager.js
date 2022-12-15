@@ -943,7 +943,7 @@ function storeJobcard()
 							disney = $(this).closest('tr').data('disney');
                             modal_name    = refname.replace(/ /g, '');
 
-                            openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print',template_name,template_id,disney,refname);
+                            openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print',template_name,template_id,disney,refname,"");
                         }
                     });
                 }
@@ -966,7 +966,7 @@ function storeJobcard()
 							disney = $(this).closest('tr').data('disney');
                             modal_name    = refname.replace(/ /g, '');
 
-                            openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname);
+                            openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname,"");
                         }
                     });
 				
@@ -1783,7 +1783,7 @@ function updateJobcard(formData)
                         style_no   = $(this).attr('data-style-no');
                         modal_name = refname.replace(/ /g, '');
 
-                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print',template_name,template_id,disney,refname);
+                        openmodaltescopreview(modal_name, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print',template_name,template_id,disney,refname,"");
                         loop++;
                     });
                 }
@@ -1804,7 +1804,7 @@ function updateJobcard(formData)
 							disney 		  = $(this).attr('data-disney');
                             modal_name    = refname.replace(/ /g, '');
 
-                            openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname);
+                            openmodaltescopreview(refname, loop, style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_orchestra',template_name,template_id,disney,refname,"");
 							loop++;
                     });
 //                    var resp = JSON.stringify(data.file_path); 
@@ -2018,7 +2018,7 @@ function getJobcardsList()
  * 
  * @return barcode
  */
-function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit,status,type,template_id,disney,refname) 
+function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, created_at, isEdit,status,type,template_id,disney,refname,obj) 
 {
 	switch(status) {
 	  case "print_orchestra":
@@ -2061,6 +2061,10 @@ function openmodaltescopreview(modal, loop, style_no,buyer_no, id, order_type, c
 
 	  case "print":
 			genarateArtworkPreview("tesco_svg_modal"+loop,modal,style_no,buyer_no,id,order_type,created_at, isEdit,type,"tesco_svg_back_modal"+loop,"tesco_svg_back_text_modal"+loop,"tesco_svg_front_modal"+loop,loop);
+	    break;
+
+      case "print_swing_tickets":
+			downloadArtworkTickets(modal+"_"+template_id+"_modal",modal,style_no,buyer_no,id,order_type,obj,template_id,type,"proof","erp","JC",isEdit)
 	    break;
 
 	  default:
@@ -3817,6 +3821,63 @@ $.ajax({
 }
 
 
+function PopupTescoTicketsProofManagerPreview(data_front,data_back,po_number,style,template_name,created_at,customer_name,size_category_fin,size_comp_fin,product_desc_fin,wee_symbol_fin,ce_symbol_fin,woolmark_logo_file,tesco_size_department,isEdit) {
+	
+	var url = "";
+	
+	$.ajax({
+		url: base_url + "/erp/job-manager/tesco/proof-div-tescoticketos",
+		type: "post",
+		data: {
+			_token: csrf_token,
+			data_front: data_front,
+            data_back: data_back,
+            tesco_po_number:po_number,
+            style:style,
+            template_name:template_name,
+            created_date:created_at,
+            customer_name:customer_name,
+            size_category_fin:size_category_fin,
+            size_comp_fin:size_comp_fin,
+			product_desc_fin:product_desc_fin,
+			wee_symbol_fin:wee_symbol_fin,
+            ce_symbol_fin:ce_symbol_fin,
+			woolmark_logo_file:woolmark_logo_file,
+			tesco_size_department:tesco_size_department
+		},
+		tryCount: 0,
+		retryLimit: 2,
+		async: false,
+		success: function (data) {
+
+			localStorage.setItem('file_path',localStorage.getItem('file_path')+','+data.file_path);
+        
+			// differentiate between edit and create functionality
+			if(isEdit === false)
+			{
+				operation()
+			}
+            if(isEdit == "spectra_print")
+            {
+                after_forloop()
+            }
+			else
+			{
+				operationEdit()
+			}
+
+		},
+		error: function (errorXHR, errorStatus, errorThrown) {
+			console.log(errorThrown);
+		},
+		complete: function() {
+			$(".loader").hide();
+			$(".loader").css('margin-top', '0%');
+        }
+	})
+}
+
+
 /**
 * This Function is used to invoke JSBarcode.
 * 
@@ -4106,11 +4167,11 @@ function after_forloop()
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
                 $('.modal').modal('hide');
-                location.reload();
                 window.open(
                     base_url+JSON.parse(resp),
                     '_blank' // <- This is what makes it open in a new window.
                 );   
+                location.reload();
             },
             400: function() {
               

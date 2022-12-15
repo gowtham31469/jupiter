@@ -3,7 +3,7 @@
  * 
  * @return barcode
  */
-function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,created_at,status,type,template_id,disney,table_name) {
+function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,created_at,status,type,template_id,disney,table_name,obj) {
 	
 	switch(status) {
 	  case "print_orchestra":
@@ -26,6 +26,10 @@ function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,c
 
 	  case "print":
 	   		genarateArtwork("tesco_svg_modal" + i, modal,style_no,buyer_no,id,order_type,created_at,status,"tesco",template_id,table_name,"tesco_svg_back_modal" + i,"tesco_svg_back_text_modal" + i,"tesco_svg_front_modal" + i,i);
+	    break;
+
+	  case "print_swing_tickets":
+			downloadArtworkTickets(modal+"_"+template_id+"_modal",modal,style_no,buyer_no,id,order_type,obj,template_id,table_name,"proof","erp","","")
 	    break;
 
 	  default:
