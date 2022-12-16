@@ -69,7 +69,6 @@ class TemplateController extends Controller
 			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')
             ->orderBy('id', 'asc')->get()->toArray();
 		}
-        dd($treeviewData);
          
         if($treeviewData){
                 $childs = array();
