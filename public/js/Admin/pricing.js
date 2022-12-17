@@ -38,7 +38,7 @@ function price_template_list() {
     });
 
     $.ajax({
-        url: base_url + "/admin/template-management/template-hierarchy",
+        url: base_url + "/admin/template-management/template-pricing-hierarchy",
         type: "Post",
         dataType: "json",
         data: {
