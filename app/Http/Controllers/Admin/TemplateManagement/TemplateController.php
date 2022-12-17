@@ -92,6 +92,42 @@ class TemplateController extends Controller
        } 
 
     } 
+
+    public function templatePricingHierarchy(Request $request)
+{
+	    $buyer = $request->buyer;
+		if($buyer == "tesco")
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->orderBy('id', 'asc')->get()->toArray();
+		}
+		else
+		{
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')->orderBy('id', 'asc')->get()->toArray();
+		}
+        
+         
+        if($treeviewData){
+                $childs = array();
+                foreach($treeviewData as &$item) 
+                {
+                $childs[$item->parent_id][] = &$item;
+                unset($item);
+                }
+                foreach($treeviewData as &$item) 
+                {
+                    if (isset($childs[$item->id]))
+                    {
+                        $item->children = $childs[$item->id];
+                        unset($item);
+                    }
+                }
+                $tree = $childs[0];
+                $treefinalData=json_encode($tree);
+                return $treefinalData;
+       } 
+
+    } 
+    
 	
 	public function saveTax(Request $request) {
         try {
