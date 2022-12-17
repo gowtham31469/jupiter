@@ -109,6 +109,7 @@ Route::prefix('admin')->group(function () {
 	Route::prefix('/template-management')->group(function () {
 		Route::get('/', 'Admin\TemplateManagement\TemplateController@templateList');
 		Route::post('/template-hierarchy', 'Admin\TemplateManagement\TemplateController@templateHierarchy');
+		Route::post('/template-pricing-hierarchy', 'Admin\TemplateManagement\TemplateController@templatePricingHierarchy');
 		Route::post('/save-taxation', 'Admin\TemplateManagement\TemplateController@saveTax');
 		Route::post('/add-template', 'Admin\TemplateManagement\TemplateController@addTemplate');
 		Route::post('/template-view', 'Admin\TemplateManagement\TemplateController@templateView');
