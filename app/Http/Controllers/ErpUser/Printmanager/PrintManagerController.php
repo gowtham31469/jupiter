@@ -138,7 +138,7 @@ class PrintManagerController extends Controller
 				else
 				{
 					
-					$buyer = strtolower(DB::table('buyers')->where('id',$buyer_id)->first()->buyer_name);
+					$buyer = strtolower(str_replace(" ", "_", DB::table('buyers')->where('id',$buyer_id)->first()->buyer_name));
 				
 					$jobcard_id_list  = ErpOrderDetails::join('erp_status','erp_status.id','erp_order_details.status')->join($buyer.'_template', $buyer.'_template.item_id', 'erp_order_details.template_id')->where('erp_order_details.erp_order_id', '=', $erp_id)
 											->where('erp_order_details.status','!=',4)

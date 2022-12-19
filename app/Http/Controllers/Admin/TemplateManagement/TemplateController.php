@@ -58,17 +58,16 @@ class TemplateController extends Controller
 	
 	public function templateHierarchy(Request $request)
 {
-	    $buyer = $request->buyer;
+	    $buyer = strtolower(str_replace(" ", "_", $request->buyer));
 		if($buyer == "tesco")
 		{
 			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->where('is_non_artwork_template', 0)->orderBy('id', 'asc')->get()->toArray();
 		}
 		else
 		{
-			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')
-            ->where('is_non_artwork_template', 0)->orderBy('id', 'asc')->get()->toArray();
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')->where('is_non_artwork_template', 0)
+            ->orderBy('id', 'asc')->get()->toArray();
 		}
-        
          
         if($treeviewData){
                 $childs = array();
@@ -94,7 +93,7 @@ class TemplateController extends Controller
 
     public function templatePricingHierarchy(Request $request)
 {
-	    $buyer = $request->buyer;
+	    $buyer = strtolower(str_replace(" ", "_", $request->buyer));
 		if($buyer == "tesco")
 		{
 			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->orderBy('id', 'asc')->get()->toArray();
@@ -130,7 +129,7 @@ class TemplateController extends Controller
 	
 	public function saveTax(Request $request) {
         try {
-			$buyer 		 = $request['buyer'];
+			$buyer 		 = strtolower(str_replace(" ", "_", $request['buyer']));
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
             $ref         = $request['ref'];
@@ -161,7 +160,7 @@ class TemplateController extends Controller
                                 ->select('*')
                                 ->where('id',$template_id)
                                 ->get();
-			$item_id = $items{0}->item_id;
+			$item_id = $items[0]->item_id;
 			DB::table($buyer.'_item_master')
                         ->where('id',$item_id)
                         ->update([
@@ -181,7 +180,7 @@ class TemplateController extends Controller
     } 
 	public function addTemplate(Request $request) {
         try {
-			$buyer 		 = $request['buyer'];
+			$buyer 		 = strtolower(str_replace(" ", "_", $request['buyer']));
             $taxation    = $request['tax'];
             $ref         = $request['ref'];
             $company     = $request['company'];
@@ -259,7 +258,7 @@ class TemplateController extends Controller
     public function templateView(Request $request)
     {
          $template_id = $request['template_id'];
-		 $buyer = $request['buyer'];
+		 $buyer = strtolower(str_replace(" ", "_", $request['buyer']));
          $treeviewData= DB::table($buyer."_template")
                                 ->select($buyer.'_template.*',$buyer.'_item_master.ref_no',$buyer.'_item_master.company_id','company.name as company_name')
                                 ->join($buyer.'_item_master',$buyer.'_item_master.id','=',$buyer.'_template.item_id')
