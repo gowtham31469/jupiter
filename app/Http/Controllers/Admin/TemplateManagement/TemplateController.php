@@ -61,12 +61,11 @@ class TemplateController extends Controller
 	    $buyer = strtolower(str_replace(" ", "_", $request->buyer));
 		if($buyer == "tesco")
 		{
-			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))
-            ->orderBy('id', 'asc')->get()->toArray();
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id', DB::raw("(CASE WHEN is_qrcode_required = 0 THEN item_name ELSE CONCAT(item_name,' with QR ') END) as text"))->where('is_non_artwork_template', 0)->orderBy('id', 'asc')->get()->toArray();
 		}
 		else
 		{
-			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')
+			$treeviewData= DB::table($buyer."_item_master")->select('id','parent_id','item_name as text')->where('is_non_artwork_template', 0)
             ->orderBy('id', 'asc')->get()->toArray();
 		}
          
