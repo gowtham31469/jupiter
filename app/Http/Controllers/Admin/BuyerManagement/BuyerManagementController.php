@@ -80,7 +80,7 @@ class BuyerManagementController extends Controller
     public function createItemMaster($buyer_name)
     {
         // set dynamic table name 
-        $table_name = strtolower($buyer_name).'_item_master';
+        $table_name = strtolower(str_replace(" ", "_", $buyer_name)).'_item_master';
 
         Schema::create($table_name, function (Blueprint $table) {
           $table->increments('id');
@@ -114,8 +114,8 @@ class BuyerManagementController extends Controller
     public function createTemplateTable($buyer_name)
     {
         // set dynamic table name 
-        $table_name = strtolower($buyer_name).'_template';
-        $item_master_table = strtolower($buyer_name).'_item_master';
+        $table_name = strtolower(str_replace(" ", "_", $buyer_name)).'_template';
+        $item_master_table = strtolower(str_replace(" ", "_", $buyer_name)).'_item_master';
 
         Schema::create($table_name, function (Blueprint $table) use ($item_master_table) {
           $table->increments('id');
@@ -157,8 +157,8 @@ class BuyerManagementController extends Controller
     public function renameItemMaster($old_buyer_name, $new_buyer_name)
     {
         // set dynamic table name 
-        $old_table_name = strtolower($old_buyer_name).'_item_master';
-        $new_table_name = strtolower($new_buyer_name).'_item_master';
+        $old_table_name = strtolower(str_replace(" ", "_", $old_buyer_name)).'_item_master';
+        $new_table_name = strtolower(str_replace(" ", "_", $new_buyer_name)).'_item_master';
 
         Schema::table($old_table_name, function (Blueprint $table) {
           $table->dropForeign(['company_id']);
@@ -183,9 +183,9 @@ class BuyerManagementController extends Controller
     public function renameTemplateTable($old_buyer_name, $new_buyer_name)
     {
         // set dynamic table name 
-        $old_table_name = strtolower($old_buyer_name).'_template';
-        $new_table_name = strtolower($new_buyer_name).'_template';
-        $item_master_table = strtolower($new_buyer_name).'_item_master';
+        $old_table_name = strtolower(str_replace(" ", "_", $old_buyer_name)).'_template';
+        $new_table_name = strtolower(str_replace(" ", "_", $new_buyer_name)).'_template';
+        $item_master_table = strtolower(str_replace(" ", "_", $new_buyer_name)).'_item_master';
 
         Schema::table($old_table_name, function (Blueprint $table) {
           $table->dropForeign(['item_id']);
@@ -195,7 +195,7 @@ class BuyerManagementController extends Controller
 
         Schema::rename($old_table_name, $new_table_name);
       
-        Schema::table($new_table_name, function (Blueprint $table) {
+        Schema::table($new_table_name, function (Blueprint $table) use ($item_master_table){
           $table->foreign('item_id')->references('id')->on($item_master_table)->onDelete('cascade');
           $table->foreign('material_id')->references('id')->on('raw_material_master')->onDelete('cascade');
           $table->index(['company_id', 'material_id']);
