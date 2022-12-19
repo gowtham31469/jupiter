@@ -71,7 +71,7 @@ class NonArtworkTemplateController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function addTemplate(Request $request) {
-        $buyer 		 = $request['buyer'];
+        $buyer 		 = strtolower(str_replace(" ", "_", $request['buyer']));
         $taxation    = $request['tax'];
         $ref         = $request['ref'];
         $company     = $request['company'];
@@ -124,7 +124,7 @@ class NonArtworkTemplateController extends Controller
     public function templateView(Request $request)
     {
          $template_id = $request['template_id'];
-		 $buyer = $request['buyer'];
+		 $buyer = strtolower(str_replace(" ", "_", $request['buyer']));
          $treeviewData= DB::table($buyer."_template")
                                 ->select($buyer.'_template.*',$buyer.'_item_master.ref_no',$buyer.'_item_master.company_id','company.name as company_name')
                                 ->join($buyer.'_item_master',$buyer.'_item_master.id','=',$buyer.'_template.item_id')
@@ -166,7 +166,7 @@ class NonArtworkTemplateController extends Controller
      */
     public function updateTemplate(Request $request) {
         try {
-			$buyer 		 = $request['buyer'];
+			$buyer 		 = strtolower(str_replace(" ", "_", $request['buyer']));
             $template_id = $request['template_id'];
             $taxation    = $request['tax'];
             $ref         = $request['ref'];
@@ -197,7 +197,7 @@ class NonArtworkTemplateController extends Controller
                                 ->select('*')
                                 ->where('id',$template_id)
                                 ->get();
-			$item_id = $items{0}->item_id;
+			$item_id = $items[0]->item_id;
 			DB::table($buyer.'_item_master')
                         ->where('id',$item_id)
                         ->update([
@@ -224,7 +224,7 @@ class NonArtworkTemplateController extends Controller
      * @return [type]           [description]
      */
     public function templateHierarchy(Request $request) {
-	    $buyer = $request->buyer;
+	    $buyer = strtolower(str_replace(" ", "_", $request->buyer));
         $treeviewData = array();
         $treeviewData= DB::table($buyer."_item_master")
                     ->select('id','parent_id','item_name as text')
@@ -264,7 +264,7 @@ class NonArtworkTemplateController extends Controller
      */
     public function renameTemplate(Request $request) {
         try {
-			$buyer = $request['buyer'];
+			$buyer = strtolower(str_replace(" ", "_", $request['buyer']));
             $template_id = $request['template_id'];
             $template_name = $request['new_name'];
             

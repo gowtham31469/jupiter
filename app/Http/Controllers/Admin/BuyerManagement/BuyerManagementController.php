@@ -246,7 +246,7 @@ class BuyerManagementController extends Controller
                 }
                 else
                 {
-                  $buyer = strtolower($name);
+                  $buyer = strtolower(str_replace(" ", "_", $name));
                   $inserted = Buyer::create([
                                 'buyer_name' => $name,
                                 'buyer_email'      => $email,
