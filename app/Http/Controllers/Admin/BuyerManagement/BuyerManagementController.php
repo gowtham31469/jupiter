@@ -248,7 +248,7 @@ class BuyerManagementController extends Controller
                 {
                   $buyer = strtolower(str_replace(" ", "_", $name));
                   $inserted = Buyer::create([
-                                'buyer_name' => $name,
+                                'buyer_name' => str_replace(" ", "-", $name),
                                 'buyer_email'      => $email,
                                 'buyer_phone'      => $phone,
                                 'buyer_address'    => $address,
@@ -351,7 +351,7 @@ class BuyerManagementController extends Controller
                 $b_name = DB::table('buyers')->where('id','=',$id)->value('buyer_name');
                 Buyer::find($id)
                   ->update([
-                    'buyer_name'          => $input['name'],
+                    'buyer_name'          => str_replace(" ", "-", $input['name']),
                     'buyer_email'         => $input['email'],
                     'buyer_phone'         => $input['phone'],
                     'buyer_address'       => preg_replace('/\s*,\s*/', ', ', $input['address']),
