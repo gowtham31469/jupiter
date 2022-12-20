@@ -146,10 +146,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $item_names[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
@@ -188,10 +184,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $references[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
@@ -231,10 +223,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $query = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
