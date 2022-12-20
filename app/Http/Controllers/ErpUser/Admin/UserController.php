@@ -237,7 +237,7 @@ class UserController extends Controller
     {	
 		switch ($buyer){
 			case "Tesco":
-				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,32,41])->get()->toArray();
+				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,32,41,54,55,56])->get()->toArray();
 				break;
 				
 			case "Orchestra":
