@@ -436,12 +436,17 @@ $(document).on('click','.edit-nat-jobcard',function(e){
                $('.datepicker').datepicker({
                    format: 'dd-mm-yyyy'
                });
+                $('#aw_app_date').datepicker({
+                    format: 'dd-mm-yyyy',
+                    endDate: new Date()
+                });
             },
             error: function(errorXHR, errorStatus, errorThrown) {
                console.log(errorThrown);
              },
             complete: function () {
                 $(".loader").hide();
+                $("#close-nat-jc-model,#jc_nat_close_btn").prop("onclick", null).off("click");
             }
         })
   } catch (e) {

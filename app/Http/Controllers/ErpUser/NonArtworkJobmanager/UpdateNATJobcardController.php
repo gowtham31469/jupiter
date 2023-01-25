@@ -37,8 +37,8 @@ class UpdateNATJobcardController extends Controller
         foreach ($new_orders as $key => $values) {
             $split_key = explode('-', $key);
             $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-            $buyers_array[$buyer_id] = $this->buyer_name;
+            $buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
+            $buyers_array[$buyer_id] = $buyer_name;
         }
 
         return view(
