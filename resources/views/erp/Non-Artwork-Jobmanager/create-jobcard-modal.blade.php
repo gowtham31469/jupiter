@@ -195,7 +195,7 @@
 								<div class="form-group has-feedback">
 									{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
 									<div class="input-group act_del_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " required="" placeholder="ACT D.DT">
+										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " placeholder="ACT D.DT">
 										<div class="input-group-addon input-sm">
 											<span class="glyphicon glyphicon-th"> </span>
 										</div>
