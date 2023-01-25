@@ -616,6 +616,12 @@ const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_ar
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
                 });
+
+                $('#aw_app_date').datepicker({
+                    format: 'dd-mm-yyyy',
+                    endDate: new Date()
+                });
+
                 // enable print button (for old version browsers)
                 $('#jc_print_btn').prop('disabled', false);
             },

@@ -21,7 +21,7 @@
 
 		
 		$("#current_date").datepicker("setDate", new Date());
-	
+ 
 
 		$.ajaxSetup({
 			headers: {
