@@ -103,7 +103,7 @@ class NonArtworkJobCardFiltersController extends Controller
 
         $erp_po_ids = $erpid_collection->all();
         asort($erp_po_ids);
-dd($erp_po_ids);
+
         return view(
             'erp.Non-Artwork-Jobmanager.non-artwork-jobcard-home',
             [
