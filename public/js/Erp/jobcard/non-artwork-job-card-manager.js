@@ -747,19 +747,19 @@ const mtrsForNatStickers = () => {
 
     switch (machine_text.toLowerCase().trim()) {
         case 'rotary':
-                $('#teeth_no').prop("disabled", false).selectpicker('refresh');
+                $('#teeth_no').val('').prop("required", true).prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, total_excess);
             break;
         case 'flexo':
-                $('#teeth_no').prop("disabled", false).selectpicker('refresh');
+                $('#teeth_no').val('').prop("required", true).prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         case 'flat bed':
-                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
+                $('#teeth_no').val('').prop("required", false).prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         default:
-                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
+                $('#teeth_no').val('').prop("required", false).prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(0, 0, 1, 0, 0);
             break;
     }
@@ -1068,14 +1068,17 @@ const storeNatJobcard = () => {
             200: function(data) {
 
                 var resp = JSON.stringify(data.file_path); 
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                ); 
+                // window.open(
+                //     base_url+JSON.parse(resp),
+                //     '_blank' // <- This is what makes it open in a new window.
+                // ); 
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('.modal').modal('hide');
-                location.reload();
+                // $('.modal').modal('hide');
+                // location.reload();
+
+                $('#jc_print_btn').remove();
+                $('#nat_jc_download_btn').attr("href", base_url+JSON.parse(resp)).attr('target','_blank').removeClass('hidden');
               
             },
             400: function() {
@@ -1097,6 +1100,7 @@ const storeNatJobcard = () => {
         },
         complete: function () {
             $(".loader").hide();
+            $("#close-nat-jc-model,#jc_nat_close_btn").attr("onclick", "location.reload()");
         }
     })
 }

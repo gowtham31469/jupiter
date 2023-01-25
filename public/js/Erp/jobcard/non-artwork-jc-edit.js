@@ -446,6 +446,7 @@ $(document).on('click','.edit-nat-jobcard',function(e){
              },
             complete: function () {
                 $(".loader").hide();
+                $("#close-nat-jc-model,#jc_nat_close_btn").prop("onclick", null).off("click");
             }
         })
   } catch (e) {
