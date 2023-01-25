@@ -467,6 +467,7 @@ const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_ar
 
                 renderCommonJCView(data);
 
+                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
                 $('#nat_template_type').val(data.template_data.template_type[0]);
                 $('.nat-jobcard-modal-title').text(data.modal_title);
                 $('#crud_operation_type').text('created_at');
@@ -746,15 +747,19 @@ const mtrsForNatStickers = () => {
 
     switch (machine_text.toLowerCase().trim()) {
         case 'rotary':
+                $('#teeth_no').prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, total_excess);
             break;
         case 'flexo':
+                $('#teeth_no').prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         case 'flat bed':
+                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         default:
+                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(0, 0, 1, 0, 0);
             break;
     }
