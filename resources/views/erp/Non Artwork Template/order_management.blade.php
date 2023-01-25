@@ -209,7 +209,7 @@
 							</td>
 							<td class="aw_td">
 								<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-									<input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
+									<input value="" id="nat_approve_date" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
 									<div class="input-group-addon">
 										<span class="glyphicon glyphicon-th"> </span >
 									</div >

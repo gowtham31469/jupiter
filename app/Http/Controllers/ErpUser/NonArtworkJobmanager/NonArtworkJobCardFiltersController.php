@@ -75,7 +75,7 @@ class NonArtworkJobCardFiltersController extends Controller
         foreach ($new_orders as $key => $values) {
             $split_key = explode('-', $key);
             $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
+            $buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
 
             $erp_po_ids[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->where([
@@ -90,7 +90,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->orderBy('erp_order_details.erp_order_id', 'asc')
             ->pluck('erp_orders.po_no', 'erp_orders.erp_id');
 
-            $buyers_array[$buyer_id] = $this->buyer_name;
+            $buyers_array[$buyer_id] = $buyer_name;
         }
 
         $erpid_collection = new Collection();

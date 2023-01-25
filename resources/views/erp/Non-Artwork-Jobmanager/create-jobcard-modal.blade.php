@@ -2,7 +2,7 @@
 	<div class="modal-dialog modal-lg nat-jobcard-creation-modal-dialog" role="document">
 		<div class="modal-content nat-jobcard-creation-modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-nat-jc-model"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title nat-jobcard-modal-title" id="natJobcardCreationModal"></h4>
 			</div>
 			{!! Form::open(['id' => 'create_nat_jobcard','data-toggle' => 'validator','role' => 'form']) !!}
@@ -185,7 +185,7 @@
 							<div class="col-md-3">
 								<div class="form-group has-feedback">
 									{!! Form::label('teeth_no', 'TEETH NO :', ['class' => 'form_label']) !!}
-									{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no','required')) }}
+									{{ Form::select('teeth_no',(['' => '-- Select Teeth No --']),'',array('class' => 'form-control input-sm selectpicker','data-width' => '100%','id' => 'teeth_no')) }}
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
@@ -195,7 +195,7 @@
 								<div class="form-group has-feedback">
 									{!! Form::label('act_del_date', 'ACT D.DT :', ['class' => 'form_label']) !!}
 									<div class="input-group act_del_date date datepicker" data-provide="datepicker" id="datePicker1">
-										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " required="" placeholder="ACT D.DT">
+										<input value="" id="act_del_date" name="act_del_date" type="text" class="form-control input-sm " placeholder="ACT D.DT">
 										<div class="input-group-addon input-sm">
 											<span class="glyphicon glyphicon-th"> </span>
 										</div>
@@ -371,8 +371,10 @@
 				</div>
 			</div>
 			<div class="modal-footer nat-jobcard-creation-modal-footer">
-				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-				{!! Form::button('Print', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn', 'onclick'  => 'return validateNatJCForm()'] ) !!}
+				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal', 'id' => 'jc_nat_close_btn'] ) !!}
+				{!! Form::button('Submit', ['class' => 'btn btn-primary btn-sm','type' => 'submit', 'id' => 'jc_print_btn', 'onclick'  => 'return validateNatJCForm()'] ) !!}
+				<a href="" class="btn btn-primary btn-sm hidden" id="nat_jc_download_btn">Download</a>
+				<!-- {!! Form::button('Download', ['class' => 'btn btn-primary btn-sm hidden','type' => 'button', 'id' => 'nat_jc_download_btn'] ) !!} -->
 			</div>
 			{!! Form::close() !!}
 		</div>

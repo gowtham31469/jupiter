@@ -30,8 +30,6 @@ class NonartworkJCRequest extends FormRequest
             'machine' => ['required'],
             'aw_app_date' => ['required'],
             'cus_del_date' => ['required'],
-            'teeth_no' => ['required'],
-            'act_del_date' => ['required'],
             'finish_type' => ['required'],
             'compiled_by' => ['required'],
         ];
