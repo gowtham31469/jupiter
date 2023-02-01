@@ -71,7 +71,8 @@
                             </select>
                         </div>
                         <div class="col-md-3 po-list hidden">
-                            <label for="invoice-no">Orders</label>
+                            <label for="invoice-no">Orders</label><br>
+                            <input type='text' class="form-control" id='txt_name' placeholder='Enter Erp Id'>
                             <span class="dynamic-table">
                             </span>
                         </div>

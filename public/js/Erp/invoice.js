@@ -32,7 +32,7 @@
                     });
                     // $('.dynamic-table').html('<form id="po-list-form"><table class="table table-fixed"><thead><tr><th></th><th style="padding-left: 30px;">ERP ID</th><th style="padding-left: 20px;">PO Number</th><th style="padding-left: 10px;">Buyer</th></tr></thead><tbody>'+html+'</tbody></table></form>');
 
-                    $('.dynamic-table').html('<form id="po-list-form"><table class="table table-bordered table-erp-list"><thead><tr><th style="border-bottom:1px white;border-right:1px white;"></th><th width="100" style="border-bottom:1px black;border-top:1px black;">ERP ID</th><th width="100" style="border-bottom:1px black;border-top:1px black;">PO Number</th><th width="100" style="border-bottom:1px black;border-top:1px black;border-width: 1px !important;">Buyer</th></tr></thead><tbody><tr><td width="500" colspan="4"><div><table>'+html+'</table></div></td></tr></tbody></table></form>');
+                    $('.dynamic-table').html('<form id="po-list-form"><table  style="margin-top:15px" class="table table-bordered table-erp-list"><thead><tr><th style="border-bottom:1px white;border-right:1px white;"></th><th width="100" style="border-bottom:1px black;border-top:1px black;">ERP ID</th><th width="100" style="border-bottom:1px black;border-top:1px black;">PO Number</th><th width="100" style="border-bottom:1px black;border-top:1px black;border-width: 1px !important;">Buyer</th></tr></thead><tbody><tr><td width="500" colspan="4"><div><table>'+html+'</table></div></td></tr><tr class="notfound" style="display:none"><td colspan="4">No record found</td></tr></table></div></td></tr></tbody></table></form>');
 
                    
 
@@ -62,6 +62,29 @@
                     $('.orders-tax').addClass('hidden')
                     $('.create-invoice').addClass('hidden')                  
                 }
+
+                $('#txt_name').val("")
+                $('#txt_name').keyup(function(){
+                    // Search Text
+                    var search = $(this).val();
+
+                    // Hide all table tbody rows
+                    $('table tbody tr').hide();
+
+                    // Count total search result
+                    var len = $('table tbody tr:not(.notfound) td:nth-child(2):contains("'+search+'")').length;
+                    
+                    if(len > 0){
+                      // Searching text in columns and show match row
+                      $('table tbody tr:not(.notfound) td:contains("'+search+'")').each(function(){
+                          $(this).closest('tr').show();
+                      });
+                    }else{
+                      $('.notfound').show();
+                    }
+                    
+                });
+                
             },
             error: function (errorXHR, errorStatus, errorThrown) {
                
