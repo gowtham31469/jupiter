@@ -473,6 +473,10 @@ const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_ar
                 $('#crud_operation_type').text('created_at');
                 $('#material_hierarchy').text(data.template_data.material_hierarchy)
 
+                if (data.template_data.aw_approve_dt.length === 1) {
+                    $('#aw_app_date').val(data.template_data.aw_approve_dt);
+                }
+
                 /** Show single templates dynamic table */
                 var single_table_html = '';
                 var meters_div_html = '';
