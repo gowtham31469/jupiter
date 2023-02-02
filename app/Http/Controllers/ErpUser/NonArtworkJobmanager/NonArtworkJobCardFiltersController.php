@@ -413,7 +413,7 @@ class NonArtworkJobCardFiltersController extends Controller
         /** Get erp order details table ids from erp orders table id */
         list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
 
-        list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array) = $jc_class_obj->createNatOrderDataArray($order_details_collection);
+        list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array, $aw_approve_dt_array) = $jc_class_obj->createNatOrderDataArray($order_details_collection);
 
         if (empty($temp_id_array)) {
             return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
@@ -435,6 +435,7 @@ class NonArtworkJobCardFiltersController extends Controller
 
         /** Push all array values into template_data array */
         $template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+        $template_data['aw_approve_dt']    = $aw_approve_dt_array;
         $template_data['cus_del_date']     = $delivery_dt_array;
         $template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
         $template_data['workorder_id']     = $workorder_id;

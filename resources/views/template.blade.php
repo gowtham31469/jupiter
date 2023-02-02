@@ -31,7 +31,7 @@
                 <td>
                     <table cellpadding="1" cellspacing="0">
                         <tr>
-                            <td width="170" style="font-size: 5px; border-right:1px solid black;"><span> Buyer</span></td>
+                            <td width="170" style="font-size: 5px; border-right:1px solid black;"><span> To</span></td>
                             <td width="160" style="font-size: 5px; border-left:1px solid black;border-right:1px solid black;"><span> Ship To</span></td>
                             <td width="108" style="border-bottom:1px solid black;" align="center" rowspan="2"><span style="line-height: -15px; font-size: 10px;"><strong>TAX INVOICE </strong></span></td>
                         </tr>
@@ -63,7 +63,7 @@
         </table>
        
         <table cellpadding="0" cellspacing="0">
-            <tr>
+            <!-- <tr>
                  <td>
                     <table cellpadding="0" cellspacing="0">
                     <tr>
@@ -74,7 +74,7 @@
                     </tr>
                     </table>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
                 <td>
                     <table cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th style="border-bottom:1px solid black;text-align:left;border-top:1px solid black;" width="25"><strong>Sno</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="62"><strong>Style</strong></th><th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>ByrPo</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Ref</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="45"><strong>Size</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Quantity</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Rate(INR)</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="45"><strong>Amount(INR)</strong></th></tr></thead><tbody>
@@ -265,8 +265,8 @@
                     <table cellpadding="1" cellspacing="0">
                     <tr>
                         <td width="408">
-                            <p>Delivery At :</p>
-                            <p>{{$ship_to->address}},{{$ship_to->pincode}}</p>
+                            <!-- <p>Delivery At :</p>
+                            <p>{{$ship_to->address}},{{$ship_to->pincode}}</p> -->
                         </td>
                     </tr>
                     </table>
