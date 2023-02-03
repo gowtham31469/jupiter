@@ -111,6 +111,8 @@
           <h4 class="modal-title" id="editModalLabel">Link E-Way No.</h4>
       </div>
       <input type="hidden" name="hiddenid" id="hiddenId">
+      <input type="hidden" name="place_of_supply" id="place_of_supply">
+      <input type="hidden" name="total_invoice_amount" id="total_invoice_amount">
 
       <div class="modal-body" id="invoice">        
          <div class="container-fluid inv_details">
@@ -174,6 +176,7 @@
               <div class="form-group has-feedback">
                   {!! Form::label('eway_no', 'E-Way Bill No.', ['class' => 'form_label']) !!}
                   {!! Form::text('eway_no',$value = '', array('class' => 'form-control input-sm','required')) !!}
+                  <div class="help-block with-errors"></div>
               </div>
               <div>
                  <strong>AMOUNT IN WORDS</strong>
@@ -416,6 +419,9 @@ function showInvoice(obj){
           var tr = '';
           var totalAmnt = 0;
 
+          var place_of_supply = data.inv_details[0].place_of_supply   
+          $('#place_of_supply').val(place_of_supply);
+
           $('#inv_no').text(data.inv_details[0].invoice_id)
           $('#inv_no').attr('data-id',invId);
           $('#customer_name').val(data.inv_details[0].company_name)
@@ -448,12 +454,14 @@ function showInvoice(obj){
                 totalAmnt+= value.delivered_qnty * value.rate;
           });
 
+          $('#total_invoice_amount').val(totalAmnt.toFixed(2));
+
           tr+= '<tr><td colspan="11"><strong>Total</strong></td><td style="border-width:1px !important;"><strong>'+totalAmnt.toFixed(2)+'</strong></td></tr>';
           $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th style="border-width:1px !important;">Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
 
           var tax_amnt = taxDivision(data.inv_details)
           var tax_tr = "";  
-          var place_of_supply = data.inv_details[0].place_of_supply     
+           
           var tax_table = $('.inv-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th style="padding-left: 2px;">Base value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
           Object.keys(tax_amnt).forEach(function(key) {
             if (place_of_supply==1){
@@ -639,61 +647,67 @@ function showInvoice(obj){
     //   downloadInvoice()
     // });
 
-     $('#edit_invoice_form').validator().on('click', function (e) {
-      if (e.isDefaultPrevented())
-      {
+    //  $('#edit_invoice_form').validator().on('click', function (e) {
+    //   if (e.isDefaultPrevented())
+    //   {
 
-      }
-      else
-      {
-         e.preventDefault();
-         /* call editCustomer function from customer.js*/
-         editInvoice();
-      }
-    })
+    //   }
+    //   else
+    //   {
+    //      e.preventDefault();
+    //      /* call editCustomer function from customer.js*/
+    //      editInvoice();
+    //   }
+    // })
 
      function editInvoice(){
         var eway_no = $('#eway_no').val();
         var inv_id = $('#inv_no').data('id');
         
-        var amntInwords = $('.amnt-in-words').text()
-        if (eway_no=="") {
-            $('.snackbar_span').html("Please link E-Way Bill No");
-            showSnackbar();
-        }else{
-             $.ajax({
-                url: base_url + "/erp/update-invoice",
-                type: "post",
-                data: {
-                    _token: csrf_token,
-                    inv_id: inv_id,
-                    eway_no:eway_no,
-                    amntInwords:amntInwords
-                },
-                beforeSend: function() {
-                    // location.reload();
-                },
-                statusCode: {
-                      200: function(data) {
-                          var resp = JSON.stringify(data);
-                          console.log( base_url+data)
-                          $('.snackbar_span').html("Successfully send Invoice to the Customer !");
-                            showSnackbar();
-                        setTimeout(function(){window.location = 'invoice';}, 1000);
-                      },
-                      400: function() {
-                          $('.snackbar_span').html("Parameter is missing !!!");
-                          showSnackbar();
-                      },
-                 },
-                error: function(data) {
+        var amntInwords = $('.amnt-in-words').text();
 
-                },
-                complete: function() {
+        var eway_rule = validateEwayBill(eway_no);
 
-                }
-            })
+        if(!eway_rule){ 
+          $('.snackbar_span').html("Please link E-Way Bill No");
+          showSnackbar();
+          return false;
         }
+
+        $.ajax({
+          url: base_url + "/erp/update-invoice",
+          type: "post",
+          data: {
+            _token: csrf_token,
+            inv_id: inv_id,
+            eway_no: eway_no,
+            amntInwords: amntInwords
+          },
+          beforeSend: function() {
+            $(".loader").show();
+          },
+          statusCode: {
+            200: function(data) {
+              var resp = JSON.stringify(data);
+              console.log(base_url + data)
+              $('.snackbar_span').html("Successfully send Invoice to the Customer !");
+              showSnackbar();
+              setTimeout(function() {
+                window.location = 'invoice';
+              }, 1000);
+            },
+            400: function() {
+              $('.snackbar_span').html("Parameter is missing !!!");
+              showSnackbar();
+            },
+          },
+          error: function(data) {
+
+          },
+          complete: function() {
+            $(".loader").hide();
+          }
+        })
            
      }
 
@@ -703,47 +717,86 @@ function showInvoice(obj){
         var inv_id = $('#inv_no').data('id');
         
         var amntInwords = $('.amnt-in-words').text()
-        if (eway_no=="") {
-            $('.snackbar_span').html("Please link E-Way Bill No");
-            showSnackbar();
-        }else{
-             $.ajax({
-                url: base_url + "/erp/download-invoice",
-                type: "post",
-                data: {
-                    _token: csrf_token,
-                    inv_id: inv_id,
-                    eway_no:eway_no,
-                    amntInwords:amntInwords
-                },
-                beforeSend: function() {
-                    // location.reload();
-                },
-                statusCode: {
-                      200: function(data) {
-                          var resp = JSON.stringify(data);
-                          console.log( base_url+data)
-                          $('.snackbar_span').html("Invoice has been successfully sent to the customer.");
-                            showSnackbar();
-                        window.open(
-                           base_url+$.trim(data),
-                          '_blank' // <- This is what makes it open in a new window.
-                        );
-                        
-                      },
-                      400: function() {
-                          $('.snackbar_span').html("Parameter is missing !!!");
-                          showSnackbar();
-                      },
-                 },
-                error: function(data) {
 
-                },
-                complete: function() {
-
-                }
-            })
+        var eway_rule = validateEwayBill(eway_no);
+        
+        if(!eway_rule){ 
+          $('.snackbar_span').html("Please link E-Way Bill No");
+          showSnackbar();
+          return false;
         }
+
+        $.ajax({
+          url: base_url + "/erp/download-invoice",
+          type: "post",
+          data: {
+            _token: csrf_token,
+            inv_id: inv_id,
+            eway_no: eway_no,
+            amntInwords: amntInwords
+          },
+          beforeSend: function() {
+            $(".loader").show();
+          },
+          statusCode: {
+            200: function(data) {
+              var resp = JSON.stringify(data);
+              console.log(base_url + data)
+              $('.snackbar_span').html("Invoice has been successfully sent to the customer.");
+              showSnackbar();
+              window.open(
+                base_url + $.trim(data),
+                '_blank' // <- This is what makes it open in a new window.
+              );
+
+            },
+            400: function() {
+              $('.snackbar_span').html("Parameter is missing !!!");
+              showSnackbar();
+            },
+          },
+          error: function(data) {
+
+          },
+          complete: function() {
+            $(".loader").hide();
+          }
+        })
+    }
+
+    function validateEwayBill(ewaybill) {
+
+      var place_of_supply = $('#place_of_supply').val();
+      var total_invoice_amount = $('#total_invoice_amount').val();
+
+      /**
+       * place_of_supply 1 : Inside tamilnadu
+       * place_of_supply 2 : Outside tamilnadu
+       * place_of_supply 3 : Outside india
+       */
+      switch (parseInt(place_of_supply)) {
+        case 1:
+                if (parseInt($.trim(total_invoice_amount)) >= 50000) {
+                  return false;
+                }
+                return true;
+          break;
+        case 2:
+                if(!$.trim(ewaybill)){
+                  return false;
+                }
+                return true;
+          break;
+      
+        default:
+                if(!$.trim(ewaybill)){
+                  return false;
+                }
+                return true;
+          break;
+      }
+
+
     }
 
 </script>

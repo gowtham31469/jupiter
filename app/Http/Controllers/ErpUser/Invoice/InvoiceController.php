@@ -159,7 +159,13 @@ class InvoiceController extends Controller
                             ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();                     
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
-                $value->item_name =  DB::table($value->item_master_table)->where('id',$details->hierarchy_id)->value('item_name');
+                $value->item_name =  DB::table('price_taxation')
+                                    ->where([
+                                        'customer_id' => $value->customer_id,
+                                        'buyer_id'    => $value->buyer_id,
+                                        'template_id' => $value->template_id,
+                                    ])
+                                    ->value('custom_name');
             }
             $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
         }
@@ -196,17 +202,9 @@ class InvoiceController extends Controller
         try 
         {
             $orders        =  $request['finalData'];
-            $htmlData      =  $request->htmlData;
-            $tax_amnt      =  $request->tax_amnt;
-            $ewayNo        =  $request->ewayNo; 
-            $creditTerms   =  $request->creditTerms;
-            $taxTotal      = $request->taxTotal;
             $place_of_supply = $request->place_of_supply;
             $roundOff      = $request->roundOff;
-            $amntInwords   = $request->amntInwords;
             $grandTotal    = $request->grandTotal;
-            // $invoiceNo     = $request->invoiceNo;
-            $invoiceDate   = $request->invoiceDate;
             $delivery_at   = $request->delivery_at;
             $eChargesArr   = $request['eCharges'];
 
@@ -262,10 +260,6 @@ class InvoiceController extends Controller
                 $delivery_at =  $deliveryAdd->id;
                 $billTo_id    =  $billAdd->id;   
             }            
-
-            $company_details =  DB::table('company')
-                                ->where('id',session()->get('company'))
-                                ->first();         
 
             if ($orders) {
                 $invoiceData = Invoices::create([
@@ -416,14 +410,9 @@ class InvoiceController extends Controller
         try
         {
             $inv_id   = $request->invoice_id;
-            // $invoice_details  = DB::table('invoice')
-            //                     ->join('cu')
-            //                     ->where('invoice_id',$inv_id)->get();
 
             $invoice_details  =      Invoices::join('customers','invoice.customer_id','customers.id')
-                                // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                 ->join('buyers','invoice.buyer_id','buyers.id')
-                                // ->where('invoice_details.company_id',session()->get('company'))
                                 ->where('invoice_id',$inv_id)
                                 ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id')
                                 ->distinct('invoice.id')
@@ -448,7 +437,6 @@ class InvoiceController extends Controller
         try {
             $objInv     = new Invoice();
             $inv_id      = $request->id;
-            $ddmmyy="DD/MM/YYYY";
             $inv_details = $objInv->getInvoiceDetails($inv_id);
             $ship_to = $objInv->getShippTo($inv_details);
             $bill_to = $objInv->getBillTo($inv_details);
@@ -493,8 +481,6 @@ class InvoiceController extends Controller
             $dynView = View::make('template')
                 ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
             ob_start();
-            // define ('PDF_FONT_NAME_MAIN', 'helvetica');
-            // define ('PDF_FONT_NAME_DATA', 'helvetica');
             $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $pdf->setCompanyData($company_details);
             //margins
@@ -517,15 +503,20 @@ class InvoiceController extends Controller
             $pdf->AddPage('P', 'A4');
             $pdf->SetXY(5.3, 24);
             $pdf->writeHTML($dynView->render());
-            // PDF::SetPrintHeader(false);
-            // PDF::SetPrintFooter(false);
-            // PDF::AddPage();
-            // PDF::writeHTML($dynView->render());
+            
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
+            Invoices::where('id', $inv_id)
+            ->update(
+                [
+                    'eway_no' => $eway_no,
+                    'invoice_file' => '/storage/app/public/invoices/invoices_' . $inv_id . '.pdf'
+                ]
+            );
+
             $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
-            //Mail notiication
+            
+            //Mail notification
             // $useremail = "aswathy@wizroots.com";
             $useremail = $inv_details[0]->email;
             Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attachment)
@@ -588,47 +579,31 @@ class InvoiceController extends Controller
                 // set font
                 $pdf->SetFont('helvetica', '', 8);
 
-                // add a page
-                // $pdf->AddPage('P', 'A4');
-                // $pdf->SetXY(5.3, 24);
-                // for ($i=0; $i <3 ; $i++) { 
-                //     $pdf->AddPage('P', 'A4');
-                //     $pdf->SetXY(5.3, 24);
-                //      // $pdf->Cell(10, -20, 'Customer Copy ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                //     $pdf->writeHTML($dynView->render());
-                    
-                // }
-
                 $invoice = array(1, 2, 3);
                 foreach($invoice as $value){
                     switch($value){
                          case 1: 
-                            $copy="text for invoice 1";
                             $pdf->AddPage('P', 'A4');
                             $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
                             $pdf->writeHTML($dynView->render()); 
                          break;
                          case 2: 
-                            $copy="text for invoice 2";
                             $pdf->AddPage('P', 'A4');
                             $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
                             $pdf->writeHTML($dynView->render());  
                          break;
                          case 3: 
-                            $copy="text for invoice 3";
                             $pdf->AddPage('P', 'A4');
                             $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20,$copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
                             $pdf->writeHTML($dynView->render());         
                          break;      
                     }
                 }
      
-            $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
+            $pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
         } 
         catch (\Exception $e)
