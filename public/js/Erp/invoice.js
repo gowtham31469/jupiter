@@ -554,7 +554,8 @@
         var roundoff = Math.round(grandTotal) - grandTotal
         $('.grand-total').text((parseFloat(grandTotal)+roundoff).toFixed(2))
         $('#round-off').val(roundoff.toFixed(2));
-        $('#round-off').closest('tr').removeAttr('hidden')     
+        $('#round-off').closest('tr').removeAttr('hidden');
+        $('#invoice_form').validator('update'); 
     }
 
     /**
