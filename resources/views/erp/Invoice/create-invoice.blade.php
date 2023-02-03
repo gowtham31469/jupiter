@@ -89,9 +89,6 @@
                     <div class="col-md-7 remarks hidden">
                         <label>Delivery Address</label>
                         <div class="row delivery-address">
-                       <!--  <div class="col-md-6">
-                           
-                        </div> -->
                         </div>
                     </div>
                     <div class="col-md-5" style="margin-bottom: 3rem;">
@@ -195,8 +192,6 @@
                                         <p class="amnt-in-words"></p>
                                     </div>
                                     <div>
-                                        <!-- <strong>Delivery At</strong>
-                                        <p class="delivery-at"></p> -->
                                         <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-details" style="padding-left: 20px;"></span>
                                     </div>
                                     <div class="pull-right" style="padding-right: 55px;">
