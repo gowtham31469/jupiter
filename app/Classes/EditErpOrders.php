@@ -17,6 +17,8 @@ class EditErpOrders
 	private $financial_year_start;
 	private $financial_year_end;
 	private $tesco_material_obj;
+	private $month;
+	private $financial_year_date_format;
 	
 	/**
 	 * Create a new controller instance.
