@@ -1,4 +1,4 @@
-function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tableID,tableName,print_flag)
+function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,activity_label,art_type,buyer_type,jc_type,isEdit)
 {
     var a1 = document.getElementById(front);
 	var svgDoc1 = a1.contentDocument;
@@ -8,14 +8,27 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
     var svgDoc1_back = a1_back.contentDocument;
     var svgRoot1_back = svgDoc1_back.documentElement;
 
-	var index_arr=[];
+
+    if(buyer_type == "admin")
+    {
+        var buyer_url = base_url + "/admin/orchestra/get-order-details";
+    }
+    else if(buyer_type == "customer")
+    {
+        var buyer_url = base_url + "/customer/orchestra/get-order-details";
+    }
+    else if(buyer_type == "erp")
+    {
+        var buyer_url = base_url + "/erp/job-manager/get-order-details";
+    }
+
 	var svgarr = [];
 	var svgarr_back = [];
 	var i=0;
 	var ajax=0;
 
     $.ajax({
-        url: base_url + "/admin/orchestra/get-order-details",
+        url: buyer_url,
         type: "Post",
         dataType: "json",
         data: {
@@ -61,9 +74,7 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
                         if(size[0] == "TAILLE")
                         {
                             svgDoc1.getElementById("size1").innerHTML = size_txt;
-                            //svgDoc1.getElementById("size2").innerHTML = size_txt;
                             svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
-                            //svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
 
                             svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = "";
                             svgDoc1_back.getElementById("size2").innerHTML = size_txt;
@@ -73,24 +84,20 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
                             if(data.size_chart.length > 0 )
                             {
                                 svgDoc1.getElementById("size_in_fr_en1").innerHTML = data.size_chart[0].size+" cm ";
-                                //svgDoc1.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size+" cm ";
                                 svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = data.size_chart[0].size + "cm";
                             }
                             else
                             {
                                 svgDoc1.getElementById("size_in_fr_en1").innerHTML = "";
                                 svgDoc1_back.getElementById("size_in_fr_en2").innerHTML = "";
-                                //svgDoc1.getElementById("size_in_fr_en2").innerHTML = "";
                             }
 
                             svgDoc1.getElementById("size1").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
                             svgDoc1_back.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
-                            //svgDoc1.getElementById("size2").innerHTML = size_txt.replace(" ", "").toLowerCase() + "/" + size1;
                         }
                         
                         svgDoc1.getElementById("parcel_code1").innerHTML = uvc_tco;
                         svgDoc1_back.getElementById("parcel_code2").innerHTML = uvc_tco;
-                        //svgDoc1.getElementById("parcel_code2").innerHTML = uvc_tco;
 
                         svgDoc1.getElementById("cofreet_symbol1").setAttribute('xlink:href', "");
                         svgDoc1.getElementById("astm_symbol1").setAttribute('xlink:href', "");
@@ -106,9 +113,15 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
                        
                         svgDoc1_back.getElementById("season_code").innerHTML = orchestra_wash_care_label_orders[0].season_code
 
-
-                        svgDoc1_back.getElementById("product_family").innerHTML = product_family.length > 0 ? product_family[0].arabic : "";
-                        svgDoc1_back.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -37.5 154) rotate(270)');
+                        if(activity_label == "PUERICULTURE")
+                        {
+                            svgDoc1_back.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 380) rotate(270)');
+                        }
+                        else
+                        {
+                            svgDoc1_back.getElementById("barcode").setAttribute('transform', 'matrix(0.8899 0 0 1.1092 -40 400) rotate(270)');
+                        }
+                        
                         jsbarcodewash(code, 'barcode', svgDoc1_back)
 
 
@@ -174,7 +187,7 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
             
             if(i == ajax)
             {
-                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,svgDoc1,user_type,svg_fin_back,svgDoc1_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals);
+                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,user_type,svg_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals,product_family[0].image);
             }
         },
         error: function(data) {
@@ -187,7 +200,7 @@ function printWashDivOs(front,back,middle,static,uvc,po,user_type,page_flag,tabl
 }
 
 
-function PopupWashos(data,data_back,data_middle,table_id,svgDoc1,user_type,data_fin_back,svgDoc1_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select) {
+function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select,pro_family_image) {
 	
     
     var s = new XMLSerializer();
@@ -204,11 +217,6 @@ function PopupWashos(data,data_back,data_middle,table_id,svgDoc1,user_type,data_
 	
     var success = false;
     var url = "";
-    var made_in_select = "";
-    
-    
-    var care_instruction_select_fin = "";
-    var wash_finals ="";
     
     $.ajax({
         url: base_url + "/"+user_type+"/order-management/print-wash-pdf",
@@ -228,7 +236,7 @@ function PopupWashos(data,data_back,data_middle,table_id,svgDoc1,user_type,data_
             dryer_select:dryer_select,
             ironing_select:ironing_select,
             cleaning_select:cleaning_select,
-            
+            pro_family_image:pro_family_image     
         },
         async: false,
         success: function (data) {

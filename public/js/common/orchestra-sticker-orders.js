@@ -2498,7 +2498,7 @@ function sticker_order_details(uvc, po, user_type) {
 			}
 			else
 			{
-				$('.snackbar_span').html('Company Details Missing.Please Contact Administrator...!');
+				$('.snackbar_span').html('Company Details Missing, Please Contact Administrator.');
                 showSnackbar();
 			}
             

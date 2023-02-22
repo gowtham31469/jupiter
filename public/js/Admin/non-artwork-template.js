@@ -20,7 +20,7 @@ function isNumber(evt) {
 
 function add_template(template_id) {
 	var tax = $('#tax_new').val();
-    var template_name = $('#template_name').val();
+    var template_name = $('#reference_number').val();
 	var ref = $('#reference_number').val();
 	var company = $('#company_new').val();
 	var hsncode = $('#hsn_code_new').val();
@@ -63,7 +63,15 @@ function add_template(template_id) {
 			template_list();
 		},
 		error: function (data) {
-			$('.snackbar_span').html('Unable to save. Try again!!');
+
+            switch (data.status) {
+                case 409:
+                    $('.snackbar_span').html(data.responseJSON.message);
+                    break;
+                default:
+                    $('.snackbar_span').html('Unable to save. Try again!!');
+            }
+            
 			showSnackbar();
 		},
 		complete: function () {

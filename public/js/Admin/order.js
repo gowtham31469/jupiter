@@ -503,27 +503,20 @@ function printHangDiv(data,disney) {
 								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
 								svgDoc1.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
 								svgDoc1.getElementById("cm").innerHTML = "ONE SIZE";
+								svgDoc1.getElementById("cm").setAttribute('font-size', '6px');
 								
 								svgDoc1.getElementById("tu_one_size").removeAttribute("visibility");
 								svgDoc.getElementById("size").innerHTML = "";
 								svgDoc.getElementById("size_french").innerHTML = "";
 								svgDoc.getElementById("size_english").innerHTML = "";
 								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
+								svgDoc.getElementById("one_size").removeAttribute("visibility");
 							}
 							else
 							{
 								if(data.size_chart.length > 0)
 								{
 									svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size+" CM";
-	//								if(data.size_chart[0].size.length == 2)
-	//								{
-	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
-	//								}
-	//								else
-	//								{
-	//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
-	//								}
-									
 								}
 								else
 								{
@@ -533,18 +526,23 @@ function printHangDiv(data,disney) {
 								svgDoc1.getElementById("size").innerHTML = size[0];
 								svgDoc1.getElementById("size_french").innerHTML = size[1];
 								svgDoc1.getElementById("size_english").innerHTML = size1;
-								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;
+								svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;svgDoc1.getElementById("cm").setAttribute('font-size', '7.7px');
 								
 								svgDoc.getElementById("size").innerHTML = size[0];
 								//console.log(size[0].length)
 								if(size[0].length == 1)
 								{
-									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 21.0324 291.266)');
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 14 297.5785)');
+									svgDoc.getElementById("size_french").setAttribute('transform', 'matrix(1.0074 0 0 1 23.4422 291.033)');
+									svgDoc.getElementById("size_english").setAttribute('transform', 'matrix(1.0074 0 0 1 23.4422 297.5544)');
 									
 								}
 								else
 								{
-									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 16.0324 291.266)');
+									svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 13 297.5785)');
+									svgDoc1.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 92 36.4142)');
+									svgDoc.getElementById("size_french").setAttribute('transform', 'matrix(1.0074 0 0 1 30 291.033)');
+									svgDoc.getElementById("size_english").setAttribute('transform', 'matrix(1.0074 0 0 1 30 297.5544)');
 								}
 								svgDoc.getElementById("size_french").innerHTML = size[1];
 								svgDoc.getElementById("size_english").innerHTML = size1;
@@ -554,6 +552,7 @@ function printHangDiv(data,disney) {
 							if(data.opqt.length > 0)
 							{
 								$(data.opqt).each(function(index,value){
+
 								switch(value.Currency)
 								{
 										case "EUR":
@@ -565,31 +564,31 @@ function printHangDiv(data,disney) {
 										svgDoc.getElementById("club_price2").innerHTML = ","+ 	svg_club_price[1];
 										break;
 										case "CAD":
-										svgDoc1.getElementById("canada_price").innerHTML = value.Price;
-										svgDoc1.getElementById("canada_club_price").innerHTML = value.Club_Price;
+										// svgDoc1.getElementById("canada_price").innerHTML = value.Price;
+										// svgDoc1.getElementById("canada_club_price").innerHTML = value.Club_Price;
 										break;
 										case "CHF":
 										svgDoc1.getElementById("swiss_price").innerHTML = value.Price;
 										svgDoc1.getElementById("swiss_club_price").innerHTML = value.Club_Price;
 										break;
 										case "DZD":
-										svgDoc1.getElementById("algeria_price").innerHTML = value.Price;
-										svgDoc1.getElementById("algeria_club_price").innerHTML = value.Club_Price;
+										// svgDoc1.getElementById("algeria_price").innerHTML = value.Price;
+										// svgDoc1.getElementById("algeria_club_price").innerHTML = value.Club_Price;
 										break;
 										case "MAD":
 										svgDoc1.getElementById("morocco_price").innerHTML = value.Price;
 										svgDoc1.getElementById("morroco_club_price").innerHTML = value.Club_Price;
 										break;
 										case "MUR":
-										svgDoc1.getElementById("morris_price").innerHTML = value.Price;
-										svgDoc1.getElementById("morris_club_price").innerHTML = value.Club_Price;
+										// svgDoc1.getElementById("morris_price").innerHTML = value.Price;
+										// svgDoc1.getElementById("morris_club_price").innerHTML = value.Club_Price;
 										break;
 										case "SAR":
-										svgDoc1.getElementById("saudi_club_price").innerHTML = value.Price;
+										// svgDoc1.getElementById("saudi_club_price").innerHTML = value.Price;
 										break;
 										case "USD":
-										svgDoc1.getElementById("us_price").innerHTML = value.Price;
-										svgDoc1.getElementById("us_club_price").innerHTML = value.Club_Price;
+										// svgDoc1.getElementById("us_price").innerHTML = value.Price;
+										// svgDoc1.getElementById("us_club_price").innerHTML = value.Club_Price;
 										break;
 										default:
 										console.log("default");
@@ -603,45 +602,27 @@ function printHangDiv(data,disney) {
 								svgDoc.getElementById("price2").innerHTML = "";
 								svgDoc.getElementById("club_price1").innerHTML = "";
 								svgDoc.getElementById("club_price2").innerHTML = "";
-								svgDoc1.getElementById("canada_price").innerHTML = "";
-								svgDoc1.getElementById("canada_club_price").innerHTML = "";
+								// svgDoc1.getElementById("canada_price").innerHTML = "";
+								// svgDoc1.getElementById("canada_club_price").innerHTML = "";
 								svgDoc1.getElementById("swiss_price").innerHTML = "";
 								svgDoc1.getElementById("swiss_club_price").innerHTML = "";
-								svgDoc1.getElementById("algeria_price").innerHTML = "";
-								svgDoc1.getElementById("algeria_club_price").innerHTML = "";
+								// svgDoc1.getElementById("algeria_price").innerHTML = "";
+								// svgDoc1.getElementById("algeria_club_price").innerHTML = "";
 								svgDoc1.getElementById("morocco_price").innerHTML = "";
 								svgDoc1.getElementById("morroco_club_price").innerHTML = "";
-								svgDoc1.getElementById("morris_price").innerHTML = "";
-								svgDoc1.getElementById("morris_club_price").innerHTML = "";
-								svgDoc1.getElementById("saudi_club_price").innerHTML = "";
-								svgDoc1.getElementById("us_price").innerHTML = "";
-								svgDoc1.getElementById("us_club_price").innerHTML = "";
+								// svgDoc1.getElementById("morris_price").innerHTML = "";
+								// svgDoc1.getElementById("morris_club_price").innerHTML = "";
+								// svgDoc1.getElementById("saudi_club_price").innerHTML = "";
+								// svgDoc1.getElementById("us_price").innerHTML = "";
+								// svgDoc1.getElementById("us_club_price").innerHTML = "";
 							}
 			
-							if(data.size_chart.length > 0)
-							{
-								svgDoc1.getElementById("cm").innerHTML =  data.size_chart[0].size+" CM";
-
-//								if(data.size_chart[0].size.length == 2)
-//								{
-//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 106.096 52.0822)');
-//								}
-//								else
-//								{
-//								   svgDoc1.getElementById("cm").setAttribute('transform', 'matrix(1.0057 0 0 1 102.096 52.0822)');
-//								}
-								
-							}
-							else
-							{
-								svgDoc1.getElementById("cm").innerHTML = "";
-							}
 							var node = $("#tree1").jstree('get_selected', true)[0].text;
 							//alert(node)
 							if(disney != "DI")
 							{
 								jsbarcode_hang(code, "barcode1", svgDoc1)
-								svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10 50)');
+								svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 27 45)');
 							}
 							else
 							{
@@ -1694,621 +1675,6 @@ function selectpicker() {
 }
 
 /**
- * This Function is used to invoke Jstree.
- * 
- * @return tree
- */
-
-function treestructurespecial(data, tree, template_id,orchestra_special_tag_orders) {
-
-	$('#' + tree).jstree({
-		'core': {
-			'data': data
-		},
-		"types": {
-			"default": {
-				"icon": "fa fa-folder"
-			}
-		},
-		"plugins": ["types", "search", "conditionalselect"],
-		 conditionalselect: function (node) {
-                        return this.is_leaf(node);
-         }
-	});
-	$('#expand').bind("click", function () {
-		$('#' + tree).jstree("open_all");
-	});
-	$('#collapse').bind("click", function () {
-		$('#' + tree).jstree("close_all");
-	});
-	var to = false;
-	$('#' + tree + '_q').keyup(function () {
-		if (to) {
-			clearTimeout(to);
-		}
-		to = setTimeout(function () {
-			var v = $('#' + tree + '_q').val();
-			$('#' + tree).jstree(true).search(v);
-		}, 250);
-	});
-
-	$("#" + tree).on("loaded.jstree", function (e, data) {
-
-		$('#' + tree).jstree(true).select_node(template_id);
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (template_id != "") {
-			var buyer = localStorage.getItem("buyer");
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.special_qty').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:400px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-					if (orchestra_special_tag_orders != "") {
-						 $('#'+tree+' >ul > li').each( function() {
-						   disable( tree,this.id );        
-						})
-						$('.special_qty').attr('disabled','disabled')
-						$('#ocn_number_special').attr('disabled','disabled')
-					}
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-
-	$('#' + tree).on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (data.instance.is_leaf(data.node)) {
-			var buyer = localStorage.getItem("buyer");
-			var template_id = data.node.id;
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.special_qty').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:400px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-}
-/**
- * This Function is used to invoke Jstree For Heat Transfer.
- * 
- * @return tree
- */
-function treestructureheat_transfer(data, tree, template_id,orchestra_heat_transfer_orders_data) {
-
-	$('#' + tree).jstree({
-		'core': {
-			'data': data
-		},
-		"types": {
-			"default": {
-				"icon": "fa fa-folder"
-			}
-		},
-		"plugins": ["types", "search", "conditionalselect"],
-		 conditionalselect: function (node) {
-                        return this.is_leaf(node);
-         }
-	});
-	$('#expand').bind("click", function () {
-		$('#' + tree).jstree("open_all");
-	});
-	$('#collapse').bind("click", function () {
-		$('#' + tree).jstree("close_all");
-	});
-	var to = false;
-	$('#' + tree + '_q').keyup(function () {
-		if (to) {
-			clearTimeout(to);
-		}
-		to = setTimeout(function () {
-			var v = $('#' + tree + '_q').val();
-			$('#' + tree).jstree(true).search(v);
-		}, 250);
-	});
-
-	$("#" + tree).on("loaded.jstree", function (e, data) {
-
-		$('#' + tree).jstree(true).select_node(template_id);
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (template_id != "") {
-			var buyer = localStorage.getItem("buyer");
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.tot_qty_tableheat').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:300px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-					
-					if (orchestra_heat_transfer_orders_data != "") {
-						 $('#'+tree+' >ul > li').each( function() {
-						   disable( tree,this.id );        
-						})
-						$('.extra_percentageheat').attr('disabled','disabled')
-						$('.tot_qty_tableheat').attr('disabled','disabled')
-						$('#ocn_number_heat').attr('disabled','disabled')
-					}
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-
-	$('#' + tree).on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (data.instance.is_leaf(data.node)) {
-			var buyer = localStorage.getItem("buyer");
-			var template_id = data.node.id;
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.tot_qty_tableheat').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:300px;height:300px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-}
-/**
- * This Function is used to invoke Jstree For Main Labels.
- * 
- * @return tree
- */
-function treestructuremain_label(data, tree, template_id,orchestra_main_label_orders) {
-
-	$('#' + tree).jstree({
-		'core': {
-			'data': data
-		},
-		"types": {
-			"default": {
-				"icon": "fa fa-folder"
-			}
-		},
-		"plugins": ["types", "search", "conditionalselect"],
-		 conditionalselect: function (node) {
-                        return this.is_leaf(node);
-         }
-	});
-	$('#expand').bind("click", function () {
-		$('#' + tree).jstree("open_all");
-	});
-	$('#collapse').bind("click", function () {
-		$('#' + tree).jstree("close_all");
-	});
-	var to = false;
-	$('#' + tree + '_q').keyup(function () {
-		if (to) {
-			clearTimeout(to);
-		}
-		to = setTimeout(function () {
-			var v = $('#' + tree + '_q').val();
-			$('#' + tree).jstree(true).search(v);
-		}, 250);
-	});
-
-	$("#" + tree).on("loaded.jstree", function (e, data) {
-
-		$('#' + tree).jstree(true).select_node(template_id);
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (template_id != "") {
-			var buyer = localStorage.getItem("buyer");
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.main_label_qty').attr('min',data.moq)
-					$('#main_labelform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:150px;object-fit:cover">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-					
-					if (orchestra_main_label_orders != "") {
-						 $('#'+tree+' >ul > li').each( function() {
-						   disable( tree,this.id );        
-						})
-						$('.main_label_qty').attr('disabled','disabled')
-						$('#ocn_number_main').attr('disabled','disabled')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-
-	$('#' + tree).on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (data.instance.is_leaf(data.node)) {
-			var buyer = localStorage.getItem("buyer");
-			var template_id = data.node.id;
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.main_label_qty').attr('min',data.moq)
-					$('#main_labelform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-}
-/**
- * This Function is used to invoke Jstree For Size Labels.
- * 
- * @return tree
- */
-function treestructuresize_label(data, tree, template_id,orchestra_size_label_orders) {
-
-	$('#' + tree).jstree({
-		'core': {
-			'data': data
-		},
-		"types": {
-			"default": {
-				"icon": "fa fa-folder"
-			}
-		},
-		"plugins": ["types", "search", "conditionalselect"],
-		 conditionalselect: function (node) {
-                        return this.is_leaf(node);
-         }
-	});
-	$('#expand').bind("click", function () {
-		$('#' + tree).jstree("open_all");
-	});
-	$('#collapse').bind("click", function () {
-		$('#' + tree).jstree("close_all");
-	});
-	var to = false;
-	$('#' + tree + '_q').keyup(function () {
-		if (to) {
-			clearTimeout(to);
-		}
-		to = setTimeout(function () {
-			var v = $('#' + tree + '_q').val();
-			$('#' + tree).jstree(true).search(v);
-		}, 250);
-	});
-
-	$("#" + tree).on("loaded.jstree", function (e, data) {
-
-		$('#' + tree).jstree(true).select_node(template_id);
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (template_id != "") {
-			var buyer = localStorage.getItem("buyer");
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.tot_qty_tablesize').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-					
-					if (orchestra_size_label_orders != "") {
-						 $('#'+tree+' >ul > li').each( function() {
-						   disable( tree,this.id );        
-						})
-						$('.extra_percentagesize').attr('disabled','disabled')
-						$('.tot_qty_tablesize').attr('disabled','disabled')
-						$('#ocn_number_size').attr('disabled','disabled')
-					}
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-
-	$('#' + tree).on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (data.instance.is_leaf(data.node)) {
-			var buyer = localStorage.getItem("buyer");
-			var template_id = data.node.id;
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					$('.tot_qty_tablesize').attr('min',data.moq)
-					$('#specialtagform').validator('update')
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px;">')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-}
-/**
- * This Function is used to invoke Jstree.
- * 
- * @return tree
- */
-
-function treestructuremain(data, tree, template_id) {
-
-	$('#' + tree).jstree({
-		'core': {
-			'data': data
-		},
-		"types": {
-			"default": {
-				"icon": "fa fa-folder"
-			}
-		},
-		"plugins": ["types", "search", "conditionalselect"],
-		 conditionalselect: function (node) {
-                        return this.is_leaf(node);
-         }
-	});
-	$('#expand').bind("click", function () {
-		$('#' + tree).jstree("open_all");
-	});
-	$('#collapse').bind("click", function () {
-		$('#' + tree).jstree("close_all");
-	});
-	var to = false;
-	$('#' + tree + '_q').keyup(function () {
-		if (to) {
-			clearTimeout(to);
-		}
-		to = setTimeout(function () {
-			var v = $('#' + tree + '_q').val();
-			$('#' + tree).jstree(true).search(v);
-		}, 250);
-	});
-
-	$("#" + tree).on("loaded.jstree", function (e, data) {
-
-		$('#' + tree).jstree(true).select_node(template_id);
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (template_id != "") {
-			var buyer = localStorage.getItem("buyer");
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-
-	$('#' + tree).on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		if (data.instance.is_leaf(data.node)) {
-			var buyer = localStorage.getItem("buyer");
-			var template_id = data.node.id;
-			
-			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
-				type: "Post",
-				dataType: "json",
-				data: {
-					template_id: template_id,
-                    customer_id: $('#customer_id').val(),
-					_token: csrf_token
-				},
-				beforeSend: function () {
-					$(".loader").show();
-				},
-				success: function (data) {
-					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<object id="svg2" style="max-height: 350px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-					} else {
-						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-					}
-
-
-				},
-				error: function (data) {
-
-				},
-				complete: function () {
-					$(".loader").hide();
-				}
-			})
-		}
-	});
-}
-
-
-/**
  * This Function is used to invoke JSBarcode.
  * 
  * @return barcode
@@ -2504,6 +1870,9 @@ function jsbarcode_hang(code, id, svgDoc) {
  */
 
 function setHangTagStatus(colour) {
+
+	$('#save_hang_button').attr('disabled','disabled')
+
     if ($('#hangtagform').find('#exist_id').val() != "") {
         var exist_id = $('#hangtagform').find('#exist_id').val();
     } else {
@@ -2515,10 +1884,17 @@ function setHangTagStatus(colour) {
         localStorage.setItem("hang_tag", exist_id);
         setHangTag(localStorage.getItem("hang_tag"),colour)
         $('#hang_template_error').addClass('hidden')
-        $("#hangtagform .left-panelorc").removeClass('active');
-        $("#hangtagform .right-panel").removeClass('active');
-        $("#hangtagform .backdrop").removeClass('active');
-        $('#hangtagform .scalable').removeClass('active');
+
+		$('.hang-card span').text('Order Approved')
+		$('.hang-card span').addClass('label label-OrderApproved label-status')
+		$('.right-panel-hang span').text('Order Approved')
+		$('.right-panel-hang span').addClass('label label-OrderApproved')
+
+		$("#hangtagform .left-panelorc-hang").removeClass('active');
+		$("#hangtagform .right-panel-hang").removeClass('active');
+		$("#hangtagform .backdrop").removeClass('active');
+		$('#hangtagform .scalable').removeClass('active');
+
     } else {
         $('#hang_template_error').removeClass('hidden')
     }
@@ -2569,8 +1945,8 @@ function setheat_transferStatus(colour) {
         localStorage.setItem("heat_transfer", exist_id);
         setHeatTransfer(localStorage.getItem("heat_transfer"),colour)
         $('#heat_transfer_template_error').addClass('hidden')
-        $("#heat_transferform .left-panelorc").removeClass('active');
-        $("#heat_transferform .right-panel").removeClass('active');
+        $("#heat_transferform .left-panel-heat").removeClass('active');
+        $("#heat_transferform .right-panel-heat").removeClass('active');
         $("#heat_transferform .backdrop").removeClass('active');
         $('#heat_transferform .scalable').removeClass('active');
     } else {
@@ -2621,8 +1997,8 @@ function setSizeLabelStatus(colour) {
         localStorage.setItem("size_label", exist_id);
         setSizeLabel(localStorage.getItem("size_label"),colour)
         $('#size_label_template_error').addClass('hidden')
-        $("#size_labelform .left-panelorc").removeClass('active');
-        $("#size_labelform .right-panel").removeClass('active');
+        $("#size_labelform .left-panel-heat").removeClass('active');
+        $("#size_labelform .right-panel-heat").removeClass('active');
         $("#size_labelform .backdrop").removeClass('active');
         $('#size_labelform .scalable').removeClass('active');
     } else {
@@ -2640,12 +2016,10 @@ function setSizeLabelStatus(colour) {
 function setHangTag(id,colour) {
 	
 	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-	template_front_id = template_id[0].id;
-	var template_back_id = $('#hang_tag_id').val();
+	var template_front_id = template_id[0].id;
+	var template_back_id = template_id[0].id;
 	var ocn_number = $('#ocn_number_hang').val();
-	//var onesizecm = $('.onesizecm').val();
-	//var onesizein = $('.onesizein').val();
-	
+	var theme_label = $('#theme_label').val();
 	var tot_qty_tablehang = [];
 	var uvc_tco = [];
 	var size = [];
@@ -2670,8 +2044,9 @@ function setHangTag(id,colour) {
 	main_id_fin = main_id.join(',');
 	barcode_fin = barcode.join(',');
 	var buyer = localStorage.getItem("buyer");
-//	alert()
-//	alert($('#parcel_id').val());
+	var uvc = $('#uvc_id').val();
+	var parcel_id = $('#parcel_id').val();
+	var season_code = $('#season_code').val();
 	
 	$.ajax({
 		url: base_url + "/admin/" + buyer + "/order-management/set_hang_tag",
@@ -2683,16 +2058,15 @@ function setHangTag(id,colour) {
 			tot_qty_table: tot_qty_tablehang_fin,
 			ocn_number:ocn_number,
 			id: id,
-			//cm:onesizecm,
-			//in:onesizein,
+			theme_label:theme_label,
 			colour: colour,
 			size_id: size_id_fin,
 			main_id: main_id_fin,
 			uvc_tco: uvc_tco_fin,
 			barcode: barcode_fin,
-			uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
+			uvc: uvc,
+			parcel_id: parcel_id,
+			season_code: season_code,
 			size: size_fin,
 			_token: csrf_token
 		},
@@ -2700,24 +2074,28 @@ function setHangTag(id,colour) {
 			$(".loader").show();
 		},
 		success: function (data) {
+
+			var onclick = `printHangDivOs("svg_hang_front","svg2","`+uvc+`","","admin","`+data.id+`","orchestra_hang_tag_orders","proof")`;
 			
+			$('#print_hang_button').attr('onclick',onclick)
+
 			$('#hangtagform').find('#exist_id').val(data.id)
 			$('#print_hang_button').removeClass('hidden')
-			//$('#cancel_hang_button').removeClass('hidden')
 			$('#save_hang_button').addClass('hidden')
 			$('#tree1 >ul > li').each( function() {
 			   disable( 'tree1',this.id );        
 			})
 			$('.extra_percentagehang').attr('disabled','disabled')
 			$('.tot_qty_tablehang').attr('disabled','disabled')
+            $('#ocn_number_hang').attr('disabled','disabled')
+			$('#po-file-upload-button').css('display','block')
+
 		},
 		error: function (data) {
 
 		}
 	})
-		$('.hang-card span').text('Order Approved')
-		$('.hang-card span').addClass('label label-OrderApproved label-status')
-		$('#po-file-upload-button').css('display','block')
+		
 }
 
 /**

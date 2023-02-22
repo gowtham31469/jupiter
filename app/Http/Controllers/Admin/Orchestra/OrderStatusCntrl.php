@@ -754,6 +754,14 @@ class OrderStatusCntrl extends Controller
 
             $data[$table_name][0]->size_chart = $parcel_details;
         }
+        else if($table_name == "orchestra_hang_tag_orders")
+        {
+            $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.oht_id',$table_name.'.id')->join('orchestra_template',$table_name.'.template_front_id','orchestra_template.id')->join('orchestra_parcel_details',$table_name.'.orchestra_parcel_details_id','orchestra_parcel_details.id')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_template.template_name','orchestra_parcel_details.Licence_Code')->where($table_name.'.id',$table_id)->get();
+
+            $parcel_details = DB::table('orchestra_parcel_details')->where('UVC',$data[$table_name][0]->uvc)->where('Season_Code',$data[$table_name][0]->season_code)->where('Color_Code',$data[$table_name][0]->color_code)->select('*')->get();
+
+            $data[$table_name][0]->size_chart = $parcel_details;
+        }
         else if($table_name == "orchestra_wash_care_label_orders")
         {
             $data[$table_name]=DB::table($table_name)->join($table_name.'_qty',$table_name.'_qty.owcl_id',$table_name.'.id')->join('orchestra_color_code','orchestra_color_code.code',$table_name.'.color_code')->where($table_name.'.status','!=','Order Cancelled')->select($table_name.'.*',$table_name.'_qty.size',$table_name.'_qty.barcode',$table_name.'_qty.uvc_tco','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where($table_name.'.id',$table_id)->get();

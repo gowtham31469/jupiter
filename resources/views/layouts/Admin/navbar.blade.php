@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-            <a class="navbar-brand grid-menu" href="/admin/dashboard"><i class="fa fa-th" aria-hidden="true"></i></a>
+            <a class="navbar-brand grid-menu" data-toggle="tooltip" data-placement="bottom" title="Main menu" href="/admin/dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g transform="translate(-1132 18)"><rect width="8" height="8" rx="3" transform="translate(1132 -8)" fill="#e3a7c0"/><rect width="8" height="8" rx="3" transform="translate(1142 -8)" fill="#b0abcb"/><rect width="8" height="8" rx="3" transform="translate(1132 -18)" fill="#bad5f0"/><rect width="8" height="8" rx="3" transform="translate(1142 -18)" fill="#a5d5d5"/></g></svg></a>
             <span class="navbar-brand logo" href="#"></span>
         </div>
 
@@ -92,7 +92,6 @@
             </div>
         </div>
     </div>
- 
   {{-- Edit admin profile modal --}}
   <div class="modal fade" id="editAdminModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
      <div class="modal-dialog" role="document">
@@ -178,5 +177,3 @@
             </div>
         </div>
     </div>
-
-

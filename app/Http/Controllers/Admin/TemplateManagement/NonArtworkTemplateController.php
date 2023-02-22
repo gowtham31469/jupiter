@@ -85,37 +85,48 @@ class NonArtworkTemplateController extends Controller
         $parent_id   = $request['template_id'];
         $template_name   = $request['template_name'];
         
-        
-        $auto_inc_id = DB::table($buyer.'_item_master')->max('id');
-        $item_id = DB::table($buyer.'_item_master')->insertGetId([
-                            'id' => $auto_inc_id + 1,
-                            'company_id' => $company,
-                            'parent_id' => $parent_id,
-                            'item_name'    => $template_name,
-                            'tag_name'    => $ref,
-                            'ref_no' => $ref,
-                            'is_qrcode_required' => 0,
-                            'is_non_artwork_template' => 1
-                    ]);
+        $already_exists = DB::table($buyer.'_item_master')->where('item_name','ilike',$template_name)->get();
 
-        $temp_auto_inc_id = DB::table($buyer.'_template')->max('id');           
-        DB::table($buyer.'_template')->insertGetId([
-                            'id' => $temp_auto_inc_id + 1,
-                            'item_id'          => $item_id,
-                            'tax'              => $taxation,
-                            'template_name'    => $ref,
-                            'hsn_code'         => $hsncode,
-                            'gl_code'          => $glcode,
-                            'gl_text'          => $gltext,
-                            'color'            => $color,
-                            'dimension_height' => $height,
-                            'dimension_width'  => $width,
-                            'material_id'      => $material_id,
-                            'hierarchy_id'     => $parent_id,
-                            'name_in_reports'  => $request['name_in_reports'],
-                            'flag'             => 0
+        if(count($already_exists) > 0)
+        {
+            return response()->json(['error'=> true,'message' =>'Already Template Name Exists'],409);
+        }
+        else
+        {
+            $auto_inc_id = DB::table($buyer.'_item_master')->max('id');
+            $item_id = DB::table($buyer.'_item_master')->insertGetId([
+                                'id' => $auto_inc_id + 1,
+                                'company_id' => $company,
+                                'parent_id' => $parent_id,
+                                'item_name'    => $template_name,
+                                'tag_name'    => $ref,
+                                'ref_no' => $ref,
+                                'is_qrcode_required' => 0,
+                                'is_non_artwork_template' => 1
                         ]);
-        return response()->json(['error'=> false,'message' =>'success'],200);
+
+            $temp_auto_inc_id = DB::table($buyer.'_template')->max('id');           
+            DB::table($buyer.'_template')->insertGetId([
+                                'id' => $temp_auto_inc_id + 1,
+                                'item_id'          => $item_id,
+                                'tax'              => $taxation,
+                                'template_name'    => $ref,
+                                'hsn_code'         => $hsncode,
+                                'gl_code'          => $glcode,
+                                'gl_text'          => $gltext,
+                                'color'            => $color,
+                                'dimension_height' => $height,
+                                'dimension_width'  => $width,
+                                'material_id'      => $material_id,
+                                'hierarchy_id'     => $parent_id,
+                                'name_in_reports'  => $request['name_in_reports'],
+                                'flag'             => 0
+                            ]);
+            return response()->json(['error'=> false,'message' =>'success'],200);
+        }
+
+        
+        
     }
 
     /**
