@@ -3,7 +3,11 @@ $(document).ready (function(){
     /** Fiscal Year Select box begin */
     $('.year-nav-menu').html('');
     // add year selection menu into navbar
-    $('.year-nav-menu').html(' <select class="selectpicker selected-year" id="financialYear" name="financialYear" data-live-search="true">Select Year</select>');
+
+
+
+
+    $('.year-nav-menu').html('<div class="form-group" style="margin-top: 15px;"><p class="text-right financial_year_label">Financial Year</p><select class="selectpicker selected-year" id="financialYear" name="financialYear" data-live-search="true">Select Year</select></div>');
     
     // Populate 30 years in selectbox options
         var yearsLength = 30;
@@ -38,9 +42,11 @@ $(document).ready (function(){
         if(localStorage.getItem("buyer") == "orchestra") 
         {
                 $('#financialYear').selectpicker('hide')
+                $('.financial_year_label').addClass('hidden')
         }
         else
         {
                 $('#financialYear').selectpicker('show')
+                $('.financial_year_label').removeClass('hidden')
         }
  });

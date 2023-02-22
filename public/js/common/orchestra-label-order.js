@@ -28,7 +28,7 @@ function label_order_details(uvc,user_type,season_code) {
             }
             else
             {
-                $('.snackbar_span').html('Company Details Missing, Please Contact Administrator.');
+                $('.snackbar_span').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Company Details Missing, Please Contact Administrator.');
                 showSnackbar();
             }
         },
@@ -225,7 +225,7 @@ function OrderDetailsCardView(uvc, data)
         }
         else
         {
-            $('.snackbar_span').html('Please Select Merchandiser');
+            $('.snackbar_span').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Please Select Merchandiser.');
             showSnackbar();
         }
         

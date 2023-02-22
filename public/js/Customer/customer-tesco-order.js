@@ -43,11 +43,13 @@ function tescoOrders(callback) {
     if(localStorage.getItem("buyer") == "orchestra") 
 	{
 			$('#financialYear').selectpicker('hide')
+            $('.financial_year_label').addClass('hidden')
 			$('.season_code-nav-menu').css('display','block')
 	}
 	else
 	{
 			$('#financialYear').selectpicker('show')
+            $('.financial_year_label').removeClass('hidden')
 			$('.season_code-nav-menu').css('display','none')
 	}
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');

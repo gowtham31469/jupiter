@@ -1,10 +1,9 @@
-@import url('https://fonts.cdnfonts.com/css/product-sans');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
 html {}
 
 body {
-    font-family: 'Product Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 12px !important;
     background-color: #ffffff;
 }
@@ -47,12 +46,7 @@ td>a>i {
     border-radius: 4px;
 }
 
-.dynamic-menu a.active,
-.dynamic-menu a:hover,
-.dynamic-menu a:focus {
-    background: #00b6ff !important;
-    color: #fff !important;
-}
+
 
 @media (min-width: 768px) {
     .navbar-default {
@@ -114,17 +108,40 @@ p.info {
 }
 
 .wallpaper {
-    background: url(../../images/background.jpg) no-repeat center center fixed;
+    /* background: url(../../images/background.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
+    background-size: cover; */
+
+    /* 
+    background: #c31432;  
+    background: -webkit-linear-gradient(to bottom, #240b36, #c31432); 
+    background: linear-gradient(to bottom, #240b36, #c31432);  */
+
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    height: 100vh;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .navbar-default .navbar-nav>li>a,
 .navbar-default .navbar-brand {
-    color: #ffffff;
-    font-weight: 700;
+    color: #ffffff;  
 }
 
 .navbar-default {
@@ -206,13 +223,10 @@ a.dropdown-toggle.profile-dropdown-admin:hover {
 }
 
 .case-wrapper:hover {
-    transform: scale(1.1);
-    transition: 0.5s ease;
+    background: #ffffff36;
 }
 
-.case-wrapper {
-    transition: 0.5s ease;
-}
+
 
 .grid-menu i {
     color: #fff !important;
@@ -230,9 +244,13 @@ a.navbar-brand.grid-menu:hover {
     position: relative;
     margin: 0px;
     float: left;
-    width: 138px;
+    width: 126px;
     height: 140px;
     text-align: center;
+    background: transparent;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
 }
 
 .app-icon {
@@ -242,7 +260,6 @@ a.navbar-brand.grid-menu:hover {
     text-align: center;
     border-radius: 50%;
     cursor: pointer;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .app-icon .inner,
@@ -252,20 +269,17 @@ a.navbar-brand.grid-menu:hover {
     color: #fafbfc;
     display: inline-block;
     transition: 0.2s;
-    -webkit-transition: 0.2s;
-    text-shadow: -1px 1px 5px rgba(0, 0, 0, 0.15);
 }
 
 .case-label {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 500;
     letter-spacing: 0.4px;
     color: #fff;
     text-align: center;
     margin-top: 10px;
     transition: 0.2s;
     -webkit-transition: 0.2s;
-    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5), 0px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .circle {
@@ -376,7 +390,7 @@ h4 {
  * Sidebar
  */
 
- .card {
+.card {
     background-color: #ffffff;
     position: relative;
     margin-bottom: 20px;
@@ -1026,29 +1040,23 @@ span.filter-option img {
 
 #snackbar {
     visibility: hidden;
-    /* Hidden by default. Visible on click */
     min-width: 250px;
-    /* Set a default minimum width */
     margin-left: -125px;
-    /* Divide value of min-width by 2 */
-    background-color: #00b6ff;
-    /* Black background color */
-    color: #fff;
-    /* White text color */
+    background-color: #ffeb3b;
+    color: #000;
     text-align: center;
-    /* Centered text */
     border-radius: 2px;
-    /* Rounded borders */
     padding: 16px;
-    /* Padding */
     position: fixed;
-    /* Sit on top of the screen */
     z-index: 1;
-    /* Add a z-index if needed */
     left: 50%;
-    /* Center the snackbar */
+    font-weight: 500;
     bottom: 30px;
-    /* 30px from the bottom */
+}
+
+#snackbar .fa-exclamation-triangle {
+    color: red;
+    margin-right: 6px;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -1058,8 +1066,8 @@ span.filter-option img {
     /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
 However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
+    animation: fadein 0.5s, fadeout 0.5s 3s;
 }
 
 /* Animations to fade the snackbar in and out */
@@ -1608,10 +1616,12 @@ span.batch-additional {
     margin-bottom: 18px;
     position: relative;
 }
+
 .buyers-card img {
-   height: 32px;
-   width: auto;
+    height: 32px;
+    width: auto;
 }
+
 .buyer-modal-title {
     font-weight: bold;
     font-size: 16px;
@@ -1831,11 +1841,13 @@ background-color: grey;
 
 
 /* akshay bhat css - 2023 */
-.artwork-wrapper, .wcl_orders_card {
+.artwork-wrapper,
+.wcl_orders_card {
     display: inline-block;
     margin-right: 30px;
     margin-bottom: 30px;
 }
+
 .artwork-wrapper h3 {
     font-weight: bold;
     font-size: 14px;
@@ -1868,17 +1880,20 @@ background-color: grey;
     max-height: 100%;
     max-width: 100%;
 }
+
 .artwork-wrapper .artwork-card span.label {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
 }
-.top-content-new-div {
+
+/* .top-content-new-div {
     background: #f7f7f7;
     padding: 21px 20px;
     margin-top: -11px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-}
+} */
+
 h4.section-title {
     font-weight: bold;
     font-size: 20px;
@@ -1890,11 +1905,12 @@ h4.section-title:before {
     content: "";
     position: absolute;
     height: 100%;
-    width:4px;
+    width: 4px;
     border-radius: 10px;
     background: #00b6ff;
     left: -10px;
 }
+
 .wcl-card {
     height: 150px;
     width: 150px;
@@ -1910,7 +1926,61 @@ h4.section-title:before {
     background: rgb(0 182 255 / 10%);
 }
 
-.wcl-card p{
+.wcl-card p {
     margin: 0 !important;
     font-weight: bold;
+}
+.header-bar{
+    background:rgb(244, 248, 252);
+    padding: 10px 20px;
+    margin-top:40px;
+    padding-bottom: 0px;
+}
+.header-bar h2{
+    font-weight: 800;
+}
+ul.navTabs{
+    margin-top: 10px;
+    margin-left: 0px;
+    padding-inline-start: 0px;
+}
+ul.navTabs li {
+    display: inline-block;
+    padding: 10px 0px 10px 0px;
+    margin: 0px;
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+    margin-right: 30px;
+}
+
+    ul.navTabs li a{
+        color: rgb(0 0 0 / 50%);
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
+    padding-bottom: 10px;
+    font-weight: 500;
+    }
+
+    .dynamic-menu a.active,
+.dynamic-menu a:hover,
+.dynamic-menu a:focus {
+    color: #000000;
+border-bottom: 3px solid #00b6ff;
+}
+.navbar-right li a{
+    border-left: 1px solid rgb(73 77 88);
+    padding: 15px 20px;
+}
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color: #ffffff;
+    background-color: transparent;
+}
+.navbar-header span{
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+.year-nav-menu .btn-group{
+    margin-top: -7px;
+    width:230px !important
 }

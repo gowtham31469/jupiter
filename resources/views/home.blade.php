@@ -17,6 +17,7 @@
 <div class="col-sm-12 col-md-12 main wallpaper" style="height:100vh">
     <div class="container">
         <div class="col-md-8 col-md-offset-2">
+            <img class="center-block" style="height: 50px;margin-top: 50px;margin-bottom: -50px;" src="{{ asset('images/logo.png') }}">
             <div class="main-menu">
                 <div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>
                 @foreach($modules as $mod) 
@@ -45,6 +46,8 @@
 <script>
  $( document ).ready(function() {
     $(".logo").html('Jupiter Garments Accessories');
+    $('.header-bar').addClass('hidden')
+   
  })
 </script>
 @endsection

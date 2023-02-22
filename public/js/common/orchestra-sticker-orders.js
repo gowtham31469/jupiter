@@ -2135,11 +2135,13 @@ function seasonCodeOrders(user_type,season_code)
 	if(localStorage.getItem("buyer") == "orchestra") 
 	{
 			$('#financialYear').selectpicker('hide')
+			$('.financial_year_label').addClass('hidden')
 			$('.season_code-nav-menu').css('display','block')
 	}
 	else
 	{
 			$('#financialYear').selectpicker('show')
+			$('.financial_year_label').removeClass('hidden')
 			$('.season_code-nav-menu').css('display','none')
 	}
 	$('li.buyer-nav-menu').removeClass('hidden');
@@ -2243,7 +2245,7 @@ function seasonCodeFilter(user_type,season_code_ls)
 					
 				})
 
-				$('.season_code-nav-menu').html('<div class="form-group"><label style="color:white;margin-right:8px;font-weight:bold;margin-top:14px">Season Code : </label><select data-usertype="'+user_type+'" multiple id="select_season_code" class="selectpicker custom-width-select-season form-control" data-actions-box="true">' + options_sc + '</select></div>')
+				$('.season_code-nav-menu').html('<div class="form-group" style="margin-top: 15px;"><p class="text-right">Season Code</p><select data-usertype="'+user_type+'" multiple id="select_season_code" class="selectpicker custom-width-select-season form-control"  data-actions-box="true">' + options_sc + '</select></div>')
 				$('#select_season_code').selectpicker()
 
 				if(season_code_ls == null)
@@ -2498,7 +2500,7 @@ function sticker_order_details(uvc, po, user_type) {
 			}
 			else
 			{
-				$('.snackbar_span').html('Company Details Missing, Please Contact Administrator.');
+				$('.snackbar_span').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Company Details Missing, Please Contact Administrator.');
                 showSnackbar();
 			}
             

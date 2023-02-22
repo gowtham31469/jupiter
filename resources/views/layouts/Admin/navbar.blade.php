@@ -8,23 +8,24 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-            <a class="navbar-brand grid-menu" data-toggle="tooltip" data-placement="bottom" title="Main menu" href="/admin/dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g transform="translate(-1132 18)"><rect width="8" height="8" rx="3" transform="translate(1132 -8)" fill="#e3a7c0"/><rect width="8" height="8" rx="3" transform="translate(1142 -8)" fill="#b0abcb"/><rect width="8" height="8" rx="3" transform="translate(1132 -18)" fill="#bad5f0"/><rect width="8" height="8" rx="3" transform="translate(1142 -18)" fill="#a5d5d5"/></g></svg></a>
-            <span class="navbar-brand logo" href="#"></span>
+            
+            <span class="navbar-brand" href="#">Jupiter Garment Accessories</span>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav dynamic-menu">
+            <!-- <ul class="nav navbar-nav dynamic-menu">
                 @foreach($sub_modules as $mod) @if($mod->parent_id != 0)
                 <li><a class="" href="{{$mod->url_path}}">{{$mod->module_name}}</a></li>
                 @endif @endforeach
-            </ul>
+            </ul> -->
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown season_code-nav-menu"></li>
-                <li class="dropdown year-nav-menu"></li>
+                <li><a style="padding:11px 20px;" class="navbar-brand grid-menu" data-toggle="tooltip" data-placement="bottom" title="Main menu" href="/admin/dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g transform="translate(-1132 18)"><rect width="8" height="8" rx="3" transform="translate(1132 -8)" fill="#e3a7c0"/><rect width="8" height="8" rx="3" transform="translate(1142 -8)" fill="#b0abcb"/><rect width="8" height="8" rx="3" transform="translate(1132 -18)" fill="#bad5f0"/><rect width="8" height="8" rx="3" transform="translate(1142 -18)" fill="#a5d5d5"/></g></svg></a></li>
+                <!-- <li class="dropdown season_code-nav-menu"></li> -->
+                <!-- <li class="dropdown year-nav-menu"></li> -->
                 <li class="dropdown buyer-nav-menu"></li>
-                 <li><a class="notification" style="cursor: pointer;" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
+                 <li><a class="notification" style="cursor: pointer; padding:7px 20px; margin-top: -3px;" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><span style="font-size: 18px; margin-top: -1px;"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.75 14A2.25 2.25 0 0 1 13 16.25v1.502l-.008.108c-.31 2.127-2.22 3.149-5.425 3.149-3.193 0-5.134-1.01-5.553-3.112L2 17.75v-1.5A2.25 2.25 0 0 1 4.25 14h6.5ZM7.5 6a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7Zm12.25-4A2.25 2.25 0 0 1 22 4.25v3.5A2.25 2.25 0 0 1 19.75 10h-1.553l-2.541 2.207A1 1 0 0 1 14 11.452V9.986a2.25 2.25 0 0 1-2-2.236v-3.5A2.25 2.25 0 0 1 14.25 2h5.5Z" fill="#ffffff"/></svg></span></a></li>
                 <li class="dropdown">
                     <!-- <a href="#" class="dropdown-toggle profile-dropdown-admin" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="well">{{ Auth::user()->name[0] }}</span> {{ Auth::user()->name }}<span class="caret"></span></a> -->
 
@@ -41,7 +42,7 @@
                 </li>
                
                 
-                <li><a class="dropdown-toggle profile-dropdown-admin" href="{{ 'admin/logout' }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                <li><a style="padding:7px 20px " class="dropdown-toggle profile-dropdown-admin" href="{{ 'admin/logout' }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.502 11.5a1.002 1.002 0 1 1 0 2.004 1.002 1.002 0 0 1 0-2.004Z" fill="#ffffff"/><path d="M12 4.354v6.651l7.442-.001L17.72 9.28a.75.75 0 0 1-.073-.976l.073-.084a.75.75 0 0 1 .976-.073l.084.073 2.997 2.997a.75.75 0 0 1 .073.976l-.073.084-2.996 3.004a.75.75 0 0 1-1.134-.975l.072-.085 1.713-1.717-7.431.001L12 19.25a.75.75 0 0 1-.88.739l-8.5-1.502A.75.75 0 0 1 2 17.75V5.75a.75.75 0 0 1 .628-.74l8.5-1.396a.75.75 0 0 1 .872.74Zm-1.5.883-7 1.15V17.12l7 1.236V5.237Z" fill="#ffffff"/><path d="M13 18.501h.765l.102-.006a.75.75 0 0 0 .648-.745l-.007-4.25H13v5.001ZM13.002 10 13 8.725V5h.745a.75.75 0 0 1 .743.647l.007.102.007 4.251h-1.5Z" fill="#ffffff"/></svg></a></li>
                 
                         <form id="logout-form" action="{{ '/admin/logout' }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
@@ -53,6 +54,16 @@
     </div>
     <!-- /.container-fluid -->
 </nav>
+<div class="header-bar">
+<div class="dropdown year-nav-menu" style="float:right"></div>
+<div class="dropdown season_code-nav-menu" style="float:right"></div>
+<h2 class="logo"><span style="visibility:hidden">Page title</span></h2>
+<ul class="navTabs dynamic-menu">
+@foreach($sub_modules as $mod) @if($mod->parent_id != 0)
+                <li><a class="" href="{{$mod->url_path}}">{{$mod->module_name}}</a></li>
+                @endif @endforeach
+</ul>
+</div>
 {{-- Snackbar html code --}}
     <div id="snackbar"><span class="snackbar_span"></span></div>
 {{-- Send Feedback modal --}}
