@@ -1359,6 +1359,9 @@
             if (localStorage.key(i).substring(0, 22) == 'wash_composition_final') {
                 arr.push(localStorage.key(i));
             }
+            else if (localStorage.key(i).substring(0, 23) == 'care_instruction_select') {
+                arr.push(localStorage.key(i));
+            }
         }
 
         // Iterate over arr and remove the items by key

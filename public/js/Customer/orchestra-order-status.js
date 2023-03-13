@@ -130,8 +130,39 @@ function orchestraStatusTable(data, path) {
 
                         var proof_button = 'printDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'",1,"'+value.UVC+'","'+value.BuyerPONo+'","customer","svg4","os","'+value.tableID+'","'+value.tableName+'","proof")'
                     }
+                    else if(value.ArtworkType == "WashCareLabel")
+                    {
+                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","os","'+value.tableID+'","'+value.tableName+'","print")'
+                        
+
+                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+                    else if(value.ArtworkType == "Hang Tag")
+                    {
+                        var print_button = 'printHangDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","'+value.tableID+'","'+value.tableName+'","print")'
+                        
+
+                        var proof_button = 'printHangDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","'+value.tableID+'","'+value.tableName+'","proof")'
+                    }
+
                     //New changes start
-                    tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    {
+                        tr += '<td> - </td>'
+                    }
+                    else if(value.ArtworkType == "WashCareLabel")
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_middle_modal" class="center-block tesco_svg" data="' + temp_file[2]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_static_modal" class="center-block tesco_svg" data="' + temp_file[3]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    }
+                    else if(value.ArtworkType == "Hang Tag")
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_back_modal" class="center-block tesco_svg" data="' + temp_file[1]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    }
+                    else
+                    {
+                        tr += '<td align="center"><object style="opacity:0;width:0px;height:0px" id="'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+'_modal" class="center-block tesco_svg" data="' + temp_file[0]+'" type="image/svg+xml"></object><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+print_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    }
+                    
 
                     if (value['Artwork Status'] == "Order Approved") {
                         var str = value[key];
@@ -158,7 +189,7 @@ function orchestraStatusTable(data, path) {
                             status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
                             tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUploaded(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","'+value['PO Number']+'","customer") > '+status_text+' </a></td>';
                         } else {
-                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved' || value['Artwork Status'] === 'Buyer Approval Pending') {
                                 status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
                                 tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","customer") > '+status_text+' </a></td>';
                             } else {
@@ -191,12 +222,20 @@ function orchestraStatusTable(data, path) {
 						tr += '<td align="center"> '+value.TemplateName+' </td>';
 					}
                 } else if (key == "Print Proof") {
-                    //New changes start
-                    // tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
-                    //New changes end
+
+                    // if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    // {
+                    //     tr += '<td> - </td>'
+                    // }
+                    // else
+                    // {
+                    //     //New changes start
+                    //     tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
+                    //     //New changes end
+                    // }
                 } else if (key == "Actions") {
                     //New changes start
-                    // var po_file = value['po_file'];
+                    var po_file = value['po_file'];
                     // let customer_po_number = value['PO Number'] === null ? '' : value['PO Number'];
                     // tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
                     //New changes end
@@ -322,10 +361,6 @@ function updateArtworkOrc(obj) {
     var color_code = $(obj).parent().attr('data-color_code');
     var buyer = $(obj).parent().attr('data-buyer');
 	var at = artwork.replace(/ /g, '');
-
-
-    
-    
     $.ajax({
         url: base_url + "/customer/orchestra/edit-artwork",
         type: "Post",
@@ -357,7 +392,6 @@ function updateArtworkOrc(obj) {
 								$('.tot_qty_tablehang').prop("disabled", true);
 								$('.extra_percentagehang').prop("disabled", true);
 								$('#save_hang_button').remove()
-                                $('#edit_orc_ht_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.hang_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -366,6 +400,10 @@ function updateArtworkOrc(obj) {
                         $('#save_hang_button').remove();
                         $('#edit_orc_ht_order_btn').remove();
                     }
+
+                    $('.left-panelorc-hang').addClass('active');
+                    $('.right-panel-hang').addClass('active');
+                    $('.left-panelorc-hang').show();
 					
 				}
 				else if(at == "SpecialTag")
@@ -376,7 +414,6 @@ function updateArtworkOrc(obj) {
 							if (data.special_erp_details.status_name !== 'Hold For JC Queue' && data.special_erp_details.status_name !== 'Moved To ERP') {
 						    	$('.special_qty').prop("disabled", true);
 								$('#save_special_button').remove()
-                                $('#edit_orc_st_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.special_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -385,6 +422,10 @@ function updateArtworkOrc(obj) {
                         $('#save_special_button').remove();
                         $('#edit_orc_st_order_btn').remove();
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "MainLabel")
 				{
@@ -395,6 +436,7 @@ function updateArtworkOrc(obj) {
 								$('.main_label_qty').prop("disabled", true);
 								$('#save_main_label_button').remove()
 								$('#edit_orc_ml_order_btn').remove()
+								$('#toggle_orch_edit_permission').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -403,17 +445,21 @@ function updateArtworkOrc(obj) {
                         $('#save_main_label_button').remove();
                         $('#edit_orc_ml_order_btn').remove()
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "WashCareLabel")
 				{
-					washcarelabelsOs(data, "")
+					washcarelabelsOs(data)
+                    
 					$('.edit-orch-order-panel').append('<input type="hidden" value="' + data.orchestra_wash_care_label_orders[0].po + '" id="po_select">');
 					if (data.wash_erp_details != null) {
 							if (data.wash_erp_details.status_name !== 'Hold For JC Queue' && data.wash_erp_details.status_name !== 'Moved To ERP') {
-								$('.tot_qty_tablewash').prop("disabled", true);
+								$('.tot_qty_tablewcl').prop("disabled", true);
 								$('.extra_percentagewash').prop("disabled", true);
 								$('#save_wash_button').remove()
-                                $('#edit_orc_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.wash_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -422,6 +468,10 @@ function updateArtworkOrc(obj) {
                         $('#save_wash_button').remove();
                         $('#edit_orc_label_order_btn').remove();
                     }
+
+                    $('.left-panel-heat').addClass('active');
+                    $('.right-panel-heat').addClass('active');
+                    $('.left-panel-heat').show();
 				}
 				else if(at == "SizeLabel")
 				{
@@ -432,7 +482,6 @@ function updateArtworkOrc(obj) {
 								$('.tot_qty_tablesize').prop("disabled", true);
 								$('.extra_percentagesize').prop("disabled", true);
 								$('#save_size_label_button').remove()
-								$('#edit_orc_sl_order_btn').remove()
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.size_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -441,6 +490,10 @@ function updateArtworkOrc(obj) {
                         $('#save_size_label_button').remove();
                         $('#edit_orc_sl_order_btn').remove()
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "HeatTransfer")
 				{
@@ -451,7 +504,6 @@ function updateArtworkOrc(obj) {
 								$('.tot_qty_tableheat').prop("disabled", true);
 								$('.extra_percentageheat').prop("disabled", true);
 								$('#save_heat_transfer_button').remove()
-                                $('#edit_orc_he_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.heat_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -460,6 +512,10 @@ function updateArtworkOrc(obj) {
                         $('#save_heat_transfer_button').remove();
                         $('#edit_orc_he_order_btn').remove();
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "SolidCartonStickers")
 				{
@@ -472,7 +528,6 @@ function updateArtworkOrc(obj) {
                                 $('#modal_height').prop("disabled", true);
                                 $('#width').prop("disabled", true);
                                 $('#save_solid_carton_button').remove()
-                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -481,6 +536,10 @@ function updateArtworkOrc(obj) {
                         $('#save_solid_carton_button').remove();
                         $('.edit_label_order_btn').remove();
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "SolidPolyBagStickers")
 				{
@@ -491,7 +550,6 @@ function updateArtworkOrc(obj) {
                                 $('.tot_qty_table_poly').prop("disabled", true);
                                 $('#age').prop("disabled", true);
                                 $('#save_solid_poly_bag_button').remove()
-                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -500,6 +558,10 @@ function updateArtworkOrc(obj) {
                         $('#save_solid_poly_bag_button').remove();
                         $('.edit_label_order_btn').remove();
                     }
+
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "StandardCartonStickers")
 				{
@@ -515,7 +577,6 @@ function updateArtworkOrc(obj) {
                                 $('#total_polybag').prop("disabled", true);
 
                                 $('#save_standard_carton_button').remove()
-                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -524,6 +585,9 @@ function updateArtworkOrc(obj) {
                         $('#save_standard_carton_button').remove();
                         $('.edit_label_order_btn').remove();
                     }
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
 				else if(at == "StandardPolyBagStickers")
 				{
@@ -534,7 +598,6 @@ function updateArtworkOrc(obj) {
                                 $('.standard_poly_bag_qty').prop("disabled", true);
                                 $('#age').prop("disabled", true);
                                 $('#save_standard_poly_bag_button').remove()
-                                $('.edit_label_order_btn').remove();
 								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
 							}
 					}
@@ -543,10 +606,12 @@ function updateArtworkOrc(obj) {
                         $('#save_standard_poly_bag_button').remove();
                         $('.edit_label_order_btn').remove();
                     }
+                    $('.left-panelos').addClass('active');
+                    $('.right-panelos').addClass('active');
+                    $('.left-panelos').show();
 				}
-				$('.left-panelos').addClass('active');
-				$('.right-panelos').addClass('active');
-    			$('.left-panelos').show();
+
+				
             },
             400: function () {
                 $('.snackbar_span').html('Something went wrong!');
@@ -564,6 +629,7 @@ function updateArtworkOrc(obj) {
     
 
 }
+
 /**
  * This Function is used to create barcode for carton stickers.
  *  
@@ -624,7 +690,7 @@ function barcode_polybagOs(id, data) {
                 svgDoc.getElementById("pmm").removeAttribute('visibility','hidden');
                 svgDoc.getElementById("pmm").innerHTML = "PMM";
             }
-
+            
 			
 			var code = data.orchestra_parcel_details[0].BarcodeForPricesTags.toString();
 			svgDoc.getElementById("size").innerHTML = data.orchestra_parcel_details[0].Size;
@@ -985,7 +1051,6 @@ function jsbarcodestdcartonBOs(code, id, svgDoc) {
 
 	/* Time to play ;) */
 
-	// https://developer.mozilla.org/en/XMLSerializer
 	svg_xml = (new XMLSerializer()).serializeToString(svg);
 	ctx = canvasTmp.getContext('2d');
 
@@ -996,7 +1061,6 @@ function jsbarcodestdcartonBOs(code, id, svgDoc) {
 		ctx.drawImage(img, 0, 0);
 	};
 
-	// https://developer.mozilla.org/en/DOM/window.btoa
 	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
 
 	// img.src - contains base64 URI from svg
@@ -1065,21 +1129,21 @@ function jsbarcodestdpolyOs(code, id, svgDoc) {
 
 function hangtagmodalOs(data) {
     var order_details = data.order_details;
-    var orchestra_hang_tag_orders_data = data.orchestra_hang_tag_orders;
+    var hang_tag_orders = data.orchestra_hang_tag_orders;
     var tr = "";
     $qu = 0;
-    if (data.orchestra_hang_tag_orders != "") {
+    if (hang_tag_orders != "") {
        
 
-        $template_front_id = data.orchestra_hang_tag_orders[0].template_front_id;
-        $exist_id = data.orchestra_hang_tag_orders[0].id;
+        $template_front_id = hang_tag_orders[0].template_front_id;
+        $exist_id = hang_tag_orders[0].id;
         
-        var str=data.orchestra_hang_tag_orders[0].status;
+        var str=hang_tag_orders[0].status;
         $status=str.replace(/ /g, "");
         $status_text=str;
-		$print_button_class="hidden";
-        $save_button_class="";
-        $ocn_number_hang = data.orchestra_hang_tag_orders[0].ocn_number;
+		$print_button_class="";
+		$save_button_class="";
+		$ocn_number_hang = hang_tag_orders[0].ocn_number;
     } else {
        
         $template_front_id = "";
@@ -1087,19 +1151,19 @@ function hangtagmodalOs(data) {
         $status="";
         $status_text="";
 		$print_button_class="hidden";
-        $save_button_class="";
-        $ocn_number_hang = "";
+		$save_button_class="";
+		$ocn_number_hang="";
     }
     var ttots = 0;
     var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
-        if (data.orchestra_hang_tag_orders != "") {
+        if (hang_tag_orders != "") {
 
-            $hang_tag_count = data.orchestra_hang_tag_orders_qty[$qu].quantity;
+            $hang_tag_count = hang_tag_orders[$qu].quantity;
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)"  type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" style="margin: 0 auto; width: 85px;"  type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
 		ttots_sum += parseInt(value.Sum);
         $qu++;
@@ -1107,9 +1171,9 @@ function hangtagmodalOs(data) {
 	
 	if(order_details[0].Size == "TAILLE UNIQUE")
 	{
-		if (data.orchestra_hang_tag_orders != "") {
-            $hang_cm = data.orchestra_hang_tag_orders[0].cm;
-			$hang_in = data.orchestra_hang_tag_orders[0].in;
+		if (hang_tag_orders != "") {
+            $hang_cm = hang_tag_orders[0].cm;
+			$hang_in = hang_tag_orders[0].in;
         } else {
             $hang_cm = "";
 			$hang_in = "";
@@ -1123,18 +1187,71 @@ function hangtagmodalOs(data) {
 	}
     
     if(isNaN(ttots))
-        {
-            ttots=0;
-        }
+    {
+        ttots=0;
+    }
     else
-        {
-            ttots=ttots;
-        }
-    var option = "<option value=''>Select Option</option>";
-    $.each(data.orchestra_template_front, function (index, value) {
-        option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
-    });
-    $('.edit-orch-order-panel').append('<form id="hangtagform" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="left-panelos col-md-8"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" value="'+ $ocn_number_hang +'" id="ocn_number_hang" required value="" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="hang_template_error" class="hidden" style="color:red;display: inherit;">Please Select the Template</label>  <div><input type="text" id="tree1_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree1" style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div><div class="help-block with-errors"></div></div>'+sizebox+'</div><div class="col-md-4"><h4>Front</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr><div class="section-1 sections"><div class="sample-artwork" style="text-align:center"></div></div></div><div class="col-md-4"><h4>Back</h4><hr><div class="section-1 sections text-center" ><input type="hidden" value="' + data.orchestra_template_id + '" id="hang_tag_id"><div class="sample_back"></div><label style="margin-top:15px">Hang Tag Print Date : ' + data.order_details[0].HangTag_Print_Date + '</label><div id="svgdiv" style="display: none;"><svg id="ean-13"></svg></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Hang Tag</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagehang" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablehang_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_hang_button" style="margin-left:10px">Submit</button>  <button class="btn btn-warning  pull-right input-sm" id="edit_orc_ht_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraHTOrder()" type="button">Edit</button> <button class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button><button type="button" class="btn btn-primary '+$print_button_class+'" id="print_hang_button" onclick=printHangDiv("svg2","'+data.order_details[0].Licence_Code+'")>Print</button> </div> </div>  </form>');
+    {
+        ttots=ttots;
+    }
+
+    $('.edit-orch-order-panel').append(`
+                                    <form id="hangtagform" data-toggle="validator"><input type="hidden" value="` + $exist_id + `" id="exist_id">
+                                    <div class="left-panelorc-hang col-md-4">
+                                        <div class="div-max">
+                                            <div class="col-md-12">
+                                                <h4>Options</h4>
+                                                <hr>
+                                                <div class="form-group has-feedback has-success"><label for="ocn_number" class="form_label">OCN
+                                                        Number</label><input type="text" value="`+ $ocn_number_hang +`" id="ocn_number_hang" required
+                                                        value="" class="form-control input-sm" placeholder="OCN Number">
+                                                    <div class="help-block with-errors"></div>
+                                                </div>
+                                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                                        class="form_label">Select Style</label><label id="hang_template_error" class="hidden"
+                                                        style="color:red;display: inherit;">Please Select the Template</label>
+                                                    <div><input type="text" id="tree1_q" value="" class="form-control input-sm"
+                                                            placeholder="Search for Awesomeness"> </div>
+                                                    <div class="scroll" id="tree1"
+                                                        style="height: calc(100vh - 260px);overflow-y: scroll;margin-top: 15px;"></div>
+                                                    <div class="help-block with-errors"></div>
+                                                </div>`+sizebox+`
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right-panel-hang col-md-8">
+                                        <div class="div-max scroll">
+                                            <h4>Quantity Info for Hang Tag</h4>
+                                            <hr>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>UVC TCO#</th>
+                                                            <th>Size</th>
+                                                            <th>Barcode</th>
+                                                            <th>Qty</th>
+                                                            <th style="display: flex;justify-content: center;"><label style="float: left; line-height: 2">Extra %:</label> <input class="form-control input-sm extra_percentagehang" type="text" onkeypress="return checkNumbersOnly(event)" style="width:60px; float: left; margin-left: 5px;"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>` + tr + `<tr class="strong">
+                                                            <td class="text-right" colspan="3">Total:</td>
+                                                            <td>` + ttots_sum + `</td>
+                                                            <td class="text-center tot_qty_tablehang_fin">` + ttots + `</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><span id="error_msg_alert" style="color:red;"></span><button
+                                                class="btn btn-primary pull-right input-sm left `+$save_button_class+`" type="submit"
+                                                id="save_hang_button" style="margin-left:10px">Submit</button> <button
+                                                class="btn btn-warning  pull-right input-sm" id="edit_orc_ht_order_btn"
+                                                style="width: 55px;margin-left: 10px;" onclick="editOrchestraHTOrder()"
+                                                type="button">Edit</button><button
+                                                class="btn btn-default pull-right input-sm" type="button" id="hangclose">Close</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                `);
 
 
 //$('.left').removeClass('disabled')
@@ -1171,40 +1288,21 @@ function hangtagmodalOs(data) {
             })
             $(this).parent().parent().parent().parent().parent().find('.tot_qty_tablehang_fin').text("0");
         }
+		$('#hangtagform').validator('validate')
 
     })
 	
-//	$('#hangtagform .onesizein').keyup(function () {
-//		
-//		var inches=$(this).val();
-//        var mySVG = document.getElementById("svg2");
-//		var svgDoc;
-//		svgDoc = mySVG.contentDocument;
-//		svgDoc.getElementById("in").innerHTML = inches;
-//
-//		
-//    });
-//	$('#hangtagform .onesizecm').keyup(function () {
-//		
-//		var cm=$(this).val();
-//        var mySVG = document.getElementById("svg2");
-//		var svgDoc;
-//		svgDoc = mySVG.contentDocument;
-//		svgDoc.getElementById("cm").innerHTML = cm;
-//		
-//    });
-
     $("#clickmehang").click(function () {
         // $('.sample-artwork').html("")
         $("#hangtagform .backdrop").toggleClass('active');
-        $("#hangtagform .right-panelos").toggleClass('active');
+        $("#hangtagform .right-panel-hang").toggleClass('active');
         $('#hangtagform .scalable').toggleClass('active');
-        $("#hangtagform .left-panelos").toggleClass('active');
+        $("#hangtagform .left-panelorc-hang").toggleClass('active');
     })
 
     $(".backdrop, #hangclose").click(function () {
-        $("#hangtagform .left-panelos").removeClass('active');
-        $("#hangtagform .right-panelos").removeClass('active');
+        $("#hangtagform .left-panelorc-hang").removeClass('active');
+        $("#hangtagform .right-panel-hang").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
     })
@@ -1242,8 +1340,6 @@ function hangtagmodalOs(data) {
     //Show Template when tree loads 
     $("#tree1").on("loaded.jstree", function (e, data) {
 		$('#tree1').jstree(true).select_node($template_front_id);
-		var node = $("#tree1").jstree('get_selected', true)[0].text;
-        var ids = $(this).parent().parent().parent().parent().parent().attr('id');
         if ($template_front_id != "") {
             var buyer = localStorage.getItem("buyer");
             var template_id = $template_front_id;
@@ -1263,230 +1359,15 @@ function hangtagmodalOs(data) {
                 success: function (data) {
 					$('.tot_qty_tablehang').attr('min',data.moq)
 					$('#hangtagform').validator('update')
-                    if (data.treeviewData.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object>')
-
-                        if (data.treeviewData[0].disney != "DI") {
-                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
-                            var svgDoc;
-                            mySVG_hang_disney.addEventListener("load", function () {
-                                svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
-								
-								var size = order_details[0].Size.split(" ")
-							
-								if(order_details[0].Size == "TAILLE UNIQUE")
-								{
-									svgDoc.getElementById("size").innerHTML = "";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-								}
-								else if(order_details[0].Size == "TAILLE L")
-								{
-									svgDoc.getElementById("size").innerHTML = "TAILLE L";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-								}
-								else
-								{
-									//alert(size[0])
-									svgDoc.getElementById("size").innerHTML = size[0];
-									if (size[1] == "ANS") {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "years";
-
-									} else {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "months";
-									}
-								}
-
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        } else {
-                            var mySVG_hang = document.getElementById("svg2");
-                            var svgDoc;
-                            mySVG_hang.addEventListener("load", function () {
-                                svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
-								
-								var size = order_details[0].Size.split(" ")
-							
-								if(order_details[0].Size == "TAILLE UNIQUE")
-								{
-									svgDoc.getElementById("size").innerHTML = "";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-								
-								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
-								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
-								
-								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-								}
-								else if(order_details[0].Size == "TAILLE L")
-								{
-									svgDoc.getElementById("size").innerHTML = "TAILLE L";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-								}
-								else
-								{
-									//alert(size[0])
-									svgDoc.getElementById("size").innerHTML = size[0];
-									if (size[1] == "ANS") {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "years";
-
-									} else {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "months";
-									}
-								}
-								
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        }
-
-                        var mySVG = document.getElementById("svg2");
-                        var svgDoc;
-                        mySVG.addEventListener("load", function () {
-                            svgDoc = mySVG.contentDocument;
-							
-							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
-							
-                            var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
-                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
-                            svgItem.innerHTML = order_details[0].UVC_TCO;
-                            var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
-							
-							if(order_details[0].Size == "TAILLE UNIQUE")
-							{
-								svgDoc.getElementById("size").innerHTML = "";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-								
-								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
-								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
-								
-								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-							}
-							else if(order_details[0].Size == "TAILLE L")
-							{
-								svgDoc.getElementById("size").innerHTML = "TAILLE L";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-							}
-							else
-							{
-								svgDoc.getElementById("size").innerHTML = size[0];
-								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
-								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
-								if (size[1] == "ANS") {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEAR";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEARS";
-									}
-									
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0];
-
-								} else {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTH";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
-									}
-									//alert(order_details[0].Age);
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0]+"M";
-								}
-							}
-                           if (data.treeviewData[0].disney != 1) {
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang(code, "barcode1", svgDoc)
-						   }
-						   else{
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang_disney(code, "barcode1", svgDoc)
-						   }
-                            
-
-
-                        }, false);
-
-
-
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-                    }
-
-
-                    $('#tree1 >ul > li').each( function() {	
-                        disable( "tree1",this.id );        	
-                    })
 					
-
+					if (hang_tag_orders != "") {
+                        $('#tree1 >ul > li').each( function() {
+                            disable( 'tree1',this.id );        
+                        })
+                        $('.extra_percentagehang').attr('disabled','disabled')
+                        $('.tot_qty_tablehang').attr('disabled','disabled')
+                        $('#ocn_number_hang').attr('disabled','disabled')
+                    }
                 },
                 error: function (data) {
 
@@ -1499,8 +1380,6 @@ function hangtagmodalOs(data) {
     });
     //Show Template when Click tree node 
     $('#tree1').on('activate_node.jstree', function (e, data) {
-		var ids = $(this).parent().parent().parent().parent().parent().attr('id');
-		var node = $("#tree1").jstree('get_selected', true)[0].text;
         if (data.instance.is_leaf(data.node)) {
             var buyer = localStorage.getItem("buyer");
             var template_id = data.node.id;
@@ -1520,223 +1399,6 @@ function hangtagmodalOs(data) {
                 success: function (data) {
 					$('.tot_qty_tablehang').attr('min',data.moq)
 					$('#hangtagform').validator('update')
-                    if (data.treeviewData.length > 0) {
-                        $('#' + ids).find('.sample-artwork').html('<object id="svg_hang_front" style="height: 486px;" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#' + ids).find('.sample_back').html('<object class="center-block" id="svg2" style="height:486px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object>')
-
-                        if (data.treeviewData[0].disney != "DI") {
-                            var mySVG_hang_disney = document.getElementById("svg_hang_front");
-                            var svgDoc;
-                            mySVG_hang_disney.addEventListener("load", function () {
-                                svgDoc = mySVG_hang_disney.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
-								
-								var size = order_details[0].Size.split(" ")
-							
-								if(order_details[0].Size == "TAILLE UNIQUE")
-								{
-									svgDoc.getElementById("size").innerHTML = "";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-									svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-								}
-								else if(order_details[0].Size == "TAILLE L")
-								{
-									svgDoc.getElementById("size").innerHTML = "TAILLE L";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-								}
-								else
-								{
-									//alert(size[0])
-									svgDoc.getElementById("size").innerHTML = size[0];
-									if (size[1] == "ANS") {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "years";
-
-									} else {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "months";
-									}
-								}
-
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        } else {
-                            var mySVG_hang = document.getElementById("svg2");
-                            var svgDoc;
-                            mySVG_hang.addEventListener("load", function () {
-                                svgDoc = mySVG_hang.contentDocument;
-                                var pri = order_details[0].PrixEurope.split(",")
-								
-								var size = order_details[0].Size.split(" ")
-							
-								if(order_details[0].Size == "TAILLE UNIQUE")
-								{
-									svgDoc.getElementById("size").innerHTML = "";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-
-									svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
-									svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
-									
-								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-								}
-								else if(order_details[0].Size == "TAILLE L")
-								{
-									svgDoc.getElementById("size").innerHTML = "TAILLE L";
-									svgDoc.getElementById("size_french").innerHTML = "";
-									svgDoc.getElementById("size_english").innerHTML = "";
-								}
-								else
-								{
-									//alert(size[0])
-									svgDoc.getElementById("size").innerHTML = size[0];
-									if (size[1] == "ANS") {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "years";
-
-									} else {
-										svgDoc.getElementById("size_french").innerHTML = size[1];
-										svgDoc.getElementById("size_english").innerHTML = "months";
-									}
-								}
-								
-                                if (pri.length == 1) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = order_details[0].PrixEurope;
-                                    svgDoc.getElementById("price2").innerHTML = "";
-                                } else if (pri.length == 2) {
-                                    var svgItem = svgDoc.getElementById("price1");
-                                    svgItem.innerHTML = pri[0];
-                                    svgDoc.getElementById("price2").innerHTML = "," + pri[1];
-                                }
-                                var pri1 = order_details[0].PrixClubEurope.toString().split(",")
-                                if (pri1.length == 1) {
-                                    svgDoc.getElementById("club_price1").innerHTML = order_details[0].PrixClubEurope;
-                                    svgDoc.getElementById("club_price2").innerHTML = "";
-                                } else if (pri1.length == 2) {
-                                    svgDoc.getElementById("club_price1").innerHTML = pri1[0];
-                                    svgDoc.getElementById("club_price2").innerHTML = "," + pri1[1];
-                                }
-
-                            }, false);
-                        }
-
-                        var mySVG = document.getElementById("svg2");
-                        var svgDoc;
-                        mySVG.addEventListener("load", function () {
-                            svgDoc = mySVG.contentDocument;
-							
-							//svgDoc.getElementById("cm").innerHTML = $('.onesizecm').val();
-							//svgDoc.getElementById("in").innerHTML = $('.onesizein').val();
-							
-                            var svgItem = svgDoc.getElementById("uvc_tco");
-                            svgDoc.getElementById("algeria_club_price").innerHTML = order_details[0].Prix_Vente_ALGERIE != null ? order_details[0].Prix_Vente_ALGERIE.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("algeria_price").innerHTML = order_details[0].Prix_Club_ALGERIE != null ? order_details[0].Prix_Club_ALGERIE.toString().replace(".", ",") .replace(" ", ""): "";
-                            svgDoc.getElementById("saudi_club_price").innerHTML = order_details[0].Prix_Vente_Arabie_Saoudite != null ? order_details[0].Prix_Vente_Arabie_Saoudite.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morroco_club_price").innerHTML = order_details[0].Prix_Vente_Maroc != null ? order_details[0].Prix_Vente_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_club_price").innerHTML = order_details[0].Prix_Vente_Suisse != null ? order_details[0].Prix_Vente_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_club_price").innerHTML = order_details[0].Prix_Vente_Canada != null ? order_details[0].Prix_Vente_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                            //svgDoc.getElementById("turkey_price").innerHTML = order_details[0].Prix_Vente_Turquie != null ? order_details[0].Prix_Vente_Turquie.toString().replace(".", ",") : "";
-                            svgDoc.getElementById("us_club_price").innerHTML = order_details[0].Prix_Vente_USA != null ? order_details[0].Prix_Vente_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("us_price").innerHTML = order_details[0].Prix_Club_USA != null ? order_details[0].Prix_Club_USA.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_club_price").innerHTML = order_details[0].Prix_Vente_Ile_Maurice != null ? order_details[0].Prix_Vente_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morris_price").innerHTML = order_details[0].Prix_Club_Ile_Maurice != null ? order_details[0].Prix_Club_Ile_Maurice.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("morocco_price").innerHTML = order_details[0].Prix_Club_Maroc != null ? order_details[0].Prix_Club_Maroc.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("swiss_price").innerHTML = order_details[0].Prix_Club_Suisse != null ? order_details[0].Prix_Club_Suisse.toString().replace(".", ",").replace(" ", "") : "";
-                            svgDoc.getElementById("canada_price").innerHTML = order_details[0].Prix_Club_Canada != null ? order_details[0].Prix_Club_Canada.toString().replace(".", ",").replace(" ", "") : "";
-                           // svgDoc.getElementById("turkey_club_price").innerHTML = order_details[0].Prix_Club_Turquie != null ? order_details[0].Prix_Club_Turquie.toString().replace(".", ",") : "";
-                            svgItem.innerHTML = order_details[0].UVC_TCO;
-                            var size = order_details[0].Size.split(" ")
-                            svgDoc.getElementById("theme").innerHTML = order_details[0].Theme;
-							
-							if(order_details[0].Size == "TAILLE UNIQUE")
-							{
-								svgDoc.getElementById("size").innerHTML = "";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-								
-								svgDoc.getElementById("size_list").innerHTML = "TAILLE UNIQUE";
-								svgDoc.getElementById("cm").innerHTML = "ONE SIZE";
-							
-								svgDoc.getElementById("tu_one_size").removeAttribute("visibility");
-							}
-							else if(order_details[0].Size == "TAILLE L")
-							{
-								svgDoc.getElementById("size").innerHTML = "TAILLE L";
-								svgDoc.getElementById("size_french").innerHTML = "";
-								svgDoc.getElementById("size_english").innerHTML = "";
-							}
-							else
-							{
-								svgDoc.getElementById("size").innerHTML = size[0];
-								
-								svgDoc.getElementById("cm").innerHTML = order_details[0].cm+" CM";
-								//svgDoc.getElementById("in").innerHTML = order_details[0].in;
-								if (size[1] == "ANS") {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEAR";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "YEARS";
-									}
-									//alert(order_details[0].Age.match(/[0-9]+/g).toString());
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0];
-
-								} else {
-									svgDoc.getElementById("size_french").innerHTML = size[1];
-									if(size[0] == 1)
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTH";
-									}
-									else
-									{
-										svgDoc.getElementById("size_english").innerHTML = "MONTHS";
-									}
-									//alert(order_details[0].Age.match(/[0-9]+/g).toString());
-									svgDoc.getElementById("size_list").innerHTML = order_details[0].Age.match(/[0-9]+/g).toString().replace(",", "-").split(',')[0]+"M";
-								}
-							}
-                           if (data.treeviewData[0].disney != 1) {
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang(code, "barcode1", svgDoc)
-						   }
-						   else{
-							   var code = order_details[0].BarcodeForPricesTags.toString();
-                               jsbarcode_hang_disney(code, "barcode1", svgDoc)
-						   }
-                            
-
-
-                        }, false);
-
-
-
-                    } else {
-                        $('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-						$('#' + ids).find('.sample_back').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
-                    }
 
                 },
                 error: function (data) {
@@ -1748,16 +1410,13 @@ function hangtagmodalOs(data) {
             })
         }
     });
-
-	
-	
 	
     $('#hangtagform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setHangTagStatusOs()
+            setHangTagStatus(hang_tag_orders[0].color_code,"customer","os")
         }
     })
 
@@ -1841,9 +1500,9 @@ function specialtagsOs(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-	$special_tag_count=data.orchestra_special_tag_orders_qty[0].quantity;
+	$special_tag_count=data.orchestra_special_tag_orders[0].quantity;
 	
-    $('.edit-orch-order-panel').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_special" required value="'+$ocn_number_special+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_st_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSTOrder()" type="button">Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_special" required value="'+$ocn_number_special+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm special_qty" value="' + $special_tag_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Special Tag Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_st_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSTOrder()" type="button">Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  </form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -1879,7 +1538,7 @@ function specialtagsOs(data) {
 
         } else {
             e.preventDefault();
-            setSpecialTagStatusOs()
+            setSpecialTagStatus(data.orchestra_special_tag_orders[0].color_code,"customer","os")
         }
     })
     $("#specialtagform :input").prop("disabled", true);
@@ -1960,7 +1619,7 @@ function treestructurespecialOs(data, tree, template_id) {
                     
                     $('#'+tree+' >ul > li').each( function() {	
                         disable( tree,this.id );        	
-                    })
+                    })	
 
 				},
 				error: function (data) {
@@ -2043,7 +1702,7 @@ function heatTransferOs(data) {
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_heat_transfer_orders != "") {
 
-            $heat_transfer_count = data.orchestra_heat_transfer_orders_qty[$qu].quantity;
+            $heat_transfer_count = data.orchestra_heat_transfer_orders[$qu].quantity;
         } else {
             $heat_transfer_count = "";
         }
@@ -2129,7 +1788,7 @@ function heatTransferOs(data) {
 
         } else {
             e.preventDefault();
-            setheat_transferStatusOs(data.color_wcl)
+            setheat_transferStatus(data.orchestra_heat_transfer_orders[0].color_code,"customer","os")
         }
     })
     $("#heat_transferform :input").prop("disabled", true);
@@ -2206,9 +1865,10 @@ function treestructureheat_transferOs(data, tree, template_id) {
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
+                    
                     $('#'+tree+' >ul > li').each( function() {	
                         disable( tree,this.id );        	
-                    })
+                    })	
 
 				},
 				error: function (data) {
@@ -2290,8 +1950,7 @@ function sizelabelsOs(data) {
     var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_size_label_orders != "") {
-
-            $size_label_count = data.orchestra_size_label_orders_qty[$qu].quantity;
+            $size_label_count = data.orchestra_size_label_orders[$qu].quantity;
         } else {
             $size_label_count = "";
         }
@@ -2315,7 +1974,7 @@ function sizelabelsOs(data) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
 
-    $('.edit-orch-order-panel').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_size" required value="'+$ocn_number_size+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Size Label</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span> <button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_sl_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSLOrder()" type="button">Edit</button> <button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="size_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_size" required value="'+$ocn_number_size+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="size_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treesl_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treesl" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for Size Label</h4> <hr> <div class="table-responsive"><table class="table table-striped table-hover table-condensed qty-table-modal" id="size_label_table"><thead><tr><th>UVC TCO#</th><th>Size</th><th>Barcode</th><th>Qty</th><th><label style="float: left; line-height: 2">Extra %:</label> <input type="text" class="form-control input-sm extra_percentagesize" onkeypress="return checkNumbersOnly(event)"  style="width:60px; float: left; margin-left: 5px;"></th></tr> </thead><tbody>' + tr + '<tr class="strong"><td class="text-right" colspan="3">Total:</td><td >' + ttots_sum + '</td><td class="text-center tot_qty_tablesize_fin">' + ttots + '</td></tr></tbody></table></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_size_label_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_sl_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraSLOrder()" type="button">Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="size_labelclose">Close</button></div> </div>  </form>');
 
 	//$('.left').removeClass('disabled')
     $('#size_labelform .tot_qty_tablesize').keyup(function () {
@@ -2379,7 +2038,7 @@ function sizelabelsOs(data) {
 
         } else {
             e.preventDefault();
-            setSizeLabelStatusOs(data.color_wcl)
+            setSizeLabelStatus(data.orchestra_size_label_orders[0].color_code,"customer","os")
         }
     })
     $("#size_labelform :input").prop("disabled", true);
@@ -2462,9 +2121,9 @@ function treestructuresize_labelOs(data, tree, template_id,orchestra_size_label_
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
                     }
-                    
+
                     $('#'+tree+' >ul > li').each( function() {	
-                        disable( tree,this.id );        	
+                          disable( tree,this.id );        	
                     })	
 
 				},
@@ -2527,7 +2186,7 @@ function mainlabelsOs(data) {
       
         $template_id = data.orchestra_main_label_orders[0].template_id;
         $exist_id = data.orchestra_main_label_orders[0].id;
-        $main_label_count=data.orchestra_main_label_orders_qty[0].quantity;
+        $main_label_count=data.orchestra_main_label_orders[0].quantity;
         
         var str=data.orchestra_main_label_orders[0].status;
         $status=str.replace(/ /g, "");
@@ -2549,7 +2208,7 @@ function mainlabelsOs(data) {
     $.each(data.orchestra_template_front, function (index, value) {
         option += "<option value=" + value.template_file + ">" + value.template_name + "</option>";
     });
-    $('.edit-orch-order-panel').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_main" required value="'+$ocn_number_main+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_ml_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraMLOrder()" type="button">Edit</button>  <button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  </form>');
+    $('.edit-orch-order-panel').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelos col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_main" required value="'+$ocn_number_main+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label>  <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panelos col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Final order qty</label><input class="form-control input-sm main_label_qty" value="' + $main_label_count + '" onkeypress="return checkorcMOQ(this)" placeholder="Main Label Count" type="number" required><div class="help-block with-errors"></div></div><span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Submit</button><button class="btn btn-warning  pull-right input-sm" id="edit_orc_ml_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraMLOrder()" type="button">Edit</button><button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  </form>');
 	//$('.left').removeClass('disabled')
     $('#main_labelform .tot_qty_table').keyup(function () {
         var tot_qty_table_carton_final = 0;
@@ -2585,7 +2244,7 @@ function mainlabelsOs(data) {
 
         } else {
             e.preventDefault();
-            setMainLabelStatusOs()
+            setMainLabelStatus(data.orchestra_main_label_orders[0].color_code,"customer","os")
         }
     })
     $("#main_labelform :input").prop("disabled", true);
@@ -2719,7 +2378,7 @@ function treestructuremain_labelOs(data, tree, template_id) {
 		}
 	});
 }
-function washcarelabelsOs(data, dataid) {
+function washcarelabelsOs(data) {
     var washing_option = "<option value=''>Select Option</option>";
     var whitening_option = "<option value=''>Select Option</option>";
     var dryer_option = "<option value=''>Select Option</option>";
@@ -2729,7 +2388,6 @@ function washcarelabelsOs(data, dataid) {
     var instruction_option = "";
     var parts_option = "<option>Select Option</option>";
     var composition_option = "<option>Select Option</option>";
-
 
     $.each(data.orchestra_countries, function (index, value) {
         made_option += '<option data-id="' + value.id + '"  data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
@@ -2774,44 +2432,37 @@ function washcarelabelsOs(data, dataid) {
 
     });
 
-	
+    var merchandisersoption = "<option value=''>Select Merchandiser</option>";
+
+	$.each(data.merchandisers, function (index, value) {
+		merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
+	});
 
     var tr = "";
     $qu = 0;
     var ttots = 0;
     if (data.orchestra_wash_care_label_orders != "") {
-        if (dataid != "") {
-            dataid1 = dataid;
-        } else {
-            dataid1 = 0;
-        }
-        if (data.orchestra_wash_care_label_orders.length > dataid1) {
+        
+        if (data.orchestra_wash_care_label_orders.length > 0) {
           
-            $exist_id = data.orchestra_wash_care_label_orders[dataid1].id;
-            if(data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment != "")
+            $exist_id = data.orchestra_wash_care_label_orders[0].id;
+            if(data.orchestra_wash_care_label_orders[0].merchandiser_comment != "")
             {
-                $comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[dataid1].merchandiser_comment+"</p><hr>";
+                $comment = "<h4>Comments :</h4><p>"+data.orchestra_wash_care_label_orders[0].merchandiser_comment+"</p><hr>";
             }
             else
             {
                 $comment = "";
             }
             
-            var str=data.orchestra_wash_care_label_orders[dataid1].status;
-//			if(str == "Order Approved")
-//			{
-//				$save_button_class = "hidden";
-//			}
-//			else
-//			{
-//				$save_button_class = "";
-//			}
+            var str=data.orchestra_wash_care_label_orders[0].status;
+
 			$save_button_class = "";
             $status=str.replace(/ /g, "");
             $status_text=str;
-            $wcl_name=data.orchestra_wash_care_label_orders[dataid1].template_name;
-			$template_id = data.orchestra_wash_care_label_orders[dataid1].template_id;
-		    $ocn_number_wash = data.orchestra_wash_care_label_orders[dataid1].ocn_number;
+            $wcl_name=data.orchestra_wash_care_label_orders[0].template_name;
+			$template_id = data.orchestra_wash_care_label_orders[0].template_id;
+		    $ocn_number_wash = data.orchestra_wash_care_label_orders[0].ocn_number;
 			
 			$print_button_class = "hidden";
         } else {
@@ -2841,13 +2492,8 @@ function washcarelabelsOs(data, dataid) {
     }
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $wash_label_count = data.orchestra_wash_care_label_orders[dataid1]['qty'][$qu].quantity;
+            if (data.orchestra_wash_care_label_orders.length > 0) {
+                $wash_label_count = data.orchestra_wash_care_label_orders[0]['qty'][$qu].quantity;
             } else {
                 $wash_label_count = "";
             }
@@ -2857,103 +2503,251 @@ function washcarelabelsOs(data, dataid) {
         }
 
 
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewash" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 85px;" onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewcl" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
 
         $qu++;
         ttots += parseInt($wash_label_count);
 
     });
 	
-	if(data.order_details[0].Size == "TAILLE UNIQUE")
-	{
-		if (dataid != "") {
-            dataid1 = dataid;
-        } else {
-            dataid1 = 0;
-        }
-		if (data.orchestra_wash_care_label_orders != "") {
-			 if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $wash_cm = data.orchestra_wash_care_label_orders[dataid1].cm;
-				$wash_in = data.orchestra_wash_care_label_orders[dataid1].in;
-            } else {
-                $wash_cm = ""; 
-				$wash_in = "";
-            }
-			
-            
-        } else {
-            $wash_cm = "";
-			$wash_in = "";
-        }
-		//var sizebox='<div class="form-group has-feedback"><label>Enter Size in Cm</label><input onkeypress="return checkNumbersOnly(event)" type="text" maxlength="3" class="form-control input-sm washonesizecm" value="'+$wash_cm+'" required="" placeholder="Enter Size in Cm"><div class="help-block with-errors"></div></div><div class="form-group has-feedback"><label>Enter Size in inches</label><input onkeypress="return checkNumbersOnly(event)" type="text" class="form-control input-sm washonesizein" maxlength="3" value="'+$wash_in+'" placeholder="Enter Size in inches"><div class="help-block with-errors"></div></div>';
-		var sizebox='';
-	}
-	else
-	{
-		var sizebox="";
-	}
 	
     if(isNaN(ttots))
-        {
-            ttots=0;
-        }
+    {
+        ttots=0;
+    }
     else
-        {
-            ttots=ttots;
-        }
-	//alert(data.order_details[0].Licence_Code)
-	if(data.order_details[0].Licence_Code === 'DI')
-	{
-		//<label id="hang_template_error" class="hidden" style="color:red">Please Select the Template</label>  <div><input type="text" id="tree_wash'+dataid+'_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div id="tree_wash'+dataid+'"></div>
-		var treestruct='';
-		var disney_flag="1";
-	}
-	else
-	{
-		var treestruct="";
-		var disney_flag="0";
-	}
+    {
+        ttots=ttots;
+    }
 
-    $('.edit-orch-order-panel').append('<form id="washcarelabelform' + dataid + '" data-toggle= "validator"><input type="hidden" value="' + $exist_id + '" id="exist_id' + dataid + '"><div class="left-panelos col-md-8"> <div class="div-max"> <div class="col-md-3"> <h4>Options</h4> <hr><div class="scroll"><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_wash' + dataid + '" required value="'+$ocn_number_wash+'" class="form-control input-sm" placeholder="OCN Number"><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">WCL Name</label><input type="text" class="form-control input-sm" required="" placeholder="WCL Name" value="' + $wcl_name + '" id="wcl_name' + dataid + '"><div class="help-block with-errors"></div></div>  <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Washing</label><select data-live-search="true" class="form-control selectpicker input-sm washing_select' + dataid + '" required>' + washing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Whitening</label><select data-live-search="true" class="form-control selectpicker input-sm whitening_select' + dataid + '" required>' + whitening_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Dryer</label><select data-live-search="true" class="form-control selectpicker input-sm dryer_select' + dataid + '" required>' + dryer_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Ironing</label><select data-live-search="true" class="form-control selectpicker input-sm ironing_select' + dataid + '" required>' + ironing_option + '</select><div class="help-block with-errors"></div></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Cleaning</label><select data-live-search="true" class="form-control selectpicker input-sm cleaning_select' + dataid + '" required>' + cleaning_option + '</select><div class="help-block with-errors"></div></div>'+treestruct+'  </div></div> <div class="col-md-5"> <h4>Art Work</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span> <hr> <div class="section-1 sections"> <div class="sample-artwork"><object style="height: calc( 100vh - 125px );"  id="washcare_svg_front' + dataid + '" data="' + data.orchestra_wash_template_front + '" type="image/svg+xml"></object> <object style="height: calc( 100vh - 125px );margin-left: 10px;"  id="washcare_svg_back' + dataid + '"  data="' + data.orchestra_wash_template_back + '" type="image/svg+xml"></object><object style="height: calc( 100vh - 125px );width: 145px;margin-left: 10px;"  id="washcare_svg_middle' + dataid + '" data="' + data.orchestra_wash_template_middle + '" type="image/svg+xml"></object></div><input type="hidden" value="' + disney_flag + '" id="wash_label_id"></div> </div> <div class="col-md-4 " style="padding-left:0px"> <h4>Options</h4> <hr>'+sizebox+' <div class="scroll"><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Made In</label><select data-live-search="true" class="form-control selectpicker input-sm made_in_select' + dataid + '" required>' + made_option + '</select><div class="help-block with-errors"></div></div> <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Care Instructions</label><select data-live-search="true" data-done-button="true" class="form-control selectpicker input-sm care_instruction_select' + dataid + '" required multiple>' + instruction_option + '</select><div class="help-block with-errors"></div></div> <div class="section-1 sections"> <h5>Compositions</h5> <select class="selectpicker composition_select' + dataid + '"  data-live-search="true">  ' + composition_option + '  </select><p class="hidden" style="color:red;float:right" id="composition_error_required' + dataid + '">Please Select Composition</p> </div> <h5>Percentage</h5> <input type="number" min="1" max="100" class="form-control input-sm composition_percent' + dataid + '"><p class="hidden" style="color:red;text-align:right" id="percentage_error_required' + dataid + '">Please Enter Percentage</p>  <button type="button" class="btn  btn-primary pull-right input-sm add_to_list' + dataid + '" onclick="add_to_list(' + dataid + ')">Add To List</button> <table class="table table-striped table-hover table-condensed"><thead><th>Composition</th><th>Quantity</th></thead><tbody id="composition_table_qty' + dataid + '"></tbody></table><p id="wash_composition_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Select composition</p><p id="wash_composition_page_error' + dataid + '" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p><div style="height: 30px;"><button class="btn  btn-primary pull-right input-sm add_to_composition' + dataid + '"  type="button" disabled onclick="add_to_composition(' + dataid + ')">Add To Composition</button></div><div><h4>Compositions :</h4><div><table class="table table-striped table-hover table-condensed"><thead><tr><th>Composition Name</th><th>Parts</th><th>Actions</th></tr></thead><tbody id="composition_remove_qty' + dataid + '"></tbody></table><div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div><div><button class="btn  btn-primary pull-right input-sm add_to_page' + dataid + '"  style="position:relative;" type="button" onclick="add_to_page(' + dataid + ')">Add To Page</button></div></div></div><div class="parts_none'+dataid+'" style="display:none"><select>' + parts_option + '</select></div> </div> </div> </div></div> <div class="right-panelos col-md-4"> <div class="div-max scroll"> <h4>Quantity Info for <span class="washlabelnameqty' + dataid + '"> WashCare Label</span></h4> <hr> <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_'+dataid+'" style="font-size:11px"> <thead> <tr> <th>UVC TCO#</th> <th>Size in ANS</th> <th>Barcode</th> <th>Qty.</th> <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th> </tr></thead> <tbody style="font-size: 11px">' + tr + ' <tr class="strong"> <td class="text-right" colspan="3">Total:</td><td>' + data.total_qty + '</td><td class="text-center tot_qty_tablewash_fin">' + ttots + '</td></tr></tbody></table><hr>'+ $comment +' <span id="error_msg_alert" style="color:red;"></span><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_wash_button" style="margin-left:10px">Submit</button> <button class="btn btn-warning  pull-right input-sm" id="edit_orc_label_order_btn" style="width: 55px;margin-left: 10px;" onclick="editOrchestraLabelOrder()" type="button">Edit</button><button class="btn btn-default pull-right input-sm" id="close" type="button">Close</button> <button type="button" class="btn btn-primary '+$print_button_class+'" id="print_wash_button" onclick=printWashDiv("washcare_svg_front","washcare_svg_back","washcare_svg_middle","'+dataid+'")>Print</button></div> </div><div id="svgdiv" style="display: none;"><svg id="ean-13"></svg></div>  </form>');
-   //$('.left').removeClass('disabled')
+    if(data.treeviewwash_label[0].parent_id != "null")
+    {
+        var wcl_template = "<option value=''>Select Option</option>";
 
-    $('#washcarelabelform' + dataid + ' .tot_qty_tablewash').keyup(function () {
+        $.each(data.treeviewwash_label, function (index, value) {
+            wcl_template += '<option value="' + value.id + '">' + value.text + '</option>'
+        });
+
+        var wcl_template_div =`<div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                    class="form_label">Select Template</label><select
+                                    data-required-error="Required" data-live-search="true"
+                                    class="form-control selectpicker input-sm wcl_template" required>` +
+                                    wcl_template + `</select>
+                                <div class="help-block with-errors"></div>
+                            </div>`
+    }
+    else
+    {
+        var wcl_template = "<option value=''>Select Option</option>";
+        
+        $.each(data.treeviewwash_label, function (index, value) {
+            wcl_template += '<option value="' + value.id + '" selected>' + value.text + '</option>'
+        });
+
+        var wcl_template_div =`<div style="display:none" class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Template</label><select
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm wcl_template" required>` +
+                                wcl_template + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>`;
+    }
+
+    $('.edit-orch-order-panel').append(`
+            <form id="washcarelabelform" data-toggle="validator"><input type="hidden" value="` + $exist_id + `"
+            id="exist_id">
+                <div class="left-panel-heat col-md-7">
+                    <div class="div-max">
+                        <div class="col-md-4">
+                            <h4>Options</h4>
+                            <hr>
+                            <div class="scroll">
+                                <div class="form-group has-feedback has-success"><label for="ocn_number" class="form_label">OCN
+                                        Number</label><input type="text" id="ocn_number_wash" required
+                                        value="`+$ocn_number_wash+`" class="form-control input-sm" placeholder="OCN Number">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">WCL Name</label><input type="text" class="form-control input-sm"
+                                        required="" placeholder="WCL Name" value="` + $wcl_name + `" id="wcl_name">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Washing</label><select data-live-search="true"
+                                        class="form-control selectpicker input-sm washing_select" required>` +
+                                        washing_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Whitening</label><select data-live-search="true"
+                                        class="form-control selectpicker input-sm whitening_select" required>` +
+                                        whitening_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Dryer</label><select data-live-search="true"
+                                        class="form-control selectpicker input-sm dryer_select" required>` +
+                                        dryer_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Ironing</label><select data-live-search="true"
+                                        class="form-control selectpicker input-sm ironing_select" required>` +
+                                        ironing_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Cleaning</label><select data-live-search="true"
+                                        class="form-control selectpicker input-sm cleaning_select" required>` +
+                                        cleaning_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                    class="form_label">Select Made In</label><select data-required-error="Required" data-live-search="true" class="form-control selectpicker input-sm made_in_select" required>` +
+                                    made_option + `</select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                            class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>` + merchandisersoption + `</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label>
+                            </div>
+                            `+wcl_template_div+`
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h4>Care Instructions & Composition</h4>
+                            <hr>
+                            <div class="scroll">
+                                <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                        class="form_label">Select Care Instructions</label><select data-live-search="true"
+                                        data-done-button="true"
+                                        class="form-control selectpicker input-sm care_instruction_select" required
+                                        multiple>` + instruction_option + `</select>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="row" style="margin-bottom: 15px;">
+                                    <div class="col-md-6">
+
+                                    <label>Compositions</label> <select class="selectpicker composition_select"
+                                        data-live-search="true"> ` + composition_option + ` </select>
+                                    <p class="hidden" style="color:red;float:right" id="composition_error_required">
+                                        Please Select Composition</p>
+                                </div>
+
+                                <div class="col-md-3">
+                                <label>Percentage</label> <input type="number" min="1" max="100"
+                                    class="form-control input-sm composition_percent">
+                                <p class="hidden" style="color:red;text-align:right" id="percentage_error_required">
+                                    Please Enter Percentage</p>
+                                    </div>
+                                    
+                                    <div class="col-md-3" style="margin-top: 22px;">
+                                    <button type="button"
+                                    class="btn  btn-primary pull-right input-sm add_to_list"
+                                    onclick="add_to_list()">Add To List</button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                <table class="table table-bordered table-striped table-hover table-condensed">
+                                    <thead>
+                                        <th>Composition</th>
+                                        <th>Percentage</th>
+                                        <th>Actions</th>
+                                    </thead>
+                                    <tbody id="composition_table_qty">
+                                        <tr id="no_data">
+                                            <td colspan="3">No data Found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;margin-bottom: 10px;">
+                                
+                                <button
+                                        class="btn  btn-primary pull-right input-sm add_to_composition" type="button"
+                                        disabled onclick="add_to_composition()">Add To Composition</button>
+                                        <p id="wash_composition_error" class="hidden"
+                                        style="color:red;margin-right: 10px;">Please add to composition set</p>
+                                <p id="wash_composition_page_error" class="hidden"
+                                    style="color:red;text-align: right;margin-right: 10px;">Please Add Composition to Page</p>
+
+                                <div>
+                                    <div class="col-md-12">
+                                            <hr>
+                                            <h4>Compositions :</h4>
+                                        <table class="table table-bordered table-striped table-hover table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Composition Name</th>
+                                                    <th>Parts</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="composition_remove_qty"></tbody>
+                                        </table>
+                                        <div>
+                                            <p class="hidden composition_error_hidden"
+                                                style="color:red;text-align: right;margin-right: 10px;">Please select parts</p>
+                                        </div>
+                                        <div><button class="btn  btn-primary pull-right input-sm add_to_page"
+                                                style="position:relative;" type="button" onclick="add_parts('')">Add
+                                                Parts</button></div>
+                                    </div>
+                                </div>
+                                <div class="parts_none" style="display:none"><select class="form-control">` + parts_option
+                                        + `</select></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel-heat col-md-5">
+                    <div class="div-max scroll">
+                        <h4>Quantity Info for <span class="washlabelnameqty"> WashCare Label</span></h4>
+                        <hr>
+                        <table class="table table-bordered table-striped table-hover table-condensed table-responsive qty-table-modal"
+                            id="wash_care_label_table_" style="font-size:11px">
+                            <thead>
+                                <tr>
+                                    <th>UVC TCO#</th>
+                                    <th>Size</th>
+                                    <th>Barcode</th>
+                                    <th>Qty</th>
+                                    <th  style="display: flex;justify-content: center;"><label style="float: left; line-height: 2">Extra %:</label><input type="text" class="form-control input-sm extra_percentagewash"
+                                            onkeypress="return checkNumbersOnly(event)"
+                                            style="width:60px; float: left; margin-left: 5px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>` + tr + ` <tr class="strong">
+                                    <td class="text-right" colspan="3">Total:</td>
+                                    <td>` + data.total_qty + `</td>
+                                    <td class="text-center tot_qty_tablewash_fin">` + ttots + `</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>`+ $comment +` <span id="error_msg_alert" style="color:red;"></span><button
+                            class="btn btn-primary pull-right input-sm left `+$save_button_class+`" type="submit"
+                            id="save_wash_button" style="margin-left:10px">Submit</button><button
+                            class="btn btn-warning  pull-right input-sm" id="edit_orc_label_order_btn"
+                            style="width: 55px;margin-left: 10px;" onclick="editOrchestraLabelOrder()" type="button">Edit</button><button
+                            class="btn btn-default pull-right input-sm" id="close" type="button">Close</button>
+                    </div>
+                </div>
+                <div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div>
+                </form>
+    `);
+
+    $('#washcarelabelform .tot_qty_tablewcl').keyup(function () {
         var tot_qty_tablewash_carton_final = 0;
-        $('#washcarelabelform' + dataid + ' tbody tr').each(function (keys, vals) {
-            if ($(this).find('.tot_qty_tablewash').val() != undefined) {
-                tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewash').val());
+        $('#washcarelabelform tbody tr').each(function (keys, vals) {
+            if ($(this).find('.tot_qty_tablewcl').val() != undefined) {
+                tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewcl').val());
             }
         })
-        $('#washcarelabelform' + dataid + ' .tot_qty_tablewash_fin').text(tot_qty_tablewash_carton_final);
+        $('#washcarelabelform .tot_qty_tablewash_fin').text(tot_qty_tablewash_carton_final);
     });
 	
-	treestructurewash(data.treeviewwash,dataid, "tree_wash"+dataid, $template_id,data);
-	
-	$('#washcarelabelform' + dataid+' .washonesizein').keyup(function () {
-		
-		//var inches=$(this).val();
-		var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val();
-        var mySVG = document.getElementById("washcare_svg_front" + dataid);
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-
-		
-    });
-	$('#washcarelabelform' + dataid+' .washonesizecm').keyup(function () {
-		//alert(dataid)
-		var cm=$(this).val();
-		//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val();
-        var mySVG = document.getElementById("washcare_svg_front" + dataid);
-		var svgDoc;
-		svgDoc = mySVG.contentDocument;
-		svgDoc.getElementById("size_in_fr_en1").innerHTML = cm+"cm";
-		svgDoc.getElementById("size_in_fr_en2").innerHTML = cm+"cm";
-		
-    });
-	
-    $('.care_instruction_select'+dataid).parent().removeClass('has-error')
+    $('.care_instruction_select').parent().removeClass('has-error')
     $('.help-block').html('')
     $('.extra_percentagewash').keyup(function () {
 		
@@ -2965,168 +2759,47 @@ function washcarelabelsOs(data, dataid) {
                 var sum = $(this).find('.sum').text();
                 var per_qty = (parseInt(sum) / 100) * parseInt(per);
                 var tot_qty = parseInt(sum) + parseInt(per_qty);
-                $(this).find('.tot_qty_tablewash').val(tot_qty);
-                if ($(this).find('.tot_qty_tablewash').val() != undefined) {
-                    tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewash').val());
+                $(this).find('.tot_qty_tablewcl').val(tot_qty);
+                if ($(this).find('.tot_qty_tablewcl').val() != undefined) {
+                    tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewcl').val());
                 }
             })
             $(this).parent().parent().parent().parent().parent().find('.tot_qty_tablewash_fin').text(tot_qty_tablewash_carton_final);
         } else {
             
             $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
-                $(this).find('.tot_qty_tablewash').val("");
+                $(this).find('.tot_qty_tablewcl').val("");
             })
             $(this).parent().parent().parent().parent().parent().find('.tot_qty_tablewash_fin').text("0");
         }
 
     })
 
-    selectpicker()
+    if (data.orchestra_wash_care_label_orders.length > 0) {
 
-    var date = new Date();
-    date.setDate(date.getDate() + 7);
+        var care_instruction_select_option = data.orchestra_wash_care_label_orders[0].care_instruction;
+        $('.made_in_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].made_in_id);
+        $('.washing_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].washing_id);
+        $('.whitening_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].whitening_id);
+        $('.dryer_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].dryer_id);
+        $('.ironing_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].ironing_id);
+        $('.cleaning_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].cleaning_id);
+        $('.wcl_template').selectpicker('val', data.orchestra_wash_care_label_orders[0].template_id);
 
-    var dateMsg = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-
-    $("#clickme" + dataid).click(function () {
-        
-       if( $('.merchandisers option:selected').val() != "")
-       {
-            composition_percentage_global = 0;
-            $('.composition_select' + dataid).prop('disabled', false)
-            $('.parts_select' + dataid).prop('disabled', false)
-            $(".parts_select" + dataid).val('');
-            $('.parts_select' + dataid).selectpicker('refresh');
-            $(".composition_select" + dataid).val('');
-            $('.composition_select' + dataid).selectpicker('refresh');
-            $(".composition_percent" + dataid).val('');
-            $('.add_to_list' + dataid).removeAttr('disabled')
-            $('#composition_table_qty' + dataid).html("")
-            $('.composition_percent' + dataid).removeAttr('disabled')
-
-            //$('.washlabelnameqty' + dataid).text($('.washlabelname' + dataid).text())
-            $("#washcarelabelform" + dataid + " .backdrop").toggleClass('active');
-            $("#washcarelabelform" + dataid + " .right-panelos").toggleClass('active');
-            $('#washcarelabelform' + dataid + ' .scalable').toggleClass('active');
-            $("#washcarelabelform" + dataid + " .left-panelos").toggleClass('active');
-            $('.merchandiser_error').addClass('hidden')
-       }
-       else
-       {
-                $('.merchandiser_error').removeClass('hidden')
-       }
-		//alert()
-		$('.tot_qty_tablewash').parent().removeClass('has-error').removeClass('has-danger')
-        
-    })
-
-    $(".backdrop, #close").click(function () {
-        $("#washcarelabelform" + dataid + " .left-panelos").removeClass('active');
-        $("#washcarelabelform" + dataid + " .right-panelos").removeClass('active');
-        $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
-        $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
-    })
-	
-	var mySVG_back = document.getElementById("washcare_svg_back" + dataid);
-    var svgDoc_back;
-    mySVG_back.addEventListener("load", function () {
-        svgDoc_back = mySVG_back.contentDocument;
-	
-	if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $('.care_instruction_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].care_instruction);
-                svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german') + "-" +
-                        $(this).data('arabic') + "-" +
-                        $(this).data('greek') + '</p>';
-                    svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
-                });
-            }
-		
-			svgDoc_back.getElementById("product_family").innerHTML = data.product_family.length > 0 ? data.product_family[0].arabic : "";
-
-        }
-		
-		 $('.care_instruction_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.care_instruction_select' + dataid + ' option:selected').val() != "") {
-                svgDoc_back.getElementById("text_care_instruction").innerHTML = "";
-                $('.care_instruction_select' + dataid + ' option:selected').each(function () {
-                    var value = '<p class="text_pragraph">' + $(this).data('french') + "-" + $(this).data('english') + "-" + $(this).data('spanish') + "-" + $(this).data('portuguese') + "-" + $(this).data('italian') + "-" + $(this).data('dutch') + "-" + $(this).data('german')  + "-" +
-                        $(this).data('arabic') + "-" +
-                        $(this).data('greek') + '</p>';
-                    svgDoc_back.getElementById("text_care_instruction").innerHTML += value;
-                });
+        $('.care_instruction_select').selectpicker('val', data.orchestra_wash_care_label_orders[0].care_instruction);
+        $('.merchandisers').selectpicker('val', data.orchestra_wash_care_label_orders[0].merchandisers_id);
 
 
-            } else {
-
-            }
+        localStorage.setItem('care_instruction_select', JSON.stringify(data.orchestra_wash_care_label_orders[0].care_instruction));
 
 
-        });
-
-        var size = data.order_details[0].Size.split(" ")
-
-        if (size[1] == "ANS") {
-            var size1 = "years";
-        } else {
-            var size1 = "months";
-        }
-
-        if(size[0] == "TAILLE")
-		{
-        	svgDoc_back.getElementById("size_in_fr_en2").innerHTML = "";
-			svgDoc_back.getElementById("size2").innerHTML = size;
-		}
-		else
-		{
-            svgDoc_back.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
-			svgDoc_back.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-		}
-
-        svgDoc_back.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
-        svgDoc_back.getElementById("season_code").innerHTML = data.order_details[0].Season_Code
-
-        svgDoc_back.getElementById("product_family").innerHTML = data.product_family[0].arabic;
-
-
-        var code = data.order_details[0].BarcodeForPricesTags.toString();
-		//alert(code)
-        jsbarcodewashOs(code, 'barcode', svgDoc_back)
-		
-		}, false);
-
-
-    var mySVG_middle = document.getElementById("washcare_svg_middle" + dataid);
-    var svgDoc_middle;
-    
-    mySVG_middle.addEventListener("load", function () {
-
-        svgDoc_middle = mySVG_middle.contentDocument;
-
-        if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                
-                var page_id = 0;
+        var page_id = 0;
                 var s_no =1;
                 //var comps="";
-                $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index, value) {
+                $.each(data.orchestra_wash_care_label_orders[0].composition, function (index, value) {
                     if (value.page_id != page_id) {
                         var comps="";
-                        $.each(data.orchestra_wash_care_label_orders[dataid1].composition, function (index1, value1) {
+                        $.each(data.orchestra_wash_care_label_orders[0].composition, function (index1, value1) {
                             if(value.page_id == value1.page_id)
                             {
                                 if(comps != "")
@@ -3143,7 +2816,7 @@ function washcarelabelsOs(data, dataid) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select disabled class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                        $('#composition_remove_qty').append(`<tr id="` + add_page_composition + `"><td><label id="label_s_no_`+add_page_composition+`">`+ s_no +`</label>. Composition</td><td><input type="hidden" value="`+comps+`" class="compositions_hidden"><select disabled class="form-control select_parts`+add_page_composition+`">` + parts_option + `</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,'')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>`)
                         
                         if(value.parts_id != "")
                         {
@@ -3152,9 +2825,8 @@ function washcarelabelsOs(data, dataid) {
                         
                         
                         var washcomp=[];
-                        $('#composition_remove_qty' + dataid + ' tr').each(function () {
+                        $('#composition_remove_qty tr').each(function () {
                               var washcomp1=[];
-                              var id=$(this).attr('id')
                               var value=$(this).find('select').find(':selected').val();
                               var compo =$(this).find('.compositions_hidden').val();
                               var compss = compo.split(',');
@@ -3167,173 +2839,54 @@ function washcarelabelsOs(data, dataid) {
                         
                         
                         var wash_finals = JSON.stringify(washcomp);
-                        localStorage.setItem('wash_composition_final'+dataid, wash_finals);
+                        localStorage.setItem('wash_composition_final', wash_finals);
                         
-                        if (value.parts_english != null) {
-                            svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.parts_french + "-" + value.parts_english + "-" + value.parts_spanish + "-" + value.parts_portuguese + "-" + value.parts_italian + "-" + value.parts_dutch + "-" + value.parts_german + "-" + value.parts_arabic + "-" + value.parts_greek + '</p>';
-                        }
                         s_no++;
                     }
-                    svgDoc_middle.getElementById("parts_composition").innerHTML += '<p class="text_pragraph composition_' + add_page_composition + '" id="composition_' + add_page_composition + '">' + value.percentage + "% " + value.french + "-" + value.english + "-" + value.spanish + "-" + value.portuguese + "-" + value.italian + "-" + value.dutch + "-" + value.german  + "-" + value.arabic + "-" + value.greek + '</p>';
 
                     page_id = value.page_id;
                 });
-            }
-
-        }
-
-
-    }, false);
-
-    var mySVG = document.getElementById("washcare_svg_front" + dataid);
-    var svgDoc;
-    mySVG.addEventListener("load", function () {
-        svgDoc = mySVG.contentDocument;
-
-        //$('.washing_select'+dataid+' option[data-id="1"]').prop('selected', true)
-
-        if (data.orchestra_wash_care_label_orders != "") {
-            if (dataid != "") {
-                dataid1 = dataid;
-            } else {
-                dataid1 = 0;
-            }
-
-            if (data.orchestra_wash_care_label_orders.length > dataid1) {
-                $('.made_in_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].made_in_id);
-                var text_for_mad_in = '<p>' + $('select.made_in_select' + dataid).find(':selected').data('french') + "-" + $('select.made_in_select' + dataid).find(':selected').data('english') + "-" + $('select.made_in_select' + dataid).find(':selected').data('spanish') + "-" + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + dataid).find(':selected').data('italian') + "-" + $('select.made_in_select' + dataid).find(':selected').data('dutch') + "-" + $('select.made_in_select' + dataid).find(':selected').data('german') + "-" +
-                    $('select.made_in_select' + dataid).find(':selected').data('arabic') + "-" +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek') + '</p>';
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-				
-                $('.washing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].washing_id);
-
-                $('.merchandisers').selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].merchandisers_id);
-
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
-                $('.whitening_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].whitening_id);
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
-                $('.dryer_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].dryer_id);
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
-                $('.ironing_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].ironing_id);
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
-                $('.cleaning_select' + dataid).selectpicker('val', data.orchestra_wash_care_label_orders[dataid1].cleaning_id);
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
-
                 
-            }
+    }
 
-        }
+    selectpicker()
 
+    $("#clickme").click(function () {
+        
+       if( $('.merchandisers option:selected').val() != "")
+       {
+            composition_percentage_global = 0;
+            $('.composition_select').prop('disabled', false)
+            $('.parts_select').prop('disabled', false)
+            $(".parts_select").val('');
+            $('.parts_select').selectpicker('refresh');
+            $(".composition_select").val('');
+            $('.composition_select').selectpicker('refresh');
+            $(".composition_percent").val('');
+            $('.add_to_list').removeAttr('disabled')
+            $('#composition_table_qty').html("")
+            $('.composition_percent').removeAttr('disabled')
+            $("#washcarelabelform" + " .backdrop").toggleClass('active');
+            $("#washcarelabelform" + " .right-panelos").toggleClass('active');
+            $('#washcarelabelform .scalable').toggleClass('active');
+            $("#washcarelabelform" + " .left-panelos").toggleClass('active');
+            $('.merchandiser_error').addClass('hidden')
+       }
+       else
+       {
+                $('.merchandiser_error').removeClass('hidden')
+       }
+	   $('.tot_qty_tablewcl').parent().removeClass('has-error').removeClass('has-danger')
+        
+    })
 
-        $('.washing_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.washing_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', $('.washing_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol1").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol1").setAttribute('xlink:href', "");
-            }
-
-
-        });
-        $('.whitening_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.whitening_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', $('.whitening_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol2").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol2").setAttribute('xlink:href', "");
-            }
-        });
-        $('.dryer_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.dryer_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', $('.dryer_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol3").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol3").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.ironing_select' + dataid + '.bootstrap-select').change(function () {
-            if ($('.ironing_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', $('.ironing_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol4").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol4").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.cleaning_select' + dataid + '.bootstrap-select').change(function () {
-            if ($('.cleaning_select' + dataid + ' option:selected').val() != "") {
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('cofreet'));
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', $('.cleaning_select' + dataid + ' option:selected').data('astm'));
-            } else {
-                svgDoc.getElementById("cofreet_symbol5").setAttribute('xlink:href', "");
-                svgDoc.getElementById("astm_symbol5").setAttribute('xlink:href', "");
-            }
-
-        });
-        $('.made_in_select' + dataid + '.bootstrap-select').on('changed.bs.select', function () {
-            if ($('.made_in_select' + dataid + ' option:selected').val() != "") {
-
-                var text_for_mad_in =  $('select.made_in_select' + dataid).find(':selected').data('french') + "-" + $('select.made_in_select' + dataid).find(':selected').data('english') + "-" + $('select.made_in_select' + dataid).find(':selected').data('spanish') + "-" + $('select.made_in_select' + dataid).find(':selected').data('portuguese') + "-" + $('select.made_in_select' + dataid).find(':selected').data('italian') + "-" + $('select.made_in_select' + dataid).find(':selected').data('dutch') + "-" + $('select.made_in_select' + dataid).find(':selected').data('german') + "-" +
-                    $('select.made_in_select' + dataid).find(':selected').data('arabic') + "-" +
-                    $('select.made_in_select' + dataid).find(':selected').data('greek');
-				//console.log(text_for_mad_in);
-                svgDoc.getElementById("country").innerHTML = text_for_mad_in;
-
-            } else {
-
-            }
-
-
-        });
-
-       
-
-
-        var size = data.order_details[0].Size.split(" ")
-
-        if (size[1] == "ANS") {
-            var size1 = "years";
-        } else {
-            var size1 = "months";
-        }
-        svgDoc.getElementById("parcel_code1").innerHTML = data.order_details[0].UVC_TCO;
-        //svgDoc.getElementById("product_family").innerHTML = data.product_family[0].arabic;
-        //svgDoc.getElementById("parcel_code2").innerHTML = data.order_details[0].UVC_TCO;
-		
-        //alert(data.order_details[0].Size)
-		
-		if(size[0] == "TAILLE")
-		{
-			//var inches=$('#washcarelabelform' + dataid+' .washonesizein').val()
-			var cm=$('#washcarelabelform' + dataid+' .washonesizecm').val()
-			
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = "";
-            //svgDoc.getElementById("size_in_fr_en2").innerHTML = "";
-			svgDoc.getElementById("size1").innerHTML = size;
-			//svgDoc.getElementById("size2").innerHTML = size;
-		}
-		else
-		{
-			svgDoc.getElementById("size_in_fr_en1").innerHTML = data.order_details[0].cm + "cm";
-            //svgDoc.getElementById("size_in_fr_en2").innerHTML = data.order_details[0].cm + "cm";
-			svgDoc.getElementById("size1").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-			//svgDoc.getElementById("size2").innerHTML = data.order_details[0].Size.replace(" ", "").toLowerCase() + "/" + size1;
-		}
-      
-
-
-    }, false);
+    $(".backdrop, #close").click(function () {
+        $("#washcarelabelform" + " .left-panel-heat").removeClass('active');
+        $("#washcarelabelform" + " .right-panel-heat").removeClass('active');
+        $("#washcarelabelform" + " .backdrop").removeClass('active');
+        $('#washcarelabelform .scalable').removeClass('active');
+    })
+	
     $("#washcarelabelform :input").prop("disabled", true);
     $("#toggle_orch_edit_permission").prop("disabled", false);
     $("#edit_orc_label_order_btn").prop("disabled", false);
@@ -3341,14 +2894,36 @@ function washcarelabelsOs(data, dataid) {
 
     $('.selectpicker').selectpicker('refresh')
     
-    $('#washcarelabelform' + dataid).validator('update');
+    $('#washcarelabelform').validator('update');
 
-    $('#washcarelabelform' + dataid).validator().on('submit', function (e) {
+
+    $('.care_instruction_select.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+
+        var hidden_id = $(this).find('option').eq(clickedIndex).val();
+        
+
+        if(care_instruction_select_option.includes(hidden_id) != true)
+        {
+            care_instruction_select_option.push(hidden_id)
+        }
+        else
+        {
+            var index_cisop = care_instruction_select_option.indexOf(hidden_id);
+            if (index_cisop !== -1) {
+                care_instruction_select_option.splice(index_cisop, 1);
+            }
+        }
+                                            
+        localStorage.setItem('care_instruction_select', JSON.stringify(care_instruction_select_option));
+        
+    });
+
+    $('#washcarelabelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setWashCareLabelStatusOs(dataid)
+            setWashCareLabelStatus("","customer","os")
         }
     })
 }
@@ -3360,7 +2935,6 @@ editOrchestraLabelOrder = () => {
     $(".pointer_anchor").css("pointer-events", "auto")
     $('.selectpicker').selectpicker('refresh')
 }
-
 
 function jsbarcodewashOs(code, id, svgDoc) {
     JsBarcode("#ean-13", code, {
@@ -3412,635 +2986,4 @@ function jsbarcodewashOs(code, id, svgDoc) {
     canvasTmp.remove();
 
     svgDoc.getElementById(id).innerHTML = svg_xml;
-}
-
-function setWashCareLabelStatusOs(dataid) {
-
-    if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
-       var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
-    } else {
-        var value = "null";
-    }
-
-    var wash_lab = JSON.stringify(wash_label);
-    var i = 0
-    $('#composition_remove_qty' + dataid + ' tr').each(function (key, val) {
-        i++;
-    })
-    if (i != 0) {
-        if( localStorage.getItem("wash_composition_final"+ dataid) != null)
-        {
-            $('#wash_composition_error' + dataid).addClass('hidden')
-            $('#wash_composition_page_error' + dataid).addClass('hidden')
-            localStorage.setItem("wash_label", wash_lab);
-            setWashLabelOs('washcarelabelform' + dataid, dataid, value)
-            $("#washcarelabelform" + dataid + " .left-panelos").removeClass('active');
-            $("#washcarelabelform" + dataid + " .right-panelos").removeClass('active');
-            $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
-            $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
-            $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
-            showSnackbar();
-            location.reload()
-        }
-        else {
-            $('#wash_composition_page_error' + dataid).removeClass('hidden')
-        }
-        
-    } else {
-        $('#wash_composition_error' + dataid).removeClass('hidden')
-    }
-
-
-}
-function setWashLabelOs(index, dataid, id) {
-	$('.washlabelname'+dataid).text($('#wcl_name' + dataid).val()+" - Washcare Label");
-    var check=0;
-    var check1=0;
-    $('#composition_remove_qty' + dataid + ' tr').each(function () {
-         
-         if($(this).find('select' + dataid).find(':selected').text() == "Select Option")
-             {
-                 check++;
-             }
-         check1++;
-    });
-    if(check1 <2 )
-    {
-        check=0;
-    }
-    if(check == 0 )
-    {
-        var composition = localStorage.getItem('wash_composition');
-
-        var wash_fins = JSON.parse(composition);
-        var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
-
-        
-        var merchandisers = $('.merchandisers option:selected').val();
-      	
-		
-		//alert($('#wash_label_id').val())
-        if($('#wash_label_id').val() != 0)
-		{
-			//var template_id = $('#' + index).find('#tree_wash' + dataid).jstree('get_selected', true);
-			template_front_id = 5;
-		}
-		else
-		{
-			template_front_id=4;
-		}
-		var washonesizecm = $('#washcarelabelform' + dataid+' .washonesizecm').val();
-		var washonesizein = $('#washcarelabelform' + dataid+' .washonesizein').val();
-        var template_name = $('#wcl_name' + dataid).val();
-        var ocn_number = $('#ocn_number_wash').val();
-        var washing_select = $('.washing_select' + dataid + ' option:selected').attr('data-id');
-        var whitening_select = $('.whitening_select' + dataid + ' option:selected').attr('data-id');
-        var dryer_select = $('.dryer_select' + dataid + ' option:selected').attr('data-id');
-        var ironing_select = $('.ironing_select' + dataid + ' option:selected').attr('data-id');
-        var cleaning_select = $('.cleaning_select' + dataid + ' option:selected').attr('data-id');
-        var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
-        // var care_instruction_select = $('.care_instruction_select'+dataid+' option:selected').val();
-
-        var care_instruction = $('.care_instruction_select' + dataid + ' option:selected');
-        var care_instruction_select = [];
-        $(care_instruction).each(function (index, brand) {
-            care_instruction_select.push([$(this).val()]);
-        });
-        var care_instruction_select_fin = care_instruction_select.join(',');
-
-        //template_front_id = template_id[0].id;
-        var tot_qty_tablewash = [];
-        var uvc_tco = [];
-        var size = [];
-        var barcode = [];
-        $('#' + index + ' tbody tr').each(function () {
-            if ($(this).find('.tot_qty_tablewash').val() != undefined) {
-                tot_qty_tablewash.push($(this).find('.tot_qty_tablewash').val())
-                uvc_tco.push($(this).find('.uvc_tco').text())
-                size.push($(this).find('.size').text())
-                barcode.push($(this).find('.barcode').text())
-            }
-
-        })
-        tot_qty_tablewash_fin = tot_qty_tablewash.join(',');
-        uvc_tco_fin = uvc_tco.join(',');
-        size_fin = size.join(',');
-        barcode_fin = barcode.join(',');
-        var buyer = localStorage.getItem("buyer");
-        
-        $.ajax({
-            url: base_url + "/customer/" + buyer + "/order-management/set_wash_labelos",
-            type: "Post",
-            data: {
-                
-                template_front_id: template_front_id,
-                ocn_number:ocn_number,
-                id: id,
-                template_name: template_name,
-                washing_select: washing_select,
-                whitening_select: whitening_select,
-				in:washonesizein,
-				cm:washonesizecm,
-                dryer_select: dryer_select,
-                ironing_select: ironing_select,
-                cleaning_select: cleaning_select,
-				parcel_id: $('#parcel_id').val(),
-				season_code: $('#season_code').val(),
-				po_select: $('#po_select').val(),
-                made_in_select: made_in_select,
-                care_instruction_select: care_instruction_select_fin,
-                composition: wash_finals,
-                tot_qty_table: tot_qty_tablewash_fin,
-                uvc_tco: uvc_tco_fin,
-                barcode: barcode_fin,
-                merchandisers: merchandisers,
-                uvc: $('#uvc_id').val(),
-                size: size_fin,
-                _token: csrf_token
-            },
-            beforeSend: function () {
-                $(".loader").show();
-            },
-            success: function (data) {
-				$('#print_wash_button').removeClass('hidden')
-				$('#save_wash_button').addClass('hidden')
-            },
-            error: function (data) {
-
-            }
-        })
-        $('.composition_error_hidden').addClass('hidden')
-        $('#washcare_label_card').css('display','inline-block') 
-		$('#clone_washcare_label_card'+dataid).css('display','inline-block')
-		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
-		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending label-status')
-		$('.wash-card'+dataid+' span').removeClass('label-OrderRejected')
-		$('#po-file-upload-button').css('display','block')
-    }
-    else
-    {
-        $('.composition_error_hidden').removeClass('hidden')
-    }
-    
-
-}
-
-/**
- * This Function is used to set special tag in local storage.
- * 
- * @return void
- */
-
-function setSpecialTagStatusOs() {
-
-    if ($('#specialtagform').find('#exist_id').val() != "") {
-        var exist_id = $('#specialtagform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("special_tag", exist_id);
-        setSpecialTagOs(localStorage.getItem("special_tag"))
-        $('#special_template_error').addClass('hidden')
-        $("#specialtagform .left-panelos").removeClass('active');
-        $("#specialtagform .right-panelos").removeClass('active');
-        $("#specialtagform .backdrop").removeClass('active');
-        $('#specialtagform .scalable').removeClass('active');
-        $('#snackbar').css('background-color', '#00b6ff');
-        $('.snackbar_span').html('Order updated Successfully');
-        showSnackbar();
-        location.reload()
-    } else {
-        $('#special_template_error').removeClass('hidden')
-    }
-}
-
-
-function setSpecialTagOs(id) {
-  
-    var special_qty = $('.special_qty').val();
-    
-    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
-    template_front_id = template_id[0].id;
-    var ocn_number = $('#ocn_number_special').val();
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#specialtagform tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
-
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    
-    $.ajax({
-        url: base_url + "/customer/" + buyer + "/order-management/set_special_tag",
-        type: "Post",
-        data: {
-            
-            template_front_id: template_front_id,
-            ocn_number:ocn_number,
-            id: id,
-            tot_qty_table: special_qty,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-			$('#save_special_button').addClass('hidden')
-        },
-        error: function (data) {
-
-        }
-    })
-	$('.special-card span').text('Order Approved')
-	$('.special-card span').addClass('label label-OrderApproved label-status')
-	$('#po-file-upload-button').css('display','block')
-}
-
-
-function setMainLabelStatusOs() {
-
-    if ($('#main_labelform').find('#exist_id').val() != "") {
-        var exist_id = $('#main_labelform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-    var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("main_label", exist_id);
-        setMainLabelOs(localStorage.getItem("main_label"))
-        $('#main_label_template_error').addClass('hidden')
-        $("#main_labelform .left-panelos").removeClass('active');
-        $("#main_labelform .right-panelos").removeClass('active');
-        $("#main_labelform .backdrop").removeClass('active');
-        $('#main_labelform .scalable').removeClass('active');
-        $('#snackbar').css('background-color', '#00b6ff');
-        $('.snackbar_span').html('Order updated Successfully');
-        showSnackbar();
-        location.reload()
-    } else {
-        $('#main_label_template_error').removeClass('hidden')
-    }
-}
-
-
-
-function setMainLabelOs(id) {
-  
-    var main_label_qty = $('.main_label_qty').val();
-    
-    var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
-    template_id = template_id[0].id;
-    var ocn_number = $('#ocn_number_main').val();
-    var tot_qty_table = [];
-    var uvc_tco = [];
-    var size = [];
-    $('#main_labelform tbody tr').each(function () {
-        if ($(this).find('.tot_qty_table').val() != undefined) {
-            tot_qty_table.push($(this).find('.tot_qty_table').val())
-            uvc_tco.push($(this).find('.uvc_tco').text())
-            size.push($(this).find('.size').text())
-        }
-
-    })
-    tot_qty_table_fin = tot_qty_table.join(',');
-    uvc_tco_fin = uvc_tco.join(',');
-    size_fin = size.join(',');
-    var buyer = localStorage.getItem("buyer");
-    
-    $.ajax({
-        url: base_url + "/customer/" + buyer + "/order-management/set_main_label",
-        type: "Post",
-        data: {
-            
-            template_id: template_id,
-            id: id,
-            tot_qty_table: main_label_qty,
-            ocn_number:ocn_number,
-            uvc_tco: uvc_tco_fin,
-            uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-            size: size_fin,
-            _token: csrf_token
-        },
-        beforeSend: function () {
-            $(".loader").show();
-        },
-        success: function (data) {
-			$('#save_main_label_button').addClass('hidden')
-        },
-        error: function (data) {
-
-        }
-    })
-	$('.main_label-card span').text('Order Approved')
-	$('.main_label-card span').addClass('label label-OrderApproved label-status')
-	$('#po-file-upload-button').css('display','block')
-}
-
-/**
- * This Function is used to set Size Labels in local storage.
- * 
- * @return void
- */
-
-function setSizeLabelStatusOs() {
-
-    if ($('#size_labelform').find('#exist_id').val() != "") {
-        var exist_id = $('#size_labelform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("size_label", exist_id);
-        setSizeLabelOs(localStorage.getItem("size_label"))
-        $('#size_label_template_error').addClass('hidden')
-        $("#size_labelform .left-panelos").removeClass('active');
-        $("#size_labelform .right-panelos").removeClass('active');
-        $("#size_labelform .backdrop").removeClass('active');
-        $('#size_labelform .scalable').removeClass('active');
-        $('#snackbar').css('background-color', '#00b6ff');
-        $('.snackbar_span').html('Order updated Successfully');
-        showSnackbar();
-        location.reload()
-    } else {
-        $('#size_label_template_error').removeClass('hidden')
-    }
-}
-/**
- * This Function is used to set Size Label in db.
- * 
- * @return void
- */
-
-
-function setSizeLabelOs(id) {
-  
-    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
-	template_id = template_id[0].id;
-    var ocn_number = $('#ocn_number_size').val();
-	
-	var tot_qty_tablesize = [];
-	var uvc_tco = [];
-	var size = [];
-	var size_id = [];
-	var main_id = [];
-	$('#size_labelform tbody tr').each(function () {
-		if ($(this).find('.tot_qty_tablesize').val() != undefined) {
-			tot_qty_tablesize.push($(this).find('.tot_qty_tablesize').val())
-			uvc_tco.push($(this).find('.uvc_tco').text())
-			size.push($(this).find('.size').text())
-			size_id.push($(this).find('.size_id').val())
-			main_id.push($(this).find('.main_id').val())
-		}
-
-	})
-	tot_qty_tablesize_fin = tot_qty_tablesize.join(',');
-	uvc_tco_fin = uvc_tco.join(',');
-	size_fin = size.join(',');
-	size_id_fin = size_id.join(',');
-	main_id_fin = main_id.join(',');
-	var buyer = localStorage.getItem("buyer");
-	
-	$.ajax({
-		url: base_url + "/customer/" + buyer + "/order-management/set_size_label",
-		type: "Post",
-		data: {
-			
-			template_id: template_id,
-			tot_qty_table: tot_qty_tablesize_fin,
-            ocn_number:ocn_number,
-			id: id,
-			size_id: size_id_fin,
-			main_id: main_id_fin,
-			uvc_tco: uvc_tco_fin,
-			uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-			size: size_fin,
-			_token: csrf_token
-		},
-		beforeSend: function () {
-			$(".loader").show();
-		},
-		success: function (data) {
-			$('#save_size_label_button').addClass('hidden')
-		},
-		error: function (data) {
-
-		}
-	})
-		$('.size_label-card span').text('Order Approved')
-		$('.size_label-card span').addClass('label label-OrderApproved label-status')
-		$('#po-file-upload-button').css('display','block')
-}
-
-
-/**
- * This Function is used to set Heat Transfer in local storage.
- * 
- * @return void
- */
-
-function setheat_transferStatusOs() {
-
-    if ($('#heat_transferform').find('#exist_id').val() != "") {
-        var exist_id = $('#heat_transferform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-    var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("heat_transfer", exist_id);
-        setHeatTransferOs(localStorage.getItem("heat_transfer"))
-        $('#heat_transfer_template_error').addClass('hidden')
-        $("#heat_transferform .left-panelos").removeClass('active');
-        $("#heat_transferform .right-panelos").removeClass('active');
-        $("#heat_transferform .backdrop").removeClass('active');
-        $('#heat_transferform .scalable').removeClass('active');
-        $('#snackbar').css('background-color', '#00b6ff');
-        $('.snackbar_span').html('Order updated Successfully');
-        showSnackbar();
-        location.reload()
-    } else {
-        $('#heat_transfer_template_error').removeClass('hidden')
-    }
-}
-
-function setHeatTransferOs(id) {
-  
-    var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
-	template_id = template_id[0].id;
-    var ocn_number = $('#ocn_number_heat').val();
-	
-	var tot_qty_tableheat = [];
-	var uvc_tco = [];
-	var size = [];
-	var size_id = [];
-	var main_id = [];
-	$('#heat_transferform tbody tr').each(function () {
-		if ($(this).find('.tot_qty_tableheat').val() != undefined) {
-			tot_qty_tableheat.push($(this).find('.tot_qty_tableheat').val())
-			uvc_tco.push($(this).find('.uvc_tco').text())
-			size.push($(this).find('.size').text())
-			size_id.push($(this).find('.size_id').val())
-			main_id.push($(this).find('.main_id').val())
-		}
-
-	})
-	tot_qty_tableheat_fin = tot_qty_tableheat.join(',');
-	uvc_tco_fin = uvc_tco.join(',');
-	size_fin = size.join(',');
-	size_id_fin = size_id.join(',');
-	main_id_fin = main_id.join(',');
-	var buyer = localStorage.getItem("buyer");
-	
-	$.ajax({
-		url: base_url + "/customer/" + buyer + "/order-management/set_heat_transfer",
-		type: "Post",
-		data: {
-			
-			template_id: template_id,
-			tot_qty_table: tot_qty_tableheat_fin,
-            ocn_number:ocn_number,
-			id: id,
-			size_id: size_id_fin,
-			main_id: main_id_fin,
-			uvc_tco: uvc_tco_fin,
-			uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-			size: size_fin,
-			_token: csrf_token
-		},
-		beforeSend: function () {
-			$(".loader").show();
-		},
-		success: function (data) {
-			$('#save_heat_transfer_button').addClass('hidden')
-		},
-		error: function (data) {
-
-		}
-	})
-		$('.heat_transfer-card span').text('Order Approved')
-		$('.heat_transfer-card span').addClass('label label-OrderApproved label-status')
-		$('#po-file-upload-button').css('display','block')
-}
-
-
-function setHangTagStatusOs() {
-    if ($('#hangtagform').find('#exist_id').val() != "") {
-        var exist_id = $('#hangtagform').find('#exist_id').val();
-    } else {
-        var exist_id = "null";
-    }
-
-    var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-    if (template_id != "") {
-        localStorage.setItem("hang_tag", exist_id);
-        setHangTagOs(localStorage.getItem("hang_tag"))
-        $('#hang_template_error').addClass('hidden')
-        $("#hangtagform .left-panelos").removeClass('active');
-        $("#hangtagform .right-panelos").removeClass('active');
-        $("#hangtagform .backdrop").removeClass('active');
-        $('#hangtagform .scalable').removeClass('active');
-        $('#snackbar').css('background-color', '#00b6ff');
-        $('.snackbar_span').html('Order updated Successfully');
-        showSnackbar();
-        location.reload()
-    } else {
-        $('#hang_template_error').removeClass('hidden')
-    }
-}
-
-function setHangTagOs(id) {
-	
-	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
-	template_front_id = template_id[0].id;
-    var ocn_number = $('#ocn_number_hang').val();
-	var template_back_id = $('#hang_tag_id').val();
-	var onesizecm = $('.onesizecm').val();
-	var onesizein = $('.onesizein').val();
-	
-	var tot_qty_tablehang = [];
-	var uvc_tco = [];
-	var size = [];
-	var size_id = [];
-	var main_id = [];
-	var barcode = [];
-	$('#hangtagform tbody tr').each(function () {
-		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
-			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
-			uvc_tco.push($(this).find('.uvc_tco').text())
-			barcode.push($(this).find('.barcode').text())
-			size.push($(this).find('.size').text())
-			size_id.push($(this).find('.size_id').val())
-			main_id.push($(this).find('.main_id').val())
-		}
-
-	})
-	tot_qty_tablehang_fin = tot_qty_tablehang.join(',');
-	uvc_tco_fin = uvc_tco.join(',');
-	size_fin = size.join(',');
-	size_id_fin = size_id.join(',');
-	main_id_fin = main_id.join(',');
-	barcode_fin = barcode.join(',');
-	var buyer = localStorage.getItem("buyer");
-//	alert()
-//	alert($('#parcel_id').val());
-	
-	$.ajax({
-		url: base_url + "/customer/" + buyer + "/order-management/set_hang_tag",
-		type: "Post",
-		data: {
-			
-			template_front_id: template_front_id,
-            ocn_number:ocn_number,
-			template_back_id: template_back_id,
-			tot_qty_table: tot_qty_tablehang_fin,
-			id: id,
-			cm:onesizecm,
-			in:onesizein,
-			size_id: size_id_fin,
-			main_id: main_id_fin,
-			uvc_tco: uvc_tco_fin,
-			barcode: barcode_fin,
-			uvc: $('#uvc_id').val(),
-			parcel_id: $('#parcel_id').val(),
-			season_code: $('#season_code').val(),
-			size: size_fin,
-			_token: csrf_token
-		},
-		beforeSend: function () {
-			$(".loader").show();
-		},
-		success: function (data) {
-			$('#print_hang_button').removeClass('hidden')
-			$('#save_hang_button').addClass('hidden')
-		},
-		error: function (data) {
-
-		}
-	})
-		$('.hang-card span').text('Order Approved')
-		$('.hang-card span').addClass('label label-OrderApproved label-status')
-		$('#po-file-upload-button').css('display','block')
 }

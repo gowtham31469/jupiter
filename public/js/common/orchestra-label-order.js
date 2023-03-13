@@ -1,4 +1,14 @@
 var wash_care_count = 1;
+var washcare = 0;
+var mainlabel = 0;
+var composition_percentage_global = 0;
+var add_page_composition = 0;
+var main_label = {};
+var wash_label = {};
+var wash_composition = {};
+var deletemain = [];
+var deletewash = [];
+
 function label_order_details(uvc,user_type,season_code) {
     var search_string = $('.dataTables_filter input').val();
     localStorage.setItem("search_string", search_string);
@@ -19,12 +29,12 @@ function label_order_details(uvc,user_type,season_code) {
         success: function (data) {
             if(data.customers.length > 0)
 			{
-                OrderDetailsCardView(uvc, data)
-                hangtagmodal(data,uvc)
-                heattransfermodal(data)
-                specialtagmodal(data)
-                mainlabelmodal(data)
-                sizelabelmodal(data)
+                OrderDetailsCardView(uvc, data,user_type)
+                hangtagmodal(data,uvc,user_type)
+                heattransfermodal(data,user_type)
+                specialtagmodal(data,user_type)
+                mainlabelmodal(data,user_type)
+                sizelabelmodal(data,user_type)
             }
             else
             {
@@ -41,7 +51,7 @@ function label_order_details(uvc,user_type,season_code) {
     })
 }
 
-function OrderDetailsCardView(uvc, data)
+function OrderDetailsCardView(uvc, data,user_type)
 {
     var buyer_po = "";
     var hang_tag_orders = data.orchestra_hang_tag_orders;
@@ -54,7 +64,8 @@ function OrderDetailsCardView(uvc, data)
 	$('.top-content').append('<div class="top-content-new-div"><h3 class="content-heading">Order Detail for UVC ' + uvc + '</h3><h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">' + buyer_po + '  </span></h5></div>');
 
 
-    var merchandisersoption = "<option value=''>Select Option</option>";
+    var merchandisersoption = "<option value=''>Select Merchandiser</option>";
+	var update_disable=0;
 
 	$.each(data.merchandisers, function (index, value) {
 		merchandisersoption += "<option value=" + value.id + ">" + value.merchandiser_name + "</option>";
@@ -64,6 +75,7 @@ function OrderDetailsCardView(uvc, data)
 		var str = hang_tag_orders[0].status;
 		$hang_status = str.replace(/ /g, "");
 		$hang_status_text = hang_tag_orders[0].status;
+		update_disable=1;
 	} else {
 		$hang_status = "";
 		$hang_status_text = "";
@@ -109,37 +121,29 @@ function OrderDetailsCardView(uvc, data)
 		$size_label_status_text = "";
 	}
 
+    if (localStorage.getItem("page_navigation") == "orders") {
+		var onclick = "orders('"+user_type+"')";
+	} else {
+		var onclick = "orderStatus('"+user_type+"')";
+	}
+    
+	if(update_disable == 0)
+	{
+		var update_disabel_button = "display:none";
+	}
+	else
+	{
+		var update_disabel_button = "";
+	}
+
     var wcl_grid = ""
 
     $(data.color_wcl).each(function (index1, value1) {
-        wcl_grid += `<div class="artwork-wrapper">
-        <div class="wcl-card" data-color="`+value1.Color_Code+`" id="newWashCareLabel_`+value1.Color_Code+`">
-        <svg xmlns="http://www.w3.org/2000/svg" width="60.124" height="60.124" viewBox="0 0 60.124 60.124"><path d="M60.367,30.3H37.82V7.758a3.758,3.758,0,1,0-7.516,0V30.3H7.758a3.758,3.758,0,1,0,0,7.516H30.3V60.367a3.758,3.758,0,1,0,7.516,0V37.82H60.367a3.758,3.758,0,1,0,0-7.516Z" transform="translate(-4 -4)" fill="#4e4e4e" opacity="0.148"/></svg>
-        <p>Add wash care label</p>
-        <p>`+value1.Color_Code+`</p>
-        </div>  
-        </div>`;
+        wcl_grid += `
+        <button class="btn btn-default wcl-card" data-color="`+value1.Color_Code+`" id="newWashCareLabel_`+value1.Color_Code+`"><i class="fa fa-plus" aria-hidden="true"></i> Add New - `+value1.Color_Code+`</button>`;
     });
 
-    $(data.orchestra_wash_care_label_orders).each(function (index1, value1) {
-        var str = value1.status;
-        $wcl_status=str.replace(/ /g, "");
-        $wcl_status_text=str;
-
-        wcl_grid += `<div class="artwork-wrapper">
-        <div class="artwork-card" data-color="`+value1.color_code+`" id="oldWashCareLabel_`+value1.color_code+`">
-            <span class="label label-` + $wcl_status + ` label-status">` + $wcl_status_text + `</span>
-            <img src="` + base_url + `/images/wcl_default.png" class="img-responsive center-block">
-        </div>  
-        <h3>Wash Care Label</h3>
-        <p id="clickmewcl_`+wash_care_count+`" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
-        </div>`;
-        washcarelabelmodal(value1, wash_care_count,value1.color_code,data.order_details[0].Activity_Label)
-        wash_care_count++;        
-    });
-    
-    
-	$('.main-content').html(`
+    $('.main-content').html(`
     
         <input type="hidden" value="` + data.order_details[0].UVC + `" id="uvc_id"><input type="hidden" value="` + data.order_details[0].Theme + `" id="theme_label"><input type="hidden" value="` + data.order_details[0].id + `" id="parcel_id"><input type="hidden" value="` + data.order_details[0].Season_Code + `" id="season_code"><input type="hidden" value="` + data.customers[0].customer_id + `" id="customer_id">
 
@@ -148,80 +152,189 @@ function OrderDetailsCardView(uvc, data)
         <div class="artworks-grid">
         <div class="artwork-wrapper">
         <div class="artwork-card hang-card">
-        <span class="label label-` + $hang_status + ` label-status">` + $hang_status_text + `</span>
-        <img src="` + base_url + `/images/ht_default.png" class="img-responsive center-block">
+        <div class="main-data"><span class="label label-` + $hang_status + `">` + $hang_status_text + `</span>
+        <h3>Hang Tag</h3>
+        <img src="` + base_url + `/images/ht_default.png" class="img-responsive"></div>
+        <div class="actions">
+        <ul>
+        <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmehang" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+        </ul>
         </div>
-        <h3>Hangtag</h3>
-        <p id="clickmehang" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+        
+        </div>
         </div>
 
         <div class="artwork-wrapper">
         <div class="artwork-card heat_transfer-card">
-        <span class="label label-` + $heat_transfer_status + ` label-status">` + $heat_transfer_status_text + `</span>
-        <img src="` + base_url + `/images/HT.jpg" class="img-responsive center-block">
-        </div>
+        <div class="main-data"><span class="label label-` + $heat_transfer_status + `">` + $heat_transfer_status_text + `</span>
         <h3>Heat Transfer</h3>
-        <p id="clickmeheat_transfer" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+        <img src="` + base_url + `/images/HT.jpg" class="img-responsive"></div>
+        <div class="actions">
+        <ul>
+        <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmeheat_transfer" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+        </ul>
+        </div>
+        </div>
         </div>
 
         <div class="artwork-wrapper">
         <div class="artwork-card special-card">
-        <span class="label label-` + $special_status + ` label-status">` + $special_status_text + `</span>
-        <img src="` + base_url + `/images/st_default.png" class="img-responsive center-block">
-        </div>
+        <div class="main-data"><span class="label label-` + $special_status + `">` + $special_status_text + `</span>
         <h3>Special Tag</h3>
-        <p id="clickmespecial" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+        <img src="` + base_url + `/images/st_default.png" class="img-responsive"></div>
+        <div class="actions">
+        <ul>
+        <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmespecial" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+        </ul>
+        </div>
+        </div>
         </div>
 
         <div class="artwork-wrapper">
         <div class="artwork-card main_label-card">
-        <span class="label label-` + $main_label_status + ` label-status">` + $main_label_status_text + `</span>
-        <img src="` + base_url + `/images/ML.png" class="img-responsive center-block">
-        </div>
+        <div class="main-data"><span class="label label-` + $main_label_status + `">` + $main_label_status_text + `</span>
         <h3>Main Label</h3>
-        <p id="clickmemain_label" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+        <img src="` + base_url + `/images/ML.png" class="img-responsive"></div>
+        <div class="actions">
+        <ul>
+        <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmemain_label" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+        </ul>
+        </div>
+        </div>
         </div>
 
         <div class="artwork-wrapper">
         <div class="artwork-card size_label-card">
-        <span class="label label-` + $size_label_status + ` label-status">` + $size_label_status_text + `</span>
-        <img src="` + base_url + `/images/SL.png" class="img-responsive center-block">
-        </div>
+        <div class="main-data"><span class="label label-` + $size_label_status + `">` + $size_label_status_text + `</span>
         <h3>Size Label</h3>
-        <p id="clickmesize_label" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+        <img src="` + base_url + `/images/SL.png" class="img-responsive"></div>
+        <div class="actions">
+        <ul>
+        <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmesize_label" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+        </ul>
+        </div>
         </div>
         </div>
 
         <h4 class="section-title">Wash care labels</h4>
         <div class="row">
         <div class="col-md-3">
-        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer" class="form_label">Select Merchandiser</label><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>` + merchandisersoption + `</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label></div>
+        <div class="form-group has-feedback has-success"><select data-live-search="true" class="form-control selectpicker input-sm merchandisers" required>` + merchandisersoption + `</select><div class="help-block with-errors"></div><label class="hidden merchandiser_error" style="color:red">Please Select Merchandiser</label>
+        </div> 
+        </div>
+        <div class="col-md-9">
+            `+wcl_grid+`
         </div>
         </div>
     
         <div class="artworks-grid" style="align-items: start; display: flex;">
-        `+wcl_grid+`
         <div class="wcl_orders_card"></div>
         </div>
+
+        <div class="bottom-bar"><div class="modal-footer"><button onclick="` + onclick + `" class="btn btn-danger pull-right btn-xs"><i class="fa fa-times" aria-hidden="true"></i>Close</button><button data-toggle="modal" id="po-file-upload-button" style="`+update_disabel_button+`" class="btn btn-success pull-right btn-xs">Update PO</button> </div></div>
     `);
+
+    $(data.orchestra_wash_care_label_orders).each(function (index1, value1) {
+        $('#po-file-upload-button').removeAttr("style")
+        var str = value1.status;
+        $wcl_status=str.replace(/ /g, "");
+        $wcl_status_text=str;
+
+        $('.wcl_orders_card').append(`<div class="artwork-wrapper">
+        <div class="artwork-card wcl_status_`+wash_care_count+`" data-color="`+value1.color_code+`" id="oldWashCareLabel_`+value1.color_code+`">
+        <div class="main-data">
+        <span class="label label-` + $wcl_status + `">` + $wcl_status_text + `</span>
+            <h3>`+value1.template_name+`</h3>
+            <p>Color Code - `+value1.color_code+`</p>
+            <img src="` + base_url + `/images/wcl_default.png" class="img-responsive">
+            </div>
+            <div class="actions">
+            <ul>
+                <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmewcl_`+wash_care_count+`" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+                <li data-toggle="tooltip" data-placement="top" title="Clone" data-id="`+wash_care_count+`" data-color="`+value1.color_code+`" id="clone_washcare_label_card`+wash_care_count+`" style="cursor: pointer; margin-left:-3px"><i class="fa fa-clone" aria-hidden="true"></i> Clone</li>
+            </ul>
+            </div>
+            </div>
+      
+    </div>`);
+
+        localStorage.setItem('care_instruction_select'+wash_care_count, JSON.stringify(value1.care_instruction));
+
+        washcarelabelmodal(value1, wash_care_count,value1.color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type)
+
+
+        $('#clone_washcare_label_card'+wash_care_count).on('click', function (e) {
+
+                clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type);
+         
+
+        });
+        
+        wash_care_count++;        
+    });    
 
     selectpicker()
 
     $('.wcl-card').click(function() {
         if( $('.merchandisers option:selected').val() != "")
         {
-            var color_code = $(this).data('color')
-            $('.wcl_orders_card').append(`
-                    <div class="artwork-wrapper">
-                        <div class="artwork-card" data-color="`+color_code+`" id="newWashCareLabel_`+color_code+`">
-                            <span class="label label-status"></span>
-                            <img src="` + base_url + `/images/wcl_default.png" class="img-responsive center-block">
+            var wcl_count = wash_care_count -1; 
+            console.log("WCL COUNT : " + wcl_count)
+            console.log($('.wcl_status_'+wcl_count+' span').text())
+            if($('.wcl_status_'+wcl_count+' span').text() == "New Order" || $('.wcl_status_'+wcl_count+' span').text() == "Clone Order")
+            {
+                $('.snackbar_span').html('Please place the order you have created before creating another order.');
+                showSnackbar();
+            }
+            else
+            {
+                var color_code = $(this).data('color')
+                $('.wcl_orders_card').append(`
+                        <div class="artwork-wrapper">
+                            <div class="artwork-card wcl_status_`+wash_care_count+`" data-color="`+color_code+`" id="newWashCareLabel_`+color_code+`">
+                            <div class="main-data">
+                                <span class="label label-Saved">New Order</span>
+                                <h3 class="wcl_name_card_`+wash_care_count+`">Wash Care Label</h3>
+                                <p>Color Code - `+color_code+`</p>
+                                <img src="` + base_url + `/images/wcl_default.png" class="img-responsive">
+                                </div>
+                                <div class="actions">
+                                <ul>
+                                    <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmewcl_`+wash_care_count+`" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+                                    <li data-toggle="tooltip" data-placement="top" title="Delete" data-id="`+wash_care_count+`" id="deletewcl_`+wash_care_count+`" style="cursor: pointer; margin-left:-3px"><i class="fa fa-trash" aria-hidden="true"></i> Delete</li>
+                                    <li class="hidden" data-toggle="tooltip" data-placement="top"  data-id="`+wash_care_count+`" data-color="`+color_code+`" title="Clone" id="clone_washcare_label_card`+wash_care_count+`" style="cursor: pointer; margin-left:-3px"><i class="fa fa-clone" aria-hidden="true"></i> Clone</li>
+                                </ul>
+                                </div>
+                                </div>
+                          
                         </div>
-                        <h3>Wash Care Label</h3>
-                        <p id="clickmewcl_`+wash_care_count+`" style="cursor: pointer;">View &amp; Edit <i class="fa fa-arrow-right" aria-hidden="true"></i></p>
-                    </div>
-            `)
-            wash_care_count++;
+                `)
+    
+                $('#deletewcl_' + wash_care_count).on('click', function (e) {
+                    
+                    $('#washcarelabelform' + $(this).data('id')).remove()
+                        
+                    $(this).parent().parent().parent().parent().remove();
+
+                    wash_care_count--;
+    
+                });
+
+                $('#clone_washcare_label_card'+wash_care_count).on('click', function (e) {
+
+                    clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type);
+             
+    
+                });
+    
+                washcarelabelmodal("",wash_care_count,color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type)
+    
+                wash_care_count++;
+    
+    
+                $('[data-toggle="tooltip"]').tooltip()
+            }
+
         }
         else
         {
@@ -230,9 +343,429 @@ function OrderDetailsCardView(uvc, data)
         }
         
     });
+
+    if (data.orchestra_wash_care_label_orders.length > 0) {
+        $('.merchandisers').selectpicker('val', data.orchestra_wash_care_label_orders[0].merchandisers_id);
+        $('.merchandisers').attr('disabled','disabled')
+    }
+
+    $('#po-file-upload-button').click(function () {
+		$('#po-file-upload-group').modal("show")
+		$('#new_po_div_status').addClass('hidden');
+		$('#new_po1_status').addClass('hidden');
+		$('#map_po_status').addClass('hidden');
+		$('#update_new_po_status').addClass('hidden');
+		$('#update_po_status').addClass('hidden');
+		$('#new_pos_status').addClass('hidden');
+		$('#map_po_div_status').addClass('hidden');
+		$('#exist_artwork_div_status').removeClass('hidden')
+		$('#new_po_no_status').val("")
+        $('#new_po_file_status').val("")
+		$('#new_po_error_status').addClass('hidden')
+		$('#new_po_file_error_status').addClass('hidden')
+		$('#new_po_error_length_status').addClass('hidden');
+		$.ajax({
+			url: base_url + "/"+user_type+"/" + buyer + "/order-management/get-existing-label-orders-po",
+			type: "get",
+			dataType: "json",
+			data: {
+				uvc: $('#uvc_id').val()
+			},
+			beforeSend: function () {
+
+			},
+			success: function (data) {
+
+				$('#check_error_status').addClass('hidden')
+				$('#new_po_error_status').addClass('hidden')
+				$('#new_po_file_error_status').addClass('hidden')
+				$('#new_po_error_length_status').addClass('hidden');
+				$('#po-file-upload-group').find('#exist_artwork_div_status ul').html("");
+				var newObj = data.orchestra_hang_tag_orders.concat(data.orchestra_special_tag_orders.concat(data.orchestra_main_label_orders.concat(data.orchestra_wash_care_label_orders.concat(data.orchestra_size_label_orders.concat(data.orchestra_heat_transfer_orders)))));
+				var coun = 0;
+				var options = "<option>Select PO</option>";
+				var unique_po = []
+				var old_po = []
+				var new_po_div_status = 0;
+				$(newObj).each(function (index1, value1) {
+					if (value1.po_number != "" && value1.po_number != null) {
+							
+						if(old_po.includes(value1.po_number) != true)
+						{
+							old_po.push(value1.po_number)
+							options += "<option data-id='"+value1.po_file+"'>" + value1.po_number + "</option>";
+						}
+						//old_po = value1.po_number;
+						coun++;
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="check-list">'+value1.color_code+' '+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+                         new_po_div_status++;
+					}
+					else {
+						$('#po-file-upload-group').find('#exist_artwork_div_status ul').append('<li data-id="'+value1.type+'-'+value1.id+'" data-company="'+value1.company_id+'" class="list-group-item">'+value1.color_code+' '+value1.TemplateName+" - "+value1.TemplateType+'</li>')
+					}
+					
+				});
+				
+				//list Item Hidden By Gowtham 
+				$('.list-group.checked-list-box .list-group-item').each(function () {
+
+					// Settings
+					var $widget = $(this),
+						$checkbox = $('<input type="checkbox" class="hidden" />'),
+						color = ($widget.data('color') ? $widget.data('color') : "primary"),
+						style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+						settings = {
+							on: {
+								icon: 'glyphicon glyphicon-check'
+							},
+							off: {
+								icon: 'glyphicon glyphicon-unchecked'
+							}
+						};
+
+					$widget.css('cursor', 'pointer')
+					$widget.append($checkbox);
+
+					// Event Handlers
+					$widget.on('click', function () {
+						$checkbox.prop('checked', !$checkbox.is(':checked'));
+						$checkbox.triggerHandler('change');
+						updateDisplay();
+					});
+					$checkbox.on('change', function () {
+						updateDisplay();
+					});
+
+
+					// Actions
+					function updateDisplay() {
+						var isChecked = $checkbox.is(':checked');
+
+						// Set the button's state
+						$widget.data('state', (isChecked) ? "on" : "off");
+
+						// Set the button's icon
+						$widget.find('.state-icon')
+							.removeClass()
+							.addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+						// Update the button's color
+						if (isChecked) {
+							$widget.addClass(style + color + ' active');
+						} else {
+							$widget.removeClass(style + color + ' active');
+						}
+					}
+
+					// Initialization
+					function init() {
+
+						if ($widget.data('checked') == true) {
+							$checkbox.prop('checked', !$checkbox.is(':checked'));
+						}
+
+						updateDisplay();
+
+						// Inject the icon if applicable
+						if ($widget.find('.state-icon').length == 0) {
+							$widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+						}
+					}
+					init();
+				});
+
+				$('#get-checked-data').on('click', function (event) {
+					event.preventDefault();
+					var checkedItems = {},
+						counter = 0;
+					$("#check-list-box li.active").each(function (idx, li) {
+						checkedItems[counter] = $(li).text();
+						counter++;
+					});
+					$('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+				});
+				
+                //End bootstrap checkbox 
+                    
+                $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control" style="width:96%">' + options + '</select>')
+                if (coun == 0) {
+                    $('#map_po_status').addClass('hidden');
+                    $('#new_po1_status').addClass('hidden');
+                    $('#new_po_div_status').removeClass('hidden');
+                    $('#new_pos_status').removeClass('hidden');
+                } else {
+                    $('#map_po_status').removeClass('hidden');
+                    $('#new_po1_status').removeClass('hidden');
+                    $('#new_pos_status').addClass('hidden');
+                }
+                $('#new_po1_status').click(function () {
+                    var sList = 0;
+                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                        if (this.checked) {
+                            sList++;
+                        }
+                    });
+
+                    if (sList > 0) {
+
+                        $('#update_new_po_status').removeClass('hidden')
+                        $('#update_po_status').addClass('hidden')
+                        $('#new_pos_status').addClass('hidden')
+                        $('#new_po_div_status').removeClass('hidden')
+                        $('#map_po_div_status').addClass('hidden')
+                        $('#exist_artwork_div_status').removeClass('hidden')
+                        $('#check_error_status').addClass('hidden')
+
+                    } else {
+                        $('#check_error_status').removeClass('hidden')
+                    }
+
+                });
+                $('#map_po_status').click(function () {
+
+                    var sList = 0;
+                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                        if (this.checked) {
+                            sList++;
+                        }
+                    });
+
+                    if (sList > 0) {
+                        $('#update_po_status').removeClass('hidden')
+                        $('#update_new_po_status').addClass('hidden')
+                        $('#new_pos_status').addClass('hidden')
+                        $('#map_po_div_status').removeClass('hidden')
+                        $('#new_po_div_status').addClass('hidden')
+                        $('#exist_artwork_div_status').removeClass('hidden')
+                        $('#check_error_status').addClass('hidden')
+
+                    } else {
+                        $('#check_error_status').removeClass('hidden')
+                    }
+
+                }); 
+                    
+                    
+                $('#update_new_po_status').click(function () {
+
+                    var sList = 0;
+                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                        if (this.checked) {
+                            sList++;
+                        }
+                    });
+
+                    if (sList > 0) {
+                        $('#check_error_status').addClass('hidden')
+                        if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
+
+                            if ($('#new_po_no_status').val().length > 9) {
+                                $('#new_po_error_length_status').removeClass('hidden');
+                                $('#new_po_error_status').addClass('hidden');
+                                $('#new_po_file_error_status').addClass('hidden');
+                            } else {
+                                var a = [];
+                                $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                    if (this.checked) {
+                                        a.push($(this).parent().attr('data-id'));
+                                    }
+                                });
+                                var aa = a.join(',');
+                                var new_po_file = $('#new_po_file_status').prop('files')[0];
+                                var new_po_no = $('#new_po_no_status').val();
+                                
+                                var form_data = new FormData();
+                                form_data.append('id', aa);
+                                form_data.append('po_file', new_po_file);
+                                form_data.append('po', new_po_no);
+                                form_data.append('_token', csrf_token);
+                                $.ajax({
+                                    url: base_url + "/"+user_type+"/" + buyer + "/order-management/update-label-orders-po",
+                                    dataType: 'text',
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    data: form_data,
+                                    type: 'post',
+                                    success: function (data) {
+                                        $('#po-file-upload-group').modal('hide')
+                                        $('.snackbar_span').html('PO Updated Successfully');
+                                        showSnackbar();
+                                    },
+                                    error: function () {
+                                        console.log('somethig is wrong, please try later');
+                                    }
+
+                                });
+                            }
+
+                        } else {
+                            if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
+                                $('#new_po_error_status').removeClass('hidden')
+                                $('#new_po_file_error_status').removeClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            } else if ($('#new_po_file_status').val() == "") {
+                                $('#new_po_file_error_status').removeClass('hidden')
+                                $('#new_po_error_status').addClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            } else if ($('#new_po_no_status').val() == "") {
+                                $('#new_po_error_status').removeClass('hidden')
+                                $('#new_po_file_error_status').addClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            }
+
+                        }
+                    } else {
+                        $('#check_error_status').removeClass('hidden')
+                    }
+                });
+
+
+                $('#new_pos_status').click(function () {
+                    var sList = 0;
+                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                        if (this.checked) {
+                            sList++;
+                        }
+                    });
+
+                    if (sList > 0) {
+                        $('#check_error_status').addClass('hidden')
+                        if ($('#new_po_no_status').val() != "" && $('#new_po_file_status').val() != "") {
+                            if ($('#new_po_no_status').val().length > 9) {
+                                $('#new_po_error_length_status').removeClass('hidden');
+
+                                $('#new_po_error_status').addClass('hidden');
+                                $('#new_po_file_error_status').addClass('hidden');
+                            } else {
+                                var a = [];
+                                $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                    if (this.checked) {
+                                        a.push($(this).parent().attr('data-id'));
+                                    }
+                                });
+                                var aa = a.join(',');
+                                var new_po_file = $('#new_po_file_status').prop('files')[0];
+                                var new_po_no = $('#new_po_no_status').val();
+                                
+                                var form_data = new FormData();
+                                form_data.append('id', aa);
+                                form_data.append('po_file', new_po_file);
+                                form_data.append('po', new_po_no);
+                                form_data.append('_token', csrf_token);
+                                $.ajax({
+                                    url: base_url + "/"+user_type+"/" + buyer + "/order-management/update-label-orders-po",
+                                    dataType: 'text',
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    data: form_data,
+                                    type: 'post',
+                                    success: function (data) {
+                                        $('#po-file-upload-group').modal('hide')
+                                        $('.snackbar_span').html('PO Updated Successfully');
+                                        showSnackbar();
+                                    },
+                                    error: function () {
+                                        console.log('somethig is wrong, please try later');
+                                    }
+
+                                });
+                            }
+
+                        } else {
+                            if ($('#new_po_no_status').val() == "" && $('#new_po_file_status').val() == "") {
+                                $('#new_po_error_status').removeClass('hidden')
+                                $('#new_po_file_error_status').removeClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            } else if ($('#new_po_file_status').val() == "") {
+                                $('#new_po_file_error_status').removeClass('hidden')
+                                $('#new_po_error_status').addClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            } else if ($('#new_po_no_status').val() == "") {
+                                $('#new_po_error_status').removeClass('hidden')
+                                $('#new_po_file_error_status').addClass('hidden')
+                                $('#new_po_error_length_status').addClass('hidden');
+                            }
+                        }
+
+                    } else {
+                        $('#check_error_status').removeClass('hidden')
+                    }
+                });
+
+                $('#update_po_status').click(function () {
+
+                    var sList = 0;
+                    $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                        if (this.checked) {
+                            sList++;
+                        }
+                    });
+
+                    if (sList > 0) {
+                        $('#check_error_status').addClass('hidden')
+
+                        if ($('#select_po_status').val() != "Select PO") {
+                            var a = [];
+                            $('#exist_artwork_div_status input[type=checkbox]').each(function () {
+                                if (this.checked) {
+                                    a.push($(this).parent().attr('data-id'));
+                                }
+                            });
+                            var aa = a.join(',');
+                            
+                            //alert($('#select_po_status option:selected').attr('data-id'))
+                            $.ajax({
+                                url: base_url + "/"+user_type+"/" + buyer + "/order-management/map-label-orders-po",
+                                type: "Post",
+                                dataType: "json",
+                                data: {
+                                    _token: csrf_token,
+                                    id: aa,
+                                    po: $('#select_po_status').val(),
+                                    po_file:$('#select_po_status option:selected').attr('data-id')
+                                },
+                                beforeSend: function () {
+
+                                },
+                                success: function (data) {
+                                    $('#po-file-upload-group').modal('hide')
+                                    $('.snackbar_span').html('PO Updated Successfully');
+                                    showSnackbar();$('#po-file-upload-div').modal('hide')
+        $('.snackbar_span').html('PO Updated Successfully');
+        showSnackbar();
+                                },
+                                error: function (data) {
+
+                                },
+                                complete: function () {
+                                    $(".loader").hide();
+                                }
+                            })
+                        } else {
+                            $('#select_error_status').removeClass('hidden')
+                        }
+                    } else {
+                        $('#check_error_status').removeClass('hidden')
+                    }
+
+                });
+            
+			},
+			error: function (data) {
+
+			},
+			complete: function () {
+				$(".loader").hide();
+			}
+		})
+	});
+
+    $('[data-toggle="tooltip"]').tooltip()
 }
 
-function hangtagmodal(data,uvc) {
+function hangtagmodal(data,uvc,user_type) {
     var order_details = data.order_details;
     var hang_tag_orders = data.orchestra_hang_tag_orders;
     var tr = "";
@@ -249,7 +782,7 @@ function hangtagmodal(data,uvc) {
 		$print_button_class="";
 		$save_button_class="hidden";
 		$ocn_number_hang = hang_tag_orders[0].ocn_number;
-        var onclick = `onclick=printHangDivOs("svg_hang_front","svg2","`+uvc+`","","admin","`+hang_tag_orders[0].id+`","orchestra_hang_tag_orders","proof")`;
+        var onclick = `onclick=printHangDivOs("svg_hang_front","svg2","`+uvc+`","","`+user_type+`","`+hang_tag_orders[0].id+`","orchestra_hang_tag_orders","proof")`;
     } else {
        
         $template_front_id = "";
@@ -458,7 +991,7 @@ function hangtagmodal(data,uvc) {
             var template_id = $template_front_id;
             
             $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
+                url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
                 type: "Post",
                 dataType: "json",
                 data: {
@@ -505,7 +1038,7 @@ function hangtagmodal(data,uvc) {
             $('#hang_template_error').addClass('hidden')
             
             $.ajax({
-                url: base_url + "/admin/" + buyer + "/template-management/template-view",
+                url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
                 type: "Post",
                 dataType: "json",
                 data: {
@@ -539,12 +1072,12 @@ function hangtagmodal(data,uvc) {
 
         } else {
             e.preventDefault();
-            setHangTagStatus(data.color_wcl)
+            setHangTagStatus(data.color_wcl,user_type,"create_order")
         }
     })
 }
 
-function heattransfermodal(data) {
+function heattransfermodal(data,user_type) {
 
     var order_details = data.order_details;
     var orchestra_heat_transfer_orders = data.orchestra_heat_transfer_orders;
@@ -720,19 +1253,19 @@ function heattransfermodal(data) {
         $('#heat_transferform .scalable').removeClass('active');
     })
 
-    treestructureheat_transfer(data.treeviewheat_transfer, "treeht", $template_id,orchestra_heat_transfer_orders);
+    treestructureheat_transfer(data.treeviewheat_transfer, "treeht", $template_id,orchestra_heat_transfer_orders,user_type);
 
     $('#heat_transferform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setheat_transferStatus(data.color_wcl)
+            setheat_transferStatus(data.color_wcl,user_type,"create_order")
         }
     })
 }
 
-function specialtagmodal(data) {
+function specialtagmodal(data,user_type) {
 
     var orchestra_special_tag_orders = data.orchestra_special_tag_orders;
 
@@ -800,19 +1333,19 @@ function specialtagmodal(data) {
         $('#specialtagform .scalable').removeClass('active');
     })
 
-    treestructurespecial(data.treeviewspecial, "tree2", $template_id,orchestra_special_tag_orders);
+    treestructurespecial(data.treeviewspecial, "tree2", $template_id,orchestra_special_tag_orders,user_type);
 
     $('#specialtagform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setSpecialTagStatus(data.color_wcl)
+            setSpecialTagStatus(data.color_wcl,user_type,"create_order")
         }
     })
 }
 
-function mainlabelmodal(data) {
+function mainlabelmodal(data,user_type) {
 
     var orchestra_main_label_orders = data.orchestra_main_label_orders;
     
@@ -884,19 +1417,19 @@ function mainlabelmodal(data) {
         $('#main_labelform .scalable').removeClass('active');
     })
 
-    treestructuremain_label(data.treeviewmain_label, "treeml", $template_id,orchestra_main_label_orders);
+    treestructuremain_label(data.treeviewmain_label, "treeml", $template_id,orchestra_main_label_orders,user_type);
 
     $('#main_labelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setMainLabelStatus(data.color_wcl)
+            setMainLabelStatus(data.color_wcl,user_type,"create_order")
         }
     })
 }
 
-function sizelabelmodal(data) {
+function sizelabelmodal(data,user_type) {
 
     var orchestra_size_label_orders = data.orchestra_size_label_orders;
 
@@ -1074,19 +1607,73 @@ function sizelabelmodal(data) {
         $('#size_labelform .scalable').removeClass('active');
     })
 
-    treestructuresize_label(data.treeviewsize_label, "treesl", $template_id,orchestra_size_label_orders);
+    treestructuresize_label(data.treeviewsize_label, "treesl", $template_id,orchestra_size_label_orders,user_type);
 
     $('#size_labelform').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
         } else {
             e.preventDefault();
-            setSizeLabelStatus(data.color_wcl)
+            setSizeLabelStatus(data.color_wcl,user_type,"create_order")
         }
     })
 }
 
-function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
+function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type) {
+    var washing_option = "<option value=''>Select Option</option>";
+    var whitening_option = "<option value=''>Select Option</option>";
+    var dryer_option = "<option value=''>Select Option</option>";
+    var ironing_option = "<option value=''>Select Option</option>";
+    var cleaning_option = "<option value=''>Select Option</option>";
+    var made_option = "<option value=''>Select Option</option>";
+    var instruction_option = "";
+    var parts_option = "<option>Select Option</option>";
+    var composition_option = "<option>Select Option</option>";
+
+    $.each(orchestra_countries, function (index, value) {
+        made_option += '<option data-id="' + value.id + '"  data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
+    });
+    $.each(orchestra_care_instruction, function (index, value) {
+		if(value.english.length > 31)
+		{
+			var txtEng = value.english.slice(0,30)+"...";
+		}
+		else
+		{
+			var txtEng = value.english;
+		}
+        instruction_option += '<option data-id="' + value.id + '" data-french="' + value.french + '" title="'+value.english+'" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german  + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + txtEng + '</option>';
+    });
+    $.each(orchestra_parts, function (index, value) {
+        parts_option += '<option data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
+    });
+    $.each(orchestra_composition, function (index, value) {
+        composition_option += '<option data-french="' + value.french + '" data-english="' + value.english + '" data-spanish="' + value.spanish + '" data-portuguese="' + value.portuguese + '" data-italian="' + value.italian + '" data-dutch="' + value.dutch + '" data-german="' + value.german  + '" data-arabic="' + value.arabic + '" data-greek="' + value.greek + '" value="' + value.id + '">' + value.english + '</option>';
+    });
+    $.each(orchestra_care_symbols, function (index, value) {
+		//console.log(value.care_instruction.length)
+		if(value.care_instruction.length > 15)
+		{
+			var carEng = value.care_instruction.slice(0,15)+"...";
+		}
+		else
+		{
+			var carEng = value.care_instruction;
+		}
+		
+        if (value.category_id == 1) {
+            washing_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
+        } else if (value.category_id == 2) {
+            whitening_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + "  value=" + value.id + ">" + carEng + "</option>";
+        } else if (value.category_id == 3) {
+            dryer_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
+        } else if (value.category_id == 4) {
+            ironing_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
+        } else if (value.category_id == 5) {
+            cleaning_option += "<option title='"+value.care_instruction+"' data-id='" + value.id + "' data-content='<img src=" + value.cofreet_symbols + "> &nbsp; " + carEng + "' value=" + value.id + "  data-cofreet=" + value.cofreet_symbols + "  data-astm=" + value.astms_symbol + ">" + carEng + "</option>";
+        }
+
+    });
 
     var tr = "";
     $qu = 0;
@@ -1098,11 +1685,24 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
         var str=data.status;
         $status=str.replace(/ /g, "");
         $status_text=str;
-        $comment = data.merchandiser_comment;
+        if(data.merchandiser_comment != null && data.merchandiser_comment !="")
+        {
+
+            $comment = "<h4>Comments :</h4><p id='comment_section_"+index_wcl_count+"'>"+data.merchandiser_comment+"</p><hr>";
+        }
+        else
+        {
+
+            $comment = "<h4>Comments :</h4><p id='comment_section_"+index_wcl_count+"'>No Comments</p><hr>";
+        }
         $save_button_class="hidden";
         $print_button_class = "";
         $cancel_button_class="";
 		$ocn_number_wcl = data.ocn_number;
+        $disable_option_select = "disabled";
+        $wcl_name=data.template_name;
+        $no_data_comp = "";
+
     } else {
      
         $template_id = "";
@@ -1115,10 +1715,16 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
         $print_button_class = "hidden";
         $cancel_button_class="hidden";
 		$ocn_number_wcl = "";
+        $disable_option_select = "";
+        $wcl_name="";
+        $no_data_comp = `
+        <tr id="no_data_comp`+index_wcl_count+`">
+            <td colspan="3">No data Found</td>
+        </tr>`;
     }
     var ttots = 0;
     var ttots_sum = 0;
-    $.each(data.order_details, function (index, value) {
+    $.each(order_details, function (index, value) {
         if(color_code == value.Color_Code)
 		{
             if (data != "") {
@@ -1142,48 +1748,217 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
         ttots=ttots;
     }
 
+
+    if(treeviewwash_label[0].parent_id != "null")
+    {
+        var wcl_template = "<option value=''>Select Option</option>";
+
+        $.each(treeviewwash_label, function (index, value) {
+            wcl_template += '<option value="' + value.id + '">' + value.text + '</option>'
+        });
+
+        var wcl_template_div =`<div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                    class="form_label">Select Template</label><select `+$disable_option_select+`
+                                    data-required-error="Required" data-live-search="true"
+                                    class="form-control selectpicker input-sm wcl_template` + index_wcl_count + `" required>` +
+                                    wcl_template + `</select>
+                                <div class="help-block with-errors"></div>
+                            </div>`
+    }
+    else
+    {
+        var wcl_template = "<option value=''>Select Option</option>";
+        
+        $.each(treeviewwash_label, function (index, value) {
+            wcl_template += '<option value="' + value.id + '" selected>' + value.text + '</option>'
+        });
+
+        var wcl_template_div =`<div style="display:none" class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Template</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm wcl_template` + index_wcl_count + `" required>` +
+                                wcl_template + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>`;
+    }
+
     $('.top-content').append(`
             <form id="washcarelabelform` + index_wcl_count + `" data-toggle="validator"><input type="hidden" value="` + $exist_id + `"
                 id="exist_id` + index_wcl_count + `"><input type="hidden" value="` + color_code + `" id="color_id` + index_wcl_count + `">
                 <div class="left-panel-heat col-md-7">
                 <div class="div-max">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <h4>Options</h4>
+                        <hr>
+                        <div class="scroll">
+                            <div class="form-group has-feedback has-success"><label for="ocn_number" class="form_label">OCN Number</label>
+                                <input type="text" id="ocn_number_wash` + index_wcl_count + `" `+$disable_option_select+` value="`+$ocn_number_wcl+`" class="form-control input-sm" placeholder="OCN Number">
+                            </div>
+                            <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                            class="form_label">WCL Name</label><input type="text"
+                            data-required-error="Required" `+$disable_option_select+` class="form-control input-sm"
+                            required="" placeholder="WCL Name" value="` + $wcl_name + `" id="wcl_name` + index_wcl_count + `">
+                        <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Washing</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm washing_select` + index_wcl_count + `" required>` +
+                                washing_option + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Whitening</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm whitening_select` + index_wcl_count + `" required>` +
+                                whitening_option + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Dryer</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm dryer_select` + index_wcl_count + `" required>` +
+                                dryer_option + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Ironing</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm ironing_select` + index_wcl_count + `" required>` +
+                                ironing_option + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                                class="form_label">Select Cleaning</label><select `+$disable_option_select+`
+                                data-required-error="Required" data-live-search="true"
+                                class="form-control selectpicker input-sm cleaning_select` + index_wcl_count + `" required>` +
+                                cleaning_option + `</select>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                            class="form_label">Select Made In</label><select `+$disable_option_select+`
+                            data-required-error="Required" data-live-search="true"
+                            class="form-control selectpicker input-sm made_in_select` + index_wcl_count + `" required>` +
+                            made_option + `</select>
+                        <div class="help-block with-errors"></div>
                     </div>
-                    <div class="col-md-6">
+                    `+wcl_template_div+`
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>Care Instructions & Composition</h4>
+                        <span class="label right_wcl_status_` + index_wcl_count + ` label-` + $status + `" style="top:13px;right:15px;padding:3px 10px;position: absolute;">` + $status_text + `</span>
+                        <hr>
+                        <div class="scroll">
+                        <div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
+                            class="form_label">Select Care Instructions</label><select `+$disable_option_select+`
+                            data-required-error="Required" data-live-search="true" data-done-button="true"
+                            class="form-control selectpicker input-sm care_instruction_select` + index_wcl_count + `" required
+                            multiple>` + instruction_option + `</select>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col-md-6">
+                                    <label>Compositions</label> <select `+$disable_option_select+`
+                                        class="selectpicker composition_select` + index_wcl_count + `" data-live-search="true"> ` +
+                                        composition_option + ` </select>
+                                    <p class="hidden" style="color:red;float:right" id="composition_error_required` + index_wcl_count + `">
+                                        Please Select Composition</p>
+                                </div>
+
+                                <div class="col-md-3">
+                                <label>Percentage</label> 
+                                
+                                <input `+$disable_option_select+` type="number" min="1" max="100" class="form-control input-sm composition_percent` + index_wcl_count + `">
+
+                                <p class="hidden" style="color:red;text-align:right" id="percentage_error_required` + index_wcl_count + `">Please Enter Percentage</p> 
+                                </div>
+                                <div class="col-md-3" style="margin-top: 22px;">
+                                <button `+$disable_option_select+` type="button"
+                                class="btn  btn-primary pull-right input-sm add_to_list` + index_wcl_count + `"
+                                onclick="add_to_list(` + index_wcl_count + `)">Add To List</button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered table-striped table-hover table-condensed">
+                                        <thead>
+                                            <th>Composition</th>
+                                            <th>Percentage</th>
+                                            <th>Actions</th>
+                                        </thead>
+                                        <tbody id="composition_table_qty` + index_wcl_count + `">
+                                        <tr id="no_data`+index_wcl_count+`">
+                                            <td colspan="3">No data Found</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;margin-bottom: 10px;">
+                                <button `+$disable_option_select+` type="button"
+                                class="btn  btn-primary pull-right input-sm add_to_composition` + index_wcl_count + `"
+                                onclick="add_to_composition(` + index_wcl_count + `)" disabled>Add To Composition Set</button>
+                                <p id="wash_composition_error` + index_wcl_count + `" class="hidden" style="color:red;margin-right: 10px;">Please add to composition set</p>
+                                </div>
+                                <div class="col-md-12">
+                                <hr>
+                                <h4>Compositions :</h4>
+                                    <table class="table table-bordered table-striped table-hover table-condensed">
+                                        <thead>
+                                            <th>Composition Name</th>
+                                            <th>Parts</th>
+                                            <th>Actions</th>
+                                        </thead>
+                                        <tbody id="composition_remove_qty` + index_wcl_count + `">
+                                        `+$no_data_comp+`
+                                        </tbody>
+                                    </table>
+                                    <div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div>
+
+                                    <div><button `+$disable_option_select+` class="btn  btn-primary pull-right input-sm add_to_page` + index_wcl_count + `"  style="position:relative;" type="button" onclick="add_parts(` + index_wcl_count + `)">Add Parts</button>
+                                    <p id="wash_composition_page_error` + index_wcl_count + `" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please add composition and parts</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="right-panel-heat col-md-5">
                 <div class="div-max scroll">
+                <h4 style="display: inline-block;">Quantity Info for <span class="washlabelnameqty` + index_wcl_count + `"> WashCare
+                    Label - </span> `+color_code+`</h4>
                     <hr>
-                    <table class="table table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_`+index_wcl_count+`" style="font-size:11px">
+                    <table class="table table-bordered table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_`+index_wcl_count+`" style="font-size:11px">
                         <thead>
-                            <tr>
-                                <th>UVC TCO#</th>
-                                <th>Size in ANS</th>
-                                <th>Barcode</th>
-                                <th>Qty</th>
-                                <th><input type="text" class="form-control input-sm extra_percentagewash" onkeypress="return checkNumbersOnly(event)" placeholder="Extra Qty %" style="float:left;height:20px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody style="font-size: 11px">` + tr + `
-                        <tfoot>
-                            <tr class="strong">
-                                <td class="text-right" colspan="3">Total:</td>
-                                <td>` + ttots_sum + `</td>
-                                <td class="text-center tot_qty_tablewash_fin` + index_wcl_count + `">` + ttots + `</td>
-                            </tr>
-                        </tfoot>
-                        </tbody>
+                        <tr>
+                            <th>UVC TCO#</th>
+                            <th>Size</th>
+                            <th>Barcode</th>
+                            <th>Qty</th>
+                            <th style="display: flex;justify-content: center;><label style="float: left; line-height: 2">Extra %:</label> <input type="text"
+                                    class="form-control input-sm extra_percentagewash` + index_wcl_count + `"
+                                    onkeypress="return checkNumbersOnly(event)"
+                                    style="width:60px; float: left; margin-left: 5px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>` + tr + `<tr class="strong">
+                            <td class="text-right" colspan="3">Total:</td>
+                            <td>` + ttots_sum + `</td>
+                            <td class="text-center tot_qty_tablewash_fin` + index_wcl_count + `">` + ttots + `</td>
+                        </tr>
+                    </tbody>
                     </table>
                     <hr>`+ $comment +` <button class="btn btn-primary pull-right input-sm left `+$save_button_class+`"
                         type="submit" id="save_wash_button_`+index_wcl_count+`" style="margin-left:10px">Save</button> <button
                         type="button" class="btn input-sm btn-danger `+$print_button_class+`" id="cancel_wash_button_`+index_wcl_count+`"
                         style="float: right;margin-left: 10px;"
-                        onclick=cancelWashDiv("`+index_wcl_count+`","admin")>Cancel</button><button
+                        onclick=cancelWashDiv("`+index_wcl_count+`","`+user_type+`")>Cancel</button><button
                         class="btn btn-default pull-right input-sm" id="wcl_labelclose_`+index_wcl_count+`" type="button">Close</button> <button
                         type="button" class="btn btn-primary `+$print_button_class+`" id="print_wash_button_`+index_wcl_count+`"
-                        onclick=printWashDiv("washcare_svg_front`+index_wcl_count+`","washcare_svg_back`+index_wcl_count+`","washcare_svg_middle`+index_wcl_count+`","`+index_wcl_count+`","admin","`+activity_label+`")>Print</button>
+                        onclick=printWashDiv("washcare_svg_front`+index_wcl_count+`","washcare_svg_back`+index_wcl_count+`","washcare_svg_middle`+index_wcl_count+`","`+index_wcl_count+`","`+user_type+`","`+activity_label+`")>Print</button>
+                        <div class="parts_none`+index_wcl_count+`" style="display:none"><select class="form-control">` + parts_option + `</select></div>
                 </div>
             </div>
             <div class="backdrop"></div>
@@ -1191,10 +1966,20 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
     `);
 
     $("#clickmewcl_"+index_wcl_count).click(function () {
-        $("#washcarelabelform"+index_wcl_count+" .backdrop").toggleClass('active');
-        $("#washcarelabelform"+index_wcl_count+" .right-panel-heat").toggleClass('active');
-        $("#washcarelabelform"+index_wcl_count+" .scalable").toggleClass('active');
-        $("#washcarelabelform"+index_wcl_count+" .left-panel-heat").toggleClass('active');
+
+        if( $('.merchandisers option:selected').val() != "")
+        {
+            $("#washcarelabelform"+index_wcl_count+" .backdrop").toggleClass('active');
+            $("#washcarelabelform"+index_wcl_count+" .right-panel-heat").toggleClass('active');
+            $("#washcarelabelform"+index_wcl_count+" .scalable").toggleClass('active');
+            $("#washcarelabelform"+index_wcl_count+" .left-panel-heat").toggleClass('active');
+        }
+        else
+        {
+            $('.snackbar_span').html('Please Select Merchandiser');
+            showSnackbar();
+        }
+        
     })
 
     $(".backdrop, #wcl_labelclose_"+index_wcl_count).click(function () {
@@ -1203,6 +1988,738 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label) {
         $("#washcarelabelform"+index_wcl_count+" .backdrop").removeClass('active');
         $("#washcarelabelform"+index_wcl_count+" .scalable").removeClass('active');
     })
+
+    if (data != "") {
+        $('.tot_qty_tablewcl').attr('disabled','disabled')
+        $('.extra_percentagewash'+index_wcl_count).attr('disabled','disabled')
+
+        $('.washing_select' + index_wcl_count).selectpicker('val', data.washing_id);
+        $('.whitening_select' + index_wcl_count).selectpicker('val', data.whitening_id);
+        $('.dryer_select' + index_wcl_count).selectpicker('val', data.dryer_id);
+        $('.ironing_select' + index_wcl_count).selectpicker('val', data.ironing_id);
+        $('.cleaning_select' + index_wcl_count).selectpicker('val', data.cleaning_id);
+        $('.made_in_select' + index_wcl_count).selectpicker('val', data.made_in_id);
+        $('.wcl_template' + index_wcl_count).selectpicker('val', data.template_id);
+        $('.care_instruction_select' + index_wcl_count).selectpicker('val', data.care_instruction);
+
+        var s_no =1;
+        var page_id = 0;
+
+        $.each(data.composition, function (index, value) {
+            if (value.page_id != page_id) {
+
+                var comps="";
+
+                $.each(data.composition, function (index1, value1) {
+                    if(value.page_id == value1.page_id)
+                    {
+                        if(comps != "")
+                        {
+                            comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                        }
+                        else
+                        {
+                            comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                        }
+                    }
+                });
+                
+                add_page_composition += 1;
+
+                $('#composition_remove_qty' + index_wcl_count).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:default;pointer-events:none" onclick="deleteComposition(this,' + index_wcl_count + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                
+                if(value.parts_id != "")
+                {
+                    $('.select_parts'+add_page_composition).val(value.parts_id)
+                    $('.select_parts'+add_page_composition).attr('disabled','disabled')
+                }
+                
+                var washcomp=[];
+
+                $('#composition_remove_qty' + index_wcl_count + ' tr').each(function () {
+                    var washcomp1=[];
+                    var id=$(this).attr('id')
+                    var value=$(this).find('select').find(':selected').val();
+                    var compo =$(this).find('.compositions_hidden').val();
+                    var compss = compo.split(',');
+                        $(compss).each(function (index1,value1){ 
+                            var english = value1.split('_');
+                            washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                        });
+                    washcomp.push(washcomp1)
+                })
+                
+                var wash_finals = JSON.stringify(washcomp);
+                localStorage.setItem('wash_composition_final'+index_wcl_count, wash_finals);
+                s_no++;
+            }
+            page_id = value.page_id;
+        });
+    }
+
+    selectpicker()
+
+    $('#washcarelabelform' + index_wcl_count + ' .tot_qty_tablewcl').keyup(function () {
+        var tot_qty_tablewash_carton_final = 0;
+        $('#washcarelabelform' + index_wcl_count + ' tbody tr').each(function (keys, vals) {
+            if ($(this).find('.tot_qty_tablewcl').val() != undefined) {
+                tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewcl').val());
+            }
+        })
+        $('#washcarelabelform' + index_wcl_count + ' .tot_qty_tablewash_fin'+ index_wcl_count).text(tot_qty_tablewash_carton_final);
+    });
+    
+
+    $('.extra_percentagewash'+index_wcl_count).keyup(function () {
+        
+        var tot_qty_tablewash_carton_final = 0;
+        if ($(this).val() != "") {
+            var per = $(this).val();
+            $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+                var sum = $(this).find('.sum').text();
+                var per_qty = (parseInt(sum) / 100) * parseInt(per);
+                var tot_qty = parseInt(sum) + parseInt(per_qty);
+                $(this).find('.tot_qty_tablewcl').val(tot_qty);
+                if ($(this).find('.tot_qty_tablewcl').val() != undefined) {
+                    tot_qty_tablewash_carton_final += parseInt($(this).find('.tot_qty_tablewcl').val());
+                }
+            })
+            $(this).parent().parent().parent().parent().parent().find('.tot_qty_tablewash_fin'+ index_wcl_count).text(tot_qty_tablewash_carton_final);
+        } else {
+            
+            $(this).parent().parent().parent().parent().parent().find('.qty-table-modal tbody tr').each(function () {
+                $(this).find('.tot_qty_tablewcl').val("");
+            })
+            $(this).parent().parent().parent().parent().parent().find('.tot_qty_tablewash_fin'+ index_wcl_count).text("0");
+        }
+
+		$('#wash_care_label_table_'+index_wcl_count).validator('validate')
+    })
+
+    var care_instruction_select_option = []
+
+    $('.care_instruction_select' + index_wcl_count + '.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+
+        var hidden_id = $(this).find('option').eq(clickedIndex).val();
+        
+
+        if(care_instruction_select_option.includes(hidden_id) != true)
+        {
+            care_instruction_select_option.push(hidden_id)
+        }
+        else
+        {
+            var index_cisop = care_instruction_select_option.indexOf(hidden_id);
+            if (index_cisop !== -1) {
+                care_instruction_select_option.splice(index_cisop, 1);
+            }
+        }
+                                            
+        localStorage.setItem('care_instruction_select'+index_wcl_count, JSON.stringify(care_instruction_select_option));
+        
+    });
+
+    $('#washcarelabelform' + index_wcl_count).validator().on('submit', function (e) {
+        if (e.isDefaultPrevented()) {
+
+        } else {
+            e.preventDefault();
+            setWashCareLabelStatus(index_wcl_count,user_type,"create_order")
+        }
+    })
+
+}
+
+
+function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,index,treeviewwash_label,user_type) 
+{
+
+    var wcl_count = index_wcl_count -1; 
+
+    console.log("wcl_count" + wcl_count)
+    console.log("wcl_status" + $('.wcl_status_'+wcl_count+' span').text())
+    if($('.wcl_status_'+wcl_count+' span').text() == "New Order" || $('.wcl_status_'+wcl_count+' span').text() == "Clone Order")
+    {
+        $('.snackbar_span').html('Please place the order you have created before creating another order.');
+        showSnackbar();
+    }
+    else
+    {
+        $('.wcl_orders_card').append(`
+                <div class="artwork-wrapper">
+                    <div class="artwork-card wcl_status_`+index_wcl_count+`" data-color="`+color_code+`" id="cloneWashCareLabel_`+color_code+`">
+                    <div class="main-data">
+                        <span class="label label-Cloned">Clone Order</span>
+                        <h3 class="wcl_name_card_`+index_wcl_count+`">Wash Care Label</h3>
+                        <p>Color Code - `+color_code+`</p>
+                        <img src="` + base_url + `/images/wcl_default.png" class="img-responsive">
+                        </div>
+                        <div class="actions">
+                        <ul>
+                            <li data-toggle="tooltip" data-placement="top" title="Edit" id="clickmewcl_`+index_wcl_count+`" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</li>
+                            <li data-toggle="tooltip" data-placement="top" title="Delete" data-id="`+index_wcl_count+`" id="deletewcl_`+index_wcl_count+`" style="cursor: pointer; margin-left:-3px"><i class="fa fa-trash" aria-hidden="true"></i> Delete</li>
+                            <li class="hidden" data-toggle="tooltip" data-id="`+index_wcl_count+`" data-color="`+color_code+`"  data-placement="top" title="Clone" id="clone_washcare_label_card`+index_wcl_count+`" style="cursor: pointer; margin-left:-3px"><i class="fa fa-clone" aria-hidden="true"></i> Clone</li>
+                        </ul>
+                        </div>
+                        </div>
+                    
+                </div>
+        `)
+
+        $('#deletewcl_' + index_wcl_count).on('click', function (e) {
+            
+            $('#washcarelabelform' + $(this).data('id')).remove()
+                
+            $(this).parent().parent().parent().parent().remove();
+
+            wash_care_count--;
+
+        });
+
+        washcarelabelmodal("",index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type)
+
+        $('#washcarelabelform'+index_wcl_count).find('#wcl_name'+index_wcl_count).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
+        $('#washcarelabelform'+index_wcl_count).find('#ocn_number_wash'+index_wcl_count).val($('#washcarelabelform'+index).find('#ocn_number_wash'+index).val())
+        
+        
+        $('.washing_select'+index_wcl_count).selectpicker('val',$('.washing_select'+index).selectpicker('val'));
+        $('.whitening_select'+index_wcl_count).selectpicker('val',$('.whitening_select'+index).selectpicker('val'));
+        $('.dryer_select'+index_wcl_count).selectpicker('val',$('.dryer_select'+index).selectpicker('val'));
+        $('.ironing_select'+index_wcl_count).selectpicker('val',$('.ironing_select'+index).selectpicker('val'));
+        $('.cleaning_select'+index_wcl_count).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
+        $('.made_in_select'+index_wcl_count).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
+        $('.wcl_template'+index_wcl_count).selectpicker('val',$('.wcl_template'+index).selectpicker('val'));
+
+        $('.care_instruction_select'+index_wcl_count).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
+
+        $('#composition_remove_qty'+index_wcl_count).html($('#composition_remove_qty'+index).html())
+
+        $('.add_to_composition'+index_wcl_count).prop('disabled',true)
+
+        $('#composition_remove_qty'+index+' tr').each(function (ind,val) {
+            var values= $(this).find('select').find(':selected').val()
+            var v= $(this).attr('id');
+            $('#composition_remove_qty'+index_wcl_count+' tr').each(function (inds,vals) {
+                if($(this).attr('id') == v)
+                {
+                    $(this).find('select').val(values)
+                    $(this).find('select').removeAttr('disabled')
+                    $(this).find('a').removeAttr('onclick')
+                    $(this).find('a').removeAttr('style')
+                    $(this).find('a').css('cursor','pointer')
+                    $(this).find('a').attr('onclick','deleteComposition(this,'+index_wcl_count+')')
+                }
+            });
+        }); 
+        
+        $('#washcarelabelform'+index+' table tbody tr').each(function (ind,val) {
+            var values= $(this).find('.tot_qty_tablewcl').val()
+            var v= $(this).find('.uvc_tco').text();
+            $('#washcarelabelform'+index_wcl_count+' table tbody tr').each(function (inds,vals) {
+                if($(this).find('.uvc_tco').text() == v)
+                {
+                    $(this).find('.tot_qty_tablewcl').val(values)
+                    
+                }
+            });
+        });
+
+        $('#washcarelabelform'+index_wcl_count+' table tbody').find('.tot_qty_tablewash_fin'+index_wcl_count).text($('#washcarelabelform'+index+' table tbody').find('.tot_qty_tablewash_fin'+index).text())
+
+        var washcomp=[];
+        $('#composition_remove_qty' + index_wcl_count + ' tr').each(function () {
+            var washcomp1=[];
+            var id=$(this).attr('id')
+            var value=$(this).find('select').find(':selected').val();
+            var compo =$(this).find('.compositions_hidden').val();
+            var compss = compo.split(',');
+                $(compss).each(function (index1,value1){ 
+                    var english = value1.split('_');
+                    washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                });
+            washcomp.push(washcomp1)
+        })
+        var wash_finals = JSON.stringify(washcomp);
+
+        localStorage.setItem('wash_composition_final'+index_wcl_count, wash_finals);
+
+
+        localStorage.setItem('care_instruction_select'+index_wcl_count, localStorage.getItem('care_instruction_select'+index));
+
+
+        $('[data-toggle="tooltip"]').tooltip()
+
+        $('#clone_washcare_label_card'+index_wcl_count).on('click', function (e) {
+
+            clonewashcarelabels(wash_care_count, $(this).data('color'), user_type,activity_label, order_details, orchestra_care_symbols, orchestra_composition, orchestra_countries, orchestra_care_instruction, orchestra_parts, $(this).data('id'),treeviewwash_label,user_type);
+
+        });
+        
+        $('#washcarelabelform'+index_wcl_count).validator('validate')
+
+
+        wash_care_count++;   
+    }
+
+}
+
+function add_to_list(dataid) {
+	
+	
+	if (dataid === undefined) {
+		dataid = "";
+	} else {
+		dataid = dataid;
+	}
+
+	if ($('.composition_select' + dataid + ' option:selected').val() != "Select Option" && $('.composition_percent' + dataid).val() != "") {
+
+		composition_percentage_global += parseInt($('.composition_percent' + dataid).val());
+
+		if (composition_percentage_global <= "100") {
+
+			composition_percentage_global = composition_percentage_global;
+			$('#composition_table_qty' + dataid).append(`<tr><td class="comp"><input type="hidden" class="list_comp" value="` + $(".composition_select" + dataid + " option:selected").attr("data-french") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-english") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-spanish") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-portuguese") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-italian") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-dutch") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-german") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-arabic") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-greek") + `_` + parseInt($(".composition_percent" + dataid).val()) + `">` + $(".composition_select" + dataid + " option:selected").text() + `</td><td class="percent">` + parseInt($(".composition_percent" + dataid).val()) + `</td><td><a style="cursor:pointer" onclick="deleteCompPer(this,'` + dataid + `')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>`)
+		} else {
+			composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
+            $('.snackbar_span').html('Percentage should not be greater than 100.');
+            showSnackbar();
+		}
+
+		$('.parts_select' + dataid).prop('disabled', 'true')
+		$('#composition_error_required' + dataid).addClass('hidden')
+		$('#percentage_error_required' + dataid).addClass('hidden')
+
+        if($('#composition_table_qty' + dataid).find('#no_data'+ dataid).html() != "")
+        {
+            $('#composition_table_qty' + dataid).find('#no_data'+ dataid).remove()
+        }
+
+	}
+	else if ($('.composition_select' + dataid + ' option:selected').val() == "Select Option")
+	{
+		$('#composition_error_required' + dataid).removeClass('hidden')
+		$('#percentage_error_required' + dataid).addClass('hidden')
+		
+	}
+	else if($('.composition_percent' + dataid).val() == "")
+	{
+		$('#percentage_error_required' + dataid).removeClass('hidden')
+		$('#composition_error_required' + dataid).addClass('hidden')
+	}
+	if (composition_percentage_global == "100") {
+		$('.composition_select' + dataid).prop('disabled', 'true')
+		$('.composition_percent' + dataid).prop('disabled', 'true')
+		$('.add_to_list' + dataid).prop('disabled', 'true')
+		$('.add_to_composition' + dataid).removeAttr('disabled')
+	}
+	$('#wash_composition_error' + dataid).addClass('hidden')
+
+}
+
+/**
+ * This Function is Sub Function of #washcarelabels.
+ * To add a compoistion into tables
+ * @return view
+ */
+
+function add_to_composition(dataid) {
+    add_page_composition += 1;
+    $('#wash_composition_error' + dataid).addClass('hidden')
+    if (dataid === undefined) {
+        dataid = "";
+    } else {
+        dataid = dataid;
+    }
+
+    if($('#composition_remove_qty' + dataid).find('#no_data_comp'+ dataid).html() != "")
+    {
+        $('#composition_remove_qty' + dataid).find('#no_data_comp'+ dataid).remove()
+    }
+    
+    composition_percentage_global = 0;
+    var a = [];
+
+
+
+    var comp_wash_final = JSON.parse(localStorage.getItem('wash_composition_final'+dataid));
+
+    console.log(comp_wash_final)
+
+    if(comp_wash_final == null)
+    {
+        console.log("hahahaha")
+        comp_wash_final = []
+    }
+
+    var comp_split_final = [];
+
+    $('#composition_table_qty' + dataid + ' tr').each(function () {
+        var comp = $(this).find('.list_comp').val();
+        var comp1 = comp.split('_');
+        a.push(comp1[0]+"_"+comp1[1]+"_"+comp1[2]+"_"+comp1[3]+"_"+comp1[4]+"_"+comp1[5]+"_"+comp1[6]+"_"+comp1[7]+"_"+comp1[8]+"_"+comp1[9])
+        comp_split_final.push("Select Option_"+comp1[1]+"_"+comp1[9])
+    })
+
+    comp_wash_final.push(comp_split_final)
+
+    localStorage.setItem('wash_composition_final'+dataid, JSON.stringify(comp_wash_final));
+
+    comps = a.join(',');
+
+    if($('#composition_remove_qty'+dataid+' tr:last td:first label').text() != null && $('#composition_remove_qty'+dataid+' tr:last td:first label').text() != "")
+    {
+        var s_no = parseInt($('#composition_remove_qty'+dataid+' tr:last td:first label').text()) + 1;
+    }
+    else
+    {
+        var s_no = 1;
+    }
+
+
+    $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden">'+$('.parts_none'+ dataid).html()+'</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+
+    $('#composition_table_qty' + dataid).html(`<tr id="no_data`+dataid+`"><td colspan="3">No data Found</td></tr>`)
+
+    $(".add_to_list" + dataid).prop("disabled", false);
+    $('.composition_select' + dataid).prop('disabled', false)
+    $('.composition_percent' + dataid).prop('disabled', false)
+    $('.parts_select' + dataid).prop('disabled', false)
+    $('.add_to_composition' + dataid).attr('disabled', 'disabled')
+    $('.composition_percent' + dataid).val("");
+    $(".composition_select" + dataid).val('');
+    $('.composition_select' + dataid).selectpicker('refresh');
+    $(".parts_select" + dataid).val('');
+    $('.parts_select' + dataid).selectpicker('refresh');
+    $('#wash_composition_error' + dataid).addClass('hidden')
+
+}
+
+
+function add_parts(dataid) {
+
+    if (dataid === undefined) {
+      dataid = "";
+    } else {
+      dataid = dataid;
+    } 
+    
+    var check=0;
+    var check1=0;
+    $('#composition_remove_qty' + dataid + ' tr').each(function () {
+        
+        if($(this).find('select').find(':selected').text() == "Select Option")
+            {
+                check++;
+            }
+        check1++;
+    });
+    
+    if(check1 <2 )
+    {
+        check=0;
+    }
+      
+    if(check == 0 )
+    {
+        $('.composition_error_hidden').addClass('hidden')
+        var washcomp=[];
+        $('#composition_remove_qty' + dataid + ' tr').each(function () {
+            var washcomp1=[];
+            var id=$(this).attr('id')
+            var value=$(this).find('select').find(':selected').val();
+            var compo =$(this).find('.compositions_hidden').val();
+            var compss = compo.split(',');
+                $(compss).each(function (index1,value1){ 
+                    var english = value1.split('_');
+                    washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+                });
+            washcomp.push(washcomp1)
+        })
+        var wash_finals = JSON.stringify(washcomp);
+        localStorage.setItem('wash_composition_final'+dataid, wash_finals);
+    }
+    else
+    {
+        $('.composition_error_hidden').removeClass('hidden')
+    }
+    $('#wash_composition_page_error' + dataid).addClass('hidden')
+  }
+
+function deleteComposition(obj, dataid) {
+
+	$(obj).parent().parent().remove();
+
+    var washcomp=[];
+    $('#composition_remove_qty' + dataid + ' tr').each(function () {
+        var washcomp1=[];
+        var id=$(this).attr('id')
+        var value=$(this).find('select').find(':selected').val();
+        var compo =$(this).find('.compositions_hidden').val();
+        var compss = compo.split(',');
+            $(compss).each(function (index1,value1){ 
+                var english = value1.split('_');
+                washcomp1.push(value+"_"+english[1]+"_"+english[9]) 
+            });
+        washcomp.push(washcomp1)
+    })
+    var wash_finals = JSON.stringify(washcomp);
+    localStorage.setItem('wash_composition_final'+dataid, wash_finals);
+    
+    if($('#composition_remove_qty' + dataid).find('tr').html() == undefined)
+    {
+        $('#composition_remove_qty' + dataid).html(`<tr id="no_data_comp`+dataid+`"><td colspan="3">No data Found</td></tr>`)
+    }
+}
+
+function deleteCompPer(obj, dataid)
+{
+	$(obj).parent().parent().remove();
+
+    composition_percentage_global -= parseInt($(obj).parent().parent().find('.percent').text());
+
+    if($('#composition_table_qty' + dataid).find('tr').html() == undefined)
+    {
+        $('#composition_table_qty' + dataid).html(`<tr id="no_data`+dataid+`"><td colspan="3">No data Found</td></tr>`)
+    }
+
+
+    if (composition_percentage_global != "100" && composition_percentage_global != 100) {
+		$('.composition_select' + dataid).prop('disabled', false)
+		$('.composition_percent' + dataid).prop('disabled', false)
+		$('.add_to_list' + dataid).prop('disabled', false)
+		$('.add_to_composition' + dataid).attr('disabled','disabled')
+	}
+    
+}
+
+/**
+ * This Function is used to set wash care labels in local storage.
+ * 
+ * @return void
+ */
+
+ function setWashCareLabelStatus(dataid,user_type,page_name) {
+
+    if ($('#washcarelabelform' + dataid).find('#exist_id' + dataid).val() != "") {
+       var value = $('#washcarelabelform' + dataid).find('#exist_id' + dataid).val();
+    } else {
+        var value = "null";
+    }
+
+    var wash_lab = JSON.stringify(wash_label);
+    var i = 0
+    $('#composition_remove_qty' + dataid + ' tr').each(function (key, val) {
+        if($(this).children('td:first').text() != "No data Found")
+        {
+            i++;
+        }
+    })
+    if (i != 0) {
+        if( localStorage.getItem("wash_composition_final"+ dataid) != null)
+        {
+            $('#wash_composition_error' + dataid).addClass('hidden')
+            $('#wash_composition_page_error' + dataid).addClass('hidden')
+            localStorage.setItem("wash_label", wash_lab);
+            setWashLabel('washcarelabelform' + dataid, dataid, value,user_type,page_name)
+            
+        }
+        else {
+            $('#wash_composition_page_error' + dataid).removeClass('hidden')
+        }
+        
+    } else {
+        $('#wash_composition_error' + dataid).removeClass('hidden')
+    }
+
+
+}
+
+function setWashLabel(index, dataid, id,user_type,page_name) {
+    $('.merchandisers').attr('disabled','disabled')
+	$('.washlabelname'+dataid).text($('#wcl_name' + dataid).val()+" - Washcare Label");
+    var check=0;
+    var check1=0;
+    $('#composition_remove_qty' + dataid + ' tr').each(function () {
+
+        if($(this).children('td:first').text() != "No data Found")
+        {
+            var trim_option = $(this).find('select').find(':selected').text().trim();
+
+            if(trim_option == 'Select Option')
+            {
+                check++;
+            }
+            check1++;
+        }
+        
+
+    });
+
+
+    if(check1 < 2 )
+    {
+        check=0;
+    }
+
+    if(check == 0 )
+    {
+        var composition = localStorage.getItem('wash_composition');
+
+        var wash_fins = JSON.parse(composition);
+        var wash_finals = localStorage.getItem('wash_composition_final'+dataid);
+
+        
+        var merchandisers = $('.merchandisers option:selected').val();
+      	
+		var template_front_id = $('.wcl_template' + dataid+' option:selected').val();
+		var po_select 	  = $('#po_select' + dataid).val();
+		$('#'+po_select+'_'+dataid).val("1");
+        var template_name = $('#wcl_name' + dataid).val();
+        var ocn_number = $('#ocn_number_wash' + dataid).val();
+        var card_flag = $('#card_flag' + dataid).val();
+        var time_flag = $('#time_flag' + dataid).val();
+        var washing_select = $('.washing_select' + dataid + ' option:selected').attr('data-id');
+        var whitening_select = $('.whitening_select' + dataid + ' option:selected').attr('data-id');
+        var dryer_select = $('.dryer_select' + dataid + ' option:selected').attr('data-id');
+        var ironing_select = $('.ironing_select' + dataid + ' option:selected').attr('data-id');
+        var cleaning_select = $('.cleaning_select' + dataid + ' option:selected').attr('data-id');
+        var made_in_select = $('.made_in_select' + dataid + ' option:selected').attr('data-id');
+
+        var care_insrtuction = localStorage.getItem('care_instruction_select'+dataid)
+
+        var care_instruction_select = JSON.parse(care_insrtuction);
+        var care_instruction_select_fin = care_instruction_select.join(',');
+
+        //template_front_id = template_id[0].id;
+        var tot_qty_tablewash = [];
+        var uvc_tco = [];
+        var size = [];
+        var barcode = [];
+        $('#' + index + ' tbody tr').each(function () {
+            if ($(this).find('.tot_qty_tablewcl').val() != undefined) {
+                tot_qty_tablewash.push($(this).find('.tot_qty_tablewcl').val())
+                uvc_tco.push($(this).find('.uvc_tco').text())
+                size.push($(this).find('.size').text())
+                barcode.push($(this).find('.barcode').text())
+            }
+
+        })
+        tot_qty_tablewash_fin = tot_qty_tablewash.join(',');
+        uvc_tco_fin = uvc_tco.join(',');
+        size_fin = size.join(',');
+        barcode_fin = barcode.join(',');
+        var buyer = localStorage.getItem("buyer");
+        
+        $.ajax({
+            url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_wash_label",
+            type: "Post",
+            data: {
+                
+                template_front_id: template_front_id,
+                id: id,
+                template_name: template_name,
+                washing_select: washing_select,
+                whitening_select: whitening_select,
+                ocn_number:ocn_number,
+                po_select: po_select,
+				//in:washonesizein,
+				//cm:washonesizecm,
+                dryer_select: dryer_select,
+                ironing_select: ironing_select,
+                card_flag: time_flag,
+                cleaning_select: cleaning_select,
+				parcel_id: $('#parcel_id').val(),
+				season_code: $('#season_code').val(),
+                made_in_select: made_in_select,
+                care_instruction_select: care_instruction_select_fin,
+                composition: wash_finals,
+                tot_qty_table: tot_qty_tablewash_fin,
+                uvc_tco: uvc_tco_fin,
+                barcode: barcode_fin,
+				color_code: $('#color_id'+dataid).val(),
+                merchandisers: merchandisers,
+                uvc: $('#uvc_id').val(),
+                size: size_fin,
+                _token: csrf_token
+            },
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            success: function (data) {
+				
+				$('#'+po_select+'_'+dataid).attr("data-exist",parseInt(data.trim()));
+				$('#exist_id'+dataid).val(parseInt(data.trim()))
+
+                $('.wcl_name_card_'+dataid).text(template_name)
+                $('#deletewcl_'+dataid).addClass("hidden")
+                $('#clone_washcare_label_card'+dataid).removeClass("hidden")
+
+                
+				
+				$('#print_wash_button_'+dataid).removeClass('hidden')
+				$('#cancel_wash_button_'+dataid).removeClass('hidden')
+				$('#save_wash_button_'+dataid).addClass('hidden')
+				$('#delete_id'+dataid).val(data)
+				$('.delete-wash'+dataid).addClass('hidden')
+				$('#clickme'+dataid).html('View & Edit <i class="fa fa-chevron-right" aria-hidden="true"></i>')
+				$('#wcl_name'+dataid).attr('disabled','disabled')
+				$('#ocn_number_wash'+dataid).attr('disabled','disabled')
+				$('.washing_select'+dataid).attr('disabled','disabled')
+				$('.washing_select'+dataid).css("background-color","#eee")
+				$('.whitening_select'+dataid).attr('disabled','disabled')
+				$('.dryer_select'+dataid).attr('disabled','disabled')
+				$('.ironing_select'+dataid).attr('disabled','disabled')
+				$('.cleaning_select'+dataid).attr('disabled','disabled')
+				$('.made_in_select'+dataid).attr('disabled','disabled')
+				$('.care_instruction_select'+dataid).attr('disabled','disabled')
+				$('.composition_select'+dataid).attr('disabled','disabled')
+				$('.composition_percent'+dataid).attr('disabled','disabled')
+				$('.add_to_list'+dataid).attr('disabled','disabled')
+				$('.add_to_page'+dataid).attr('disabled','disabled')
+				$('#composition_flag'+dataid).val('disabled')
+				
+				$("#wash_care_label_table_"+dataid+" :input").prop("disabled", true);
+				//alert(dataid)
+                
+
+                $("#washcarelabelform" + dataid + " .left-panel-heat").removeClass('active');
+                $("#washcarelabelform" + dataid + " .right-panel-heat").removeClass('active');
+                $("#washcarelabelform" + dataid + " .backdrop").removeClass('active');
+                $('#washcarelabelform' + dataid + ' .scalable').removeClass('active');
+                $('#washcarelabelform' + dataid + ' .right_wcl_status_'+dataid).text('Buyer Approval Pending')
+                $('#washcarelabelform' + dataid + ' .right_wcl_status_'+dataid).addClass('label label-BuyerApprovalPending')
+                $('.wcl_status_'+dataid+' span').text('Buyer Approval Pending')
+                $('.wcl_status_'+dataid+' span').addClass('label label-BuyerApprovalPending')
+
+                if(page_name == "os")
+                {
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html('Order updated Successfully');
+                    showSnackbar();
+                    location.reload()
+                }
+                
+            },
+            error: function (data) {
+
+            }
+        })
+        $('.composition_error_hidden').addClass('hidden')
+        $('#washcare_label_card'+dataid).css('display','inline-block') 
+		$('#washcare_label_card'+dataid).removeClass('hidden')
+		$('#clone_washcare_label_card'+dataid).removeClass('hidden')
+		$('.wash-card'+dataid+' span').text('Buyer Approval Pending')
+		$('.wash-card'+dataid+' span').addClass('label label-BuyerApprovalPending')
+		$('.wash-card'+dataid+' span').removeClass('label-OrderRejected')
+		$('#po-file-upload-button').css('display','block')
+    }
+    else
+    {
+        $('.composition_error_hidden').removeClass('hidden')
+    }
+    
+
 }
 
 function selectpicker() {
@@ -1294,7 +2811,7 @@ function printHangDivOs(front,back,uvc,po,user_type,tableID,tableName,art_type) 
                 var code = value.barcode;
                 
                 $.ajax({
-                    url: base_url + "/admin/order-management/get-tsl-size",
+                    url: base_url + "/"+user_type+"/order-management/get-tsl-size",
                     type: 'GET',
                     async: false,
                     data: {
@@ -1483,7 +3000,7 @@ function printHangDivOs(front,back,uvc,po,user_type,tableID,tableName,art_type) 
             
             if(i == ajax)
             {
-                PopupHangOs(svg_fin_front, svg_fin,svgDoc1,disney,node,uvc);
+                PopupHangOs(svg_fin_front, svg_fin,svgDoc1,disney,node,uvc,user_type);
             }
         },
         error: function(data) {
@@ -1496,55 +3013,55 @@ function printHangDivOs(front,back,uvc,po,user_type,tableID,tableName,art_type) 
 	
 }
 
-function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc) {
+function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc,user_type) {
     
-        var success = false;
-        var url = "";
-        
-        $.ajax({
-            url: base_url + "/admin/order-management/print-hang-pdf",
-            type: "post",
-            data: {
-                _token: csrf_token,
-                svg: svgRoot,
-                svgRoot: svgRoot1,
-                template_name : node,
-                uvc : uvc
-            },
-            async: false,
-            success: function (data) {
-                if(disney != "DI")
-                {
-                    svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 50.8835)');
-                }
-                else
-                {	var node = $("#tree1").jstree('get_selected', true)[0].text;
-                     if(node == "COD2")
-                     {
-                         svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 32.6793 139.8835)');
-                     }
-                     else if(node == "DBB1")
+    var success = false;
+    var url = "";
+    
+    $.ajax({
+        url: base_url + "/"+user_type+"/order-management/print-hang-pdf",
+        type: "post",
+        data: {
+            _token: csrf_token,
+            svg: svgRoot,
+            svgRoot: svgRoot1,
+            template_name : node,
+            uvc : uvc
+        },
+        async: false,
+        success: function (data) {
+            if(disney != "DI")
+            {
+                svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 50.8835)');
+            }
+            else
+            {	var node = $("#tree1").jstree('get_selected', true)[0].text;
+                    if(node == "COD2")
                     {
-                        svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 51.8835)');
+                        svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 32.6793 139.8835)');
                     }
-                     else
-                     {
-    
-                        svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 57.8835)');
-                     }
+                    else if(node == "DBB1")
+                {
+                    svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 51.8835)');
                 }
-                
-                success = true;
-                url = data;
-            },
-            error: function (data) {
-    
-            },
-        })
-        if (success) { //AND THIS CHANGED
-            window.open(url)
-        }
+                    else
+                    {
+
+                    svgDoc1.getElementById("barcode1").setAttribute('transform', 'matrix(1.0971 0 0 1 10.6793 57.8835)');
+                    }
+            }
+            
+            success = true;
+            url = data;
+        },
+        error: function (data) {
+
+        },
+    })
+    if (success) { //AND THIS CHANGED
+        window.open(url)
     }
+}
 
 
 /**
@@ -1553,7 +3070,7 @@ function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc) {
  * @return tree
  */
 
- function treestructurespecial(data, tree, template_id,orchestra_special_tag_orders) {
+ function treestructurespecial(data, tree, template_id,orchestra_special_tag_orders,user_type) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -1594,7 +3111,7 @@ function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc) {
 			var buyer = localStorage.getItem("buyer");
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1639,7 +3156,7 @@ function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc) {
 			var template_id = data.node.id;
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1676,7 +3193,7 @@ function PopupHangOs(svgRoot, svgRoot1,svgDoc1,disney,node,uvc) {
  * 
  * @return tree
  */
-function treestructureheat_transfer(data, tree, template_id,orchestra_heat_transfer_orders_data) {
+function treestructureheat_transfer(data, tree, template_id,orchestra_heat_transfer_orders_data,user_type) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -1717,7 +3234,7 @@ function treestructureheat_transfer(data, tree, template_id,orchestra_heat_trans
 			var buyer = localStorage.getItem("buyer");
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1764,7 +3281,7 @@ function treestructureheat_transfer(data, tree, template_id,orchestra_heat_trans
 			var template_id = data.node.id;
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1801,7 +3318,7 @@ function treestructureheat_transfer(data, tree, template_id,orchestra_heat_trans
  * 
  * @return tree
  */
-function treestructuremain_label(data, tree, template_id,orchestra_main_label_orders) {
+function treestructuremain_label(data, tree, template_id,orchestra_main_label_orders,user_type) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -1842,7 +3359,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
 			var buyer = localStorage.getItem("buyer");
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1857,7 +3374,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
 					$('.main_label_qty').attr('min',data.moq)
 					$('#main_labelform').validator('update')
 					if (data.treeviewData.length > 0) {
-						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:150px;object-fit:cover">')
+						$('#' + ids).find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file + '" style="width:150px;height:400px">')
 					} else {
 						$('#' + ids).find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
 					}
@@ -1889,7 +3406,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
 			var template_id = data.node.id;
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -1926,7 +3443,7 @@ function treestructuremain_label(data, tree, template_id,orchestra_main_label_or
  * 
  * @return tree
  */
-function treestructuresize_label(data, tree, template_id,orchestra_size_label_orders) {
+function treestructuresize_label(data, tree, template_id,orchestra_size_label_orders,user_type) {
 
 	$('#' + tree).jstree({
 		'core': {
@@ -1967,7 +3484,7 @@ function treestructuresize_label(data, tree, template_id,orchestra_size_label_or
 			var buyer = localStorage.getItem("buyer");
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -2014,7 +3531,7 @@ function treestructuresize_label(data, tree, template_id,orchestra_size_label_or
 			var template_id = data.node.id;
 			
 			$.ajax({
-				url: base_url + "/admin/" + buyer + "/template-management/template-view",
+				url: base_url + "/"+user_type+"/" + buyer + "/template-management/template-view",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -2045,4 +3562,1031 @@ function treestructuresize_label(data, tree, template_id,orchestra_size_label_or
 			})
 		}
 	});
+}
+
+function cancelWashDiv(dataid,user_type){
+	
+	var id 	  = $('#washcarelabelform'+dataid).find('#exist_id'+dataid).val();
+	
+	$.ajax({
+		url: base_url + "/"+user_type+"/orchestra/order-management/remove_wcl",
+		type: "Post",
+		data: {
+			id: id,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+
+            if(data.orchestra_wcl != null)
+            {
+                $('.merchandisers').selectpicker('val', '');
+                $('.merchandisers').removeAttr('disabled');
+            }
+
+			if(data.update_po_disable == 0)
+			{
+				$('#po-file-upload-button').css('display','none')
+			}
+			
+			$('#washcarelabelform' + dataid).remove()
+                
+            $('.wcl_status_' + dataid).parent().remove();
+			
+		},
+		error: function (data) {
+
+		}
+	})
+}
+
+function setHangTagStatus(colour,user_type,page_name) {
+
+	$('#save_hang_button').attr('disabled','disabled')
+
+    if ($('#hangtagform').find('#exist_id').val() != "") {
+        var exist_id = $('#hangtagform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+
+    var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
+    if (template_id != "") {
+        
+        localStorage.setItem("hang_tag", exist_id);
+        setHangTag(localStorage.getItem("hang_tag"),colour,user_type)
+        $('#hang_template_error').addClass('hidden')
+
+		
+
+		$("#hangtagform .left-panelorc-hang").removeClass('active');
+		$("#hangtagform .right-panel-hang").removeClass('active');
+		$("#hangtagform .backdrop").removeClass('active');
+		$('#hangtagform .scalable').removeClass('active');
+
+        if(page_name == "os")
+        {
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            location.reload()
+        }
+        else
+        {
+            $('.hang-card span').text('Order Approved')
+            $('.hang-card span').addClass('label label-OrderApproved label-status')
+            $('.right-panel-hang span').text('Order Approved')
+            $('.right-panel-hang span').addClass('label label-OrderApproved')
+        }
+
+    } else {
+        $('#hang_template_error').removeClass('hidden')
+    }
+}
+
+function setHangTag(id,colour,user_type) {
+	
+	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
+	var template_front_id = template_id[0].id;
+	var template_back_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_hang').val();
+	var theme_label = $('#theme_label').val();
+	var tot_qty_tablehang = [];
+	var uvc_tco = [];
+	var size = [];
+	var size_id = [];
+	var main_id = [];
+	var barcode = [];
+	$('#hangtagform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_tablehang').val() != undefined) {
+			tot_qty_tablehang.push($(this).find('.tot_qty_tablehang').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			barcode.push($(this).find('.barcode').text())
+			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
+		}
+
+	})
+	tot_qty_tablehang_fin = tot_qty_tablehang.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
+	barcode_fin = barcode.join(',');
+	var buyer = localStorage.getItem("buyer");
+	var uvc = $('#uvc_id').val();
+	var parcel_id = $('#parcel_id').val();
+	var season_code = $('#season_code').val();
+	
+	$.ajax({
+		url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_hang_tag",
+		type: "Post",
+		data: {
+			
+			template_front_id: template_front_id,
+			template_back_id: template_back_id,
+			tot_qty_table: tot_qty_tablehang_fin,
+			ocn_number:ocn_number,
+			id: id,
+			theme_label:theme_label,
+			colour: colour,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
+			uvc_tco: uvc_tco_fin,
+			barcode: barcode_fin,
+			uvc: uvc,
+			parcel_id: parcel_id,
+			season_code: season_code,
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+
+			var onclick = `printHangDivOs("svg_hang_front","svg2","`+uvc+`","","`+user_type+`","`+data.id+`","orchestra_hang_tag_orders","proof")`;
+			
+			$('#print_hang_button').attr('onclick',onclick)
+
+			$('#hangtagform').find('#exist_id').val(data.id)
+			$('#print_hang_button').removeClass('hidden')
+			$('#save_hang_button').addClass('hidden')
+			$('#tree1 >ul > li').each( function() {
+			   disable( 'tree1',this.id );        
+			})
+			$('.extra_percentagehang').attr('disabled','disabled')
+			$('.tot_qty_tablehang').attr('disabled','disabled')
+            $('#ocn_number_hang').attr('disabled','disabled')
+			$('#po-file-upload-button').css('display','block')
+
+		},
+		error: function (data) {
+
+		}
+	})
+		
+}
+
+/**
+ * This Function is used to set special tag in local storage.
+ * 
+ * @return void
+ */
+
+ function setSpecialTagStatus(colour,user_type,page_name) {
+
+    if ($('#specialtagform').find('#exist_id').val() != "") {
+        var exist_id = $('#specialtagform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
+    if (template_id != "") {
+        localStorage.setItem("special_tag", exist_id);
+        setSpecialTag(localStorage.getItem("special_tag"),colour,user_type)
+        $('#special_template_error').addClass('hidden')
+        $("#specialtagform .backdrop").removeClass('active');
+        $('#specialtagform .scalable').removeClass('active');
+
+        if(page_name == "os")
+        {
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            $("#specialtagform .left-panelos").removeClass('active');
+            $("#specialtagform .right-panelos").removeClass('active');
+            location.reload()
+        }
+        else
+        {
+            $("#specialtagform .left-panelorc").removeClass('active');
+            $("#specialtagform .right-panel").removeClass('active');
+        }
+    } else {
+        $('#special_template_error').removeClass('hidden')
+    }
+}
+
+/**
+ * This Function is used to set Heat Transfer in local storage.
+ * 
+ * @return void
+ */
+
+function setheat_transferStatus(colour,user_type,page_name) {
+
+    if ($('#heat_transferform').find('#exist_id').val() != "") {
+        var exist_id = $('#heat_transferform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+    var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
+    if (template_id != "") {
+        localStorage.setItem("heat_transfer", exist_id);
+        setHeatTransfer(localStorage.getItem("heat_transfer"),colour,user_type)
+        $('#heat_transfer_template_error').addClass('hidden')
+        $("#heat_transferform .backdrop").removeClass('active');
+        $('#heat_transferform .scalable').removeClass('active');
+        if(page_name == "os")
+        {
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            $("#heat_transferform .left-panelos").removeClass('active');
+            $("#heat_transferform .right-panelos").removeClass('active');
+            location.reload()
+        }
+        else
+        {
+            $("#heat_transferform .left-panel-heat").removeClass('active');
+            $("#heat_transferform .right-panel-heat").removeClass('active');
+        }
+    } else {
+        $('#heat_transfer_template_error').removeClass('hidden')
+    }
+}
+/**
+ * This Function is used to set Main Label in local storage.
+ * 
+ * @return void
+ */
+
+function setMainLabelStatus(colour,user_type,page_name) {
+
+    if ($('#main_labelform').find('#exist_id').val() != "") {
+        var exist_id = $('#main_labelform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+    var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
+    if (template_id != "") {
+        localStorage.setItem("main_label", exist_id);
+        setMainLabel(localStorage.getItem("main_label"),colour,user_type)
+        $('#main_label_template_error').addClass('hidden')
+        $("#main_labelform .backdrop").removeClass('active');
+        $('#main_labelform .scalable').removeClass('active');
+        if(page_name == "os")
+        {
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            $("#main_labelform .left-panelos").removeClass('active');
+            $("#main_labelform .right-panelos").removeClass('active');
+            location.reload()
+        }
+        else
+        {
+            $("#main_labelform .left-panelorc").removeClass('active');
+            $("#main_labelform .right-panel").removeClass('active');
+        }
+    } else {
+        $('#main_label_template_error').removeClass('hidden')
+    }
+}
+/**
+ * This Function is used to set Size Labels in local storage.
+ * 
+ * @return void
+ */
+
+function setSizeLabelStatus(colour,user_type,page_name) {
+
+    if ($('#size_labelform').find('#exist_id').val() != "") {
+        var exist_id = $('#size_labelform').find('#exist_id').val();
+    } else {
+        var exist_id = "null";
+    }
+    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
+    if (template_id != "") {
+        localStorage.setItem("size_label", exist_id);
+        setSizeLabel(localStorage.getItem("size_label"),colour,user_type)
+        $('#size_label_template_error').addClass('hidden')
+        $("#size_labelform .backdrop").removeClass('active');
+        $('#size_labelform .scalable').removeClass('active');
+        if(page_name == "os")
+        {
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order updated Successfully');
+            showSnackbar();
+            $("#size_labelform .left-panelos").removeClass('active');
+            $("#size_labelform .right-panelos").removeClass('active');
+            location.reload()
+        }
+        else
+        {
+            $("#size_labelform .left-panel-heat").removeClass('active');
+            $("#size_labelform .right-panel-heat").removeClass('active');
+        }
+    } else {
+        $('#size_label_template_error').removeClass('hidden')
+    }
+}
+
+/**
+ * This Function is used to set special tag in db.
+ * 
+ * @return void
+ */
+
+
+function setSpecialTag(id,colour,user_type) {
+	var myElements = $(".special_qty");
+    var special_qty = [];
+    for (var i=0;i<myElements.length;i++) {
+        special_qty.push(myElements.eq(i).val());
+    }
+    
+    var template_id = $('#specialtagform').find('#tree2').jstree('get_selected', true);
+    template_front_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_special').val();
+    var tot_qty_table = [];
+    var uvc_tco = [];
+    var size = [];
+    $('#specialtagform tbody tr').each(function () {
+        if ($(this).find('.tot_qty_table').val() != undefined) {
+            tot_qty_table.push($(this).find('.tot_qty_table').val())
+            uvc_tco.push($(this).find('.uvc_tco').text())
+            size.push($(this).find('.size').text())
+        }
+
+    })
+    tot_qty_table_fin = tot_qty_table.join(',');
+    uvc_tco_fin = uvc_tco.join(',');
+    size_fin = size.join(',');
+    var buyer = localStorage.getItem("buyer");
+    
+    $.ajax({
+        url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_special_tag",
+        type: "Post",
+        data: {
+            
+            template_front_id: template_front_id,
+            id: id,
+            tot_qty_table: special_qty,
+			ocn_number:ocn_number,
+            uvc_tco: uvc_tco_fin,
+			colour: colour,
+            uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
+            size: size_fin,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+			$('#specialtagform').find('#exist_id').val(data.id)
+			$('#save_special_button').addClass('hidden')
+			//$('#cancel_special_button').removeClass('hidden');
+			$('#tree2 >ul > li').each( function() {
+			   disable( 'tree2',this.id );        
+			})
+			$('.special_qty').attr('disabled','disabled')
+        },
+        error: function (data) {
+
+        }
+    })
+	$('.special-card span').text('Order Approved')
+	$('.special-card span').addClass('label label-OrderApproved label-status')
+	$('#po-file-upload-button').css('display','block')
+}
+/**
+ * This Function is used to set HeatTransfer in db.
+ * 
+ * @return void
+ */
+
+
+function setHeatTransfer(id,colour,user_type) {
+  
+    var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
+	console.log(template_id)
+	template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_heat').val();
+	
+	var tot_qty_tableheat = [];
+	var uvc_tco = [];
+	var size = [];
+	var size_id = [];
+	var main_id = [];
+	$('#heat_transferform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_tableheat').val() != undefined) {
+			tot_qty_tableheat.push($(this).find('.tot_qty_tableheat').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
+		}
+
+	})
+	tot_qty_tableheat_fin = tot_qty_tableheat.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
+	var buyer = localStorage.getItem("buyer");
+	
+	$.ajax({
+		url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_heat_transfer",
+		type: "Post",
+		data: {
+			
+			template_id: template_id,
+			tot_qty_table: tot_qty_tableheat_fin,
+			ocn_number:ocn_number,
+			id: id,
+			colour: colour,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			$('#heat_transferform').find('#exist_id').val(data.id)
+			$('#save_heat_transfer_button').addClass('hidden')
+			//$('#cancel_heat_button').removeClass('hidden');
+			$('#treeht >ul > li').each( function() {
+			   disable( 'treeht',this.id );        
+			})
+			$('.extra_percentageheat').attr('disabled','disabled')
+			$('.tot_qty_tableheat').attr('disabled','disabled')
+		},
+		error: function (data) {
+
+		}
+	})
+		$('.heat_transfer-card span').text('Order Approved')
+		$('.heat_transfer-card span').addClass('label label-OrderApproved label-status')
+		$('#po-file-upload-button').css('display','block')
+}
+/**
+ * This Function is used to set Main Label in db.
+ * 
+ * @return void
+ */
+
+
+function setMainLabel(id,colour,user_type) {
+  
+	var myElements = $(".main_label_qty");
+    var main_label_qty = [];
+    for (var i=0;i<myElements.length;i++) {
+        main_label_qty.push(myElements.eq(i).val());
+    }
+	
+    
+    var template_id = $('#main_labelform').find('#treeml').jstree('get_selected', true);
+    template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_main').val();
+    var tot_qty_table = [];
+    var uvc_tco = [];
+    var size = [];
+    $('#main_labelform tbody tr').each(function () {
+        if ($(this).find('.tot_qty_table').val() != undefined) {
+            tot_qty_table.push($(this).find('.tot_qty_table').val())
+            uvc_tco.push($(this).find('.uvc_tco').text())
+            size.push($(this).find('.size').text())
+        }
+
+    })
+    tot_qty_table_fin = tot_qty_table.join(',');
+    uvc_tco_fin = uvc_tco.join(',');
+    size_fin = size.join(',');
+    var buyer = localStorage.getItem("buyer");
+    
+    $.ajax({
+        url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_main_label",
+        type: "Post",
+        data: {
+            
+            template_id: template_id,
+            id: id,
+            tot_qty_table: main_label_qty,
+			ocn_number:ocn_number,
+            uvc_tco: uvc_tco_fin,
+            colour: colour,
+            uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
+            size: size_fin,
+            _token: csrf_token
+        },
+        beforeSend: function () {
+            $(".loader").show();
+        },
+        success: function (data) {
+			$('#main_labelform').find('#exist_id').val(data.id)
+			$('#save_main_label_button').addClass('hidden')
+			//$('#cancel_main_button').removeClass('hidden');
+			$('.snackbar_span').html('This is only for to place main label. Size label you want to place seperately');
+			showSnackbar();
+			$('#treeml >ul > li').each( function() {
+			   disable( 'treeml',this.id );        
+			})
+			$('.main_label_qty').attr('disabled','disabled')
+        },
+        error: function (data) {
+
+        }
+    })
+	$('.main_label-card span').text('Order Approved')
+	$('.main_label-card span').addClass('label label-OrderApproved label-status')
+	$('#po-file-upload-button').css('display','block')
+}
+/**
+ * This Function is used to set Size Label in db.
+ * 
+ * @return void
+ */
+
+
+function setSizeLabel(id,colour,user_type) {
+  
+    var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
+	console.log(template_id)
+	template_id = template_id[0].id;
+	var ocn_number = $('#ocn_number_size').val();
+	
+	var tot_qty_tablesize = [];
+	var uvc_tco = [];
+	var size = [];
+	var size_id = [];
+	var main_id = [];
+	$('#size_labelform tbody tr').each(function () {
+		if ($(this).find('.tot_qty_tablesize').val() != undefined) {
+			tot_qty_tablesize.push($(this).find('.tot_qty_tablesize').val())
+			uvc_tco.push($(this).find('.uvc_tco').text())
+			size.push($(this).find('.size').text())
+			size_id.push($(this).find('.size_id').val())
+			main_id.push($(this).find('.main_id').val())
+		}
+
+	})
+	tot_qty_tablesize_fin = tot_qty_tablesize.join(',');
+	uvc_tco_fin = uvc_tco.join(',');
+	size_fin = size.join(',');
+	size_id_fin = size_id.join(',');
+	main_id_fin = main_id.join(',');
+	var buyer = localStorage.getItem("buyer");
+	
+	$.ajax({
+		url: base_url + "/"+user_type+"/" + buyer + "/order-management/set_size_label",
+		type: "Post",
+		data: {
+			
+			template_id: template_id,
+			tot_qty_table: tot_qty_tablesize_fin,
+			ocn_number:ocn_number,
+			id: id,
+			colour: colour,
+			size_id: size_id_fin,
+			main_id: main_id_fin,
+			uvc_tco: uvc_tco_fin,
+			uvc: $('#uvc_id').val(),
+			parcel_id: $('#parcel_id').val(),
+			season_code: $('#season_code').val(),
+			size: size_fin,
+			_token: csrf_token
+		},
+		beforeSend: function () {
+			$(".loader").show();
+		},
+		success: function (data) {
+			$('#size_labelform').find('#exist_id').val(data.id)
+			$('#save_size_label_button').addClass('hidden')
+			//$('#cancel_size_button').removeClass('hidden');
+			$('#treesl >ul > li').each( function() {
+			   disable( 'treesl',this.id );        
+			})
+			$('.extra_percentagesize').attr('disabled','disabled')
+			$('.tot_qty_tablesize').attr('disabled','disabled')
+		},
+		error: function (data) {
+
+		}
+	})
+		$('.size_label-card span').text('Order Approved')
+		$('.size_label-card span').addClass('label label-OrderApproved label-status')
+		$('#po-file-upload-button').css('display','block')
+}
+
+/**
+ * method to check the input value is a number or not
+ * @param  input data
+ * @return {Boolean}
+ */
+ function isNumber(evt) {
+	try {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
+
+/**
+ * method to show the PO file upload window
+ * @param  {[type]} id         [description]
+ * @param  {[type]} table_name [description]
+ * @param  {[type]} uvc        [description]
+ * @param  {[type]} qntytable  [description]
+ * @return {[type]}            [description]
+ */
+function showPOUpload(id,table_name,uvc,qntytable)
+{
+    if (po_file!= "null")
+    {
+        $('#po_upload').addClass('hidden')
+        $('.upload-po').addClass('hidden')
+        $('#po_file').removeClass('hidden')
+    }
+    else
+    {
+        $('#po_upload').removeClass('hidden')
+        $('.upload-po').removeClass('hidden')
+        $('#po_file').addClass('hidden')
+    }
+    var po_link = base_url+po_file
+    $('#po_link').attr("href",po_link);
+    $('#rowID').val(id);
+    $('#tableName').val(tableName);
+    $('#po-file-upload').modal('show')
+}
+
+/** [showSnackbar function] */
+function showSnackbar() {
+	try {
+		// Get the snackbar DIV
+		var x = document.getElementById("snackbar")
+
+		// Add the "show" class to DIV
+		x.className = "show";
+
+		// After 3 seconds, remove the show class from DIV
+		setTimeout(function () {
+			x.className = x.className.replace("show", "");
+		}, 3000);
+	} catch (e) {
+		console.log("Error:" + e)
+	}
+}
+
+
+/**
+ * This Function is used to restrict alpha numeric and special characters.
+ * 
+ * @return boolean
+ */
+function checkNumbersOnly(e) {
+
+	if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+		return false;
+	}
+}
+
+function disable(id,node_id) {
+  var node = $("#"+id).jstree().get_node( node_id );
+  $("#"+id).jstree().disable_node(node); 
+  node.children.forEach( function(child_id) {            
+    disable( id,child_id );
+  })
+} 
+
+function enable(id,node_id) {
+  var node = $("#"+id).jstree().get_node( node_id );
+  $("#"+id).jstree().enable_node(node); 
+  node.children.forEach( function(child_id) {            
+    enable( id,child_id );
+  })
+} 
+
+/**
+ * This Function is used to invoke select picker.
+ * 
+ * @return select
+ */
+
+function selectpicker() {
+	$('.selectpicker').selectpicker({
+		style: 'btn-default',
+		size: 4
+	});
+
+}
+
+/**
+ * This Function is used to invoke JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+		format: "ean13",
+		width: 5.99,
+		height: 343,
+		fontSize: 60
+	});
+	var svg = document.getElementById('svgdiv').querySelector('svg'),
+		canvas = document.createElement('canvas'),
+		body = document.getElementsByTagName('body')[0],
+		canvasTmp,
+		svg_xml,
+		ctx,
+		img;
+	// if our "svg" doesn't have 'xmlns' attribute we must add it
+	//    svg.setAttribute('width', '188.931023622px');
+	svg.setAttribute('font-size', '70px');
+	svg.setAttribute('font-family', 'calibrib');
+
+	canvas.id = 'canvas';
+	canvas.width = svg.getBoundingClientRect().width;
+	canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	svgDoc.getElementById(id).innerHTML = svg_xml;
+}
+
+/**
+ * This Function is used to invoke Hang Tag JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode_hang_disney(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 286,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '88px');
+    svg.setAttribute('height', '80px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
+}
+/**
+ * This Function is used to invoke Hang Tag JSBarcode.
+ * 
+ * @return barcode
+ */
+
+function jsbarcode_hang(code, id, svgDoc) {
+	JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 320,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '70px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '80px');
+    svg.setAttribute('height', '100px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+	body.appendChild(canvas);
+	canvasTmp = document.getElementById('canvas');
+
+	/* Time to play ;) */
+
+	// https://developer.mozilla.org/en/XMLSerializer
+	svg_xml = (new XMLSerializer()).serializeToString(svg);
+	ctx = canvasTmp.getContext('2d');
+
+	// JavaScript (HTML) image
+	img = new Image();
+
+	img.onload = function () {
+		ctx.drawImage(img, 0, 0);
+	};
+
+	// https://developer.mozilla.org/en/DOM/window.btoa
+	img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+	// img.src - contains base64 URI from svg
+
+	//remove temporary canvas
+	canvasTmp.remove();
+	
+	//console.log(svg_xml)
+	
+	var allGs = document.getElementsByTagName('g');
+	var firstG = allGs[0];
+	var firstChild = firstG.childNodes[0];
+	
+	firstChild.setAttribute("x","20")
+	
+	var xchil = document.getElementById('svgdiv')
+
+	svgDoc.getElementById(id).innerHTML = xchil.innerHTML;
+}
+
+function artwork_modal(uvc,po)
+{
+	alert(uvc)
+	alert(po)
+}
+
+function wordWrap(str, maxWidth) {
+    var newLineStr = ""; done = false; res = '';
+    do {                    
+        found = false;
+        // Inserts new line at first whitespace of the line
+        for (i = maxWidth - 1; i >= 0; i--) {
+            if (testWhite(str.charAt(i))) {
+				
+				var arabic = /[\u0600-\u06FF]/;
+//				var split_text = [str.slice(0, i), newLineStr].join('').split(' - ')
+//				$(split_text).each(function(index,value){
+//					if(arabic.test(value) == true)
+//					{
+//						"<tspan>"+value+"</tspan>"
+//					}
+//				})
+				
+				if(arabic.test([str.slice(0, i), newLineStr].join('')) == true)
+				{
+					var join_text="";
+					var split_text = [str.slice(0, i), newLineStr].join('').split(' - ')
+					$(split_text).each(function(index,value){
+						if(arabic.test(value) == true)
+						{
+							join_text += "<tspan style='font-family:Dejavu Sans' text-anchor='start'> - "+value+"</tspan>";
+						}
+						else
+						{
+							join_text += "<tspan text-anchor='end'  x='0' dy='7'> - "+value+"</tspan>";
+						}
+					})
+					res = res + join_text;
+				}
+				else
+				{
+					res = res + "<tspan  x='0' dy='7'>" +[str.slice(0, i), newLineStr].join('') + "</tspan>";
+				}
+				
+                
+                str = str.slice(i + 1);
+                found = true;
+                break;
+            }
+        }
+        // Inserts new line at maxWidth position, the word is too long to wrap
+        if (!found) {
+            res +="<tspan>" + [str.slice(0, maxWidth), newLineStr].join('')+ "</tspan>";
+            str = str.slice(maxWidth);
+        }
+
+        if (str.length < maxWidth)
+            done = true;
+    } while (!done);
+	
+	if(arabic.test(str) == true)
+	{
+		var join_text="";
+		var split_text = str.split(' - ')
+		$(split_text).each(function(index,value){
+			if(arabic.test(value) == true)
+			{
+				join_text += "<tspan dy='7' x='0' text-anchor='end' style='font-family:Dejavu Sans'> - "+value+" </tspan>";
+			}
+			else
+			{
+				join_text += "<tspan text-anchor='start'  x='0'> "+value+"</tspan>";
+			}
+		})
+		return res + join_text;
+	}
+	else
+	{
+		return res + "<tspan  x='0' dy='7'>" + str + "</tspan>";
+	}
+
+}
+
+function testWhite(x) {
+    var white = new RegExp(/^\s$/);
+    return white.test(x.charAt(0));
+}
+/**
+ * [MOQ validation function]
+ * @author <praveen>
+ */
+function checkMOQ(obj) {
+	try {
+		//alert()
+			var moq =$(obj).attr("min"); 
+			$(obj).data("min-error","Qty should be >= "+moq); 
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
+}
+function checkorcMOQ(obj) {
+	try {
+			var moq =$(obj).attr("min"); 
+			$(obj).data("min-error","Qty should be >= "+moq); 
+	} catch (e) {
+		/** [error statements] */
+		console.error("Error:" + e)
+	}
 }

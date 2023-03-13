@@ -356,14 +356,14 @@ transform: scale(1);
 
 {{-- Order Details modal --}}
 <div class="modal fade bd-example-modal-lg" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog modal-lg buyer-selection-modal-dialog" role="document">
-		<div class="modal-content buyer-selection-modal-content" style="color: #333;">
+	<div class="modal-dialog modal-lg erp-selection-modal-dialog" role="document">
+		<div class="modal-content erp-selection-modal-content" style="color: #333;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Order Details</h4>
 			</div>
 
-			<div class="modal-body buyer-selection-modal-body scroll">
+			<div class="modal-body erp-selection-modal-body scroll">
 				<label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
 				<label class="label label-danger label-required-error hidden">Please check the checkbox</label>
 				<input type="hidden" id="erp_order_id">
@@ -451,7 +451,7 @@ transform: scale(1);
 
 			</div>
 
-			<div class="modal-footer buyer-selection-modal-footer">
+			<div class="modal-footer erp-selection-modal-footer">
 				
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()" type="button" id="submit_button">Submit</button>

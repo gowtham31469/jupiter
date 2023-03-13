@@ -805,6 +805,23 @@
             $('.po').attr("disabled", "disabled");
         })
         $(document).ready(function() {
+
+            var arr = []; // Array to hold the keys
+            // Iterate over localStorage and insert the keys that meet the condition into arr
+            for (var i = 0; i < localStorage.length; i++) {
+                if (localStorage.key(i).substring(0, 22) == 'wash_composition_final') {
+                    arr.push(localStorage.key(i));
+                }
+                else if (localStorage.key(i).substring(0, 23) == 'care_instruction_select') {
+                    arr.push(localStorage.key(i));
+                }
+            }
+
+            // Iterate over arr and remove the items by key
+            for (var i = 0; i < arr.length; i++) {
+                localStorage.removeItem(arr[i]);
+            }
+            
             /* Show logo on left side */
             $('.logo').html('Orders');
 

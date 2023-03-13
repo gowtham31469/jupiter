@@ -1,10 +1,9 @@
-@import url('https://fonts.cdnfonts.com/css/product-sans');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 html {}
 
 body {
-    font-family: 'Product Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 12px !important;
     background-color: #ffffff;
 }
@@ -1043,7 +1042,7 @@ span.filter-option img {
     /* Padding */
     position: fixed;
     /* Sit on top of the screen */
-    z-index: 1;
+    z-index: 15;
     /* Add a z-index if needed */
     left: 50%;
     /* Center the snackbar */
@@ -1141,6 +1140,7 @@ span.sticker-details {
     background: #2ecc71;
 }
 
+
 .label-CreateOrder {
     background: #e52222;
 }
@@ -1153,10 +1153,17 @@ span.sticker-details {
     background: #3498db;
 }
 
+.label-Cloned {
+    background: #444444;
+}
+
 .label-OrderApproved {
     background: #09a308;
 }
-
+.new-label-OrderApproved {
+    color: #09a308;
+    padding: 0;
+}
 .label-OrderCancelled {
     background: rgb(244, 67, 54);
 }
@@ -1291,7 +1298,7 @@ span.sticker-details {
 .qty-table-modal input::-webkit-input-placeholder {
     font-size: 9px;
     line-height: 3;
-    font-weight: 100;
+    font-weight: 400;
 }
 
 .add_to_list {
@@ -1594,6 +1601,40 @@ span.batch-additional {
     overflow-y: auto;
 }
 
+.erp-selection-modal-dialog {
+    
+    width: 100%;
+    height: calc(100% - 20px);
+    padding: 0;
+    margin: 0;
+    overflow-y: initial !important;
+
+}
+
+.erp-selection-modal-content {
+
+    border-radius: 0;
+    color: white;
+    margin: 15px 15px 15px 15px;
+
+}
+
+.erp-selection-modal-body {
+
+    max-height: calc(100vh - 157px);
+    overflow-y: auto;
+
+}
+
+.erp-selection-modal-footer {
+
+    border-radius: 0;
+    background: #ffff;
+    position: absolute;
+    width: 100%;
+
+}
+
 /* 2, 3, 4, 6, 8, or 16 */
 
 .elevation-2dp {
@@ -1833,44 +1874,67 @@ background-color: grey;
 /* akshay bhat css - 2023 */
 .artwork-wrapper, .wcl_orders_card {
     display: inline-block;
-    margin-right: 30px;
+    margin-right: 10px;
     margin-bottom: 30px;
 }
-.artwork-wrapper h3 {
+.artwork-wrapper .artwork-card  h3 {
     font-weight: bold;
     font-size: 14px;
     color: #4e4e4e;
-    margin-top: 6px;
-    margin-left: 10px;
+    margin:0;
     margin-bottom: 0px;
+    margin-top: 6px;
 }
 
-.artwork-wrapper p {
+.artwork-wrapper .artwork-card p {
     font-weight: 400;
     font-size: 12px;
     color: #4e4e4e;
-    margin-left: 10px;
+    margin:0px;
 }
 
 .artwork-wrapper .artwork-card {
-    height: 150px;
-    width: 150px;
+    height: 220px;
+    width: 220px;
     border: 1px solid #d5d5d5;
     background: #fff;
-    border-radius: 15px;
-    padding: 16px;
-    align-items: center;
-    display: flex;
+    border-radius: 4px;
     position: relative;
 }
+.artwork-wrapper .artwork-card:hover {
+    box-shadow: 0px 3px 3px 0px #0000001a;
+}
 
+.artwork-wrapper .artwork-card .main-data{
+  padding: 10px;
+  border-bottom: 1px solid #d5d5d5;
+  height:185px;
+}
 .artwork-wrapper .artwork-card img {
     max-height: 100%;
     max-width: 100%;
+    height: 100px;
+    margin-top: 10px;
 }
-.artwork-wrapper .artwork-card span.label {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+.artwork-wrapper .artwork-card span.custom-card-label {
+  color: red;
+  padding: 0px;
+  text-align: left;
+
+}
+.artwork-card .actions ul{
+    padding-inline-start: 0px;
+}
+.artwork-card .actions ul li {
+    display: inline-block;
+    padding: 8px 13px;
+    border-right: 1px solid #d5d5d5;
+    color: #999999;
+}
+
+.artwork-card .actions ul li:hover {
+    background: #263238;
+    color: #fff;
 }
 .top-content-new-div {
     background: #f7f7f7;
@@ -1894,23 +1958,4 @@ h4.section-title:before {
     border-radius: 10px;
     background: #00b6ff;
     left: -10px;
-}
-.wcl-card {
-    height: 150px;
-    width: 150px;
-    border: 1px dashed #d5d5d5;
-    background: #fff;
-    border-radius: 15px;
-    padding: 26px;
-    text-align: center;
-    cursor: pointer;
-}
-
-.wcl-card:hover {
-    background: rgb(0 182 255 / 10%);
-}
-
-.wcl-card p{
-    margin: 0 !important;
-    font-weight: bold;
 }

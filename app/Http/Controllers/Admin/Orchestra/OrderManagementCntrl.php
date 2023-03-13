@@ -241,7 +241,36 @@ class OrderManagementCntrl extends Controller
 
             $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('season_code',$season_code)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
 
-            $data['color_exists'] = DB::table('orchestra_wash_care_label_orders')->select('orchestra_wash_care_label_orders.color_code as Color_Code')->where('orchestra_wash_care_label_orders.uvc',$uvc)->where('season_code',$season_code)->where('status','!=','Order Cancelled')->groupBy('orchestra_wash_care_label_orders.color_code') ->orderBy('orchestra_wash_care_label_orders.color_code','asc')->get();
+
+            if($data['order_details']{0}->Licence_Code === 'DI')
+            {
+                if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
+                {
+                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('parent_id','3')->where('id','!=','8')->where('id','!=','202')->where('id','!=','203')->where('id','!=','9')->where('id','!=','4')->orderBy('item_name', 'asc')->get();
+                    $data['treeviewwash_label'] = $treeviewwash_label;
+                }
+                else
+                {
+                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->where('parent_id','3')->where('id','!=','202')->where('tag_name','wcl_pmm')->orderBy('item_name', 'asc')->get();
+                    $data['treeviewwash_label'] = $treeviewwash_label;
+                }
+                
+            }
+            else
+            {
+                if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
+                {
+                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','4')->get();
+
+                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                }
+                else
+                {
+                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','202')->get();
+
+                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                }
+            }
 
             foreach($data['orchestra_wash_care_label_orders'] as $value1)
             {
@@ -257,6 +286,16 @@ class OrderManagementCntrl extends Controller
                 }
                 $value1->care_instruction=$care_instructions;
             }
+
+            $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_composition'] = DB::table('orchestra_compositions')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_countries'] = DB::table('orchestra_countries')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->where('is_enabled',1)->select('*')->get(); 
+            
+            $data['orchestra_parts'] = DB::table('orchestra_parts')->where('is_enabled',1)->select('*')->get();
             
             $factory = $data['order_details']{0}->FactoryCode;
             $data['customers']=DB::table('customers')->join('customer_buyers','customer_buyers.customer_id','=','customers.id')->where('customers.factory_code',$factory)->where('customer_buyers.buyer_id',1)->select('*')->get();
@@ -2637,16 +2676,11 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-			$po_wcl = WashLabelOrders::where('uvc',$uvc)->where('season_code',$season_code)->where('po',$po_select)->where('status','!=','Order Cancelled')->select('*')->get();
-
-			
-			if(count($po_wcl) > 0)
-			{
 				WashLabelOrders::where('id',$id)
                    ->update([
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
-                        //'merchandisers_id'      => $merchandisers,
+                        'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
                         'ocn_number'      => $ocn_number,
                         'washing_id'      => $washing_select,
@@ -2655,7 +2689,7 @@ class OrderManagementCntrl extends Controller
                         'ironing_id'      => $ironing_select,
                         'cleaning_id'      => $cleaning_select,
                         'made_in_id'      => $made_in_select,
-					    'color_code'      => $color_code,
+					    //'color_code'      => $color_code,
 					    'card_flag'      => $card_flag,
                         'po'    => $po_select,
                         'care_instruction_id'      => $care_instruction_select,
@@ -2663,9 +2697,9 @@ class OrderManagementCntrl extends Controller
                         'svg_path'    => "", 
                         'status'    => "Buyer Approval Pending",
 						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+						//'season_code'    => $season_code,
+					    //'pi_status'           => $pi_status,
+					   	//'po_status'           => $po_status,
                   ]);
                 $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                             ->delete();
@@ -2718,81 +2752,7 @@ class OrderManagementCntrl extends Controller
 
             ]);
 			return $id;
-			}
-			else
-			{
-				$inserted = WashLabelOrders::create([
-                                'uvc' => $uvc,
-                                'template_id'      => $template_front_id,
-                                'merchandisers_id'      => $merchandisers,
-                                'template_name'      => $template_name,
-                                'ocn_number'      => $ocn_number,
-                                'washing_id'      => $washing_select,
-                                'whitening_id'      => $whitening_select,
-                                'dryer_id'      => $dryer_select,
-                                'ironing_id'      => $ironing_select,
-                                'cleaning_id'      => $cleaning_select,
-                                'made_in_id'      => $made_in_select,
-				   				'color_code'      => $color_code,
-								'card_flag'      => $card_flag,
-				   				'po'      => $po_select,
-                                'care_instruction_id'      => $care_instruction_select,
-                        		'customer_id'    => $factory{0}->id,
-                                'svg_path'    => "", 
-                                'status'    => "Buyer Approval Pending",
-								'orchestra_parcel_details_id'    => $parcel_id,
-								'season_code'    => $season_code,
-				   				'pi_status'           => $pi_status,
-				   				'po_status'           => $po_status,
-                     ]);
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     WashLabelOrdersQty::create([
-                                        'owcl_id' => $inserted->id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'barcode'      => $barcode[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
-         $k=1;
-         $composition = json_decode($request->composition);
-            foreach($composition as $key => $value)
-            {
-                foreach($value as $key1 => $value1)
-                {
-                    $exp_val = explode('_',$value1);
-                    if($exp_val[0] == "Select Option")
-                    {
-                        $parts_id=0;
-                    }
-                    else
-                    {
-                        $parts_id=$exp_val[0];
-                    }
-                    $orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
-                    $composition_id=$orchestra_compositions{0}->id;
-                    $percent=$exp_val[2];
-                    WashCareComposition::create([
-                                        'owcl_id' => $inserted->id,
-                                        'parts_id'      => $parts_id,
-                                        'composition_id'      => $composition_id,
-                                        'percentage'    => $percent,
-                                        'page_id'    => $k,
-                             ]);
-                }
-                $k++;
-            }
-			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
-
-            ]);
-			return  $inserted->id;
-			}
-              
+			  
         }
         else
         {
