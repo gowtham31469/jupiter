@@ -246,12 +246,12 @@ class OrderManagementCntrl extends Controller
             {
                 if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
                 {
-                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('parent_id','3')->where('id','!=','8')->where('id','!=','202')->where('id','!=','203')->where('id','!=','9')->where('id','!=','4')->orderBy('item_name', 'asc')->get();
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->orWhere('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','8')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.id','!=','203')->where('orchestra_item_master.id','!=','9')->where('orchestra_item_master.id','!=','4')->orderBy('orchestra_item_master.item_name', 'asc')->get();
                     $data['treeviewwash_label'] = $treeviewwash_label;
                 }
                 else
                 {
-                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->where('parent_id','3')->where('id','!=','202')->where('tag_name','wcl_pmm')->orderBy('item_name', 'asc')->get();
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->where('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.tag_name','wcl_pmm')->orderBy('orchestra_item_master.item_name', 'asc')->get();
                     $data['treeviewwash_label'] = $treeviewwash_label;
                 }
                 
@@ -260,15 +260,15 @@ class OrderManagementCntrl extends Controller
             {
                 if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
                 {
-                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','4')->get();
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','4')->get();
 
-                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
                 }
                 else
                 {
-                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','202')->get();
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','202')->get();
 
-                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
                 }
             }
 

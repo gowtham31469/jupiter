@@ -1,4 +1,4 @@
-function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,activity_label,art_type,buyer_type,jc_type,isEdit)
+function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,tableName,print_type,page_name,index_wcl_count)
 {
     var a1 = document.getElementById(front);
 	var svgDoc1 = a1.contentDocument;
@@ -9,17 +9,22 @@ function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,act
     var svgRoot1_back = svgDoc1_back.documentElement;
 
 
-    if(buyer_type == "admin")
+    if(user_type == "admin")
     {
         var buyer_url = base_url + "/admin/orchestra/get-order-details";
     }
-    else if(buyer_type == "customer")
+    else if(user_type == "customer")
     {
         var buyer_url = base_url + "/customer/orchestra/get-order-details";
     }
-    else if(buyer_type == "erp")
+    else if(user_type == "erp")
     {
         var buyer_url = base_url + "/erp/job-manager/get-order-details";
+    }
+
+    if(page_name == "co")
+    {
+        tableID = $('#exist_id'+index_wcl_count).val()
     }
 
 	var svgarr = [];
@@ -45,6 +50,7 @@ function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,act
 
             var product_family = data.product_family;
             var orchestra_wash_care_label_orders = data.orchestra_wash_care_label_orders;
+            var activity_label = data.orchestra_wash_care_label_orders[0].activity_label;
 
             $(data.orchestra_wash_care_label_orders).each(function(index,value){
 
@@ -187,7 +193,7 @@ function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,act
             
             if(i == ajax)
             {
-                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,user_type,svg_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals,product_family[0].image);
+                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,user_type,svg_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals,product_family[0].image,activity_label);
             }
         },
         error: function(data) {
@@ -200,7 +206,7 @@ function printWashDivOs(front,back,middle,uvc,po,user_type,tableID,tableName,act
 }
 
 
-function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select,pro_family_image) {
+function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select,pro_family_image,activity_label) {
 	
     
     var s = new XMLSerializer();
@@ -236,7 +242,8 @@ function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back
             dryer_select:dryer_select,
             ironing_select:ironing_select,
             cleaning_select:cleaning_select,
-            pro_family_image:pro_family_image     
+            pro_family_image:pro_family_image,
+            activity_label:activity_label
         },
         async: false,
         success: function (data) {
@@ -250,4 +257,66 @@ function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back
     if (success) { //AND THIS CHANGED
         window.open(url)
     }
+}
+
+function jsbarcodewash(code, id, svgDoc) {
+    JsBarcode("#ean-13", code, {
+        format: "ean13",
+        width: 5.99,
+        height: 290,
+		lineColor: "cmyk(0%, 0%, 0%, 100%)",
+        fontSize: 55
+    });
+    var svg = document.getElementById('svgdiv').querySelector('svg'),
+        canvas = document.createElement('canvas'),
+        body = document.getElementsByTagName('body')[0],
+        canvasTmp,
+        svg_xml,
+        ctx,
+        img;
+    // if our "svg" doesn't have 'xmlns' attribute we must add it
+    //    svg.setAttribute('width', '188.931023622px');
+    svg.setAttribute('font-size', '50px');
+    svg.setAttribute('font-family', 'ocr-b-10bt');
+    svg.setAttribute('width', '92.2px');
+    svg.setAttribute('height', '133.5px');
+    canvas.id = 'canvas';
+    canvas.width = svg.getBoundingClientRect().width;
+    canvas.height = svg.getBoundingClientRect().height;
+
+    body.appendChild(canvas);
+    canvasTmp = document.getElementById('canvas');
+
+    svg.getElementsByTagName('text')[2].setAttribute('letter-spacing', '5px')
+    svg.getElementsByTagName('text')[4].setAttribute('letter-spacing', '5px')
+    svg.getElementsByTagName('text')[0].setAttribute('x', '20')
+    svg.getElementsByTagName('text')[0].setAttribute('y', '350')
+    svg.getElementsByTagName('text')[2].setAttribute('y', '350')
+    svg.getElementsByTagName('text')[4].setAttribute('y', '350')
+
+    console.log(svg)
+
+
+    /* Time to play ;) */
+
+    // https://developer.mozilla.org/en/XMLSerializer
+    svg_xml = (new XMLSerializer()).serializeToString(svg);
+    ctx = canvasTmp.getContext('2d');
+
+    // JavaScript (HTML) image
+    img = new Image();
+
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+    };
+
+    // https://developer.mozilla.org/en/DOM/window.btoa
+    img.src = 'data:image/svg+xml;base64,' + btoa(svg_xml);
+
+    // img.src - contains base64 URI from svg
+
+    //remove temporary canvas
+    canvasTmp.remove();
+
+    svgDoc.getElementById(id).innerHTML = svg_xml;
 }

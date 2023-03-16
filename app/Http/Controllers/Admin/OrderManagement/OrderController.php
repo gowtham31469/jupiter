@@ -1773,7 +1773,7 @@ class OrderController extends Controller
 			{
 				
 				$express_value = explode('_',$value[0]);
-				if($express_value[0] != "Select Option")
+				if($express_value[0] != "Select Option" && $express_value[0] != 0)
 				{
 						$exp_value = explode('_',$value[0]);
 						$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
@@ -1819,7 +1819,7 @@ class OrderController extends Controller
 
 				
 				PDF::writeHTMLCell('26', '40', $xx, '176', $tbl1, '', 0, 0, true, 'C', true);
-				PDF::writeHTMLCell('22', '40', $xx + 29.5, '58', $tbl2, '', 0, 0, true, 'C', true);
+				PDF::writeHTMLCell('22', '40', $xx + 29.5, '60', $tbl2, '', 0, 0, true, 'C', true);
 				PDF::SetFillColor(255, 255, 255);
 				PDF::SetTextColor(0, 0, 0);
 				$xx += 65;

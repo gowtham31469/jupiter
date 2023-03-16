@@ -260,12 +260,12 @@ function OrderDetailsCardView(uvc, data,user_type)
 
         localStorage.setItem('care_instruction_select'+wash_care_count, JSON.stringify(value1.care_instruction));
 
-        washcarelabelmodal(value1, wash_care_count,value1.color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type)
+        washcarelabelmodal(value1, wash_care_count,value1.color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type,data.buyer_po)
 
 
         $('#clone_washcare_label_card'+wash_care_count).on('click', function (e) {
 
-                clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type);
+                clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type,data.buyer_po);
          
 
         });
@@ -279,8 +279,6 @@ function OrderDetailsCardView(uvc, data,user_type)
         if( $('.merchandisers option:selected').val() != "")
         {
             var wcl_count = wash_care_count -1; 
-            console.log("WCL COUNT : " + wcl_count)
-            console.log($('.wcl_status_'+wcl_count+' span').text())
             if($('.wcl_status_'+wcl_count+' span').text() == "New Order" || $('.wcl_status_'+wcl_count+' span').text() == "Clone Order")
             {
                 $('.snackbar_span').html('Please place the order you have created before creating another order.');
@@ -322,12 +320,12 @@ function OrderDetailsCardView(uvc, data,user_type)
 
                 $('#clone_washcare_label_card'+wash_care_count).on('click', function (e) {
 
-                    clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type);
+                    clonewashcarelabels(wash_care_count, $(this).data('color'), user_type, data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,$(this).data('id'),data.treeviewwash_label,user_type,data.buyer_po);
              
     
                 });
     
-                washcarelabelmodal("",wash_care_count,color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type)
+                washcarelabelmodal("",wash_care_count,color_code,data.order_details[0].Activity_Label,data.order_details,data.orchestra_care_symbols,data.orchestra_composition,data.orchestra_countries,data.orchestra_care_instruction,data.orchestra_parts,data.treeviewwash_label,user_type,data.buyer_po)
     
                 wash_care_count++;
     
@@ -802,7 +800,7 @@ function hangtagmodal(data,uvc,user_type) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 85px;" type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 95px;" type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
 		ttots_sum += parseInt(value.Sum);
         $qu++;
@@ -1117,7 +1115,7 @@ function heattransfermodal(data,user_type) {
         } else {
             $heat_transfer_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input type="number" style="margin: 0 auto; width: 85px;" class="form-control input-sm tot_qty_tableheat" data-required-error="Required" value="' + $heat_transfer_count + '" required placeholder="HT Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input type="number" style="margin: 0 auto; width: 95px;" class="form-control input-sm tot_qty_tableheat" data-required-error="Required" value="' + $heat_transfer_count + '" required placeholder="HT Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>';
         ttots += parseInt($heat_transfer_count);
 		ttots_sum += parseInt(value.Sum);
         $qu++;
@@ -1468,7 +1466,7 @@ function sizelabelmodal(data,user_type) {
         } else {
             $size_label_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 85px;" type="number" class="form-control  input-sm tot_qty_tablesize" data-required-error="Required" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>'; 
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 95px;" type="number" class="form-control  input-sm tot_qty_tablesize" data-required-error="Required" value="' + $size_label_count + '" required placeholder="Size Label Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>'; 
         ttots += parseInt($size_label_count);
 		ttots_sum += parseInt(value.Sum);
         $qu++;
@@ -1619,7 +1617,7 @@ function sizelabelmodal(data,user_type) {
     })
 }
 
-function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type) {
+function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type,buyer_po_array) {
     var washing_option = "<option value=''>Select Option</option>";
     var whitening_option = "<option value=''>Select Option</option>";
     var dryer_option = "<option value=''>Select Option</option>";
@@ -1732,7 +1730,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
             } else {
                 $wcl_label_count = "";
             }
-            tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="color_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 85px;" type="number" class="form-control  input-sm tot_qty_tablewcl" data-required-error="Required" value="' + $wcl_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>'; 
+            tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="color_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td style="display: flex;justify-content: center;"> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 95px;" type="number" class="form-control  input-sm tot_qty_tablewcl" data-required-error="Required" value="' + $wcl_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors min-div" style="font-size:10px"></div></div></td></tr>'; 
             ttots += parseInt($wcl_label_count);
             ttots_sum += parseInt(value.Sum);
             $qu++;
@@ -1764,6 +1762,11 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                                     wcl_template + `</select>
                                 <div class="help-block with-errors"></div>
                             </div>`
+        var split_template = "";
+        var wcl_sample_front = ""
+        var wcl_sample_back = ""
+        var wcl_sample_middle = ""
+        var wcl_sample_static = ""
     }
     else
     {
@@ -1780,11 +1783,28 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                                 wcl_template + `</select>
                             <div class="help-block with-errors"></div>
                         </div>`;
+        var split_template = treeviewwash_label[0].template_file.split(',')
+
+        var wcl_sample_front = '<object id="front_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[0] + '" type="image/svg+xml"></object>'
+        var wcl_sample_back = '<object id="back_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[1] + '" type="image/svg+xml"></object>'
+        var wcl_sample_middle = '<object id="middle_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[2] + '" type="image/svg+xml"></object>'
+        var wcl_sample_static = '<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[3] + '" type="image/svg+xml"></object>'
+
     }
+
+    var buyer_po = "";
+    
+    $.each(buyer_po_array, function (index,value) {
+            buyer_po += value.BuyerPONo + " | ";
+    });
 
     $('.top-content').append(`
             <form id="washcarelabelform` + index_wcl_count + `" data-toggle="validator"><input type="hidden" value="` + $exist_id + `"
                 id="exist_id` + index_wcl_count + `"><input type="hidden" value="` + color_code + `" id="color_id` + index_wcl_count + `">
+                <div class="wcl-sample-front">`+wcl_sample_front+`</div>
+                <div class="wcl-sample-back">`+wcl_sample_back+`</div>
+                <div class="wcl-sample-middle">`+wcl_sample_middle+`</div>
+                <div class="wcl-sample-static">`+wcl_sample_static+`</div>
                 <div class="left-panel-heat col-md-7">
                 <div class="div-max">
                     <div class="col-md-4">
@@ -1914,7 +1934,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                                         `+$no_data_comp+`
                                         </tbody>
                                     </table>
-                                    <div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please select parts</p></div>
+                                    <div><p class="hidden composition_error_hidden" style="color:red;text-align: right;margin-right: 10px;">Please add parts to the composition</p></div>
 
                                     <div><button `+$disable_option_select+` class="btn  btn-primary pull-right input-sm add_to_page` + index_wcl_count + `"  style="position:relative;" type="button" onclick="add_parts(` + index_wcl_count + `)">Add Parts</button>
                                     <p id="wash_composition_page_error` + index_wcl_count + `" class="hidden" style="color:red;text-align: right;margin-right: 10px;">Please add composition and parts</p>
@@ -1929,6 +1949,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                 <div class="div-max scroll">
                 <h4 style="display: inline-block;">Quantity Info for <span class="washlabelnameqty` + index_wcl_count + `"> WashCare
                     Label - </span> `+color_code+`</h4>
+                    <h5 class="poc_number"><strong>POs for this UVC : </strong><span id="poNo">` + buyer_po + `  </span></h5>
                     <hr>
                     <table class="table table-bordered table-striped table-hover table-condensed table-responsive qty-table-modal" id="wash_care_label_table_`+index_wcl_count+`" style="font-size:11px">
                         <thead>
@@ -1957,7 +1978,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                         onclick=cancelWashDiv("`+index_wcl_count+`","`+user_type+`")>Cancel</button><button
                         class="btn btn-default pull-right input-sm" id="wcl_labelclose_`+index_wcl_count+`" type="button">Close</button> <button
                         type="button" class="btn btn-primary `+$print_button_class+`" id="print_wash_button_`+index_wcl_count+`"
-                        onclick=printWashDiv("washcare_svg_front`+index_wcl_count+`","washcare_svg_back`+index_wcl_count+`","washcare_svg_middle`+index_wcl_count+`","`+index_wcl_count+`","`+user_type+`","`+activity_label+`")>Print</button>
+                        onclick=printWashDivOs("front_modal_`+index_wcl_count+`","back_modal_`+index_wcl_count+`","middle_modal_`+index_wcl_count+`","static_modal_`+index_wcl_count+`","`+ order_details[0].UVC+`","","admin","","orchestra_wash_care_label_orders","print","co","`+index_wcl_count+`")>Print</button>
                         <div class="parts_none`+index_wcl_count+`" style="display:none"><select class="form-control">` + parts_option + `</select></div>
                 </div>
             </div>
@@ -2009,6 +2030,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
             if (value.page_id != page_id) {
 
                 var comps="";
+                var comps_info="<label style='font-size:12px;color:black'>Compositions : </label>";
 
                 $.each(data.composition, function (index1, value1) {
                     if(value.page_id == value1.page_id)
@@ -2016,17 +2038,19 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                         if(comps != "")
                         {
                             comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                            comps_info += "<p style='color:black'>"+value1.english+" : "+value1.percentage+" % </p>";
                         }
                         else
                         {
                             comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                            comps_info += "<p style='color:black'>"+value1.english+" : "+value1.percentage+" %</p>";
                         }
                     }
                 });
                 
                 add_page_composition += 1;
 
-                $('#composition_remove_qty' + index_wcl_count).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:default;pointer-events:none" onclick="deleteComposition(this,' + index_wcl_count + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+                $('#composition_remove_qty' + index_wcl_count).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition <i class="fa fa-info-circle" aria-hidden="true" data-container="body" data-toggle="popover" data-placement="top" data-content="'+comps_info+'" style="cursor:pointer"></i></td><td><input type="hidden" value="'+comps+'" class="compositions_hidden"><select class="form-control select_parts'+add_page_composition+'">' + parts_option + '</select></td><td><a style="cursor:default;pointer-events:none" onclick="deleteComposition(this,' + index_wcl_count + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
                 
                 if(value.parts_id != "")
                 {
@@ -2054,6 +2078,9 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                 s_no++;
             }
             page_id = value.page_id;
+        });
+        $('[data-toggle="popover"]').popover({
+            html: true
         });
     }
 
@@ -2096,12 +2123,18 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
 		$('#wash_care_label_table_'+index_wcl_count).validator('validate')
     })
 
-    var care_instruction_select_option = []
+    if(JSON.parse(localStorage.getItem('care_instruction_select'+index_wcl_count)) != null)
+    {
+        var care_instruction_select_option = JSON.parse(localStorage.getItem('care_instruction_select'+index_wcl_count))
+    }
+    else
+    {
+        var care_instruction_select_option = []
+    }
 
     $('.care_instruction_select' + index_wcl_count + '.bootstrap-select').on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
 
         var hidden_id = $(this).find('option').eq(clickedIndex).val();
-        
 
         if(care_instruction_select_option.includes(hidden_id) != true)
         {
@@ -2131,13 +2164,11 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
 }
 
 
-function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,index,treeviewwash_label,user_type) 
+function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,index,treeviewwash_label,user_type,buyer_po_array) 
 {
 
     var wcl_count = index_wcl_count -1; 
 
-    console.log("wcl_count" + wcl_count)
-    console.log("wcl_status" + $('.wcl_status_'+wcl_count+' span').text())
     if($('.wcl_status_'+wcl_count+' span').text() == "New Order" || $('.wcl_status_'+wcl_count+' span').text() == "Clone Order")
     {
         $('.snackbar_span').html('Please place the order you have created before creating another order.');
@@ -2145,6 +2176,7 @@ function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label
     }
     else
     {
+        localStorage.setItem('care_instruction_select'+index_wcl_count, localStorage.getItem('care_instruction_select'+index));
         $('.wcl_orders_card').append(`
                 <div class="artwork-wrapper">
                     <div class="artwork-card wcl_status_`+index_wcl_count+`" data-color="`+color_code+`" id="cloneWashCareLabel_`+color_code+`">
@@ -2176,7 +2208,7 @@ function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label
 
         });
 
-        washcarelabelmodal("",index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type)
+        washcarelabelmodal("",index_wcl_count,color_code,activity_label,order_details,orchestra_care_symbols,orchestra_composition,orchestra_countries,orchestra_care_instruction,orchestra_parts,treeviewwash_label,user_type,buyer_po_array)
 
         $('#washcarelabelform'+index_wcl_count).find('#wcl_name'+index_wcl_count).val($('#washcarelabelform'+index).find('#wcl_name'+index).val())
         $('#washcarelabelform'+index_wcl_count).find('#ocn_number_wash'+index_wcl_count).val($('#washcarelabelform'+index).find('#ocn_number_wash'+index).val())
@@ -2243,15 +2275,15 @@ function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label
 
         localStorage.setItem('wash_composition_final'+index_wcl_count, wash_finals);
 
-
-        localStorage.setItem('care_instruction_select'+index_wcl_count, localStorage.getItem('care_instruction_select'+index));
-
-
         $('[data-toggle="tooltip"]').tooltip()
+
+        $('[data-toggle="popover"]').popover({
+            html: true
+        });
 
         $('#clone_washcare_label_card'+index_wcl_count).on('click', function (e) {
 
-            clonewashcarelabels(wash_care_count, $(this).data('color'), user_type,activity_label, order_details, orchestra_care_symbols, orchestra_composition, orchestra_countries, orchestra_care_instruction, orchestra_parts, $(this).data('id'),treeviewwash_label,user_type);
+            clonewashcarelabels(wash_care_count, $(this).data('color'), user_type,activity_label, order_details, orchestra_care_symbols, orchestra_composition, orchestra_countries, orchestra_care_instruction, orchestra_parts, $(this).data('id'),treeviewwash_label,user_type,buyer_po_array);
 
         });
         
@@ -2280,6 +2312,12 @@ function add_to_list(dataid) {
 
 			composition_percentage_global = composition_percentage_global;
 			$('#composition_table_qty' + dataid).append(`<tr><td class="comp"><input type="hidden" class="list_comp" value="` + $(".composition_select" + dataid + " option:selected").attr("data-french") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-english") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-spanish") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-portuguese") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-italian") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-dutch") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-german") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-arabic") + `_` + $(".composition_select" + dataid + " option:selected").attr("data-greek") + `_` + parseInt($(".composition_percent" + dataid).val()) + `">` + $(".composition_select" + dataid + " option:selected").text() + `</td><td class="percent">` + parseInt($(".composition_percent" + dataid).val()) + `</td><td><a style="cursor:pointer" onclick="deleteCompPer(this,'` + dataid + `')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>`)
+
+            if($('#composition_table_qty' + dataid).find('#no_data'+ dataid).html() != "")
+            {
+                $('#composition_table_qty' + dataid).find('#no_data'+ dataid).remove()
+            }
+
 		} else {
 			composition_percentage_global -= parseInt($('.composition_percent' + dataid).val());
             $('.snackbar_span').html('Percentage should not be greater than 100.');
@@ -2290,10 +2328,7 @@ function add_to_list(dataid) {
 		$('#composition_error_required' + dataid).addClass('hidden')
 		$('#percentage_error_required' + dataid).addClass('hidden')
 
-        if($('#composition_table_qty' + dataid).find('#no_data'+ dataid).html() != "")
-        {
-            $('#composition_table_qty' + dataid).find('#no_data'+ dataid).remove()
-        }
+        
 
 	}
 	else if ($('.composition_select' + dataid + ' option:selected').val() == "Select Option")
@@ -2340,24 +2375,21 @@ function add_to_composition(dataid) {
     composition_percentage_global = 0;
     var a = [];
 
-
-
     var comp_wash_final = JSON.parse(localStorage.getItem('wash_composition_final'+dataid));
-
-    console.log(comp_wash_final)
 
     if(comp_wash_final == null)
     {
-        console.log("hahahaha")
         comp_wash_final = []
     }
 
     var comp_split_final = [];
+    var comps_info="<label style='font-size:12px;color:black'>Compositions : </label>";
 
     $('#composition_table_qty' + dataid + ' tr').each(function () {
         var comp = $(this).find('.list_comp').val();
         var comp1 = comp.split('_');
         a.push(comp1[0]+"_"+comp1[1]+"_"+comp1[2]+"_"+comp1[3]+"_"+comp1[4]+"_"+comp1[5]+"_"+comp1[6]+"_"+comp1[7]+"_"+comp1[8]+"_"+comp1[9])
+        comps_info += "<p style='color:black'>"+comp1[1]+" : "+comp1[9]+" % </p>";
         comp_split_final.push("Select Option_"+comp1[1]+"_"+comp1[9])
     })
 
@@ -2377,9 +2409,13 @@ function add_to_composition(dataid) {
     }
 
 
-    $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition</td><td><input type="hidden" value="'+comps+'" class="compositions_hidden">'+$('.parts_none'+ dataid).html()+'</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
+    $('#composition_remove_qty' + dataid).append('<tr id="' + add_page_composition + '"><td><label id="label_s_no_'+add_page_composition+'">'+ s_no +'</label>. Composition <i class="fa fa-info-circle" aria-hidden="true" data-container="body" data-toggle="popover" data-placement="top" data-content="'+comps_info+'" style="cursor:pointer"></i></td><td><input type="hidden" value="'+comps+'" class="compositions_hidden">'+$('.parts_none'+ dataid).html()+'</td><td><a style="cursor:pointer" onclick="deleteComposition(this,' + dataid + ')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>')
 
     $('#composition_table_qty' + dataid).html(`<tr id="no_data`+dataid+`"><td colspan="3">No data Found</td></tr>`)
+
+    $('[data-toggle="popover"]').popover({
+        html: true
+    });
 
     $(".add_to_list" + dataid).prop("disabled", false);
     $('.composition_select' + dataid).prop('disabled', false)
@@ -2536,23 +2572,25 @@ function deleteCompPer(obj, dataid)
 }
 
 function setWashLabel(index, dataid, id,user_type,page_name) {
+
+    
     $('.merchandisers').attr('disabled','disabled')
 	$('.washlabelname'+dataid).text($('#wcl_name' + dataid).val()+" - Washcare Label");
     var check=0;
     var check1=0;
-    $('#composition_remove_qty' + dataid + ' tr').each(function () {
 
-        if($(this).children('td:first').text() != "No data Found")
-        {
-            var trim_option = $(this).find('select').find(':selected').text().trim();
+    var composition = JSON.parse(localStorage.getItem('wash_composition_final'+dataid));
 
-            if(trim_option == 'Select Option')
+    $(composition).each(function (index,value) {
+
+            var trim_option = value[0].split("_");
+
+            if(trim_option[0] == 'Select Option')
             {
                 check++;
             }
+            
             check1++;
-        }
-        
 
     });
 
@@ -2564,6 +2602,16 @@ function setWashLabel(index, dataid, id,user_type,page_name) {
 
     if(check == 0 )
     {
+
+        if(page_name == "os")
+        {
+            $('#save_wash_button').attr('disabled','disabled')
+        }
+        else
+        {
+            $('#save_wash_button_'+dataid).attr('disabled','disabled')
+        }
+        
         var composition = localStorage.getItem('wash_composition');
 
         var wash_fins = JSON.parse(composition);
@@ -2695,9 +2743,15 @@ function setWashLabel(index, dataid, id,user_type,page_name) {
                 if(page_name == "os")
                 {
                     $('#snackbar').css('background-color', '#00b6ff');
-                    $('.snackbar_span').html('Order updated Successfully');
+                    $('.snackbar_span').html('Order updated successfully');
                     showSnackbar();
                     location.reload()
+                }
+                else
+                {
+                    $('#snackbar').css('background-color', '#00b6ff');
+                    $('.snackbar_span').html('Order created successfully');
+                    showSnackbar();
                 }
                 
             },
@@ -2821,7 +2875,6 @@ function printHangDivOs(front,back,uvc,po,user_type,tableID,tableName,art_type) 
                     tryCount: 0,
                     retryLimit: 2,
                     success: function (data) {
-                        //console.log(data)
                         if(size[0] == "TAILLE")
                         {
                             svgDoc1.getElementById("size").innerHTML = "";
@@ -2856,7 +2909,6 @@ function printHangDivOs(front,back,uvc,po,user_type,tableID,tableName,art_type) 
                             svgDoc1.getElementById("uvc_tco").innerHTML = uvc_tco;svgDoc1.getElementById("cm").setAttribute('font-size', '7.7px');
                             
                             svgDoc.getElementById("size").innerHTML = size[0];
-                            //console.log(size[0].length)
                             if(size[0].length == 1)
                             {
                                 svgDoc.getElementById("size").setAttribute('transform', 'matrix(1.0074 0 0 1 14 297.5785)');
@@ -3629,16 +3681,19 @@ function setHangTagStatus(colour,user_type,page_name) {
         if(page_name == "os")
         {
             $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
+            $('.snackbar_span').html('Order updated successfully');
             showSnackbar();
             location.reload()
         }
         else
         {
             $('.hang-card span').text('Order Approved')
-            $('.hang-card span').addClass('label label-OrderApproved label-status')
+            $('.hang-card span').addClass('label label-OrderApproved')
             $('.right-panel-hang span').text('Order Approved')
             $('.right-panel-hang span').addClass('label label-OrderApproved')
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order created successfully');
+            showSnackbar();
         }
 
     } else {
@@ -3648,6 +3703,8 @@ function setHangTagStatus(colour,user_type,page_name) {
 
 function setHangTag(id,colour,user_type) {
 	
+    $('#save_hang_button').attr('disabled','disabled')
+
 	var template_id = $('#hangtagform').find('#tree1').jstree('get_selected', true);
 	var template_front_id = template_id[0].id;
 	var template_back_id = template_id[0].id;
@@ -3755,7 +3812,7 @@ function setHangTag(id,colour,user_type) {
         if(page_name == "os")
         {
             $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
+            $('.snackbar_span').html('Order updated successfully');
             showSnackbar();
             $("#specialtagform .left-panelos").removeClass('active');
             $("#specialtagform .right-panelos").removeClass('active');
@@ -3765,6 +3822,9 @@ function setHangTag(id,colour,user_type) {
         {
             $("#specialtagform .left-panelorc").removeClass('active');
             $("#specialtagform .right-panel").removeClass('active');
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order created successfully');
+            showSnackbar();
         }
     } else {
         $('#special_template_error').removeClass('hidden')
@@ -3794,7 +3854,7 @@ function setheat_transferStatus(colour,user_type,page_name) {
         if(page_name == "os")
         {
             $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
+            $('.snackbar_span').html('Order updated successfully');
             showSnackbar();
             $("#heat_transferform .left-panelos").removeClass('active');
             $("#heat_transferform .right-panelos").removeClass('active');
@@ -3804,6 +3864,9 @@ function setheat_transferStatus(colour,user_type,page_name) {
         {
             $("#heat_transferform .left-panel-heat").removeClass('active');
             $("#heat_transferform .right-panel-heat").removeClass('active');
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order created successfully');
+            showSnackbar();
         }
     } else {
         $('#heat_transfer_template_error').removeClass('hidden')
@@ -3832,7 +3895,7 @@ function setMainLabelStatus(colour,user_type,page_name) {
         if(page_name == "os")
         {
             $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
+            $('.snackbar_span').html('Order updated successfully');
             showSnackbar();
             $("#main_labelform .left-panelos").removeClass('active');
             $("#main_labelform .right-panelos").removeClass('active');
@@ -3842,6 +3905,9 @@ function setMainLabelStatus(colour,user_type,page_name) {
         {
             $("#main_labelform .left-panelorc").removeClass('active');
             $("#main_labelform .right-panel").removeClass('active');
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order created successfully');
+            showSnackbar();
         }
     } else {
         $('#main_label_template_error').removeClass('hidden')
@@ -3870,7 +3936,7 @@ function setSizeLabelStatus(colour,user_type,page_name) {
         if(page_name == "os")
         {
             $('#snackbar').css('background-color', '#00b6ff');
-            $('.snackbar_span').html('Order updated Successfully');
+            $('.snackbar_span').html('Order updated successfully');
             showSnackbar();
             $("#size_labelform .left-panelos").removeClass('active');
             $("#size_labelform .right-panelos").removeClass('active');
@@ -3880,6 +3946,9 @@ function setSizeLabelStatus(colour,user_type,page_name) {
         {
             $("#size_labelform .left-panel-heat").removeClass('active');
             $("#size_labelform .right-panel-heat").removeClass('active');
+            $('#snackbar').css('background-color', '#00b6ff');
+            $('.snackbar_span').html('Order created successfully');
+            showSnackbar();
         }
     } else {
         $('#size_label_template_error').removeClass('hidden')
@@ -3894,6 +3963,8 @@ function setSizeLabelStatus(colour,user_type,page_name) {
 
 
 function setSpecialTag(id,colour,user_type) {
+
+    $('#save_special_button').attr('disabled','disabled')
 	var myElements = $(".special_qty");
     var special_qty = [];
     for (var i=0;i<myElements.length;i++) {
@@ -3953,7 +4024,7 @@ function setSpecialTag(id,colour,user_type) {
         }
     })
 	$('.special-card span').text('Order Approved')
-	$('.special-card span').addClass('label label-OrderApproved label-status')
+	$('.special-card span').addClass('label label-OrderApproved')
 	$('#po-file-upload-button').css('display','block')
 }
 /**
@@ -3964,9 +4035,10 @@ function setSpecialTag(id,colour,user_type) {
 
 
 function setHeatTransfer(id,colour,user_type) {
+
+    $('#save_heat_transfer_button').attr('disabled','disabled')
   
     var template_id = $('#heat_transferform').find('#treeht').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	var ocn_number = $('#ocn_number_heat').val();
 	
@@ -4029,7 +4101,7 @@ function setHeatTransfer(id,colour,user_type) {
 		}
 	})
 		$('.heat_transfer-card span').text('Order Approved')
-		$('.heat_transfer-card span').addClass('label label-OrderApproved label-status')
+		$('.heat_transfer-card span').addClass('label label-OrderApproved')
 		$('#po-file-upload-button').css('display','block')
 }
 /**
@@ -4040,6 +4112,8 @@ function setHeatTransfer(id,colour,user_type) {
 
 
 function setMainLabel(id,colour,user_type) {
+
+    $('#save_main_label_button').attr('disabled','disabled')
   
 	var myElements = $(".main_label_qty");
     var main_label_qty = [];
@@ -4103,7 +4177,7 @@ function setMainLabel(id,colour,user_type) {
         }
     })
 	$('.main_label-card span').text('Order Approved')
-	$('.main_label-card span').addClass('label label-OrderApproved label-status')
+	$('.main_label-card span').addClass('label label-OrderApproved')
 	$('#po-file-upload-button').css('display','block')
 }
 /**
@@ -4113,10 +4187,11 @@ function setMainLabel(id,colour,user_type) {
  */
 
 
-function setSizeLabel(id,colour,user_type) {
-  
+function setSizeLabel(id,colour,user_type) {    
+
+    $('#save_size_label_button').attr('disabled','disabled')
+    
     var template_id = $('#size_labelform').find('#treesl').jstree('get_selected', true);
-	console.log(template_id)
 	template_id = template_id[0].id;
 	var ocn_number = $('#ocn_number_size').val();
 	
@@ -4179,7 +4254,7 @@ function setSizeLabel(id,colour,user_type) {
 		}
 	})
 		$('.size_label-card span').text('Order Approved')
-		$('.size_label-card span').addClass('label label-OrderApproved label-status')
+		$('.size_label-card span').addClass('label label-OrderApproved')
 		$('#po-file-upload-button').css('display','block')
 }
 

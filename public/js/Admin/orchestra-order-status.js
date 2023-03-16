@@ -132,10 +132,10 @@ function orchestraStatusTable(data, path) {
                     }
                     else if(value.ArtworkType == "WashCareLabel")
                     {
-                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","os","'+value.tableID+'","'+value.tableName+'","print")'
+                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","'+value.tableID+'","'+value.tableName+'","print","os","")'
                         
 
-                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","os","'+value.tableID+'","'+value.tableName+'","proof")'
+                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","admin","'+value.tableID+'","'+value.tableName+'","proof","os","")'
                     }
                     else if(value.ArtworkType == "Hang Tag")
                     {
@@ -1213,7 +1213,7 @@ function hangtagmodalOs(data) {
         } else {
             $hang_tag_count = "";
         }
-        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" style="margin: 0 auto; width: 85px;"  type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
+        tr += '<tr><input type="hidden" value="' + value.Color_Code + '" class="size_id"><input type="hidden" value="' + value.id + '" class="main_id"><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + value.Size + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success"><input onkeypress="return checkorcMOQ(this)" style="margin: 0 auto; width: 95px;"  type="number" class="form-control  input-sm tot_qty_tablehang" data-required-error="Required" value="' + $hang_tag_count + '" required placeholder="Hang Tag Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
         ttots += parseInt($hang_tag_count);
 		ttots_sum += parseInt(value.Sum);
         $qu++;
@@ -2543,6 +2543,8 @@ function washcarelabelsOs(data) {
 		$save_button_class = "";
         $ocn_number_wash = "";
     }
+
+	var ttots_sum = 0;
     $.each(data.order_details, function (index, value) {
         if (data.orchestra_wash_care_label_orders != "") {
             if (data.orchestra_wash_care_label_orders.length > 0) {
@@ -2556,10 +2558,11 @@ function washcarelabelsOs(data) {
         }
 
 
-        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 85px;" onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewcl" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
+        tr += '<tr><td class="uvc_tco">' + value.UVC_TCO + '</td><td class="size">' + (value.Size).replace("ANS", '') + '</td><td class="barcode">' + value.BarcodeForPricesTags + '</td><td class="sum">' + value.Sum + '</td><td> <div class="form-group has-feedback has-success" style="width: 100%;"><input style="margin: 0 auto; width: 95px;" onkeypress="return checkorcMOQ(this)" type="number" min="'+data.wash_moq+'" class="form-control input-sm tot_qty_tablewcl" value="' + $wash_label_count + '" required placeholder="WCL Count"><div class="help-block with-errors" style="font-size:10px"></div></div></td></tr>';
 
         $qu++;
         ttots += parseInt($wash_label_count);
+		ttots_sum += parseInt(value.Sum);
 
     });
 	
@@ -2741,7 +2744,7 @@ function washcarelabelsOs(data) {
                                         </table>
                                         <div>
                                             <p class="hidden composition_error_hidden"
-                                                style="color:red;text-align: right;margin-right: 10px;">Please select parts</p>
+                                                style="color:red;text-align: right;margin-right: 10px;">Please add parts to the composition</p>
                                         </div>
                                         <div><button class="btn  btn-primary pull-right input-sm add_to_page"
                                                 style="position:relative;" type="button" onclick="add_parts('')">Add
@@ -2773,7 +2776,7 @@ function washcarelabelsOs(data) {
                             </thead>
                             <tbody>` + tr + ` <tr class="strong">
                                     <td class="text-right" colspan="3">Total:</td>
-                                    <td>` + data.total_qty + `</td>
+                                    <td>` + ttots_sum + `</td>
                                     <td class="text-center tot_qty_tablewash_fin">` + ttots + `</td>
                                 </tr>
                             </tbody>
@@ -2856,16 +2859,19 @@ function washcarelabelsOs(data) {
                 $.each(data.orchestra_wash_care_label_orders[0].composition, function (index, value) {
                     if (value.page_id != page_id) {
                         var comps="";
+                        var comps_info="<label style='font-size:12px;color:black'>Compositions : </label>";
                         $.each(data.orchestra_wash_care_label_orders[0].composition, function (index1, value1) {
                             if(value.page_id == value1.page_id)
                             {
                                 if(comps != "")
                                 {
                                     comps+=","+value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                                    comps_info += "<p style='color:black'>"+value1.english+" : "+value1.percentage+" % </p>";
                                 }
                                 else
                                 {
                                     comps+=value1.french+"_"+value1.english+"_"+value1.spanish+"_"+value1.portuguese+"_"+value1.italian+"_"+value1.dutch+"_"+value1.german+"_"+value1.arabic+"_"+value1.greek+"_"+value1.percentage;
+                                    comps_info += "<p style='color:black'>"+value1.english+" : "+value1.percentage+" %</p>";
                                 }
                                 
                             }
@@ -2873,7 +2879,8 @@ function washcarelabelsOs(data) {
                         });
                         
                         add_page_composition += 1;
-                        $('#composition_remove_qty').append(`<tr id="` + add_page_composition + `"><td><label id="label_s_no_`+add_page_composition+`">`+ s_no +`</label>. Composition</td><td><input type="hidden" value="`+comps+`" class="compositions_hidden"><select disabled class="form-control select_parts`+add_page_composition+`">` + parts_option + `</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,'')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>`)
+                        $('#composition_remove_qty').append(`<tr id="` + add_page_composition + `"><td><label id="label_s_no_`+add_page_composition+`">`+ s_no +`</label>. Composition <i class="fa fa-info-circle" aria-hidden="true" data-container="body" data-toggle="popover" data-placement="top" data-content="`+comps_info+`" style="cursor:pointer"></i>
+                        </td><td><input type="hidden" value="`+comps+`" class="compositions_hidden"><select disabled class="form-control select_parts`+add_page_composition+`">` + parts_option + `</select></td><td><a style="cursor:pointer;pointer-events:none" class="pointer_anchor" onclick="deleteComposition(this,'')"><i class="fa fa-trash" aria-hidden="true"></i></a></td></tr>`)
                         
                         if(value.parts_id != "")
                         {
@@ -2903,6 +2910,11 @@ function washcarelabelsOs(data) {
 
                     page_id = value.page_id;
                 });
+
+
+		    $('[data-toggle="popover"]').popover({
+                html: true
+            });
                 
     }
 

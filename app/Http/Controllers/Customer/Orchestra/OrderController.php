@@ -246,12 +246,12 @@ class OrderController extends Controller
             {
                 if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
                 {
-                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('parent_id','3')->where('id','!=','8')->where('id','!=','202')->where('id','!=','203')->where('id','!=','9')->where('id','!=','4')->orderBy('item_name', 'asc')->get();
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->orWhere('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','8')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.id','!=','203')->where('orchestra_item_master.id','!=','9')->where('orchestra_item_master.id','!=','4')->orderBy('orchestra_item_master.item_name', 'asc')->get();
                     $data['treeviewwash_label'] = $treeviewwash_label;
                 }
                 else
                 {
-                    $treeviewwash_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->where('parent_id','3')->where('id','!=','202')->where('tag_name','wcl_pmm')->orderBy('item_name', 'asc')->get();
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->where('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.tag_name','wcl_pmm')->orderBy('orchestra_item_master.item_name', 'asc')->get();
                     $data['treeviewwash_label'] = $treeviewwash_label;
                 }
                 
@@ -260,15 +260,15 @@ class OrderController extends Controller
             {
                 if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
                 {
-                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','4')->get();
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','4')->get();
 
-                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
                 }
                 else
                 {
-                    $orc_template_name= DB::table("orchestra_item_master")->select('item_name')->orWhere('id','202')->get();
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','202')->get();
 
-                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null"]);
+                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
                 }
             }
 
@@ -1782,6 +1782,8 @@ class OrderController extends Controller
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
         $ocn_number = $request->ocn_number;
+        $theme_reference = $request->theme_reference;
+        $parcel_code = $request->parcel_code;
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
@@ -1837,6 +1839,7 @@ class OrderController extends Controller
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
                         'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height,  
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
@@ -1880,6 +1883,7 @@ class OrderController extends Controller
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
                                 'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height,
 				  				'customer_id'    => $factory{0}->id, 
                                 'svg_path'    => "", 
@@ -1921,6 +1925,7 @@ class OrderController extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height,
 					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -1963,6 +1968,7 @@ class OrderController extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height, 
 				   				'width'           => $width,
                         		'customer_id'    => $factory{0}->id,
@@ -2014,6 +2020,8 @@ class OrderController extends Controller
         $carton_template_id = $request->carton_template_id; 
         $size = explode(',',$request->size);
         $ocn_number = $request->ocn_number;
+        $theme_reference = $request->theme_reference;
+        $parcel_code = $request->parcel_code;
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
 		$size_break = explode(',',$request->size_break);
@@ -2076,6 +2084,7 @@ class OrderController extends Controller
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
                         'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height, 
                         'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
@@ -2101,7 +2110,7 @@ class OrderController extends Controller
 									'ospbs_id' => $poly_id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'size_break'      => "",
 									'quantity'    => $final_order_qty,
 									'quantity_sets'    => $final_order_qty
@@ -2121,6 +2130,7 @@ class OrderController extends Controller
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
                                 'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height, 
 				  				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
@@ -2144,7 +2154,7 @@ class OrderController extends Controller
 									'ospbs_id' => $inserted_poly->id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'size_break'      => "",
 									'quantity'    => $final_order_qty,
 									'quantity_sets'    => $final_order_qty
@@ -2166,6 +2176,7 @@ class OrderController extends Controller
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
                         'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height,
 					   	'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -2191,7 +2202,7 @@ class OrderController extends Controller
 									'oscs_id' => $carton_id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'quantity'    => $final_order_qty_sets,
 									'quantity_sets'    => $final_order_qty_sets
 				 ]);
@@ -2209,6 +2220,7 @@ class OrderController extends Controller
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
                                 'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height,
 				   				'width'           => $width,
 				   				'customer_id'    => $factory{0}->id,
@@ -2234,7 +2246,7 @@ class OrderController extends Controller
 									'oscs_id' => $inserted->id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'quantity'    => $final_order_qty_sets,
 									'quantity_sets'    => $final_order_qty_sets
 				]);
@@ -2681,7 +2693,7 @@ class OrderController extends Controller
                    ->update([
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
-                        //'merchandisers_id'      => $merchandisers,
+                        'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
                         'ocn_number'      => $ocn_number,
                         'washing_id'      => $washing_select,
@@ -2690,7 +2702,7 @@ class OrderController extends Controller
                         'ironing_id'      => $ironing_select,
                         'cleaning_id'      => $cleaning_select,
                         'made_in_id'      => $made_in_select,
-					    'color_code'      => $color_code,
+					    //'color_code'      => $color_code,
 					    'card_flag'      => $card_flag,
                         'po'    => $po_select,
                         'care_instruction_id'      => $care_instruction_select,
@@ -2698,9 +2710,9 @@ class OrderController extends Controller
                         'svg_path'    => "", 
                         'status'    => "Buyer Approval Pending",
 						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+						//'season_code'    => $season_code,
+					    //'pi_status'           => $pi_status,
+					   	//'po_status'           => $po_status,
                   ]);
                 $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                             ->delete();
@@ -2921,8 +2933,8 @@ class OrderController extends Controller
                     'status'    => "Buyer Approval Pending",
                     'orchestra_parcel_details_id'    => $parcel_id,
                     'season_code'    => $season_code,
-                    'pi_status'           => $pi_status,
-                    'po_status'           => $po_status,
+                    //'pi_status'           => $pi_status,
+                    //'po_status'           => $po_status,
             ]);
             $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                         ->delete();
@@ -3135,7 +3147,7 @@ class OrderController extends Controller
 
             // check order status in erp_oorders table.                    
             $data_array = [];
-            $data_array['id'] = $request->id;
+            $data_array['id'] = $template_id;
             $data_array['table_name'] = $table_name;
             $class_obj = new ERPOrderStatusCheck();
             $erp_order_details = $class_obj->OrchestraERPStatus($data_array);
