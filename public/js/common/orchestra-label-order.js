@@ -1005,7 +1005,7 @@ function hangtagmodal(data,uvc,user_type) {
 					$('#hangtagform').validator('update')
                     if (data.treeviewData.length > 0) {
                         $('#hangtagform').find('.sample-front').html('<object id="svg_hang_front" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
+                        $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
                     } 
 					
 					if (hang_tag_orders != "") {
@@ -1052,7 +1052,7 @@ function hangtagmodal(data,uvc,user_type) {
 					$('#hangtagform').validator('update')
                     if (data.treeviewData.length > 0) {
                         $('#hangtagform').find('.sample-front').html('<object id="svg_hang_front" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
-                        $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;position: absolute;"><svg id="ean-13"></svg></div>')
+                        $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
                     } 
                 },
                 error: function (data) {
@@ -1752,7 +1752,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
         var wcl_template = "<option value=''>Select Option</option>";
 
         $.each(treeviewwash_label, function (index, value) {
-            wcl_template += '<option value="' + value.id + '">' + value.text + '</option>'
+            wcl_template += '<option data-template="'+value.template_file+'" value="' + value.id + '">' + value.text + '</option>'
         });
 
         var wcl_template_div =`<div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
@@ -1773,7 +1773,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
         var wcl_template = "<option value=''>Select Option</option>";
         
         $.each(treeviewwash_label, function (index, value) {
-            wcl_template += '<option value="' + value.id + '" selected>' + value.text + '</option>'
+            wcl_template += '<option data-template="'+value.template_file+'" value="' + value.id + '" selected>' + value.text + '</option>'
         });
 
         var wcl_template_div =`<div style="display:none" class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"
@@ -1788,7 +1788,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
         var wcl_sample_front = '<object id="front_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[0] + '" type="image/svg+xml"></object>'
         var wcl_sample_back = '<object id="back_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[1] + '" type="image/svg+xml"></object>'
         var wcl_sample_middle = '<object id="middle_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[2] + '" type="image/svg+xml"></object>'
-        var wcl_sample_static = '<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[3] + '" type="image/svg+xml"></object>'
+        var wcl_sample_static = '<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template[3] + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>'
 
     }
 
@@ -1801,10 +1801,10 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
     $('.top-content').append(`
             <form id="washcarelabelform` + index_wcl_count + `" data-toggle="validator"><input type="hidden" value="` + $exist_id + `"
                 id="exist_id` + index_wcl_count + `"><input type="hidden" value="` + color_code + `" id="color_id` + index_wcl_count + `">
-                <div class="wcl-sample-front">`+wcl_sample_front+`</div>
-                <div class="wcl-sample-back">`+wcl_sample_back+`</div>
-                <div class="wcl-sample-middle">`+wcl_sample_middle+`</div>
-                <div class="wcl-sample-static">`+wcl_sample_static+`</div>
+                <div class="wcl-sample-front`+index_wcl_count+`">`+wcl_sample_front+`</div>
+                <div class="wcl-sample-back`+index_wcl_count+`">`+wcl_sample_back+`</div>
+                <div class="wcl-sample-middle`+index_wcl_count+`">`+wcl_sample_middle+`</div>
+                <div class="wcl-sample-static`+index_wcl_count+`">`+wcl_sample_static+`</div>
                 <div class="left-panel-heat col-md-7">
                 <div class="div-max">
                     <div class="col-md-4">
@@ -2023,6 +2023,15 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
         $('.wcl_template' + index_wcl_count).selectpicker('val', data.template_id);
         $('.care_instruction_select' + index_wcl_count).selectpicker('val', data.care_instruction);
 
+
+        var template_file_wcl = $('.wcl_template'+index_wcl_count).find(':selected').attr('data-template')
+        var split_template_wcl = template_file_wcl.split(',')
+        
+        $('.wcl-sample-front'+index_wcl_count).html('<object id="front_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[0] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-back'+index_wcl_count).html('<object id="back_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[1] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-middle'+index_wcl_count).html('<object id="middle_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[2] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-static'+index_wcl_count).html('<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[3] + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
+
         var s_no =1;
         var page_id = 0;
 
@@ -2152,6 +2161,20 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
         
     });
 
+    $('.wcl_template' + index_wcl_count).on('changed.bs.select', function (e, clickedIndex, newValue, oldValue) {
+        
+
+        var template_file_wcl = $(this).find(':selected').attr('data-template')
+        var split_template_wcl = template_file_wcl.split(',')
+        
+        $('.wcl-sample-front'+index_wcl_count).html('<object id="front_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[0] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-back'+index_wcl_count).html('<object id="back_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[1] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-middle'+index_wcl_count).html('<object id="middle_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[2] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-static'+index_wcl_count).html('<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[3] + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
+
+    });
+    
+
     $('#washcarelabelform' + index_wcl_count).validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {
 
@@ -2221,6 +2244,14 @@ function clonewashcarelabels(index_wcl_count,color_code,user_type,activity_label
         $('.cleaning_select'+index_wcl_count).selectpicker('val',$('.cleaning_select'+index).selectpicker('val'));
         $('.made_in_select'+index_wcl_count).selectpicker('val',$('.made_in_select'+index).selectpicker('val'));
         $('.wcl_template'+index_wcl_count).selectpicker('val',$('.wcl_template'+index).selectpicker('val'));
+
+        var template_file_wcl = $('.wcl_template'+index).find(':selected').attr('data-template')
+        var split_template_wcl = template_file_wcl.split(',')
+        
+        $('.wcl-sample-front'+index_wcl_count).html('<object id="front_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[0] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-back'+index_wcl_count).html('<object id="back_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[1] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-middle'+index_wcl_count).html('<object id="middle_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[2] + '" type="image/svg+xml"></object>')
+        $('.wcl-sample-static'+index_wcl_count).html('<object id="static_modal_'+index_wcl_count+'" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + split_template_wcl[3] + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
 
         $('.care_instruction_select'+index_wcl_count).selectpicker('val',$('.care_instruction_select'+index).selectpicker('val'));
 
