@@ -1980,8 +1980,6 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'material_id' => 103,
                         'sub_material_id' => 192,
                     ]);
-
-
 //                    \App\OrchestraItemMaster::create([
 //                        'id'  => 199,
 //                        'company_id' => 2,
@@ -2000,9 +1998,8 @@ class OrchestraItemMasterTableSeeder extends Seeder
 //                        'material_id' => 103,
 //                        'sub_material_id' => 200,
 //                    ]);
-
                     \App\OrchestraItemMaster::create([
-                        'id'  => 201,
+                        'id'  => 199,
                         'company_id' => 1,
                         'parent_id' => 63,    
                         'item_name' => "L09 Print Label Dark",
@@ -2012,7 +2009,7 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'sub_material_id' => 62,
                     ]);
                     \App\OrchestraItemMaster::create([
-                        'id'  => 202,
+                        'id'  => 200,
                         'company_id' => 1,
                         'parent_id' => 63,    
                         'item_name' => "L09 Print Label Light",
@@ -2020,6 +2017,36 @@ class OrchestraItemMasterTableSeeder extends Seeder
                         'tag_name' => "heat_transfer",
                         'material_id' => 1,
                         'sub_material_id' => 62,
+                    ]);
+                    \App\OrchestraItemMaster::create([
+                        'id'  => 201,
+                        'company_id' => 1,
+                        'parent_id' => 3,    
+                        'item_name' => "Disney Pixar",
+                        'ref_no' => "",
+                        'tag_name' => "",
+                        'material_id' => 1,
+                        'sub_material_id' => 2,
+                    ]);
+                    \App\OrchestraItemMaster::create([
+                        'id'  => 202,
+                        'company_id' => 1,
+                        'parent_id' => 3,    
+                        'item_name' => "PMM",
+                        'ref_no' => "",
+                        'tag_name' => "",
+                        'material_id' => 1,
+                        'sub_material_id' => 2,
+                    ]);
+                    \App\OrchestraItemMaster::create([
+                        'id'  => 203,
+                        'company_id' => 1,
+                        'parent_id' => 3,    
+                        'item_name' => "PMM - Disney Baby",
+                        'ref_no' => "",
+                        'tag_name' => "",
+                        'material_id' => 1,
+                        'sub_material_id' => 2,
                     ]);
                     
     } //run fucntion ends here

@@ -2498,7 +2498,7 @@ function sticker_order_details(uvc, po, user_type) {
 			}
 			else
 			{
-				$('.snackbar_span').html('Company Details Missing.Please Contact Administrator...!');
+				$('.snackbar_span').html('Company Details Missing, Please Contact Administrator.');
                 showSnackbar();
 			}
             
@@ -2990,7 +2990,7 @@ function proofDiv(data, isstd,uvc,buyer_po, user_type) {
 		svgDoc.getElementById("round").style.fill = "#FFFFFF"
 		var name=uvc+"-STD-PS-"+buyer_po;
 		var age_colour = $('#age option:selected').data('color');
-		ProofPopupTable(svgRoot,name,svgDoc,age_colour,user_type,page_flag,table_id,"","","","","","");
+		ProofPopupTable(svgRoot,name,svgDoc,age_colour,user_type,"co","","","","","","","");
 	} else if (data == "svg3" && isstd == "1") {
 		var a = document.getElementById(data);
 		var svgDoc = a.contentDocument;

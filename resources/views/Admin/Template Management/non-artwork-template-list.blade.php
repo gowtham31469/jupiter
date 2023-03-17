@@ -95,11 +95,11 @@
               <div class="row">
                   {!! Form::open(['id' => 'add_template_form','data-toggle' => 'validator','role' => 'form']) !!}
                   <div class="modal-body">
-                      <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
+                      <!-- <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('template_name', 'Template Name :', ['class' => 'form_label pull-left']) !!}
                         {!! Form::text('template_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Name','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                         <div class="help-block with-errors"></div>
-                      </div>
+                      </div> -->
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('reference_number', 'Reference Number :', ['class' => 'form_label pull-left']) !!}
                           {!! Form::text('reference_number',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Ref.No', 'maxlength' => '50')) !!}
@@ -110,12 +110,12 @@
                         {!! Form::select('company_new',  $value=$company, null, ['class' => 'form-control input-sm']) !!}
                         <div class="help-block with-errors"></div>
                       </div>
-                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('tax_new', 'Taxation Value (%) :', ['class' => 'form_label pull-left']) !!}
                           {!! Form::select('tax_new', $value= $tax, null, ['class' => 'form-control input-sm']) !!}
                         <div class="help-block with-errors"></div>
                       </div>
+                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('material_new', 'Material :', ['class' => 'form_label pull-left']) !!}
                           {!! Form::select('material_new', $value= $material, null, ['class' => 'form-control input-sm']) !!}
@@ -126,12 +126,12 @@
                         {!! Form::text('gl_text_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Text','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
-                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('gl_code_new', 'GL Code :', ['class' => 'form_label pull-left']) !!}
                         {!! Form::number('gl_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'GL Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;', 'onkeypress'=> 'return isNumber(event)')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
+                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('color_new', 'Color :', ['class' => 'form_label pull-left']) !!}
                         {!! Form::text('color_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Color','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
@@ -142,12 +142,12 @@
                         {!! Form::number('hsn_code_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'HSN Code','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
-                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('dimension_height_new', 'Height (mm): ', ['class' => 'form_label pull-left']) !!}
                         {!! Form::number('dimension_height_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Height','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
                         <div class="help-block with-errors"></div>
                       </div>
+                      <div class="clearfix"></div>
                       <div class="form-group col-xs-10 col-sm-4 col-md-4 col-lg-4 has-feedback">
                         {!! Form::label('dimension_width_new', 'Width (mm) :', ['class' => 'form_label pull-left']) !!}
                         {!! Form::number('dimension_width_new',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Width','required','maxlength' => '25', 'style' => 'text-transform: capitalize;')) !!}
@@ -186,15 +186,15 @@
                         </div>
                         @foreach($buyers as $buyer)
                          <a class="buyer-card-link" style="cursor: pointer;">
-                             <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$buyer->buyer_name}}"  data-value ="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
+                             <div class="buyers-card elevation-2dp active-buyer" data-name ="{{$buyer->buyer_name}}"  data-value ="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
                                <img src="{{$buyer->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                              </div>
                          </a>
                         @endforeach
                      </div>
-                     <div class="modal-footer buyer-selection-modal-footer">
+                     <!-- <div class="modal-footer buyer-selection-modal-footer">
                          {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                     </div>
+                     </div> -->
                 {!! Form::close() !!}
              </div>
          </div>

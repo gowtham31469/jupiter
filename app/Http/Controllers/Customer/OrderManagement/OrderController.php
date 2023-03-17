@@ -841,7 +841,7 @@ class OrderController extends Controller
 		{
 			
 			$express_value = explode('_',$value[0]);
-			if($express_value[0] != "Select Option")
+			if($express_value[0] != "Select Option" && $express_value[0] != 0)
 			{
 					$exp_value = explode('_',$value[0]);
 					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
