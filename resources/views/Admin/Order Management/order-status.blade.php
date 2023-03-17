@@ -710,15 +710,15 @@
                     </div>
                     @foreach($buyers as $buyer)
                     <a class="buyer-card-link" style="cursor: pointer;">
-                        <div class="card buyers-card elevation-2dp active-buyer" data-name="{{$buyer->buyer_name}}" data-value="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
+                        <div class="buyers-card elevation-2dp active-buyer" data-name="{{$buyer->buyer_name}}" data-value="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
                             <img src="{{$buyer->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                         </div>
                     </a>
                     @endforeach
                 </div>
-                <div class="modal-footer buyer-selection-modal-footer">
+                <!-- <div class="modal-footer buyer-selection-modal-footer">
                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                </div>
+                </div> -->
                 {!! Form::close() !!}
             </div>
         </div>
@@ -805,6 +805,23 @@
             $('.po').attr("disabled", "disabled");
         })
         $(document).ready(function() {
+
+            var arr = []; // Array to hold the keys
+            // Iterate over localStorage and insert the keys that meet the condition into arr
+            for (var i = 0; i < localStorage.length; i++) {
+                if (localStorage.key(i).substring(0, 22) == 'wash_composition_final') {
+                    arr.push(localStorage.key(i));
+                }
+                else if (localStorage.key(i).substring(0, 23) == 'care_instruction_select') {
+                    arr.push(localStorage.key(i));
+                }
+            }
+
+            // Iterate over arr and remove the items by key
+            for (var i = 0; i < arr.length; i++) {
+                localStorage.removeItem(arr[i]);
+            }
+            
             /* Show logo on left side */
             $('.logo').html('Orders');
 
