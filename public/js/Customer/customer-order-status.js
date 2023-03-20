@@ -2685,7 +2685,7 @@ function updateArtwork(obj) {
                                 var tpnd = value.tpnd;
                                 var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '" value="' + value.size + '" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
                                 var tpn_th = "Enter TPND";
-                                var tpn_len = "13";
+                                var tpn_len = "9";
                                 var unit_len = "6";
                             }
 
