@@ -835,9 +835,9 @@ function hangtagmodal(data,uvc,user_type) {
         <form id="hangtagform" data-toggle="validator"><input type="hidden" value="` + $exist_id + `" id="exist_id">
             <div class="sample-front"></div>
             <div class="sample-back"></div>
-            <div class="left-panelorc-hang col-md-4">
+            <div class="left-panel-heat col-md-7">
                 <div class="div-max">
-                    <div class="col-md-12">
+                    <div class="col-md-5">
                         <h4>Options</h4>
                         <hr>
                         <div class="form-group has-feedback has-success"><label for="ocn_number" class="form_label">OCN
@@ -857,12 +857,20 @@ function hangtagmodal(data,uvc,user_type) {
                             <div class="help-block with-errors"></div>
                         </div>`+sizebox+`
                     </div>
+                    <div class="col-md-7 hang-card">
+                        <h4>ArtWork</h4><span class="label label-`+$status+`"
+                            style="top:13px;right:15px;padding:3px 10px;position: absolute;">`+$status_text+`</span>
+                        <hr>
+                        <div class="section-1 sections">
+                            <label style="margin-top: -40px;position: absolute;margin-right: 120px;right: 0;">Hang Tag Print Date : `+order_details[0].start_print_date+`</label>
+                            <div class="sample-artwork" style="text-align:center;margin-right: 190px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="right-panel-hang col-md-8">
+            <div class="right-panel-heat col-md-5">
                 <div class="div-max scroll">
-                    <h4 style="display:inline">Quantity Info for Hang Tag</h4>
-                    <span class="label label-` + $status + `" style="margin-left:10px;">` + $status_text + `</span>
+                    <h4>Quantity Info for Hang Tag</h4>
                     <hr>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover table-condensed qty-table-modal" id="hang_tag_table">
@@ -939,14 +947,14 @@ function hangtagmodal(data,uvc,user_type) {
     $("#clickmehang").click(function () {
         // $('.sample-artwork').html("")
         $("#hangtagform .backdrop").toggleClass('active');
-        $("#hangtagform .right-panel-hang").toggleClass('active');
+        $("#hangtagform .right-panel-heat").toggleClass('active');
         $('#hangtagform .scalable').toggleClass('active');
-        $("#hangtagform .left-panelorc-hang").toggleClass('active');
+        $("#hangtagform .left-panel-heat").toggleClass('active');
     })
 
     $(".backdrop, #hangclose").click(function () {
-        $("#hangtagform .left-panelorc-hang").removeClass('active');
-        $("#hangtagform .right-panel-hang").removeClass('active');
+        $("#hangtagform .left-panel-heat").removeClass('active');
+        $("#hangtagform .right-panel-heat").removeClass('active');
         $("#hangtagform .backdrop").removeClass('active');
         $('#hangtagform .scalable').removeClass('active');
     })
@@ -1006,7 +1014,29 @@ function hangtagmodal(data,uvc,user_type) {
                     if (data.treeviewData.length > 0) {
                         $('#hangtagform').find('.sample-front').html('<object id="svg_hang_front" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
                         $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
-                    } 
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('HEAD', data.treeviewData[0].template_file.replaceAll("svg", 'png'), false);
+                        xhr.send();
+
+                        if (xhr.status == "404") {
+                            $('#hangtagform').find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+                            $('#hangtagform').find('.sample-artwork').css('margin-right','0px')
+                            $('#hangtagform').find('.sample-artwork').css('margin-top','230px')
+                        }
+                        else
+                        {
+                            $('#hangtagform').find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file.replaceAll("svg", 'png') + '" style="height: 450px;"><img src="' + data.treeviewData[1].template_file.replaceAll("svg", 'png') + '" style="position: absolute;display:inline;height: 450px;">')
+                            $('#hangtagform').find('.sample-artwork').css('margin-right','190px')
+                            $('#hangtagform').find('.sample-artwork').css('margin-top','85px')
+                        }
+                    }
+                    else
+                    {
+                        $('#hangtagform').find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+                        $('#hangtagform').find('.sample-artwork').css('margin-right','0px')
+                        $('#hangtagform').find('.sample-artwork').css('margin-top','230px')
+                    }
 					
 					if (hang_tag_orders != "") {
                         $('#tree1 >ul > li').each( function() {
@@ -1053,7 +1083,29 @@ function hangtagmodal(data,uvc,user_type) {
                     if (data.treeviewData.length > 0) {
                         $('#hangtagform').find('.sample-front').html('<object id="svg_hang_front" style="opacity:0;width:0px;height:0px" class="center-block svg2" data="' + data.treeviewData[0].template_file + '" type="image/svg+xml"></object>')
                         $('#hangtagform').find('.sample-back').html('<object id="svg2" style="opacity:0;width:0px;height:0px" data="' + data.treeviewData[1].template_file + '" type="image/svg+xml"></object><div id="svgdiv" style="visibility:hidden;z-index: -1;position: absolute;"><svg id="ean-13"></svg></div>')
-                    } 
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('HEAD', data.treeviewData[0].template_file.replaceAll("svg", 'png'), false);
+                        xhr.send();
+
+                        if (xhr.status == "404") {
+                            $('#hangtagform').find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+                            $('#hangtagform').find('.sample-artwork').css('margin-right','0px')
+                            $('#hangtagform').find('.sample-artwork').css('margin-top','230px')
+                        } else {
+                            $('#hangtagform').find('.sample-artwork').html('<img src="' + data.treeviewData[0].template_file.replaceAll("svg", 'png') + '" style="height: 450px;"><img src="' + data.treeviewData[1].template_file.replaceAll("svg", 'png') + '" style="position: absolute;display:inline;height: 450px;">')
+                            $('#hangtagform').find('.sample-artwork').css('margin-right','190px')
+                            $('#hangtagform').find('.sample-artwork').css('margin-top','85px')
+                        }
+
+                        
+                    }
+                    else
+                    {
+                        $('#hangtagform').find('.sample-artwork').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;"></i>')
+                        $('#hangtagform').find('.sample-artwork').css('margin-right','0px')
+                        $('#hangtagform').find('.sample-artwork').css('margin-top','230px')
+                    }
                 },
                 error: function (data) {
 
@@ -1131,7 +1183,7 @@ function heattransfermodal(data,user_type) {
 
     $('.top-content').append(`
                 <form id="heat_transferform" data-toggle="validator">
-                <div class="left-panel-heat col-md-7" id="HandTag"><input type="hidden" value="` + $exist_id + `" id="exist_id">
+                <div class="left-panel-heat col-md-7" id="HeatTransferTag"><input type="hidden" value="` + $exist_id + `" id="exist_id">
                     <div class="div-max">
                         <div class="col-md-6 ">
                             <h4>Options</h4>
@@ -1153,9 +1205,9 @@ function heattransfermodal(data,user_type) {
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 heat_transfer-card">
                             <h4>ArtWork</h4><span class="label label-`+$status+`"
-                                style="position: absolute;top: 30px;left: 15px;">`+$status_text+`</span>
+                                style="top:13px;right:15px;padding:3px 10px;position: absolute;">`+$status_text+`</span>
                             <hr>
                             <div class="section-1 sections scroll">
                                 <div class="sample-artwork" style="text-align:center"></div>
@@ -1304,7 +1356,7 @@ function specialtagmodal(data,user_type) {
 		$c++;
     });
     
-    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_special" value="'+$ocn_number_special+'" class="form-control input-sm" placeholder="OCN Number"></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label> <div style="margin-top: -45px;"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand_special">Expand</button><button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse_special">Collapse</button></div> <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success">'+st+'<div class="help-block with-errors" style="margin-bottom: 20px;"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button type="button" class="btn hidden input-sm btn-danger '+$cancel_button_class+'" id="cancel_special_button" style="float: right;margin-left: 10px;" onclick=cancelSpecialDiv()>Cancel</button><button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="specialtagform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="SpecialTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-4 "><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_special" value="'+$ocn_number_special+'" class="form-control input-sm" placeholder="OCN Number"></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="special_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label> <div style="margin-top: -45px;"><button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand_special">Expand</button><button type="button" class="btn btn-xs btn-success" style="float: right;background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" id="collapse_special">Collapse</button></div> <div><input type="text" id="tree2_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="tree2" style="height: calc(100vh - 338px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-8 special-card"><h4>ArtWork</h4><span class="label label-'+$status+'" style="top:13px;right:15px;padding:3px 10px;position: absolute;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Special Tag</h4> <hr> <div class="scroll"><div class="form-group has-feedback has-success">'+st+'<div class="help-block with-errors" style="margin-bottom: 20px;"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_special_button" style="margin-left:10px">Save</button> <button type="button" class="btn hidden input-sm btn-danger '+$cancel_button_class+'" id="cancel_special_button" style="float: right;margin-left: 10px;" onclick=cancelSpecialDiv()>Cancel</button><button class="btn btn-default pull-right input-sm" type="button" id="specialclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 	//$('.left').removeClass('disabled')
     $('#specialtagform .tot_qty_tablespecial').keyup(function () {
         var tot_qty_tablespecial_carton_final = 0;
@@ -1387,7 +1439,7 @@ function mainlabelmodal(data,user_type) {
     var button_tree = '<button type="button" style="background-color: #263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="expand_main">Expand</button><button type="button" style="float:right;background-color:#263238;border: #263238;margin-top: 45px;margin-bottom: 5px;" class="btn btn-xs btn-success" id="collapse_main">Collapse</button>';
 	
 
-    $('.top-content').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="HandTag"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5"><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_main" value="'+$ocn_number_main+'" class="form-control input-sm" placeholder="OCN Number"></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label> <div style="margin-top: -45px;"> '+button_tree+' </div> <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7"><h4>ArtWork</h4><span class="label label-'+$status+'" style="position: absolute;top: 30px;left: 15px;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4><label style="color:#ff9800">This is only to place main label orders. Size label orders you want to place seperately</label> <hr> <div class="scroll"><div class="form-group has-feedback has-success" style="margin-bottom: 20px;">'+ml+'<div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Save</button> <button type="button" class="btn btn-danger hidden input-sm '+$cancel_button_class+'" id="cancel_main_button" style="float: right;margin-left: 10px;" onclick=cancelMainDiv()>Cancel</button><button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
+    $('.top-content').append('<form id="main_labelform" data-toggle= "validator"><div class="left-panelorc col-md-8" id="MainLabel"><input type="hidden" value="' + $exist_id + '" id="exist_id"><div class="div-max"><div class="col-md-5"><h4>Options</h4><hr><div class="form-group has-feedback has-success"><label for="ocn_number"class="form_label">OCN Number</label><input type="text" id="ocn_number_main" value="'+$ocn_number_main+'" class="form-control input-sm" placeholder="OCN Number"></div><div class="form-group has-feedback has-success"><label for="edit_merchandiser_buyer"class="form_label">Select Style</label><label id="main_label_template_error" style="color:red;display: inherit;" class="hidden">Please select the template</label> <div style="margin-top: -45px;"> '+button_tree+' </div> <div><input type="text" id="treeml_q" value="" class="form-control input-sm" placeholder="Search for Awesomeness"> </div><div class="scroll" id="treeml" style="height: calc(100vh - 205px);overflow-y: scroll;margin-top:15px"></div><div class="help-block with-errors"></div></div></div> <div class="col-md-7 main_label-card"><h4>ArtWork</h4><span class="label label-'+$status+'" style="top:13px;right:15px;padding:3px 10px;position: absolute;">'+$status_text+'</span><hr> <div class="section-1 sections scroll"><div class="sample-artwork" style="text-align:center"></div></div></div></div></div><div class="right-panel col-md-4"> <div class="div-max"> <h4>Quantity Info for Main Label</h4><label style="color:#ff9800">This is only to place main label orders. Size label orders you want to place seperately</label> <hr> <div class="scroll"><div class="form-group has-feedback has-success" style="margin-bottom: 20px;">'+ml+'<div class="help-block with-errors"></div></div><button class="btn btn-primary pull-right input-sm left '+$save_button_class+'" type="submit" id="save_main_label_button" style="margin-left:10px">Save</button> <button type="button" class="btn btn-danger hidden input-sm '+$cancel_button_class+'" id="cancel_main_button" style="float: right;margin-left: 10px;" onclick=cancelMainDiv()>Cancel</button><button class="btn btn-default pull-right input-sm" type="button" id="main_labelclose">Close</button>  </div></div> </div>  <div class="backdrop"></div></form>');
 
 	//$('.left').removeClass('disabled')
     $('#main_labelform .tot_qty_table').keyup(function () {
@@ -1482,7 +1534,7 @@ function sizelabelmodal(data,user_type) {
     }
 
     $('.top-content').append(`<form id="size_labelform" data-toggle="validator">
-    <div class="left-panel-heat col-md-7" id="HandTag"><input type="hidden" value="` + $exist_id + `" id="exist_id">
+    <div class="left-panel-heat col-md-7" id="SizeLabel"><input type="hidden" value="` + $exist_id + `" id="exist_id">
         <div class="div-max">
             <div class="col-md-5 ">
                 <h4>Options</h4>
@@ -1506,9 +1558,9 @@ function sizelabelmodal(data,user_type) {
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-7 size_label-card">
                 <h4>ArtWork</h4><span class="label label-`+$status+`"
-                    style="position: absolute;top: 30px;left: 15px;">`+$status_text+`</span>
+                    style="top:13px;right:15px;padding:3px 10px;position: absolute;">`+$status_text+`</span>
                 <hr>
                 <div class="section-1 sections scroll">
                     <div class="sample-artwork" style="text-align:center"></div>
@@ -3704,8 +3756,8 @@ function setHangTagStatus(colour,user_type,page_name) {
 
 		
 
-		$("#hangtagform .left-panelorc-hang").removeClass('active');
-		$("#hangtagform .right-panel-hang").removeClass('active');
+		$("#hangtagform .left-panel-heat").removeClass('active');
+		$("#hangtagform .right-panel-heat").removeClass('active');
 		$("#hangtagform .backdrop").removeClass('active');
 		$('#hangtagform .scalable').removeClass('active');
 
@@ -3720,8 +3772,6 @@ function setHangTagStatus(colour,user_type,page_name) {
         {
             $('.hang-card span').text('Order Approved')
             $('.hang-card span').addClass('label label-OrderApproved')
-            $('.right-panel-hang span').text('Order Approved')
-            $('.right-panel-hang span').addClass('label label-OrderApproved')
             $('#snackbar').css('background-color', '#00b6ff');
             $('.snackbar_span').html('Order created successfully');
             showSnackbar();
