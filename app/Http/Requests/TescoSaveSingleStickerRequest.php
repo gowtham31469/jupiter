@@ -44,7 +44,7 @@ class TescoSaveSingleStickerRequest extends FormRequest
             'case_size.*'           => ['nullable', 'sometimes', 'numeric'],
             'size.*'                => ['nullable', 'sometimes'],
 
-            'orms_tpn'            => ['nullable', 'sometimes', new Numeric, new OrmsTpn],
+            'orms_tpn'            => ['nullable', 'sometimes', new Numeric],
             'itf_barcode'         => ['nullable', 'sometimes', new ITFBarcode, new Numeric],
             'ean_barcode'         => ['nullable', 'sometimes', new EANBarcode, new Numeric],
             'case_size'           => ['nullable', 'sometimes', new Numeric],

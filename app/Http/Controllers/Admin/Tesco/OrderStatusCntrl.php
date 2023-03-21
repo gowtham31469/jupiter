@@ -2389,20 +2389,20 @@ class OrderStatusCntrl extends Controller
         
         if($request->template_name == "FFC/01/M13020C" || $request->template_name == "FFC/01/M13022C" || $request->template_name == "FFK/01/M13021C" || $request->template_name == "FFK/01/M13163C" || $request->template_name == "GE/01/M13114C - Opt 1" || $request->template_name == "GE/01/M13114C - Opt 2" || $request->template_name == "GE/01/M13114C - Opt 3" || $request->template_name == "GE/01/M13114C - Opt 4")
         {
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black;">BOARD : To match to fedrigoni,arena extra white smooth</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
         else if($request->template_name == "FFB/01/M13023C" || $request->template_name == "FFB/01/M13233C")
         {
 
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : Laminated together,tinteretto gesso</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black">BOARD : Laminated together,tinteretto gesso</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY C ( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=45, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
         else if($request->template_name == "FFC/01/M13304C")
         {
 
-            $html_board = '<h6 style="color:red">GSM : 300 GSM</h6><h6 style="color:red">BOARD : To match to fedrigoni,arena extra white smooth</h6><h6 style="color:red">COLOR</h6><h6 style="color:red">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</h6><h6 style="color:red"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</h6><h6 style="color:red">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</h6><h6 style="color:red">485U,PROCESS BLACK</h6>';
-            PDF::writeHTMLCell($w=0, $h=0, $x=130, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
+            $html_board = '<div style="font-size:5.5px;font-weight:700"><p style="color:black">GSM : 300 GSM</p><p style="color:black">BOARD : To match to fedrigoni,arena extra white smooth</p><p style="color:black">COLOR</p><p style="color:black">FRONT : F&F GREY B (L* 75.43 , A* 0.68 , B* -2.42) ,</p><p style="color:black"> F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 )</p><p style="color:black">BACK : F&F GREY C( L* 58.14 , A* 0.45 , B* -3.81 ),</p><p style="color:black">485U,PROCESS BLACK</p></div>';
+            PDF::writeHTMLCell($w=0, $h=0, $x=150, $y=42, $html_board, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=false);
         }
 
         if($request->template_name == "FFC/01/M13304C")
@@ -2539,6 +2539,22 @@ class OrderStatusCntrl extends Controller
                         $wri_y=101.5;
                     }
                 }
+                else if($request->template_name == "FFC/01/M13020C")
+                {
+                    if(count($siz_cat) <= 3)
+                    {
+                        $wri_y=102.5;
+                    }
+                    else if(count($siz_cat) == 4)
+                    {
+                        $wri_y=100.7;
+                    }
+                    else if(count($siz_cat) == 5)
+                    {
+                        $wri_y=100.4;
+                    }
+                    
+                }
                 else
                 {
                     if(count($siz_cat) <= 3)
@@ -2601,56 +2617,114 @@ class OrderStatusCntrl extends Controller
     
                     // if($request->template_name != "FFC/01/M13020C" && $request->template_name != "GE/01/M13114C - Opt 1")
                     // {
-                        $par_pro = json_decode($product_desc_fin[0]);
-                    
-                        if($size_category_fin[$j] != "null")
+
+                        if($request->template_name == "FFC/01/M13020C")
                         {
-                            if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                            $par_pro = json_decode($product_desc_fin[0]);
+                    
+                            if($size_category_fin[$j] != "null")
                             {
-                                $fo_si = "4.5px";
-                                $let_spac = "-0.2px";
+                                if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                                {
+                                    $fo_si = "4.5px";
+                                    $let_spac = "-0.2px";
+                                }
+                                else
+                                {
+                                    $fo_si = "5px";
+                                    $let_spac = "0px";
+                                }
+                                $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=110.2, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            
+                                $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=112.2, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                             }
                             else
                             {
-                                $fo_si = "5px";
-                                $let_spac = "0px";
+                                if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                                {
+                                    $fo_si = "4.5px";
+                                    $let_spac = "-0.2px";
+                                }
+                                else
+                                {
+                                    $fo_si = "5px";
+                                    $let_spac = "0px";
+                                }
+                                $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=106.7, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                                
+                                $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=108.7, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                             }
-                            $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-        
-                            //  print_r($html);
-        
-                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-        
-                            $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-        
-                            //  print_r($html);
-        
-                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                         }
                         else
                         {
-                            if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                            $par_pro = json_decode($product_desc_fin[0]);
+                    
+                            if($size_category_fin[$j] != "null")
                             {
-                                $fo_si = "4.5px";
-                                $let_spac = "-0.2px";
+                                if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                                {
+                                    $fo_si = "4.5px";
+                                    $let_spac = "-0.2px";
+                                }
+                                else
+                                {
+                                    $fo_si = "5px";
+                                    $let_spac = "0px";
+                                }
+                                $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=111.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            
+                                $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=113.5, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                             }
                             else
                             {
-                                $fo_si = "5px";
-                                $let_spac = "0px";
+                                if(strlen($par_pro{0}->slovak." • ".$par_pro{0}->hungarian) > 64)
+                                {
+                                    $fo_si = "4.5px";
+                                    $let_spac = "-0.2px";
+                                }
+                                else
+                                {
+                                    $fo_si = "5px";
+                                    $let_spac = "0px";
+                                }
+                                $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+                                
+                                $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
+            
+                                //  print_r($html);
+            
+                                PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                             }
-                            $html = '<p style="font-family:FandFSans-Regular; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Bold; font-size:5px;">'.$par_pro{0}->english.'</label> • '.$par_pro{0}->czech.'</p>';
-        
-                            //  print_r($html);
-        
-                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=107, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
-                            
-                            $html = '<p style="font-family:FandFSans-Regular;letter-spacing:'.$let_spac.'; font-size:'.$fo_si.';"><label  style="font-family:FandFSans-Regular; font-size:'.$fo_si.';">'.$par_pro{0}->slovak.'</label> • '.$par_pro{0}->hungarian.'</p>';
-        
-                            //  print_r($html);
-        
-                            PDF::writeHTMLCell($w=0, $h=0, $x=$wri_x+1, $y=109, $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
                         }
+                        
                     //}
     
                 }
