@@ -778,6 +778,9 @@ Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], 
 	Route::post('/logout', 'MerchandiserAuth\LoginController@logout')->name('merchandiser.logout');
 	Route::get('/pending-orders', 'Merchandiser\HomeController@index');
 	Route::get('/get-wcl-details', 'Merchandiser\HomeController@getWCLById');
+	Route::post('/orchestra/get-order-details', 'Merchandiser\HomeController@getOrderDetails');
+	Route::get('/order-management/get-tsl-size', 'Merchandiser\HomeController@getTescoTSLSizechart');
+	Route::post('/order-management/print-wash-pdf', 'Merchandiser\HomeController@printWashPdf');
 	Route::post('/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
 	Route::get('/past-orders', 'Merchandiser\HomeController@pastOrders');

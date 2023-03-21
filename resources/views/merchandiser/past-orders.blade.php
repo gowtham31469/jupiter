@@ -41,8 +41,8 @@
                     @else
                          <td>-</td>
                     @endif
-                    @if($order->Status == "Rejected")
-                    <td><span class="label label-warning">{{  $order->Status }}</span></td>
+                    @if($order->Status == "Order Rejected")
+                    <td><span class="label label-OrderRejected">{{  $order->Status }}</span></td>
                     @else
                     <td><span class="label label-Approved">{{  $order->Status }}</span></td>
                     @endif
@@ -69,12 +69,12 @@
             initComplete: function() {
                 $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first').append(' <button class="filterbtn" type="button" onClick="showFilter()"><i class="fa fa-filter" aria-hidden="true"></i></button>');
                 $('.main-content > .dataTables_wrapper > .row > .col-sm-12 > .pull-right:first .dataTables_filter').css('display', 'inline-block');
-                $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-2"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-2"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-2"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-2"><select class="selectpicker" id="selectApproveDate"> <option disabled selected>Select Approve Date</option> </select></div><div class="col-md-2"><select class="selectpicker" id="selectRejectDate"> <option disabled selected>Select Reject Date</option> </select></div><div class="col-md-2"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
+                $('.main-content > .dataTables_wrapper > .row > .col-sm-12:first').append('<div class="filter-window"><h5><strong>Order Status Filter</strong></h5> <div class="row"> <div class="col-md-3"><input type="text" class="form-control" style="width:100%" name="daterange" /></div><div class="col-md-3"><select class="selectpicker" id="supplierName"> <option disabled selected>Select Supplier</option></select></div><div class="col-md-3"><select class="selectpicker" id="uvcNumber"> <option disabled selected>Select UVC</option></select></div><div class="col-md-3"><select class="selectpicker" id="selectStatus"> <option disabled selected>Select Status</option> </select></div></div><div class="filter-actions"><button class="btn btn-primary input-sm pull-right" id="reset">Clear Filter</button><button id="closeFilter" class="btn btn-default input-sm pull-right" onclick="showFilter()">Close</button><div class="clearfix"></div></div></div>');
 
                 /*For Custom Filters*/
                 this.api().columns().every(function(i) {
                     var column = this;
-                    if (i === 0 || i === 2 || i === 6 || i === 7 || i === 8) {
+                    if (i === 0 || i === 2 || i === 8) {
                         var select;
                         switch (i) {
                             case 0:
@@ -82,12 +82,6 @@
                                 break;
                             case 2:
                                 select = $('#supplierName')
-                                break;
-                            case 6:
-                                select = $('#selectApproveDate')
-                                break;
-                            case 7:
-                                select = $('#selectRejectDate')
                                 break;
                             case 8:
                                 select = $('#selectStatus')
@@ -116,8 +110,6 @@
         $("#reset").on("click", function() {
             $('#uvcNumber').val('').change();
             $('#supplierName').val('').change();
-            $('#selectApproveDate').val('').change();
-            $('#selectRejectDate').val('').change();
             $('#selectStatus').val('').change();
             $.fn.dataTableExt.afnFiltering.length = 0;
             $tableSel.dataTable().fnDraw();
@@ -132,10 +124,10 @@
 
             },
             function(start, end, label) {
-                /*We call our filter function*/
-                filterByDate(4, start, end); 
-                /*Manually redraw the table after filtering*/
-                $tableSel.dataTable().fnDraw(); 
+                $.fn.dataTableExt.afnFiltering.length = 0;
+                $tableSel.dataTable().fnDraw();
+                filterByDate(5, start, end); // We call our filter function
+                $tableSel.dataTable().fnDraw();
             });
 
         $('input[name="daterange"]').val('Filter by Order Date');
@@ -160,7 +152,8 @@
         /*Custom filter syntax requires pushing the new filter to the global filter array*/
         $.fn.dataTableExt.afnFiltering.push(
             function(oSettings, aData, iDataIndex) {
-                var rowDate = normalizeDate(aData[column]),
+                var columnDate = aData[column].toString().split("-").reverse().join("-");
+			    var rowDate = normalizeDate(columnDate),
                     start = normalizeDate(startDate),
                     end = normalizeDate(endDate);
 

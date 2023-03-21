@@ -1,13 +1,5 @@
 function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,tableName,print_type,page_name,index_wcl_count)
 {
-    var a1 = document.getElementById(front);
-	var svgDoc1 = a1.contentDocument;
-	var svgRoot1 = svgDoc1.documentElement;
-
-    var a1_back = document.getElementById(back);
-    var svgDoc1_back = a1_back.contentDocument;
-    var svgRoot1_back = svgDoc1_back.documentElement;
-
 
     if(user_type == "admin")
     {
@@ -21,6 +13,23 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
     {
         var buyer_url = base_url + "/erp/job-manager/get-order-details";
     }
+    else if(user_type == "merchandiser")
+    {
+        var buyer_url = base_url + "/merchandiser/orchestra/get-order-details";
+
+        front = tableID+"_"+front;
+        back = tableID+"_"+back;
+        middle = tableID+"_"+middle;
+        static_final = tableID+"_"+static_final;
+    }
+
+    var a1 = document.getElementById(front);
+	var svgDoc1 = a1.contentDocument;
+	var svgRoot1 = svgDoc1.documentElement;
+
+    var a1_back = document.getElementById(back);
+    var svgDoc1_back = a1_back.contentDocument;
+    var svgRoot1_back = svgDoc1_back.documentElement;
 
     if(page_name == "co")
     {
