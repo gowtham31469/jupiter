@@ -75,7 +75,7 @@ class NonArtworkJobCardFiltersController extends Controller
         foreach ($new_orders as $key => $values) {
             $split_key = explode('-', $key);
             $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
+            $buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
 
             $erp_po_ids[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->where([
@@ -90,7 +90,7 @@ class NonArtworkJobCardFiltersController extends Controller
             ->orderBy('erp_order_details.erp_order_id', 'asc')
             ->pluck('erp_orders.po_no', 'erp_orders.erp_id');
 
-            $buyers_array[$buyer_id] = $this->buyer_name;
+            $buyers_array[$buyer_id] = $buyer_name;
         }
 
         $erpid_collection = new Collection();
@@ -146,10 +146,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $buyer_name = DB::table('buyers')->where('id', $request['buyer_id'])->value('buyer_name');
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $item_names[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
@@ -188,10 +184,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $references[] = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
@@ -231,10 +223,6 @@ class NonArtworkJobCardFiltersController extends Controller
         $templates = $this->erp_user_mapped_template_obj->getPermittedTemplates();
 
         foreach ($templates as $key => $values) {
-            $split_key = explode('-', $key);
-            $buyer_id = $split_key[0];
-            $this->buyer_name = DB::table('buyers')->where('id', $buyer_id)->value('buyer_name');
-
             $query = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
             ->join(strtolower($buyer_name).'_item_master', 'erp_order_details.template_id', strtolower($buyer_name).'_item_master.id')
             ->join(strtolower($buyer_name).'_template', strtolower($buyer_name).'_template.item_id', strtolower($buyer_name).'_item_master.id')
@@ -425,7 +413,7 @@ class NonArtworkJobCardFiltersController extends Controller
         /** Get erp order details table ids from erp orders table id */
         list($order_details_collection, $order_detail_ids) = $jc_class_obj->getNatErpOrderDetails($uuid_array, $this->order_ap_status_id, $this->erp_jc_status_id);
 
-        list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array) = $jc_class_obj->createNatOrderDataArray($order_details_collection);
+        list($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array, $aw_approve_dt_array) = $jc_class_obj->createNatOrderDataArray($order_details_collection);
 
         if (empty($temp_id_array)) {
             return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
@@ -447,6 +435,7 @@ class NonArtworkJobCardFiltersController extends Controller
 
         /** Push all array values into template_data array */
         $template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
+        $template_data['aw_approve_dt']    = $aw_approve_dt_array;
         $template_data['cus_del_date']     = $delivery_dt_array;
         $template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
         $template_data['workorder_id']     = $workorder_id;

@@ -7,21 +7,34 @@
 
 		$('.table-responsive').on('show.bs.dropdown', function () {
 			$('body').css( "overflow-x", "hidden" );
-		// $('.table-responsive').css( "overflow", "inherit" );
 		});
 
 		$('.table-responsive').on('hide.bs.dropdown', function () {
 			$('body').css( "overflow-x", "auto" );	
-		// $('.table-responsive').css( "overflow", "auto" );
 		})
 
 		$('.reference_select').selectpicker({
 		dropupAuto: false
 		});
 
-		
-		$("#current_date").datepicker("setDate", new Date());
-	
+        $('#currentDatePicker').datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true
+        }).datepicker("setDate", "0");
+
+        $('#dueDatePicker').datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+
+        format_aw_appr_date();
 
 		$.ajaxSetup({
 			headers: {
@@ -102,6 +115,8 @@
     		}
     		set_row_index()
     		sync_calculations()
+
+            format_aw_appr_date();
 		}
 
 		function set_row_index()
@@ -186,7 +201,7 @@
 
 		}
 
-		$('#add_single_row').click(function()
+		$('#add_single_row').on("click", function()
 		{  	
 			row_ids = ['addr0'];
 			action = ['create'];
@@ -514,9 +529,6 @@
 							$('.snackbar_span').html('Order created successfully !!!');
 						}
 						showSnackbar();
-						// setTimeout(function () {
-						// 	location.reload(true);
-						// }, 2500);
 					}
 				}  
 			}); 
@@ -557,19 +569,32 @@
 					$("#dynamic_field").html('')
 					$("#dynamic_field").html(data.td)
 					$('.selectpicker').selectpicker('refresh')
-					$('#current_date').datepicker("setDate", new Date(data.row['order_created_at']) );
-					$('#due_date').datepicker("setDate", new Date(data.row['delivery_date']) );
 
-					$(".aw_date").each(function(i,v)
+					$('#currentDatePicker').datepicker("setDate", new Date(data.row['order_created_at']) );
+					$('#dueDatePicker').datepicker("setDate", new Date(data.row['delivery_date']) );
+
+					$(".nat_approve_date").each(function(i,v)
 					{	
 						if(data.approved_dates[i] == null)
 						{
-							$(this).datepicker("setDate", null);
+                            $(this).datepicker({
+                                autoclose: true,
+                                format: "dd/mm/yyyy",
+                                immediateUpdates: true,
+                                todayBtn: true,
+                                todayHighlight: true,
+                            }).datepicker("setDate", null);
 							$(this).parent().parent().css("pointer-events",'none')
 						}
 						else
 						{
-							$(this).datepicker("setDate", new Date(data.approved_dates[i]))
+							$(this).datepicker({
+                                autoclose: true,
+                                format: "dd/mm/yyyy",
+                                immediateUpdates: true,
+                                todayBtn: true,
+                                todayHighlight: true,
+                            }).datepicker("setDate", new Date(data.approved_dates[i]));
 						}
 						
 					})
@@ -636,4 +661,16 @@
 		}
 		});
 	});
+
+    function format_aw_appr_date () {
+        $('.nat_approve_date').datepicker({
+            autoclose: true,
+            format: "dd/mm/yyyy",
+            immediateUpdates: true,
+            todayBtn: true,
+            todayHighlight: true,
+            endDate: new Date()
+        });
+    }
+    
 });  

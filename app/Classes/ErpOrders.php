@@ -21,6 +21,7 @@ class ErpOrders
 	private $financial_year;
 	private $tesco_material_obj;
 	private $erp_id_gen_obj;
+	private $financial_year_date_format;
 	
 	/**
 	 * Create a new controller instance.

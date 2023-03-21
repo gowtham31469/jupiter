@@ -9,7 +9,7 @@ class ErpUserMappedTemplates
     {
         return DB::table('erpusers_template_mapping')
         ->join('buyers', 'erpusers_template_mapping.buyer', 'buyers.id')
-        ->where('erpusers_template_mapping.company',session()->get('company'))
+        // ->where('erpusers_template_mapping.company',session()->get('company'))    // commented company mapping check : bcoz of parent-child company id mismatch. 
         ->where(function ($query) {
             if (Auth::guard('erpuser')->id() != 1) {
                 $query->where('erpusers_template_mapping.erp_user', Auth::guard('erpuser')->id());

@@ -36,6 +36,7 @@ class JobcardCommonClass
 
 	public function createNatOrderDataArray($order_details_collection){
 		$order_dt_array     = array();
+		$aw_approve_dt_array= array();
 		$delivery_dt_array  = array();
 		$style_array        = array();
 		$ordertype_array    = array();
@@ -51,6 +52,8 @@ class JobcardCommonClass
 			$reference_name = $order_details->order_qnty_table_name === 'non_artwork_orders_quanty'?'non-artwork':$order_details->reference_name;
 
 			!in_array($order_details->created_at, $order_dt_array, true) ? array_push($order_dt_array, $order_details->created_at) : $order_dt_array;
+
+			!in_array(Carbon::parse($order_details->aw_date)->format('d-m-Y'), $aw_approve_dt_array, true) ? array_push($aw_approve_dt_array, Carbon::parse($order_details->aw_date)->format('d-m-Y')) : $aw_approve_dt_array;
 
 			!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array, true) ? array_push($delivery_dt_array, Carbon::parse($order_details->delivery_date)->format('d-m-Y')) : $delivery_dt_array;
 
@@ -88,7 +91,7 @@ class JobcardCommonClass
 
 		}
 
-		return array($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array);
+		return array($order_dt_array, $delivery_dt_array, $style_array, $ordertype_array, $temp_id_array, $distinct_ref_array, $customer_po_array, $single_templates, $erp_id_array, $aw_approve_dt_array);
 	}
 
 	public function getTemplateData($buyer, $temp_id_array) {

@@ -55,8 +55,8 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="current_date">Current Date</label>
-					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-						<input value="" id="current_date" name="current_date" type="text" class="form-control common_entry set_readonly " required="" placeholder="Current Date">
+					<div class="input-group tesco_manufacture_date date " data-provide="datepicker" id="currentDatePicker">
+						<input value="" id="current_date" name="current_date" type="text" class="form-control common_entry set_readonly datepicker" required="" placeholder="Current Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
 						</div >
@@ -67,7 +67,7 @@
 			<div class="col-md-4">
 				<div class="form-group has-feedback">
 					<label for="due_date">Due Date</label>
-					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
+					<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="dueDatePicker">
 						<input value="" id="due_date" name="due_date" type="text" class="form-control common_entry set_readonly" required="" placeholder="Select Due Date">
 						<div class="input-group-addon">
 							<span class="glyphicon glyphicon-th"> </span >
@@ -208,8 +208,8 @@
 								</select>
 							</td>
 							<td class="aw_td">
-								<div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-									<input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
+								<div class="input-group tesco_manufacture_date date nat_approve_date" data-provide="datepicker" id="awDatePicker">
+									<input value="" id="nat_approve_date" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date">
 									<div class="input-group-addon">
 										<span class="glyphicon glyphicon-th"> </span >
 									</div >

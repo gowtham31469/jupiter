@@ -467,10 +467,15 @@ const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_ar
 
                 renderCommonJCView(data);
 
+                $('#teeth_no').prop("disabled", true).selectpicker('refresh');
                 $('#nat_template_type').val(data.template_data.template_type[0]);
                 $('.nat-jobcard-modal-title').text(data.modal_title);
                 $('#crud_operation_type').text('created_at');
                 $('#material_hierarchy').text(data.template_data.material_hierarchy)
+
+                if (data.template_data.aw_approve_dt.length === 1) {
+                    $('#aw_app_date').val(data.template_data.aw_approve_dt);
+                }
 
                 /** Show single templates dynamic table */
                 var single_table_html = '';
@@ -616,6 +621,12 @@ const getNatJGAOrderDetails = (checked_count, buyerArray, customerArray, uuid_ar
                 $('.datepicker').datepicker({
                     format: 'dd-mm-yyyy'
                 });
+
+                $('#aw_app_date').datepicker({
+                    format: 'dd-mm-yyyy',
+                    endDate: new Date()
+                });
+
                 // enable print button (for old version browsers)
                 $('#jc_print_btn').prop('disabled', false);
             },
@@ -740,15 +751,19 @@ const mtrsForNatStickers = () => {
 
     switch (machine_text.toLowerCase().trim()) {
         case 'rotary':
+                $('#teeth_no').val('').prop("required", true).prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, 1, 0, total_excess);
             break;
         case 'flexo':
+                $('#teeth_no').val('').prop("required", true).prop("disabled", false).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         case 'flat bed':
+                $('#teeth_no').val('').prop("required", false).prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(total_qty, length_side_dimension, no_of_repeats, repeat_gap, total_excess);
             break;
         default:
+                $('#teeth_no').val('').prop("required", false).prop("disabled", true).selectpicker('refresh');
                 mtrs = machineExcessCalculation(0, 0, 1, 0, 0);
             break;
     }
@@ -1057,14 +1072,17 @@ const storeNatJobcard = () => {
             200: function(data) {
 
                 var resp = JSON.stringify(data.file_path); 
-                window.open(
-                    base_url+JSON.parse(resp),
-                    '_blank' // <- This is what makes it open in a new window.
-                ); 
+                // window.open(
+                //     base_url+JSON.parse(resp),
+                //     '_blank' // <- This is what makes it open in a new window.
+                // ); 
                 $('.snackbar_span').html("Jobcard Created Successfully");
                 showSnackbar();
-                $('.modal').modal('hide');
-                location.reload();
+                // $('.modal').modal('hide');
+                // location.reload();
+
+                $('#jc_print_btn').remove();
+                $('#nat_jc_download_btn').attr("href", base_url+JSON.parse(resp)).attr('target','_blank').removeClass('hidden');
               
             },
             400: function() {
@@ -1086,6 +1104,7 @@ const storeNatJobcard = () => {
         },
         complete: function () {
             $(".loader").hide();
+            $("#close-nat-jc-model,#jc_nat_close_btn").attr("onclick", "location.reload()");
         }
     })
 }

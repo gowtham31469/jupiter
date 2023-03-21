@@ -37,6 +37,7 @@ class NonArtworkTemplateController extends Controller
     private $financial_year;
     private $tesco_material_obj;
     private $erp_id_gen_obj;
+    private $financial_year_date_format;
 
 
 
@@ -180,15 +181,6 @@ class NonArtworkTemplateController extends Controller
 
     public function saveNonArtworkOrders(Request $request)
     {   
-        // dd($request->all());
-
-         // $collection = collect($request->ocn);
-         // $matrix = $collection->crossJoin($request->bpo,$request->style);
-         // dd($matrix->all());
-         // dd(array_unique($matrix->all(), SORT_REGULAR));
-         // dd(count($matrix->unique()),$matrix->unique());
-
-         
 
         // $rules = [
         //     'current_date' => 'required',
@@ -209,7 +201,6 @@ class NonArtworkTemplateController extends Controller
         //     'A_W_Status.*' => 'required',
         //     'quantity.*' => 'required',
         // ];
-
 
         $erp_id = $this->erp_id_gen_obj->generateErpID(
                 $this->financial_year_start,
@@ -371,9 +362,9 @@ class NonArtworkTemplateController extends Controller
                                   'template_id' => $request->reference[$key],
                                   'style_ref' => $request->style[$key],
                                   'total_qty' => $request->qty_total,
-                                  'delivery_date' => Carbon::parse($request->due_date)->toDateString(),
-                                  'order_created_at' => Carbon::parse($request->current_date)->toDateTimeString(),
-                                  'order_approved_at' => $request->approve_date[$key]!=null ? Carbon::parse($request->approve_date[$key])->toDateTimeString():null,
+                                  'delivery_date' => Carbon::createFromFormat('d/m/Y', $request->due_date)->toDateString(),
+                                  'order_created_at' => Carbon::createFromFormat('d/m/Y', $request->current_date)->toDateTimeString(),
+                                  'order_approved_at' => $request->approve_date[$key]!=null ? Carbon::createFromFormat('d/m/Y', $request->approve_date[$key])->toDateTimeString():null,
                                   'created_by' => Auth::guard('erpuser')->id()
                                 ]
                                 );
@@ -419,7 +410,7 @@ class NonArtworkTemplateController extends Controller
                         'order_quantity'        => $request->quantity[$key],
                         'pending_orders'        => $request->quantity[$key],
                         'size'                  => $size,
-                        'delivery_date'         => Carbon::parse($request->due_date)->toDateString(),
+                        'delivery_date'         => Carbon::createFromFormat('d/m/Y', $request->due_date)->toDateString(),
                         'order_qnty_table_name' => "non_artwork_orders_quanty",
                         'order_qnty_table_id'   => $nat_qty->id,
                         'template_id'           => $request->reference[$key],
@@ -433,13 +424,11 @@ class NonArtworkTemplateController extends Controller
                         'rate'                  => $request->rate[$key],
                         'zone'                  => null,
                         'order_type'            => "newOrder",
-                        'created_at'            => Carbon::parse($request->current_date)
-                                                    ->toDateTimeString(),
+                        'created_at'            => $this->current_date,
                         'order_status_id'       => $request->approve_date[$key] ==null ? 2 : 4,
-                        'order_date'            => Carbon::parse($request->current_date)
-                                                    ->toDateTimeString(),
+                        'order_date'            => Carbon::createFromFormat('d/m/Y', $request->current_date)->toDateTimeString(),
                         'aw_date'               => $request->approve_date[$key]!=null ?
-                                                     Carbon::parse($request->approve_date[$key])->toDateTimeString():null,
+                        Carbon::createFromFormat('d/m/Y', $request->approve_date[$key])->toDateTimeString():null,
                         'uuid'                  => $unique_id,
                         'fiscal_year_start'     => $this->financial_year_start,
                         'fiscal_year_end'       => $this->financial_year_end
@@ -693,8 +682,8 @@ class NonArtworkTemplateController extends Controller
                                         </select>
                                     </td>
                                     <td width="170" class="aw_td">
-                                        <div class="input-group tesco_manufacture_date date" data-provide="datepicker" id="datePicker1">
-                                            <input value="" id="" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date" '.$readonly.'>
+                                        <div class="input-group tesco_manufacture_date date nat_approve_date" data-provide="datepicker" id="awDatePicker">
+                                            <input value="" id="nat_approve_date" name="approve_date[]" type="text" class="form-control aw_date" placeholder="Select Due Date" '.$readonly.'>
                                             <div class="input-group-addon">
                                                 <span class="glyphicon glyphicon-th"> </span>
                                             </div>
