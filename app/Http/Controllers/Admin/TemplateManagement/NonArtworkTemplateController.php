@@ -292,4 +292,48 @@ class NonArtworkTemplateController extends Controller
         return $result;
          
     }
+
+    /**
+     * Method to delete the template
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function deleteTemplate(Request $request) {
+        try {
+			$buyer = strtolower(str_replace(" ", "_", $request['buyer']));
+            $template_id = $request['template_id'];
+            $buyer_id = $request['buyer_id'];
+            
+            $orders = DB::table('non_artwork_orders')
+                        ->where('buyer_id',$buyer_id)
+                        ->where('template_id',$template_id)
+                        ->get();
+
+            if(count($orders) == 0)
+            {
+                DB::table($buyer.'_item_master')
+                    ->where('id',$template_id)
+                    ->delete();
+
+                DB::table($buyer.'_template')
+                    ->where('item_id',$template_id)
+                    ->delete();
+
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $result = response()->json(['error'=> false,'message' =>'error'],200);
+            }
+			
+        }
+        catch (\Exception $e)
+        {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+        return $result;
+         
+    }
+
+    
 }
