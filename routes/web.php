@@ -166,6 +166,7 @@ Route::prefix('admin')->group(function () {
 		Route::post('/update-template', 'Admin\TemplateManagement\NonArtworkTemplateController@updateTemplate');
 		Route::post('/template-hierarchy', 'Admin\TemplateManagement\NonArtworkTemplateController@templateHierarchy');
 		Route::post('/rename-template', 'Admin\TemplateManagement\NonArtworkTemplateController@renameTemplate');
+		Route::post('/delete-template', 'Admin\TemplateManagement\NonArtworkTemplateController@deleteTemplate');
 	});
 	//Orchestra Order Management - Admin
 	Route::prefix('/orchestra')->group(function () {

@@ -90,6 +90,7 @@ function showAddTemplatePopUp() {
 
 function template_list() {
     var buyer = localStorage.getItem("buyer");
+    var delete_temp = "";
 
     $.ajax({
         url: base_url + "/admin/non-artwork-template/template-hierarchy",
@@ -135,31 +136,78 @@ function template_list() {
                                         showAddTemplatePopUp();
                                     }
                                 },
-                                // "Rename": {
-                                //     "separator_before": false,
-                                //     "separator_after": false,
-                                //     "label": "Rename Template",
-                                //     "icon": "fa fa-pencil-square-o",
-                                //     "action": function (obj) { 
-                                //         tree.edit($node);
-                                //     }
-                                // },  
-                                // "Remove": {
-                                //     "separator_before": false,
-                                //     "separator_after": false,
-                                //     "label": "Delete Template",
-                                //     "action": function (obj) {
-                                //         alert("Delete template")
-                                //     }
-                                // }
+                                "Rename": {
+                                    "separator_before": false,
+                                    "separator_after": false,
+                                    "label": "Rename Template",
+                                    "icon": "fa fa-pencil-square-o",
+                                    "action": function (obj) { 
+                                        tree.edit($node);
+                                    }
+                                },  
+                                "Remove": {
+                                    "separator_before": false,
+                                    "separator_after": false,
+                                    "label": "Delete Template",
+                                    "icon": "fa fa-minus-square-o",
+                                    "action": function (obj) {
+                                        var buyer = localStorage.getItem("buyer");
+                                        var buyer_id = localStorage.getItem("buyer_id");
+                                        var temp_id = $node.id;
+                                        
+                                        $.ajax({
+                                            url: base_url + "/admin/non-artwork-template/delete-template",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: {
+                                                buyer: buyer,
+                                                buyer_id: buyer_id,
+                                                template_id: temp_id,
+                                                _token: csrf_token
+                                            },
+                                            success: function (data) {
+                                                if(data.message == "error")
+                                                {
+                                                    $('.snackbar_span').html(' The template you are trying to delete cannot be removed as there is already an order placed using it');
+                                                    showSnackbar();
+                                                }
+                                                else
+                                                {
+                                                    $('.snackbar_span').html('Template delete successful');
+                                                    showSnackbar();
+                                                    tree.delete_node($node);
+                                                }
+                                            },
+                                            error: function (data) {
+                                                $('.snackbar_span').html('Unable to save. Try again!!');
+                                                showSnackbar();
+                                            },
+                                            complete: function () {
+
+                                            }
+                                        });
+                                    }
+                                }
                             };
                     }
                 },
                 "plugins": ["types", "search", "contextmenu" ]
             }).on('show_contextmenu.jstree', function(e, reference, element) {
-                console.log(element)
-                if ( reference.node.parents.length !== 2 ) {
+                console.log(reference.node.parents.length)
+                if ( reference.node.parents.length == 1 ) {
                      $('.vakata-context').hide();
+                }
+                else if(reference.node.parents.length == 2)
+                {
+                    $('.vakata-context li:nth-child(1)').show();
+                    $('.vakata-context li:nth-child(2)').hide();
+                    $('.vakata-context li:nth-child(3)').hide();
+                }
+                else if(reference.node.parents.length > 2)
+                {
+                    $('.vakata-context li:nth-child(1)').hide();
+                    $('.vakata-context li:nth-child(2)').show();
+                    $('.vakata-context li:nth-child(3)').show();
                 }
             
             }).on('rename_node.jstree', function(e, data) {
@@ -454,4 +502,5 @@ function renameNode(data) {
 		}
 	});
 }
+
 
