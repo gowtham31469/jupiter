@@ -24,7 +24,7 @@
 							<div class="form-group has-feedback">
 								{!! Form::label('nat_erp_id', 'Erp Id', ['class' => 'form_label']) !!}
 								<select class="selectpicker" id="nat_erp_id" title="Select ERP Id" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_erp_id[]" onchange="disableLevelTwoFilters()">
-									@foreach($erp_po_ids as $erp_id => $po)
+									@foreach($erp_ids as $erp_id)
 									<option value="{{$erp_id}}">{{ $erp_id }}</option>
 									@endforeach
 								</select>
@@ -35,7 +35,7 @@
 							<div class="form-group has-feedback">
 								{!! Form::label('nat_customer_po', 'Customer Po Number', ['class' => 'form_label']) !!}
 								<select class="selectpicker" id="nat_customer_po" title="Select Customer PO" data-done-button="true" multiple data-selected-text-format="count" data-actions-box="true" data-live-search="true" data-size="10" name="nat_customer_po[]" onchange="disableLevelTwoFilters()">
-									@foreach($erp_po_ids as $erp_id => $po)
+									@foreach($erp_pos as $po)
 									<option value="{{$po}}">{{ $po }}</option>
 									@endforeach
 								</select>
