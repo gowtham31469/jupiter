@@ -31,7 +31,7 @@ class ErpUserMappedTemplates
                 ->where('hierarchy_id', $value->templates)
                 ->distinct('hierarchy_id')
                 ->pluck('item_id');
-            if ($arr_template) {
+            if ($arr_template->isNotEmpty()) {
                 $new_orders[$value->buyer_id . "-" . $i] = $arr_template;
             }
             $i++;
