@@ -94,20 +94,28 @@ class NonArtworkJobCardFiltersController extends Controller
         }
 
         $erpid_collection = new Collection();
+        $po_collection = new Collection();
 
         foreach ($erp_po_ids as $items) {
-            foreach ($items as $key => $item) {
-                $erpid_collection->put($key, $item);
+            
+            if($items->isNotEmpty()){
+                foreach ($items as $key => $item) {
+                    $erpid_collection->put($key, $key);
+                    $po_collection->put($item, $item);
+                }
             }
+            
         }
 
-        $erp_po_ids = $erpid_collection->all();
-        asort($erp_po_ids);
-
+        $erp_ids = $erpid_collection->all();
+        $erp_pos = $po_collection->all();
+        asort($erp_ids);
+        
         return view(
             'erp.Non-Artwork-Jobmanager.non-artwork-jobcard-home',
             [
-                'erp_po_ids' => $erp_po_ids,
+                'erp_ids' => $erp_ids,
+                'erp_pos' => $erp_pos,
                 'buyers' => $buyers_array,
                 'companies' => $companies
             ]
@@ -162,19 +170,22 @@ class NonArtworkJobCardFiltersController extends Controller
             ->distinct('reports_template_level_name.id')
             ->get();
         }
-
+        
         $item_names_collection = new Collection();
-
+        $key = 0;
         foreach ($item_names as $items) {
-            foreach ($items as $key => $item) {
-                $item_names_collection->put($key, $item);
+            if ($items->isNotEmpty()) {
+                foreach ($items as $item) {
+                    $item_names_collection->put($key, $item);
+                    $key += 1;
+                }
             }
         }
 
         return response()->json([
             'error'=> false,
             'message' =>'success', 
-            'item_names' => $item_names_collection->all() 
+            'item_names' => $item_names_collection->unique() 
         ],200);	
     }
 
@@ -198,15 +209,17 @@ class NonArtworkJobCardFiltersController extends Controller
             ->whereIn('erp_order_details.order_status_id', $this->order_ap_status_id)
             ->whereIn('erp_order_details.template_id', $values)
             ->select('erp_order_details.reference_name', 'erp_order_details.template_id')
-            ->distinct('erp_order_details.template_id')
+            ->distinct('erp_order_details.reference_name')
             ->get();
         }
 
         $references_collection = new Collection();
 
         foreach ($references as $items) {
-            foreach ($items as $key => $item) {
-                $references_collection->put($key, $item);
+            if ($items->isNotEmpty()) {
+                foreach ($items as $key => $item) {
+                    $references_collection->put($key, $item);
+                }
             }
         }
 
@@ -259,22 +272,29 @@ class NonArtworkJobCardFiltersController extends Controller
         $style_no_collection = new Collection();
 
         foreach ($ocn_numbers as $items) {
-            foreach ($items as $key => $item) {
-                $ocn_collection->put($key, $item);
+            
+            if ($items->isNotEmpty()) {
+                foreach ($items as $key => $item) {
+                    $ocn_collection->put($key, $item);
+                }
             }
         }
 
 
         foreach ($buyer_po_number as $items) {
-            foreach ($items as $key => $item) {
-                $buyer_po_collection->put($key, $item);
+            if ($items->isNotEmpty()) {
+                foreach ($items as $key => $item) {
+                    $buyer_po_collection->put($key, $item);
+                }
             }
         }
 
 
         foreach ($style_no as $items) {
-            foreach ($items as $key => $item) {
-                $style_no_collection->put($key, $item);
+            if ($items->isNotEmpty()) {
+                foreach ($items as $key => $item) {
+                    $style_no_collection->put($key, $item);
+                }
             }
         }
 
@@ -365,6 +385,8 @@ class NonArtworkJobCardFiltersController extends Controller
                 {
                     $query->orWhereIn('erp_orders.erp_id', $request['erp_id']);
                 }
+            })
+            ->where(function($query) use ($request){
                 if($request['customer_po'])
                 {
                     $query->orWhereIn('erp_orders.po_no', $request['customer_po']);
