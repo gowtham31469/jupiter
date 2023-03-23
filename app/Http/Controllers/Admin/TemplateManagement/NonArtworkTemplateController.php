@@ -278,12 +278,30 @@ class NonArtworkTemplateController extends Controller
 			$buyer = strtolower(str_replace(" ", "_", $request['buyer']));
             $template_id = $request['template_id'];
             $template_name = $request['new_name'];
+            $buyer_id = $request['buyer_id'];
             
-            DB::table($buyer.'_item_master')
-                        ->where('id',$template_id)
-                        ->update(['item_name' => $template_name]);
-			
-            $result = response()->json(['error'=> false,'message' =>'success'],200);
+            $orders = DB::table('non_artwork_orders')
+                        ->where('buyer_id',$buyer_id)
+                        ->where('template_id',$template_id)
+                        ->get();
+
+            if(count($orders) == 0)
+            {
+                DB::table($buyer.'_item_master')
+                ->where('id',$template_id)
+                ->update(['item_name' => $template_name]);
+    
+                $result = response()->json(['error'=> false,'message' =>'success'],200);
+            }
+            else
+            {
+                $template_name = DB::table($buyer.'_item_master')
+                                    ->where('id',$template_id)
+                                    ->get();
+                $result = response()->json(['error'=> false,'message' =>'error','template_name' => $template_name],200);
+            }
+            
+            
         }
         catch (\Exception $e)
         {

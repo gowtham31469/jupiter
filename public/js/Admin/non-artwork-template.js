@@ -20,7 +20,7 @@ function isNumber(evt) {
 
 function add_template(template_id) {
 	var tax = $('#tax_new').val();
-    var template_name = $('#reference_number').val();
+    var template_name = $('#template_name').val();
 	var ref = $('#reference_number').val();
 	var company = $('#company_new').val();
 	var hsncode = $('#hsn_code_new').val();
@@ -211,7 +211,44 @@ function template_list() {
                 }
             
             }).on('rename_node.jstree', function(e, data) {
-                renameNode(data);
+                var obj = this;
+                var node = data.node;
+                var buyer = localStorage.getItem("buyer");
+                var temp_id = data.node.id;
+                var text = data.node.text;
+                var buyer_id = localStorage.getItem("buyer_id");
+                $.ajax({
+                    url: base_url + "/admin/non-artwork-template/rename-template",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        buyer: buyer,
+                        buyer_id: buyer_id,
+                        template_id: temp_id,
+                        new_name: text,
+                        _token: csrf_token
+                    },
+                    success: function (data) {
+                        if(data.message == "error")
+                        {
+                            $('.snackbar_span').html(' The template you are trying to rename cannot be renamed as there is already an order placed using it');
+                            showSnackbar();
+                            $(obj).jstree('set_text', node , data.template_name[0].item_name);
+                        }
+                        else
+                        {
+                            $('.snackbar_span').html('Template rename successful');
+                            showSnackbar();
+                        }
+                    },
+                    error: function (data) {
+                        $('.snackbar_span').html('Unable to save. Try again!!');
+                        showSnackbar();
+                    },
+                    complete: function () {
+
+                    }
+                });
 
             }).bind("loaded.jstree", function (event, data) {
                 $(this).jstree("open_all");
@@ -473,34 +510,6 @@ function showSnackbar() {
     setTimeout(function () {
         x.className = x.className.replace("show", "");
     }, 3000);
-}
-
-function renameNode(data) {
-    var buyer = localStorage.getItem("buyer");
-    var temp_id = data.node.id;
-    var text = data.node.text;
-    $.ajax({
-		url: base_url + "/admin/non-artwork-template/rename-template",
-		type: "POST",
-		dataType: "json",
-		data: {
-            buyer: buyer,
-			template_id: temp_id,
-            new_name: text,
-            _token: csrf_token
-		},
-		success: function (data) {
-			$('.snackbar_span').html('Template rename successful');
-			showSnackbar();
-		},
-		error: function (data) {
-			$('.snackbar_span').html('Unable to save. Try again!!');
-			showSnackbar();
-		},
-		complete: function () {
-
-		}
-	});
 }
 
 
