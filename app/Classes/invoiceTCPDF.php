@@ -24,7 +24,7 @@ class invoiceTCPDF extends \TCPDF
         $this->SetX(8);
         // Set font
         $this->SetFont('helvetica', '', 8);
-        $this->Image('././././'.$this->company->logo, 160, 10, 30, 10);
+        $this->Image('././././'.$this->company->logo, 160, 10, 20, 10);
         $header =  '<table>
                         <tr class="blank_row">
                             <td rowsopan="1"></td>
