@@ -225,19 +225,17 @@ const storeSpectrraJobcard = (form) => {
               openmodaltescopreview(modal_name, "loop", style_no, buyer_po_no, id, order_type, created_at, isEdit,'print_swing_tickets',"tesco_swingticket_orders",template_id,disney,refname,$(this));
           }
         }
-        
 
-
-        
-
-        // window.open(
-        //     base_url+JSON.parse(resp),
-        //     '_blank' // <- This is what makes it open in a new window.
-        // ); 
-        // $('.snackbar_span').html("Jobcard Created Successfully");
-        // showSnackbar();
-        // $('.modal').modal('hide');
-        // location.reload();
+        if(response.is_non_artwork_template){
+          window.open(
+              base_url+JSON.parse(resp),
+              '_blank' // <- This is what makes it open in a new window.
+          ); 
+          $('.snackbar_span').html("Jobcard Created Successfully");
+          showSnackbar();
+          $('.modal').modal('hide');
+          location.reload();
+        }
       },
       422: function (errorXHR) {
         var error_msg = ``;

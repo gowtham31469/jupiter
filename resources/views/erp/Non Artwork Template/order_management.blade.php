@@ -196,7 +196,7 @@
 								<select data-live-search="true" name="reference[]" class="selectpicker form-control input-group reference_select" data-container="body" title="Select reference"></select>
 							</td> -->
 							<td>
-								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color" maxlength="8">
+								<input type="text" name="color[]" class="form-control input-sm label-ean-field" placeholder="Color" maxlength="12">
 							</td>
 							<td>
 								<input type="text" name="composition[]" class="form-control input-sm label-ean-field" placeholder="Composition" maxlength="25">
