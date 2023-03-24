@@ -65,7 +65,7 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <td>
-                    <table cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th style="border-bottom:1px solid black;text-align:left;border-top:1px solid black;" width="25"><strong>SNo</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="62"><strong>Style</strong></th><th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>Buyer PO</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Reference</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="45"><strong>Size</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Quantity</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Rate(INR)</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="47"><strong>Amount(INR)</strong></th></tr></thead><tbody>
+                    <table cellpadding="1" cellspacing="0" border="0" class="thead-design" ><thead><tr><th style="border-bottom:1px solid black;text-align:left;border-top:1px solid black;" width="25"><strong>SNo</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="62"><strong>Style</strong></th><th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>OCN</strong></th><th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>Buyer PO</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Reference</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="45"><strong>Size</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Quantity</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Rate(INR)</strong></th><th style="border-bottom:1px solid black;border-top:1px solid black;" width="47"><strong>Amount(INR)</strong></th></tr></thead><tbody>
                     @php 
                         $totalQnty=0;
                         $totalpendingQnty=0;
@@ -81,6 +81,7 @@
                             <td style="text-align:left;" width="25">{{++$i}}</td>
                             <td width="60">{{$data['po_no']}}</td>
                             <td width="62">{{$data['style_no']}}</td>
+                            <td width="62">{{$data['ocn_number']}}</td>
                             <td width="60">{{$data['buyer_po_number']}}</td>
                             <td width="60">{{$data['reference_name']}}</td>
                             @php
@@ -97,8 +98,8 @@
                         </tr>
                         <tr>
                             <td  width="1"></td>
-                            <td width="251" colspan="4"><strong style="text-align:left;"><span>ITEM :  </span><span>{{$data['item_name']}} ,</span><span> OCN :</span><span> {{$data['ocn_number']}}</span></strong></td>
-                            <td style="text-align:right;" width="185" colspan="3"><strong><span> HSNCode :</span><span> {{$data['hsn_code']}}</span></strong></td>
+                            <td width="251" colspan="4"><strong style="text-align:left;"><span>ITEM :  </span><span>{{$data['item_name']}} ,</span></strong></td>
+                            <td style="text-align:left;" width="185" colspan="3"><strong><span> HSNCode :</span><span> {{$data['hsn_code']}}</span></strong></td>
                         </tr>
                         <tr>                    
                             <td style="text-align:left;" width="25">{{++$i}}</td>
