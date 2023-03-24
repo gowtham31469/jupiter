@@ -670,7 +670,7 @@ class NonArtworkTemplateController extends Controller
                                     <td width="100" class="selectpicker_td item_td '.$readonly_class.'">'.$item_select.'</td>
                                     <td width="150" class="reference_td selectpicker_td '.$readonly_class.'">'.$reference_select.'</td>
                                     <td width="150">
-                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color" maxlength="8" '.$readonly.'>
+                                        <input type="text" name="color[]" class="form-control input-sm label-ean-field" value="'.$value->color.'" placeholder="Color" maxlength="12" '.$readonly.'>
                                     </td>
                                     <td width="150">
                                         <input type="text" name="composition[]" class="form-control input-sm label-ean-field" value="'.$value->composition.'"placeholder="Composition" maxlength="25" '.$readonly.'>
