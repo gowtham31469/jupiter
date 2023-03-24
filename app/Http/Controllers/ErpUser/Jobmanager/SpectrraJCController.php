@@ -112,9 +112,9 @@ class SpectrraJCController extends Controller
         $request->validated();
         
         $store_jc = new StoreSpectrraJobcard();
-        $file_path = $store_jc->storeSpectrraJC($request);
+        list($file_path, $is_non_artwork_template) = $store_jc->storeSpectrraJC($request);
 
-        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path],200);
+        return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'is_non_artwork_template' => $is_non_artwork_template],200);
     }
 
     public function getSpectrraJCDetails(Request $request)

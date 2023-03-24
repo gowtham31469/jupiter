@@ -67,7 +67,9 @@ class StoreSpectrraJobcard
             $this->crud_jc_obj->updateJCDataHistory((array)$erp_order_data->erp_order_id, (array)$erp_order_data->uuid, $workorder_id, $this->current_timestamp,(array)$erp_order_data->orders->buyer->buyer_name, $request);
         }
 
-       return $this->generateSpectrraJCPdf($erp_order_data, $store_jobcard, $color_match_array);
+        $is_nat = $erp_order_data->orders->buyer->artwork_flag == 1?0:1;
+
+       return array($this->generateSpectrraJCPdf($erp_order_data, $store_jobcard, $color_match_array),$is_nat);
 
     }
 
@@ -120,7 +122,7 @@ class StoreSpectrraJobcard
             'color_match' => $color_match_array,
             'order_id'    => $erp_order_data->orders->erp_id,
             'total_qty'    => $erp_order_data->total_qty,
-    ]);
+        ]);
 
         //append content to header
         $pdf->SetXY(13.4,25);
