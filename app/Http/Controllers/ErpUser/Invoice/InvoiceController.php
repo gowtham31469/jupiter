@@ -479,10 +479,10 @@ class InvoiceController extends Controller
             
             
             $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
+                ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details]);
             ob_start();
             $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $pdf->setCompanyData($company_details);
+            $pdf->setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords);
             //margins
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -559,10 +559,10 @@ class InvoiceController extends Controller
             
             
                 $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
+                ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details]);
                 ob_start();
                 $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-                $pdf->setCompanyData($company_details);
+                $pdf->setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords);
                 //margins
                 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
                 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -576,26 +576,34 @@ class InvoiceController extends Controller
                 // set image scale factor
                 $pdf->setImageScale(0.8);
 
-                // set font
-                $pdf->SetFont('helvetica', '', 8);
 
                 $invoice = array(1, 2, 3);
                 foreach($invoice as $value){
+                    // set font
+                    $pdf->SetFont('helvetica', '', 8);
                     switch($value){
                          case 1: 
                             $pdf->AddPage('P', 'A4');
+                            
                             $pdf->SetXY(5.3, 24);
                             $pdf->writeHTML($dynView->render()); 
+                            $pdf->SetFont('helvetica', '', 10);
+                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Original", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
+
                          break;
                          case 2: 
                             $pdf->AddPage('P', 'A4');
                             $pdf->SetXY(5.3, 24);
                             $pdf->writeHTML($dynView->render());  
+                            $pdf->SetFont('helvetica', '', 10);
+                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Duplicate", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
                          break;
                          case 3: 
                             $pdf->AddPage('P', 'A4');
                             $pdf->SetXY(5.3, 24);
-                            $pdf->writeHTML($dynView->render());         
+                            $pdf->writeHTML($dynView->render());   
+                            $pdf->SetFont('helvetica', '', 10);
+                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Second Duplicate", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
                          break;      
                     }
                 }

@@ -18,6 +18,7 @@ class ProformaInvoice
   private $today_date;
   private $financial_year_start;
   private $financial_year_end;
+  private $financial_year_date_format;
   private $financial_year;
 	
 	/**
