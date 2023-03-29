@@ -217,17 +217,7 @@ class invoiceTCPDF extends \TCPDF
                                 <p>Authorized Signatory</p>
                             </td>
                         </tr>
-                        <tr>
-                            <td width="148.5" ></td>
-                            <td width="140"></td>
-                            <td width="120" colspan="2">
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr class="blank_row">
-                            <td rowsopan="1"></td>
-                        </tr>
+                        
                     </table>';
         // Title
         $this->writeHTML($footer, false, false, true, false, '');

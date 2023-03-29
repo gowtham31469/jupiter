@@ -152,11 +152,11 @@ class InvoiceController extends Controller
                           ->select('*')
                           ->first();
 
-
+            $order_group = array();
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
-                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();                     
+                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax')->first();                     
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
                 $value->item_name =  DB::table('price_taxation')
@@ -166,8 +166,11 @@ class InvoiceController extends Controller
                                         'template_id' => $value->template_id,
                                     ])
                                     ->value('custom_name');
+                $unique_key = $value->template_id.'-'.$details->hsn_code.'-'.$value->ocn_number.'-'.'color';                        
+                $order_group[$unique_key][] = $value;
             }
-            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
+
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist' => $order_group,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details, 'place_of_supply' => $orderlist[0]->place_of_supply],200);
         }
         catch (\Exception $e)
         {

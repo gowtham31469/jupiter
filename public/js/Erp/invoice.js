@@ -106,6 +106,13 @@
     		erp_id.push($(this).val());
     	});
 
+        var me = $(this);
+
+        if ( me.data('requestRunning') ) {
+            return;
+        }
+        me.data('requestRunning', true);
+
     	if (erp_id.length > 0) {
     		var table = $(obj).attr('data-id')
     		$.ajax({
@@ -114,8 +121,6 @@
     			data: {
     				erp_id: erp_id
     			},
-    			tryCount: 0,
-    			retryLimit: 2,
     			dataType: "json",
 
     			success: function (data) {
@@ -124,6 +129,7 @@
     					order_data = data.orderlist;
     					ship_to = data.ship_to;
     					bill_to = data.bill_to;
+    					company_details = data.company_details;
     					company_details = data.company_details;
     					createInvoice(order_data, order_data)
 						localStorage.setItem("order_data", JSON.stringify(order_data));
@@ -141,7 +147,7 @@
 
     			},
     			complete: function () {
-
+                    me.data('requestRunning', false);
     			}
     		})
     	} else {
@@ -174,39 +180,41 @@
         var totaligst = 0;
         var totaltax = 0;
         var itemName = "";
-        taxDivision(taxData)
+        taxDivision(taxData);
+        place_of_supply = Object.values(orderData)[0][0].place_of_supply;
         
-        place_of_supply = orderData[0].place_of_supply;                 
-        $(orderData).each(function(index, value)
-        {            
-            var size = (value.size == null)?'-':value.size ;
-            var chkbx = (value.rate == 0) ? "": "checked";
-            var dlvryBx= (chkbx != "checked") ? "disabled" : "";
-            
-            if (itemName==value.item_name) {
-                var _ocn = value.ocn_number==null?'-':value.ocn_number;
-                var _refName = value.reference_name==null?'-':value.reference_name;
-                tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
-                tr += '</tr>';
+        for(values of Object.values(orderData)){
+            $(values).each(function(index, value)
+            {                                                           
+                var size = (value.size == null)?'-':value.size ;
+                var chkbx = (value.rate == 0) ? "": "checked";
+                var dlvryBx= (chkbx != "checked") ? "disabled" : "";
                 
-            }
-            else{
-                var hsnCode = value.hsn_code==null?'-':value.hsn_code;
-                var _ocn = value.ocn_number==null?'-':value.ocn_number;
-                var _refName = value.reference_name==null?'-':value.reference_name;
-                tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
-                tr += '</tr>';
-                 itemName =value.item_name
-            }
-
-            qnty += value.order_quantity;
-            pendQnty += value.pending_qnty;
-            amnt += (value.pending_qnty*value.rate);
-
-        });
+                if (itemName==value.item_name) {
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                    var _refName = value.reference_name==null?'-':value.reference_name;
+                    tr += '<tr class="trClass" id="'+value.id+'">';
+                    tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '</tr>';
+                    
+                }
+                else{
+                    var hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                    var _ocn = value.ocn_number==null?'-':value.ocn_number;
+                    var _refName = value.reference_name==null?'-':value.reference_name;
+                    tr += '<tr class="trClass" id="'+value.id+'">';
+                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
+                    tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_ocn+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '</tr>';
+                     itemName =value.item_name
+                }
+    
+                qnty += value.order_quantity;
+                pendQnty += value.pending_qnty;
+                amnt += (value.pending_qnty*value.rate);
+    
+            });
+        }
 
         tr+= '<tr><td colspan="8"><strong>Total</strong></td><td class="qnty-sum">'+qnty+'</td><td class="balnc-qnty" id="balnc-qnty">'+pendQnty+'</td><td class="total-qnty" id="total-qnty">'+quantityTotal()+'</td><td></td><td class="total-amnt" style="border-width: 1px !important;">'+amnt.toFixed(2)+'</td></tr>';
 
@@ -309,25 +317,33 @@
      * @return {[unique tax array for that order details]}
      */
     function taxDivision(orderData){
+        
         var taxIndexes = [] ;
-        var taxlist = orderData.map(a => a.tax);
-        $.each(taxlist, function(i, el){
+        for(values of Object.values(orderData)){
+            var taxlist = values.map(a => a.tax);
+        }  
+
+         $.each(taxlist, function(i, el){
             if($.inArray(el, uniqueTax) === -1) 
-             uniqueTax.push(el);
-        }); 
+            uniqueTax.push(el);
+        });
+
         $(uniqueTax).each(function(key, vals){
             var sub_amnt = 0;
-            taxIndexes[vals] = $.map(orderData, function(obj, index) {
-                if(obj.tax == vals) {
-                    if (obj.delvry_qnty == 0) {
-                        sub_amnt += obj.pending_qnty*obj.rate;
+            for(values of Object.values(orderData)){
+                taxIndexes[vals] = $.map(values, function(obj, index) {
+                    if(obj.tax == vals) {
+                        if (obj.delvry_qnty == 0) {
+                            sub_amnt += obj.pending_qnty*obj.rate;
+                        }
+                        else{
+                            sub_amnt += obj.delvry_qnty*obj.rate;
+                        }
+                        
                     }
-                    else{
-                        sub_amnt += obj.delvry_qnty*obj.rate;
-                    }
-                    
-                }
-            }) 
+                }) 
+            } 
+           
             tax_amnt[vals] = sub_amnt;                                     
         });
         return tax_amnt;
@@ -508,7 +524,7 @@
      * @return {[updated tax details]}
      */
     function updateTaxAmount(tax_amnt){
-
+        console.log("place_of_supply : "+place_of_supply);
         var tax_tr = "";       
         var tax_table = $('.orders-tax').html('<table class="table text-center table-bordered orders_tax" style="margin-top: -23px;;"><thead><tr><th>Tax</th><th>Base Value (₹)</th><th>Amount (₹)</th></tr></thead><tbody class="tax-tabl"></tbody></table>')
         Object.keys(tax_amnt).forEach(function(key) {

@@ -81,14 +81,14 @@
                         <tr>
                             <th style="border-bottom:1px solid black;text-align:left;border-top:1px solid black;" width="25"><strong>SNo</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Style</strong></th>
-                            <th style="border-top:1px solid black;border-bottom:1px solid black;" width="40"><strong>OCN</strong></th>
-                            <th style="border-top:1px solid black;border-bottom:1px solid black;" width="47"><strong>Buyer PO</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Style</strong></th>
+                            <!-- <th style="border-top:1px solid black;border-bottom:1px solid black;" width="40"><strong>OCN</strong></th> -->
+                            <th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>Buyer PO</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Reference</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="45"><strong>Size</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="50"><strong>Size</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="35"><strong>Quantity</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Rate(INR)</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="47"><strong>Amount(INR)</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="48"><strong>Amount(INR)</strong></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,31 +103,32 @@
                                 <tr>
                                     <td style="text-align:left;" width="25">{{++$i}}</td>
                                     <td width="60">{{$data['po_no']}}</td>
-                                    <td width="40">{{$data['style_no']}}</td>
-                                    <td width="40">{{$data['ocn_number']}}</td>
-                                    <td width="47">{{$data['buyer_po_number']}}</td>
+                                    <td width="60">{{$data['style_no']}}</td>
+                                    <!-- <td width="40">{{$data['ocn_number']}}</td> -->
+                                    <td width="60">{{$data['buyer_po_number']}}</td>
                                     <td width="60">{{$data['reference_name']}}</td>
                                     @php
                                         $size = $data['size']=="null"?'-':$data['size'];
                                     @endphp
-                                    <td width="45">{{$size}}</td>
+                                    <td width="50">{{$size}}</td>
                                     <td width="35">{{$data['delvry_qnty']}}</td>
                                     <td width="40">{{$data['rate']}}</td>
-                                    <td width="45" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                    <td width="48" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                                 </tr>
                             @else
-                                <tr>
-                                    <td width="437" colspan="9" class="tdheight"></td>
-                                </tr>
                                 <tr>
                                     <td colspan="8" style="text-align:left;">
                                         <strong >
                                             <span>ITEM : </span>
-                                            <span>{{$data['item_name']}} ,</span>
+                                            <span>{{$data['item_name']}},</span>
                                         </strong>
                                         <strong>
                                             <span> HSNCode :</span>
-                                            <span> {{$data['hsn_code']}}</span>
+                                            <span> {{$data['hsn_code']}},</span>
+                                        </strong>
+                                        <strong>
+                                            <span> OCN :</span>
+                                            <span> {{$data['ocn_number']}}</span>
                                         </strong>
                                     </td>
                                 </tr>
@@ -135,17 +136,17 @@
                                     <td style="text-align:left;" width="25">{{++$i}}</td>
                                     <!-- <td>{{$data['id']}}</td> -->
                                     <td width="60">{{$data['po_no']}}</td>
-                                    <td width="40">{{$data['style_no']}}</td>
-                                    <td width="40">{{$data['ocn_number']}}</td>
-                                    <td width="47">{{$data['buyer_po_number']}}</td>
+                                    <td width="60">{{$data['style_no']}}</td>
+                                    <!-- <td width="40">{{$data['ocn_number']}}</td> -->
+                                    <td width="60">{{$data['buyer_po_number']}}</td>
                                     <td width="60">{{$data['reference_name']}}</td>
                                     @php
                                         $size = $data['size']=="null"?'-':$data['size'];
                                     @endphp
-                                    <td width="45">{{$size}}</td>
+                                    <td width="50">{{$size}}</td>
                                     <td width="35">{{$data['delvry_qnty']}}</td>
                                     <td width="40">{{$data['rate']}}</td>
-                                    <td width="45" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                    <td width="48" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                                 </tr>
                             @endif
 
@@ -158,15 +159,7 @@
                 </table>
             </td>
         </tr>
-        <tr>
-            <td>
-                <table cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        
     </table>
 </body>
 
