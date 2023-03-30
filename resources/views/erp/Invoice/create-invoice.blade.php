@@ -12,10 +12,6 @@
        padding: 0 !important;
        margin: 0 !important;
     }
-    .table-erp-list {
-      /*width: 100%;*/
-      /*background-color: #f3f3f3;*/
-    }
     .table-erp-list tbody div{
         overflow:scroll;
         height:100px;

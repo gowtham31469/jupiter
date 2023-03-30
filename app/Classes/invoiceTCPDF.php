@@ -13,6 +13,7 @@ class invoiceTCPDF extends \TCPDF
     protected $header ='';
     protected $footer ='';
     static $errorMsg ='';
+    public $last_page_flag = false;
 
     public function setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords){
         $this->company      = $company_details;
@@ -23,6 +24,18 @@ class invoiceTCPDF extends \TCPDF
         $this->amntInwords      = $amntInwords;
 
     }
+
+    /**
+     * Function to check last page , TCPDF method
+     *
+     * @return void
+     */
+    public function Close() {
+        $this->last_page_flag = true;
+        parent::Close();
+      }
+
+
     /**
     * Overwrite Header() method.
     * @public
@@ -70,13 +83,13 @@ class invoiceTCPDF extends \TCPDF
         
     }
 
-      /**
+    /**
     * Overwrite Footer() method.
     * @public
     */
     public function Footer() {
-        // Position at 75 mm from bottom
-        $this->SetY(-75);
+        // Position at 60 mm from bottom
+        $this->SetY(-60);
         $this->SetX(8);
         // Set font
         $this->SetFont('helvetica', '', 8);
@@ -217,19 +230,20 @@ class invoiceTCPDF extends \TCPDF
                                 <p>Authorized Signatory</p>
                             </td>
                         </tr>
-                        <tr>
-                            <td width="148.5" ></td>
-                            <td width="140"></td>
-                            <td width="120" colspan="2">
-                            </td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr class="blank_row">
-                            <td rowsopan="1"></td>
-                        </tr>
+                        
                     </table>';
-        // Title
-        $this->writeHTML($footer, false, false, true, false, '');
+        
+
+        /** Add footer in last page */
+        if ($this->last_page_flag)
+        {
+            $this->writeHTML($footer, false, false, true, false, '');
+            $this->Cell(0, 11, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        }
+        else 
+        {
+            $this->Cell(0, 111, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        }
     }
 }
