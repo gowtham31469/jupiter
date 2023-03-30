@@ -28,6 +28,7 @@ use App\Classes\InvoiceIDGenerator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use App\Classes\FPDF_Merge;
 
 class InvoiceController extends Controller
 {
@@ -133,7 +134,7 @@ class InvoiceController extends Controller
                             ->where('erp_order_details.company_id',session()->get('company'))
                             ->whereIn('erp_order_details.status',[6,8])
                             ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as ref_no','erp_order_details.reference_name as reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'))
-							->orderBy('erp_order_details.id', 'asc')
+							->orderBy('erp_order_details.template_id', 'asc')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
                 $orderlist[0]->delvry_thru  = DB::table('nominated_forwarders')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
@@ -152,11 +153,10 @@ class InvoiceController extends Controller
                           ->select('*')
                           ->first();
 
-
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
-                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();                     
+                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax')->first();                     
                 $value->hsn_code = $details->hsn_code;
                 $value->tax = $details->tax;
                 $value->item_name =  DB::table('price_taxation')
@@ -167,7 +167,8 @@ class InvoiceController extends Controller
                                     ])
                                     ->value('custom_name');
             }
-            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
+
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist' => $orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details, 'place_of_supply' => $orderlist[0]->place_of_supply],200);
         }
         catch (\Exception $e)
         {
@@ -545,6 +546,7 @@ class InvoiceController extends Controller
     {
         try{
             $objInv      = new Invoice();
+            $merge = new FPDF_Merge();
             $inv_id      = $request->inv_id;
             $amntInwords = $request->amntInwords;
             $eway_no     = $request->eway_no;
@@ -556,10 +558,15 @@ class InvoiceController extends Controller
                                 ->first();
             $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
             $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
-            
-            
+
+            $invoice = array('Original', 'Duplicate', 'Second Duplicate');
+
+            foreach($invoice as $key => $value){
+
+                $key_val = strtolower(str_replace(' ', '_', $value));
+
                 $dynView = View::make('template')
-                ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details]);
+                    ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details]);
                 ob_start();
                 $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
                 $pdf->setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords);
@@ -575,44 +582,26 @@ class InvoiceController extends Controller
 
                 // set image scale factor
                 $pdf->setImageScale(0.8);
+                // set font
+                $pdf->SetFont('helvetica', '', 8);
 
+                $pdf->AddPage('P', 'A4');
+                $pdf->SetXY(5.3, 24);
+                $pdf->writeHTML($dynView->render()); 
+                $pdf->SetFont('helvetica', '', 10);
+                $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', $value, $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
+                $pdf->Output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'), 'F');
+                ob_end_clean();
 
-                $invoice = array(1, 2, 3);
-                foreach($invoice as $value){
-                    // set font
-                    $pdf->SetFont('helvetica', '', 8);
-                    switch($value){
-                         case 1: 
-                            $pdf->AddPage('P', 'A4');
-                            
-                            $pdf->SetXY(5.3, 24);
-                            $pdf->writeHTML($dynView->render()); 
-                            $pdf->SetFont('helvetica', '', 10);
-                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Original", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
+                $merge->add(public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'));
 
-                         break;
-                         case 2: 
-                            $pdf->AddPage('P', 'A4');
-                            $pdf->SetXY(5.3, 24);
-                            $pdf->writeHTML($dynView->render());  
-                            $pdf->SetFont('helvetica', '', 10);
-                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Duplicate", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
-                         break;
-                         case 3: 
-                            $pdf->AddPage('P', 'A4');
-                            $pdf->SetXY(5.3, 24);
-                            $pdf->writeHTML($dynView->render());   
-                            $pdf->SetFont('helvetica', '', 10);
-                            $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', "Second Duplicate", $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
-                         break;      
-                    }
-                }
+                unlink(public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'));
+            }
      
-            $pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
-
-            public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
+            $merge->Output(public_path("/storage/app/public/invoices/invoices_".$inv_id.".pdf") , 'F');
 
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
+
         } 
         catch (\Exception $e)
         {
