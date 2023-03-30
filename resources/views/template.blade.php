@@ -23,7 +23,7 @@
         }
 
         .tdheight {
-            height: 5px !important;
+            height: 0px !important;
         }
     </style>
 </head>
@@ -82,7 +82,6 @@
                             <th style="border-bottom:1px solid black;text-align:left;border-top:1px solid black;" width="25"><strong>SNo</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Style</strong></th>
-                            <!-- <th style="border-top:1px solid black;border-bottom:1px solid black;" width="40"><strong>OCN</strong></th> -->
                             <th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>Buyer PO</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Reference</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="50"><strong>Size</strong></th>
@@ -96,15 +95,16 @@
                             $i = 0;
                             $size = '-';
                             $itemName = "";
+                            $ocn = "";
+                            $hsnCode = "";
                         @endphp
 
                         @foreach($inv_details as $data)
-                            @if($itemName == $data['item_name'])
+                            @if($itemName == $data['item_name'] && $hsnCode == $data['hsn_code'] && $ocn == $data['ocn_number'])
                                 <tr>
                                     <td style="text-align:left;" width="25">{{++$i}}</td>
                                     <td width="60">{{$data['po_no']}}</td>
                                     <td width="60">{{$data['style_no']}}</td>
-                                    <!-- <td width="40">{{$data['ocn_number']}}</td> -->
                                     <td width="60">{{$data['buyer_po_number']}}</td>
                                     <td width="60">{{$data['reference_name']}}</td>
                                     @php
@@ -116,6 +116,9 @@
                                     <td width="48" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                                 </tr>
                             @else
+                                <tr>
+                                    <td width="437" colspan="9" class="tdheight"></td>
+                                </tr>
                                 <tr>
                                     <td colspan="8" style="text-align:left;">
                                         <strong >
@@ -134,10 +137,8 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align:left;" width="25">{{++$i}}</td>
-                                    <!-- <td>{{$data['id']}}</td> -->
                                     <td width="60">{{$data['po_no']}}</td>
                                     <td width="60">{{$data['style_no']}}</td>
-                                    <!-- <td width="40">{{$data['ocn_number']}}</td> -->
                                     <td width="60">{{$data['buyer_po_number']}}</td>
                                     <td width="60">{{$data['reference_name']}}</td>
                                     @php
@@ -152,6 +153,8 @@
 
                             @php
                                 $itemName = $data['item_name'];
+                                $hsnCode = $data['hsn_code']=="null"?'-':$data['hsn_code'];
+                                $ocn = $data['ocn_number']=="null"?'-':$data['ocn_number'];
                             @endphp
 
                         @endforeach

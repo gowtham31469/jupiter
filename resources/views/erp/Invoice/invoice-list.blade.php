@@ -432,19 +432,23 @@ function showInvoice(obj){
 
           $('#bill_to').html('<span>Buyer</span><br><h4>'+data.inv_details[0].company_name+'</h4><span>'+data.bill_to.address+','+data.bill_to.pincode+'</span></br><span> GSTIN :'+data.inv_details[0].gstin_number+ '</span>')
           var itemName ="";
+          var hsnCode = "";
+          var _ocn = "";
           $(data.inv_details).each(function(index, value)
           {   
               var size = (value.size == "null")?'-':value.size ;
               
-              if (itemName==value.item_name) {
+              if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_no) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width: 1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width: 1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                 }
                 else{
-                    var hsnCode = value.hsn_code==null?'-':value.hsn_code;
-                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+'</strong></td></tr>';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.ocn_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    hsnCode = value.hsn_code==null?'-':value.hsn_code;
+                    _ocn = value.ocn_no==null?'-':value.ocn_no;
+                    
+                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+' OCN: '+_ocn+'</strong></td></tr>';
+                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
                     itemName =value.item_name;
                 } 
@@ -453,8 +457,8 @@ function showInvoice(obj){
 
           $('#total_invoice_amount').val(totalAmnt.toFixed(2));
 
-          tr+= '<tr><td colspan="11"><strong>Total</strong></td><td style="border-width:1px !important;"><strong>'+totalAmnt.toFixed(2)+'</strong></td></tr>';
-          $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>OCN</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th style="border-width:1px !important;">Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
+          tr+= '<tr><td colspan="10"><strong>Total</strong></td><td style="border-width:1px !important;"><strong>'+totalAmnt.toFixed(2)+'</strong></td></tr>';
+          $('#order_details').html('<table class="table table-bordered table-condensed preview-inv-details" id="preview-inv-details" style="width:100%"><thead><tr><th>ERP ID</th><th>Buyer</th><th>Order No</th><th>PO No</th><th>Style</th><th>Ref</th><th>Size</th><th>Tax (%)</th><th>Quantity</th><th>Rate (₹)</th><th style="border-width:1px !important;">Amount (₹)</th></tr></thead><tbody>'+tr+'</tbody></table>');
 
           var tax_amnt = taxDivision(data.inv_details)
           var tax_tr = "";  
