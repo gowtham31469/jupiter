@@ -13,7 +13,8 @@ function openmodaltesco(modal, i,template_file,style_no,buyer_no,id,order_type,c
 	  	}
 	  	else if(type == "wash_care")
 	  	{
-   			printWashDivJC('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,modal,style_no,buyer_no,id,order_type,created_at,status,"orchestra")
+			
+			printWashDivOs('washcare_front'+ i,'washcare_back'+ i,'washcare_middle'+i,'washcare_static'+i,style_no,buyer_no,'erp',id,table_name,"print","","",modal)
 
 	  	}
 	  	else

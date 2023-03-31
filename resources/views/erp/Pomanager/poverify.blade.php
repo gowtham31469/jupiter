@@ -375,6 +375,7 @@ transform: scale(1);
 							<th>PO Number</th>
 							<th>Style No</th>
 							<th>Reference</th>
+							<th>Color</th>
 							<th>Size</th>
 							<th>Quantity</th>
 							<th>Price</th>
@@ -773,6 +774,9 @@ transform: scale(1);
 					{
 						index.buyer_po_number='-'
 					}
+
+					var color_code = index.color_code != null ? index.color_code : "-";
+
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
@@ -780,6 +784,7 @@ transform: scale(1);
 							  <td class="po_number_td">` + index.buyer_po_number + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
+							  <td class="color_td">` + color_code + `</td>
 							  <td class="size_td">` + size + `</td>
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>

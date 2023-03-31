@@ -477,7 +477,7 @@ class ErpOrders
 
 			// unique id for array creation
 			// combination of erpid-refname-styleno-buyerpo-ordertype
-			$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag;
+			$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag.'-'.$orders->color_code;
 
 			// write data into history tables
 			$action_id      = DB::table('actions')
@@ -529,6 +529,7 @@ class ErpOrders
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_orders->id,
 							'style_no'         		=> $orders->uvc,
+							'color_code'         	=> $orders->color_code,
 							'order_quantity'   		=> $vals->quantity,
 							'pending_orders'		=> $vals->quantity,
 							'size'         	   		=> $vals->size,

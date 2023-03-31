@@ -52,7 +52,7 @@
 					</div>
 
 					<span class="label label-{{ str_replace(' ','',$order->Status)}}">{{  $order->Status }}</span></td>
-                    <td><a href="#" class="view-wcl" data-toggle="tooltip" title="View"><i class="fa fa-eye fa-button filterbtn options" aria-hidden="true"></i></a><a href="#" class="download-wcl" onclick='printWashDivOs("template_front_modal","template_back_modal","template_middle_modal","template_static_modal","{{ $order->UVC }}","","merchandiser","{{ $order->id }}","orchestra_wash_care_label_orders","print","os","")' data-toggle="tooltip" title="Download"><i class="fa fa-download fa-button filterbtn options" aria-hidden="true"></i></a></td>
+                    <td><a href="#" class="view-wcl" data-toggle="tooltip" title="View"><i class="fa fa-eye fa-button filterbtn options" aria-hidden="true"></i></a><a href="#" class="download-wcl" onclick='printWashDivOs("template_front_modal","template_back_modal","template_middle_modal","template_static_modal","{{ $order->UVC }}","","merchandiser","{{ $order->id }}","orchestra_wash_care_label_orders","print","os","","")' data-toggle="tooltip" title="Download"><i class="fa fa-download fa-button filterbtn options" aria-hidden="true"></i></a></td>
                 </tr>
                 @endforeach
 

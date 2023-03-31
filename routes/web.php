@@ -784,6 +784,8 @@ Route::group(['middleware' => 'merchandiser_auth', 'prefix' => 'merchandiser'], 
 	Route::post('/order-management/print-wash-pdf', 'Merchandiser\HomeController@printWashPdf');
 	Route::post('/set-wcl-merchandiser-approve-comment', 'Merchandiser\HomeController@addWCLApproveCommentById');
 	Route::post('/set-wcl-merchandiser-reject-comment', 'Merchandiser\HomeController@addWCLRejectCommentById');
+	Route::post('/orchestra/orders-submit-filter', 'Merchandiser\HomeController@orderSubmitFilter');
+	Route::post('/orchestra/orchestra-submit-os', 'Merchandiser\HomeController@orderSubmitOs');
 	Route::get('/past-orders', 'Merchandiser\HomeController@pastOrders');
 	/** Merchandiser profile related routes */
 	Route::get('/get-profile-details', 'Merchandiser\MerchandiserProfileController@getMerchandiserDetailsById');
