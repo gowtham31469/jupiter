@@ -87,8 +87,17 @@ class invoiceTCPDF extends \TCPDF
     * @public
     */
     public function Footer() {
-        // Position at 60 mm from bottom
-        $this->SetY(-60);
+
+        if(sizeof($this->extra_charges) === 0){
+            $this->SetY(-60);
+        } else if(sizeof($this->extra_charges) === 1){
+            $this->SetY(-65);
+        } else if(sizeof($this->extra_charges) === 2){
+            $this->SetY(-70);
+        } else if(sizeof($this->extra_charges) === 3){
+            $this->SetY(-75);
+        }
+
         $this->SetX(8);
         // Set font
         $this->SetFont('helvetica', '', 8);
@@ -237,12 +246,12 @@ class invoiceTCPDF extends \TCPDF
         if ($this->last_page_flag)
         {
             $this->writeHTML($footer, false, false, true, false, '');
-            $this->Cell(0, 11, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+            // $this->Cell(0, 11, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 
         }
         else 
         {
-            $this->Cell(0, 111, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+            // $this->Cell(0, 111, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
     }
 }
