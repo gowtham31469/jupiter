@@ -176,6 +176,7 @@
         var itemName = "";
         var hsnCode = "";
         var _ocn = "";
+        var orch_colorcode = "";
         taxDivision(taxData)
         
         place_of_supply = orderData[0].place_of_supply;                 
@@ -185,7 +186,7 @@
             var chkbx = (value.rate == 0) ? "": "checked";
             var dlvryBx= (chkbx != "checked") ? "disabled" : "";
             
-            if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_number) {
+            if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_number && orch_colorcode === value.color_code) {
                 var _refName = value.reference_name==null?'-':value.reference_name;
                 tr += '<tr class="trClass" id="'+value.id+'">';
                 tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+'  onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td style="border-width: 1px !important;" class="amnt">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
@@ -194,12 +195,18 @@
             } else {
                 hsnCode = value.hsn_code==null?'-':value.hsn_code;
                 _ocn = value.ocn_number==null?'-':value.ocn_number;
+                orch_colorcode = value.color_code==null?'-':value.color_code;
                 _refName = value.reference_name==null?'-':value.reference_name;
-                tr += '<tr class="trClass" id="'+value.id+'">';
-                tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+' OCN: '+_ocn+'</strong></td></tr><tr class="trClass" id="'+value.id+'">';
-                tr += '<td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
+                itemName =value.item_name
+
+                tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
+                
+                if(value.buyer_name.toLowerCase() === 'orchestra'){
+                    tr += ',  Color: '+orch_colorcode;
+                } 
+                
+                tr += '</strong></td></tr><tr class="trClass" id="'+value.id+'"><td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
-                 itemName =value.item_name
             }
 
             qnty += value.order_quantity;
@@ -634,6 +641,7 @@
             var itemName ="";
             var hsnCode = "";
             var _ocn = "";
+            var orch_colorcode = "";
             $(arr).each(function(index, value)
             {            
                 var size = (value.size == null)?'-':value.size ;
@@ -647,7 +655,7 @@
                 value.delvry_qnty = delQnty;
                 pending_qnty = value.pending_qnty - delQnty
 
-                if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_number) {
+                if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_number && orch_colorcode === value.color_code) {
                     var _refName = value.reference_name==null?'-':value.reference_name;
 
                     tr += '<tr class="trClass" id="'+value.id+'">';
@@ -658,11 +666,17 @@
                     hsnCode = value.hsn_code==null?'-':value.hsn_code;
                     _ocn = value.ocn_number==null?'-':value.ocn_number;
                     _refName = value.reference_name==null?'-':value.reference_name;
-
-                    tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+' OCN: '+_ocn+'</strong></td></tr>';
-                    tr += '<tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
-                    tr += '</tr>';
+                    orch_colorcode = value.color_code==null?'-':value.color_code;
                     itemName =value.item_name
+
+                    tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
+                
+                    if(value.buyer_name.toLowerCase() === 'orchestra'){
+                        tr += ',  Color: '+orch_colorcode;
+                    } 
+                    
+                    tr += '</strong></td></tr><tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
+                    tr += '</tr>';
                 }               
                 qnty += value.order_quantity;
                 pendingQnty += pending_qnty

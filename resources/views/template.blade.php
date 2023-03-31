@@ -83,11 +83,11 @@
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>PO No</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Style</strong></th>
                             <th style="border-top:1px solid black;border-bottom:1px solid black;" width="60"><strong>Buyer PO</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="60"><strong>Reference</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="50"><strong>Size</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="35"><strong>Quantity</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="80"><strong>Reference</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Size</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="30"><strong>Quantity</strong></th>
                             <th style="border-bottom:1px solid black;border-top:1px solid black;" width="40"><strong>Rate(INR)</strong></th>
-                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="48"><strong>Amount(INR)</strong></th>
+                            <th style="border-bottom:1px solid black;border-top:1px solid black;" width="43"><strong>Amount(INR)</strong></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -97,23 +97,24 @@
                             $itemName = "";
                             $ocn = "";
                             $hsnCode = "";
+                            $orchColorCode = "";
                         @endphp
 
                         @foreach($inv_details as $data)
-                            @if($itemName == $data['item_name'] && $hsnCode == $data['hsn_code'] && $ocn == $data['ocn_number'])
+                            @if($itemName == $data['item_name'] && $hsnCode == $data['hsn_code'] && $ocn == $data['ocn_number'] && $orchColorCode == $data['color_code'])
                                 <tr>
                                     <td style="text-align:left;" width="25">{{++$i}}</td>
                                     <td width="60">{{$data['po_no']}}</td>
                                     <td width="60">{{$data['style_no']}}</td>
                                     <td width="60">{{$data['buyer_po_number']}}</td>
-                                    <td width="60">{{$data['reference_name']}}</td>
+                                    <td width="80">{{$data['reference_name']}}</td>
                                     @php
                                         $size = $data['size']=="null"?'-':$data['size'];
                                     @endphp
                                     <td width="50">{{$size}}</td>
-                                    <td width="35">{{$data['delvry_qnty']}}</td>
-                                    <td width="40">{{$data['rate']}}</td>
-                                    <td width="48" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                    <td width="30">{{$data['delvry_qnty']}}</td>
+                                    <td width="30">{{$data['rate']}}</td>
+                                    <td width="43" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                                 </tr>
                             @else
                                 <tr>
@@ -133,6 +134,13 @@
                                             <span> OCN :</span>
                                             <span> {{$data['ocn_number']}}</span>
                                         </strong>
+
+                                        @if (strtolower($data['buyer_name']) === 'orchestra')
+                                            <strong>
+                                                <span>, Color :</span>
+                                                <span> {{$data['color_code']}}</span>
+                                            </strong>
+                                        @endif
                                     </td>
                                 </tr>
                                 <tr>
@@ -140,14 +148,14 @@
                                     <td width="60">{{$data['po_no']}}</td>
                                     <td width="60">{{$data['style_no']}}</td>
                                     <td width="60">{{$data['buyer_po_number']}}</td>
-                                    <td width="60">{{$data['reference_name']}}</td>
+                                    <td width="80">{{$data['reference_name']}}</td>
                                     @php
                                         $size = $data['size']=="null"?'-':$data['size'];
                                     @endphp
                                     <td width="50">{{$size}}</td>
-                                    <td width="35">{{$data['delvry_qnty']}}</td>
-                                    <td width="40">{{$data['rate']}}</td>
-                                    <td width="48" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
+                                    <td width="30">{{$data['delvry_qnty']}}</td>
+                                    <td width="30">{{$data['rate']}}</td>
+                                    <td width="43" style="text-align:right;">{{number_format((float)$data['delvry_qnty'] * $data['rate'], 2, '.', '') }}</td>
                                 </tr>
                             @endif
 
@@ -155,6 +163,7 @@
                                 $itemName = $data['item_name'];
                                 $hsnCode = $data['hsn_code']=="null"?'-':$data['hsn_code'];
                                 $ocn = $data['ocn_number']=="null"?'-':$data['ocn_number'];
+                                $orchColorCode = $data['color_code']=="null"?'-':$data['color_code'];
                             @endphp
 
                         @endforeach
