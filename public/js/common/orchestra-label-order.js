@@ -2030,7 +2030,7 @@ function washcarelabelmodal(data,index_wcl_count,color_code,activity_label,order
                         onclick=cancelWashDiv("`+index_wcl_count+`","`+user_type+`")>Cancel</button><button
                         class="btn btn-default pull-right input-sm" id="wcl_labelclose_`+index_wcl_count+`" type="button">Close</button> <button
                         type="button" class="btn btn-primary `+$print_button_class+`" id="print_wash_button_`+index_wcl_count+`"
-                        onclick=printWashDivOs("front_modal_`+index_wcl_count+`","back_modal_`+index_wcl_count+`","middle_modal_`+index_wcl_count+`","static_modal_`+index_wcl_count+`","`+ order_details[0].UVC+`","","admin","","orchestra_wash_care_label_orders","print","co","`+index_wcl_count+`")>Print</button>
+                        onclick=printWashDivOs("front_modal_`+index_wcl_count+`","back_modal_`+index_wcl_count+`","middle_modal_`+index_wcl_count+`","static_modal_`+index_wcl_count+`","`+ order_details[0].UVC+`","","admin","","orchestra_wash_care_label_orders","print","co","`+index_wcl_count+`","")>Print</button>
                         <div class="parts_none`+index_wcl_count+`" style="display:none"><select class="form-control">` + parts_option + `</select></div>
                 </div>
             </div>

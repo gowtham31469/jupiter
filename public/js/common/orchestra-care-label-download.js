@@ -1,17 +1,52 @@
-function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,tableName,print_type,page_name,index_wcl_count)
+function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,tableName,print_type,page_name,index_wcl_count,ref_name)
 {
+
+    if(page_name == "co")
+    {
+        tableID = $('#exist_id'+index_wcl_count).val()
+    }
 
     if(user_type == "admin")
     {
         var buyer_url = base_url + "/admin/orchestra/get-order-details";
+        var wash_data = {
+                            _token: csrf_token,
+                            table_id: tableID,
+                            table_name: tableName,
+                            ref_name: ref_name,
+                            style_no: uvc,
+                            buyer:"orchestra",
+                            buyer_no: po
+                        }
+        var size_url = base_url + "/"+user_type+"/order-management/get-tsl-size";
     }
     else if(user_type == "customer")
     {
         var buyer_url = base_url + "/customer/orchestra/get-order-details";
+        var wash_data = {
+                            _token: csrf_token,
+                            table_id: tableID,
+                            table_name: tableName,
+                            ref_name: ref_name,
+                            style_no: uvc,
+                            buyer:"orchestra",
+                            buyer_no: po
+                        }
+        var size_url = base_url + "/"+user_type+"/order-management/get-tsl-size";
     }
     else if(user_type == "erp")
     {
         var buyer_url = base_url + "/erp/job-manager/get-order-details";
+        var wash_data = {
+                            _token: csrf_token,
+                            id: tableID,
+                            table_name: tableName,
+                            ref_name: ref_name,
+                            style_no: uvc,
+                            buyer:"orchestra",
+                            buyer_no: po
+                        }
+        var size_url = base_url + "/"+user_type+"/job-manager/tesco/get-tsl-size";
     }
     else if(user_type == "merchandiser")
     {
@@ -21,6 +56,16 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
         back = tableID+"_"+back;
         middle = tableID+"_"+middle;
         static_final = tableID+"_"+static_final;
+        var wash_data = {
+                            _token: csrf_token,
+                            table_id: tableID,
+                            table_name: tableName,
+                            ref_name: ref_name,
+                            style_no: uvc,
+                            buyer:"orchestra",
+                            buyer_no: po
+                        }
+        var size_url = base_url + "/"+user_type+"/order-management/get-tsl-size";
     }
 
     var a1 = document.getElementById(front);
@@ -31,11 +76,6 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
     var svgDoc1_back = a1_back.contentDocument;
     var svgRoot1_back = svgDoc1_back.documentElement;
 
-    if(page_name == "co")
-    {
-        tableID = $('#exist_id'+index_wcl_count).val()
-    }
-
 	var svgarr = [];
 	var svgarr_back = [];
 	var i=0;
@@ -45,23 +85,27 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
         url: buyer_url,
         type: "Post",
         dataType: "json",
-        data: {
-            _token: csrf_token,
-            table_id: tableID,
-            table_name: tableName,
-            style_no: uvc,
-            buyer_no: po
-        },
+        data: wash_data,
         beforeSend: function() {
 
         },
         success: function(data) {
+            if(user_type == "erp")
+            {
+                var product_family = data.order_details.product_family;
+                var orchestra_wash_care_label_orders = data.order_details.orchestra_wash_care_label_orders;
+                var activity_label = data.order_details.orchestra_wash_care_label_orders[0].activity_label;
+                var created_at = data.order_details.orchestra_wash_care_label_orders[0].created_at;
+            }
+            else
+            {
+                var product_family = data.product_family;
+                var orchestra_wash_care_label_orders = data.orchestra_wash_care_label_orders;
+                var activity_label = data.orchestra_wash_care_label_orders[0].activity_label;
+                var created_at = data.orchestra_wash_care_label_orders[0].created_at;
+            }
 
-            var product_family = data.product_family;
-            var orchestra_wash_care_label_orders = data.orchestra_wash_care_label_orders;
-            var activity_label = data.orchestra_wash_care_label_orders[0].activity_label;
-
-            $(data.orchestra_wash_care_label_orders).each(function(index,value){
+            $(orchestra_wash_care_label_orders).each(function(index,value){
 
                 var size_txt = value.size;
                 var uvc_tco = value.uvc_tco;
@@ -76,7 +120,7 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
                 var code = value.barcode;
 
                 $.ajax({
-                    url: base_url + "/"+user_type+"/order-management/get-tsl-size",
+                    url: size_url,
                     type: 'GET',
                     async: false,
                     data: {
@@ -167,20 +211,20 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
 
             })
 
-            var washing_select = data.orchestra_wash_care_label_orders[0].washing_id;
-            var whitening_select = data.orchestra_wash_care_label_orders[0].whitening_id;
-            var dryer_select = data.orchestra_wash_care_label_orders[0].dryer_id;
-            var ironing_select = data.orchestra_wash_care_label_orders[0].ironing_id;
-            var cleaning_select = data.orchestra_wash_care_label_orders[0].cleaning_id;
+            var washing_select = orchestra_wash_care_label_orders[0].washing_id;
+            var whitening_select = orchestra_wash_care_label_orders[0].whitening_id;
+            var dryer_select = orchestra_wash_care_label_orders[0].dryer_id;
+            var ironing_select = orchestra_wash_care_label_orders[0].ironing_id;
+            var cleaning_select = orchestra_wash_care_label_orders[0].cleaning_id;
 
-            var made_in_id = data.orchestra_wash_care_label_orders[0].made_in_id;
-            var care_instruction_id = data.orchestra_wash_care_label_orders[0].care_instruction_id;
+            var made_in_id = orchestra_wash_care_label_orders[0].made_in_id;
+            var care_instruction_id = orchestra_wash_care_label_orders[0].care_instruction_id;
 
 
             var washcomp=[];
-            $(data.orchestra_wash_care_label_orders[0].parts_comp).each(function (index_part,value_part) {
+            $(orchestra_wash_care_label_orders[0].parts_comp).each(function (index_part,value_part) {
                 var washcomp1=[];
-                $(data.orchestra_wash_care_label_orders[0].care_composition).each(function(index_comp,value_comp){
+                $(orchestra_wash_care_label_orders[0].care_composition).each(function(index_comp,value_comp){
                     if(value_part.parts_id == value_comp.parts_id)
                     {
                         washcomp1.push(value_comp.parts_id +"_"+ value_comp.english +"_"+ value_comp.percentage);
@@ -202,7 +246,8 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
             
             if(i == ajax)
             {
-                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,user_type,svg_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals,product_family[0].image,activity_label);
+                var product_image = product_family.length > 0 ? product_family[0].image : "";
+                PopupWashos(svg_fin,svgRoot1_back,svgRoot1_middle, tableID,user_type,svg_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,wash_finals,product_image,activity_label,created_at,po,uvc,ref_name);
             }
         },
         error: function(data) {
@@ -215,7 +260,7 @@ function printWashDivOs(front,back,middle,static_final,uvc,po,user_type,tableID,
 }
 
 
-function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select,pro_family_image,activity_label) {
+function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back,washing_select,whitening_select,dryer_select,ironing_select,cleaning_select,made_in_id,care_instruction_id,compo_select,pro_family_image,activity_label,created_at,po,uvc,ref_name) {
 	
     
     var s = new XMLSerializer();
@@ -232,9 +277,18 @@ function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back
 	
     var success = false;
     var url = "";
+
+    if(user_type == "erp")
+    {
+        var download_url = base_url + "/"+user_type+"/job-manager/orchestra/print-wash-pdf";
+    }
+    else
+    {
+        var download_url = base_url + "/"+user_type+"/order-management/print-wash-pdf";
+    }
     
     $.ajax({
-        url: base_url + "/"+user_type+"/order-management/print-wash-pdf",
+        url: download_url,
         type: "post",
         data: {
             _token: csrf_token,
@@ -252,12 +306,23 @@ function PopupWashos(data,data_back,data_middle,table_id,user_type,data_fin_back
             ironing_select:ironing_select,
             cleaning_select:cleaning_select,
             pro_family_image:pro_family_image,
-            activity_label:activity_label
+            activity_label:activity_label,
+            created_at:created_at,
+            buyer_no:po,
+            style_no:uvc,
+            ref_name:ref_name
         },
         async: false,
         success: function (data) {
             success = true;
-            url = data;
+            if(user_type == "erp")
+            {
+                url = data.file_path;
+            }
+            else
+            {
+                url = data;
+            }
         },
         error: function (data) {
 

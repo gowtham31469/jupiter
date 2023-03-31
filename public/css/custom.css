@@ -1140,6 +1140,13 @@ span.sticker-details {
     background: #2ecc71;
 }
 
+.label-PartiallyDispatched {
+    background: #bd9b19;
+}
+
+.label-OrderDispatched {
+    background: #16453e;
+}
 
 .label-CreateOrder {
     background: #e52222;
