@@ -253,20 +253,52 @@ class HomeController extends Controller
 	        try{
 				 $merchandiser_id = Auth::guard('web_merchandiser')->id();
          
-	             $orders = DB::table('orchestra_wash_care_label_orders')
-                        ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_wash_care_label_orders.template_id')
-                        ->join('orchestra_template','orchestra_template.item_id', 'orchestra_wash_care_label_orders.template_id')
-                        ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
-                        ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
-                        ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw("'WashCareLabel' as \"Artwork\""),'customers.company_name as SupplierName','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status',DB::raw("orchestra_wash_care_label_orders.season_code as \"Season\""),'merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id','orchestra_wash_care_label_orders.approved_date as ApprovedDate','orchestra_wash_care_label_orders.rejected_date as RejectedDate')
-                        ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
-                        ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
-                        ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
-                        ->groupBy('orchestra_wash_care_label_orders.uvc','orchestra_wash_care_label_orders.id','customers.company_name','merchandisers.merchandiser_name')
-                        ->get();
+	            // $orders = DB::table('orchestra_wash_care_label_orders')
+              //           ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_wash_care_label_orders.template_id')
+              //           ->join('orchestra_template','orchestra_template.item_id', 'orchestra_wash_care_label_orders.template_id')
+              //           ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
+              //           ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
+              //           ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw("'WashCareLabel' as \"Artwork\""),'customers.company_name as SupplierName','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status',DB::raw("orchestra_wash_care_label_orders.season_code as \"Season\""),'merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id','orchestra_wash_care_label_orders.approved_date as ApprovedDate','orchestra_wash_care_label_orders.rejected_date as RejectedDate')
+              //           ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+              //           ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+              //           ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+              //           ->groupBy('orchestra_wash_care_label_orders.uvc','orchestra_wash_care_label_orders.id','customers.company_name','merchandisers.merchandiser_name')
+              //           ->get();
 
-               $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
-	             return view('merchandiser.past-orders',['orders' => $orders,'buyers' => $buyers]);
+              $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+
+              $date_start = date("Y-m-d", strtotime(" -6 month"));
+              $date_end = date("Y-m-d");
+
+              $owcl_season = DB::table("orchestra_wash_care_label_orders")
+                                ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                                ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                                ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                                ->select("season_code")
+                                ->groupBy('season_code')
+                                ->get();
+
+              $owcl_style = DB::table("orchestra_wash_care_label_orders")
+                                ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                                ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                                ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                                ->select("uvc")
+                                ->groupBy('uvc')
+                                ->get();
+
+              $owcl_supplier = DB::table('orchestra_wash_care_label_orders')
+                                ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
+                                ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                                ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                                ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                                ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                                ->select('customer_id','customers.company_name')
+                                ->groupBy('customer_id','customers.company_name')
+                                ->get();
+
+	            return view('merchandiser.past-orders',['owcl_season' => $owcl_season,'owcl_style' => $owcl_style,'buyers' => $buyers,'owcl_supplier' => $owcl_supplier]);
 	        } catch (\Exception $e)
 	          {
 	             return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -326,7 +358,9 @@ class HomeController extends Controller
 		$svgarr = explode(',_',$request->svg);
 		$pro_family_image = $request->pro_family_image;
 		$id = $request->id;
-		$owcl = DB::table('orchestra_wash_care_label_orders')->select('*')->where('id',$id)->first();
+		$activity_label = $request->activity_label;
+
+		$owcl = DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.item_name')->where('orchestra_wash_care_label_orders.id',$id)->first();
 
 		$customer_id = $owcl->customer_id;
 		$customer = DB::table('customers')->select('*')->where('id',$customer_id)->first();
@@ -341,6 +375,15 @@ class HomeController extends Controller
 		$this->template_desc = "Taffeta Wash Care Label";
 		$this->tesco_po_number = $owcl->po;
 		$this->style = $owcl->uvc;
+
+		if($activity_label == "PUERICULTURE")
+		{
+			$this->size_text = "25 x 152mm";
+		}
+		else
+		{
+			$this->size_text = "25 x 165mm";
+		}
 
         //$svg=urldecode($request->svg);
 		
@@ -374,6 +417,7 @@ class HomeController extends Controller
 			$pdf->SetY(0);
 		  $name=$this->template_name;
 		  $zone=$this->template_zone;
+		  $size_text=$this->size_text;
 			$tesco_po_number=$this->tesco_po_number;
 			if($tesco_po_number == null || $tesco_po_number == "null")
 			{
@@ -463,7 +507,7 @@ class HomeController extends Controller
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 127x80mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$size_text.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>
@@ -556,7 +600,6 @@ class HomeController extends Controller
 
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$activity_label = $request->activity_label;
 
 
 		$orchestra_washing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->washing_select)->get();
@@ -619,6 +662,13 @@ class HomeController extends Controller
 			$j=0;
 			foreach($svgarr as $value)
 			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
 				$svg=urldecode($value);
 				$svg_back=urldecode($data_fin_back[$j]);
 
@@ -649,14 +699,6 @@ class HomeController extends Controller
 				PDF::SetTextColor(0, 0, 0);
 				$xx += 65;
 				$i++;
-				
-				
-				if($i == 3)
-				{
-					PDF::AddPage('P', 'A4');
-					$i=0;
-					$xx=12.5;
-				}
 				$j++;
 			}
 
@@ -716,6 +758,13 @@ class HomeController extends Controller
 			$j=0;
 			foreach($svgarr as $value)
 			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
 				$svg=urldecode($value);
 				$svg_back=urldecode($data_fin_back[$j]);
 
@@ -755,14 +804,6 @@ class HomeController extends Controller
 				PDF::SetTextColor(0, 0, 0);
 				$xx += 65;
 				$i++;
-				
-				
-				if($i == 3)
-				{
-					PDF::AddPage('P', 'A4');
-					$i=0;
-					$xx=12.5;
-				}
 				$j++;
 			}
 
@@ -774,12 +815,168 @@ class HomeController extends Controller
 			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/wcl_4.svg'), $x=105, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
 		}
-		
-		
 
+		$item_name = str_replace( " ", "_", $owcl->item_name );
 		
+		PDF::Output( public_path('/storage/app/template/'.$item_name.'_ID_'.$owcl->uvc.'.pdf'), 'F');
+    	print_r(url('/storage/app/template/'.$item_name.'_ID_'.$owcl->uvc.'.pdf'));
 
-		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+		// PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        // print_r(url('/storage/app/template/solid1.pdf'));
+
     } 
+    
+    public function orderSubmitFilter(Request $request)
+    {
+      try{
+
+          $merchandiser_id = Auth::guard('web_merchandiser')->id();
+
+          $buyers = DB::table('buyers')->where('is_active','=',1)->pluck('buyer_name','id')->all();
+
+          $date_start = $request->start_date;
+          $date_end = $request->end_date;
+
+          $owcl_season = DB::table("orchestra_wash_care_label_orders")
+                            ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                            ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                            ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                            ->select("season_code")
+                            ->groupBy('season_code')
+                            ->get();
+
+          $owcl_style = DB::table("orchestra_wash_care_label_orders")
+                            ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                            ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                            ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                            ->select("uvc")
+                            ->groupBy('uvc')
+                            ->get();
+
+          $owcl_supplier = DB::table('orchestra_wash_care_label_orders')
+                            ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
+                            ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                            ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                            ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                            ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                            ->select('customer_id','customers.company_name')
+                            ->groupBy('customer_id','customers.company_name')
+                            ->get();
+
+          return response()->json(['owcl_season' => $owcl_season,'owcl_style' => $owcl_style,'buyers' => $buyers,'owcl_supplier' => $owcl_supplier],200);
+
+      } 
+      catch (\Exception $e)
+      {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
+    }
+
+    public function orderSubmitOs(Request $request)
+    {
+        try
+        {
+          $merchandiser_id = Auth::guard('web_merchandiser')->id();
+          if($request->seasonos !== null)
+          {
+              $seasonos = $request->seasonos;
+          }
+          else
+          {
+              $seasonos = array();
+          }
+
+          if($request->ukstylenoos !== null)
+          {
+              $ukstylenoos = $request->ukstylenoos;
+          }
+          else
+          {
+              $ukstylenoos = array();
+          }
+
+          if($request->supplieros !== null)
+          {
+              $supplieros = $request->supplieros;
+          }
+          else
+          {
+              $supplieros = array();
+          }
+
+          if($request->statusos !== null)
+          {
+              $statusos = $request->statusos;
+          }
+          else
+          {
+              $statusos = array();
+          }
+
+          if($request->start_date !== null)
+          {
+              $date_start = $request->start_date;
+          }
+          else
+          {
+              $date_start = date("Y-m-d", strtotime(" -6 month"));
+          }
+          
+          if($request->end_date !== null)
+          {
+              $date_end = $request->end_date;
+          }
+          else
+          {
+              $date_end = date("Y-m-d");
+          }
+
+          $orders = DB::table('orchestra_wash_care_label_orders')
+                        ->join('orchestra_item_master','orchestra_item_master.id', 'orchestra_wash_care_label_orders.template_id')
+                        ->join('orchestra_template','orchestra_template.item_id', 'orchestra_wash_care_label_orders.template_id')
+                        ->leftjoin('customers','customers.id', 'orchestra_wash_care_label_orders.customer_id')
+                        ->join('merchandisers','merchandisers.id','=','orchestra_wash_care_label_orders.merchandisers_id')
+                        ->select('orchestra_wash_care_label_orders.uvc as UVC',DB::raw("'WashCareLabel' as \"Artwork\""),'customers.company_name as SupplierName','orchestra_wash_care_label_orders.created_at as OrderDate','orchestra_wash_care_label_orders.delivery_date as DeliveryDate','orchestra_wash_care_label_orders.status as Status',DB::raw("orchestra_wash_care_label_orders.season_code as \"Season\""),'merchandisers.merchandiser_name','orchestra_wash_care_label_orders.id','orchestra_wash_care_label_orders.approved_date as ApprovedDate','orchestra_wash_care_label_orders.rejected_date as RejectedDate')
+                        ->where(function($query) use ($seasonos){
+                          if(count($seasonos))
+                          {
+                              $query->orWhereIn('season_code', $seasonos);
+                          }
+                        })
+                        ->where(function($query) use ($supplieros){
+                          if(count($supplieros))
+                          {
+                              $query->orWhereIn('customer_id', $supplieros);
+                          }
+                        })
+                        ->where(function($query) use ($ukstylenoos){
+                          if(count($ukstylenoos))
+                          {
+                              $query->orWhereIn('uvc', $ukstylenoos);
+                          }
+                        })
+                        ->where(function($query) use ($statusos){
+                          if(count($statusos))
+                          {
+                              $query->orWhereIn('status', $statusos);
+                          }
+                        })
+                        ->whereBetween('orchestra_wash_care_label_orders.created_at', [$date_start.' 00:00:00', $date_end.' 23:59:59'])
+                        ->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')
+                        ->where('orchestra_wash_care_label_orders.status','<>','Buyer Approval Pending')
+                        ->where('orchestra_wash_care_label_orders.merchandisers_id','=',$merchandiser_id)
+                        ->groupBy('orchestra_wash_care_label_orders.uvc','orchestra_wash_care_label_orders.id','customers.company_name','merchandisers.merchandiser_name')
+                        ->get();
+
+          return response()->json(['orders' => $orders],200);
+
+        }
+        catch (\Exception $e)
+        {
+            return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+        }
+    }
+    
 }

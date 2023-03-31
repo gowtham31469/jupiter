@@ -33,8 +33,7 @@ orderStatus = (user_type) => {
                     <div class="col-md-2">
                         <div class="form-group">
                             <select class="selectpicker form-control input-sm" id="orch_filter_orderstatus" name="orch_filter_orderstatus[]" title="Select Order Status" data-actions-box="true" multiple data-done-button="true" data-selected-text-format="count" data-live-search="true" data-size="10">
-                                <option value="Saved">Saved</option>
-                                <option value="Order Placed">Submited</option>
+                                <option value="Buyer Approval Pending">Submited</option>
                                 <option value="Order Pending">Pending</option>
                                 <option value="Order Cancelled">Cancelled</option>
                             </select>
@@ -43,7 +42,7 @@ orderStatus = (user_type) => {
                     <div class="col-md-2">
                         <div class="form-group">
                             <select class="selectpicker form-control input-sm" id="orch_filter_artworkstatus" name="orch_filter_artworkstatus[]" title="Select Artwork Status" data-actions-box="true" multiple data-done-button="true" data-selected-text-format="count" data-live-search="true" data-size="10">
-                                <option value="Approval Pending">Approval Pending</option>
+                                <option value="Buyer Approval Pending">Approval Pending</option>
                                 <option value="Order Approved">Order Approved</option>
                             </select>
                         </div>
@@ -690,10 +689,11 @@ getOrchestraOrders = (user_type) => {
                         }],
                         "pageLength": 25,
                         "order": [
-                            [8, "desc"]
+                            [9, "desc"]
                         ],
                         scrollX:        true,
                         "aoColumns": [
+                            null,
                             null,
                             null,
                             null,

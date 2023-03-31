@@ -1501,7 +1501,9 @@ class OrderController extends Controller
 		$svgarr = explode(',_',$request->svg);
 		$pro_family_image = $request->pro_family_image;
 		$id = $request->id;
-		$owcl = DB::table('orchestra_wash_care_label_orders')->select('*')->where('id',$id)->first();
+		$activity_label = $request->activity_label;
+
+		$owcl = DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.item_name')->where('orchestra_wash_care_label_orders.id',$id)->first();
 
 		$customer_id = $owcl->customer_id;
 		$customer = DB::table('customers')->select('*')->where('id',$customer_id)->first();
@@ -1516,6 +1518,15 @@ class OrderController extends Controller
 		$this->template_desc = "Taffeta Wash Care Label";
 		$this->tesco_po_number = $owcl->po;
 		$this->style = $owcl->uvc;
+
+		if($activity_label == "PUERICULTURE")
+		{
+			$this->size_text = "25 x 152mm";
+		}
+		else
+		{
+			$this->size_text = "25 x 165mm";
+		}
 
         //$svg=urldecode($request->svg);
 		
@@ -1549,6 +1560,7 @@ class OrderController extends Controller
 			$pdf->SetY(0);
 		  $name=$this->template_name;
 		  $zone=$this->template_zone;
+		  $size_text=$this->size_text;
 			$tesco_po_number=$this->tesco_po_number;
 			if($tesco_po_number == null || $tesco_po_number == "null")
 			{
@@ -1638,7 +1650,7 @@ class OrderController extends Controller
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 127x80mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$size_text.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>
@@ -1731,7 +1743,6 @@ class OrderController extends Controller
 
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$activity_label = $request->activity_label;
 
 
 		$orchestra_washing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->washing_select)->get();
@@ -1794,6 +1805,13 @@ class OrderController extends Controller
 			$j=0;
 			foreach($svgarr as $value)
 			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
 				$svg=urldecode($value);
 				$svg_back=urldecode($data_fin_back[$j]);
 
@@ -1824,14 +1842,6 @@ class OrderController extends Controller
 				PDF::SetTextColor(0, 0, 0);
 				$xx += 65;
 				$i++;
-				
-				
-				if($i == 3)
-				{
-					PDF::AddPage('P', 'A4');
-					$i=0;
-					$xx=12.5;
-				}
 				$j++;
 			}
 
@@ -1891,6 +1901,13 @@ class OrderController extends Controller
 			$j=0;
 			foreach($svgarr as $value)
 			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
 				$svg=urldecode($value);
 				$svg_back=urldecode($data_fin_back[$j]);
 
@@ -1930,14 +1947,6 @@ class OrderController extends Controller
 				PDF::SetTextColor(0, 0, 0);
 				$xx += 65;
 				$i++;
-				
-				
-				if($i == 3)
-				{
-					PDF::AddPage('P', 'A4');
-					$i=0;
-					$xx=12.5;
-				}
 				$j++;
 			}
 
@@ -1949,13 +1958,15 @@ class OrderController extends Controller
 			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/wcl_4.svg'), $x=105, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 			
 		}
-		
-		
 
+		$item_name = str_replace( " ", "_", $owcl->item_name );
 		
+		PDF::Output( public_path('/storage/app/template/'.$item_name.'_ID_'.$owcl->uvc.'.pdf'), 'F');
+    	print_r(url('/storage/app/template/'.$item_name.'_ID_'.$owcl->uvc.'.pdf'));
 
-		PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
-        print_r(url('/storage/app/template/solid1.pdf'));
+		// PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        // print_r(url('/storage/app/template/solid1.pdf'));
+
     } 
 	
 	/**

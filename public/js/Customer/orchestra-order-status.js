@@ -8,40 +8,16 @@ var td_row = "";
  * @return {[type]}      [description]
  */
 function orchestraStatusTable(data, path) {
-    var th = "";
+    var th = "<th style='text-align: center;'>UVC</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season</th><th style='text-align: center;'>Buyer Po</th><th style='display:none'>Artwork Type</th><th style='text-align: center;'>Template Name</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th>";
     var tr = "";
     var columnsIn = data[0];
-    for (var key in columnsIn) {
-        if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uvc" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code"  && key != "created_at" && key != "template_file" && key != "Print Proof" && key != "Actions") {
-            if (key == "TemplateName") {
-                th += "<th style='text-align: center;'>Template Name</th>";
-            } else if (key == "BuyerPONo") {
-                th += "<th style='text-align: center;'>BuyerPO No</th>";
-            } else if (key == "ArtworkType") {
-                th += "<th style='display:none'>Artwork Type</th>";
-            } else if (key == "Artwork Status") {
-                //New changes start
-                th += "<th>Order Status</th><th>Artwork</th><th>Artwork Status</th>";
-                //New changes end
-            } else if (key == "SupplierName") {
-                th += "<th style='text-align: center;'>Supplier Name</th>";
-            } else if (key == "OrderDate") {
-                th += "<th style='text-align: center;'>Order Date</th>";
-            } else if (key == "DeliveryDate") {
-                th += "<th style='text-align: center;'>Delivery Date</th>";
-            } else {
-                th += "<th style='text-align: center;'>" + key + "</th>";
-            }
-        }
-
-    }
     $.each(data, function (index, value) {
         var action_status = false;
         tr += '<tr class="trClass" id="' + value.tableName + '_' + value.tableID + '">';
         for (var key in columnsIn) {
             if (key != "id") {
 
-                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0) {
+                if (key == "PO Number" && value['po_required'] == 1 && value['is_order_count_empty'] == 0 && value['Artwork Status'] != "Order Cancelled") {
                     var po_file = value['po_file'];
                     let customer_po_number = value[key] === null ? ' - ' : value[key];
                     //New changes start
@@ -72,7 +48,7 @@ function orchestraStatusTable(data, path) {
                             status_text = '<span class="pi_class label label-' + status + '">' + value[key] + '</span>';
                             tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
                         } else {
-                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved') {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved' || value['Artwork Status'] === 'Buyer Approval Pending' || value['Artwork Status'] === 'Order Pending') {
                                 status_text = '<span class="pi_class label label-PIApprovalPending"> PI Approval Pending </span>';
                                 tr += '<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick=genarateOrchetraPI("' + value.tableID + '","' + value.tableName + '","' + value.UVC + '","' + action_status + '","'+value.BuyerPONo+'")>'+status_text+'</a></td>';	
                             } else {
@@ -132,10 +108,10 @@ function orchestraStatusTable(data, path) {
                     }
                     else if(value.ArtworkType == "WashCareLabel")
                     {
-                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","os","'+value.tableID+'","'+value.tableName+'","print","os","")'
+                        var print_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","'+value.tableID+'","'+value.tableName+'","print","os","","")'
                         
 
-                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","os","'+value.tableID+'","'+value.tableName+'","proof","os","")'
+                        var proof_button = 'printWashDivOs("'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_back_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_middle_modal"+'","'+value.TemplateName.replace(/ /g, "")+"_"+value.template_id+"_static_modal"+'","'+value.UVC+'","'+value.BuyerPONo+'","customer","'+value.tableID+'","'+value.tableName+'","proof","os","","")'
                     }
                     else if(value.ArtworkType == "Hang Tag")
                     {
@@ -146,7 +122,7 @@ function orchestraStatusTable(data, path) {
                     }
 
                     //New changes start
-                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
+                    if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer") || (value['Artwork Status'] == "Order Cancelled"))
                     {
                         tr += '<td> - </td>'
                     }
@@ -173,7 +149,9 @@ function orchestraStatusTable(data, path) {
                         tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
                     } else if (value['Artwork Status'] == "Buyer Approval Pending"){
                         tr += '<td align="center"><span class="label label-POPending">Buyer Approval Pending</span></td>';
-                    }else {
+                    } else if (value['Artwork Status'] == "Order Pending"){
+                        tr += '<td align="center"><span class="label label-OrderRejected">Artwork Rejected</span></td>';
+                    } else {
                         tr += '<td align="center"> - </td>';
                     }
 
@@ -189,7 +167,7 @@ function orchestraStatusTable(data, path) {
                             status_text = '<span class="po_class label label-' + status + '">' + value['PO Status'] + '</span>';
                             tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUploaded(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","'+value['PO Number']+'","customer") > '+status_text+' </a></td>';
                         } else {
-                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved' || value['Artwork Status'] === 'Buyer Approval Pending') {
+                            if (value['Artwork Status'] === 'Order Placed' || value['Artwork Status'] === 'Order Approved' || value['Artwork Status'] === 'Buyer Approval Pending' || value['Artwork Status'] === 'Order Pending') {
                                 status_text = '<span class="po_class label label-POPending"> PO Pending </span>';
                                 tr += '<td align="center" class="po_status"><a href="javascript:void(0)" class="po-style" onclick=orchestraPOUpload(this,"' + value.tableID + '","' + po_file + '","' + value.tableName + '","'+value.UVC+'","customer") > '+status_text+' </a></td>';
                             } else {
@@ -221,29 +199,11 @@ function orchestraStatusTable(data, path) {
 					{
 						tr += '<td align="center"> '+value.TemplateName+' </td>';
 					}
-                } else if (key == "Print Proof") {
-
-                    // if((value.ArtworkType == "Special Tag") || (value.ArtworkType == "Main Label") || (value.ArtworkType == "Size Label") || (value.ArtworkType == "Heat Transfer"))
-                    // {
-                    //     tr += '<td> - </td>'
-                    // }
-                    // else
-                    // {
-                    //     //New changes start
-                    //     tr += '<td align="center"><button data-id="' + value.tableID + '" data-table1="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '" data-orderDate="' + value.OrderDate + '" data-template_id="' + value.template_id + '" data-order_status="' + value['Artwork Status'] + '" class="" href="javascript:void(0)" onclick='+proof_button+'><span style="cursor:pointer" class="fa fa-download"></span></button></td>';
-                    //     //New changes end
-                    // }
-                } else if (key == "Actions") {
-                    //New changes start
-                    var po_file = value['po_file'];
-                    // let customer_po_number = value['PO Number'] === null ? '' : value['PO Number'];
-                    // tr += '<td class="text-center"><div class="form-group has-feedback"><div class="input-group"><input type="text" onkeypress="return AvoidSpace(event)" name="orchestra-po" id="orchestra-po-' + value.tableID + '" class="form-control input-sm orchestra-po" placeholder="Enter PO" maxlength="11" value="' + customer_po_number + '"><span class="input-group-btn po-span"><button type="submit" class="btn btn-sm btn-default orchestra-po-submit" onclick=orchestraSetPO(this,"' + value.tableID + '","' + value.tableName + '","' + po_file + '")><span class="fa fa-check"></span></button></span></div></div></td>';
-                    //New changes end
                 } else if (key == "ArtworkType") {
 					tr += '<td style="display:none">' + value[key] + '</td>';
                 } else if (key == "DeliveryDate") {
 
-                    if (value['is_order_count_empty'] == 0) {
+                    if (value['is_order_count_empty'] == 0 && (value['Artwork Status'] != "Order Cancelled")) {
                         if (value[key] == null) {
                             tr += '<td><span style=display:none;>' + value.created_at + '</span><input class="form-control input-sm datepicker_recurring_start" data-id="' + value.delivery_day_count + '" style="width: 107px; border-color: rgb(244, 67, 54);" placeholder="Delivery Date" onchange=updateDeliveryDate(this,"' + value.tableID + '","' + value.tableName + '")  readonly></td>';
                         } else {
@@ -253,7 +213,7 @@ function orchestraStatusTable(data, path) {
                     } else {
                         tr += '<td><span style=display:none;>' + value.created_at + '</span> - </td>';
                     }
-                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code" && key != "created_at" && key != "template_file") {
+                } else if (key != "tableName" && key != "tableID" && key != "po_file" && key != "pi_required" && key != "po_required" && key != "uk_style_ref" && key != "ce_style_ref" && key != "template_id" && key != "customer_id" && key != "order_flag" && key != "delivery_day_count" && key != "is_order_count_empty" && key != "color_code" && key != "created_at" && key != "template_file" && key != "Print Proof" && key != "Actions" && key != "SupplierName") {
                     if (value[key] == "" || value[key] == null || value[key] == "null") {
                         tr += '<td> - </td>';
                     } else {
@@ -385,230 +345,310 @@ function updateArtworkOrc(obj) {
 				$('.edit-orch-order-panel').html('<input type="hidden" value="' + data.order_details[0].UVC + '" id="uvc_id"><input type="hidden" value="' + data.order_details[0].id + '" id="parcel_id"><input type="hidden" value="' + data.order_details[0].Season_Code + '" id="season_code"><input type="hidden" value="'+data.customers[0].id+'" id="customer_id">');
 				if(at == "HangTag")
 				{
-					hangtagmodalOs(data)
-					
-					if (data.hang_erp_details != null) {
-							if (data.hang_erp_details.status_name !== 'Hold For JC Queue' && data.hang_erp_details.status_name !== 'Moved To ERP') {
-								$('.tot_qty_tablehang').prop("disabled", true);
-								$('.extra_percentagehang').prop("disabled", true);
-								$('#save_hang_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.hang_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_hang_tag_orders.length > 0)
+                    {
+                        hangtagmodalOs(data)
+                        
+                        if (data.hang_erp_details != null) {
+                                if (data.hang_erp_details.status_name !== 'Hold For JC Queue' && data.hang_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_tablehang').prop("disabled", true);
+                                    $('.extra_percentagehang').prop("disabled", true);
+                                    $('#save_hang_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.hang_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_hang_tag_orders[0].edit_permission === 0) {
-                        $('#save_hang_button').remove();
-                        $('#edit_orc_ht_order_btn').remove();
+                        if (data.orchestra_hang_tag_orders[0].edit_permission === 0) {
+                            $('#save_hang_button').remove();
+                            $('#edit_orc_ht_order_btn').remove();
+                        }
+
+                        $('.left-panel-heat').addClass('active');
+                        $('.right-panel-heat').addClass('active');
+                        $('.left-panel-heat').show();
                     }
-
-                    $('.left-panel-heat').addClass('active');
-                    $('.right-panel-heat').addClass('active');
-                    $('.left-panel-heat').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 					
 				}
 				else if(at == "SpecialTag")
 				{
-					specialtagsOs(data)
-					
-					if (data.special_erp_details != null) {
-							if (data.special_erp_details.status_name !== 'Hold For JC Queue' && data.special_erp_details.status_name !== 'Moved To ERP') {
-						    	$('.special_qty').prop("disabled", true);
-								$('#save_special_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.special_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_special_tag_orders.length > 0)
+                    {
+                        specialtagsOs(data)
+                        
+                        if (data.special_erp_details != null) {
+                                if (data.special_erp_details.status_name !== 'Hold For JC Queue' && data.special_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.special_qty').prop("disabled", true);
+                                    $('#save_special_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.special_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_special_tag_orders[0].edit_permission === 0) {
-                        $('#save_special_button').remove();
-                        $('#edit_orc_st_order_btn').remove();
+                        if (data.orchestra_special_tag_orders[0].edit_permission === 0) {
+                            $('#save_special_button').remove();
+                            $('#edit_orc_st_order_btn').remove();
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "MainLabel")
 				{
-					mainlabelsOs(data)
-					
-					if (data.main_erp_details != null) {
-							if (data.main_erp_details.status_name !== 'Hold For JC Queue' && data.main_erp_details.status_name !== 'Moved To ERP') {
-								$('.main_label_qty').prop("disabled", true);
-								$('#save_main_label_button').remove()
-								$('#edit_orc_ml_order_btn').remove()
-								$('#toggle_orch_edit_permission').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_main_label_orders.length > 0)
+                    {
+                        mainlabelsOs(data)
+                        
+                        if (data.main_erp_details != null) {
+                                if (data.main_erp_details.status_name !== 'Hold For JC Queue' && data.main_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.main_label_qty').prop("disabled", true);
+                                    $('#save_main_label_button').remove()
+                                    $('#edit_orc_ml_order_btn').remove()
+                                    $('#toggle_orch_edit_permission').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.main_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_main_label_orders[0].edit_permission === 0) {
-                        $('#save_main_label_button').remove();
-                        $('#edit_orc_ml_order_btn').remove()
+                        if (data.orchestra_main_label_orders[0].edit_permission === 0) {
+                            $('#save_main_label_button').remove();
+                            $('#edit_orc_ml_order_btn').remove()
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "WashCareLabel")
 				{
-					washcarelabelsOs(data)
-                    
-					$('.edit-orch-order-panel').append('<input type="hidden" value="' + data.orchestra_wash_care_label_orders[0].po + '" id="po_select">');
-					if (data.wash_erp_details != null) {
-							if (data.wash_erp_details.status_name !== 'Hold For JC Queue' && data.wash_erp_details.status_name !== 'Moved To ERP') {
-								$('.tot_qty_tablewcl').prop("disabled", true);
-								$('.extra_percentagewash').prop("disabled", true);
-								$('#save_wash_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.wash_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_wash_care_label_orders.length > 0)
+                    {
+                        washcarelabelsOs(data)
+                        
+                        $('.edit-orch-order-panel').append('<input type="hidden" value="' + data.orchestra_wash_care_label_orders[0].po + '" id="po_select">');
+                        if (data.wash_erp_details != null) {
+                                if (data.wash_erp_details.status_name !== 'Hold For JC Queue' && data.wash_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_tablewcl').prop("disabled", true);
+                                    $('.extra_percentagewash').prop("disabled", true);
+                                    $('#save_wash_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.wash_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_wash_care_label_orders[0].edit_permission === 0) {
-                        $('#save_wash_button').remove();
-                        $('#edit_orc_label_order_btn').remove();
+                        if (data.orchestra_wash_care_label_orders[0].edit_permission === 0) {
+                            $('#save_wash_button').remove();
+                            $('#edit_orc_label_order_btn').remove();
+                        }
+
+                        $('.left-panel-heat').addClass('active');
+                        $('.right-panel-heat').addClass('active');
+                        $('.left-panel-heat').show();
                     }
-
-                    $('.left-panel-heat').addClass('active');
-                    $('.right-panel-heat').addClass('active');
-                    $('.left-panel-heat').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "SizeLabel")
 				{
-					sizelabelsOs(data)
-					
-					if (data.size_erp_details != null) {
-							if (data.size_erp_details.status_name !== 'Hold For JC Queue' && data.size_erp_details.status_name !== 'Moved To ERP') {
-								$('.tot_qty_tablesize').prop("disabled", true);
-								$('.extra_percentagesize').prop("disabled", true);
-								$('#save_size_label_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.size_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_size_label_orders.length > 0)
+                    {
+                        sizelabelsOs(data)
+                        
+                        if (data.size_erp_details != null) {
+                                if (data.size_erp_details.status_name !== 'Hold For JC Queue' && data.size_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_tablesize').prop("disabled", true);
+                                    $('.extra_percentagesize').prop("disabled", true);
+                                    $('#save_size_label_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.size_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_size_label_orders[0].edit_permission === 0) {
-                        $('#save_size_label_button').remove();
-                        $('#edit_orc_sl_order_btn').remove()
+                        if (data.orchestra_size_label_orders[0].edit_permission === 0) {
+                            $('#save_size_label_button').remove();
+                            $('#edit_orc_sl_order_btn').remove()
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "HeatTransfer")
 				{
-					heatTransferOs(data)
-					
-					if (data.heat_erp_details != null) {
-							if (data.heat_erp_details.status_name !== 'Hold For JC Queue' && data.heat_erp_details.status_name !== 'Moved To ERP') {
-								$('.tot_qty_tableheat').prop("disabled", true);
-								$('.extra_percentageheat').prop("disabled", true);
-								$('#save_heat_transfer_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.heat_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_heat_transfer_orders.length > 0)
+                    {
+                        heatTransferOs(data)
+                        
+                        if (data.heat_erp_details != null) {
+                                if (data.heat_erp_details.status_name !== 'Hold For JC Queue' && data.heat_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_tableheat').prop("disabled", true);
+                                    $('.extra_percentageheat').prop("disabled", true);
+                                    $('#save_heat_transfer_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.heat_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_heat_transfer_orders[0].edit_permission === 0) {
-                        $('#save_heat_transfer_button').remove();
-                        $('#edit_orc_he_order_btn').remove();
+                        if (data.orchestra_heat_transfer_orders[0].edit_permission === 0) {
+                            $('#save_heat_transfer_button').remove();
+                            $('#edit_orc_he_order_btn').remove();
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "SolidCartonStickers")
 				{
-					SolidCartonStickersOs(data,"customer")
-					
-					if (data.solid_carton_erp_details != null) {
-							if (data.solid_carton_erp_details.status_name !== 'Hold For JC Queue' && data.solid_carton_erp_details.status_name !== 'Moved To ERP') {
-                                $('.tot_qty_table_carton').prop("disabled", true);
-                                $('#age').prop("disabled", true);
-                                $('#modal_height').prop("disabled", true);
-                                $('#width').prop("disabled", true);
-                                $('#save_solid_carton_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_solid_carton_sticker_orders.length > 0)
+                    {
+                        SolidCartonStickersOs(data,"customer")
+                        
+                        if (data.solid_carton_erp_details != null) {
+                                if (data.solid_carton_erp_details.status_name !== 'Hold For JC Queue' && data.solid_carton_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_table_carton').prop("disabled", true);
+                                    $('#age').prop("disabled", true);
+                                    $('#modal_height').prop("disabled", true);
+                                    $('#width').prop("disabled", true);
+                                    $('#save_solid_carton_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_solid_carton_sticker_orders[0].edit_permission === 0) {
-                        $('#save_solid_carton_button').remove();
-                        $('.edit_label_order_btn').remove();
+                        if (data.orchestra_solid_carton_sticker_orders[0].edit_permission === 0) {
+                            $('#save_solid_carton_button').remove();
+                            $('.edit_label_order_btn').remove();
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "SolidPolyBagStickers")
 				{
-					SolidPolyBagStickersOs(data,"customer")
-					
-					if (data.solid_poly_erp_details != null) {
-							if (data.solid_poly_erp_details.status_name !== 'Hold For JC Queue' && data.solid_poly_erp_details.status_name !== 'Moved To ERP') {
-                                $('.tot_qty_table_poly').prop("disabled", true);
-                                $('#age').prop("disabled", true);
-                                $('#save_solid_poly_bag_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_solid_poly_bag_sticker_orders.length > 0)
+                    {
+                        SolidPolyBagStickersOs(data,"customer")
+                        
+                        if (data.solid_poly_erp_details != null) {
+                                if (data.solid_poly_erp_details.status_name !== 'Hold For JC Queue' && data.solid_poly_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.tot_qty_table_poly').prop("disabled", true);
+                                    $('#age').prop("disabled", true);
+                                    $('#save_solid_poly_bag_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.solid_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_solid_poly_bag_sticker_orders[0].edit_permission === 0) {
-                        $('#save_solid_poly_bag_button').remove();
-                        $('.edit_label_order_btn').remove();
+                        if (data.orchestra_solid_poly_bag_sticker_orders[0].edit_permission === 0) {
+                            $('#save_solid_poly_bag_button').remove();
+                            $('.edit_label_order_btn').remove();
+                        }
+
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "StandardCartonStickers")
 				{
-					StandardCartonStickersOs(data,"customer")
-					
-					if (data.standard_carton_erp_details != null) {
-							if (data.standard_carton_erp_details.status_name !== 'Hold For JC Queue' && data.standard_carton_erp_details.status_name !== 'Moved To ERP') {
-                                $('.standard_carton_qty').prop("disabled", true);
-                                $('#age').prop("disabled", true);
-                                $('#modal_height').prop("disabled", true);
-                                $('#width').prop("disabled", true);
-                                $('#needed_modal').prop("disabled", true);
-                                $('#total_polybag').prop("disabled", true);
+                    if(data.orchestra_standard_carton_sticker_orders.length > 0)
+                    {
+                        StandardCartonStickersOs(data,"customer")
+                        
+                        if (data.standard_carton_erp_details != null) {
+                                if (data.standard_carton_erp_details.status_name !== 'Hold For JC Queue' && data.standard_carton_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.standard_carton_qty').prop("disabled", true);
+                                    $('#age').prop("disabled", true);
+                                    $('#modal_height').prop("disabled", true);
+                                    $('#width').prop("disabled", true);
+                                    $('#needed_modal').prop("disabled", true);
+                                    $('#total_polybag').prop("disabled", true);
 
-                                $('#save_standard_carton_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                                    $('#save_standard_carton_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_carton_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_standard_carton_sticker_orders[0].edit_permission === 0) {
-                        $('#save_standard_carton_button').remove();
-                        $('.edit_label_order_btn').remove();
+                        if (data.orchestra_standard_carton_sticker_orders[0].edit_permission === 0) {
+                            $('#save_standard_carton_button').remove();
+                            $('.edit_label_order_btn').remove();
+                        }
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 				else if(at == "StandardPolyBagStickers")
 				{
-					StandardPolyBagStickersOs(data,"customer")
-					
-					if (data.standard_poly_erp_details != null) {
-							if (data.standard_poly_erp_details.status_name !== 'Hold For JC Queue' && data.standard_poly_erp_details.status_name !== 'Moved To ERP') {
-                                $('.standard_poly_bag_qty').prop("disabled", true);
-                                $('#age').prop("disabled", true);
-                                $('#save_standard_poly_bag_button').remove()
-								$('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
-							}
-					}
+                    if(data.orchestra_standard_poly_bag_sticker_orders.length > 0)
+                    {
+                        StandardPolyBagStickersOs(data,"customer")
+                        
+                        if (data.standard_poly_erp_details != null) {
+                                if (data.standard_poly_erp_details.status_name !== 'Hold For JC Queue' && data.standard_poly_erp_details.status_name !== 'Moved To ERP') {
+                                    $('.standard_poly_bag_qty').prop("disabled", true);
+                                    $('#age').prop("disabled", true);
+                                    $('#save_standard_poly_bag_button').remove()
+                                    $('#error_msg_alert').html('ERP Order Status : <strong>' + data.standard_poly_erp_details.status_name + '</strong>. You are not allowed to edit this order.')
+                                }
+                        }
 
-                    if (data.orchestra_standard_poly_bag_sticker_orders[0].edit_permission === 0) {
-                        $('#save_standard_poly_bag_button').remove();
-                        $('.edit_label_order_btn').remove();
+                        if (data.orchestra_standard_poly_bag_sticker_orders[0].edit_permission === 0) {
+                            $('#save_standard_poly_bag_button').remove();
+                            $('.edit_label_order_btn').remove();
+                        }
+                        $('.left-panelos').addClass('active');
+                        $('.right-panelos').addClass('active');
+                        $('.left-panelos').show();
                     }
-                    $('.left-panelos').addClass('active');
-                    $('.right-panelos').addClass('active');
-                    $('.left-panelos').show();
+                    else
+                    {
+                        $('.snackbar_span').html('Order Cancelled!!!');
+                        showSnackbar();
+                    }
 				}
 
 				
