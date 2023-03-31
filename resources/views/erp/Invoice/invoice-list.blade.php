@@ -434,11 +434,12 @@ function showInvoice(obj){
           var itemName ="";
           var hsnCode = "";
           var _ocn = "";
+          var orch_colorcode = "";
           $(data.inv_details).each(function(index, value)
           {   
               var size = (value.size == "null")?'-':value.size ;
               
-              if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_no) {
+              if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_no && orch_colorcode === value.color_code) {
                     tr += '<tr class="trClass" id="'+value.id+'">';
                     tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width: 1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
@@ -446,11 +447,17 @@ function showInvoice(obj){
                 else{
                     hsnCode = value.hsn_code==null?'-':value.hsn_code;
                     _ocn = value.ocn_no==null?'-':value.ocn_no;
-                    
-                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+'  HSNCode: '+hsnCode+' OCN: '+_ocn+'</strong></td></tr>';
-                    tr += '<td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
-                    tr += '</tr>';
+                    orch_colorcode = value.color_code==null?'-':value.color_code;
                     itemName =value.item_name;
+
+                    tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
+                
+                    if(value.buyer_name.toLowerCase() === 'orchestra'){
+                        tr += ',  Color: '+orch_colorcode;
+                    } 
+                    
+                    tr += '</strong></td></tr><tr><td>'+value.erp_id+'</td><td>'+value.buyer_name+'</td><td>'+value.order_no+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+value.custom_ref_name+'</td><td>'+size+'</td><td>'+value.tax+'</td><td>'+value.delivered_qnty+'</td><td>'+value.rate+'</td><td style="border-width:1px !important;">'+(value.delivered_qnty * value.rate).toFixed(2)+'</td>';
+                    tr += '</tr>';
                 } 
                 totalAmnt+= value.delivered_qnty * value.rate;
           });

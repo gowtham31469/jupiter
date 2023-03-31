@@ -36,6 +36,8 @@ class OrderController extends Controller
     private $thl3;
     private $tsl1;
     private $tsl3;
+    private $tcl5;
+    private $tsl2;
     private $tcl1_type;
     private $tcl2_type;
     private $tcl4_type;
@@ -43,10 +45,14 @@ class OrderController extends Controller
     private $thl3_type;
     private $tsl1_type;
     private $tsl3_type;
+    private $tcl5_type;
+    private $tsl2_type;
+    private $tesco_washcare_orders_type;
     private $current_date;
     private $ratio_pack_type;
     private $financial_year_date;
     private $buyer_id;
+
     
     /**
      * Create a new controller instance.
@@ -98,8 +104,8 @@ class OrderController extends Controller
     {
 	    $customer_id = Auth::guard('web_customer')->id();
       $year = explode('-', $request->year);
-      $from_date = $year[0].'-'.$this->financial_year_date;
-      $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString();
+      $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+      $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";
 		
 	    $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 
