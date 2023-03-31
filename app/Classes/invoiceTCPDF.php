@@ -79,7 +79,6 @@ class invoiceTCPDF extends \TCPDF
         $this->Line($this->getPageWidth()-8,8, $this->getPageWidth()-8, $this->getPageHeight()-8);
         $this->Line(8, $this->getPageHeight()-8, $this->getPageWidth()-8, $this->getPageHeight()-8);
         $this->Line(8,8,8, $this->getPageHeight()-8);
-        // Title
         
     }
 

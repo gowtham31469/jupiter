@@ -77,6 +77,10 @@ class OrderManagementCntrl extends Controller
     private $financial_year_start;
     private $financial_year_end;
     private $buyer_id;
+    private $tesco_washcare_orders_type;
+    private $tesco_swingticket_orders_type;
+    private $financial_year_date_format;
+    private $today_date;
 
 
     /**
@@ -214,8 +218,8 @@ class OrderManagementCntrl extends Controller
     public function Orders(Request $request)
     {
       $year = explode('-', $request->year);
-      $from_date = $year[0].'-'.$this->financial_year_date;
-      $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+      $from_date = ($year[0].'-'.$this->financial_year_date)." 00:00:00";
+      $to_date =(Carbon::parse($from_date)->addYear()->subDay()->toDateString())." 23:59:59"; 
       
       $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->select('tesco_tcl1_orders.id', 'tesco_tcl1_orders.template_id', 'tesco_tcl1_orders.zone', 'tesco_tcl1_orders.template_type', 'tesco_tcl1_orders.po_number', 'tesco_tcl1_orders.uk_style_ref', 'tesco_tcl1_orders.ce_style_ref', 'tesco_tcl1_orders.order_status', 'tesco_tcl1_orders.created_at',DB::raw("'".$this->tcl1."'".' as "TemplateName"'))->where('order_flag', 'newOrder')->where('order_status','!=', 'Order Cancelled')->whereBetween('created_at', [$from_date, $to_date])->orderBy('id', 'desc')->get();
       
@@ -2304,11 +2308,11 @@ class OrderManagementCntrl extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         
         $data['tesco_tcl1_orders'] = DB::table('tesco_tcl1_orders')->whereNotIn('order_status', ["Saved","Order Placed","Order Cancelled"])->whereBetween('created_at', [$from_date, $to_date])->select('*',DB::raw("'stickers' as \"type\""))->get();

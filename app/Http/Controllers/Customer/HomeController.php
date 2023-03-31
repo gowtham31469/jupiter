@@ -32,6 +32,8 @@ class HomeController extends Controller
     private $financial_year_date;
     private $financial_year_start;
     private $financial_year_end;
+    private $financial_year_date_format;
+    private $today_date;
     /**
      * Create a new controller instance.
      *
@@ -83,11 +85,11 @@ class HomeController extends Controller
 
             if(Session::get('fiscal-year') != null) {
               $year = explode('-', Session::get('fiscal-year'));
-              $from_date = $year[0].'-'.$this->financial_year_date;
-              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+              $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
             } else {
-              $from_date = $this->financial_year_start;
-              $to_date =$this->financial_year_end; 
+              $from_date = $this->financial_year_start." 00:00:00";
+              $to_date =$this->financial_year_end." 23:59:59"; 
             }
             
             $customObj   = new CustomerDashboard();
@@ -142,11 +144,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
 
           $customObj   = new CustomerDashboard();
@@ -181,11 +183,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
           $customObj   = new CustomerDashboard();
 
@@ -220,11 +222,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
           $customObj   = new CustomerDashboard();
           $customer_id = Auth::guard('web_customer')->id();
@@ -272,11 +274,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         
         if($customer_role_id->role_id == 1)
@@ -326,11 +328,11 @@ class HomeController extends Controller
 
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
                    
           if($customer_role_id->role_id == 1)
@@ -375,11 +377,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         if($customer_role_id->role_id == 1)
         { 
@@ -428,11 +430,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
                    
         if($customer_role_id->role_id == 1)
@@ -477,11 +479,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         
         if($customer_role_id->role_id == 1)
@@ -529,11 +531,11 @@ class HomeController extends Controller
           }
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
                      
         if($customer_role_id->role_id == 1)
