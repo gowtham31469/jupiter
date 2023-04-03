@@ -445,9 +445,9 @@ function showInvoice(obj){
                     tr += '</tr>';
                 }
                 else{
-                    hsnCode = value.hsn_code==null?'-':value.hsn_code;
-                    _ocn = value.ocn_no==null?'-':value.ocn_no;
-                    orch_colorcode = value.color_code==null?'-':value.color_code;
+                    hsnCode = value.hsn_code;
+                    _ocn = value.ocn_no;
+                    orch_colorcode = value.color_code;
                     itemName =value.item_name;
 
                     tr += '<tr><td></td><td colspan="13"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;

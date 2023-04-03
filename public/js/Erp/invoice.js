@@ -185,7 +185,7 @@
             var size = (value.size == null)?'-':value.size ;
             var chkbx = (value.rate == 0) ? "": "checked";
             var dlvryBx= (chkbx != "checked") ? "disabled" : "";
-            
+
             if (itemName === value.item_name && hsnCode === value.hsn_code && _ocn === value.ocn_number && orch_colorcode === value.color_code) {
                 var _refName = value.reference_name==null?'-':value.reference_name;
                 tr += '<tr class="trClass" id="'+value.id+'">';
@@ -193,12 +193,12 @@
                 tr += '</tr>';
                 
             } else {
-                hsnCode = value.hsn_code==null?'-':value.hsn_code;
-                _ocn = value.ocn_number==null?'-':value.ocn_number;
-                orch_colorcode = value.color_code==null?'-':value.color_code;
-                _refName = value.reference_name==null?'-':value.reference_name;
-                itemName =value.item_name
-
+                hsnCode = value.hsn_code;
+                _ocn = value.ocn_number;
+                orch_colorcode = value.color_code;
+                _refName = value.reference_name;
+                itemName = value.item_name
+                
                 tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
                 
                 if(value.buyer_name.toLowerCase() === 'orchestra'){
@@ -663,10 +663,10 @@
                     tr += '</tr>';
                 }
                 else{
-                    hsnCode = value.hsn_code==null?'-':value.hsn_code;
-                    _ocn = value.ocn_number==null?'-':value.ocn_number;
-                    _refName = value.reference_name==null?'-':value.reference_name;
-                    orch_colorcode = value.color_code==null?'-':value.color_code;
+                    hsnCode = value.hsn_code;
+                    _ocn = value.ocn_number;
+                    _refName = value.reference_name;
+                    orch_colorcode = value.color_code;
                     itemName =value.item_name
 
                     tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
