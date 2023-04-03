@@ -157,7 +157,10 @@ class InvoiceController extends Controller
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
                             ->select($value->template_table.'.hsn_code',$value->template_table.'.tax')->first();                     
-                $value->hsn_code = $details->hsn_code;
+                $value->hsn_code = $details->hsn_code === null ? '-' : $details->hsn_code;
+                $value->ocn_number = $value->ocn_number === null ? '-' : $value->ocn_number;
+                $value->color_code = $value->color_code === null ? '-' : $value->color_code;
+                
                 $value->tax = $details->tax;
                 $value->item_name =  DB::table('price_taxation')
                                     ->where([
