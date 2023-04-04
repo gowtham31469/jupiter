@@ -132,15 +132,12 @@
                                         </strong>
                                         <strong>
                                             <span> OCN :</span>
-                                            <span> {{$data['ocn_number']}}</span>
+                                            <span> {{$data['ocn_number']}},</span>
                                         </strong>
-
-                                        @if (strtolower($data['buyer_name']) === 'orchestra')
-                                            <strong>
-                                                <span>, Color :</span>
-                                                <span> {{$data['color_code']}}</span>
-                                            </strong>
-                                        @endif
+                                        <strong>
+                                            <span> Color :</span>
+                                            <span> {{$data['color_code']}}</span>
+                                        </strong>
                                     </td>
                                 </tr>
                                 <tr>
