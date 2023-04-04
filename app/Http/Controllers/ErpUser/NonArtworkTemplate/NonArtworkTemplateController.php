@@ -431,7 +431,8 @@ class NonArtworkTemplateController extends Controller
                         Carbon::createFromFormat('d/m/Y', $request->approve_date[$key])->toDateTimeString():null,
                         'uuid'                  => $unique_id,
                         'fiscal_year_start'     => $this->financial_year_start,
-                        'fiscal_year_end'       => $this->financial_year_end
+                        'fiscal_year_end'       => $this->financial_year_end,
+                        'color_code'            => $request->color[$key]
                     ])->id;
 
 

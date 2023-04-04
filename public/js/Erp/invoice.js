@@ -199,11 +199,7 @@
                 _refName = value.reference_name;
                 itemName = value.item_name
                 
-                tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
-                
-                if(value.buyer_name.toLowerCase() === 'orchestra'){
-                    tr += ',  Color: '+orch_colorcode;
-                } 
+                tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn+',  Color: '+orch_colorcode;
                 
                 tr += '</strong></td></tr><tr class="trClass" id="'+value.id+'"><td><input name="order_select" value="'+value.id +'" id="'+value.id +'" class="order-select" type="checkbox" '+chkbx+'/></td><td class="order_id">'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+'</td><td class="qnty">'+value.order_quantity+'</td><td class="pending-qnty" data-id="'+value.pending_qnty+'">'+value.pending_qnty+'</td><td style="width: 116px;"><div class="form-group has-feedback"><input type="number" min="1" step="1" value="" class="form-control delivery-qnty" style="text-align: center;" required data-id="'+value.id+'" min="1" '+dlvryBx+' onkeyup="updateAmount.call(this,'+uniqueTax+')"></div></td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(value.pending_qnty * value.rate).toFixed(2)+'</td>';
                 tr += '</tr>';
@@ -669,11 +665,7 @@
                     orch_colorcode = value.color_code;
                     itemName =value.item_name
 
-                    tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn;
-                
-                    if(value.buyer_name.toLowerCase() === 'orchestra'){
-                        tr += ',  Color: '+orch_colorcode;
-                    } 
+                    tr += '<tr><td></td><td colspan="12"><strong style="float: left;">ITEM: '+value.item_name+',  HSNCode: '+hsnCode+', OCN: '+_ocn+',  Color: '+orch_colorcode;
                     
                     tr += '</strong></td></tr><tr class="trClass" id="'+value.id+'"><td>'+value.id+'</td><td>'+value.po_no+'</td><td>'+value.style_no+'</td><td>'+_refName+'</td><td>'+size+'</td><td class="tax-td">'+value.tax+' </td><td style="width: 116px;">'+delQnty+'</td><td class="rate">'+value.rate+'</td><td class="amnt" style="border-width: 1px !important;">'+(delQnty * value.rate).toFixed(2)+'</td>';
                     tr += '</tr>';
