@@ -44,6 +44,7 @@
 								<th>Customer PO Number</th>
 								<th>Buyer PO Number</th>
 								<th>Style Number</th>
+								<th>Color Code</th>
 								<th>Reference Number</th>
 								<th>Delivery Date</th>
 								<th>Actions</th>
@@ -73,6 +74,11 @@
 								<td>-</td>
 								@endif
 								<td>{{$value['style_no']}}</td>
+								@if ($value['color_code'] != '')
+								<td>{{$value['color_code']}}</td>
+								@else
+								<td>-</td>
+								@endif
 								<td>{{$value['reference_name']}}</td>
 								@if ($value['delivery_date'] != '')
 								<td>{{$value['delivery_date']}}</td>
@@ -104,6 +110,11 @@
 								<td>-</td>
 								@endif
 								<td>{{$value['style_no']}}</td>
+								@if ($value['color_code'] != '')
+								<td>{{$value['color_code']}}</td>
+								@else
+								<td>-</td>
+								@endif
 								<td>{{$value['reference_name']}}</td>
 								@if ($value['delivery_date'] != '')
 								<td>{{$value['delivery_date']}}</td>
@@ -160,6 +171,11 @@
 								<td>-</td>
 								@endif
 								<td>{{$value['style_no']}}</td>
+								@if ($value['color_code'] != '')
+								<td>{{$value['color_code']}}</td>
+								@else
+								<td>-</td>
+								@endif
 								<td>{{$value['reference_name']}}</td>
 								@if ($value['delivery_date'] != '')
 								<td>{{$value['delivery_date']}}</td>
@@ -200,6 +216,11 @@
 								<td>-</td>
 								@endif
 								<td>{{$value['style_no']}}</td>
+								@if ($value['color_code'] != '')
+								<td>{{$value['color_code']}}</td>
+								@else
+								<td>-</td>
+								@endif
 								<td>{{$value['reference_name']}}</td>
 								@if ($value['delivery_date'] != '')
 								<td>{{$value['delivery_date']}}</td>
