@@ -147,6 +147,7 @@
 								<th>Customer PO No.</th>
 								<th>Buyer PO No.</th>
 								<th>Style No.</th>
+								<th>Color Code</th>
 								<th>Reference</th>
 								<th>OCN</th>
 								<th>Item Name</th>
