@@ -49,11 +49,13 @@
                         <td width="160" style="border-left:1px solid black">
                             <p>{{$ship_to->address}},{{$ship_to->pincode}}</p>
                         </td>
-                        <td width="40" style="border-left:1px solid black"><span> Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                        <td width="40" style="border-left:1px solid black">
                             <p> Invoice No&nbsp;:</p>
+                            <span> Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
                         </td>
-                        <td width="68"><span> {{$inv_details[0]['inv_date']}}</span>
+                        <td width="68">
                             <p> {{$inv_details[0]['invoice_id']}}</p>
+                            <span> {{$inv_details[0]['inv_date']}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -65,7 +67,7 @@
                     <tr>
                         <td width="170" style="line-height: 1px;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
                         <td width="160" style="line-height: 1px; border-left:1px solid black;"><span>GSTIN : {{$inv_details[0]['gstin_number']}}</span></td>
-                        <td width="40" style="line-height: 1px;  border-left:1px solid black;"><br><span> Disp thru&nbsp;&nbsp;&nbsp; :</span></td>
+                        <td width="40" style="line-height: 1px;  border-left:1px solid black;"><br><span> Disp thru&nbsp;&nbsp; :</span></td>
                         <td width="68" style="line-height: 1px; "><span> {{$inv_details[0]['delvry_thru']}}</span></td>
                     </tr>
                 </table>
