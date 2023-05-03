@@ -144,13 +144,13 @@
 
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top:6px;">
-                                    <span><p><strong>TAX INVOICE </strong></p></span>
+                                    <span><p><strong>TAX INVOICE </strong></p></span><br>
+                                    <strong>Invoice No </strong>
+                                    <span style="padding-left: 2px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span><br>
                                     <strong>Date</strong>
                                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                     </span><br>
-                                    <strong>Invoice No </strong>
-                                    <span style="padding-left: 2px;"> : </span>
-                                    <span style="padding-left: 4px;" class="invoice_number"></span>
                                     <p><strong>Disp thru</strong>          
                                     <span style="padding-left: 10px;"> : </span>
                                     <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
