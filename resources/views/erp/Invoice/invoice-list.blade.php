@@ -175,7 +175,7 @@
               </div>
               <div class="form-group has-feedback">
                   {!! Form::label('eway_no', 'E-Way Bill No.', ['class' => 'form_label']) !!}
-                  {!! Form::text('eway_no',$value = '', array('class' => 'form-control input-sm','required')) !!}
+                  {!! Form::text('eway_no',$value = '', array('class' => 'form-control input-sm','required', 'maxlength' => '12')) !!}
                   <div class="help-block with-errors"></div>
               </div>
               <div>
@@ -675,7 +675,9 @@ function showInvoice(obj){
       switch (parseInt(place_of_supply)) {
         case 1:
                 if (parseInt($.trim(total_invoice_amount)) >= 50000) {
-                  return false;
+                  if(!$.trim(ewaybill)){
+                    return false;
+                  }
                 }
                 return true;
           break;
