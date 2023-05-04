@@ -361,24 +361,33 @@ class InvoiceController extends Controller
                     $order_qty_table     = $erp_order_details->order_qnty_table_name;
 					$order_qnty_table_id = $erp_order_details->order_qnty_table_id;
 
-					// make orders cancelled in artwork table
-					if($value['buyer_name'] === 'Orchestra') {
-
-						// get the first letter of each word for a given string
-						$result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
-						$qnty_id = '';
-						foreach (explode(' ', $result_str) as $word)
-						{
-							$qnty_id .= strtolower($word[0]);
-						}
-						$main_table  = str_replace("_qty","",$order_qty_table);
-						$order_qty_field = $qnty_id.'_id';
-						$order_status_field = 'status';
-					} else {
-						$order_qty_field  =  str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table));
-						$main_table  = str_replace("_quanty","",$order_qty_table);
-						$order_status_field = 'order_status';
-					}
+					switch ($value['buyer_name']) {
+                        case 'Orchestra':
+                            // get the first letter of each word for a given string
+                            $result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
+                            $qnty_id = '';
+                            foreach (explode(' ', $result_str) as $word)
+                            {
+                                $qnty_id .= strtolower($word[0]);
+                            }
+                            $main_table  = $order_qty_table != "non_artwork_orders_quanty"?str_replace("_qty","",$order_qty_table):str_replace("_quanty","",$order_qty_table);
+                            $order_qty_field = $order_qty_table != "non_artwork_orders_quanty"?$qnty_id.'_id':"non_artwork_order_id";
+                            $order_status_field = $order_qty_table != "non_artwork_orders_quanty"?'status':'order_status';
+                            break;
+                        case 'Tesco':
+                            // get the first letter of each word for a given string
+                            $order_qty_field  =  $order_qty_table != "non_artwork_orders_quanty"?str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table)):"non_artwork_order_id";
+                            $main_table  = str_replace("_quanty","",$order_qty_table);
+                            $order_status_field = 'order_status';
+                            break;
+                        
+                        default:
+                            // get the first letter of each word for a given string
+                            $order_qty_field  =  $order_qty_table != "non_artwork_orders_quanty"?str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table)):"non_artwork_order_id";
+                            $main_table  = str_replace("_quanty","",$order_qty_table);
+                            $order_status_field = 'order_status';
+                            break;
+                    }
 
 					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
                     
