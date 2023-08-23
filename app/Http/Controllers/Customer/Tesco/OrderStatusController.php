@@ -4129,7 +4129,7 @@ class OrderStatusController extends Controller
 			$qty_table_name ="tesco_tcl5_orders_quanty";
 			$foreign_key ="tcl5_order_id";
 			$single_size = explode(',',$request['single_size']);
-            $barcode_type = 'itf_barcode';
+            $barcode_type = 'ean_barcode';
             $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';
 		}
         else if($template_name == "TSL2")
