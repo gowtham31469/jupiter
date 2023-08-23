@@ -36,8 +36,8 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
-const itf_barcode_stickers  = ['TCL 1', 'TCL 2', 'TSL 1', 'THL 1', 'TCL 5'];
-const ean_barcode_stickers  = ['TCL 4', 'TSL 3', 'THL 3'];
+const itf_barcode_stickers  = ['TCL 1', 'TCL 2', 'TSL 1', 'THL 1'];
+const ean_barcode_stickers  = ['TCL 4', 'TSL 3', 'THL 3', 'TCL 5'];
 const ean_itf_barcode_stickers  = ['TCL 4', 'TSL 3', 'TSL 2'];
 function tescoOrders(callback) {
     if(localStorage.getItem("buyer") == "orchestra") 
