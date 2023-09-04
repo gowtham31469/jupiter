@@ -5,7 +5,6 @@
  */
 function reOrderTesco()
 {
-    //$('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
 	var buyer = localStorage.getItem("buyer");
     
 	$.ajax({
@@ -19,8 +18,6 @@ function reOrderTesco()
 			
 		},
 		success: function (data) {
-			var newObj = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders))))))));
-			
 			var newObj1 = data.tesco_tcl1_orders.concat(data.tesco_tcl2_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_thl1_orders.concat(data.tesco_thl3_orders.concat(data.tesco_tsl1_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders.concat(data.tesco_swingticket_orders))))))))));
 			
 			var uniqueNames = [];
@@ -65,8 +62,6 @@ function reOrderTesco()
 					 options+="<option>"+uniqueNames[i]+"</option>";
 				}
 				
-				var newObjrepeatOrder = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders))))
-				
 				var newObjrepeatOrder1 = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders.concat(data.tesco_swingticket_orders))))))
 				
 				var uniqueNamesRepeatOrder = [];
@@ -80,8 +75,6 @@ function reOrderTesco()
 				});
 			
 				for(i = 0; i< newObjrepeatOrder1.length; i++){
-					// if(newObjrepeatOrder1[i].is_order_count_empty == 0)
-					// {
 						if(newObjrepeatOrder1[i].type == "stickers" || newObjrepeatOrder1[i].type == "swing tickets")
 						{
 							if(newObjrepeatOrder1[i].zone == "CE")
@@ -104,8 +97,6 @@ function reOrderTesco()
 							}   
 						}
 						
-					//}
-					     
 				}
 				var optionsRepeatOrder="<option>Select Style Number</option>";
 				for(i = 0; i< uniqueNamesRepeatOrder.length; i++){    
@@ -170,8 +161,6 @@ function reordertescoartworks()
 				var i=1;
 				$(newObj).each(function(key,index){
 					
-					// if(index.is_order_count_empty == 0)
-					// {
 						if(index.type == "tesco_washcare_orders")
 						{
 							var span='<span class="label labels">-</span><span id="list-li-reorder'+i+'"></span>';
@@ -221,7 +210,6 @@ function reordertescoartworks()
 							}
 						}	
 					i++;
-					//}
 				})
 				
 			},
@@ -273,11 +261,8 @@ function repeatordertescoartworks()
 			success: function (data) {
 				var newObj = data.tesco_thl3_orders.concat(data.tesco_tcl4_orders.concat(data.tesco_tsl3_orders.concat(data.tesco_washcare_orders.concat(data.tesco_tcl5_orders.concat(data.tesco_tsl2_orders.concat(data.tesco_swingticket_orders))))))
 				
-				
 				var i=1;
 				$(newObj).each(function(key,index){
-					// if(index.is_order_count_empty == 0)
-					// {
 						if(index.type == "tesco_washcare_orders")
 						{
 							var span='<span class="label labels">-</span><span id="list-li-repeatorder'+i+'"></span>';
@@ -329,7 +314,6 @@ function repeatordertescoartworks()
 						
 						
 						i++;
-					//}
 				})
 				
 			},
@@ -403,10 +387,17 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 				var tpnd_tr="TPND";
 				var th_tr="";
 			}
-			else if((name == "TCL5" && zone=="CE") || (name == "TSL2" && zone=="CE"))
+			else if((name == "TSL2" && zone=="CE"))
 			{
 				var qty="Units Per Case";
 				var barcode_tr="ITF Barcode";
+				var tpnd_tr="ORMS TPND";
+				var th_tr="<th>Size</th>";
+			}
+			else if((name == "TCL5" && zone=="CE"))
+			{
+				var qty="Units Per Case";
+				var barcode_tr="EAN Barcode";
 				var tpnd_tr="ORMS TPND";
 				var th_tr="<th>Size</th>";
 			}
@@ -449,10 +440,17 @@ function extraQuantityTesco(type,id,name,zone,po_number,liid)
 						var tpnd_td=index.tpnd;
 						var th_td="";
 					}
-					else if((name == "TCL5" && zone=="CE") || (name == "TSL2" && zone=="CE"))
+					else if((name == "TSL2" && zone=="CE"))
 					{
 						var unit_qty = index.case_size;
 						var barcode_td=index.itf_barcode;
+						var tpnd_td=index.orms_tpn;
+						var th_td="<td>"+index.size+"</td>";
+					}
+					else if((name == "TCL5" && zone=="CE"))
+					{
+						var unit_qty = index.case_size;
+						var barcode_td=index.ean_barcode;
 						var tpnd_td=index.orms_tpn;
 						var th_td="<td>"+index.size+"</td>";
 					}
@@ -632,8 +630,6 @@ function extraQuantityLabelTescoRepeatOrder(type,id,name,zone,po_number,liid)
 
 			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><div class="form-group has-feedback has-success"><input type="text" maxlength="7" class="form-control  input-sm purchase_order_number" required value="" placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 
-			var split_template = data.template_file[0].template_file.split(',')
-
 			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
@@ -763,8 +759,6 @@ function extraQuantityLabelTesco(type,id,name,zone,po_number,liid)
                                         </div>`;
 
 			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
-
-			var split_template = data.template_file[0].template_file.split(',')
 
 			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
@@ -897,8 +891,6 @@ function extraQuantitySTTesco(type,id,name,zone,po_number,liid)
 
 			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 
-			var split_template = data.template_file[0].template_file.split(',')
-
 			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
 			$('.artwork_name_care_label_reorder').text(data.template_file[0].template_name)
@@ -1029,8 +1021,6 @@ function extraQuantityStTescoRepeatOrder(type,id,name,zone,po_number,liid)
                                         </div>`;
 
 			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><div class="form-group has-feedback has-success"><input type="text" maxlength="7" class="form-control  input-sm purchase_order_number" required value="" placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
-
-			var split_template = data.template_file[0].template_file.split(',')
 
 			$('.sample_artwork_care_label_reorder').html('<i class="fa fa-file-text-o fa-4x" aria-hidden="true" style="object-fit:cover; font-size: 100px;margin-top: 50%;"></i>')
 
@@ -1667,14 +1657,13 @@ function contentdocument(data,name,zone)
 			    svgDoc1.getElementById("brand").style.fontSize = "9px"; 
 		     }
 
-			if(name == "TSL3" || name == "THL3" )
+			if(name == "TSL3" || name == "THL3" || name == "TCL5" )
 			{
 				jsbarcodetescoean(data.qty[0].ean_barcode, 'barcode', svgDoc1)
 				svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].ean_barcode;
 			}
-			else if(name == "TCL1" || name == "TCL5" || name == "TSL1"|| name == "THL1" )
+			else if(name == "TCL1" || name == "TSL1"|| name == "THL1" )
 			{
-				//alert(data.qty[0].itf_barcode)
 				jsbarcodetesco(data.qty[0].itf_barcode, 'barcode', svgDoc1)
 				svgDoc1.getElementById("barcode_number").innerHTML = data.qty[0].itf_barcode;
 			}
@@ -1813,12 +1802,6 @@ function jsbarcodetescoean(code, id, svgDoc) {
  * @return barcode
  */
 function jsbarcodetescotslean(code, id, svgDoc) {
-//		format: "ean13",
-//		width: 3.45,
-//		height: 125,
-//		fontSize: 35,
-//		flat: true,
-//		displayValue: false
 	JsBarcode("#ean-13", code, {
 	    format: "ean13",
 		width: 3.9260,
