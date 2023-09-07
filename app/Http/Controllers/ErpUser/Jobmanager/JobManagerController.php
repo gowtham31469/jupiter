@@ -2072,7 +2072,7 @@ class JobManagerController extends Controller
 					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
 
 					$lasttpn = substr($qr_code_check[3] , -3);
-					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
 					if($qr_check == $qr_code[$qr_count])
 					{
 						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
@@ -3789,7 +3789,7 @@ class JobManagerController extends Controller
             else if($name == "TCL5-sticker")
             {
                $qr_code_check=explode(',',$qr_code_check_fin[$i]);
-               $barcode=$qr_code_check[2];
+               $barcode=$qr_code_check[1];
             }
             else if($name == "THL1-sticker")
             {
@@ -3891,7 +3891,7 @@ class JobManagerController extends Controller
 					 $qr_code_check=explode(',',$qr_code_check_fin[$i]);
 
 					 $lasttpn = substr($qr_code_check[3] , -3);
-					 $qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					 $qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
 					 if($qr_check == $qr_code[$i])
 					 {
 						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
@@ -3950,7 +3950,7 @@ class JobManagerController extends Controller
 					else if($name == "TCL5-sticker")
 					{
 					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
-					$barcode_unlink=$qr_code_check[2];
+					$barcode_unlink=$qr_code_check[1];
 					}
 					else if($name == "THL1-sticker")
 					{

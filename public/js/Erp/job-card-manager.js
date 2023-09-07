@@ -3410,7 +3410,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
 
                         svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
                     }
-                    if ((name == "THL3-sticker")) {
+                    if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
                         if (zone == "CE") {
                             var barcode_change = val.ean_barcode
@@ -3419,7 +3419,7 @@ function genarateArtworkPreview(data, name,style_no,buyer_no,id,order_type,creat
                         }
                         jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
                         svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-                    } else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+                    } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
                         if (zone == "CE") {
                             var barcode_change = val.itf_barcode
