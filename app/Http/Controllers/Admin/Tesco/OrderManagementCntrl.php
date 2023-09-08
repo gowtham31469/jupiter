@@ -1809,17 +1809,13 @@ class OrderManagementCntrl extends Controller
              PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
             if($name != "TCL2-sticker" && $name != "TCL4-sticker")
             {
-                 if($name != "THL3-sticker")
-                 {
+                if(($name != "THL3-sticker") && ($name != "TCL5-sticker"))
+                {
                      if($qr_flag == 1)
                     {
                       if($name == "THL1-sticker")
                               {
                         PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-                      }
-                      else if($name == "TCL5-sticker")
-                      {
-                        PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                       else
                       {
