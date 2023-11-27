@@ -2026,7 +2026,7 @@ class OrderStatusCntrl extends Controller
                         $qr_code_check=explode(',',$qr_code_check_fin[$j]);
                         $barcode_unlink=$qr_code_check[1];
                         }
-                     //unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
+                     unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
                      $j++;
                  }
              }
@@ -3467,15 +3467,8 @@ class OrderStatusCntrl extends Controller
 		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
-		// Check for errors
-        if ($info === null) {
-            // An error occurred
-            $error = error_get_last();
-            return json_encode(['error' => $info]);
-        } else {
-            // Command executed successfully
-            return json_encode(['result' => $info]);
-        }
+		$info    = json_encode($info, true);
+		return $info;
 	}
 	/**
 	 * This Function is used to generate barcode using java.
