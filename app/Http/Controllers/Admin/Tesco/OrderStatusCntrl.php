@@ -2026,7 +2026,7 @@ class OrderStatusCntrl extends Controller
                         $qr_code_check=explode(',',$qr_code_check_fin[$j]);
                         $barcode_unlink=$qr_code_check[1];
                         }
-                     unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
+                     //unlink(public_path('/storage/app/template/'.$barcode_unlink.'.png'));
                      $j++;
                  }
              }
