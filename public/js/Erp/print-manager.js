@@ -2449,7 +2449,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 
 				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.ean_barcode
@@ -2489,7 +2489,7 @@ function genarateArtworkPrintManager(data, name,style_no,buyer_no,id,order_type,
 				
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode
@@ -3978,7 +3978,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 
 				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.ean_barcode
@@ -3989,7 +3989,7 @@ function genarateArtworkProofManager(data, name,style_no,buyer_no,id,order_type,
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode

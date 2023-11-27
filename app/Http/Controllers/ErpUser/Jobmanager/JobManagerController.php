@@ -2072,7 +2072,7 @@ class JobManagerController extends Controller
 					$qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
 
 					$lasttpn = substr($qr_code_check[3] , -3);
-					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
 					if($qr_check == $qr_code[$qr_count])
 					{
 						PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
@@ -3789,7 +3789,7 @@ class JobManagerController extends Controller
             else if($name == "TCL5-sticker")
             {
                $qr_code_check=explode(',',$qr_code_check_fin[$i]);
-               $barcode=$qr_code_check[2];
+               $barcode=$qr_code_check[1];
             }
             else if($name == "THL1-sticker")
             {
@@ -3809,28 +3809,24 @@ class JobManagerController extends Controller
 			 PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
 			if($name != "TCL2-sticker" && $name != "TCL4-sticker")
             {
-                 if($name != "THL3-sticker")
-                 {
-                     if($qr_flag == 1)
-											{
-												if($name == "THL1-sticker")
-																{
-													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-												}
-												else if($name == "TCL5-sticker")
-												{
-													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-												}
-												else
-												{
-													PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-												}
-												
-											}
-											else
-											{
-												PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-											}
+				if(($name != "THL3-sticker") && ($name != "TCL5-sticker"))
+				{
+                    if($qr_flag == 1)
+					{
+						if($name == "THL1-sticker")
+										{
+							PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						}
+						else
+						{
+							PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+						}
+						
+					}
+					else
+					{
+						PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 12, 52, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+					}
                  }
                 else
                 {
@@ -3891,7 +3887,7 @@ class JobManagerController extends Controller
 					 $qr_code_check=explode(',',$qr_code_check_fin[$i]);
 
 					 $lasttpn = substr($qr_code_check[3] , -3);
-					 $qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					 $qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
 					 if($qr_check == $qr_code[$i])
 					 {
 						PDF::write2DBarcode($qr_code[$i], 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
@@ -3950,7 +3946,7 @@ class JobManagerController extends Controller
 					else if($name == "TCL5-sticker")
 					{
 					$qr_code_check=explode(',',$qr_code_check_fin[$j]);
-					$barcode_unlink=$qr_code_check[2];
+					$barcode_unlink=$qr_code_check[1];
 					}
 					else if($name == "THL1-sticker")
 					{

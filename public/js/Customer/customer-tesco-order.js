@@ -36,8 +36,8 @@ function camelize(str) {
 var globalOrderType = 0;
 var barcode_checks = 0;
 var isSubmitting = false;
-const itf_barcode_stickers  = ['TCL 1', 'TCL 2', 'TSL 1', 'THL 1', 'TCL 5'];
-const ean_barcode_stickers  = ['TCL 4', 'TSL 3', 'THL 3'];
+const itf_barcode_stickers  = ['TCL 1', 'TCL 2', 'TSL 1', 'THL 1'];
+const ean_barcode_stickers  = ['TCL 4', 'TSL 3', 'THL 3', 'TCL 5'];
 const ean_itf_barcode_stickers  = ['TCL 4', 'TSL 3', 'TSL 2'];
 function tescoOrders(callback) {
     if(localStorage.getItem("buyer") == "orchestra") 
@@ -2734,7 +2734,7 @@ function printDivTesco(data,name,obj) {
 					svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				}
 				
-				if((name== "THL3-sticker"))
+				if((name== "THL3-sticker") || (name == "TCL5-sticker"))
 				{
 					
 					if(zone == "CE")
@@ -2752,7 +2752,7 @@ function printDivTesco(data,name,obj) {
 						svgDoc.getElementById("barcode_number").setAttribute('transform', "matrix(1 0 0 1 68 204)");
 					}
 				}
-				else if((name == "TCL1-sticker") || (name == "TCL5-sticker")  || (name == "THL1-sticker"))
+				else if((name == "TCL1-sticker") || (name == "THL1-sticker"))
 				{
 					if(zone == "CE")
 					{
@@ -4816,7 +4816,7 @@ function dynamicSVGTemplatescard(id,item)
                  {
                       svgDoc.getElementById("unit_per_case").innerHTML = '';
                  }
-				 if(item.template_name === "THL 3")
+				 if( (item.template_name === "THL 3") || (item.template_name === "TCL 5"))
 			     {
 					   /** [ Dynamically change svg barcode ] */
 					   if(ce_single_ean !='' && ce_single_ean.length === 13)
@@ -4847,29 +4847,6 @@ function dynamicSVGTemplatescard(id,item)
                           svgDoc.getElementById("barcode").innerHTML = '';
 					   }
 			     }
-                 else if (item.template_name === "TCL 5") {
-                     /** [ Dynamically change svg barcode ] */
-                     if (ce_ratio_itf != '' && ce_ratio_itf.length === 14) {
-                         var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
-                         if (barcodecheck == "false") {
-                             barcode_checks++;
-                             $('.barcode-error').html('');
-                             svgDoc.getElementById("barcode_number").innerHTML = '';
-                             /**  [ Show validation error message ] **/
-                             $('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
-                         } else {
-                             barcode_checks = 0;
-                             $('.barcode-error').html('');
-                             jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-                             svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
-                         }
-                     } else {
-                         barcode_checks = 0;
-                         $('.barcode-error').html('');
-                         svgDoc.getElementById("barcode").innerHTML = '';
-                         svgDoc.getElementById("barcode_number").innerHTML = '';
-                     }
-                 }
                  var size  = $('#ce_single_size_1').val();
                  /** if size is not empty, Get equivalent ce size for entered size (single templates) */
                  if(size != '')

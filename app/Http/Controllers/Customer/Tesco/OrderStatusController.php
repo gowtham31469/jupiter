@@ -2396,10 +2396,10 @@ class OrderStatusController extends Controller
                     $qr_code_check=explode(',',$qr_code_check_fin[$qr_count]);
 
 					$lasttpn = substr($qr_code_check[3] , -3);
-					$qr_check = $qr_code_check[0].",".$qr_code_check[2]."/".$lasttpn.",".$qr_code_check[3];
+					$qr_check = $qr_code_check[0].",".$qr_code_check[1]."/".$lasttpn.",".$qr_code_check[3];
                     if($qr_check == $qr_code[$qr_count])
                     {
-                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
+                        PDF::write2DBarcode($qr_code[$qr_count], 'QRCODE,Q', 89, $qr_y+1.5, 17, 17, $style, 'N');
                     }
 				}
 				else if($name == "THL1-sticker")
@@ -4129,7 +4129,7 @@ class OrderStatusController extends Controller
 			$qty_table_name ="tesco_tcl5_orders_quanty";
 			$foreign_key ="tcl5_order_id";
 			$single_size = explode(',',$request['single_size']);
-            $barcode_type = 'itf_barcode';
+            $barcode_type = 'ean_barcode';
             $tpnd_type = $zone === 'CE'?'orms_tpn':'tpnd';
 		}
         else if($template_name == "TSL2")

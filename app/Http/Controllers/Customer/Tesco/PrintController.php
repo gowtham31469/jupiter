@@ -400,7 +400,7 @@ class PrintController extends Controller
 				else if($name == "TCL5-sticker")
 				{
 					$lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
-					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+					$qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->ean_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
 					if($qr_check == $qr_code[$qr_count]->qr_code)
 					{
 						PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
