@@ -3467,8 +3467,15 @@ class OrderStatusCntrl extends Controller
 		$tabula       = Config::get('tabula.bar_jar_big');
 		
 		$info    = shell_exec('java -jar '.$tabula.' '.$barcode.' '.public_path('/storage/app/template/'.$name.'.png').' '.$type.' 50 16');
-		$info    = json_encode($info, true);
-		return $info;
+		// Check for errors
+        if ($info === null) {
+            // An error occurred
+            $error = error_get_last();
+            return json_encode(['error' => $error['message']]);
+        } else {
+            // Command executed successfully
+            return json_encode(['result' => $info]);
+        }
 	}
 	/**
 	 * This Function is used to generate barcode using java.
