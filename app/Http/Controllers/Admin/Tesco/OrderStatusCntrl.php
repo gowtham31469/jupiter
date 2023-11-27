@@ -3471,7 +3471,7 @@ class OrderStatusCntrl extends Controller
         if ($info === null) {
             // An error occurred
             $error = error_get_last();
-            return json_encode(['error' => $error['message']]);
+            return json_encode(['error' => $info]);
         } else {
             // Command executed successfully
             return json_encode(['result' => $info]);
