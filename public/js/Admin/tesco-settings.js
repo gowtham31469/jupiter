@@ -3251,7 +3251,7 @@ function addTescoComponents() {
               208: function() {
                   $('#components_error').removeClass('hidden');
                   $('#components_error').removeAttr('style');
-                  $('#components_error').html('Component[English] already excists.')
+                  $('#components_error').html('Component[English] already exists.')
                   $("#components_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -3362,7 +3362,7 @@ function editTescoComponents() {
               208: function() {
                   $('#components_update_error').removeClass('hidden');
                   $('#components_update_error').removeAttr('style');
-                  $('#components_update_error').html('Component[English] already excists.')
+                  $('#components_update_error').html('Component[English] already exists.')
                   $("#components_update_error").addClass("alert alert-warning");
               },
           },
@@ -3574,7 +3574,7 @@ function addTescoFabric() {
               208: function() {
                   $('#fabric_error').removeClass('hidden');
                   $('#fabric_error').removeAttr('style');
-                  $('#fabric_error').html('Fabric[English] already excists.')
+                  $('#fabric_error').html('Fabric[English] already exists.')
                   $("#fabric_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -3684,7 +3684,7 @@ function updateTescoFabric() {
               208: function() {
                   $('#fabric_update_error').removeClass('hidden');
                   $('#fabric_update_error').removeAttr('style');
-                  $('#fabric_update_error').html('Fabric[English] already excists.')
+                  $('#fabric_update_error').html('Fabric[English] already exists.')
                   $("#fabric_update_error").addClass("alert alert-warning");
               },
           },
@@ -3894,7 +3894,7 @@ function addTescoKidsStatement() {
               208: function() {
                   $('#kids_stmt_error').removeClass('hidden');
                   $('#kids_stmt_error').removeAttr('style');
-                  $('#kids_stmt_error').html('Statement[English] already excists.')
+                  $('#kids_stmt_error').html('Statement[English] already exists.')
                   $("#kids_stmt_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -4005,7 +4005,7 @@ function updateTescoKidsStmt() {
               208: function() {
                   $('#kids_stmt_update_error').removeClass('hidden');
                   $('#kids_stmt_update_error').removeAttr('style');
-                  $('#kids_stmt_update_error').html('Statement [English] already excists.')
+                  $('#kids_stmt_update_error').html('Statement [English] already exists.')
                   $("#kids_stmt_update_error").addClass("alert alert-warning");
               },
           },
@@ -4215,7 +4215,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               208: function() {
                   $('#translation_error').removeClass('hidden');
                   $('#translation_error').removeAttr('style');
-                  $('#translation_error').html('Translation[English] already excists.')
+                  $('#translation_error').html('Translation[English] already exists.')
                   $("#translation_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -4326,7 +4326,7 @@ function disableTescoKidsStatement(id, csrf_token) {
               208: function() {
                   $('#translation_update_error').removeClass('hidden');
                   $('#translation_update_error').removeAttr('style');
-                  $('#translation_update_error').html('Translation [English] already excists.')
+                  $('#translation_update_error').html('Translation [English] already exists.')
                   $("#translation_update_error").addClass("alert alert-warning");
               },
           },

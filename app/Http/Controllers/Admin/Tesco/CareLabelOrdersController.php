@@ -111,9 +111,7 @@ class CareLabelOrdersController extends Controller
 
             $request->validated();
 
-            $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
-
-            return $response;
+            return $this->storeorder->storeTescoLabelOrder($request, 'admin');
         }
     }
 

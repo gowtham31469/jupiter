@@ -538,6 +538,66 @@ function tescoOrders(callback) {
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
+										{
+											"id": "122",
+											"text": "GCLW25/M11363G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "123",
+											"text": "GCLW25/M11364G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "124",
+											"text": "GCLW25/M11367G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "125",
+											"text": "GCLW25/M11372G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "126",
+											"text": "GCLW25/M11374G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "127",
+											"text": "GCLW25/M11375G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "128",
+											"text": "GCLW25/M11378G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "129",
+											"text": "GCLB25/M11410G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "130",
+											"text": "GCLW20/M11473G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "131",
+											"text": "GCLW20/M11474G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
 									]
 								}]
 							},{

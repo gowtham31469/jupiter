@@ -218,7 +218,7 @@ $( () => {
                 <div class="col-xs-4">
                     <div class="form-group has-feedback">
                     <div class="input-group">
-                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
+                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" min="0" readonly>
                         <div class="input-group-addon">%</div>
                     </div>
                     <div class="help-block with-errors"></div>

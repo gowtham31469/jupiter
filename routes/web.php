@@ -421,19 +421,19 @@ Route::prefix('admin')->group(function () {
 		Route::put('/make-tesco-product-description-disabled', 'Admin\Settings\Tesco\ProductDescriptionController@disableProductDescription');
 		Route::get('/get-tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@getTescoProductDescription');
 		Route::put('/update-tesco-product-description', 'Admin\Settings\Tesco\ProductDescriptionController@updateTescoProductDescription');
-		Route::post('/settings/tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@tescoProductBenefits');
-		Route::post('/add-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@addTescoProductBenefits');
-		Route::put('/make-tesco-product-benfits-enabled', 'Admin\Settings\Tesco\ProductBenefitsController@enableProductBenefits');
-		Route::put('/make-tesco-product-benfits-disabled', 'Admin\Settings\Tesco\ProductBenefitsController@disableProductBenefits');
-		Route::get('/get-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@getTescoProductBenefits');
-		Route::put('/update-tesco-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@updateTescoProductBenefits');
-		Route::post('/upload-product-benfits', 'Admin\Settings\Tesco\ProductBenefitsController@uploadTescoProductBenefits');
-		Route::post('/settings/tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@tescoMMProductBenefits');
-		Route::post('/add-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@addTescoMMProductBenefits');
-		Route::put('/make-tesco-mm-product-benfits-enabled', 'Admin\Settings\Tesco\MMProductBenefitsController@enableMMProductBenefits');
-		Route::put('/make-tesco-mm-product-benfits-disabled', 'Admin\Settings\Tesco\MMProductBenefitsController@disableMMProductBenefits');
-		Route::get('/get-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@getTescoMMProductBenefits');
-		Route::put('/update-tesco-mm-product-benfits', 'Admin\Settings\Tesco\MMProductBenefitsController@updateTescoMMProductBenefits');
+		Route::post('/settings/tesco-product-benefits', 'Admin\Settings\Tesco\ProductBenefitsController@tescoProductBenefits');
+		Route::post('/add-tesco-product-benefits', 'Admin\Settings\Tesco\ProductBenefitsController@addTescoProductBenefits');
+		Route::put('/make-tesco-product-benefits-enabled', 'Admin\Settings\Tesco\ProductBenefitsController@enableProductBenefits');
+		Route::put('/make-tesco-product-benefits-disabled', 'Admin\Settings\Tesco\ProductBenefitsController@disableProductBenefits');
+		Route::get('/get-tesco-product-benefits', 'Admin\Settings\Tesco\ProductBenefitsController@getTescoProductBenefits');
+		Route::put('/update-tesco-product-benefits', 'Admin\Settings\Tesco\ProductBenefitsController@updateTescoProductBenefits');
+		Route::post('/upload-product-benefits', 'Admin\Settings\Tesco\ProductBenefitsController@uploadTescoProductBenefits');
+		Route::post('/settings/tesco-mm-product-benefits', 'Admin\Settings\Tesco\MMProductBenefitsController@tescoMMProductBenefits');
+		Route::post('/add-tesco-mm-product-benefits', 'Admin\Settings\Tesco\MMProductBenefitsController@addTescoMMProductBenefits');
+		Route::put('/make-tesco-mm-product-benefits-enabled', 'Admin\Settings\Tesco\MMProductBenefitsController@enableMMProductBenefits');
+		Route::put('/make-tesco-mm-product-benefits-disabled', 'Admin\Settings\Tesco\MMProductBenefitsController@disableMMProductBenefits');
+		Route::get('/get-tesco-mm-product-benefits', 'Admin\Settings\Tesco\MMProductBenefitsController@getTescoMMProductBenefits');
+		Route::put('/update-tesco-mm-product-benefits', 'Admin\Settings\Tesco\MMProductBenefitsController@updateTescoMMProductBenefits');
 		Route::post('/settings/tesco-wee-symbols', 'Admin\Settings\Tesco\WeeSymbolsController@tescoWeeSymbols');
 		Route::post('/settings/add-tesco-wee-symbols', 'Admin\Settings\Tesco\WeeSymbolsController@addTescoWeeSymbols');
 		Route::put('/settings/make-tesco-wee-symbol-enabled', 'Admin\Settings\Tesco\WeeSymbolsController@enableWeeSymbol');
@@ -446,6 +446,28 @@ Route::prefix('admin')->group(function () {
 		Route::put('/settings/make-tesco-woolmark-logo-disabled', 'Admin\Settings\Tesco\WoolMarkLogoController@disableTescoWoolmarkLogo');
 		Route::get('/settings/get-tesco-woolmark-logo', 'Admin\Settings\Tesco\WoolMarkLogoController@getTescoWoolmarkLogo');
 		Route::post('/settings/update-tesco-woolmark-logo', 'Admin\Settings\Tesco\WoolMarkLogoController@updateTescoWoolmarkLogo');
+
+		Route::post('/settings/tesco-flammability', 'Admin\Settings\Tesco\FlammabilityController@tescoFlammability');
+		Route::post('/add-tesco-flammability', 'Admin\Settings\Tesco\FlammabilityController@addTescoFlammability');
+		Route::put('/make-tesco-flammability-enabled', 'Admin\Settings\Tesco\FlammabilityController@enableFlammability');
+		Route::put('/make-tesco-flammability-disabled', 'Admin\Settings\Tesco\FlammabilityController@disableFlammability');
+		Route::get('/get-tesco-flammability', 'Admin\Settings\Tesco\FlammabilityController@getTescoFlammability');
+		Route::put('/update-tesco-flammability', 'Admin\Settings\Tesco\FlammabilityController@updateTescoFlammability');
+
+		Route::post('/settings/tesco-tog', 'Admin\Settings\Tesco\TogController@tescoTog');
+		Route::post('/add-tesco-tog', 'Admin\Settings\Tesco\TogController@addTescoTog');
+		Route::put('/make-tesco-tog-enabled', 'Admin\Settings\Tesco\TogController@enableTog');
+		Route::put('/make-tesco-tog-disabled', 'Admin\Settings\Tesco\TogController@disableTog');
+		Route::get('/get-tesco-tog', 'Admin\Settings\Tesco\TogController@getTescoTog');
+		Route::put('/update-tesco-tog', 'Admin\Settings\Tesco\TogController@updateTescoTog');
+
+		Route::post('/settings/tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@tescoGarmentStatement');
+		Route::post('/add-tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@addTescoGarmentStatement');
+		Route::put('/make-tesco-garment-statement-enabled', 'Admin\Settings\Tesco\GarmentStatementController@enableGarmentStatement');
+		Route::put('/make-tesco-garment-statement-disabled', 'Admin\Settings\Tesco\GarmentStatementController@disableGarmentStatement');
+		Route::get('/get-tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@getTescoGarmentStatement');
+		Route::put('/update-tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@updateTescoGarmentStatement');
+
 		Route::post('/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
 		Route::post('/add-tesco-brands', 'Admin\Settings\Tesco\TescoSettings@addTescoBrands');
 		Route::get('/get-tesco-brands-details', 'Admin\Settings\Tesco\TescoSettings@getTescoBrandsById');

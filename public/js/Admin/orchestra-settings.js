@@ -1710,7 +1710,7 @@ function addOrchestraComposition() {
                 208: function() {
                     $('#composition_error').removeClass('hidden');
                     $('#composition_error').removeAttr('style');
-                    $('#composition_error').html('Composition[English] already excists.')
+                    $('#composition_error').html('Composition[English] already exists.')
                     $("#composition_error").addClass("alert alert-warning");
                 },
                 400: function() {
@@ -1828,7 +1828,7 @@ function editOrchestraComposition() {
                 208: function() {
                     $('#composition_update_error').removeClass('hidden');
                     $('#composition_update_error').removeAttr('style');
-                    $('#composition_update_error').html('Composition[English] already excists.')
+                    $('#composition_update_error').html('Composition[English] already exists.')
                     $("#composition_update_error").addClass("alert alert-warning");
                 },
             },
