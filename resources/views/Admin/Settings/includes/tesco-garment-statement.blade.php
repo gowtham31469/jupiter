@@ -51,13 +51,6 @@
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'template_id_mm']) }}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -120,13 +113,6 @@
                             {!! Form::label('garment_statement_edit_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
                             {!! Form::text('garment_statement_edit_hungarian',$value = '', array('class' => 'form-control
                             input-sm','placeholder' => 'Garment Statement name in hungarian','required','id' => 'garment_statement_edit_hungarian')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'edit_template_id_mm']) }}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

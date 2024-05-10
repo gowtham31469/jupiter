@@ -10,8 +10,8 @@ class GarmentStatementController extends Controller
 {
     public function tescoGarmentStatement(){
       try {
-          $tesco_components = TescoGarmentStatement::select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
-          return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
+          $tesco_garment_statement = TescoGarmentStatement::select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_garment_statement' => $tesco_garment_statement]);
       }
       catch (\Exception $e){
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -19,7 +19,7 @@ class GarmentStatementController extends Controller
     }
 
     /**
-     * Add tesco Components.
+     * Add tesco garment statement.
      * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
@@ -35,7 +35,6 @@ class GarmentStatementController extends Controller
                         'czech'     => $request['czech'],
                         'slovak'    => $request['slovak'],
                         'hungarian' => $request['hungarian'],
-                        'template_id' => $request['template_id']
                 ]);
                 $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
             }
@@ -48,8 +47,8 @@ class GarmentStatementController extends Controller
     }
 
     /**
-     * Get tesco Components details by ID for editing.
-     * @param tesco Components id
+     * Get tesco garment statement details by ID for editing.
+     * @param tesco garment statement id
      * @return \Illuminate\Http\Response
      */
     public function getTescoGarmentStatement(Request $request){
@@ -64,8 +63,8 @@ class GarmentStatementController extends Controller
     }
 
     /**
-    * Update tesco Components by id.
-    * @param tesco Components id
+    * Update tesco garment statement by id.
+    * @param tesco garment statement id
     * @return \Illuminate\Http\Response
     */
     public function updateTescoGarmentStatement(Request $request){
@@ -77,7 +76,6 @@ class GarmentStatementController extends Controller
                                         'czech'     => $request['czech'],
                                         'slovak'    => $request['slovak'],
                                         'hungarian' => $request['hungarian'],
-                                        'template_id' => $request['template_id']
                         ]);
             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
       } catch (\Exception $e) {
@@ -87,8 +85,8 @@ class GarmentStatementController extends Controller
     }
 
     /**
-       * Make Components enabled
-       * @param Components id
+       * Make garment statement enabled
+       * @param garment statement id
        * @return boolean true or false
        */
       public function enableGarmentStatement(Request $request){
@@ -105,7 +103,7 @@ class GarmentStatementController extends Controller
       }
 
       /**
-       * Make Components disabled
+       * Make garment statement disabled
        * @return boolean true or false
        */
       public function disableGarmentStatement(Request $request){

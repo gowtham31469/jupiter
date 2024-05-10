@@ -59,7 +59,7 @@ function tescoGarmentStatements() {
             '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Garment Statements </h3></div>'+
             '<table id="tesco-components-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
             '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.tesco_components, function(i, item) {
+            $.each(data.tesco_garment_statement, function(i, item) {
               var index = i + 1;
               tesco_metadata += '<tr id="' + item.id + '">'+
               '<td>' + index + '</td>'+
@@ -114,8 +114,6 @@ function addGarmentStatements() {
     var czech = $('#garment_statement_czech').val();
     var slovak = $('#garment_statement_slovak').val();
     var hungarian = $('#garment_statement_hungarian').val();
-    var template_id = $('#template_id_mm').val();
-      
 
     $.ajax({
           url: base_url + "/admin/tesco/add-tesco-garment-statement",
@@ -127,7 +125,6 @@ function addGarmentStatements() {
             czech: czech,
             slovak: slovak,
             hungarian: hungarian,
-            template_id: template_id
           },
           tryCount: 0,
           retryLimit: 2,
@@ -196,7 +193,6 @@ function gettescoGarmentStatementsById(id) {
               $('#garment_statement_edit_czech').val(data.garment_statement[0].czech);
               $('#garment_statement_edit_slovak').val(data.garment_statement[0].slovak);
               $('#garment_statement_edit_hungarian').val(data.garment_statement[0].hungarian);
-              $("#edit_template_id_mm").val(data.garment_statement[0].template_id).change();
               $('#editGarmentStatementsModal').modal({
                   backdrop: 'static',
                   keyboard: false
@@ -228,7 +224,6 @@ function updateGarmentStatements() {
       var czech = $('#garment_statement_edit_czech').val();
       var slovak = $('#garment_statement_edit_slovak').val();
       var hungarian = $('#garment_statement_edit_hungarian').val();
-      var template_id = $('#edit_template_id_mm').val();
       
       $.ajax({
           url: base_url + "/admin/tesco/update-tesco-garment-statement",
@@ -246,7 +241,6 @@ function updateGarmentStatements() {
             czech: czech,
             slovak: slovak,
             hungarian: hungarian,
-            template_id: template_id
           },
           tryCount: 0,
           retryLimit: 2,

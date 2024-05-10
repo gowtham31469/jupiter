@@ -21,8 +21,6 @@ class CreateTescoGarmentStatementsTable extends Migration
             $table->string('slovak')->nullable(true);
             $table->string('hungarian')->nullable(true);
             $table->boolean('is_enabled')->default('0');
-            $table->unsignedInteger('template_id')->nullable(true)->index();
-            $table->foreign('template_id')->references('id')->on('tesco_item_master')->onDelete('cascade');
             $table->timestamps();
         });
     }

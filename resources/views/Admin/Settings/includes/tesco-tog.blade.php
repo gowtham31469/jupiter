@@ -13,48 +13,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
-                            {!! Form::label('tog_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_english',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in english','required','id'=>'tog_english')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in polish','id'=>'tog_polish')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in czech','required','id'=>'tog_czech')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in slovak','required','id'=>'tog_slovak')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'Tog name in hungarian','required','id'=>'tog_hungarian')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'template_id_mm']) }}
+                            {!! Form::label('tog_value', 'Tog Value', ['class' => 'form_label']) !!}
+                            {!! Form::text('tog_value',$value = '', array('class' => 'form-control input-sm','placeholder'
+                            => 'Tog value','required','id'=>'tog_value')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -85,48 +46,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
-                            {!! Form::label('tog_edit_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_edit_english',$value = '', array('class' => 'form-control input-sm
-                            ','placeholder' => 'Tog name in english','required','id' => 'tog_edit_english')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_edit_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_edit_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in polish','id' => 'tog_edit_polish')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_edit_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_edit_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in czech','required','id' => 'tog_edit_czech')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_edit_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_edit_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Tog name in slovak','required','id' => 'tog_edit_slovak')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('tog_edit_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('tog_edit_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'Tog name in hungarian','required','id' => 'tog_edit_hungarian')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'edit_template_id_mm']) }}
+                            {!! Form::label('edit_tog_value', 'Tog Value', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_tog_value',$value = '', array('class' => 'form-control input-sm
+                            ','placeholder' => 'Tog value','required','id' => 'edit_tog_value')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

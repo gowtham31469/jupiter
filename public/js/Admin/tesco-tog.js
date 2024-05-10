@@ -58,16 +58,12 @@ function tescoTog() {
             '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addTogModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Tog </a></div></div>'+
             '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Tog </h3></div>'+
             '<table id="tesco-components-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
-            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.tesco_components, function(i, item) {
+            '<tr><th>Sl. No</th><th>Tog</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_togs, function(i, item) {
               var index = i + 1;
               tesco_metadata += '<tr id="' + item.id + '">'+
               '<td>' + index + '</td>'+
-              '<td>' + item.english + '</td>'+
-              '<td>' + item.polish + '</td>'+
-              '<td>' + item.czech + '</td>'+
-              '<td>' + item.slovak + '</td>'+
-              '<td>' + item.hungarian + '</td>';
+              '<td>' + item.tog_value + '</td>';
               if (item.is_enabled) {
                 tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
               } else {
@@ -109,25 +105,14 @@ function tescoTog() {
  */
 function addTog() {
   try {
-    var english = $('#tog_english').val();
-    var polish = $('#tog_polish').val();
-    var czech = $('#tog_czech').val();
-    var slovak = $('#tog_slovak').val();
-    var hungarian = $('#tog_hungarian').val();
-    var template_id = $('#template_id_mm').val();
-      
+    var tog_value = $('#tog_value').val();
 
     $.ajax({
           url: base_url + "/admin/tesco/add-tesco-tog",
           method: 'POST',
           data: {
             _token: csrf_token,
-            english: english,
-            polish: polish,
-            czech: czech,
-            slovak: slovak,
-            hungarian: hungarian,
-            template_id: template_id
+            tog_value: tog_value,
           },
           tryCount: 0,
           retryLimit: 2,
@@ -146,7 +131,7 @@ function addTog() {
               208: function() {
                   $('#tog_error').removeClass('hidden');
                   $('#tog_error').removeAttr('style');
-                  $('#tog_error').html('Tog[English] already exists.')
+                  $('#tog_error').html('Tog value already exists.')
                   $("#tog_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -191,12 +176,7 @@ function gettescoTogById(id) {
 
               console.log(data)
               $('#edit_tesco_tog_id').val(data.tog[0].id);
-              $('#tog_edit_english').val(data.tog[0].english);
-              $('#tog_edit_polish').val(data.tog[0].polish);
-              $('#tog_edit_czech').val(data.tog[0].czech);
-              $('#tog_edit_slovak').val(data.tog[0].slovak);
-              $('#tog_edit_hungarian').val(data.tog[0].hungarian);
-              $("#edit_template_id_mm").val(data.tog[0].template_id).change();
+              $('#edit_tog_value').val(data.tog[0].tog_value);
               $('#editTogModal').modal({
                   backdrop: 'static',
                   keyboard: false
@@ -223,12 +203,7 @@ function gettescoTogById(id) {
 function updateTog() {
   try {
       var id = $('#edit_tesco_tog_id').val();
-      var english = $('#tog_edit_english').val();
-      var polish = $('#tog_edit_polish').val();
-      var czech = $('#tog_edit_czech').val();
-      var slovak = $('#tog_edit_slovak').val();
-      var hungarian = $('#tog_edit_hungarian').val();
-      var template_id = $('#edit_template_id_mm').val();
+      var edit_tog_value = $('#edit_tog_value').val();
       
       $.ajax({
           url: base_url + "/admin/tesco/update-tesco-tog",
@@ -241,12 +216,7 @@ function updateTog() {
           data: { 
             _token: csrf_token,
             id : id,
-            english: english,
-            polish: polish,
-            czech: czech,
-            slovak: slovak,
-            hungarian: hungarian,
-            template_id: template_id
+            tog_value: edit_tog_value,
           },
           tryCount: 0,
           retryLimit: 2,

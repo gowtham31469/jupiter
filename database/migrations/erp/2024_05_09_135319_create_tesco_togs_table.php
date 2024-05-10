@@ -15,14 +15,8 @@ class CreateTescoTogsTable extends Migration
     {
         Schema::create('tesco_togs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('english');
-            $table->string('polish')->nullable(true);
-            $table->string('czech')->nullable(true);
-            $table->string('slovak')->nullable(true);
-            $table->string('hungarian')->nullable(true);
+            $table->string('tog_value');
             $table->boolean('is_enabled')->default('0');
-            $table->unsignedInteger('template_id')->nullable(true)->index();
-            $table->foreign('template_id')->references('id')->on('tesco_item_master')->onDelete('cascade');
             $table->timestamps();
         });
     }

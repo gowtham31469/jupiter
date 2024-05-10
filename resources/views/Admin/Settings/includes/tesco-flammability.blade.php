@@ -13,48 +13,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
-                            {!! Form::label('flammability_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_english',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in english','required','id'=>'flammability_english')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in polish','id'=>'flammability_polish')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in czech','required','id'=>'flammability_czech')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in slovak','required','id'=>'flammability_slovak')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'Flammability name in hungarian','required','id'=>'flammability_hungarian')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'template_id_mm']) }}
+                            {!! Form::label('flammability_text', 'Flammability Text', ['class' => 'form_label']) !!}
+                            {!! Form::text('flammability_text',$value = '', array('class' => 'form-control input-sm','placeholder'
+                            => 'Flammability text','required','id'=>'flammability_text')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -85,48 +46,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group has-feedback">
-                            {!! Form::label('flammability_edit_english', 'English', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_edit_english',$value = '', array('class' => 'form-control input-sm
-                            ','placeholder' => 'Flammability name in english','required','id' => 'flammability_edit_english')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_edit_polish', 'Polish', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_edit_polish',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in polish','id' => 'flammability_edit_polish')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_edit_czech', 'Czech', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_edit_czech',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in czech','required','id' => 'flammability_edit_czech')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_edit_slovak', 'Slovak', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_edit_slovak',$value = '', array('class' => 'form-control input-sm','placeholder'
-                            => 'Flammability name in slovak','required','id' => 'flammability_edit_slovak')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('flammability_edit_hungarian', 'Hungarian', ['class' => 'form_label']) !!}
-                            {!! Form::text('flammability_edit_hungarian',$value = '', array('class' => 'form-control
-                            input-sm','placeholder' => 'Flammability name in hungarian','required','id' => 'flammability_edit_hungarian')) !!}
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group has-feedback">
-                            {!! Form::label('template_id', 'Select Template', ['class' => 'form_label']) !!}
-                            {{ Form::select('template_id', $templates, '', ['class' => 'form-control input-sm','required','id'=>'edit_template_id_mm']) }}
+                            {!! Form::label('edit_flammability_text', 'Flammability Text', ['class' => 'form_label']) !!}
+                            {!! Form::text('edit_flammability_text',$value = '', array('class' => 'form-control input-sm
+                            ','placeholder' => 'Flammability Text','required','id' => 'edit_flammability_text')) !!}
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>

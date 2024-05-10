@@ -10,8 +10,8 @@ class TogController extends Controller
 {
     public function tescoTog(){
       try {
-          $tesco_components = TescoTog::select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
-          return response()->json(['error'=>'false','message' =>'success', 'tesco_components' => $tesco_components]);
+          $tesco_togs = TescoTog::select('id', 'tog_value','is_enabled')->orderBy('is_enabled','desc')->get();
+          return response()->json(['error'=>'false','message' =>'success', 'tesco_togs' => $tesco_togs]);
       }
       catch (\Exception $e){
           return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
@@ -19,23 +19,18 @@ class TogController extends Controller
     }
 
     /**
-     * Add tesco Components.
+     * Add tesco tog.
      * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
     public function addTescoTog(Request $request){
 
         try {
-            if(TescoTog::where('english','ilike',$request['english'])->exists()){
-                $result = response()->json(['error'=> true,'message' =>'Description[English] Already Exists'],208);
+            if(TescoTog::where('tog_value','ilike',$request['tog_value'])->exists()){
+                $result = response()->json(['error'=> true,'message' =>'Tog value Already Exists'],208);
             }else{
                 $inserted = TescoTog::create([
-                        'english'   => $request['english'],
-                        'polish'    => $request['polish'],
-                        'czech'     => $request['czech'],
-                        'slovak'    => $request['slovak'],
-                        'hungarian' => $request['hungarian'],
-                        'template_id' => $request['template_id']
+                        'tog_value'   => $request['tog_value'],
                 ]);
                 $result = $inserted != '' ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
             }
@@ -48,8 +43,8 @@ class TogController extends Controller
     }
 
     /**
-     * Get tesco Components details by ID for editing.
-     * @param tesco Components id
+     * Get tesco tog details by ID for editing.
+     * @param tesco tog id
      * @return \Illuminate\Http\Response
      */
     public function getTescoTog(Request $request){
@@ -64,20 +59,15 @@ class TogController extends Controller
     }
 
     /**
-    * Update tesco Components by id.
-    * @param tesco Components id
+    * Update tesco tog by id.
+    * @param tesco tog id
     * @return \Illuminate\Http\Response
     */
     public function updateTescoTog(Request $request){
       try {
           $id = $request['id'];
               $updated = TescoTog::where('id',$id)->update([
-                                        'english'   => $request['english'],
-                                        'polish'    => $request['polish'],
-                                        'czech'     => $request['czech'],
-                                        'slovak'    => $request['slovak'],
-                                        'hungarian' => $request['hungarian'],
-                                        'template_id' => $request['template_id']
+                                        'tog_value'   => $request['tog_value'],
                         ]);
             $result = $updated != ''?response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
       } catch (\Exception $e) {
@@ -87,8 +77,8 @@ class TogController extends Controller
     }
 
     /**
-       * Make Components enabled
-       * @param Components id
+       * Make tog enabled
+       * @param tog id
        * @return boolean true or false
        */
       public function enableTog(Request $request){
@@ -105,7 +95,7 @@ class TogController extends Controller
       }
 
       /**
-       * Make Components disabled
+       * Make tog disabled
        * @return boolean true or false
        */
       public function disableTog(Request $request){

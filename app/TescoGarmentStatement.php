@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class TescoGarmentStatement extends Model
 {
-    protected $fillable = ['english', 'polish', 'czech', 'slovak', 'hungarian', 'is_enabled','template_id'];
+    protected $fillable = ['english', 'polish', 'czech', 'slovak', 'hungarian', 'is_enabled'];
 }

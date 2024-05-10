@@ -58,16 +58,12 @@ function tescoFlammability() {
             '<div class="main-sub-menu"><div class="action-group pull-right sub-menu-button"><a href="#" data-target="#addFlammabilityModal" class=" btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-plus"></i> Add Flammability </a></div></div>'+
             '<div class="template-block"><div class="top-content"><h3 class="content-heading"> Flammability </h3></div>'+
             '<table id="tesco-components-list-table" class="table table-hover table-striped table-bordered table-responsive" style="width:100%"><thead>'+
-            '<tr><th>Sl. No</th><th>English</th><th>Polish</th><th>Czech</th><th>Slovak</th><th>Hungarian</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-            $.each(data.tesco_components, function(i, item) {
+            '<tr><th>Sl. No</th><th>Flammability Text</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+            $.each(data.tesco_flammability, function(i, item) {
               var index = i + 1;
               tesco_metadata += '<tr id="' + item.id + '">'+
               '<td>' + index + '</td>'+
-              '<td>' + item.english + '</td>'+
-              '<td>' + item.polish + '</td>'+
-              '<td>' + item.czech + '</td>'+
-              '<td>' + item.slovak + '</td>'+
-              '<td>' + item.hungarian + '</td>';
+              '<td>' + item.flammability_text + '</td>';
               if (item.is_enabled) {
                 tesco_metadata += '<td><span class="label label-success">Enabled</span></td>';
               } else {
@@ -109,25 +105,14 @@ function tescoFlammability() {
  */
 function addFlammability() {
   try {
-    var english = $('#flammability_english').val();
-    var polish = $('#flammability_polish').val();
-    var czech = $('#flammability_czech').val();
-    var slovak = $('#flammability_slovak').val();
-    var hungarian = $('#flammability_hungarian').val();
-    var template_id = $('#template_id_mm').val();
-      
+    var flammability_text = $('#flammability_text').val();
 
     $.ajax({
           url: base_url + "/admin/tesco/add-tesco-flammability",
           method: 'POST',
           data: {
             _token: csrf_token,
-            english: english,
-            polish: polish,
-            czech: czech,
-            slovak: slovak,
-            hungarian: hungarian,
-            template_id: template_id
+            flammability_text: flammability_text,
           },
           tryCount: 0,
           retryLimit: 2,
@@ -146,7 +131,7 @@ function addFlammability() {
               208: function() {
                   $('#flammability_error').removeClass('hidden');
                   $('#flammability_error').removeAttr('style');
-                  $('#flammability_error').html('Flammability[English] already exists.')
+                  $('#flammability_error').html('Flammability already exists.')
                   $("#flammability_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -191,12 +176,7 @@ function gettescoFlammabilityById(id) {
 
               console.log(data)
               $('#edit_tesco_flammability_id').val(data.flammability[0].id);
-              $('#flammability_edit_english').val(data.flammability[0].english);
-              $('#flammability_edit_polish').val(data.flammability[0].polish);
-              $('#flammability_edit_czech').val(data.flammability[0].czech);
-              $('#flammability_edit_slovak').val(data.flammability[0].slovak);
-              $('#flammability_edit_hungarian').val(data.flammability[0].hungarian);
-              $("#edit_template_id_mm").val(data.flammability[0].template_id).change();
+              $('#edit_flammability_text').val(data.flammability[0].flammability_text);
               $('#editFlammabilityModal').modal({
                   backdrop: 'static',
                   keyboard: false
@@ -223,12 +203,7 @@ function gettescoFlammabilityById(id) {
 function updateFlammability() {
   try {
       var id = $('#edit_tesco_flammability_id').val();
-      var english = $('#flammability_edit_english').val();
-      var polish = $('#flammability_edit_polish').val();
-      var czech = $('#flammability_edit_czech').val();
-      var slovak = $('#flammability_edit_slovak').val();
-      var hungarian = $('#flammability_edit_hungarian').val();
-      var template_id = $('#edit_template_id_mm').val();
+      var flammability_text = $('#edit_flammability_text').val();
       
       $.ajax({
           url: base_url + "/admin/tesco/update-tesco-flammability",
@@ -241,12 +216,7 @@ function updateFlammability() {
           data: { 
             _token: csrf_token,
             id : id,
-            english: english,
-            polish: polish,
-            czech: czech,
-            slovak: slovak,
-            hungarian: hungarian,
-            template_id: template_id
+            flammability_text: flammability_text,
           },
           tryCount: 0,
           retryLimit: 2,
