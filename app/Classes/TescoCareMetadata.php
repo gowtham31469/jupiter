@@ -85,4 +85,31 @@ class TescoCareMetadata
       ->pluck('name', 'id')
       ->all();
   }
+
+  public function getGarmentStatements()
+  {
+    return DB::table('tesco_garment_statements')
+      ->where('is_enabled', 1)
+      ->orderBy('id')
+      ->pluck('english', 'id')
+      ->all();
+  }
+
+  public function getTogRatings()
+  {
+    return DB::table('tesco_togs')
+      ->where('is_enabled', 1)
+      ->orderBy('id')
+      ->pluck('tog_value', 'id')
+      ->all();
+  }
+
+  public function getFlammabilityTexts()
+  {
+    return DB::table('tesco_flammabilities')
+      ->where('is_enabled', 1)
+      ->orderBy('id')
+      ->pluck('flammability_text', 'id')
+      ->all();
+  }
 }

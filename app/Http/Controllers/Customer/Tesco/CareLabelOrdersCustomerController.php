@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Customer\Tesco;
 
-use App\Classes\Customer\CustomersList;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use View;
 use DB;
 use Auth;
+use View;
+use App\TescoPrimarySize;
+use Illuminate\Http\Request;
+use App\Classes\EditTescoOrders;
 use App\Classes\TescoCareMetadata;
+use App\Http\Controllers\Controller;
 use App\Classes\StoreTescoLabelOrder;
-use App\Classes\UpdateTescoLabelOrder;
 use App\Classes\TescoCareLabelParser;
 
-use App\TescoPrimarySize;
+use App\Classes\UpdateTescoLabelOrder;
+use App\Classes\Customer\CustomersList;
+use App\Classes\TescoSwingTicketMetadata;
 use App\Http\Requests\TescoLabelOrderRequest;
-use App\Classes\EditTescoOrders;
 
 class CareLabelOrdersCustomerController extends Controller
 {
@@ -24,8 +25,9 @@ class CareLabelOrdersCustomerController extends Controller
     private $updateLabelOrder;
     private $parselabel;
     private $customers;
+    private $woolmarkLogos;
 
-    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers)
+    public function __construct(TescoCareMetadata $caremeta, StoreTescoLabelOrder $storeorder, UpdateTescoLabelOrder $updateLabelOrder, TescoCareLabelParser $parselabel, CustomersList $customers, TescoSwingTicketMetadata $swingTicketMetadata)
     {
 
         $this->caremeta = $caremeta;
@@ -37,6 +39,7 @@ class CareLabelOrdersCustomerController extends Controller
         $this->parselabel = $parselabel;
 
         $this->customers = $customers;
+        $this->woolmarkLogos = $swingTicketMetadata->getwoolmarkLogos();
     }
 
     public function index(Request $request)
@@ -53,7 +56,11 @@ class CareLabelOrdersCustomerController extends Controller
                     'fabriclists' => $this->caremeta->getCareLabelFabrics(),
                     'template' => $request['template'],
                     'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
-                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet(),
+                    'garment_statements' => $this->caremeta->getGarmentStatements(),
+                    'tog_rating' => $this->caremeta->getTogRatings(),
+                    'flammability' => $this->caremeta->getFlammabilityTexts(),
+                    'woolmark_logos' => $this->woolmarkLogos,
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -175,7 +182,11 @@ class CareLabelOrdersCustomerController extends Controller
                     'components' => $this->caremeta->getCareLabelComponents(),
                     'fabriclists' => $this->caremeta->getCareLabelFabrics(),
                     'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
-                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet(),
+                    'garment_statements' => $this->caremeta->getGarmentStatements(),
+                    'tog_rating' => $this->caremeta->getTogRatings(),
+                    'flammability' => $this->caremeta->getFlammabilityTexts(),
+                    'woolmark_logos' => $this->woolmarkLogos,
                 ], 200);
             } else {
                 return response()->json(['error' => true, 'message' => 'Error'], 400);

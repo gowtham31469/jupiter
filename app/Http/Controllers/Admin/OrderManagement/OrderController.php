@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin\OrderManagement;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Classes\Modules;
-use Response;
-use View;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
 use DB;
 use PDF;
-use App\Classes\Dashboard;
-use Carbon\Carbon;
-use App\FinancialYearResetDate;
+use View;
 use Session;
+use Response;
+use Carbon\Carbon;
+use App\Classes\Modules;
+use App\Classes\Dashboard;
+use Illuminate\Http\Request;
+use App\FinancialYearResetDate;
 use App\Classes\TescoCareMetadata;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use App\Classes\TescoSwingTicketMetadata;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -609,7 +610,7 @@ class OrderController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	
-    public function orders(TescoCareMetadata $caremeta)
+    public function orders(TescoCareMetadata $caremeta, TescoSwingTicketMetadata $swingTicketMetadata)
     {
         $module_var = new Modules();
         $is_allowed = $module_var->permittedModules();
@@ -640,12 +641,22 @@ class OrderController extends Controller
 
             $part_of_two_piece_set = $caremeta->getPartOfTwoPieceSet();
 
+			$garment_statements = $caremeta->getGarmentStatements();
+			$tog_rating = $caremeta->getTogRatings();
+			$flammability = $caremeta->getFlammabilityTexts();
+			$woolmarkLogos = $swingTicketMetadata->getwoolmarkLogos();
+
             return view('Admin/Order Management/orders',['buyers' => $buyers,
             	'buyer_count' => $buyer_count,'symbols' => $symbols,
             	'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
             	'kids_warning' => $kids_warning,'components' => $components,
             	'fabriclists' => $fabriclists,
-                'additional_instructions' => $additional_instructions]);
+                'additional_instructions' => $additional_instructions,
+				'garment_statements' => $garment_statements,
+				'tog_rating' => $tog_rating,
+				'flammability' => $flammability,
+				'woolmark_logos' => $woolmarkLogos,
+			]);
         }
         else
         {
