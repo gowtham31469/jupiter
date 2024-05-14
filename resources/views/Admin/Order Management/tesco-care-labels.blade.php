@@ -103,6 +103,59 @@
         <div class="help-block with-errors"></div>
         </div>
     </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_woolmark_logo', 'Woolmark Logo', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_woolmark_logo"  id="tesco_care_woolmark_logo" required>
+                <option value="">-- Select Woolmark Logo --</option>
+                @if(!empty($symbols['Dryer']))
+                    @foreach($symbols['Dryer'] as $key => $value)
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->iso_symbols ) }}' /> {{$value->degree}}" value="{{ $value->id }}" >{{ $value->degree }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_woolmark_batch_code', 'Woolmark Batch Code', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '10')) !!}
+        <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_uk_ce_mark', 'UK/CE Mark', ['class' => 'form_label']) !!}
+            <select name="tesco_care_uk_ce_mark" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_uk_ce_mark">
+            <optgroup label="Select UK/CE Mark">
+                <option value="">None</option>
+                @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_flammability', 'Flammability', ['class' => 'form_label']) !!}
+            <select name="tesco_care_flammability" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_flammability">
+            <optgroup label="Select Flammability">
+                <option value="">None</option>
+                @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row">
@@ -162,32 +215,6 @@
         </div>
     </div>
     @endfor
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-12">
-        <div class="align-items form-group has-feedback">
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-
-        </div>
-    </div>
 </div>
 <hr>
 <div class="row">
@@ -291,14 +318,39 @@
         </div>
         <div class="col-md-6">
             <div class="form-group has-feedback">
-                {!! Form::label('tesco_care_kids_warning', 'Kids Warning Statement', ['class' => 'form_label']) !!}
-                {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Kids Warning Statement --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kids_warning', 'data-live-search' => 'true')) }}
+                {!! Form::label('tesco_care_kids_warning', 'Children Warning', ['class' => 'form_label']) !!}
+                {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Children Warning --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kids_warning', 'data-live-search' => 'true')) }}
                 <div class="help-block with-errors"></div>
             </div>
         </div>
     </div>
     <div class="label-order-invisible-div"></div>
 </div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-8">
+    <div class="row">
+    <div class="col-md-12">
+        <h4>Optional Garment Statements</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_garment_statements', 'Garment Statements', ['class' => 'form_label']) !!}
+            <select name="tesco_care_garment_statements" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_garment_statements">
+            <optgroup label="Select Garment Statements">
+                <option value="">None</option>
+                @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    </div>
 </div>
 <hr>
 <div class="row hidden" id="baby_sleeping_bag_div">
