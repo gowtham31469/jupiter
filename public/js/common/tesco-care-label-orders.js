@@ -577,6 +577,19 @@ $(function () {
         return status;
     }
 
+    validatePoValue = (e) => {
+
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+            e.preventDefault();
+        } else {
+            var key = e.keyCode;
+            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222))) {
+                e.preventDefault();
+            }
+        }
+
+    }
+
 });
 
 $(document).on('change', '.tesco-care-fiber-class', (e) => {

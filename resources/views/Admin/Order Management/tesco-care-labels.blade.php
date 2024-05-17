@@ -12,7 +12,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '9', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
+        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -36,7 +36,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
+        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '7')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
+        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '5', "onkeypress" => "return isNumber(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -52,7 +52,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
+        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -120,11 +120,8 @@
             <select name="tesco_care_uk_ce_mark" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_uk_ce_mark">
             <optgroup label="Select UK/CE Mark">
                 <option value="">None</option>
-                @foreach ($part_of_two_piece_set as $key => $value)
-                <option value="{{ $key }}">
-                    {{ $value }}
-                </option>
-                @endforeach
+                <option value="1" selected>Yes</option>
+                <option value="2">No</option>
             </optgroup>
             </select>
             <div class="help-block with-errors"></div>
