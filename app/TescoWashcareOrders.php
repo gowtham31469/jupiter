@@ -36,9 +36,6 @@ class TescoWashcareOrders extends Model
         'ironing_symbol_id',
         'dryclean_symbol_id',
         'include_btn_sew_space',
-        'exclusive_trims',
-        'contains_non_textile_part',
-        'part_of_set',
         'bs_en_declaration',
         'baby_sleeping_bag_symbol',
         'order_status',
@@ -76,7 +73,12 @@ class TescoWashcareOrders extends Model
         'additional_care_text_2',
         'additional_care_id_3',
         'additional_care_text_3',
-        'potps_id'
+        'potps_id',
+        'woolmark_batch_code',
+        'woolmark_logo_id',
+        'uk_ce_mark',
+        'flammability_id',
+        'garment_statement_id',
     ];
 
     protected $casts = [

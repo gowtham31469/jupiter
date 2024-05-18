@@ -72,7 +72,7 @@ class StoreTescoLabelOrder
             'tesco_metadata_supplier_id'     => $request->tesco_care_supplier,
             'fabric_batch_code'              => $request->tesco_care_fabric_code,
             'leather_suede_code'             => $request->tesco_care_leather_id,
-            'tog'                            => $request->tesco_care_tog,
+            'tog'                            => $request->tesco_care_tog_rating,
             'country_of_origin_id'           => $request->tesco_care_coo,
             'country_of_origin_text'         => $translation_texts['country_translation'],
             'kids_warning_id'                => $request->tesco_care_kids_warning,
@@ -96,9 +96,6 @@ class StoreTescoLabelOrder
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
             'order_placed_by'                => $customer_data['created_by'],
-            'exclusive_trims_text'           => $translation_texts['exclusive_trim'],
-            'contains_non_textile_part_text' => $translation_texts['non_textile_part'],
-            'part_of_set_text'               => $translation_texts['part_of_set'],
             'is_order_count_empty'           => $is_order_count_empty,
             'order_created_at'               => Carbon::now('Asia/Kolkata')->toDateTimeString(),
             'additional_care_id_1'           => $request->tesco_care_additional_instruction_1,
@@ -108,7 +105,12 @@ class StoreTescoLabelOrder
             'additional_care_id_3'           => $request->tesco_care_additional_instruction_3,
             'additional_care_text_3'         => $translation_texts['additional_text_3'],
             'potps_id'                       => $request->tesco_care_part_of_two_piece_set,
-            'size_department_text'           => $size_department_text
+            'size_department_text'           => $size_department_text,
+            'woolmark_batch_code'            => $request->tesco_care_woolmark_batch_code,
+            'woolmark_logo_id'               => $request->tesco_care_woolmark_logo,
+            'uk_ce_mark'                     => $request->tesco_care_uk_ce_mark,
+            'flammability_id'                => $request->tesco_care_flammability,
+            'garment_statement_id'           => $request->tesco_care_garment_statements,
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;

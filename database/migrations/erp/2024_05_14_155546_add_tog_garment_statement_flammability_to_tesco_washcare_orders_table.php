@@ -14,7 +14,7 @@ class AddTogGarmentStatementFlammabilityToTescoWashcareOrdersTable extends Migra
     public function up()
     {
         Schema::table('tesco_washcare_orders', function (Blueprint $table) {
-            $table->decimal('tog',6,2)->nullable();
+            $table->integer('tog')->nullable(true)->index();
             $table->integer('woolmark_logo_id')->nullable(true)->index();
             $table->string('woolmark_batch_code')->nullable(true);
             $table->boolean('uk_ce_mark')->default('0');
@@ -24,6 +24,7 @@ class AddTogGarmentStatementFlammabilityToTescoWashcareOrdersTable extends Migra
             $table->foreign('woolmark_logo_id')->references('id')->on('tesco_woolmark_logos')->onDelete('cascade');
             $table->foreign('flammability_id')->references('id')->on('tesco_flammabilities')->onDelete('cascade');
             $table->foreign('garment_statement_id')->references('id')->on('tesco_garment_statements')->onDelete('cascade');
+            $table->foreign('tog')->references('id')->on('tesco_togs')->onDelete('cascade');
 
         });
     }
@@ -36,6 +37,7 @@ class AddTogGarmentStatementFlammabilityToTescoWashcareOrdersTable extends Migra
     public function down()
     {
         Schema::table('tesco_washcare_orders', function (Blueprint $table) {
+            $table->dropForeign('tesco_washcare_orders_tog_foreign');
             $table->dropColumn('tog');
             $table->dropForeign('tesco_washcare_orders_woolmark_logo_id_foreign');
             $table->dropColumn('woolmark_logo_id');

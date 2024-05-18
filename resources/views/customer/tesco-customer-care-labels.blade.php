@@ -12,7 +12,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '9', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -28,7 +28,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
+        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','maxlength' => '8', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -36,7 +36,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
+        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '7')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
+        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '5', "onkeypress" => "return isNumber(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -52,7 +52,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
+        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>
@@ -84,6 +84,55 @@
             <optgroup label="Select Part of Two Piece Set">
                 <option value="">None</option>
                 @foreach ($part_of_two_piece_set as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_woolmark_logo', 'Woolmark Logo', ['class' => 'form_label']) !!}
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_woolmark_logo"  id="tesco_care_woolmark_logo" required>
+                <option value="">-- Select Woolmark Logo --</option>
+                @if(!empty($woolmark_logos))
+                    @foreach($woolmark_logos as $key => $value)
+                            <option data-id="{{ $value->id }}" data-content="<img class='tesco-care-symbols' src='{{ asset($value->woolmark_logo ) }}' /> {{$value->woolmark_logo_text}}" value="{{ $value->id }}" >{{ $value->woolmark_logo_text }}</option>
+                    @endforeach
+                @endif
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_woolmark_batch_code', 'Woolmark Batch Code', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '10')) !!}
+        <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_uk_ce_mark', 'UK/CE Mark', ['class' => 'form_label']) !!}
+            <select name="tesco_care_uk_ce_mark" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_uk_ce_mark">
+            <optgroup label="Select UK/CE Mark">
+                <option value="true" selected>Yes</option>
+                <option value="false">No</option>
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_flammability', 'Flammability', ['class' => 'form_label']) !!}
+            <select name="tesco_care_flammability" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_flammability">
+            <optgroup label="Select Flammability">
+                <option value="">None</option>
+                @foreach ($flammability as $key => $value)
                 <option value="{{ $key }}">
                     {{ $value }}
                 </option>
@@ -162,32 +211,6 @@
         </div>
     </div>
     @endfor
-</div>
-<hr>
-<div class="row">
-    <div class="col-md-12">
-        <div class="align-items form-group has-feedback">
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-        <div class="checkbox">
-            <label>
-                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
-            </label>
-            <div class="help-block with-errors"></div>
-        </div>
-
-        </div>
-    </div>
 </div>
 <hr>
 <div class="row">
@@ -291,14 +314,36 @@
         </div>
         <div class="col-md-6">
             <div class="form-group has-feedback">
-                {!! Form::label('tesco_care_kids_warning', 'Kids Warning Statement', ['class' => 'form_label']) !!}
-                {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Kids Warning Statement --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kids_warning', 'data-live-search' => 'true')) }}
+                {!! Form::label('tesco_care_kids_warning', 'Children Warning', ['class' => 'form_label']) !!}
+                {{  Form::select('tesco_care_kids_warning',(['' => '-- Select Children Warning --'] + $kids_warning),'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_kids_warning', 'data-live-search' => 'true')) }}
                 <div class="help-block with-errors"></div>
             </div>
         </div>
     </div>
     <div class="label-order-invisible-div"></div>
 </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <h4>Optional Garment Statements</h4>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_care_garment_statements', 'Garment Statements', ['class' => 'form_label']) !!}
+            <select name="tesco_care_garment_statements" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_garment_statements">
+            <optgroup label="Select Garment Statements">
+                <option value="">None</option>
+                @foreach ($garment_statements as $key => $value)
+                <option value="{{ $key }}">
+                    {{ $value }}
+                </option>
+                @endforeach
+            </optgroup>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="row hidden" id="baby_sleeping_bag_div">
@@ -320,8 +365,18 @@
             <div class="help-block with-errors"></div>
         </div>
         <div class="form-group has-feedback form-inline">
-            {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
-            {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG')) !!}
+            {!! Form::label('tesco_care_tog_rating', 'Tog Rating', ['class' => 'form_label']) !!}
+                <select name="tesco_care_tog_rating" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_tog_rating">
+                <optgroup label="Select Tog Rating">
+                    <option value="">None</option>
+                    @foreach ($tog_rating as $key => $value)
+                    <option value="{{ $key }}">
+                        {{ $value }}
+                    </option>
+                    @endforeach
+                </optgroup>
+                </select>
+                <div class="help-block with-errors"></div>
         </div>
         </div>
     </div>
