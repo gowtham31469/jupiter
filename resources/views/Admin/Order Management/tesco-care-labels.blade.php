@@ -119,8 +119,8 @@
             {!! Form::label('tesco_care_uk_ce_mark', 'UK/CE Mark', ['class' => 'form_label']) !!}
             <select name="tesco_care_uk_ce_mark" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_uk_ce_mark">
             <optgroup label="Select UK/CE Mark">
-                <option value="true" selected>Yes</option>
-                <option value="false">No</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
             </optgroup>
             </select>
             <div class="help-block with-errors"></div>

@@ -15,16 +15,16 @@ class AddTogGarmentStatementFlammabilityToTescoWashcareOrdersTable extends Migra
     {
         Schema::table('tesco_washcare_orders', function (Blueprint $table) {
             $table->integer('tog')->nullable(true)->index();
-            $table->integer('woolmark_logo_id')->nullable(true)->index();
-            $table->string('woolmark_batch_code')->nullable(true);
-            $table->boolean('uk_ce_mark')->default('0');
-            $table->integer('flammability_id')->nullable(true)->index();
-            $table->integer('garment_statement_id')->nullable(true)->index();
-
-            $table->foreign('woolmark_logo_id')->references('id')->on('tesco_woolmark_logos')->onDelete('cascade');
-            $table->foreign('flammability_id')->references('id')->on('tesco_flammabilities')->onDelete('cascade');
-            $table->foreign('garment_statement_id')->references('id')->on('tesco_garment_statements')->onDelete('cascade');
             $table->foreign('tog')->references('id')->on('tesco_togs')->onDelete('cascade');
+            $table->integer('woolmark_logo_id')->nullable(true)->index();
+            $table->foreign('woolmark_logo_id')->references('id')->on('tesco_woolmark_logos')->onDelete('cascade');
+            $table->string('woolmark_batch_code')->nullable(true);
+            $table->string('uk_ce_mark')->default('yes');
+            $table->integer('flammability_id')->nullable(true)->index();
+            $table->foreign('flammability_id')->references('id')->on('tesco_flammabilities')->onDelete('cascade');
+            $table->integer('garment_statement_id')->nullable(true)->index();
+            $table->foreign('garment_statement_id')->references('id')->on('tesco_garment_statements')->onDelete('cascade');
+           
 
         });
     }
