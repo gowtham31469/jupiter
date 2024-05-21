@@ -376,7 +376,9 @@ background: rgba(0,0,0,0.2);
         background-color:#263238 !important;
         color:#ffff !important;
     }
-
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">

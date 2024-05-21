@@ -54,6 +54,10 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 {{-- Hidden div for svg rendering --}}
 <div id="modaldiv">

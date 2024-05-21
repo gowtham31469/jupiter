@@ -36,6 +36,10 @@
         width: 3000px !important;
         height: 3000px !important;
     }
+
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 
 {{-- Hidden div for svg rendering --}}
