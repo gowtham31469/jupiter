@@ -457,8 +457,36 @@
         </div>
     </div>
 
-    {!! Form::label('po', 'Purchase Order Number', ['class' => 'form_label']) !!} {!! Form::text('po',$value = '', array('id'=>'new_po_no','class' => 'form-control input-sm po ','placeholder' => 'Purchase Order Number','required')) !!}
-						
+    <!--
+	<div class="modal fade po-details" id="po-file-upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Purchase Order</h4>
+				</div>
+				<div class="modal-body">
+					<div id="exist_artwork_div" style="margin-left: 10px;padding-bottom:25px;color: #002c3e;font-weight: 600;">
+					</div>
+					<div id="map_po_div" style="margin-top: 40px;" class="hidden">
+					</div>
+					<div id="new_po_div" style="margin-top:50px;" class="hidden">
+						<label style="color:red" id="new_po_error" class="hidden">Please Enter Purchase Order Number</label>
+						<div class="form-group">
+						{!! Form::label('po', 'Purchase Order Number', ['class' => 'form_label']) !!} {!! Form::text('po',$value = '', array('id'=>'new_po_no','class' => 'form-control input-sm po ','placeholder' => 'Purchase Order Number','required')) !!}
+						</div>
+						<input type="file" id="new_po_file">
+						<button style="margin-top:10px" type="button" class="btn btn-primary" id="update_new_po">Update New PO</button>
+					</div>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+-->
 
     <div class="modal fade" data-backdrop="static" id="po-file-upload-div" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
