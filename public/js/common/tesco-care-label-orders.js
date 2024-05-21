@@ -123,7 +123,7 @@ $(function () {
                                                 <div class="col-xs-4">
                                                     <div class="form-group has-feedback">
                                                     <div class="input-group">
-                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
+                                                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" min="0"  id="fiber_individual_percentage_` + component_count + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
                                                         <div class="input-group-addon">%</div>
                                                     </div>
                                                     <div class="help-block with-errors"></div>
@@ -575,6 +575,19 @@ $(function () {
             }
         });
         return status;
+    }
+
+    validatePoValue = (e) => {
+
+        if (e.shiftKey || e.ctrlKey || e.altKey) {
+            e.preventDefault();
+        } else {
+            var key = e.keyCode;
+            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222))) {
+                e.preventDefault();
+            }
+        }
+
     }
 
 });

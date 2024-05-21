@@ -54,6 +54,10 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 {{-- Hidden div for svg rendering --}}
 <div id="modaldiv">
@@ -485,37 +489,42 @@
                     <input type="hidden" id="label_template_name">
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
+                        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '9', "onkeydown" => "return validatePoValue(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
+                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
+                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8', "onkeydown" => "return validatePoValue(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
+                        {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '7')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
+                        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '5', "onkeypress" => "return isNumber(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
+                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        {!! Form::label('tesco_care_woolmark_batch_code', 'Woolmark Batch Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '10')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
@@ -526,26 +535,6 @@
                             </label>
                         </div>
                         <div class="help-block with-errors"></div>
-                    </div>
-                    <div class="align-items form-group has-feedback">
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
                     </div>
                     <div class="label-metadata-select"></div>
                     <hr>
@@ -567,10 +556,7 @@
                                     </label>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div class="form-group has-feedback form-inline">
-                                    {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
-                                    {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG')) !!}
-                                </div>
+                                <div class="tog-div"></div>
                             </div>
                         </div>
                     </div>

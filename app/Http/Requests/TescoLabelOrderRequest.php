@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Rules\ValidateTescoCarePo;
+use App\Rules\ValidateTescoCareOptionId;
+use Illuminate\Foundation\Http\FormRequest;
 
 class TescoLabelOrderRequest extends FormRequest
 {
@@ -25,16 +27,19 @@ class TescoLabelOrderRequest extends FormRequest
     public function rules()
     {
         return [ 
-            'tesco_care_po'                    => ['required'],
-            'tesco_care_eqos'                  => ['required'],
-            'tesco_care_ce_style'              => ['required'],
-            'tesco_care_uk_style'              => ['required'],
+            'tesco_care_po'                    => ['required', new ValidateTescoCarePo],
+            'tesco_care_eqos'                  => ['required', 'numeric', 'digits:7'],
+            'tesco_care_ce_style'              => ['required', new ValidateTescoCareOptionId],
+            'tesco_care_uk_style'              => ['required', 'alpha_num', 'size:7'],
+            'tesco_care_fabric_code'           => ['required', 'numeric', 'digits:5'],
+            'tesco_care_leather_id'            => ['required', 'size:10'],
             'tesco_care_coo'                   => ['required', 'numeric', 'exists:tesco_countries,id'],
             'tesco_care_supplier'              => ['required', 'numeric', 'exists:tesco_suppliers,id'],
             'template_id'                      => ['required', 'numeric', 'exists:tesco_item_master,id'],
             'order_type'                       => ['nullable', 'sometimes', Rule::in(['newOrder', 'repeatOrder'])],
             'primary_size_id'                  => ['sometimes'],
-
+            'tesco_care_uk_ce_mark'            => ['required', Rule::in(['yes', 'no'])],
+            
             'tesco_care_wash_instruction'      => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
             'tesco_care_bleach_instruction'    => ['required', 'numeric', 'exists:tesco_care_symbols,id'],
             'tesco_care_dry_instruction'       => ['required', 'numeric', 'exists:tesco_care_symbols,id'],

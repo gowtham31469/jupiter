@@ -135,7 +135,7 @@ function addProductDescription() {
               208: function() {
                   $('#components_error').removeClass('hidden');
                   $('#components_error').removeAttr('style');
-                  $('#components_error').html('Product Description[English] already excists.')
+                  $('#components_error').html('Product Description[English] already exists.')
                   $("#components_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -248,7 +248,7 @@ function updateProductDescription() {
               208: function() {
                   $('#product_description_error').removeClass('hidden');
                   $('#product_description_error').removeAttr('style');
-                  $('#product_description_error').html('Product Description already excists.')
+                  $('#product_description_error').html('Product Description already exists.')
                   $("#product_description_error").addClass("alert alert-warning");
               },
           },

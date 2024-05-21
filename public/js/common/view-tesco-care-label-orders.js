@@ -33,7 +33,6 @@ $( () => {
         $('#hidden_name').val(order_data.order_details.item_master.template_name)
         $('.create-download-artwork').css('display','inline-block')
         $('#tesco_care_po').val(order_data.order_details.po_number)
-        $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_eqos').val(order_data.order_details.eqos_site_code)
         $('#tesco_care_ce_style').val(order_data.order_details.ce_style_ref)
         $('#tesco_care_uk_style').val(order_data.order_details.uk_style_ref)
@@ -42,11 +41,13 @@ $( () => {
         $('#tesco_care_coo').val(order_data.order_details.country_of_origin_id)
         $('#tesco_care_supplier').val(order_data.order_details.tesco_metadata_supplier_id)
         $('#tesco_care_part_of_two_piece_set').val(order_data.order_details.potps_id)
+        $('#tesco_care_woolmark_logo').val(order_data.order_details.woolmark_logo_id)
+        $('#tesco_care_woolmark_batch_code').val(order_data.order_details.woolmark_batch_code)
+        $('#tesco_care_uk_ce_mark').val(order_data.order_details.uk_ce_mark)
+        $('#tesco_care_flammability').val(order_data.order_details.flammability_id)
+        $('#tesco_care_garment_statements').val(order_data.order_details.garment_statement_id)
 
         $('#tesco_care_button_space').prop('checked', order_data.order_details.include_btn_sew_space);
-        $('#tesco_care_exclusive_trim').prop('checked', order_data.order_details.exclusive_trims);
-        $('#tesco_care_non_textile_part').prop('checked', order_data.order_details.contains_non_textile_part);
-        $('#tesco_care_part_of_set').prop('checked', order_data.order_details.part_of_set);
 
         $('#tesco_care_wash_instruction').val(order_data.order_details.wash_symbol_id)
         $('#tesco_care_bleach_instruction').val(order_data.order_details.bleach_symbol_id)
@@ -65,7 +66,7 @@ $( () => {
 
             $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
             $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
-            $('#tesco_care_tog').val(order_data.order_details.tog)
+            $('#tesco_care_tog_rating').val(order_data.order_details.tog)
         }
 
         var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + order_data.order_details.id + '">';
@@ -170,7 +171,7 @@ $( () => {
                                                             <div class="col-xs-4">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled min="0">
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>

@@ -46,6 +46,9 @@
             <li id="14" onclick="tescoMMProductBenefits()"><a>MM Product Benefits</a></li>
             <li id="15" onclick="weeSymbols()"><a>Wee Symbols</a></li>
             <li id="16" onclick="woolMarkLogos()"><a>Woolmark Logo</a></li>
+            <li id="17" onclick="tescoFlammability()"><a>Flammability</a></li>
+            <li id="18" onclick="tescoGarmentStatements()"><a>Garment Statement</a></li>
+            <li id="19" onclick="tescoTog()"><a>TOG</a></li>
           </ul>
         </div>
         <div class="content">
@@ -65,6 +68,9 @@
     @include('Admin.Settings.includes.tesco_mm_product_benefits')
     @include('Admin.Settings.includes.tesco_wee_symbols')
     @include('Admin.Settings.includes.tesco_woolmark_logos')
+    @include('Admin.Settings.includes.tesco-flammability')
+    @include('Admin.Settings.includes.tesco-garment-statement')
+    @include('Admin.Settings.includes.tesco-tog')
     
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
@@ -2074,6 +2080,9 @@
     <script src="{{ asset('js/Admin/tesco-settings-product-description.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco_wee_symbols.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco_woolmark_logos.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-flammability.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-garment-statement.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-tog.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
@@ -2284,6 +2293,13 @@
         $("#labelsize_error").addClass('hidden');
         $("#labelsize_update_error").addClass('hidden');
         $(".removeLabelSizeItem").remove();
+
+        $('#add-garment-statement-form').trigger("reset");
+        $('#edit-garment-statement-form').trigger("reset");
+        $('#add-flammability-form').trigger("reset");
+        $('#edit-flammability-form').trigger("reset");
+        $('#add-tog-form').trigger("reset");
+        $('#edit-tog-form').trigger("reset");
        })
 
       /** Add orchestra garment form validation **/

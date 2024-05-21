@@ -376,7 +376,9 @@ background: rgba(0,0,0,0.2);
         background-color:#263238 !important;
         color:#ffff !important;
     }
-
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 <input type="hidden" id="status_flag">
 <div class="col-sm-12 col-md-12 main">
@@ -816,7 +818,7 @@ background: rgba(0,0,0,0.2);
             <div class="col-xs-4">
                 <div class="form-group has-feedback">
                 <div class="input-group">
-                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" readonly>
+                    <input type="number" class="form-control input-sm fiber-individual-percentage-{{$j}}" onkeyup="return calculateTotalFiberPercentage(this,'{{ $j }}', event)" max="100" id="fiber_individual_percentage_{{$j}}_{{$i}}" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" min="0" readonly>
                     <div class="input-group-addon">%</div>
                 </div>
                 <div class="help-block with-errors"></div>
