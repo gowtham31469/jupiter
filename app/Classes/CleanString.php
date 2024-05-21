@@ -27,7 +27,7 @@ class CleanString
     $string = str_replace(' ', '-', $string);
 
     // Removes special chars.
-    $string = preg_replace('/[^A-Za-z0-9\-]/', '-', $string);
+    $string = preg_replace('/[^A-Za-z0-9\-.]/', '-', $string);
 
     // Replaces multiple hyphens with single one.
     $string = preg_replace('/-+/', '-', $string);
