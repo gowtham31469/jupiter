@@ -77,6 +77,7 @@ class UpdateTescoLabelOrder
             'uk_ce_mark'                     => $request->tesco_care_uk_ce_mark,
             'flammability_id'                => $request->tesco_care_flammability,
             'garment_statement_id'           => $request->tesco_care_garment_statements,
+            'garment_statement_text'         => $translation_texts['garment_statement_text'],
         );
 
         TescoWashcareOrders::where(['id' => $request->order_id])->update($insert_data);

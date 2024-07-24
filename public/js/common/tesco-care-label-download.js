@@ -104,16 +104,16 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             var svgRoot_back_text =svgDoc_back_text.documentElement;
             var svgRoot_front_text =svgDoc_front_text.documentElement;
 
-            if(data.order_details[0].bs_en_declaration == 0)
-            {
-                svgDoc.getElementById("height_text").setAttribute('font-size','5.5px');
-                svgDoc.getElementById("height_text").setAttribute('letter-spacing','0.4px');
-            }
-            else
-            {
-                svgDoc.getElementById("height_text").setAttribute('font-size','4.5px');
-                svgDoc.getElementById("height_text").setAttribute('letter-spacing','0px');
-            }
+            // if(data.order_details[0].bs_en_declaration == 0)
+            // {
+            //     svgDoc.getElementById("height_text").setAttribute('font-size','5.5px');
+            //     svgDoc.getElementById("height_text").setAttribute('letter-spacing','0.4px');
+            // }
+            // else
+            // {
+            //     svgDoc.getElementById("height_text").setAttribute('font-size','4.5px');
+            //     svgDoc.getElementById("height_text").setAttribute('letter-spacing','0px');
+            // }
 
             if(data.order_details[0].bs_en_declaration == 0)
             {
@@ -145,6 +145,8 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
                 svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
                 svgDoc.getElementById("style_value").innerHTML = "STYLE:"+ val.uk_style_ref;
+                svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+                
                 if(val.fabric_batch_code != null && val.fabric_batch_code != "")
                 {
                     svgDoc.getElementById("batch_code").innerHTML = val.fabric_batch_code;
@@ -153,20 +155,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     //alert()
                     
-                    //console.log();
-                    if(name2 == "GCL25B/M13278G" || name2 == "GCL25B/M13279G")
-                    {
-                        //console.log("hai bye");
-                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 104.5)");
-                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 111.5)");
-                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 118.5)");
-                    }
-                    else
-                    {
-                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 103)");
-                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 110)");
-                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 117)");
-                    }
+                    svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 103)");
+                    svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 110)");
+                    svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 117)");
                     
                     svgDoc.getElementById("batch_code").innerHTML = "";
                 }
@@ -178,7 +169,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                    svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 4.8456, 160.7462)");
+                    svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 164.7462)");
                     
                 }
                 
@@ -201,7 +192,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                     {
                         selected_secondary_sizes_text += '<tspan text-anchor="middle" x="10" y="'+$size_y+'">'+selected_secondary_sizes_val['value']+'</tspan>'
-                        $size_y += 6;
+                        $size_y += 5;
                     }
                 })
                 svgDoc.getElementById("height_text").innerHTML = selected_secondary_sizes_text;
@@ -242,9 +233,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
 
 
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 22.5, 257.061)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 36.4, 257.0148)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 10.65, 264.3518)");
+                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
+                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
+                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
 
                     //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
 
@@ -277,9 +268,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     svgDoc.getElementById("small_translation1").innerHTML = polish;
                     //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                     //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 30.7 257.061)");
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 17.1806, 257.061)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 9.9, 264.3518)");
+                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
+                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
+                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
                     
                     svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
                     svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
@@ -296,9 +287,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
                     svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21.5, 257.061)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 257.0148)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 4.25, 264.3518)");
+                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
+                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
+                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
 
                     //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
                     
@@ -324,9 +315,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
 
 
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21.6, 257.061)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35.1, 257.0148)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 3.1, 264.3518)");
+                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
+                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
+                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
 
                     //svgDoc.getElementById("small_english").innerHTML = "up to 3M";
                     
@@ -360,9 +351,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     svgDoc.getElementById("small_translation1").innerHTML = polish;
                     //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
                     //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 18.8, 257.061)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 31.3, 257.061)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8605, 0, 0, 1, 7.3, 264.061)");
+                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21, 257.061)");
+                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,46, 257.061)");
+                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 264.061)");
                     
                     svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
                     svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
@@ -383,13 +374,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
                     }
                     else if(val.uk_size == "6-9M")
                     {
@@ -406,13 +397,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
                     }
                     else if(val.uk_size == "9-12M")
                     {
@@ -429,13 +420,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
                     }
                     else if(val.uk_size == "12-18M")
                     {
@@ -452,13 +443,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 256)");
                     }
                     else if(val.uk_size == "18-24M")
                     {
@@ -475,13 +466,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 256)");
                     }
                     else if(val.uk_size == "1-2Y" || val.uk_size == "2-3Y" || val.uk_size == "3-4Y" || val.uk_size == "4-5Y" || val.uk_size == "5-6Y" || val.uk_size == "6-7Y" || val.uk_size == "7-8Y" || val.uk_size == "8-9Y" || val.uk_size == "9-10Y")
                     {
@@ -497,13 +488,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 19.8656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 19.8656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 256)");
                     }
                     else if(val.uk_size == "10-11Y" || val.uk_size == "11-12Y" || val.uk_size == "12-13Y" || val.uk_size == "13-14Y" || val.uk_size == "14-15Y" || val.uk_size == "15-16Y")
                     {
@@ -519,13 +510,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 19.8656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 19.8656, 256)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 52.3656, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 52.3656, 256)");
                     }
                     else
                     {
@@ -541,13 +532,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 16.5, 250)");
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 259.591)");
+                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.9656, 255)");
 
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 259.591)");
+                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51, 255)");
                     }
                     // svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
                     //     svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
@@ -561,13 +552,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     //     svgDoc.getElementById("uk_size").innerHTML = "9-10Y";
                     //     svgDoc.getElementById("ce_size").innerHTML = "9-10Y";
 
-                    //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 252.641)");
+                    //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
 
-                    //     svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 252.6402)");
+                    //     svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
 
-                    //     svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 19.8656, 259.591)");
+                    //     svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 19.8656, 256)");
 
-                    //     svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 52.3656, 259.591)");
+                    //     svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 52.3656, 256)");
                 }
                 svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
                 var country_of_origin_text = JSON.parse(val.country_of_origin_text)
@@ -582,7 +573,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             })
 
             var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-            svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="12.88">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="18.82">'+country_of_origin_text[0].hungarian+'</tspan>';
+            svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+
+            svgDoc_back_text.getElementById("part_text").innerHTML = '<tspan   x="2" y="1.2">'+data.order_details[0].part_czech+'</tspan><tspan   x="2" y="6">'+data.order_details[0].part_slovak+'</tspan><tspan  x="1.8" y="10.94">'+data.order_details[0].part_hungarian+'</tspan>';
 
             // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
             // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
@@ -625,12 +618,12 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(sample.length > 1)
             {
                 //$('#splitdiv').html("")
-                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
             }
             else
             {
                 //$('#splitdiv').html("")
-                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
             }
 
              
@@ -644,6 +637,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             $y=0;
             $line_length=0;
             $ind=1;
+            var isFirstLine = true;
             //console.log("gy:"+$chunk_str.length)
             $($chunk_str).each(function(index,chunk_val){
                 if(chunk_val != "AT 30º")
@@ -655,17 +649,18 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     var firstOccuranceIndex = chunk_val.search(/\//) + 1;
 
-                    var resultStr = chunk_val.substr(0, firstOccuranceIndex) + chunk_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                    var resultStr = chunk_val.substr(0, firstOccuranceIndex) + chunk_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
-                    var new_chunk_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                    var new_chunk_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$y+'" >/</tspan><tspan>')
                     chunks += '<tspan>'+new_chunk_val+'</tspan>';
                 }
                 else
                 {
-                    var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                    chunks += '<tspan x="12" y="'+$y+'">'+new_chunk_val+'</tspan>';
+                    var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan>')
+                    var xPosition = isFirstLine ? '9' : '0';
+                    chunks += '<tspan x="'+xPosition+'" y="'+$y+'">'+new_chunk_val+'</tspan>';
                 }
-                //chunks += '<tspan x="12" y="'+$y+'">'+chunk_val+'</tspan>';
+                //chunks += '<tspan x="9" y="'+$y+'">'+chunk_val+'</tspan>';
                 if($chunk_str.length == $ind)
                 {
                     $y+=8;
@@ -676,6 +671,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 $ind++;
                 $line_length++;
+                isFirstLine = false;
                 
             })
 
@@ -703,18 +699,25 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     sk_garment_component += toTitleCase(garment_component_text[0].slovak);
                     hu_garment_component += toTitleCase(garment_component_text[0].hungarian);
                 }
+
+                var isFirstEntryComp = true;
                 
                 $(comp_val.fibre).each(function(index,fibre_val){
                     var fibre_text = JSON.parse(fibre_val.fibre_composition_text)
-                    en_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
+
+                    var separator = isFirstEntryComp ? ": " : " ";
+
+                    en_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
 
                     //pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
 
-                    cz_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
+                    cz_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
 
-                    sk_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].slovak);
+                    sk_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].slovak);
 
-                    hu_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].hungarian);
+                    hu_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].hungarian);
+
+                    isFirstEntryComp = false;
                 });
             })
 
@@ -823,17 +826,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     var firstOccuranceIndex = garment_val.search(/\//) + 1;
 
-                    var resultStr = garment_val.substr(0, firstOccuranceIndex) + garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                    var resultStr = garment_val.substr(0, firstOccuranceIndex) + garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
-                    var new_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
+                    var new_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$y+'" >/</tspan><tspan>')
                     chunks += '<tspan>'+new_garment_val+'</tspan>';
                 }
                 else
                 {
-                    var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                    chunks += '<tspan x="12" y="'+$y+'">'+new_garment_val+'</tspan>';
+                    var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan>')
+                    chunks += '<tspan x="9" y="'+$y+'">'+new_garment_val+'</tspan>';
                 }
-                //chunks += '<tspan x="12" y="'+$y+'">'+garment_val+'</tspan>';
+                //chunks += '<tspan x="9" y="'+$y+'">'+garment_val+'</tspan>';
                 if($garment_str.length == $ind_en)
                 {
                     $y+=8;
@@ -856,18 +859,21 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             //     if($y > 96)
             //     {
-            //         new_chunks += '<tspan x="12" y="'+$z+'">'+pl_garment_val+'</tspan>';
+            //         new_chunks += '<tspan x="9" y="'+$z+'">'+pl_garment_val+'</tspan>';
             //     }
             //     else
             //     {
-            //         chunks += '<tspan x="12" y="'+$y+'">'+pl_garment_val+'</tspan>';   
+            //         chunks += '<tspan x="9" y="'+$y+'">'+pl_garment_val+'</tspan>';   
             //     }
                 
             //     $y+=6;
             //     $z+=6;
             // })
 
-            if($line_length > 15)
+
+            $limited_length = 15;
+
+            if($line_length > $limited_length)
             {
                 new_chunks += '<tspan x="0" y="'+$z+'">CZ</tspan>';
             }
@@ -877,28 +883,35 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
             $ind_cz=1;
             $($cz_garment_str).each(function(index,cz_garment_val){
-                if($line_length == 15)
+
+                var isAllUpperCase = cz_garment_val === cz_garment_val.toUpperCase();
+
+                // Set scaling factor based on whether the text is all uppercase
+
+                var scaleFactor = isAllUpperCase ? '0.9' : '1'; // Adjust scale factor as needed
+                
+                if($line_length == $limited_length)
                 {
                     $z=0;
                 }
 
-                if($line_length > 15)
+                if($line_length > $limited_length)
                 {
                     if(cz_garment_val.charAt(0) == "/")
                     {
                         var firstOccuranceIndex = cz_garment_val.search(/\//) + 1;
 
-                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
-                        var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan>'+new_cz_garment_val+'</tspan>';
+                        var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$z+'" >/</tspan><tspan transform="scale(' + scaleFactor + ' 1)">')
+                        new_chunks += '<tspan transform="scale(' + scaleFactor + ' 1)">'+new_cz_garment_val+'</tspan>';
                     }
                     else
                     {
-                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan x="12" y="'+$z+'">'+new_cz_garment_val+'</tspan>';
+                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactor + ' 1)">')
+                        new_chunks += '<tspan x="9" y="'+$z+'" transform="scale(' + scaleFactor + ' 1)">'+new_cz_garment_val+'</tspan>';
                     }
-                    //new_chunks += '<tspan x="12" y="'+$z+'">'+cz_garment_val+'</tspan>';
+                    //new_chunks += '<tspan x="9" y="'+$z+'">'+cz_garment_val+'</tspan>';
                 }
                 else
                 {
@@ -906,17 +919,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         var firstOccuranceIndex = cz_garment_val.search(/\//) + 1;
 
-                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                        var resultStr = cz_garment_val.substr(0, firstOccuranceIndex) + cz_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactor + ' 1)">'); 
 
-                        var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
-                        chunks += '<tspan>'+new_cz_garment_val+'</tspan>'; 
+                        var new_cz_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$y+'" >/</tspan><tspan transform="scale(' + scaleFactor + ' 1)">')
+                        chunks += '<tspan transform="scale(' + scaleFactor + ' 1)">'+new_cz_garment_val+'</tspan>'; 
                     }
                     else
                     {
-                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                        chunks += '<tspan x="12" y="'+$y+'">'+new_cz_garment_val+'</tspan>'; 
+                        var new_cz_garment_val =cz_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan>')
+                        chunks += '<tspan x="9" y="'+$y+'" transform="scale(' + scaleFactor + ' 1)">'+new_cz_garment_val+'</tspan>'; 
                     }
-                    //chunks += '<tspan x="12" y="'+$y+'">'+cz_garment_val+'</tspan>';   
+                    //chunks += '<tspan x="9" y="'+$y+'">'+cz_garment_val+'</tspan>';   
                 }
 
                 if($cz_garment_str.length == $ind_cz)
@@ -933,13 +946,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 $line_length++;
             })
 
-            if($line_length > 15)
+            if($line_length > $limited_length)
             {
                 new_chunks += '<tspan x="0" y="'+$z+'">SK</tspan>';
             }
             else
             {
-                if($line_length == 15)
+                if($line_length == $limited_length)
                 {
                     new_chunks += '<tspan x="0" y="6">SK</tspan>';
                 }
@@ -952,50 +965,56 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             $($sk_garment_str).each(function(index_str_en,sk_garment_val){
                 console.log("$line_length 1" + $line_length)
 
-                if((index_str_en == 0 && $line_length ==15))
+                var isAllUpperCaseSk = sk_garment_val === sk_garment_val.toUpperCase();
+
+                // Set scaling factor based on whether the text is all uppercase
+
+                var scaleFactorSk = isAllUpperCaseSk ? '0.9' : '1'; // Adjust scale factor as needed
+
+                if((index_str_en == 0 && $line_length ==$limited_length))
                 {
                     $z=6;
                 }
-                else if($line_length == 15)
+                else if($line_length == $limited_length)
                 {
                     $z=0;
                 }
 
-                if($line_length > 15)
+                if($line_length > $limited_length)
                 {
                     if(sk_garment_val.charAt(0) == "/")
                     {
                         var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
 
-                        var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                        var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
-                        var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
+                        var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$z+'" >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                        new_chunks += '<tspan transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>';
                     }
                     else
                     {
-                        var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
+                        var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                        new_chunks += '<tspan x="9" y="'+$z+'" transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>';
                     }
-                    //new_chunks += '<tspan x="12" y="'+$z+'">'+sk_garment_val+'</tspan>';
+                    //new_chunks += '<tspan x="9" y="'+$z+'">'+sk_garment_val+'</tspan>';
                 }
                 else
                 {
-                    if((index_str_en == 0 && $line_length ==15))
+                    if((index_str_en == 0 && $line_length ==$limited_length))
                     {
                         if(sk_garment_val.charAt(0) == "/")
                         {
                             var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
     
-                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
     
-                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
-                            new_chunks += '<tspan>'+new_sk_garment_val+'</tspan>';
+                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$z+'" >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                            new_chunks += '<tspan transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>';
                         }
                         else
                         {
-                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+new_sk_garment_val+'</tspan>';
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                            new_chunks += '<tspan x="9" y="'+$z+'" transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>';
                         }
                     }
                     else
@@ -1004,19 +1023,19 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = sk_garment_val.search(/\//) + 1;
     
-                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                            var resultStr = sk_garment_val.substr(0, firstOccuranceIndex) + sk_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
     
-                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
-                            chunks += '<tspan>'+new_sk_garment_val+'</tspan>'; 
+                            var new_sk_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$y+'" >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                            chunks += '<tspan transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>'; 
                         }
                         else
                         {
-                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                            chunks += '<tspan x="12" y="'+$y+'">'+new_sk_garment_val+'</tspan>'; 
+                            var new_sk_garment_val =sk_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorSk + ' 1)">')
+                            chunks += '<tspan x="9" y="'+$y+'" transform="scale(' + scaleFactorSk + ' 1)">'+new_sk_garment_val+'</tspan>'; 
                         }
                     }
                     
-                    //chunks += '<tspan x="12" y="'+$y+'">'+sk_garment_val+'</tspan>';   
+                    //chunks += '<tspan x="9" y="'+$y+'">'+sk_garment_val+'</tspan>';   
                 }
                 
                 if($sk_garment_str.length == $ind_sk)
@@ -1033,13 +1052,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 $line_length++;
             })
 
-            if($line_length > 15)
+            if($line_length > $limited_length)
             {
                 new_chunks += '<tspan x="0" y="'+$z+'">HU</tspan>';
             }
             else
             {
-                if($line_length == 15)
+                if($line_length == $limited_length)
                 {
                     new_chunks += '<tspan x="0" y="6">HU</tspan>';
                 }
@@ -1051,53 +1070,62 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
 
             $($hu_garment_str).each(function(index_str_hu,hu_garment_val){
+
+                var isAllUpperCaseHu = hu_garment_val === hu_garment_val.toUpperCase();
+
+                // Set scaling factor based on whether the text is all uppercase
+
+                var scaleFactorHu = isAllUpperCaseHu ? '0.9' : '1'; // Adjust scale factor as needed
                 
-                if((index_str_hu == 0 && $line_length ==15) || ($hu_garment_str.length == 5 && $line_length == 15))
+                if((index_str_hu == 0 && $line_length ==$limited_length) || ($hu_garment_str.length == 5 && $line_length == $limited_length))
                 {
                     $z=6;
                 }
-                else if($line_length == 15)
+                else if($line_length == $limited_length)
                 {
                     $z=0;
                 }
 
-                if($line_length > 15)
+                if($line_length > $limited_length)
                 {
                     if(hu_garment_val.charAt(0) == "/")
                     {
                         var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
 
-                        var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                        var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
 
-                        var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan>'+new_hu_garment_val+'</tspan>';
+                        var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="9" id="hai" y="'+$z+'" >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                        new_chunks += '<tspan transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>';
+
+                        console.log(new_hu_garment_val)
+                        console.log(new_chunks)
                     }
                     else
                     {
-                        var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                        new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
+                        var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                        new_chunks += '<tspan x="9" y="'+$z+'" transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>';
                     }
-                    //new_chunks += '<tspan x="12" y="'+$z+'">'+hu_garment_val+'</tspan>';
+                    //new_chunks += '<tspan x="9" y="'+$z+'">'+hu_garment_val+'</tspan>';
                 }
                 else
                 {
-                    if((index_str_hu == 0 && $line_length ==15) || ($hu_garment_str.length == 5 && $line_length == 15))
+                    if((index_str_hu == 0 && $line_length ==$limited_length) || ($hu_garment_str.length == 5 && $line_length == $limited_length))
                     {
                         if(hu_garment_val.charAt(0) == "/")
                         {
                             var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
     
-                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
     
     
-                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$z+'" style="stroke-width:1">/</tspan><tspan>')
-                            new_chunks += '<tspan>'+new_hu_garment_val+'</tspan>';
+                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$z+'" >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                            new_chunks += '<tspan transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>';
                         }
                         else
                         {
-                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                            new_chunks += '<tspan x="12" y="'+$z+'">'+new_hu_garment_val+'</tspan>';
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                            new_chunks += '<tspan x="9" y="'+$z+'" transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>';
                         }
                     }
                     else
@@ -1106,19 +1134,19 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             var firstOccuranceIndex = hu_garment_val.search(/\//) + 1;
 
-                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan style="stroke-width:1">/</tspan><tspan>'); 
+                            var resultStr = hu_garment_val.substr(0, firstOccuranceIndex) + hu_garment_val.slice(firstOccuranceIndex).replace(/\//g, '</tspan><tspan >/</tspan><tspan>'); 
 
-                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="12" y="'+$y+'" style="stroke-width:1">/</tspan><tspan>')
-                            chunks += '<tspan>'+new_hu_garment_val+'</tspan>'; 
+                            var new_hu_garment_val = resultStr.replace("/", '</tspan><tspan x="9" y="'+$y+'" >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                            chunks += '<tspan transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>'; 
                         }
                         else
                         {
-                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan style="stroke-width:1">/</tspan><tspan>')
-                            chunks += '<tspan x="12" y="'+$y+'">'+new_hu_garment_val+'</tspan>'; 
+                            var new_hu_garment_val =hu_garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan transform="scale(' + scaleFactorHu + ' 1)">')
+                            chunks += '<tspan x="9" y="'+$y+'" transform="scale(' + scaleFactorHu + ' 1)">'+new_hu_garment_val+'</tspan>'; 
                         }
                     }
                     
-                    //chunks += '<tspan x="12" y="'+$y+'">'+hu_garment_val+'</tspan>';   
+                    //chunks += '<tspan x="9" y="'+$y+'">'+hu_garment_val+'</tspan>';   
                 }
                 
                 $y+=6;
@@ -1161,17 +1189,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                 if(order_page == "job_card_manager")
                 {
-                    PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
+                    PopupTescoLabelsPrieview(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,isEdit,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department,data.order_details[0].woolmark_logo_file,data.order_details[0].woolmark_logo_id);
                 }
                 else
                 {
                     if(art_type == "print")
                     {
-                        PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
+                        PopupTescoLabelsGeneratePrintManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department,data.order_details[0].woolmark_logo_file,data.order_details[0].woolmark_logo_id);
                     }
                     else 
                     {
-                        PopupTescoLabelsProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department);
+                        PopupTescoLabelsProofManager(svg_fin,svg_fin_back,svg_fin_back_text,svg_fin_front,data.order_details[0].po_number,data.order_details[0].uk_style_ref+"/"+data.order_details[0].ce_style_ref,data.tesco_item_master[0].item_name,data.order_details[0].created_at,data.order_details[0].customer_name,data.order_details[0].wash_astm,data.order_details[0].wash_iso,data.order_details[0].whit_astm,data.order_details[0].whit_iso,data.order_details[0].dry_astm,data.order_details[0].dry_iso,data.order_details[0].iron_astm,data.order_details[0].iron_iso,data.order_details[0].clean_astm,data.order_details[0].clean_iso,data.order_details[0].white_wash_astm,data.order_details[0].white_wash_iso,data.order_details[0].white_whit_astm,data.order_details[0].white_whit_iso,data.order_details[0].white_dry_astm,data.order_details[0].white_dry_iso,data.order_details[0].white_iron_astm,data.order_details[0].white_iron_iso,data.order_details[0].white_clean_astm,data.order_details[0].white_clean_iso,data.order_details[0].tesco_size_department,data.order_details[0].woolmark_logo_file,data.order_details[0].woolmark_logo_id);
                     }
                 }
                 

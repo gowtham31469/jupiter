@@ -56,7 +56,7 @@ $( () => {
         $('#baby_sleeping_bag_div').addClass("hidden");
 
         var metadata_select_div = ` <div class="form-group has-feedback">
-                                     <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
+                                    <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_coo" name="tesco_care_coo">
                                             <option value="">-- Select Country Of Origin --</option>`;
                                             $.each(order_data.coo, function (id, name) {
@@ -67,7 +67,7 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_supplier" class="component-label">Supplier </label>
+                                    <label for="tesco_care_supplier" class="component-label">Supplier </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_supplier" name="tesco_care_supplier" onchange="getMoq(this, '`+user_type+`', 'update')">
                                             <option value="">-- Select Supplier --</option>`;
                                             $.each(order_data.tesco_suppliers, function (id, name) {
@@ -78,7 +78,7 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
+                                    <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_part_of_two_piece_set" name="tesco_care_part_of_two_piece_set">
                                         <optgroup label="Select Part of Two Piece Set">
                                             <option value="">None</option>`;
@@ -91,7 +91,7 @@ $( () => {
                                     </div>
                                     <div class="form-group has-feedback">
                                      <label for="tesco_care_woolmark_logo" class="component-label">Woolmark Logo </label>
-                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_woolmark_logo" name="tesco_care_woolmark_logo" required>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_woolmark_logo" name="tesco_care_woolmark_logo">
                                             <option value="">-- Select Woolmark Logo --</option>`;
                                             $.each(order_data.woolmark_logos, function (id, value) {
 

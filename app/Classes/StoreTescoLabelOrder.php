@@ -108,6 +108,7 @@ class StoreTescoLabelOrder
             'uk_ce_mark'                     => $request->tesco_care_uk_ce_mark,
             'flammability_id'                => $request->tesco_care_flammability,
             'garment_statement_id'           => $request->tesco_care_garment_statements,
+            'garment_statement_text'         => $translation_texts['garment_statement_text'],
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;
@@ -262,6 +263,11 @@ class StoreTescoLabelOrder
 
         $translations['part_of_set'] = !is_null($request->tesco_care_part_of_set) ? DB::table('tesco_care_additional_instructions')
             ->where('english', 'part of set')
+            ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
+            ->get() : null;
+
+        $translations['garment_statement_text'] = !is_null($request->tesco_care_garment_statements) ? DB::table('tesco_garment_statements')
+            ->where('id', $request->tesco_care_garment_statements)
             ->select('english', 'polish', 'czech', 'slovak', 'hungarian')
             ->get() : null;
 

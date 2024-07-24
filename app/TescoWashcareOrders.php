@@ -78,6 +78,7 @@ class TescoWashcareOrders extends Model
         'uk_ce_mark',
         'flammability_id',
         'garment_statement_id',
+        'garment_statement_text',
     ];
 
     protected $casts = [
