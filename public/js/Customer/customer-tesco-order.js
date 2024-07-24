@@ -527,29 +527,7 @@ function tescoOrders(callback) {
 									"id": "33",
 									"text": "Printed Labels",
 									"parent_id": "32",
-									"children": [{
-											"id": "34",
-											"text": "GCL25W/M12723G",
-											"parent_id": "33",
-											"template_type": "tesco_care_labels"
-										}, {
-											"id": "35",
-											"text": "GCL25W/M13220G",
-											"parent_id": "33",
-											"template_type": "tesco_care_labels"
-										},
-										{
-											"id": "36",
-											"text": "GCL25B/M13278G",
-											"parent_id": "33",
-											"template_type": "tesco_care_labels"
-										},
-										{
-											"id": "37",
-											"text": "GCL25B/M13279G",
-											"parent_id": "33",
-											"template_type": "tesco_care_labels"
-										},
+									"children": [
                                         {
 											"id": "122",
 											"text": "GCLW25/M11363G",
