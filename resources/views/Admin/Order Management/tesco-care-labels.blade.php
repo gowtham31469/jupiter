@@ -96,7 +96,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_woolmark_logo', 'Woolmark Logo', ['class' => 'form_label']) !!}
-            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_woolmark_logo"  id="tesco_care_woolmark_logo" required>
+            <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_woolmark_logo"  id="tesco_care_woolmark_logo">
                 <option value="">-- Select Woolmark Logo --</option>
                 @if(!empty($woolmark_logos))
                     @foreach($woolmark_logos as $key => $value)
@@ -110,7 +110,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_woolmark_batch_code', 'Woolmark Batch Code', ['class' => 'form_label']) !!}
-        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '10')) !!}
+        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '9')) !!}
         <div class="help-block with-errors"></div>
         </div>
     </div>

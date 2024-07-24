@@ -24,7 +24,7 @@ class AddTogGarmentStatementFlammabilityToTescoWashcareOrdersTable extends Migra
             $table->foreign('flammability_id')->references('id')->on('tesco_flammabilities')->onDelete('cascade');
             $table->integer('garment_statement_id')->nullable(true)->index();
             $table->foreign('garment_statement_id')->references('id')->on('tesco_garment_statements')->onDelete('cascade');
-           
+
 
         });
     }
