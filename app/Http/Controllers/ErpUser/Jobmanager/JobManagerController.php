@@ -544,6 +544,7 @@ class JobManagerController extends Controller
 
 								
 											$order_omp  = 	DB::table($order_table)
+											->leftJoin('tesco_woolmark_logos','tesco_washcare_orders.woolmark_logo_id','=','tesco_woolmark_logos.id')
 																->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
 																->join('tesco_care_symbols as washing',$order_table.'.wash_symbol_id', 'washing.id')
                                 ->join('tesco_care_symbols as whitening',$order_table.'.bleach_symbol_id', 'whitening.id')
@@ -551,7 +552,7 @@ class JobManagerController extends Controller
                                 ->join('tesco_care_symbols as iron',$order_table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$order_table.'.dryclean_symbol_id', 'cleaning.id')
 																	->where($order_table.'.id',$order_details_omp[0]->$order_id)
-																	->select($order_table.'.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
+																	->select($order_table.'.*','tesco_woolmark_logos.label_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
 																	->get();
 
 																	$value->washcare_order_id=$order_details_omp{0}->washcare_order_id;
@@ -612,13 +613,16 @@ class JobManagerController extends Controller
 																	$value->white_clean_iso=$order_omp[0]->white_clean_iso;
 																	$value->white_clean_astm=$order_omp[0]->white_clean_astm;
 																	$value->degree=$order_omp{0}->degree;
+																	$value->woolmark_logo_file=$order_omp[0]->label_woolmark_logo;
+																	$value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
+																	$value->woolmark_batch_code=$order_omp[0]->woolmark_batch_code;
 																	$value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
 																	$value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
 																	$value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
 																	$value->kids_warning_text=$order_omp{0}->kids_warning_text;
-																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
-																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
-																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+																	$value->exclusive_trims_text=$order_omp[0]->garment_statement_text;
+																	$value->contains_non_textile_part_text=null;
+																	$value->part_of_set_text=null;
                 													$value->tesco_size_department=$tesco_size_department[0]->department_name;
 																	$value->created_at=$order_omp[0]->created_at;
 											
