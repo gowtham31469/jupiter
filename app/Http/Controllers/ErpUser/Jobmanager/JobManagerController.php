@@ -581,10 +581,17 @@ class JobManagerController extends Controller
 																											->select('*')
 																											->get();
 																			$value->part_name = $part_name{0}->name;
+																			$value->part_czech = $part_name{0}->czech;
+																			$value->part_slovak = $part_name{0}->slovak;
+																			$value->part_hungarian = $part_name{0}->hungarian;
+																			
 																	}
 																	else
 																	{
 																			$value->part_name = "";
+																			$value->part_czech = "";
+																			$value->part_slovak = "";
+																			$value->part_hungarian = "";
 																	}
 																	
 																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
