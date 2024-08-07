@@ -2050,7 +2050,6 @@ class OrderStatusCntrl extends Controller
         $svgStringBackText=urldecode($data_back_text[0]);
         $svgStringFrontImage=urldecode($data_front_image[0]);
 
-
         $wash_astm = $request->wash_astm;
         $wash_iso = $request->wash_iso;
         $whit_astm = $request->whit_astm;
@@ -3730,6 +3729,8 @@ class OrderStatusCntrl extends Controller
                 $value->additional_care_text_3=$order_omp[0]->additional_care_text_3;
                 $value->kids_warning_text=$order_omp[0]->kids_warning_text;
                 $value->exclusive_trims_text=$order_omp[0]->garment_statement_text;
+                $value->flammability_id=$order_omp[0]->flammability_id;
+                $value->uk_ce_mark=$order_omp[0]->uk_ce_mark;
                 $value->contains_non_textile_part_text=null;
                 $value->part_of_set_text=null;
                 $value->tesco_size_department=$tesco_size_department[0]->department_name;
