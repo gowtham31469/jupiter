@@ -31,7 +31,12 @@ $( () => {
     mapLabelStoredValues = (order_data, user_role) => {
         $('#hidden_id').val(order_data.order_details.id)
         $('#hidden_name').val(order_data.order_details.item_master.template_name)
-        $('.create-download-artwork').css('display','inline-block')
+
+        if(order_data.order_details.order_status != "Order Pending")
+        {
+            $('.create-download-artwork').css('display','inline-block')
+        }
+        
         $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_eqos').val(order_data.order_details.eqos_site_code)
         $('#tesco_care_ce_style').val(order_data.order_details.ce_style_ref)

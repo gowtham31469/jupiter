@@ -74,8 +74,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
     }
     svgDoc.getElementById("reference_number").innerHTML = name2;
             
-   //console.log(name+" - "+name2);
-
     var svgarr = [];
     var svgarr_back = [];
     var svgarr_back_text = [];
@@ -104,48 +102,51 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             var svgRoot_back_text =svgDoc_back_text.documentElement;
             var svgRoot_front_text =svgDoc_front_text.documentElement;
 
-            // if(data.order_details[0].bs_en_declaration == 0)
-            // {
-            //     svgDoc.getElementById("height_text").setAttribute('font-size','5.5px');
-            //     svgDoc.getElementById("height_text").setAttribute('letter-spacing','0.4px');
-            // }
-            // else
-            // {
-            //     svgDoc.getElementById("height_text").setAttribute('font-size','4.5px');
-            //     svgDoc.getElementById("height_text").setAttribute('letter-spacing','0px');
-            // }
-
-            if(data.order_details[0].bs_en_declaration == 0)
+            if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G")
             {
-                svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
+                if(data.order_details[0].leather_suede_code != "" && data.order_details[0].leather_suede_code != null)
+                {
+                    svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
+                }
+                else
+                {
+                    svgDoc.getElementById("leather_suede_code").innerHTML = "";
+                }
             }
-
-            if(data.order_details[0].baby_sleeping_bag_symbol == 0)
-            {
-                svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
-            }
-
-            if(data.order_details[0].leather_suede_code != "" && data.order_details[0].leather_suede_code != null)
-            {
-                svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
-            }
-            else
-            {
-                svgDoc.getElementById("leather_suede_code").innerHTML = "";
-            }
-
-            
-            
-            // if(data.order_details[0].tog == "" || data.order_details[0].tog == null)
-            // {
-            //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
-            // }
 
             $(data.order_details).each(function (key, val) {
                 svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
                 svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
                 svgDoc.getElementById("style_value").innerHTML = "STYLE:"+ val.uk_style_ref;
-                svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+
+                if(name2 == "GCLW25/M11364G")
+                {
+                        if(val.uk_ce_mark == "yes")
+                        {
+                            svgDoc.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
+                        }
+
+                    if(val.flammability_id != null && val.flammability_id != "null" && val.flammability_id != "")
+                    {
+                        svgDoc.getElementById("low_flammable_1").removeAttribute("visibility", "hidden");
+                        svgDoc.getElementById("low_flammable_2").removeAttribute("visibility", "hidden");
+                    }
+                    else
+                    {
+                        svgDoc.getElementById("low_flammable_1").setAttribute("visibility", "hidden");
+                        svgDoc.getElementById("low_flammable_2").setAttribute("visibility", "hidden");
+                    }
+                }
+
+                if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G")
+                {
+
+                    svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+                }
                 
                 if(val.fabric_batch_code != null && val.fabric_batch_code != "")
                 {
@@ -169,7 +170,36 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                    svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 164.7462)");
+
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 174.7462)");
+
+                        if(val.bs_en_declaration == 0)
+                        {
+                            
+                            svgDoc.getElementById("bs_en").setAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("bs_en").removeAttribute("visibility", "hidden");
+                        }
+
+                        if(val.baby_sleeping_bag_symbol == 0)
+                        {
+                            svgDoc.getElementById("tog_image").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("tog_image").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
+                        }
+                    }
+                    else
+                    {
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 164.7462)");
+                    }
                     
                 }
                 
@@ -221,348 +251,192 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 
                 if(val.uk_size == "tiny baby")
                 {
-                    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
 
-                    //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
-
-
-
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
-
-                    //svgDoc.getElementById("small_english").innerHTML = "tiny baby";
+                    setVisibilityForSize(svgDoc);
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        setTransformations(svgDoc,"23.2","262","48.2","262","35","269")
+                    }
+                    else
+                    {
+                        setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
+                    }
 
                     var polish = "tiny baby"
                     var czech = data.tesco_tiny[0].czech
                     var slovak = data.tesco_tiny[0].slovak
                     var hungarian = data.tesco_tiny[0].hungarian
-                    svgDoc.getElementById("small_translation1").innerHTML = polish;
-                    svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
-                    svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+
+                    setTranslations(svgDoc,polish, czech, slovak, hungarian)
                 }
                 else if(val.uk_size.toLowerCase() == "newborn")
                 {
-                    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
-
-                    //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
-
-                    //svgDoc.getElementById("small_english").innerHTML = "Newborn";
+                    setVisibilityForSize(svgDoc);
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        setTransformations(svgDoc,"23.2","262","48.2","262","35","269")
+                    }
+                    else
+                    {
+                        setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
+                    }
 
                     var polish = "newborn"
                     var czech = data.tesco_nb[0].czech
                     var slovak = data.tesco_nb[0].slovak
                     var hungarian = data.tesco_nb[0].hungarian
-                    svgDoc.getElementById("small_translation1").innerHTML = polish;
-                    //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
-                    //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
-                    
-                    svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
-                    svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+
+                    setTranslations(svgDoc,polish, czech, slovak, hungarian)
                 }
                 else if(val.uk_size == "up to 1M")
                 {
-                    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+                    setVisibilityForSize(svgDoc);
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        setTransformations(svgDoc,"23.2","262","48.2","262","35","269")
+                    }
+                    else
+                    {
+                        setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
+                    }
 
-                    //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
-
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
-
-                    //svgDoc.getElementById("small_english").innerHTML = "up to 1M";
-                    
                     var polish = "up to 1m"
                     var czech = data.tesco_up1[0].czech
                     var slovak = data.tesco_up1[0].slovak
                     var hungarian = data.tesco_up1[0].hungarian
-                    svgDoc.getElementById("small_translation1").innerHTML = polish;
-                    //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
-                    svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
-                    svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+
+                    setTranslations(svgDoc,polish, czech, slovak, hungarian)
                 }
                 else if(val.uk_size == "up to 3M")
                 {
-                    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+                    setVisibilityForSize(svgDoc);
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        setTransformations(svgDoc,"23.2","262","48.2","262","35","269")
+                    }
+                    else
+                    {
+                        setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
+                    }
 
-                    //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
-
-
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 23.2, 245)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,48.2, 245)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 252)");
-
-                    //svgDoc.getElementById("small_english").innerHTML = "up to 3M";
-                    
                     var polish = "up to 3m"
                     var czech = data.tesco_up3[0].czech
                     var slovak = data.tesco_up3[0].slovak
                     var hungarian = data.tesco_up3[0].hungarian
-                    svgDoc.getElementById("small_translation1").innerHTML = polish;
-                    //svgDoc.getElementById("small_translation2").style.letterSpacing = "-0.05px";
-                    svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
-                    svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+
+                    setTranslations(svgDoc,polish, czech, slovak, hungarian)
                 }
                 else if(val.uk_size == "One size")
                 {
-                    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
-
-                    //svgDoc.getElementById("small_english").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
-                    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
-
-                    //svgDoc.getElementById("small_english").innerHTML = "One size";
+                    setVisibilityForSize(svgDoc);
+                    
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        setTransformations(svgDoc,"21","272","46","272","35","280")
+                    }
+                    else
+                    {
+                        setTransformations(svgDoc,"21","257.061","46","257.061","35","264.061")
+                    }
+                    
                     
                     var polish = "one size"
                     var czech = data.tesco_onesize[0].czech
                     var slovak = data.tesco_onesize[0].slovak
                     var hungarian = data.tesco_onesize[0].hungarian
-                    svgDoc.getElementById("small_translation1").innerHTML = polish;
-                    //svgDoc.getElementById("small_translation1").style.letterSpacing = "-0.2px";
-                    //svgDoc.getElementById("small_translation_1").style.letterSpacing = "-0.2px";
-                    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 21, 257.061)");
-                    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1,46, 257.061)");
-                    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 35, 264.061)");
-                    
-                    svgDoc.getElementById("small_translation_1").innerHTML = "  • "+czech;
-                    svgDoc.getElementById("small_translation2").innerHTML ="• "+slovak+ " • "+hungarian;
+
+                    setTranslations(svgDoc,polish, czech, slovak, hungarian)
                 }
                 else
                 {
-                    if(val.uk_size == "3-6M")
+                    if(val.uk_size == "3-6M" || val.uk_size == "6-9M" || val.uk_size == "9-12M")
                     {
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
 
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
+                        if(name2 == "GCLW25/M11367G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","262","45.42","262","19.4656","268","51.9983","268","1.0148")
+                        }
+                        else
+                        {
+                            setMYTransformations(svgDoc,"15.12","250","45.42","250","19.4656","256","51.9983","256","1.0148")
+                        }
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
                     }
-                    else if(val.uk_size == "6-9M")
+                    else if(val.uk_size == "12-18M" || val.uk_size == "18-24M")
                     {
-
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
+                        if(name2 == "GCLW25/M11367G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","262","45.42","262","19.2656","268","51.7983","268","1.0148")
+                        }
+                        else
+                        {
+                            setMYTransformations(svgDoc,"15.12","250","45.42","250","19.2656","256","51.7983","256","1.0148")
+                        }
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
+                        
 
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
-                    }
-                    else if(val.uk_size == "9-12M")
-                    {
-
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
-
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
-
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.4656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.9983, 256)");
-                    }
-                    else if(val.uk_size == "12-18M")
-                    {
-
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
-
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
-
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 256)");
-                    }
-                    else if(val.uk_size == "18-24M")
-                    {
-
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
-
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
-
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.2656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51.7983, 256)");
                     }
                     else if(val.uk_size == "1-2Y" || val.uk_size == "2-3Y" || val.uk_size == "3-4Y" || val.uk_size == "4-5Y" || val.uk_size == "5-6Y" || val.uk_size == "6-7Y" || val.uk_size == "7-8Y" || val.uk_size == "8-9Y" || val.uk_size == "9-10Y")
                     {
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
 
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
+                        if(name2 == "GCLW25/M11367G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","262","45.42","262","19.8656","268","52.3656","268","0.9105")
+                        }
+                        else
+                        {
+                            setMYTransformations(svgDoc,"15.12","250","45.42","250","19.8656","256","52.3656","256","0.9105")
+                        }
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
-
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 19.8656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.9105, 0, 0, 1, 52.3656, 256)");
                     }
                     else if(val.uk_size == "10-11Y" || val.uk_size == "11-12Y" || val.uk_size == "12-13Y" || val.uk_size == "13-14Y" || val.uk_size == "14-15Y" || val.uk_size == "15-16Y")
                     {
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
+                        if(name2 == "GCLW25/M11367G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","262","45.42","262","19.8656","268","52.3656","268","0.8255")
+                        }
+                        else
+                        {
+                            setMYTransformations(svgDoc,"15.12","250","45.42","250","19.8656","256","52.3656","256","0.8255")
+                        }
 
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 19.8656, 256)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8255, 0, 0, 1, 52.3656, 256)");
                     }
                     else
                     {
-                        svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                        svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 16.5, 250)");
-
-                        svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                        svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 19.9656, 255)");
-
-                        svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 51, 255)");
+                        if(name2 == "GCLW25/M11367G")
+                        {
+                            setMYTransformations(svgDoc,"16.5","262","45.42","262","19.9656","268","51","268","1.0148")
+                        }
+                        else
+                        {
+                            setMYTransformations(svgDoc,"16.5","250","45.42","250","19.9656","255","51","255","1.0148")
+                        }
                     }
-                    // svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
-
-                    //     svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
-                    //     svgDoc.getElementById("uk_size").innerHTML = "9-10Y";
-                    //     svgDoc.getElementById("ce_size").innerHTML = "9-10Y";
-
-                    //     svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 15.12, 250)");
-
-                    //     svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, 45.42, 250)");
-
-                    //     svgDoc.getElementById("uk_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 19.8656, 256)");
-
-                    //     svgDoc.getElementById("ce_size").setAttribute('transform', "matrix(0.8105, 0, 0, 1, 52.3656, 256)");
                 }
                 svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
                 var country_of_origin_text = JSON.parse(val.country_of_origin_text)
                 svgDoc.getElementById("made_in_english").innerHTML = country_of_origin_text[0].english;
+
+                if(name2 == "GCLW25/M11364G")
+                {
+                    svgDoc.getElementById("made_in_czech").innerHTML = country_of_origin_text[0].czech;
+                    svgDoc.getElementById("made_in_slovak").innerHTML = country_of_origin_text[0].slovak;
+                }
+                
                 var svgRoot = svgDoc.documentElement;
                 var s = new XMLSerializer();
                 var d = svgRoot;
@@ -572,21 +446,18 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 ajax_count++;
             })
 
-            var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-            svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            if(name2 != "GCLW25/M11364G")
+            {
+                var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
+                svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            } 
+            else
+            {
+                var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
+                svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            }
 
             svgDoc_back_text.getElementById("part_text").innerHTML = '<tspan   x="2" y="1.2">'+data.order_details[0].part_czech+'</tspan><tspan   x="2" y="6">'+data.order_details[0].part_slovak+'</tspan><tspan  x="1.8" y="10.94">'+data.order_details[0].part_hungarian+'</tspan>';
-
-            // svgDoc_back.getElementById("wash_iso").setAttribute('xlink:href',data.order_details[0].wash_iso);
-            // svgDoc_back.getElementById("clean_iso").setAttribute('xlink:href',data.order_details[0].clean_iso);
-            // svgDoc_back.getElementById("whit_iso").setAttribute('xlink:href',data.order_details[0].whit_iso);
-            // svgDoc_back.getElementById("iron_iso").setAttribute('xlink:href',data.order_details[0].iron_iso);
-            // svgDoc_back.getElementById("dry_iso").setAttribute('xlink:href',data.order_details[0].dry_iso);
-            // svgDoc_back.getElementById("wash_astm").setAttribute('xlink:href',data.order_details[0].wash_astm);
-            // svgDoc_back.getElementById("dry_astm").setAttribute('xlink:href',data.order_details[0].dry_astm);
-            // svgDoc_back.getElementById("whit_astm").setAttribute('xlink:href',data.order_details[0].whit_astm);
-            // svgDoc_back.getElementById("iron_astm").setAttribute('xlink:href',data.order_details[0].iron_astm);
-            // svgDoc_back.getElementById("clean_astm").setAttribute('xlink:href',data.order_details[0].clean_astm);
 
             var additional_care_text_1 = JSON.parse(data.order_details[0].additional_care_text_1)
             var additional_care_text_2 = JSON.parse(data.order_details[0].additional_care_text_2)
@@ -617,28 +488,19 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(sample.length > 1)
             {
-                //$('#splitdiv').html("")
                 $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
             }
             else
             {
-                //$('#splitdiv').html("")
                 $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
             }
 
-             
-
-
             $chunk_str = chunksplit("breaking_words")
-           // $chunk_str = chunkSubstr(en_care_instructions, 28).split(/\r?\n/);
-
-            //console.log($chunk_str);
             var chunks='<tspan  x="0" y="0">EN</tspan>';
             $y=0;
             $line_length=0;
             $ind=1;
             var isFirstLine = true;
-            //console.log("gy:"+$chunk_str.length)
             $($chunk_str).each(function(index,chunk_val){
                 if(chunk_val != "AT 30º")
                 {
@@ -660,7 +522,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     var xPosition = isFirstLine ? '9' : '0';
                     chunks += '<tspan x="'+xPosition+'" y="'+$y+'">'+new_chunk_val+'</tspan>';
                 }
-                //chunks += '<tspan x="9" y="'+$y+'">'+chunk_val+'</tspan>';
                 if($chunk_str.length == $ind)
                 {
                     $y+=8;
@@ -676,7 +537,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             })
 
             var en_garment_component = "";
-            //var pl_garment_component = "";
             var cz_garment_component = "";
             var sk_garment_component = "";
             var hu_garment_component = "";
@@ -686,7 +546,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 if(index != 0)
                 {
                     en_garment_component += " / " +toTitleCase(garment_component_text[0].english);
-                   // pl_garment_component += " / " +toTitleCase(garment_component_text[0].polish);
                     cz_garment_component += " / " +toTitleCase(garment_component_text[0].czech);
                     sk_garment_component += " / " +toTitleCase(garment_component_text[0].slovak);
                     hu_garment_component += " / " +toTitleCase(garment_component_text[0].hungarian);
@@ -694,7 +553,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     en_garment_component += toTitleCase(garment_component_text[0].english);
-                    //pl_garment_component += toTitleCase(garment_component_text[0].polish);
                     cz_garment_component += toTitleCase(garment_component_text[0].czech);
                     sk_garment_component += toTitleCase(garment_component_text[0].slovak);
                     hu_garment_component += toTitleCase(garment_component_text[0].hungarian);
@@ -708,8 +566,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     var separator = isFirstEntryComp ? ": " : " ";
 
                     en_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].english);
-
-                    //pl_garment_component += " / " + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].polish);
 
                     cz_garment_component += separator + fibre_val.fibre_composition_percentage+ "% " + toTitleCase(fibre_text[0].czech);
 
@@ -730,7 +586,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(exclusive_trims_text != "" && exclusive_trims_text != null)
             {
                 en_garment_component += " / " + toTitleCase(exclusive_trims_text[0].english)
-                //pl_garment_component += " / " + toTitleCase(exclusive_trims_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(exclusive_trims_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(exclusive_trims_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(exclusive_trims_text[0].hungarian)
@@ -739,7 +594,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(contains_non_textile_part_text != "" && contains_non_textile_part_text != null)
             {
                 en_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].english)
-                //pl_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(contains_non_textile_part_text[0].hungarian)
@@ -748,7 +602,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(kids_warning_text != "" && kids_warning_text != null)
             {
                 en_garment_component += " / " + toTitleCase(kids_warning_text[0].english)
-                //pl_garment_component += " / " + toTitleCase(kids_warning_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(kids_warning_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(kids_warning_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(kids_warning_text[0].hungarian)
@@ -756,22 +609,18 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(additional_care_text_1 != "" && additional_care_text_1 != null)
             {
-                //console.log("Polish : "+additional_care_text_1[0].polish)
-                //pl_garment_component += " / " + toTitleCase(additional_care_text_1[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_1[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_1[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_1[0].hungarian)
             }
             if(additional_care_text_2 != "" && additional_care_text_2 != null)
             {
-                //pl_garment_component += " / " + toTitleCase(additional_care_text_2[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_2[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_2[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_2[0].hungarian)
             }
             if(additional_care_text_3 != "" && additional_care_text_3 != null)
             {
-                //pl_garment_component += " / " + toTitleCase(additional_care_text_3[0].polish)
                 cz_garment_component += " / " + toTitleCase(additional_care_text_3[0].czech)
                 sk_garment_component += " / " + toTitleCase(additional_care_text_3[0].slovak)
                 hu_garment_component += " / " + toTitleCase(additional_care_text_3[0].hungarian)
@@ -779,7 +628,6 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(degree >= 30)
             {
-               // pl_garment_component += " / " + toTitleCase(data.degree_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(data.degree_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(data.degree_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(data.degree_text[0].hungarian)
@@ -788,34 +636,15 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             if(part_of_set_text != "" && part_of_set_text != null)
             {
                 en_garment_component += " / " + toTitleCase(part_of_set_text[0].english)
-                //pl_garment_component += " / " + toTitleCase(part_of_set_text[0].polish)
                 cz_garment_component += " / " + toTitleCase(part_of_set_text[0].czech)
                 sk_garment_component += " / " + toTitleCase(part_of_set_text[0].slovak)
                 hu_garment_component += " / " + toTitleCase(part_of_set_text[0].hungarian)
             }
 
             $garment_str = chunkSubstrpercentage(en_garment_component, 28);
-            //$pl_garment_str = chunkSubstr(pl_garment_component, 28).split(/\r?\n/);
             $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 28);
             $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 28);
             $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 28);
-
-            // $('#splitdiv').append('<div id="breaking_words_en" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+en_garment_component+'</div>');  
-
-            // $('#splitdiv').append('<div id="breaking_words_pl" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;display:none">'+pl_garment_component+'</div>');  
-
-            // $('#splitdiv').append('<div id="breaking_words_cz" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+cz_garment_component+'</div>');  
-
-            // $('#splitdiv').append('<div id="breaking_words_sk" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+sk_garment_component+'</div>');  
-
-            // $('#splitdiv').append('<div id="breaking_words_hu" style="inline-size: 170px;overflow-wrap: break-word;whitespace:pre;">'+hu_garment_component+'</div>');  
-
-
-            //$garment_str = chunksplit("breaking_words_en")
-            //$cz_garment_str = chunksplit("breaking_words_en")
-            //$cz_garment_str = chunksplit("breaking_words_cz")
-            //$sk_garment_str = chunksplit("breaking_words_sk")
-            //$hu_garment_str = chunksplit("breaking_words_hu")
 
             chunks += '<tspan x="0" y="'+$y+'">EN</tspan>';
 
@@ -836,7 +665,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     var new_garment_val =garment_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan>')
                     chunks += '<tspan x="9" y="'+$y+'">'+new_garment_val+'</tspan>';
                 }
-                //chunks += '<tspan x="9" y="'+$y+'">'+garment_val+'</tspan>';
+
                 if($garment_str.length == $ind_en)
                 {
                     $y+=8;
@@ -870,8 +699,16 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             //     $z+=6;
             // })
 
+            $limited_length = 0;
 
-            $limited_length = 15;
+            if(name2 == "GCLW25/M11364G")
+            {
+                $limited_length = 16;
+            }
+            else
+            {
+                $limited_length = 15;
+            }
 
             if($line_length > $limited_length)
             {
@@ -1214,6 +1051,56 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
         }
     });
         
+}
+
+
+function setVisibilityForSize(svgDoc) {
+
+    svgDoc.getElementById("uk_size").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("ce_size").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("uk").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("eur").setAttribute("visibility", "hidden");
+
+    svgDoc.getElementById("small_translation1").removeAttribute("visibility", "hidden");
+    svgDoc.getElementById("small_translation_1").removeAttribute("visibility", "hidden");
+    svgDoc.getElementById("small_translation2").removeAttribute("visibility", "hidden");
+
+}
+
+function setMYTransformations(svgDoc,ukx,uky,eurx,eury,uk_sizex,uk_sizey,ce_sizex,ce_sizey,xtrans) {
+
+    svgDoc.getElementById("uk_size").removeAttribute("visibility", "hidden");
+    svgDoc.getElementById("ce_size").removeAttribute("visibility", "hidden");
+    svgDoc.getElementById("uk").removeAttribute("visibility", "hidden");
+    svgDoc.getElementById("eur").removeAttribute("visibility", "hidden");
+
+    svgDoc.getElementById("small_english").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("small_translation1").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("small_translation_1").setAttribute("visibility", "hidden");
+    svgDoc.getElementById("small_translation2").setAttribute("visibility", "hidden");
+
+    svgDoc.getElementById("uk").setAttribute('transform', "matrix(1.0148, 0, 0, 1, "+ukx+", "+uky+")");
+
+    svgDoc.getElementById("eur").setAttribute('transform', "matrix(1.0148, 0, 0, 1, "+eurx+", "+eury+")");
+
+    svgDoc.getElementById("uk_size").setAttribute('transform', "matrix("+xtrans+", 0, 0, 1, "+uk_sizex+", "+uk_sizey+")");
+
+    svgDoc.getElementById("ce_size").setAttribute('transform', "matrix("+xtrans+", 0, 0, 1, "+ce_sizex+", "+ce_sizey+")");
+
+}
+
+function setTransformations(svgDoc,stx,sty,stx1,sty1,stx2,sty2) {
+    svgDoc.getElementById("small_translation1").setAttribute('transform', "matrix(1.0039, 0, 0, 1, "+stx+", "+sty+")");
+    svgDoc.getElementById("small_translation_1").setAttribute('transform', "matrix(0.8105, 0, 0, 1, "+stx1+", "+sty1+")");
+    svgDoc.getElementById("small_translation2").setAttribute('transform', "matrix(0.8105, 0, 0, 1, "+stx2+", "+sty2+")");
+}
+
+function setTranslations(svgDoc,polish, czech, slovak, hungarian) {
+
+    svgDoc.getElementById("small_translation1").innerHTML = polish;
+    svgDoc.getElementById("small_translation_1").innerHTML = " • "+czech;
+    svgDoc.getElementById("small_translation2").innerHTML =" • "+slovak+ " • "+hungarian;
+
 }
 
 function chunksplit(breaking_id)
