@@ -4144,7 +4144,7 @@ class OrderManagementCntrl extends Controller
         $data['order_details']->type = 'tesco_swingticket_orders';
       }
 
-      if (array_intersect(["GCL25W/M12723G", "GCL25W/M13220G","GCL25B/M13278G","GCL25B/M13279G"], $artwork)) {
+      if (array_intersect(["GCLW25/M11363G", "GCLW25/M11364G", "GCLW25/M11367G", "GCLW25/M11372G", "GCLW25/M11374G", "GCLW25/M11375G", "GCLW25/M11378G", "GCLB25/M11410G", "GCLW20/M11473G", "GCLW20/M11474G"], $artwork)) {
         $data['order_details']  = TescoWashcareOrders::with([
           'quantities',
           'garment_components',

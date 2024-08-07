@@ -115,24 +115,29 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             //     svgDoc.getElementById("height_text").setAttribute('letter-spacing','0px');
             // }
 
-            if(data.order_details[0].bs_en_declaration == 0)
+            // if(data.order_details[0].bs_en_declaration == 0)
+            // {
+            //     svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
+            // }
+
+            // if(data.order_details[0].baby_sleeping_bag_symbol == 0)
+            // {
+            //     svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
+            // }
+
+            if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G")
             {
-                svgDoc_front_text.getElementById("sleeping_bag_name").setAttribute('style', "visibility:hidden");
+                if(data.order_details[0].leather_suede_code != "" && data.order_details[0].leather_suede_code != null)
+                {
+                    svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
+                }
+                else
+                {
+                    svgDoc.getElementById("leather_suede_code").innerHTML = "";
+                }
             }
 
-            if(data.order_details[0].baby_sleeping_bag_symbol == 0)
-            {
-                svgDoc_front_text.getElementById("tog_image").setAttribute('style', "visibility:hidden");
-            }
-
-            if(data.order_details[0].leather_suede_code != "" && data.order_details[0].leather_suede_code != null)
-            {
-                svgDoc.getElementById("leather_suede_code").innerHTML = data.order_details[0].leather_suede_code;
-            }
-            else
-            {
-                svgDoc.getElementById("leather_suede_code").innerHTML = "";
-            }
+            
 
             
             
@@ -141,11 +146,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             //     svgDoc_front_text.getElementById("tog_name").setAttribute('style', "visibility:hidden");
             // }
 
+
             $(data.order_details).each(function (key, val) {
                 svgDoc.getElementById("po_value").innerHTML = "PO:"+val.po_number;
                 svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
                 svgDoc.getElementById("style_value").innerHTML = "STYLE:"+ val.uk_style_ref;
-                svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+
+                if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G")
+                {
+
+                    svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+                }
                 
                 if(val.fabric_batch_code != null && val.fabric_batch_code != "")
                 {
@@ -169,7 +180,36 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     svgDoc.getElementById("packaging_reference_number").innerHTML = "";
-                    svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 164.7462)");
+
+                    if(name2 == "GCLW25/M11367G")
+                    {
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 174.7462)");
+
+                        if(val.bs_en_declaration == 0)
+                        {
+                            
+                            svgDoc.getElementById("bs_en").setAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("bs_en").removeAttribute("visibility", "hidden");
+                        }
+
+                        if(val.baby_sleeping_bag_symbol == 0)
+                        {
+                            svgDoc.getElementById("tog_image").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("tog_image").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
+                        }
+                    }
+                    else
+                    {
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 164.7462)");
+                    }
                     
                 }
                 
@@ -563,6 +603,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 svgDoc.getElementById("ce_style_number").innerHTML = val.ce_style_ref;
                 var country_of_origin_text = JSON.parse(val.country_of_origin_text)
                 svgDoc.getElementById("made_in_english").innerHTML = country_of_origin_text[0].english;
+
+                if(name2 == "GCLW25/M11364G")
+                {
+                    svgDoc.getElementById("made_in_czech").innerHTML = country_of_origin_text[0].czech;
+                    svgDoc.getElementById("made_in_slovak").innerHTML = country_of_origin_text[0].slovak;
+                }
+                
                 var svgRoot = svgDoc.documentElement;
                 var s = new XMLSerializer();
                 var d = svgRoot;
@@ -572,8 +619,18 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 ajax_count++;
             })
 
-            var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
-            svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            if(name2 != "GCLW25/M11364G")
+            {
+                var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
+                svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            } 
+            else
+            {
+                var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
+                svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].hungarian+'</tspan>';
+            }
+
+            
 
             svgDoc_back_text.getElementById("part_text").innerHTML = '<tspan   x="2" y="1.2">'+data.order_details[0].part_czech+'</tspan><tspan   x="2" y="6">'+data.order_details[0].part_slovak+'</tspan><tspan  x="1.8" y="10.94">'+data.order_details[0].part_hungarian+'</tspan>';
 
@@ -870,8 +927,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             //     $z+=6;
             // })
 
-
-            $limited_length = 15;
+            if(name2 != "GCLW25/M11364G")
+            {
+                $limited_length = 15;
+            }
+            else
+            {
+                $limited_length = 16;
+            }
 
             if($line_length > $limited_length)
             {

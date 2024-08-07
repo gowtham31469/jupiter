@@ -359,7 +359,11 @@ $(function () {
                 200: function (response) {
 
                         $('#hidden_id').val(response.data.last_insertion)
-                        $('.create-download-artwork').css('display', 'inline-block')
+
+                        if(response.data.is_order_count_empty == 0){
+                            $('.create-download-artwork').css('display', 'inline-block')
+                        }
+
                         $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
 
                         $("#alert_success").delay(3000).slideUp(200, function () {
@@ -583,7 +587,7 @@ $(function () {
             e.preventDefault();
         } else {
             var key = e.keyCode;
-            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222))) {
+            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222) || (key == 189) || (key == 173))) {
                 e.preventDefault();
             }
         }
