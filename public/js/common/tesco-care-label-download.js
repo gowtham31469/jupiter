@@ -205,7 +205,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 
                 if(val.tog != "" && val.tog != null)
                 {
-                    svgDoc.getElementById("tog_value_1_").innerHTML = "TOG "+val.tog;
+                    svgDoc.getElementById("tog_value_1_").innerHTML = "TOG "+val.tog_value;
                 }
                 else
                 {
