@@ -30,6 +30,29 @@ $( () => {
                     showSnackbar();
                 } else {
                     loadCareLabelDetails(data, user_type)
+
+                    var template_id = data.order_details.template_id
+                    
+                    if(template_id == 122 || template_id == 128 || template_id == 129)
+                    {
+                        $('#uk_ce_mark_div').addClass('hidden');
+                        $('#flammability_div').addClass('hidden');
+                    } else if(template_id == 123 || template_id == 125)
+                    {
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    } else if(template_id == 126 || template_id == 130 || template_id == 131)
+                    {
+                        $('#flammability_div').addClass('hidden');
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    } else if(template_id == 124 || template_id == 127)
+                    {
+                        $('#uk_ce_mark_div').addClass('hidden');
+                        $('#flammability_div').addClass('hidden');
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    }
                 }
 
             },
@@ -89,7 +112,7 @@ $( () => {
                                             });
                                         metadata_select_div += `</optgroup></select>
                                     </div>
-                                    <div class="form-group has-feedback">
+                                    <div class="form-group has-feedback" id="wool_mark_logo_div">
                                      <label for="tesco_care_woolmark_logo" class="component-label">Woolmark Logo </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_woolmark_logo" name="tesco_care_woolmark_logo">
                                             <option value="">-- Select Woolmark Logo --</option>`;
@@ -100,7 +123,7 @@ $( () => {
                                             });
                                         metadata_select_div += `</select>
                                     </div>
-                                    <div class="form-group has-feedback">
+                                    <div class="form-group has-feedback" id="uk_ce_mark_div">
                                      <label for="tesco_care_uk_ce_mark" class="component-label">UK/CE Mark </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_uk_ce_mark" name="tesco_care_uk_ce_mark">
                                             <optgroup label="Select UK/CE Mark">
@@ -108,7 +131,7 @@ $( () => {
                                                 <option value="no">No</option>
                                             </optgroup></select>
                                     </div>
-                                    <div class="form-group has-feedback">
+                                    <div class="form-group has-feedback" id="flammability_div">
                                      <label for="tesco_care_flammability" class="component-label">Flammability </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_flammability" name="tesco_care_flammability">
                                         <optgroup label="Select Flammability">
@@ -224,7 +247,7 @@ $( () => {
 
         var tog_div_html = `<div class="form-group has-feedback">
         <label for="tesco_care_tog_rating" class="component-label">Tog Rating</label>
-            <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_tog_rating" name="tesco_care_tog_rating" required>
+            <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_tog_rating" name="tesco_care_tog_rating">
                 <option value="">-- Select Tog Rating --</option>`;
                 $.each(order_data.tog_rating, function (id, name) {
 
@@ -390,7 +413,12 @@ $( () => {
 
         $('#update_tesco_label_order_status_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
-
+                console.log("Form submission prevented due to validation errors.");
+                // Log each invalid field
+                $('#update_tesco_label_order_status_form').find(':invalid').each(function(index, element) {
+                    console.log("Validation error in field:", element.name || element.id, "Value:", $(element).val());
+                    console.log("Error details:", element.validationMessage);
+                });
             } else {
                 e.preventDefault();
                 $('#submit_label_order_btn').prop('disabled',true)
