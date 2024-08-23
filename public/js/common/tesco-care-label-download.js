@@ -144,11 +144,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     if(val.uk_ce_mark == "yes")
                     {
-                        svgDoc.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
+                        svgDoc_front_text.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
+                        svgDoc.getElementById("uk_ce_text").removeAttribute("visibility", "hidden");
                     }
                     else
                     {
-                        svgDoc.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
+                        svgDoc_front_text.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
+                        svgDoc.getElementById("uk_ce_text").setAttribute("visibility", "hidden");
                     }
                 } else if(name2 == "GCLW25/M11372G")
                 {
@@ -212,12 +214,12 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                         if(val.baby_sleeping_bag_symbol == 0)
                         {
-                            svgDoc.getElementById("tog_image").setAttribute("visibility", "hidden");
+                            svgDoc_front_text.getElementById("tog_image").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
                         }
                         else
                         {
-                            svgDoc.getElementById("tog_image").removeAttribute("visibility", "hidden");
+                            svgDoc_front_text.getElementById("tog_image").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
                         }
                     }
@@ -290,6 +292,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         setTransformations(svgDoc,"23.2","253","48.2","253","35","260")
                     }
+                    else if(name2 == "GCLW25/M11378G")
+                    {
+                        setTransformations(svgDoc,"23.2","248","48.2","248","35","255")
+                    }
                     else
                     {
                         setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
@@ -312,6 +318,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     else if(name2 == "GCLW25/M11372G")
                     {
                         setTransformations(svgDoc,"23.2","253","48.2","253","35","260")
+                    }
+                    else if(name2 == "GCLW25/M11378G")
+                    {
+                        setTransformations(svgDoc,"23.2","248","48.2","248","35","255")
                     }
                     else
                     {
@@ -336,6 +346,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         setTransformations(svgDoc,"23.2","253","48.2","253","35","260")
                     }
+                    else if(name2 == "GCLW25/M11378G")
+                    {
+                        setTransformations(svgDoc,"23.2","248","48.2","248","35","255")
+                    }
                     else
                     {
                         setTransformations(svgDoc,"23.2","245","48.2","245","35","252")
@@ -358,6 +372,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     else if(name2 == "GCLW25/M11372G")
                     {
                         setTransformations(svgDoc,"23.2","253","48.2","253","35","260")
+                    }
+                    else if(name2 == "GCLW25/M11378G")
+                    {
+                        setTransformations(svgDoc,"23.2","250","48.2","250","35","257")
                     }
                     else
                     {

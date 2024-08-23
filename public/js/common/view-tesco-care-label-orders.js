@@ -24,6 +24,27 @@ $( () => {
             $('#add_garment_component_btn').remove();
             $('#remove_component_btn').remove();
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + '</strong></h4></div>');
+
+            if(template_id == 122 || template_id == 128 || template_id == 129)
+            {
+                $('#uk_ce_mark_div').addClass('hidden');
+                $('#flammability_div').addClass('hidden');
+            } else if(template_id == 123 || template_id == 125)
+            {
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            } else if(template_id == 126 || template_id == 130 || template_id == 131)
+            {
+                $('#flammability_div').addClass('hidden');
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            } else if(template_id == 124 || template_id == 127)
+            {
+                $('#uk_ce_mark_div').addClass('hidden');
+                $('#flammability_div').addClass('hidden');
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            }
         });
 
     }
@@ -110,11 +131,14 @@ $( () => {
 
             var ce_ean = valueOfElement.ce_ean != null?valueOfElement.ce_ean:"";
             var uk_ean = valueOfElement.uk_ean != null?valueOfElement.uk_ean:"";
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
-                                            <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
-                                        </tr>`;
+                quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                                <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                                <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + (valueOfElement.count !== 0 ? valueOfElement.count : '') + `"
+                                                ` + (order_data.moq ? `min="` + order_data.moq + `" data-min-error="Quantity Should be >= ` + order_data.moq + `."` : '') + `
+                                                ` + (order_data.max ? `max="` + order_data.max + `" data-max-error="Quantity Should be <= ` + order_data.max + `."` : '') + `
+                                                disabled><div class="help-block with-errors"></div></div></td>
+                                                <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
+                                            </tr>`;
         });
         quantity_html += `</tbody>
                                         </table>
