@@ -169,7 +169,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                 }
 
-                if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G" && name2 != "GCLW25/M11375G" && name2 != "GCLW25/M11374G" && name2 != "GCLW25/M11372G")
+                if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G" && name2 != "GCLW25/M11375G" && name2 != "GCLW25/M11374G" && name2 != "GCLW25/M11372G" && name2 != "GCLW20/M11473G")
                 {
 
                     svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
@@ -222,6 +222,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                             svgDoc_front_text.getElementById("tog_image").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
                         }
+                    }
+                    else  if(name2 == "GCLW20/M11473G")
+                    {
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 166)");
                     }
                     else  if(name2 == "GCLW25/M11374G")
                     {
@@ -518,7 +522,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 var country_of_origin_text = JSON.parse(val.country_of_origin_text)
                 svgDoc.getElementById("made_in_english").innerHTML = country_of_origin_text[0].english;
 
-                if(name2 == "GCLW25/M11364G")
+                if(name2 == "GCLW25/M11364G" || name2 == "GCLW20/M11473G")
                 {
                     svgDoc.getElementById("made_in_czech").innerHTML = country_of_origin_text[0].czech;
                     svgDoc.getElementById("made_in_slovak").innerHTML = country_of_origin_text[0].slovak;

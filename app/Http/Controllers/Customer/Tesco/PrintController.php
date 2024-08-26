@@ -915,6 +915,10 @@ class PrintController extends Controller
     {
         $wool_x=23;
     }
+	else
+	{
+		$wool_x=0;
+	}
 
 	   foreach($data_front as $value)
 	   {
@@ -931,6 +935,10 @@ class PrintController extends Controller
                 {
                     $wool_x=23;
                 }
+				else
+				{
+					$wool_x=0;
+				}
 		   }
 
 		   if($i == 0)
