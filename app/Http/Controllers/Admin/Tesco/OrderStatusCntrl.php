@@ -2095,6 +2095,10 @@ class OrderStatusCntrl extends Controller
         {
             $wool_x=23;
         }
+        else
+        {
+            $wool_x=0;
+        }
         
         foreach($data_front as $value)
         {
@@ -2110,6 +2114,10 @@ class OrderStatusCntrl extends Controller
                 else if($woolmark_logo_id == 2)
                 {
                     $wool_x=23;
+                }
+                else
+                {
+                    $wool_x=0;
                 }
             }
 
@@ -3334,6 +3342,11 @@ class OrderStatusCntrl extends Controller
         {
             $wool_x=23;
         }
+        else
+        {
+            $wool_x=0;
+        }
+
         foreach($data_front as $value)
         {
             
@@ -3348,6 +3361,10 @@ class OrderStatusCntrl extends Controller
                 else if($woolmark_logo_id == 2)
                 {
                     $wool_x=23;
+                }
+                else
+                {
+                    $wool_x=0;
                 }
             }
 

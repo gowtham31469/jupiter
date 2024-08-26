@@ -6893,6 +6893,10 @@ $buyer_no=$request->buyer_no;
 			{
 				$wool_x=23;
 			}
+			else
+			{
+				$wool_x=0;
+			}
 		   foreach($data_front as $value)
 		   {
 			   
@@ -6907,6 +6911,10 @@ $buyer_no=$request->buyer_no;
 					else if($woolmark_logo_id == 2)
 					{
 						$wool_x=23;
+					}
+					else
+					{
+						$wool_x=0;
 					}
 			   }
 	
@@ -7080,6 +7088,10 @@ $buyer_no=$request->buyer_no;
         {
             $wool_x=23;
         }
+        else
+        {
+            $wool_x=0;
+        }
 
         foreach($data_front as $value)
         {
@@ -7096,6 +7108,10 @@ $buyer_no=$request->buyer_no;
                 {
                     $wool_x=23;
                 }
+				else
+				{
+					$wool_x=0;
+				}
             }
 
             if($i == 0)
