@@ -173,6 +173,15 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
 
                     svgDoc.getElementById("woolmark_batch_code").innerHTML = val.woolmark_batch_code;
+
+                    if(val.woolmark_logo_id == null && val.woolmark_logo_id == "")
+                    {
+                        svgDoc_front_text.getElementById("woolmark_logo_text").setAttribute("visibility", "hidden");
+                    }
+                    else
+                    {
+                        svgDoc_front_text.getElementById("woolmark_logo_text").removeAttribute("visibility", "hidden");
+                    }
                 }
                 
                 if(val.fabric_batch_code != null && val.fabric_batch_code != "")
