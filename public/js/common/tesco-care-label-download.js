@@ -167,6 +167,17 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                         svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.8 1)");
                     }
+
+                    if(val.flammability_id != null && val.flammability_id != "null" && val.flammability_id != "")
+                    {
+                        svgDoc.getElementById("low_flammable_1").removeAttribute("visibility", "hidden");
+                        svgDoc.getElementById("low_flammable_2").removeAttribute("visibility", "hidden");
+                    }
+                    else
+                    {
+                        svgDoc.getElementById("low_flammable_1").setAttribute("visibility", "hidden");
+                        svgDoc.getElementById("low_flammable_2").setAttribute("visibility", "hidden");
+                    }
                 }
 
                 if(name2 != "GCLW25/M11364G" && name2 != "GCLW25/M11367G" && name2 != "GCLW25/M11375G" && name2 != "GCLW25/M11374G" && name2 != "GCLW25/M11372G" && name2 != "GCLW20/M11473G")
@@ -225,11 +236,29 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             svgDoc_front_text.getElementById("tog_image").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
+                            if(name2 == "GCLW25/M11367G")
+                            {
+                                    svgDoc.getElementById("baby_text_1").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_2").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_3").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_4").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_5").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_6").setAttribute("visibility", "hidden");
+                            }
                         }
                         else
                         {
                             svgDoc_front_text.getElementById("tog_image").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
+                            if(name2 == "GCLW25/M11367G")
+                            {
+                                svgDoc.getElementById("baby_text_1").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_2").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_3").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_4").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_5").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_6").removeAttribute("visibility", "hidden");
+                            }
                         }
                     }
                     else  if(name2 == "GCLW20/M11473G")
@@ -280,17 +309,23 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 if(val.potps_id == null)
                 {
                     svgDoc.getElementById("part_of_two_piece_set").setAttribute("visibility", "hidden");
-                    svgDoc.getElementById("uk_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 302.3271)");
-                    svgDoc.getElementById("ce_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 312.2111)");
-                    svgDoc.getElementById("top_line").setAttribute('y1', "294.16");
-                    svgDoc.getElementById("top_line").setAttribute('y2', "294.16");
-                    svgDoc.getElementById("bottom_line").setAttribute('y1', "315.63");
-                    svgDoc.getElementById("bottom_line").setAttribute('y2', "315.63");
+                    // svgDoc.getElementById("uk_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 302.3271)");
+                    // svgDoc.getElementById("ce_ean_barcode").setAttribute('transform', "matrix(0.6664 0 0 1 36.1605 312.2111)");
+                    // svgDoc.getElementById("top_line").setAttribute('y1', "294.16");
+                    // svgDoc.getElementById("top_line").setAttribute('y2', "294.16");
+                    // svgDoc.getElementById("bottom_line").setAttribute('y1', "315.63");
+                    // svgDoc.getElementById("bottom_line").setAttribute('y2', "315.63");
+
+                    svgDoc_back_text.getElementById("wyprod_text").setAttribute('transform', "translate(34 13.5)");
+                    
+                    
                 }
                 else
                 {
                     svgDoc.getElementById("part_of_two_piece_set").removeAttribute("visibility", "hidden");
                     svgDoc.getElementById("part_of_two_piece_set").innerHTML = val.part_name;
+
+                    svgDoc_back_text.getElementById("wyprod_text").setAttribute('transform', "translate(34 6)");
                 }
                 
                 if(val.uk_size == "tiny baby")

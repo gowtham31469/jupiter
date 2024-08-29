@@ -530,17 +530,17 @@
                     <hr>
                     <div class="row hidden" id="baby_sleeping_bag_div">
                         <div class="col-md-12">
-                            <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
+                            <div class="alert alert-danger" role="alert">The Tog Value is required only if the size chart selected is “Baby Sleeping Bags”</div>
                         </div>
                         <div class="col-md-12">
                             <div class="align-items form-group0 has-feedback">
-                                <div class="checkbox">
+                                <div class="checkbox hidden">
                                     <label>
                                         {!! Form::checkbox('tesco_care_bs_en',null,null,['id' => 'tesco_care_bs_en']) !!} Conforms to BS EN 16781:2018
                                     </label>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div class="checkbox form-group has-feedback">
+                                <div class="checkbox form-group has-feedback hidden">
                                     <label>
                                         {!! Form::checkbox('tesco_care_sleep_bag_symbol',null,null,['id' => 'tesco_care_sleep_bag_symbol']) !!} <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
                                     </label>
