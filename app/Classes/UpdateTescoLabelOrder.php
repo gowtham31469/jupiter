@@ -39,6 +39,17 @@ class UpdateTescoLabelOrder
 
         $translation_texts = $store_order_obj->getTranslationTexts($request);
 
+        if($request->tesco_care_tog_rating != null)
+        {
+            $tesco_care_bs_en = 1;
+            $tesco_care_sleep_bag_symbol = 1;
+        }
+        else
+        {
+            $tesco_care_bs_en = 0;
+            $tesco_care_sleep_bag_symbol = 0;
+        }
+
         $insert_data = array(
             'po_number'                      => $request->tesco_care_po,
             'uk_style_ref'                   => $request->tesco_care_uk_style,
@@ -59,8 +70,8 @@ class UpdateTescoLabelOrder
             'ironing_symbol_id'              => $request->tesco_care_iron_instruction,
             'dryclean_symbol_id'             => $request->tesco_care_dry_clean_instruction,
             'include_btn_sew_space'          => !is_null($request->tesco_care_button_space) ? $request->tesco_care_button_space : 0,
-            'bs_en_declaration'              => !is_null($request->tesco_care_bs_en) ? $request->tesco_care_bs_en : 0,
-            'baby_sleeping_bag_symbol'       => !is_null($request->tesco_care_sleep_bag_symbol) ? $request->tesco_care_sleep_bag_symbol : 0,
+            'bs_en_declaration'              => $tesco_care_bs_en,
+            'baby_sleeping_bag_symbol'       => $tesco_care_sleep_bag_symbol,
             'order_status'                   => $order_status,
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
