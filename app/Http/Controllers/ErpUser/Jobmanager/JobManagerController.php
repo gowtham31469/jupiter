@@ -552,7 +552,7 @@ class JobManagerController extends Controller
                                 ->join('tesco_care_symbols as iron',$order_table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$order_table.'.dryclean_symbol_id', 'cleaning.id')
 																	->where($order_table.'.id',$order_details_omp[0]->$order_id)
-																	->select($order_table.'.*','tesco_woolmark_logos.label_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
+																	->select($order_table.'.*','tesco_woolmark_logos.label_woolmark_logo','tesco_woolmark_logos.white_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
 																	->get();
 
 																	$value->washcare_order_id=$order_details_omp{0}->washcare_order_id;
@@ -621,6 +621,7 @@ class JobManagerController extends Controller
 																	$value->white_clean_astm=$order_omp[0]->white_clean_astm;
 																	$value->degree=$order_omp{0}->degree;
 																	$value->woolmark_logo_file=$order_omp[0]->label_woolmark_logo;
+																	$value->white_woolmark_logo_file=$order_omp[0]->white_woolmark_logo;
 																	$value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
 																	$value->woolmark_batch_code=$order_omp[0]->woolmark_batch_code;
 																	$value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
@@ -6700,7 +6701,13 @@ $buyer_no=$request->buyer_no;
 		   $iron_iso = $request->iron_iso;
 		   $clean_astm = $request->clean_astm;
 		   $clean_iso = $request->clean_iso;
-		   $woolmark_logo_file = $request->woolmark_logo_file;
+		   if($request->template_name != "GCLB25/M11410G"){
+   
+			   $woolmark_logo_file = $request->woolmark_logo_file;
+		   }
+		   else{
+			   $woolmark_logo_file = $request->white_woolmark_logo_file;
+		   }
 		   $woolmark_logo_id = $request->woolmark_logo_id;
 	
 		   $white_wash_astm = $request->white_wash_astm;
@@ -6925,7 +6932,12 @@ $buyer_no=$request->buyer_no;
 			   
 			   $svgString=urldecode($value);
 
-			if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G"  && $request->template_name != "GCLW25/M11374G" && $request->template_name != "GCLW25/M11372G")
+			
+	
+			PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+			if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G"  && $request->template_name != "GCLW25/M11374G" && $request->template_name != "GCLW25/M11372G" && $request->template_name != "GCLW20/M11473G" && $request->template_name != "GCLW20/M11474G" )
 			{
 
 				if($woolmark_logo_id == 1)
@@ -6937,9 +6949,7 @@ $buyer_no=$request->buyer_no;
 						PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 					}
 			}
-	
-			   PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
 			   $xx+=30;
 			   $wool_x+=30;
 			   $i++;
@@ -6988,38 +6998,106 @@ $buyer_no=$request->buyer_no;
             PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=98.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         }
+        else if($request->template_name == "GCLW25/M11367G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11473G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+4, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+4, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+7.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+7.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+11.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+11.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.1, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.1, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+18.5, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+18.5, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11474G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+4, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+4, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+7.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+7.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+11.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+11.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.1, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.1, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+18.5, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+18.5, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLB25/M11410G") {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
         else if($request->template_name != "GCLW25/M11364G") {
-				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-		
-				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		   } else {
-				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=93.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=93.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=93.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=93.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=93.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			}
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
 	
 		   
 	
@@ -7053,6 +7131,15 @@ $buyer_no=$request->buyer_no;
         $iron_iso = $request->iron_iso;
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
+
+		if($request->template_name != "GCLB25/M11410G"){
+
+            $woolmark_logo_file = $request->woolmark_logo_file;
+        }
+        else{
+            $woolmark_logo_file = $request->white_woolmark_logo_file;
+        }
+		$woolmark_logo_id = $request->woolmark_logo_id;
 
         $white_wash_astm = $request->white_wash_astm;
         $white_wash_iso = $request->white_wash_iso;
@@ -7121,8 +7208,11 @@ $buyer_no=$request->buyer_no;
             
             $svgString=urldecode($value);
             //print_r($svgString);
-            
-			if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G"  && $request->template_name != "GCLW25/M11374G" && $request->template_name != "GCLW25/M11372G")
+
+            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+			if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G"  && $request->template_name != "GCLW25/M11374G"  && $request->template_name != "GCLW25/M11372G" && $request->template_name != "GCLW20/M11473G" && $request->template_name != "GCLW20/M11474G" )
             {
                 if($woolmark_logo_id == 1)
                 {
@@ -7133,9 +7223,6 @@ $buyer_no=$request->buyer_no;
                     PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
             }
-
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             $xx+=30;
             $wool_x+=30;
             $i++;
@@ -7183,6 +7270,73 @@ $buyer_no=$request->buyer_no;
 
             PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=98.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11367G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11473G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+4, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+4, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+7.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+7.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+11.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+11.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.1, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.1, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+18.5, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+18.5, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11474G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+4, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+4, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+7.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+7.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+11.3, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+11.3, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.1, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.1, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+18.5, $y=95.3, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+18.5, $y=99.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLB25/M11410G") {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         }
         else if($request->template_name != "GCLW25/M11364G") {
 
