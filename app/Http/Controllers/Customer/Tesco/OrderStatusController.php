@@ -4623,7 +4623,7 @@ class OrderStatusController extends Controller
                                 ->join('tesco_care_symbols as iron',$table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$table.'.dryclean_symbol_id', 'cleaning.id')
                                 ->where('tesco_washcare_orders.id',$value->$table_id)
-                                ->select('tesco_washcare_orders.*','tesco_woolmark_logos.label_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm','tesco_togs.tog_value')
+                                ->select('tesco_washcare_orders.*','tesco_woolmark_logos.label_woolmark_logo','tesco_woolmark_logos.white_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm','tesco_togs.tog_value')
                                 ->get();
                 
                 $value->po_number=$order_omp[0]->po_number;
@@ -4681,6 +4681,7 @@ class OrderStatusController extends Controller
                 $value->white_clean_astm=$order_omp[0]->white_clean_astm;
                 $value->degree=$order_omp[0]->degree;
                 $value->woolmark_logo_file=$order_omp[0]->label_woolmark_logo;
+                $value->white_woolmark_logo_file=$order_omp[0]->white_woolmark_logo;
                 $value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
                 $value->woolmark_batch_code=$order_omp[0]->woolmark_batch_code;
                 $value->additional_care_text_1=$order_omp[0]->additional_care_text_1;
