@@ -927,10 +927,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
             {
-                $garment_str = chunkSubstrpercentage(en_garment_component, 21);
-                $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 21);
-                $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 21);
-                $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 21);
+                $garment_str = chunkSubstrpercentage(en_garment_component, 20);
+                $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 20);
+                $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 20);
+                $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 20);
             }
             else
             {
