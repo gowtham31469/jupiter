@@ -780,7 +780,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
 
             $chunk_str = chunksplit("breaking_words")
-            var chunks='<tspan  x="0" y="0">EN</tspan>';
+            var chunks='';
             $y=0;
             $line_length=0;
             $ind=1;
@@ -803,8 +803,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else
                 {
                     var new_chunk_val =chunk_val.replaceAll("/", '</tspan><tspan >/</tspan><tspan>')
-                    var xPosition = isFirstLine ? '9' : '0';
-                    chunks += '<tspan x="'+xPosition+'" y="'+$y+'">'+new_chunk_val+'</tspan>';
+                    chunks += '<tspan x="0" y="'+$y+'">'+new_chunk_val+'</tspan>';
                 }
                 if($chunk_str.length == $ind)
                 {
