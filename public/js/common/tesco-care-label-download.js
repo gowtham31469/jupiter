@@ -294,7 +294,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             svgDoc_front_text.getElementById("tog_image").setAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
-                            if(name2 == "GCLW25/M11367G")
+                            if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                             {
                                     svgDoc.getElementById("baby_text_1").setAttribute("visibility", "hidden");
                                     svgDoc.getElementById("baby_text_2").setAttribute("visibility", "hidden");
@@ -308,7 +308,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             svgDoc_front_text.getElementById("tog_image").removeAttribute("visibility", "hidden");
                             svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
-                            if(name2 == "GCLW25/M11367G")
+                            if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                             {
                                 svgDoc.getElementById("baby_text_1").removeAttribute("visibility", "hidden");
                                 svgDoc.getElementById("baby_text_2").removeAttribute("visibility", "hidden");
