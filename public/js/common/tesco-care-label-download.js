@@ -1022,13 +1022,25 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             $limited_length = 0;
 
-            if(name2 == "GCLW25/M11364G")
+            if(name2 == "GCLW25/M11363G")
+            {
+                $limited_length = 16;
+            }
+            else if(name2 == "GCLW25/M11364G")
             {
                 $limited_length = 16;
             }
             else if(name2 == "GCLW25/M11367G")
             {
                 $limited_length = 17;
+            }
+            else if(name2 == "GCLW25/M11378G")
+            {
+                $limited_length = 16;
+            }
+            else if(name2 == "GCLW25/M11372G")
+            {
+                $limited_length = 16;
             }
             else if(name2 == "GCLW25/M11374G")
             {
