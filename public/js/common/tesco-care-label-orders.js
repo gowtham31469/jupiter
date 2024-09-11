@@ -608,7 +608,7 @@ $(function () {
             e.preventDefault();
         } else {
             var key = e.keyCode;
-            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222) || (key == 189) || (key == 173))) {
+            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222) || (key == 189) || (key == 173) || (key == 109))) {
                 e.preventDefault();
             }
         }
