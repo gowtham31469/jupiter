@@ -146,14 +146,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         svgDoc_back.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 244) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 244) scale(0.65 1)");
 
                     }
                     else
                     {
                         svgDoc_back.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.65 1)");
                     }
                 } 
                 else if(name2 == "GCLW20/M11474G")
@@ -162,14 +162,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         svgDoc_back.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 244) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 244) scale(0.65 1)");
 
                     }
                     else
                     {
                         svgDoc_back.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.65 1)");
                     }
                 }
                 else if(name2 == "GCLW25/M11374G")
@@ -190,14 +190,14 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         svgDoc_back.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 242) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 242) scale(0.65 1)");
 
                     }
                     else
                     {
                         svgDoc_back.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.8 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.65 1)");
                     }
 
                     if(val.flammability_id != null && val.flammability_id != "null" && val.flammability_id != "")
@@ -233,13 +233,39 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 else
                 {
-                    //alert()
-                    
-                    svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 103)");
-                    svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 110)");
-                    svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 35, 117)");
+                    if(name2 == "GCLW25/M11364G" || name2 == "GCLW25/M11372G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 121.2519)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 126.2514)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 131.2509)");
+                    }
+                    else if(name2 == "GCLW25/M11363G" || name2 == "GCLW25/M11368G" || name2 == "GCLB25/M11410G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 124.1455)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 128.6455)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 133.1455)");
+                    }
+                    else if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 131.8876)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 136.8871)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 141.8866)");
+                    }
+                    else if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 124.8013)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 129.8008)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 134.8004)");
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 128.8781)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 133.3781)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 137.8781)");
+                    }
                     
                     svgDoc.getElementById("batch_code").innerHTML = "";
+
                 }
 
                 if(val.internal_reference != "" && val.internal_reference != null)
@@ -405,6 +431,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         setTransformations(svgDoc,"0.75","0.70","17.5","255","38","255","28","262")
                     }
+                    else if(name2 == "GCLB25/M11410G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","250","48.2","250","35","257")
+                    }
                     else
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","245","48.2","245","35","252")
@@ -439,6 +469,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     else if(name2 == "GCLW20/M11474G")
                     {
                         setTransformations(svgDoc,"0.75","0.70","17.5","255","38","255","28","262")
+                    }
+                    else if(name2 == "GCLB25/M11410G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","250","48.2","250","35","257")
                     }
                     else
                     {
@@ -475,6 +509,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         setTransformations(svgDoc,"0.75","0.70","17.5","255","38","255","28","262")
                     }
+                    else if(name2 == "GCLB25/M11410G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","250","48.2","250","35","257")
+                    }
                     else
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","245","48.2","245","35","252")
@@ -509,6 +547,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     else if(name2 == "GCLW20/M11474G")
                     {
                         setTransformations(svgDoc,"0.75","0.70","17.5","255","38","255","28","262")
+                    }
+                    else if(name2 == "GCLB25/M11410G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","250","48.2","250","35","257")
                     }
                     else
                     {
@@ -714,7 +756,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 ajax_count++;
             })
 
-            if(name2 != "GCLW25/M11364G")
+            if(name2 != "GCLW25/M11364G" && name2 != "GCLW20/M11473G" && name2 != "GCLW20/M11474G")
             {
                 var country_of_origin_text = JSON.parse(data.order_details[0].country_of_origin_text)
                 svgDoc_back_text.getElementById("wyprod_text").innerHTML = '<tspan   x="2" y="5.94">'+country_of_origin_text[0].czech+'</tspan><tspan   x="2" y="11">'+country_of_origin_text[0].slovak+'</tspan><tspan  x="1.8" y="14.94">'+country_of_origin_text[0].hungarian+'</tspan>';
@@ -754,29 +796,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             
             let sample = en_care_instructions.split('AT');
 
-            if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
+            if(sample.length > 1)
             {
-                if(sample.length > 1)
-                {
-                    $('#splitdiv').html('<div id="breaking_words" style="inline-size: 150px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
-                }
-                else
-                {
-                    $('#splitdiv').html('<div id="breaking_words" style="inline-size: 150px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
-                }
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
             }
             else
             {
-
-                if(sample.length > 1)
-                {
-                    $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
-                }
-                else
-                {
-                    $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
-                }
-
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
             }
 
             $chunk_str = chunksplit("breaking_words")
@@ -926,10 +952,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
             {
-                $garment_str = chunkSubstrpercentage(en_garment_component, 20);
-                $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 20);
-                $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 20);
-                $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 20);
+                $garment_str = chunkSubstrpercentage(en_garment_component, 28);
+                $cz_garment_str = chunkSubstrpercentage(cz_garment_component, 28);
+                $sk_garment_str = chunkSubstrpercentage(sk_garment_component, 28);
+                $hu_garment_str = chunkSubstrpercentage(hu_garment_component, 28);
             }
             else
             {
@@ -1012,9 +1038,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             {
                 $limited_length = 17;
             }
-            else
+            else if(name2 == "GCLB25/M11410G")
             {
                 $limited_length = 15;
+            }
+            else
+            {
+                $limited_length = 19;
             }
 
             if($line_length > $limited_length)
