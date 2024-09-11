@@ -608,8 +608,13 @@ $(function () {
             e.preventDefault();
         } else {
             var key = e.keyCode;
-            if (!((key == 8) || (key == 32) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105) || (key >= 186 && key <= 192) || (key >= 219 && key <= 222) || (key == 189) || (key == 173) || (key == 109))) {
-                e.preventDefault();
+            if (!((key >= 48 && key <= 57) || // Numbers 0-9 (main keyboard)
+                (key >= 96 && key <= 105) || // Numbers 0-9 (numpad)
+                key == 189 ||  // Hyphen (main keyboard)
+                key == 109 ||  // Hyphen (numpad)
+                key == 8 ||    // Backspace
+                key == 46)) {  // Delete
+                    e.preventDefault();
             }
         }
 
