@@ -50,6 +50,8 @@ class UpdateTescoLabelOrder
             $tesco_care_sleep_bag_symbol = 0;
         }
 
+        $internal_reference = $request->internal_reference;
+
         $insert_data = array(
             'po_number'                      => $request->tesco_care_po,
             'uk_style_ref'                   => $request->tesco_care_uk_style,
@@ -76,6 +78,7 @@ class UpdateTescoLabelOrder
             'total_qty'                      => $total_qty,
             'edit_permission'                => $edit_permission,
             'is_order_count_empty'           => $is_order_count_empty,
+            'internal_reference'           => $internal_reference,
             'additional_care_id_1'           => $request->tesco_care_additional_instruction_1,
             'additional_care_text_1'         => $translation_texts['additional_text_1'],
             'additional_care_id_2'           => $request->tesco_care_additional_instruction_2,

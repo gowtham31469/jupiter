@@ -271,6 +271,80 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 if(val.internal_reference != "" && val.internal_reference != null)
                 {
                     svgDoc.getElementById("packaging_reference_number").innerHTML = val.internal_reference;
+
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
+                    {
+
+                        if(val.bs_en_declaration == 0)
+                        {
+                            
+                            svgDoc.getElementById("bs_en").setAttribute("visibility", "hidden");
+                        }
+                        else
+                        {
+                            svgDoc.getElementById("bs_en").removeAttribute("visibility", "hidden");
+                        }
+
+                        if(val.baby_sleeping_bag_symbol == 0)
+                        {
+                            svgDoc_front_text.getElementById("tog_image").setAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").setAttribute("visibility", "hidden");
+                            if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
+                            {
+                                    svgDoc.getElementById("baby_text_1").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_2").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_3").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_4").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_5").setAttribute("visibility", "hidden");
+                                    svgDoc.getElementById("baby_text_6").setAttribute("visibility", "hidden");
+                            }
+                        }
+                        else
+                        {
+                            svgDoc_front_text.getElementById("tog_image").removeAttribute("visibility", "hidden");
+                            svgDoc.getElementById("tog_value_1_").removeAttribute("visibility", "hidden");
+                            if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
+                            {
+                                svgDoc.getElementById("baby_text_1").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_2").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_3").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_4").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_5").removeAttribute("visibility", "hidden");
+                                svgDoc.getElementById("baby_text_6").removeAttribute("visibility", "hidden");
+                            }
+                        }
+                    }
+
+                    if(name2 == "GCLW25/M11363G" || name2 == "GCLW25/M11378G" || name2 == "GCLB25/M11410G")
+                    {
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 6.5 159.6377)");
+                        svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6694 164.1377)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 6.5 168.6377)");
+                    }
+                    else if(name2 == "GCLW25/M11364G" || name2 == "GCLW25/M11372G")
+                    {
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6681 159.351)");
+                        svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6681 164.3505)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 5.6681 169.35)");
+                    }
+                    else if(name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11367G")
+                    {
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6714 169.9872)");
+                        svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6714 174.9867)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 5.6714 179.9862)");
+                    }
+                    else if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
+                    {
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6681 163)");
+                        svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6723 169)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 5.6723 175)");
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 6.5 171.4099)");
+                        svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 6.5 176.4094)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 6.5 181.4089)");
+                    }
                 }
                 else
                 {

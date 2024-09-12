@@ -631,3 +631,15 @@ $(document).on('change', '.tesco-care-fiber-class', (e) => {
     }
 });
 
+$(document).off('change', '#tesco_care_woolmark_logo').on('change', '#tesco_care_woolmark_logo', (e) => {
+    if ($(e.target).val()) {
+        // Enable the input by setting disabled property to false
+        $('#tesco_care_woolmark_batch_code').prop('disabled', false);
+    } else {
+        // Disable the input by setting disabled property to true
+        $('#tesco_care_woolmark_batch_code').prop('disabled', true);
+        $('#tesco_care_woolmark_batch_code').val("");
+    }
+});
+
+
