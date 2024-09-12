@@ -1098,7 +1098,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(name2 == "GCLW25/M11363G")
             {
-                $limited_length = 16;
+                $limited_length = 15;
             }
             else if(name2 == "GCLW25/M11364G")
             {
