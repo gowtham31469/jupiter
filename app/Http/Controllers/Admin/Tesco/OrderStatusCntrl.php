@@ -2143,9 +2143,9 @@ class OrderStatusCntrl extends Controller
 
             if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLW25/M11378G" || $request->template_name == "GCLB25/M11410G")
             {
-                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.208, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.208, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             }
             else if($request->template_name == "GCLW25/M11364G" || $request->template_name == "GCLW25/M11372G")
             {
