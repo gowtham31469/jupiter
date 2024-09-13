@@ -341,7 +341,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
                     {
-                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6681 163)");
+                        svgDoc.getElementById("reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6723 163)");
                         svgDoc.getElementById("packaging_reference_number").setAttribute('transform', "matrix(1 0 0 1 5.6723 169)");
                         svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1 0 0 1 5.6723 175)");
                     }
