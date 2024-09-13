@@ -432,7 +432,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                 var selected_secondary_sizes_text = "";
                 console.log(selected_secondary_sizes)
-                $size_y=2;
+                $size_y=0;
                 $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                     if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                     {
