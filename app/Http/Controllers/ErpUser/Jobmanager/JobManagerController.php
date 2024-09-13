@@ -7282,9 +7282,9 @@ $buyer_no=$request->buyer_no;
             else if($request->template_name == "GCLW25/M11378G")
             {
                 
-                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.5, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.5, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             }
             else if($request->template_name == "GCLW25/M11374G")
             {
