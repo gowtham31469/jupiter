@@ -6967,11 +6967,11 @@ $buyer_no=$request->buyer_no;
             {
                 if($woolmark_logo_id == 1)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=91, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
                 else if($woolmark_logo_id == 2)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
             }
 
@@ -7255,7 +7255,7 @@ $buyer_no=$request->buyer_no;
 
             //PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-            if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLW25/M11378G" || $request->template_name == "GCLB25/M11410G")
+            if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLB25/M11410G")
             {
                 PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.378, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
@@ -7279,6 +7279,13 @@ $buyer_no=$request->buyer_no;
 
                 PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=20, $h=142, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             }
+            else if($request->template_name == "GCLW25/M11378G")
+            {
+                
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=139, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
             else if($request->template_name == "GCLW25/M11374G")
             {
                 PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=148, $link='', $align='', $palign='', $border=0, $fitonpage=false);
@@ -7291,11 +7298,11 @@ $buyer_no=$request->buyer_no;
             {
                 if($woolmark_logo_id == 1)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=91, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
                 else if($woolmark_logo_id == 2)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
             }
             

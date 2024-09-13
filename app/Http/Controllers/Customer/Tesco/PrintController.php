@@ -987,11 +987,11 @@ class PrintController extends Controller
             {
                 if($woolmark_logo_id == 1)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=91, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
                 else if($woolmark_logo_id == 2)
                 {
-                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
                 }
             }
 
