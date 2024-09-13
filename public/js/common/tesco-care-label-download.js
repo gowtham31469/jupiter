@@ -432,7 +432,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 var selected_secondary_sizes = JSON.parse(val.selected_secondary_sizes)
                 var selected_secondary_sizes_text = "";
                 console.log(selected_secondary_sizes)
-                $size_y=0;
+                $size_y=2;
                 $(selected_secondary_sizes).each(function(index,selected_secondary_sizes_val){
                     if(selected_secondary_sizes_val['id'] != "" && selected_secondary_sizes_val['id'] != null)
                     {
@@ -501,7 +501,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW25/M11378G")
                     {
-                        setTransformations(svgDoc,"1.0039","0.8105","23.2","248","48.2","248","35","255")
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","252","48.2","252","35","259")
                     }
                     else if(name2 == "GCLW20/M11473G")
                     {
@@ -540,7 +540,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW25/M11378G")
                     {
-                        setTransformations(svgDoc,"1.0039","0.8105","23.2","248","48.2","248","35","255")
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","252","48.2","252","35","259")
                     }
                     else if(name2 == "GCLW20/M11473G")
                     {
@@ -579,7 +579,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW25/M11378G")
                     {
-                        setTransformations(svgDoc,"1.0039","0.8105","23.2","248","48.2","248","35","255")
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","252","48.2","252","35","259")
                     }
                     else if(name2 == "GCLW20/M11473G")
                     {
@@ -618,7 +618,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW25/M11378G")
                     {
-                        setTransformations(svgDoc,"1.0039","0.8105","23.2","250","48.2","250","35","257")
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","252","48.2","252","35","259")
                     }
                     else if(name2 == "GCLW20/M11473G")
                     {
@@ -689,6 +689,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.4656","272","51.9983","272","1.0148")
                         }
+                        else if(name2 == "GCLW25/M11378G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","254","45.42","254","19.4656","260","51.9983","260","1.0148")
+                        }
                         else if(name2 == "GCLW25/M11372G")
                         {
                             setMYTransformations(svgDoc,"15.12","254","45.42","254","19.2656","260","51.7983","260","1.0148")
@@ -715,6 +719,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.2656","272","51.7983","272","1.0148")
+                        }
+                        else if(name2 == "GCLW25/M11378G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","254","45.42","254","19.4656","260","51.9983","260","1.0148")
                         }
                         else if(name2 == "GCLW25/M11372G")
                         {
@@ -745,6 +753,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.8656","272","52.3656","272","0.9105")
                         }
+                        else if(name2 == "GCLW25/M11378G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","254","45.42","254","19.4656","260","51.9983","260","1.0148")
+                        }
                         else if(name2 == "GCLW25/M11372G")
                         {
                             setMYTransformations(svgDoc,"15.12","254","45.42","254","19.2656","260","51.7983","260","1.0148")
@@ -772,6 +784,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.8656","272","52.3656","272","0.8255")
                         }
+                        else if(name2 == "GCLW25/M11378G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","254","45.42","254","19.4656","260","51.9983","260","1.0148")
+                        }
                         else if(name2 == "GCLW25/M11372G")
                         {
                             setMYTransformations(svgDoc,"15.12","254","45.42","254","19.2656","260","51.7983","260","1.0148")
@@ -798,6 +814,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
                         {
                             setMYTransformations(svgDoc,"16.5","266","45.42","266","19.9656","272","51","272","1.0148")
+                        }
+                        else if(name2 == "GCLW25/M11378G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","254","45.42","254","19.4656","260","51.9983","260","1.0148")
                         }
                         else if(name2 == "GCLW25/M11372G")
                         {
