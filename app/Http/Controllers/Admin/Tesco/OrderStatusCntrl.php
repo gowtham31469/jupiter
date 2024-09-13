@@ -2097,11 +2097,11 @@ class OrderStatusCntrl extends Controller
 
         if($woolmark_logo_id == 1)
         {
-            $wool_x=21.15;
+            $wool_x=20.15;
         }
         else if($woolmark_logo_id == 2)
         {
-            $wool_x=23;
+            $wool_x=22;
         }
         else
         {
@@ -2117,11 +2117,11 @@ class OrderStatusCntrl extends Controller
                 $xx=15;
                 if($woolmark_logo_id == 1)
                 {
-                    $wool_x=21.15;
+                    $wool_x=20.15;
                 }
                 else if($woolmark_logo_id == 2)
                 {
-                    $wool_x=23;
+                    $wool_x=22;
                 }
                 else
                 {
