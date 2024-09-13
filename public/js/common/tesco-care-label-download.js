@@ -196,7 +196,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     {
                         svgDoc_back.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
 
-                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 242) scale(0.65 1)");
+                        svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 251) scale(0.65 1)");
 
                     }
                     else
