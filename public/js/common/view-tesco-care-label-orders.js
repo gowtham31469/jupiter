@@ -24,6 +24,27 @@ $( () => {
             $('#add_garment_component_btn').remove();
             $('#remove_component_btn').remove();
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + '</strong></h4></div>');
+
+            if(template_id == 122 || template_id == 128 || template_id == 129)
+            {
+                $('#uk_ce_mark_div').addClass('hidden');
+                $('#flammability_div').addClass('hidden');
+            } else if(template_id == 123 || template_id == 125)
+            {
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            } else if(template_id == 126 || template_id == 130 || template_id == 131)
+            {
+                $('#flammability_div').addClass('hidden');
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            } else if(template_id == 124 || template_id == 127)
+            {
+                $('#uk_ce_mark_div').addClass('hidden');
+                $('#flammability_div').addClass('hidden');
+                $('#wool_mark_logo_div').addClass('hidden');
+                $('#wool_mark_batch_code_div').addClass('hidden');
+            }
         });
 
     }
@@ -31,8 +52,12 @@ $( () => {
     mapLabelStoredValues = (order_data, user_role) => {
         $('#hidden_id').val(order_data.order_details.id)
         $('#hidden_name').val(order_data.order_details.item_master.template_name)
-        $('.create-download-artwork').css('display','inline-block')
-        $('#tesco_care_po').val(order_data.order_details.po_number)
+
+        if(order_data.order_details.order_status != "Order Pending")
+        {
+            $('.create-download-artwork').css('display','inline-block')
+        }
+        
         $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_eqos').val(order_data.order_details.eqos_site_code)
         $('#tesco_care_ce_style').val(order_data.order_details.ce_style_ref)
@@ -42,11 +67,13 @@ $( () => {
         $('#tesco_care_coo').val(order_data.order_details.country_of_origin_id)
         $('#tesco_care_supplier').val(order_data.order_details.tesco_metadata_supplier_id)
         $('#tesco_care_part_of_two_piece_set').val(order_data.order_details.potps_id)
+        $('#tesco_care_woolmark_logo').val(order_data.order_details.woolmark_logo_id)
+        $('#tesco_care_woolmark_batch_code').val(order_data.order_details.woolmark_batch_code)
+        $('#tesco_care_uk_ce_mark').val(order_data.order_details.uk_ce_mark)
+        $('#tesco_care_flammability').val(order_data.order_details.flammability_id)
+        $('#tesco_care_garment_statements').val(order_data.order_details.garment_statement_id)
 
         $('#tesco_care_button_space').prop('checked', order_data.order_details.include_btn_sew_space);
-        $('#tesco_care_exclusive_trim').prop('checked', order_data.order_details.exclusive_trims);
-        $('#tesco_care_non_textile_part').prop('checked', order_data.order_details.contains_non_textile_part);
-        $('#tesco_care_part_of_set').prop('checked', order_data.order_details.part_of_set);
 
         $('#tesco_care_wash_instruction').val(order_data.order_details.wash_symbol_id)
         $('#tesco_care_bleach_instruction').val(order_data.order_details.bleach_symbol_id)
@@ -65,7 +92,7 @@ $( () => {
 
             $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
             $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
-            $('#tesco_care_tog').val(order_data.order_details.tog)
+            $('#tesco_care_tog_rating').val(order_data.order_details.tog)
         }
 
         var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + order_data.order_details.id + '">';
@@ -104,11 +131,14 @@ $( () => {
 
             var ce_ean = valueOfElement.ce_ean != null?valueOfElement.ce_ean:"";
             var uk_ean = valueOfElement.uk_ean != null?valueOfElement.uk_ean:"";
-            quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + valueOfElement.count + `" min="`+order_data.moq+`" data-min-error="Quantity Should be >= `+order_data.moq+`." disabled><div class="help-block with-errors"></div></div></td>
-                                            <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
-                                        </tr>`;
+                quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="` + uk_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                                <td><div class="form-group has-feedback"><input class="form-control input-sm" placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="` + ce_ean + `" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)" disabled><div class="help-block with-errors"></div></div></td>
+                                                <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control input-sm tesco-quantity-field" placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]" value="` + (valueOfElement.count !== 0 ? valueOfElement.count : '') + `"
+                                                ` + (order_data.moq ? `min="` + order_data.moq + `" data-min-error="Quantity Should be >= ` + order_data.moq + `."` : '') + `
+                                                ` + (order_data.max ? `max="` + order_data.max + `" data-max-error="Quantity Should be <= ` + order_data.max + `."` : '') + `
+                                                disabled><div class="help-block with-errors"></div></div></td>
+                                                <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]'>
+                                            </tr>`;
         });
         quantity_html += `</tbody>
                                         </table>
@@ -156,7 +186,7 @@ $( () => {
 
                                 garment_comp_div += `<div class="col-xs-8">
                                                                     <div class="form-group has-feedback">
-                                                                    <select class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
+                                                                    <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
                                                                     <option value="">-- Select Fiber --</option>`;
                                 $.each(data.data.fabriclists, function (fabric_index, item) {
 
@@ -170,7 +200,7 @@ $( () => {
                                                             <div class="col-xs-4">
                                                                 <div class="form-group has-feedback">
                                                                 <div class="input-group">
-                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled>
+                                                                    <input type="number" class="form-control input-sm fiber-individual-percentage" max="100"  id="fiber_individual_percentage_` + index + `_` + fiber_count + `" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" value="` + fibre_composition_percentage + `" disabled min="0">
                                                                     <div class="input-group-addon">%</div>
                                                                 </div>
                                                                 <div class="help-block with-errors"></div>

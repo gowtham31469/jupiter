@@ -237,15 +237,15 @@ class UserController extends Controller
     {	
 		switch ($buyer){
 			case "Tesco":
-				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,32,41])->get()->toArray();
+				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,32,41,54,55,56])->get()->toArray();
 				break;
 				
 			case "Orchestra":
-				$treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,90,103,104,154,170,174,178,182,188,191])->get()->toArray();
+				$treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,90,103,104,154,170,174,178,182,188,191,203,204,205])->get()->toArray();
 				break;
 				
 			default:
-				$treeviewData= DB::table("tesco_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,32,41])->get()->toArray();
+				$treeviewData= DB::table(strtolower(str_replace(" ", "_", $buyer))."_item_master")->select('id','item_name as text','parent_id')->whereIn('parent_id', [0,1,2,3,4])->get()->toArray();
 				break;
 		}
         

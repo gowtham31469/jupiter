@@ -12,10 +12,6 @@
        padding: 0 !important;
        margin: 0 !important;
     }
-    .table-erp-list {
-      /*width: 100%;*/
-      /*background-color: #f3f3f3;*/
-    }
     .table-erp-list tbody div{
         overflow:scroll;
         height:100px;
@@ -71,7 +67,8 @@
                             </select>
                         </div>
                         <div class="col-md-3 po-list hidden">
-                            <label for="invoice-no">Orders</label>
+                            <label for="invoice-no">Orders</label><br>
+                            <input type='text' class="form-control" id='txt_name' placeholder='Enter Erp Id'>
                             <span class="dynamic-table">
                             </span>
                         </div>
@@ -88,9 +85,6 @@
                     <div class="col-md-7 remarks hidden">
                         <label>Delivery Address</label>
                         <div class="row delivery-address">
-                       <!--  <div class="col-md-6">
-                           
-                        </div> -->
                         </div>
                     </div>
                     <div class="col-md-5" style="margin-bottom: 3rem;">
@@ -150,13 +144,13 @@
 
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 pull-right" id="ship_to" style="padding-left: 50px; margin-top:6px;">
-                                    <span><p><strong>TAX INVOICE </strong></p></span>
+                                    <span><p><strong>TAX INVOICE </strong></p></span><br>
+                                    <strong>Invoice No </strong>
+                                    <span style="padding-left: 2px;"> : </span>
+                                    <span style="padding-left: 4px;" class="invoice_number"></span><br>
                                     <strong>Date</strong>
                                     <span style="padding-left: 37px;"> : <span style="padding-left: 6px;" class="invoice-date"></span>
                                     </span><br>
-                                    <strong>Invoice No </strong>
-                                    <span style="padding-left: 2px;"> : </span>
-                                    <span style="padding-left: 4px;" class="invoice_number"></span>
                                     <p><strong>Disp thru</strong>          
                                     <span style="padding-left: 10px;"> : </span>
                                     <span style="padding-left: 4px;" class="disp_thru" id="disp_thru"></span></p>  
@@ -194,8 +188,6 @@
                                         <p class="amnt-in-words"></p>
                                     </div>
                                     <div>
-                                        <!-- <strong>Delivery At</strong>
-                                        <p class="delivery-at"></p> -->
                                         <label>Delivery At</label><span style="padding-left: 8px;">:</span><span class="delivery-details" style="padding-left: 20px;"></span>
                                     </div>
                                     <div class="pull-right" style="padding-right: 55px;">
@@ -229,33 +221,8 @@
             </div>
         </div>
     </div>
-    <!-- company selection Modal -->
-<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-     <div class="modal-dialog buyer-selection-modal-dialog" role="document">
-         <div class="modal-content buyer-selection-modal-content">
-                <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
-                 </div>
-                 <div class="modal-body buyer-selection-modal-body">
-                    <div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
-                      <strong>Warning!</strong> Select a Company to proceed.
-                    </div>
-                    @foreach($companies as $company)
-                     <a class="buyer-card-link" style="cursor: pointer;">
-                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                         </div>
-                     </a>
-                    @endforeach
-                 </div>
-                 <div class="modal-footer buyer-selection-modal-footer">
-                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                 </div>
-            {!! Form::close() !!}
-         </div>
-     </div>
- </div>
+<!-- Job card creation Modal -->
+@include('erp.components.company-selection-modal')
         {{-- Show snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 @endsection @else
@@ -307,7 +274,7 @@ $(document).ready(function(){
         $('#buyerSelectionModalCenter').modal('show');  
         
         $.ajax({
-            url: base_url + "/erp/po-manager/set_company_session",
+            url: base_url + "/erp/set-erp-company-session",
             type: "Post",
             dataType: "json",
             data: {

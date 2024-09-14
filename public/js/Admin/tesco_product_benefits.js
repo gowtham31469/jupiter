@@ -42,7 +42,7 @@ function tescoProductBenefits() {
     $('.tesco-sidebar').show();
 
     $.ajax({
-      url: base_url + "/admin/tesco/settings/tesco-product-benfits",
+      url: base_url + "/admin/tesco/settings/tesco-product-benefits",
       type: "POST",
       dataType: "json",
       data: {
@@ -92,11 +92,7 @@ function tescoProductBenefits() {
         $('#tesco-components-list-table_length select').addClass('form-control input-sm');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -121,7 +117,7 @@ function tescoProductBenefits() {
     var template_id = $('#template_id').val();
 
     $.ajax({
-      url: base_url + "/admin/tesco/add-tesco-product-benfits",
+      url: base_url + "/admin/tesco/add-tesco-product-benefits",
       method: 'POST',
       data: {
         _token: csrf_token,
@@ -149,7 +145,7 @@ function tescoProductBenefits() {
         208: function() {
           $('#benefits_error').removeClass('hidden');
           $('#benefits_error').removeAttr('style');
-          $('#benefits_error').html('Product Benefits[English] already excists.')
+          $('#benefits_error').html('Product Benefits[English] already exists.')
           $("#benefits_error").addClass("alert alert-warning");
         },
         400: function() {
@@ -158,11 +154,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -184,7 +176,7 @@ function tescoProductBenefits() {
     }
     isSubmitting = true;
     $.ajax({
-      url: base_url + "/admin/tesco/get-tesco-product-benfits",
+      url: base_url + "/admin/tesco/get-tesco-product-benefits",
       dataType: "json",
       method: "get",
       data: { id: id },
@@ -212,11 +204,7 @@ function tescoProductBenefits() {
         $('#editProductBenefitsModal').modal('show');
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -242,7 +230,7 @@ function tescoProductBenefits() {
     var template_id = $('#edit_template_id').val();
 
     $.ajax({
-      url: base_url + "/admin/tesco/update-tesco-product-benfits",
+      url: base_url + "/admin/tesco/update-tesco-product-benefits",
       dataType: "json",
       beforeSend: function() {
         $(".loader").show();
@@ -273,16 +261,12 @@ function tescoProductBenefits() {
         208: function() {
           $('#product_description_error').removeClass('hidden');
           $('#product_description_error').removeAttr('style');
-          $('#product_description_error').html('Product Benefits already excists.')
+          $('#product_description_error').html('Product Benefits already exists.')
           $("#product_description_error").addClass("alert alert-warning");
         },
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();
@@ -305,7 +289,7 @@ function tescoProductBenefits() {
     }
     isSubmitting = true;
     $.ajax({
-      url: base_url + "/admin/tesco/make-tesco-product-benfits-enabled",
+      url: base_url + "/admin/tesco/make-tesco-product-benefits-enabled",
       dataType: "json",
       beforeSend: function() {
         $(".loader").show();
@@ -323,11 +307,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         tescoProductBenefits();
@@ -351,7 +331,7 @@ function tescoProductBenefits() {
     }
     isSubmitting = true;
     $.ajax({
-      url: base_url + "/admin/tesco/make-tesco-product-benfits-disabled",
+      url: base_url + "/admin/tesco/make-tesco-product-benefits-disabled",
       dataType: "json",
       beforeSend: function() {
         $(".loader").show();
@@ -369,11 +349,7 @@ function tescoProductBenefits() {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         tescoProductBenefits();
@@ -413,7 +389,7 @@ function uploadProductBenefit(template_id, excel_file) {
     form_data.append('_token', csrf_token);
 
     $.ajax({
-      url: base_url + "/admin/tesco/upload-product-benfits",
+      url: base_url + "/admin/tesco/upload-product-benefits",
       type: "POST",
       data: form_data,
       cache: false,
@@ -439,11 +415,7 @@ function uploadProductBenefit(template_id, excel_file) {
         }
       },
       error: function(errorXHR, errorStatus, errorThrown) {
-        this.tryCount++;
-        if (this.tryCount <= this.retryLimit) {
-          $.ajax(this);
-          return;
-        }
+        console.log(errorThrown);
       },
       complete: function() {
         $(".loader").hide();

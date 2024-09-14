@@ -43,10 +43,12 @@ function tescoOrders(callback) {
     if(localStorage.getItem("buyer") == "orchestra") 
 	{
 			$('#financialYear').selectpicker('hide')
+			$('.season_code-nav-menu').css('display','block')
 	}
 	else
 	{
 			$('#financialYear').selectpicker('show')
+			$('.season_code-nav-menu').css('display','none')
 	}
     $('.main-content').html('<div class="loader"><div class=" fa-3x"><i class="fa fa-spinner fa-pulse"></i></div></div>');
     $('.top-content').html('');
@@ -525,26 +527,64 @@ function tescoOrders(callback) {
 									"id": "33",
 									"text": "Printed Labels",
 									"parent_id": "32",
-									"children": [{
-											"id": "34",
-											"text": "GCL25W/M12723G",
-											"parent_id": "33",
-											"template_type": "tesco_care_labels"
-										}, {
-											"id": "35",
-											"text": "GCL25W/M13220G",
+									"children": [
+                                        {
+											"id": "122",
+											"text": "GCLW25/M11363G",
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
 										{
-											"id": "36",
-											"text": "GCL25B/M13278G",
+											"id": "123",
+											"text": "GCLW25/M11364G",
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
 										{
-											"id": "37",
-											"text": "GCL25B/M13279G",
+											"id": "124",
+											"text": "GCLW25/M11367G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "125",
+											"text": "GCLW25/M11372G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "126",
+											"text": "GCLW25/M11374G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "127",
+											"text": "GCLW25/M11375G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "128",
+											"text": "GCLW25/M11378G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "129",
+											"text": "GCLB25/M11410G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "130",
+											"text": "GCLW20/M11473G",
+											"parent_id": "33",
+											"template_type": "tesco_care_labels"
+										},
+										{
+											"id": "131",
+											"text": "GCLW20/M11474G",
 											"parent_id": "33",
 											"template_type": "tesco_care_labels"
 										},
@@ -654,10 +694,12 @@ function tescoOrders(callback) {
 
                 /** [ To get selected leaf node ] */
                 var template_id = 0;
+				var ref_template_name;
                 $('#jstree').on('activate_node.jstree', function (e, data) {
                     if (data.instance.is_leaf(data.node) != '') 
                     {
                         template_id = data.node.id;
+						ref_template_name = data.node.text;
                         template_type = data.node.original.template_type;
                         $.ajax({
                             url: base_url + "/customer/tesco/template-view",
@@ -704,11 +746,7 @@ function tescoOrders(callback) {
 
                             },
                             error: function(errorXHR, errorStatus, errorThrown) {
-                              this.tryCount++;
-                              if (this.tryCount <= this.retryLimit) {
-                                  $.ajax(this);
-                                  return;
-                              }
+                                console.log(errorThrown);
                             },
                             complete: function () {
                                 $(".loader").hide();
@@ -750,6 +788,21 @@ function tescoOrders(callback) {
 							$("#tesco_care_size_chart_div").removeClass("hidden");
 							$('#tesco_care_size_chart').prop('required', true);
 							$('#tesco_care_size_chart').val('');
+
+                            if(ref_template_name == "GCLW25/M11375G")
+							{
+								$('#tesco_care_size_chart').val("9").prop('disabled', true);;
+
+							}
+							else if(ref_template_name == "GCLW25/M11367G")
+							{
+								$('#tesco_care_size_chart').val("9").prop('disabled', true);;
+							}
+							else
+							{
+								$('#tesco_care_size_chart').val("").prop('disabled', false);;
+                            }
+
 							// Label Parser
 							if(globalOrderType === 1 && template_type === 'tesco_care_labels') { 
 								// Show only for tesco_care_labels PO upload
@@ -913,11 +966,7 @@ function tescoOrders(callback) {
 				callback();
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
         complete: function () {
             
@@ -1597,11 +1646,7 @@ function createOrders(parsedObj = false, oType = false) {
                         }
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                       /** [ To make top menu active ] */
@@ -1638,7 +1683,7 @@ function create_download_artwork(print_type,obj)
 		var table_name_print = "tesco_swingticket_orders"
 
 
-		downloadArtworkTickets(data,temp_name,style_no,BuyerPO,tableID,order_flag,obj,template_id,table_name_print,"proof","customer")
+		downloadArtworkTickets(data,temp_name,style_no,BuyerPO,tableID,order_flag,obj,template_id,table_name_print,"proof","customer","","")
 	}
 	else
 	{
@@ -1659,7 +1704,7 @@ function create_download_artwork(print_type,obj)
 }
 
 
-function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso,tesco_size_department) {
+function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso,tesco_size_department,woolmark_logo_file,white_woolmark_logo_file,woolmark_logo_id) {
 	
 	var url = "";
 	
@@ -1697,7 +1742,10 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
             white_iron_iso:white_iron_iso,
             white_clean_astm:white_clean_astm,
             white_clean_iso:white_clean_iso,
-            tesco_size_department:tesco_size_department
+            tesco_size_department:tesco_size_department,
+			woolmark_logo_file:woolmark_logo_file,
+			white_woolmark_logo_file:white_woolmark_logo_file,
+            woolmark_logo_id:woolmark_logo_id
 		},
 		tryCount: 0,
 		retryLimit: 2,
@@ -1719,11 +1767,7 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 	})
 }
@@ -1925,11 +1969,7 @@ function printDivTesco(data,name,obj) {
 							svgarr.push(str)
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -2243,11 +2283,7 @@ function printDivTesco(data,name,obj) {
                                 svgarr.push(str)
                             },
                             error: function (errorXHR, errorStatus, errorThrown) {
-                                this.tryCount++;
-                                if (this.tryCount <= this.retryLimit) {
-                                    $.ajax(this);
-                                    return;
-                                }
+                                console.log(errorThrown);
                             },
                             complete: function () {
     
@@ -2563,11 +2599,7 @@ function printDivTesco(data,name,obj) {
                                 svgarr.push(str)
                             },
                             error: function (errorXHR, errorStatus, errorThrown) {
-                                this.tryCount++;
-                                if (this.tryCount <= this.retryLimit) {
-                                    $.ajax(this);
-                                    return;
-                                }
+                                console.log(errorThrown);
                             },
                             complete: function () {
     
@@ -3013,11 +3045,7 @@ function printDivTesco(data,name,obj) {
 							
 						},
 						error: function (errorXHR, errorStatus, errorThrown) {
-							this.tryCount++;
-							if (this.tryCount <= this.retryLimit) {
-								$.ajax(this);
-								return;
-							}
+							console.log(errorThrown);
 						},
 						complete: function () {
 
@@ -3310,11 +3338,7 @@ function PopupTesco(data,name,zone) {
 			
 		},
 		error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
 	})
 
@@ -3385,11 +3409,7 @@ function PopupTescoSmall(data,name,zone) {
 			
 		},
 		error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
 	})
 }
@@ -4183,11 +4203,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
-                      this.tryCount++;
-                      if (this.tryCount <= this.retryLimit) {
-                          $.ajax(this);
-                          return;
-                      }
+                      console.log(errorThrown);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -4469,11 +4485,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
-                      this.tryCount++;
-                      if (this.tryCount <= this.retryLimit) {
-                          $.ajax(this);
-                          return;
-                      }
+                      console.log(errorThrown);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -5066,11 +5078,7 @@ function dynamicSVGTemplatescard(id,item)
 							}
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
-                      this.tryCount++;
-                      if (this.tryCount <= this.retryLimit) {
-                          $.ajax(this);
-                          return;
-                      }
+                      console.log(errorThrown);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -5349,11 +5357,7 @@ function dynamicSVGTemplatescard(id,item)
                            }
                      },
                      error: function(errorXHR, errorStatus, errorThrown) {
-                      this.tryCount++;
-                      if (this.tryCount <= this.retryLimit) {
-                          $.ajax(this);
-                          return;
-                      }
+                      console.log(errorThrown);
                      },
                      complete: function () {
                           /** [To make top menu active] */
@@ -5898,11 +5902,7 @@ function storeCERatioTCL1TCL2TSL1()
                     }
                 },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -6034,11 +6034,7 @@ function storeCERatioTHL1()
                     }
                 },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -6162,11 +6158,7 @@ function storeUKRatioTCL1TCL2TSL1()
                     }
                 },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -6269,11 +6261,7 @@ function storeUKRatioTHL1()
                     }
                 },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7050,11 +7038,7 @@ function saveCERatioTCL1TCL2TSL1()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -7170,11 +7154,7 @@ function saveCERatioTHL1()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -7312,11 +7292,7 @@ function saveCESingleTCL4TSL3()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                       $(".loader").hide();
@@ -7442,11 +7418,7 @@ function saveCESingleTHL3()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7553,11 +7525,7 @@ function saveUKRatioTCL1TCL2TSL1()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7643,11 +7611,7 @@ function saveUKRatioTHL1()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7752,11 +7716,7 @@ function saveUKSingleTCL4TSL3()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7851,11 +7811,7 @@ function saveUKSingleTHL3()
                     afterOrderSaved(data)
                  },
                  error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                  },
                  complete: function () {
                     $(".loader").hide();
@@ -7925,11 +7881,7 @@ function loadTemplatePreview() {
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+          console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -8416,11 +8368,7 @@ function PopupTescoTicketsProofManager(data_front,data_back,po_number,style,temp
 
 		},
 		error: function (errorXHR, errorStatus, errorThrown) {
-			this.tryCount++;
-			if (this.tryCount <= this.retryLimit) {
-				$.ajax(this);
-				return;
-			}
+			console.log(errorThrown);
 		},
 		complete: function() {
 			$(".loader").hide();

@@ -1,43 +1,50 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Jobmanager;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use App\OrchestraSolidPolySticker;
-use App\OrchestraSolidPolyStickerQty;
-use App\OrchestraSolidCartonSticker;
-use App\OrchestraSolidCartonStickerQty;
-use App\OrchestraParcelDetails;
-use App\OrchestraStdCartonStickerQty;
-use App\OrchestraStdCartonSticker;
-use App\OrchestraStdPolyStickerQty;
-use App\OrchestraStdPolySticker;
-use App\OrchestraHangTagQty;
+use DB;
+use PDF;
+use Auth;
+use File;
+use View;
+use Config;
+use Session;
+use Response;
+use App\Buyer;
+use App\History;
+use Carbon\Carbon;
+use App\ErpOrders as Erp;
 use App\OrchestraHangTag;
 use App\OrchestraAgeGroup;
 use App\OrchestraWashCare;
-use App\OrchestraWashCareQty;
-use Response;
-use View;
-use Auth;
-use DB;
-use Session;
-use App\ErpOrders as Erp;
-use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
-use PDF;
-use App\Classes\JobcardPDFHeaderFooter;
 use App\Classes\FPDF_Merge;
-use File;
-use Config;
-use App\History;
-use App\Buyer;
+use App\Classes\JobcardJGA;
+use App\OrchestraHangTagQty;
+use Illuminate\Http\Request;
+use App\OrchestraWashCareQty;
 use App\FinancialYearResetDate;
-use App\Classes\TescoMaterialQuery;
+use App\OrchestraParcelDetails;
+use App\Classes\JobcardMetadata;
+use App\OrchestraStdPolySticker;
+use App\Classes\ErpCompanySession;
+use App\OrchestraSolidPolySticker;
+use App\OrchestraStdCartonSticker;
+use App\Classes\JobcardCommonClass;
 use App\Classes\JobcardIDGenerator;
+use App\Classes\TescoMaterialQuery;
+use App\OrchestraStdPolyStickerQty;
+use App\Http\Controllers\Controller;
+use App\OrchestraSolidCartonSticker;
+use Illuminate\Support\Facades\Mail;
+use App\OrchestraSolidPolyStickerQty;
+use App\OrchestraStdCartonStickerQty;
+use Illuminate\Support\Facades\Input;
+use App\Classes\ErpUserMappedTemplates;
+use App\Classes\JobcardPDFHeaderFooter;
+use App\OrchestraSolidCartonStickerQty;
+use Illuminate\Support\Facades\Validator;
+use App\Classes\JobcardIDByCustomerBuyerId;
+use App\ErpOrderDetails as ErpOrderDetails;
+use App\Classes\UpdateCreateJobcardMainTable;
 
 class JobManagerController extends Controller
 {
@@ -46,7 +53,9 @@ class JobManagerController extends Controller
 	private $order_ap_status_id;
 	private $tesco_material_obj;
 	private $jobcard_id_gen_obj;
-
+    private $erp_user_mapped_template_obj;
+    private $set_company_session;
+    private $jobcard_ids_obj;
 	/**
 	 * Create a new controller instance.
 	 *
@@ -55,8 +64,9 @@ class JobManagerController extends Controller
 	public function __construct()
 	{
 		$this->middleware('erpuser');
-		// get the current time
-		$this->current_date = Carbon::now('Asia/Kolkata')->format('Y-m-d');
+
+		$role = "JOB CARD MANAGER";
+        $this->middleware('role_permission:'.$role);
 
 		// Get Erp status table id for 'Moved To JC Queue' status.
 		$this->erp_jc_status_id = DB::table('erp_status')->where('status_name', 'Moved To JC Queue')->value('id');
@@ -66,6 +76,9 @@ class JobManagerController extends Controller
 
 		$this->tesco_material_obj = new TescoMaterialQuery();
 		$this->jobcard_id_gen_obj = new JobcardIDGenerator();
+		$this->erp_user_mapped_template_obj = new ErpUserMappedTemplates();
+        $this->set_company_session = new ErpCompanySession();
+		$this->jobcard_ids_obj = new JobcardIDByCustomerBuyerId();
 	}
 		
 	/**
@@ -75,181 +88,119 @@ class JobManagerController extends Controller
 	 */
 	public function index()
 	{
-		try {
-			$erp_user_id = Auth::guard('erpuser')->id();
+		$companies = $this->set_company_session->setCompanySession();
+
+		// full access to erp admin
+		$new_orders = $this->erp_user_mapped_template_obj->getPermittedTemplates();
+		
+		$orders_erp = array();
+		foreach($new_orders as $key => $values)
+		{
+			$split_key = explode('-', $key);
+			$buyer_id = $split_key[0];
+			$buyer_name = strtolower(DB::table('buyers')->where('id', $buyer_id)->value('buyer_name'));
 			
-			$companies   = 	DB::table('erpuser_company_mapping')
-									->join('company','erpuser_company_mapping.company','company.id')
-									->where('erpuser_company_mapping.erp_user',$erp_user_id)
-									->select('erpuser_company_mapping.*','company.name', 'company.logo')
-									->get();
+			foreach($values as $valuess)
+			{
+				$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
+										->join('customers', 'erp_orders.customer_id', 'customers.id')
+										->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
+										->join('erp_status', 'erp_orders.status', 'erp_status.id')
+										->join($buyer_name.'_template', $buyer_name.'_template.item_id', 'erp_order_details.template_id')
+										->where(['erp_order_details.template_id' => $valuess,
+													'erp_order_details.deleted_at' => null,
+													'erp_order_details.company_id' => session()->get('company'),
+													'erp_order_details.status' => $this->erp_jc_status_id,
+													'erp_order_details.order_status_id' => $this->order_ap_status_id,
+													'buyers.id' => $buyer_id])
+										->where('erp_order_details.order_qnty_table_name', '<>', 'non_artwork_orders_quanty')
+										->orderBy('erp_order_details.erp_order_id', 'asc')
+										->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone', 'erp_order_details.color_code')
+										->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone', 'erp_order_details.color_code')
+										->get()->toArray();
 
-			if($companies)
-			{
-				$company_id   = DB::table('company')
-								->select('company.*')
-								->where('company.id', $companies[0]->company)
-								->first();
-			}
-			else
-			{
-				return view('erp.home');
-			}
-
-			if(session()->get('company') == "" && session()->get('company') == null)
-			{
-				session()->put('company', $company_id->id);
-				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-			}
-
-			// full access to erp admin
-			if($erp_user_id != 1)
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-									->where('erpusers_template_mapping.company',session()->get('company'))
-									->where('erpusers_template_mapping.erp_user',$erp_user_id)
-									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
-									->distinct('erpusers_template_mapping.templates')
-									->get();
-			}
-			else
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-									->where('erpusers_template_mapping.company',session()->get('company'))
-									->select('erpusers_template_mapping.buyer as buyer_id', 'erpusers_template_mapping.templates', 'buyers.template_table','buyers.item_master_table')
-									->distinct('erpusers_template_mapping.templates')
-									->get();
-			}
-			
-			$new_orders = array();
-			$i=1;
-			foreach($templates as $value)
-			{
-				$arr_template =  DB::table($value->template_table)
-								->where('hierarchy_id',$value->templates)
-								//->where('flag',1)
-								->distinct('hierarchy_id')
-								->pluck('item_id');
-				if($arr_template)
+				if(count($erp_order_details) > 0)
 				{
-					$new_orders[$value->buyer_id."-".$i] = $arr_template;
-				}
-				$i++;
-			}
-			
-			$orders_erp = array();
-			foreach($new_orders as $key => $values)
-			{
-				$split_key = explode('-', $key);
-				$buyer_id = $split_key[0];
-				$this->buyer_name = strtolower(DB::table('buyers')->where('id', $buyer_id)->value('buyer_name'));
-				
-				foreach($values as $valuess)
-				{
-					$erp_order_details = Erp::join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-											->join('customers', 'erp_orders.customer_id', 'customers.id')
-											->join('buyers', 'erp_orders.buyer_id', 'buyers.id')
-											->join('erp_status', 'erp_orders.status', 'erp_status.id')
-											->join($this->buyer_name.'_template', $this->buyer_name.'_template.item_id', 'erp_order_details.template_id')
-											->where('erp_order_details.template_id', '=', $valuess)
-											// ->where('erp_orders.status', '=', $erp_status_id)
-											->where('erp_order_details.deleted_at', null)
-											->where('erp_order_details.status', '=', $this->erp_jc_status_id)
-											->where('erp_order_details.order_status_id', '=', $this->order_ap_status_id)
-											->where('buyers.id', $buyer_id)
-											->orderBy('erp_order_details.erp_order_id', 'asc')
-											->groupBy('erp_order_details.template_id', 'erp_orders.id', 'customers.company_name', 'erp_status.status_name', 'buyers.id', 'erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'erp_order_details.erp_order_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at','erp_order_details.uuid', 'erp_order_details.zone')
-											->select('erp_orders.id', 'erp_order_details.template_id','erp_orders.customer_id', 'erp_orders.buyer_id', 'erp_orders.po_no', 'erp_orders.po_file', 'erp_orders.status', 'erp_orders.erp_id','erp_order_details.reference_name','erp_order_details.order_qnty_table_name','erp_order_details.order_qnty_table_id', 'erp_order_details.style_no', 'erp_order_details.buyer_po_number', 'erp_order_details.delivery_date', 'customers.company_name', 'erp_status.status_name', 'buyers.buyer_name', 'buyers.id as buyer_id',$this->buyer_name.'_template.template_file', 'erp_order_details.order_type', 'erp_order_details.created_at', 'erp_order_details.uuid', 'erp_order_details.zone')
-											->get()->toArray();
-					
-					if(count($erp_order_details) > 0)
+					foreach($erp_order_details as $erp_order_det)
 					{
-						foreach($erp_order_details as $erp_order_det)
+						// format delivery date to dd-mm-yyyy
+						if($erp_order_det["delivery_date"] != null)
 						{
-							// format delivery date to dd-mm-yyyy
-							if($erp_order_det["delivery_date"] != null)
-							{
-                                 $erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
-							}
-							
-							if($erp_order_det["order_qnty_table_name"] == "orchestra_hang_tag_orders_qty")
-							{
-								$fkey = DB::table('orchestra_hang_tag_orders_qty')
-								->where('id',$erp_order_det["order_qnty_table_id"])
-								->first()
-								->oht_id;
-
-								$row = DB::table('orchestra_hang_tag_orders')
-								->where('id',$fkey)->first();
-								
-								$disney = DB::table('orchestra_parcel_details')
-								->where('id',$row->orchestra_parcel_details_id)->first();
-								
-								$erp_order_det["Disney"] = $disney->Licence_Code;
-								
-								$erp_order_det["frontPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_front_id)
-								->where('flag',1)
-								->first()
-								->template_file;
-
-								$erp_order_det["backPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_front_id)
-								->where('flag',0)
-								->first()
-								->template_file;
-								
-							}
-							
-							if($erp_order_det["order_qnty_table_name"] == "orchestra_wash_care_label_orders_qty")
-							{
-								$fkey = DB::table('orchestra_wash_care_label_orders_qty')
-								->where('id',$erp_order_det["order_qnty_table_id"])
-								->first()
-								->owcl_id;
-
-								$row = DB::table('orchestra_wash_care_label_orders')
-								->where('id',$fkey)->first();
-								
-								$disney = DB::table('orchestra_parcel_details')
-								->where('id',$row->orchestra_parcel_details_id)->first();
-								
-								$erp_order_det["Disney"] = $disney->Licence_Code;
-								
-								$erp_order_det["frontPath"] = DB::table('orchestra_template')
-								->where('item_id',$row->template_id)
-								->where('flag',1)
-								->first()
-								->template_file;
-
-								$erp_order_det["backPath"]='/storage/app/template/Orchestra/WCL/sticker2.svg';
-								$erp_order_det["middlePath"]='/storage/app/template/Orchestra/WCL/sticker3.svg';
-							}
-
-							$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
+								$erp_order_det["delivery_date"] = Carbon::parse($erp_order_det["delivery_date"])->format('d-m-Y');
 						}
 						
+						if($erp_order_det["order_qnty_table_name"] == "orchestra_hang_tag_orders_qty")
+						{
+							$fkey = DB::table('orchestra_hang_tag_orders_qty')
+							->where('id',$erp_order_det["order_qnty_table_id"])
+							->first()
+							->oht_id;
+
+							$row = DB::table('orchestra_hang_tag_orders')
+							->where('id',$fkey)->first();
+							
+							$disney = DB::table('orchestra_parcel_details')
+							->where('id',$row->orchestra_parcel_details_id)->first();
+							
+							$erp_order_det["Disney"] = $disney->Licence_Code;
+							
+							$template_file  = DB::table('orchestra_template')
+							->where('item_id',$row->template_front_id)
+							->first()
+							->template_file;
+
+							$split_temp_file = explode(",", $template_file);
+
+							$erp_order_det["frontPath"] = $split_temp_file[0];
+							$erp_order_det["backPath"] = $split_temp_file[1];
+							
+						}
+						
+						if($erp_order_det["order_qnty_table_name"] == "orchestra_wash_care_label_orders_qty")
+						{
+							$fkey = DB::table('orchestra_wash_care_label_orders_qty')
+							->where('id',$erp_order_det["order_qnty_table_id"])
+							->first()
+							->owcl_id;
+
+							$row = DB::table('orchestra_wash_care_label_orders')
+							->where('id',$fkey)->first();
+							
+							$disney = DB::table('orchestra_parcel_details')
+							->where('id',$row->orchestra_parcel_details_id)->first();
+							
+							$erp_order_det["Disney"] = $disney->Licence_Code;
+
+							$template_file = DB::table('orchestra_template')
+							->where('item_id',$row->template_id)
+							->first()
+							->template_file;
+
+							$split_temp_file = explode(",", $template_file);
+
+							$erp_order_det["frontPath"] = $split_temp_file[0];
+							$erp_order_det["backPath"] = $split_temp_file[1];
+							$erp_order_det["middlePath"] = $split_temp_file[1];
+							$erp_order_det["staticPath"] = $split_temp_file[1];
+						}
+
+						$orders_erp[$erp_order_det['uuid']] = $erp_order_det;
 					}
+					
 				}
-				
 			}
-
-			asort($orders_erp);
-
-			return view(
-				'erp.Jobmanager.jobmanager',
-				[
-					'orders' => $orders_erp,
-					'companies' => $companies,
-				]
-			);
+			
 		}
-		catch (\Exception $e)
-		{
-		return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-		}
+
+		asort($orders_erp);
+
+		return view(
+			'erp.Jobmanager.jobmanager',
+			[
+				'orders' => $orders_erp,
+				'companies' => $companies,
+			]
+		);
 	}
 	/**
 	 * Get order deatils.
@@ -271,24 +222,25 @@ class JobManagerController extends Controller
 		if($request->buyer=="orchestra")
 		{
 			$order_details  = 	DB::table('erp_order_details')
-							->where('erp_order_details.style_no',$style_no)
-							->where('erp_order_details.erp_order_id',$id)
-							->where('erp_order_details.reference_name',$ref_name)
+									->where('erp_order_details.style_no',$style_no)
+									->where('erp_order_details.erp_order_id',$id)
+									->where('erp_order_details.reference_name',$ref_name)
 
-							->where(function($query) use($buyer_no) 
-							{
-							$query->when($buyer_no!="null", function ($q) use($buyer_no) 
-							{
-							return $q->where('erp_order_details.buyer_po_number',$buyer_no);
-							});
-							})
-
-							->where('erp_order_details.status','!=',4)
-							->where('erp_order_details.order_status_id','!=',3)
-							->where('erp_order_details.deleted_at', null)
-							->orderBy('erp_order_details.id', 'desc')
-							->select('*')
-							->get();
+									->where(function($query) use($buyer_no) 
+									{
+										$query->when($buyer_no!="null", function ($q) use($buyer_no) 
+									{
+									return $q->where('erp_order_details.buyer_po_number',$buyer_no);
+									});
+									})
+									->where('erp_order_details.order_quantity','!=',0)
+									->where('erp_order_details.order_quantity','!=',null)
+									->where('erp_order_details.status','!=',4)
+									->where('erp_order_details.order_status_id','!=',3)
+									->where('erp_order_details.deleted_at', null)
+									->orderBy('erp_order_details.order_qnty_table_id', 'asc')
+									->select('*')
+									->get();
 
 			$order_Qty_table = $order_details[0]->order_qnty_table_name;
 			$ordertable = substr($order_Qty_table,0,strrpos($order_Qty_table,"_"));
@@ -309,30 +261,22 @@ class JobManagerController extends Controller
 
 				case 'orchestra_wash_care_label_orders' :
 
-						$res = OrchestraWashCare::with(['washcarelabelQty' => function ($query) {
-						$query->leftJoin('orchestra_size_chart as osc', 'osc.age', 'orchestra_wash_care_label_orders_qty.size')->select(DB::raw('distinct on ("orchestra_wash_care_label_orders_qty".uvc_tco) "uvc_tco"'),'orchestra_wash_care_label_orders_qty.*','osc.*');
-						}])->where('orchestra_wash_care_label_orders.id',$parentTable_id)->get();
+					$res['orchestra_wash_care_label_orders'] = DB::table('orchestra_wash_care_label_orders')->join('orchestra_wash_care_label_orders_qty','orchestra_wash_care_label_orders_qty.owcl_id','orchestra_wash_care_label_orders.id')->join('orchestra_color_code','orchestra_color_code.code','orchestra_wash_care_label_orders.color_code')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.*','orchestra_wash_care_label_orders_qty.size','orchestra_wash_care_label_orders_qty.barcode','orchestra_wash_care_label_orders_qty.uvc_tco','orchestra_color_code.french as french_color','orchestra_color_code.english as english_color')->where('orchestra_wash_care_label_orders.id',$parentTable_id)->get();
+
+            
+					$parcel_details = DB::table('orchestra_parcel_details')->where('id',$res['orchestra_wash_care_label_orders'][0]->orchestra_parcel_details_id)->select('*')->get();
 					
-					$res->map(function ($res) use($parentTable_id) {
-						$res->reference_name = "Orchestra WashCare";
-						$res->parentId = $parentTable_id;
-
-						$res->cofreet_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->cofreet_symbols;
-						$res->astm_symbol1 = DB::table('orchestra_care_symbols')->where('id',$res->washing_id)->first()->astms_symbol;
-
-						$res->cofreet_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->cofreet_symbols;
-						$res->astm_symbol2 = DB::table('orchestra_care_symbols')->where('id',$res->whitening_id)->first()->astms_symbol;
-
-						$res->cofreet_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->cofreet_symbols;
-						$res->astm_symbol3 = DB::table('orchestra_care_symbols')->where('id',$res->dryer_id)->first()->astms_symbol;
-
-						$res->cofreet_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->cofreet_symbols;
-						$res->astm_symbol4 = DB::table('orchestra_care_symbols')->where('id',$res->ironing_id)->first()->astms_symbol;
-
-						$res->cofreet_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->cofreet_symbols;
-						$res->astm_symbol5 = DB::table('orchestra_care_symbols')->where('id',$res->cleaning_id)->first()->astms_symbol;
-
-						});
+					$orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')->join('orchestra_compositions','orchestra_compositions.id','orchestra_wash_care_composition.composition_id')->where('owcl_id',$parentTable_id)->select('orchestra_wash_care_composition.*','orchestra_compositions.english')->orderBy('orchestra_wash_care_composition.id')->get();
+					
+					$orchestra_parts_comp = DB::table('orchestra_wash_care_composition')->where('owcl_id',$parentTable_id)->select('orchestra_wash_care_composition.parts_id')->groupBy('orchestra_wash_care_composition.parts_id')->get();
+					
+					$res['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$parcel_details{0}->Family_Code)->get();
+					
+					$res['orchestra_wash_care_label_orders'][0]->activity_label = $parcel_details{0}->Activity_Label;
+					
+					$res['orchestra_wash_care_label_orders'][0]->care_composition = $orchestra_wash_care_composition;
+					$res['orchestra_wash_care_label_orders'][0]->parts_comp = $orchestra_parts_comp;
+					$res['orchestra_wash_care_label_orders'][0]->product_family = $res['product_family'];
 
 				break;
 
@@ -600,6 +544,7 @@ class JobManagerController extends Controller
 
 								
 											$order_omp  = 	DB::table($order_table)
+											->leftJoin('tesco_woolmark_logos','tesco_washcare_orders.woolmark_logo_id','=','tesco_woolmark_logos.id')
 																->join('tesco_suppliers',$order_table.'.tesco_metadata_supplier_id', 'tesco_suppliers.id')
 																->join('tesco_care_symbols as washing',$order_table.'.wash_symbol_id', 'washing.id')
                                 ->join('tesco_care_symbols as whitening',$order_table.'.bleach_symbol_id', 'whitening.id')
@@ -607,7 +552,7 @@ class JobManagerController extends Controller
                                 ->join('tesco_care_symbols as iron',$order_table.'.ironing_symbol_id', 'iron.id')
                                 ->join('tesco_care_symbols as cleaning',$order_table.'.dryclean_symbol_id', 'cleaning.id')
 																	->where($order_table.'.id',$order_details_omp[0]->$order_id)
-																	->select($order_table.'.*','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
+																	->select($order_table.'.*','tesco_woolmark_logos.label_woolmark_logo','tesco_woolmark_logos.white_woolmark_logo','tesco_suppliers.supplier_name','washing.iso_symbols as wash_iso','washing.astms_symbol as wash_astm','washing.degree','whitening.iso_symbols as whit_iso','whitening.astms_symbol as whit_astm','dry.iso_symbols as dry_iso','dry.astms_symbol as dry_astm','iron.iso_symbols as iron_iso','iron.astms_symbol as iron_astm','cleaning.iso_symbols as clean_iso','cleaning.astms_symbol as clean_astm','washing.white_iso_symbols as white_wash_iso','washing.white_astms_symbol as white_wash_astm','washing.degree','whitening.white_iso_symbols as white_whit_iso','whitening.white_astms_symbol as white_whit_astm','dry.white_iso_symbols as white_dry_iso','dry.white_astms_symbol as white_dry_astm','iron.white_iso_symbols as white_iron_iso','iron.white_astms_symbol as white_iron_astm','cleaning.white_iso_symbols as white_clean_iso','cleaning.white_astms_symbol as white_clean_astm')
 																	->get();
 
 																	$value->washcare_order_id=$order_details_omp{0}->washcare_order_id;
@@ -636,10 +581,17 @@ class JobManagerController extends Controller
 																											->select('*')
 																											->get();
 																			$value->part_name = $part_name{0}->name;
+																			$value->part_czech = $part_name{0}->czech;
+																			$value->part_slovak = $part_name{0}->slovak;
+																			$value->part_hungarian = $part_name{0}->hungarian;
+																			
 																	}
 																	else
 																	{
 																			$value->part_name = "";
+																			$value->part_czech = "";
+																			$value->part_slovak = "";
+																			$value->part_hungarian = "";
 																	}
 																	
 																	$value->baby_sleeping_bag_symbol=$order_omp{0}->baby_sleeping_bag_symbol;
@@ -668,13 +620,17 @@ class JobManagerController extends Controller
 																	$value->white_clean_iso=$order_omp[0]->white_clean_iso;
 																	$value->white_clean_astm=$order_omp[0]->white_clean_astm;
 																	$value->degree=$order_omp{0}->degree;
+																	$value->woolmark_logo_file=$order_omp[0]->label_woolmark_logo;
+																	$value->white_woolmark_logo_file=$order_omp[0]->white_woolmark_logo;
+																	$value->woolmark_logo_id=$order_omp[0]->woolmark_logo_id;
+																	$value->woolmark_batch_code=$order_omp[0]->woolmark_batch_code;
 																	$value->additional_care_text_1=$order_omp{0}->additional_care_text_1;
 																	$value->additional_care_text_2=$order_omp{0}->additional_care_text_2;
 																	$value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
 																	$value->kids_warning_text=$order_omp{0}->kids_warning_text;
-																	$value->exclusive_trims_text=$order_omp{0}->exclusive_trims_text;
-																	$value->contains_non_textile_part_text=$order_omp{0}->contains_non_textile_part_text;
-																	$value->part_of_set_text=$order_omp{0}->part_of_set_text;
+																	$value->exclusive_trims_text=$order_omp[0]->garment_statement_text;
+																	$value->contains_non_textile_part_text=null;
+																	$value->part_of_set_text=null;
                 													$value->tesco_size_department=$tesco_size_department[0]->department_name;
 																	$value->created_at=$order_omp[0]->created_at;
 											
@@ -976,303 +932,22 @@ class JobManagerController extends Controller
 	 */
 	public function getOrderDetailsByIds(Request $request)
 	{
-	  try {
-			if(session()->get('company_name') === "jupitergarmentsaccessories"){
-				$erp_orders_ids     = explode(',', $request['orders']);
-				$selected_ref_arrays= explode(',', $request['ref_array']);
-				$buyer_pos          = explode(',', $request['buyer_po_array']);
-				$order_type         = explode(',', $request['order_type_array']);
-				$uuid               = explode(',', $request['uuid_array']);
-				$order_dt_array     = array();
-				$delivery_dt_array  = array();
-				$style_array        = array();
-				$ordertype_array    = array();
-				$temp_id_array      = array();
-				$template_data      = array();
-				$ratio_templates    = array();
-				$single_templates   = array();
-				$print_color_array  = array();
-				$material_array     = array();
-				$article_array      = array();
-				$length_array       = array();
-				$width_array        = array();
-				$distinct_ref_array = array();
-				$single_temp_data   = array();
-				$common_data_chunk  = array();
-				$size_chunk         = array();
-				$final_chunk        = array();
-				$order_detail_ids   = array();
-				$erp_id_array       = array();
-				$customer_po_array  = array();
-				$color_code         = array();
-				$tint_color         = array();
-
-				/** Get erp order details table ids from erp orders table id */
-				foreach ($erp_orders_ids as $row => $erp_orders_id) {
-					// buyer po number is not mandatory for orchestra.
-					// So splitting query using conditional statements.
-					$order_detail_id_array = ErpOrderDetails::where([
-						'erp_order_details.erp_order_id' => $erp_orders_id,
-						'erp_order_details.order_type' => $order_type[$row],
-						'erp_order_details.uuid' => $uuid[$row],
-						'erp_order_details.status' => $this->erp_jc_status_id,
-						'erp_order_details.order_status_id' => $this->order_ap_status_id,
-						'erp_order_details.reference_name' => $selected_ref_arrays[$row]
-					]);
-					if ($buyer_pos[$row] != "") {
-						$order_detail_id_array = $order_detail_id_array->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
-							->pluck('erp_order_details.id')->all();
-					} else {
-						$order_detail_id_array = $order_detail_id_array->pluck('erp_order_details.id')->all();
-					}
-
-					$order_detail_ids = array_unique(array_merge($order_detail_ids, $order_detail_id_array));
-				}
-				sort($order_detail_ids);
-				
-				$order_details_collection = Erp::select('erp_orders.*', 'erp_order_details.*')
-				->join('erp_order_details', 'erp_order_details.erp_order_id', 'erp_orders.id')
-				->whereIn('erp_order_details.id', $order_detail_ids)
-				->get();
-
-				/** Same buyer or not validation */
-				$buyer_id_list = $order_details_collection->pluck('buyer_id')->toArray();
-
-				if (count(array_unique($buyer_id_list)) === 1) {
-					$buyer = DB::table('buyers')
-					->select('buyer_name', 'id as buyer_id', 'template_table', 'item_master_table')
-					->where('id', $buyer_id_list[0])
-						->first();
-
-					$this->buyer_name = $buyer->buyer_name;
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Buyers Not Acceptable'], 406);
-				}
-
-				/** Same customer or not validation */
-				$customer_id_list = $order_details_collection->pluck('customer_id')->toArray();
-
-				if (count(array_unique($customer_id_list)) === 1) {
-					$customer = DB::table('customers')
-					->select('short_name as customer_name', 'id as customer_id')
-					->where('id', $customer_id_list[0])
-						->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Customers Not Acceptable'], 406);
-				}
-
-				/** Same company or not validation */
-				$company_id_list = $order_details_collection->pluck('company_id')->toArray();
-
-				if (count(array_unique($company_id_list)) === 1) {
-					$company = DB::table('company')
-					->select('name as company', 'id as company_id', 'address as company_address', 'logo as company_logo')
-					->where('id', $company_id_list[0])
-						->first();
-				} else {
-					return response()->json(['error' => true, 'message' => 'Different Companies Not Acceptable'], 406);
-				}
-
-				foreach ($order_details_collection as $key => $order_details) {
-
-					!in_array($order_details->created_at, $order_dt_array, true) ? array_push($order_dt_array, $order_details->created_at) : $order_dt_array;
-
-					!in_array(Carbon::parse($order_details->delivery_date)->format('d-m-Y'), $delivery_dt_array, true) ? array_push($delivery_dt_array, Carbon::parse($order_details->delivery_date)->format('d-m-Y')) : $delivery_dt_array;
-
-					!in_array($order_details->style_no, $style_array, true) ? array_push($style_array, $order_details->style_no) : $style_array;
-
-					!in_array($order_details->order_type, $ordertype_array, true) ? array_push($ordertype_array, $order_details->order_type) : $ordertype_array;
-
-					!in_array($order_details->template_id, $temp_id_array, true) ? array_push($temp_id_array, $order_details->template_id) : $temp_id_array;
-
-					!in_array($order_details->reference_name, $distinct_ref_array, true) ? array_push($distinct_ref_array, $order_details->reference_name) : $distinct_ref_array;
-
-					!in_array($order_details->po_no, $customer_po_array, true) ? array_push($customer_po_array, $order_details->po_no) : $customer_po_array;
-
-					/** Create separate ratio/single templates array  */
-					if ($order_details->template_type == "ratio") {
-						if ($this->buyer_name === "Tesco") {
-							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
-							->select($order_details->order_qnty_table_name . '.id as qty_table_id', $order_details->order_qnty_table_name . '.ratio_pack_type')
-							->first();
-
-							$order_details->ratio_pack_type = $order_main_table_data->ratio_pack_type;
-						} else {
-							$order_main_table_data = DB::table($order_details->order_qnty_table_name)
-							->select($order_details->order_qnty_table_name . '.id as qty_table_id')
-							->first();
-						}
-
-						$order_details->qty_table_id = $order_main_table_data->qty_table_id;
-
-						$ratio_templates[$order_details->reference_name][] = $order_details;
-					} else {
-						// to differenciate reorder and repeatorder having same values
-						$unique_id = $order_details->uuid;
-
-						$erp_id_array[$order_details->reference_name][] = $order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id;
-
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['ocn_number'] = $order_details->ocn_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['erp_id'] = $order_details->erp_id;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['buyer_po_number'] = $order_details->buyer_po_number;
-						$single_templates[$order_details->reference_name]['order_data'][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id]['template_id'] = $order_details->template_id;
-						$single_templates[$order_details->reference_name]['size'][$order_details->size][$order_details->erp_id . '-' . $order_details->buyer_po_number . '-' . $order_details->order_type . '-' . $unique_id] = $order_details->order_quantity;
-					}
-
-					// Add color code and age group pantone color as tint color for orchestra
-					if ($this->buyer_name === "Orchestra") {
-						// parse orchestra orders table and table id from quantity table name
-						$main_table     = str_replace("_qty", "", $order_details->order_qnty_table_name);
-						$result_str     = str_replace("_", " ", str_replace("_orders", "", $main_table));
-						$qnty_id        = '';
-						foreach (explode(' ', $result_str) as $word) {
-							$qnty_id .= strtolower($word[0]);
-						}
-
-						$orchestra_color_details = DB::table($order_details->order_qnty_table_name)
-						->select($main_table . '.color_code', 'orchestra_age_group.pantone_color')
-						->join($main_table, $main_table . '.id', $order_details->order_qnty_table_name . '.' . $qnty_id . '_id')
-						->join('orchestra_age_group',  'orchestra_age_group.id', $main_table . '.group_id')
-						->where($order_details->order_qnty_table_name . '.id', $order_details->order_qnty_table_id)
-						->first();
-
-						!in_array($orchestra_color_details->color_code, $color_code, true) ? array_push($color_code, $orchestra_color_details->color_code) : $color_code;
-						!in_array($orchestra_color_details->pantone_color, $tint_color, true) ? array_push($tint_color, $orchestra_color_details->pantone_color) : $tint_color;
-					}
-				}
-
-				/** Get templates metadata details */
-				if (!empty($temp_id_array)) {
-					$template_details = DB::table($buyer->template_table)
-						->select($buyer->template_table . '.color', $buyer->template_table . '.dimension_height as length', $buyer->template_table . '.dimension_width as width', $buyer->item_master_table . '.item_name as article', 'raw_material_master.material_name_employee as material',  $buyer->template_table . '.material_id')
-						->join($buyer->item_master_table, $buyer->item_master_table . '.id', $buyer->template_table . '.hierarchy_id')
-						->join('raw_material_master', 'raw_material_master.id', $buyer->template_table . '.material_id')
-						->whereIn($buyer->template_table . '.item_id', $temp_id_array)
-						->orderBy($buyer->template_table . '.id')
-						->get();
-
-					foreach ($template_details as $template_detail) {
-						!in_array($template_detail->color, $print_color_array, true) ? array_push($print_color_array, $template_detail->color) : $print_color_array;
-
-						!in_array($template_detail->material, $material_array, true) ? array_push($material_array, $template_detail->material) : $material_array;
-
-						!in_array($template_detail->article, $article_array, true) ? array_push($article_array, $template_detail->article) : $article_array;
-
-						!in_array($template_detail->length, $length_array, true) ? array_push($length_array, $template_detail->length) : $length_array;
-
-						!in_array($template_detail->width, $width_array, true) ? array_push($width_array, $template_detail->width) : $width_array;
-					}
-				} else {
-					return response()->json(['error' => true, 'message' => 'Template details are missing, contact your admin.'], 404);
-				}
-				
-				/** Different size breakup value handling */
-				foreach ($single_templates as $template => $template_item) {
-					ksort($template_item['order_data']);
-					$po_count = sizeof($template_item['order_data']);
-
-					foreach ($template_item['size'] as $size => $qty) {
-						$size_count = sizeof($qty);
-
-						if ($size_count < $po_count) {
-							/** push 0 qty value for missing/additional size-breakup  */
-							for ($i = 0; $i < sizeof($erp_id_array[$template]); $i++) {
-								$qty = !array_key_exists($erp_id_array[$template][$i], $qty) ? array_merge($qty, [$erp_id_array[$template][$i] => 0]) : $qty;
-							}
-						}
-						ksort($qty);
-
-						$template_item['size'][$size] = $qty;
-					}
-					$single_templates[$template] = $template_item;
-
-					/** Split template data array into small chunks (3 elements in each chunks) */
-					/** common data chunk */
-					$common_data_chunk = array_chunk($template_item['order_data'], 3);
-					foreach ($common_data_chunk as $key => $data) {
-						$final_chunk[$template . '_' . $key]['order_data'] = $data;
-					}
-
-					foreach ($template_item['size'] as $size => $qty) {
-						/** size-quantity chunk */
-						$size_chunk =  array_chunk($qty, 3, true);
-						foreach ($size_chunk as $key2 => $value2) {
-							/** check if all the size values are 0 or not
-							 * remove following if condition if client wants zero qty size in final table.
-							 */
-							$is_size_qty_empty = array_filter($value2) != NULL ? 0 : 1;
-							if ($is_size_qty_empty != 1) {
-								$final_chunk[$template . '_' . $key2]['size'][$size . '_' . $key2] = $value2;
-							}
-						}
-					}
-				}
-
-				/** Unset unwanted values from buyers array */
-				unset($buyer->template_table);
-				unset($buyer->item_master_table);
-
-				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
-
-				/** Push all array values into template_data array */
-				$template_data['order_date']       = Carbon::parse(min($order_dt_array))->format('d-m-Y');
-				$template_data['cus_del_date']     = $delivery_dt_array;
-				$template_data['today_date']       = Carbon::parse($this->current_date)->format('d-m-Y');
-				$template_data['workorder_id']     = $workorder_id;
-				$template_data['company']          = $company;
-				$template_data['customer']         = $customer;
-				$template_data['buyer']            = $buyer;
-				$template_data['ordertype_array']  = $ordertype_array;
-				$template_data['style_array']      = $style_array;
-				$template_data['refnum_array']     = $distinct_ref_array;
-				$template_data['color']            = $print_color_array;
-				$template_data['material']		   = $material_array;
-				$template_data['article']          = $article_array;
-				$template_data['length']   		   = $length_array;
-				$template_data['width']            = $width_array;
-				$template_data['ratio']            = $ratio_templates;
-				$template_data['single']           = $final_chunk;
-				$template_data['order_detail_ids'] = $order_detail_ids;
-				$template_data['customer_po_array'] = $customer_po_array;
-				$template_data['color_code']       = $color_code;
-				$template_data['tint_color']       = $tint_color;
-
-				$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-				->where('is_enabled', true)
-				->pluck('disp_mode', 'id')
-				->all();
-				$erp_finish_type = DB::table('erp_finish_type')
-				->where('is_enabled', true)
-				->pluck('finish_type', 'id')
-				->all();
-				$erp_machines = DB::table('erp_machines')
-				->where('is_enabled', true)
-				->pluck('machine', 'id')
-				->all();
-				$erp_teeth_no = DB::table('erp_teeth_no')
-				->where('is_enabled', true)
-				->pluck('teeth_no', 'id')
-				->all();
-			} else {
-				return response()->json(['error'=> true,'message' =>'Jobcard for Spectrra Printers currently not available !!'],406);
-			}
-
+		try {
+			$jga_jc = new JobcardJGA();
+			list($template_data, $metadata) = $jga_jc->getOrderDataForJGAJC($request, $this->erp_jc_status_id, $this->order_ap_status_id);
 			return response()->json([
-				'error'=> false,
-				'message' =>'Success', 
+				'error' => false,
+				'message' => 'Success',
 				'template_data' => $template_data,
-				'disp_modes' => $erp_dispatch_mode,
-				'finish_types' => $erp_finish_type,
-				'machines' => $erp_machines,
-				'teeth_nos' => $erp_teeth_no
+				'disp_modes' => $metadata['erp_dispatch_mode'],
+				'finish_types' => $metadata['erp_finish_type'],
+				'machines' => $metadata['erp_machines'],
+				'teeth_nos' => $metadata['erp_teeth_no']
 
-			],200);
-  
-		  } catch (\Exception $e)
-		  {
-			return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
-		  }
+			], 200);
+		} catch (\Exception $e) {
+			return response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
 	}
 	
 	/**
@@ -1330,396 +1005,241 @@ class JobManagerController extends Controller
 				$buyer_pos       = explode(',', $request['selected_buyer_po_array']);
 				$order_types     = explode(',', $request['order_type_array']);
 				$uuid            = explode(',', $request['uuid_array']);
+				$crud_jc_obj     = new UpdateCreateJobcardMainTable();
 
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
-				if(isset($company_id) && isset($jobcard_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($material))
+				if(!isset($company_id) && !isset($jobcard_id) && !isset($created_date) && !isset($article) && !isset($material) && !isset($customer_id) && !isset($buyer_id) && !isset($disp_mode) && !isset($order_date) && !isset($machine) && !isset($cus_del_date)  && !isset($finish_type)  && !isset($compiled_by) && !isset($final_json_obj) && !isset($material))
 				{
-					$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
-					$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
+					return response()->json(['error'=> true,'message' =>'Parameter is Missing'],400);
+				}
 
-					$article_array = explode(', ', $article);
-					
-					// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
-					$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+				$buyer    = DB::table('buyers')->select('buyer_name')->where('id', $buyer_id)->first();
+				$customer = DB::table('customers')->select('short_name as customer_name', 'pi_required', 'po_required')->where('id', $customer_id)->first();
 
-					// Get Erp status table id for 'Jobcard Created' status.
-					$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
-					$store_jobcard_id = DB::table('jobcard_main_table')->insertGetId([
-						'work_order_id'          => $workorder_id,
-						'company_id'             => $company_id,
-						'customer_id'            => $customer_id,
-						'buyer_id'               => $buyer_id,
-						'created_date'           => $created_date,
-						'material'               => $material,
-						'article'                => $article,
-						'style_number'           => $style_no,
-						'reference'              => $reference,
-						'order_type'             => $order_type,
-						'dispatch_mode'          => $disp_mode,
-						'order_date'             => $order_date,
-						'length'                 => $length,
-						'repeat_gap'             => $repeat_gap,
-						'machine'                => $machine,
-						'customer_del_date'      => $cus_del_date,
-						'width'                  => $width,
-						'roll_width'             => $roll_width,
-						'film_no'                => $film_no,
-						'invoice_date'           => $invoice_date,
-						'length_side'            => $length_side,
-						'excess_percentage'      => $excess,
-						'teeth_no'               => $teeth_no,
-						'invoice_num'            => $inv_no,
-						'no_of_stickers'         => $no_sticker,
-						'finish_type'            => $finish_type,
-						'print_color'            => $print_color,
-						'compiled_by'            => $compiled_by,
-						'barcode_read'           => $barcode_read,
-						'operator'               => $operator,
-						'checker'                => $checker,
-						'authorized_by'          => $authorized_by,
-						'axicon_verifier'        => $axicon_verifier,
-						'approved_by'            => $approved_by,
-						'packer'                 => $packer,
-						'approval_date'          => $approval_date,
-						'roll_issued_by'         => $roll_issued_by,
-						'cutter'                 => $cutter,
-						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
-						'created_at'             => $current_timestamp,
-						'updated_at'             => $current_timestamp,
-						'tint_color'             => $tint_color,
-						'customer_po_num'        => $customer_po_num
-					  ]);
+				$article_array = explode(', ', $article);
+				
+				// jobcard id format "Itemname(2)FinancialYearERPID(last 5)0001" where  and for old order "JGA-JC-1"
+				$workorder_id = $this->jobcard_id_gen_obj->generateJobcardID($article_array, $erp_orders_ids);
+
+				// Get Erp status table id for 'Jobcard Created' status.
+				$erp_status_id = DB::table('erp_status')->where('status_name', 'Jobcard Created')->value('id');
+
+				$store_jobcard_id = $crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, 'created_at', 0);
+				
+				/** Store jobcard settings and excess details**/
+				if($store_jobcard_id != '')
+				{
+					$single_ref      = explode(',', $request['single_ref']);
+					$act_excess 	 = explode(',', $request['act_excess']);
+					$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
+					$settings        = explode(',', $request['settings']);
+					$total_mtrs 	 = explode(',', $request['total_mtrs']);
 					
-					/** Store jobcard settings and excess details**/
-					if($store_jobcard_id != '')
+					if (!empty($request['single_ref'])) 
 					{
-						if (!empty($request['single_ref'])) 
+						$i = 0;
+						foreach($single_ref as $value)
 						{
+							$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
+								'jobcard_main_table_id'   => $store_jobcard_id->id,
+								'ref_name'                => $single_ref[$i],
+								'mtrs_for_stickers'       => $sticker_mtr[$i],
+								'actual_excess'           => $act_excess[$i],
+								'settings'                => $settings[$i],
+								'total_mtrs'              => $total_mtrs[$i],
+								'created_at'              => $current_timestamp,
+								'updated_at'              => $current_timestamp
+							]);
+							$i++;
+						}
+					}
+
+					/** Update jobcard created status erp order details table */
+					foreach($erp_orders_ids as $row => $erp_orders_id)
+					{
+						/** Get updated data and update in history table */
+						// buyer po is optional for orchestra orders 
+						$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
+						->where('erp_order_details.order_type', $order_types[$row])
+						->where('erp_order_details.uuid', $uuid[$row])
+						->where('erp_order_details.reference_name', $selected_ref[$row]);
+
+						if($buyer_pos[$row] != "") {
+							$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+							->update([
+								'status'  => $erp_status_id,
+								'jc_number' => $workorder_id,
+								'jc_created_by' => Auth::guard('erpuser')->id(),
+								'jc_created_date' => $current_timestamp
+							]);
+
+							$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
+						} else {
+							$update_query->update([
+								'status'  => $erp_status_id,
+								'jc_number' => $workorder_id,
+								'jc_created_by' => Auth::guard('erpuser')->id(),
+								'jc_created_date' => $current_timestamp
+							]);
+
+							$jobcard_data = $update_query->get();
+						}
+
+						$template       = 'Available';
+						$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
+						
+						foreach($jobcard_data as $key => $data)
+						{
+							// it will insert if erp_order_details_id i snot exists, otherwise it will update 
+							$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
+								'updated_at'           => $current_timestamp,
+								'disp_mode_id'         => $disp_mode
+							]);
+
+							DB::table('event_history')
+							->insert([
+								'history_id'  => $history_id->id,
+								'action_id'   => $action_id,
+								'created_by'  => Auth::guard('erpuser')->id(),
+								'created_at'  => $current_timestamp,
+								'updated_at'  => $current_timestamp,
+							]);
 							
-							$single_ref      = explode(',', $request['single_ref']);
-							$act_excess 	 = explode(',', $request['act_excess']);
-							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
-							$settings        = explode(',', $request['settings']);
-							$total_mtrs 	 = explode(',', $request['total_mtrs']);
-
-							$i = 0;
-							foreach($single_ref as $value)
-							{
-								$store_jobcard_details = DB::table('jobcard_excess_details')->insert([
-									'jobcard_main_table_id'   => $store_jobcard_id,
-									'ref_name'                => $single_ref[$i],
-									'mtrs_for_stickers'       => $sticker_mtr[$i],
-									'actual_excess'           => $act_excess[$i],
-									'settings'                => $settings[$i],
-									'total_mtrs'              => $total_mtrs[$i],
-									'created_at'              => $current_timestamp,
-									'updated_at'              => $current_timestamp
-								]);
-								$i++;
-							}
 						}
-						else
-						{
-							$single_ref      = explode(',', $request['single_ref']);
-							$act_excess 	 = explode(',', $request['act_excess']);
-							$sticker_mtr 	 = explode(',', $request['sticker_mtr']);
-							$settings        = explode(',', $request['settings']);
-							$total_mtrs 	 = explode(',', $request['total_mtrs']);
-						}
+						
+					}
 
-						/** Update jobcard created status erp order details table */
-						foreach($erp_orders_ids as $row => $erp_orders_id)
+					/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
+					foreach($erp_orders_ids as $row => $erp_orders_id)
+					{
+						$erp_order_table_status = DB::table('erp_order_details')
+							->where('erp_order_details.erp_order_id', $erp_orders_id)
+							->pluck('status')->all();
+						
+						if(count(array_unique($erp_order_table_status)) === 1)
 						{
-							/** Get updated data and update in history table */
-							// buyer po is optional for orchestra orders 
-							$update_query = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_orders_id)
-							->where('erp_order_details.order_type', $order_types[$row])
-							->where('erp_order_details.uuid', $uuid[$row])
-							->where('erp_order_details.reference_name', $selected_ref[$row]);
-
-							if($buyer_pos[$row] != "") {
-								$update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])
+							DB::table('erp_orders')
+								->where('erp_orders.id', $erp_orders_id)
 								->update([
-									'status'  => $erp_status_id,
-									'jc_number' => $workorder_id,
-									'jc_created_by' => Auth::guard('erpuser')->id(),
-									'jc_created_date' => $current_timestamp
+									'status'  => $erp_order_table_status[0]
 								]);
-
-								$jobcard_data = $update_query->where('erp_order_details.buyer_po_number', $buyer_pos[$row])->get();
-							} else {
-								$update_query->update([
-									'status'  => $erp_status_id,
-									'jc_number' => $workorder_id,
-									'jc_created_by' => Auth::guard('erpuser')->id(),
-									'jc_created_date' => $current_timestamp
-								]);
-
-								$jobcard_data = $update_query->get();
-							}
-
-							$template       = 'Available';
-							$action_id  = DB::table('actions')->where('action', 'JC Created')->value('id');
-							
-							foreach($jobcard_data as $key => $data)
-							{
-								$qnty_table     = $data->order_qnty_table_name;
-								$qty_row_id     = $data->order_qnty_table_id;
-								if($buyer->buyer_name === 'Tesco'){
-
-									$main_table     = str_replace("_quanty","",$qnty_table);
-									$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-									$order_details  = DB::table($qnty_table)
-														->select($main_table.'.*')
-														->where($qnty_table.'.id', $qty_row_id)
-														->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-														->first();
-									$season         = $order_details->season_code;
-									$country        = $order_details->zone;
-									$style_zone     = strtolower($country).'_style_ref';
-									$template_id    = $order_details->template_id;
-									$order_table_array = explode("_", $main_table);
-									$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-									
-									$material_name  = $template_level->material;
-									$material_sub   = $template_level->material_sub;
-									$material_ref   = $template_level->ref;
-									
-									if ($customer->pi_required == 1 && $customer->po_required== 0) {
-										$customer_po  = $order_details->pi_id;
-									}
-									else if($customer->po_required== 1){
-										$customer_po  = $order_details->purchase_order_no;
-									}
-
-									$buyer_po       = $order_details->po_number;
-									$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-									$ocn_number     = $order_details->ocn_number;
-									
-
-								} else if($buyer->buyer_name === 'Orchestra'){
-
-									$main_table     = str_replace("_qty","",$qnty_table);
-									$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-									$qnty_id        = '';
-									foreach (explode(' ', $result_str) as $word)
-									{
-									$qnty_id .= strtolower($word[0]);
-									}
-									
-									$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-													->first();
-									
-									// template front and back id storing in orchestra_hang_tag_orders table
-									$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-									$template_data = DB::table('orchestra_item_master')
-													->where('orchestra_item_master.id', $template_id)
-													->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-									$material_name  = DB::table('orchestra_item_master')->where('id', $template_data->material_id)->value('item_name');
-									$material_sub  = DB::table('orchestra_item_master')->where('id', $template_data->sub_material_id)->value('item_name');
-									
-									$material_ref   = $template_data->item_name;
-
-									if ($customer->pi_required == 1 && $customer->po_required== 0) {
-										$customer_po  = $order_details->pi_id;
-									}
-									else if($customer->po_required== 1){
-										$customer_po  = $order_details->po_number;
-									}
-									
-									$buyer_po       = $order_details->po;
-									$style          = $order_details->uvc;
-									$ocn_number     = null;
-									$season         = $order_details->season_code;
-									$country        = null;
-
-								} else {
-
-									$template       = 'Not Available';
-
-								}
-
-								// it will insert if erp_order_details_id i snot exists, otherwise it will update 
-								$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
-									'buyer_id'             => $buyer_id,
-									'template'             => $template,
-									'season'               => $season,
-									'country'              => $country,
-									'customer_id'          => $customer_id,
-									'material'             => $material_name,
-									'mat_sub'              => $material_sub,
-									'reference'            => $material_ref,
-									'style'                => $style,
-									'po'                   => $customer_po,
-									'buyer_po'             => $buyer_po,
-									'ocn'                  => $ocn_number,
-									'created_at'           => $current_timestamp,
-									'updated_at'           => $current_timestamp,
-									'disp_mode_id'         => $disp_mode
-								]);
-
-								DB::table('event_history')
-								->insert([
-									'history_id'  => $history_id->id,
-									'action_id'   => $action_id,
-									'created_by'  => Auth::guard('erpuser')->id(),
-									'created_at'  => $current_timestamp,
-									'updated_at'  => $current_timestamp,
-								]);
-								
-							}
-							
 						}
-
-						/** Update jobcard created status erp orders table(iff, all the orders in the order details table have same status. ie, after creating jobcard for all orders) */
-						foreach($erp_orders_ids as $row => $erp_orders_id)
-						{
-							$erp_order_table_status = DB::table('erp_order_details')
-								->where('erp_order_details.erp_order_id', $erp_orders_id)
-								->pluck('status')->all();
-							
-							if(count(array_unique($erp_order_table_status)) === 1)
-							{
-								DB::table('erp_orders')
-									->where('erp_orders.id', $erp_orders_id)
-									->update([
-										'status'  => $erp_order_table_status[0]
-									]);
-							}
-						}
-
-						$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
-
-						$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
-						$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
-						$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
-						$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
-
-						/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
-						$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
-						$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
-						$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
-						$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
-						$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
-						
-						$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-						$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);		
-
-						$pdf->SetPrintHeader(true);
-						$pdf->SetPrintFooter(true);  
-
-						//margins
-						$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-						$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-						$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-						
-						// set header and footer fonts
-						$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-						$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-						
-						// /** Handle Page break */
-						// if ($pdf->last_page_flag)
-						// {
-								// set auto page breaks
-							$pdf->SetAutoPageBreak(TRUE, 40);
-		
-						// }
-						// else 
-						// {
-						// 	  $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-						// }
-						
-
-						// set image scale factor
-						$pdf->setImageScale(1.8);
-
-						// set font
-						$pdf->SetFont('helvetica', '', 8);
-
-						// add a page
-						$pdf->AddPage('P', 'A4');
-
-						// set some text to print
-						$view = View::make('erp/Jobmanager/jobcard-pdf-template')
-								->with([
-										'buyer' 		   => $buyer,
-										'customer' 		   => $customer,
-										'company'		   => $company,
-										'workorder_id'     => $workorder_id,
-										'created_date'     => $formated_created_date,
-										'article'	       => $article,
-										'material'		   => $material,
-										'style_no'		   => $style_no,
-										'order_type'       => $order_type,
-										'reference'		   => $reference,
-										'disp_mode'	       => $erp_dispatch_mode,
-										'order_date'	   => $formated_order_date,
-										'length'		   => $length,
-										'repeat_gap'	   => $repeat_gap,
-										'machine'		   => $erp_machine,
-										'cus_del_date' 	   => $formated_cus_del_date,
-										'roll_width'	   => $roll_width,
-										'width'	  		   => $width,
-										'film_no'		   => $film_no, 
-										'invoice_date'     => $formated_inv_date,
-										'length_side'	   => $length_side,
-										'excess'	       => $excess,
-										'teeth_no'		   => $erp_teeth_no,
-										'inv_no'	       => $inv_no,
-										'no_sticker'	   => $no_sticker,
-										'finish_type'	   => $erp_finish_type,
-										'print_color'      => $print_color,
-										'compiled_by'      => $compiled_by,
-										'barcode_read'     => $barcode_read,
-										'operator'         => $operator,
-										'checker'          => $checker,
-										'authorized_by'    => $authorized_by,
-										'axicon_verifier'  => $axicon_verifier,
-										'approved_by'	   => $approved_by,
-										'packer'		   => $packer,
-										'approval_date'    => $format_approval_date,
-										'roll_issued_by'   => $roll_issued_by,
-										'cutter'		   => $cutter,
-										'cartons' 		   => $cartons,
-										'final_json_obj'   => json_decode($final_json_obj, true),
-										'single_ref'	   => $single_ref,
-										'act_excess'	   => $act_excess,
-										'sticker_mtr'	   => $sticker_mtr,
-										'settings'		   => $settings,
-										'total_mtrs' 	   => $total_mtrs,
-										'tint_color'       => $tint_color,
-										'customer_po'      => $customer_po_num
-								]);
-
-						//append content to header
-						$pdf->SetXY(13.4,26.3);
-						$pdf->writeHTML($view->render());
-
-						//Close and output PDF document
-						ob_end_clean();
-						$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
-						$pdf->IncludeJS("print();");
-						$pdf->Output( public_path($file_path), 'F');
-
-						DB::table('jobcard_main_table')->where('id', $store_jobcard_id)
-						->update([
-							'file_path'   => $file_path,
-							'updated_at'  => $current_timestamp
-						]);
-						return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 					}
-					else
-					{
-						return response()->json(['error'=> true,'message' =>'Error'],400);
-					}
+
+					$company  = DB::table('company')->select('name as company', 'address as company_address', 'logo as company_logo')->where('id', $company_id)->first();
+
+					$erp_dispatch_mode = DB::table('erp_dispatch_mode')->where('id', $disp_mode)->value('disp_mode');
+					$erp_finish_type   = DB::table('erp_finish_type')->where('id', $finish_type)->value('finish_type');
+					$erp_machine       = DB::table('erp_machines')->where('id', $machine)->value('machine');
+					$erp_teeth_no 	   = DB::table('erp_teeth_no')->where('id', $teeth_no)->value('teeth_no');
+
+					/** [ Creating new object for JobcardPDFHeaderFooter() class ] */
+					$format_approval_date  = $approval_date == ''?NULL:Carbon::parse($approval_date)->format('d-m-Y');
+					$formated_inv_date     = $invoice_date == ''?NULL:Carbon::parse($invoice_date)->format('d-m-Y');
+					$formated_created_date = $created_date == ''?NULL:Carbon::parse($created_date)->format('d-m-Y');
+					$formated_order_date   = $order_date == ''?NULL:Carbon::parse($order_date)->format('d-m-Y');
+					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 					
+					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);		
+					$pdf->SetPrintHeader(true);
+					$pdf->SetPrintFooter(true);  
+
+					//margins
+					$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+					$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+					$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+					
+					// set header and footer fonts
+					$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+					$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+					
+					// /** Handle Page break */
+					// set auto page breaks
+					$pdf->SetAutoPageBreak(TRUE, 40);
+
+					// set image scale factor
+					$pdf->setImageScale(1.8);
+
+					// set font
+					$pdf->SetFont('helvetica', '', 8);
+
+					// add a page
+					$pdf->AddPage('P', 'A4');
+
+					// set some text to print
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
+							->with([
+									'buyer' 		   => $buyer,
+									'customer' 		   => $customer,
+									'company'		   => $company,
+									'workorder_id'     => $workorder_id,
+									'created_date'     => $formated_created_date,
+									'article'	       => $article,
+									'material'		   => $material,
+									'style_no'		   => $style_no,
+									'order_type'       => $order_type,
+									'reference'		   => $reference,
+									'disp_mode'	       => $erp_dispatch_mode,
+									'order_date'	   => $formated_order_date,
+									'length'		   => $length,
+									'repeat_gap'	   => $repeat_gap,
+									'machine'		   => $erp_machine,
+									'cus_del_date' 	   => $formated_cus_del_date,
+									'roll_width'	   => $roll_width,
+									'width'	  		   => $width,
+									'film_no'		   => $film_no, 
+									'invoice_date'     => $formated_inv_date,
+									'length_side'	   => $length_side,
+									'excess'	       => $excess,
+									'teeth_no'		   => $erp_teeth_no,
+									'inv_no'	       => $inv_no,
+									'no_sticker'	   => $no_sticker,
+									'finish_type'	   => $erp_finish_type,
+									'print_color'      => $print_color,
+									'compiled_by'      => $compiled_by,
+									'barcode_read'     => $barcode_read,
+									'operator'         => $operator,
+									'checker'          => $checker,
+									'authorized_by'    => $authorized_by,
+									'axicon_verifier'  => $axicon_verifier,
+									'approved_by'	   => $approved_by,
+									'packer'		   => $packer,
+									'approval_date'    => $format_approval_date,
+									'roll_issued_by'   => $roll_issued_by,
+									'cutter'		   => $cutter,
+									'cartons' 		   => $cartons,
+									'final_json_obj'   => json_decode($final_json_obj, true),
+									'single_ref'	   => $single_ref,
+									'act_excess'	   => $act_excess,
+									'sticker_mtr'	   => $sticker_mtr,
+									'settings'		   => $settings,
+									'total_mtrs' 	   => $total_mtrs,
+									'tint_color'       => $tint_color,
+									'customer_po'      => $customer_po_num
+							]);
+
+					//append content to header
+					$pdf->SetXY(13.4,26.3);
+					$pdf->writeHTML($view->render());
+
+					//Close and output PDF document
+					ob_end_clean();
+					$file_path =  "/storage/app/public/jobcards/".$workorder_id."."."pdf";	
+					$pdf->IncludeJS("print();");
+					$pdf->Output( public_path($file_path), 'F');
+
+					DB::table('jobcard_main_table')->where('id', $store_jobcard_id->id)
+					->update([
+						'file_path'   => $file_path,
+						'updated_at'  => $current_timestamp
+					]);
+					return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path, 'buyer_name' => $buyer->buyer_name],200);	
 				}
 				else
 				{
-					return response()->json(['error'=> true,'message' =>'Parameter is Missing'],400);
+					return response()->json(['error'=> true,'message' =>'Error'],400);
 				}
 		}
 		catch (\Exception $e)
@@ -2625,7 +2145,10 @@ class JobManagerController extends Controller
         
 
         PDF::Output( public_path('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'), 'F');
-        print_r(url('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf'));
+
+		$file_path =  '/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf';	
+		
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'_ID_'.$request->style.'.pdf')],200);	
         
      }
 		 
@@ -3244,42 +2767,19 @@ class JobManagerController extends Controller
 	public function getJobcards()
 	{
 		try {
-				$customer_id = Auth::guard('erpuser')->id();
-				
-				$companies   = 	DB::table('erpuser_company_mapping')
-										->join('company','erpuser_company_mapping.company','company.id')
-										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo','company.id')
-										->get();
-				if($companies)
-				{
-					$company_id   = DB::table('company')
-									->select('company.*')
-									->where('company.id', '=', $companies[0]->company)
-									->first();
-				}
-				else
-				{
-					return view('erp.home');
-				}
-				
-				
-				if(session()->get('company') == "" && session()->get('company') == null)
-				{
-					session()->put('company', $company_id->id);
-					session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-				}
-				/**
-				 * Dropdown values
-				 */
-				$buyers  = 	DB::table('buyers')
-								->join('jobcard_main_table', 'jobcard_main_table.buyer_id', 'buyers.id')
-								->where('jobcard_main_table.company_id', '=', session()->get('company'))
+				$set_company_session = new ErpCompanySession();
+        
+       			$companies = $set_company_session->setCompanySession();
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
+
+				$buyers  = 	DB::table($jc_main_table)
+								->join('buyers', $jc_main_table.'.buyer_id', 'buyers.id')
+								->where($jc_main_table.'.company_id',  session()->get('company'))
+								->where($jc_main_table.'.is_non_artwork_template', 0)
 								->pluck('buyers.buyer_name','buyers.id')
 								->all();
-				
 				return view('erp.Jobmanager.jobcards-list', ['buyers' => $buyers, 'companies' => $companies]);	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3294,64 +2794,40 @@ class JobManagerController extends Controller
 	{
 		try {
 				$id = $request['id'];
+				$jc_metadata = new JobcardMetadata();
+                $metadata = $jc_metadata->erpJobcardMetaData();
 
-				$customer_id = Auth::guard('erpuser')->id();
+				$jobcard_data  = DB::table('jobcard_main_table')
+									->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
+									->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
+									->join('company', 'company.id', 'jobcard_main_table.company_id')
+									->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
+									->where('jobcard_main_table.id', '=', $id)
+									->first();
+				$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
+				$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
+				$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
+				$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
+				$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
 
-				if(session()->get('company') == "" || session()->get('company') == null || $customer_id == null)
-				{
-					return view('erp.home');
-				}
-				else
-				{
-					$jobcard_data  = DB::table('jobcard_main_table')
-										->select('jobcard_main_table.*', 'customers.id as customer_id','customers.short_name as customer', 'buyers.buyer_name', 'buyers.id as buyer_id', 'company.name as company', 'company.id as company_id', 'company.address as company_address','company.logo as company_logo')
-										->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-										->join('company', 'company.id', 'jobcard_main_table.company_id')
-										->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-										->where('jobcard_main_table.id', '=', $id)
-										->first();
-					$jobcard_data->created_date      =	$jobcard_data->created_date == ''?NULL:Carbon::parse($jobcard_data->created_date)->format('d-m-Y');
-					$jobcard_data->order_date        =	$jobcard_data->order_date == ''?NULL:Carbon::parse($jobcard_data->order_date)->format('d-m-Y');
-					$jobcard_data->customer_del_date =	$jobcard_data->customer_del_date == ''?NULL:Carbon::parse($jobcard_data->customer_del_date)->format('d-m-Y');
-					$jobcard_data->invoice_date      =	$jobcard_data->invoice_date == ''?NULL:Carbon::parse($jobcard_data->invoice_date)->format('d-m-Y');
-					$jobcard_data->approval_date     =	$jobcard_data->approval_date == ''?NULL:Carbon::parse($jobcard_data->approval_date)->format('d-m-Y');
+				$jobcard_details  = DB::table('jobcard_excess_details')
+									->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
+									->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
+									->get();
+				$jobcard_data->additional_details = $jobcard_details;	
 
-					$jobcard_details  = DB::table('jobcard_excess_details')
-										->select('jobcard_excess_details.ref_name', 'jobcard_excess_details.mtrs_for_stickers', 'jobcard_excess_details.actual_excess', 'jobcard_excess_details.settings', 'jobcard_excess_details.total_mtrs')
-										->where('jobcard_excess_details.jobcard_main_table_id', '=', $jobcard_data->id)
-										->get();
-					$jobcard_data->additional_details = $jobcard_details;	
+				return response()->json([
+					'error'=> false,
+					'message' =>'Success', 
+					'jobcard_data' => $jobcard_data,
+					'disp_modes' => $metadata['erp_dispatch_mode'],
+					'finish_types' => $metadata['erp_finish_type'],
+					'machines' => $metadata['erp_machines'],
+					'teeth_nos' => $metadata['erp_teeth_no'],
 
-					$erp_dispatch_mode = DB::table('erp_dispatch_mode')
-					->where('is_enabled', true)
-					->pluck('disp_mode', 'id')
-					->all();
-					$erp_finish_type = DB::table('erp_finish_type')
-					->where('is_enabled', true)
-					->pluck('finish_type', 'id')
-					->all();
-					$erp_machines = DB::table('erp_machines')
-					->where('is_enabled', true)
-					->pluck('machine', 'id')
-					->all();
-					$erp_teeth_no = DB::table('erp_teeth_no')
-					->where('is_enabled', true)
-					->pluck('teeth_no', 'id')
-					->all();
-
-					return response()->json([
-						'error'=> false,
-						'message' =>'Success', 
-						'jobcard_data' => $jobcard_data,
-						'disp_modes' => $erp_dispatch_mode,
-						'finish_types' => $erp_finish_type,
-						'machines' => $erp_machines,
-						'teeth_nos' => $erp_teeth_no
-
-					], 200);
-				}
+				], 200);
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3407,57 +2883,13 @@ class JobManagerController extends Controller
 				$jobcard_id 	 = $request['jobcard_id'];
 				$tint_color      = $request['tint_color'];
 				$customer_po_num = $request['customer_po'];
+				$crud_jc_obj     = new UpdateCreateJobcardMainTable();
 				
 				$current_timestamp = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
 				if(isset($company_id) && isset($workorder_id) && isset($created_date) && isset($article) && isset($material) && isset($customer_id) && isset($buyer_id) && isset($disp_mode) && isset($order_date) && isset($machine) && isset($cus_del_date)  && isset($finish_type)  && isset($compiled_by) && isset($final_json_obj) && isset($jobcard_id) && isset($material))
 				{
-					DB::table('jobcard_main_table')->where('id', $jobcard_id)
-					->update([
-						'work_order_id'          => $workorder_id,
-						'company_id'             => $company_id,
-						'customer_id'            => $customer_id,
-						'buyer_id'               => $buyer_id,
-						'created_date'           => $created_date,
-						'material'               => $material,
-						'article'                => $article,
-						'style_number'           => $style_no,
-						'reference'              => $reference,
-						'order_type'             => $order_type,
-						'dispatch_mode'          => $disp_mode,
-						'order_date'             => $order_date,
-						'length'                 => $length,
-						'repeat_gap'             => $repeat_gap,
-						'machine'                => $machine,
-						'customer_del_date'      => $cus_del_date,
-						'width'                  => $width,
-						'roll_width'             => $roll_width,
-						'film_no'                => $film_no,
-						'invoice_date'           => $invoice_date,
-						'length_side'            => $length_side,
-						'excess_percentage'      => $excess,
-						'teeth_no'               => $teeth_no,
-						'invoice_num'            => $inv_no,
-						'no_of_stickers'         => $no_sticker,
-						'finish_type'            => $finish_type,
-						'print_color'            => $print_color,
-						'compiled_by'            => $compiled_by,
-						'barcode_read'           => $barcode_read,
-						'operator'               => $operator,
-						'checker'                => $checker,
-						'authorized_by'          => $authorized_by,
-						'axicon_verifier'        => $axicon_verifier,
-						'approved_by'            => $approved_by,
-						'packer'                 => $packer,
-						'approval_date'          => $approval_date,
-						'roll_issued_by'         => $roll_issued_by,
-						'cutter'                 => $cutter,
-						'cartons'                => $cartons,
-						'template_quantity_json' => $final_json_obj,
-						'updated_at'             => $current_timestamp,
-						'tint_color'             => $tint_color,
-						'customer_po_num'        => $customer_po_num
-					]);
+					$crud_jc_obj->updateOrCreateJobcardData($request, $workorder_id, $current_timestamp, 'updated_at', 0);
 					
 					if (!empty($request['single_ref'])) 
 					{
@@ -3514,7 +2946,7 @@ class JobManagerController extends Controller
 					$formated_cus_del_date = $cus_del_date == ''?NULL:Carbon::parse($cus_del_date)->format('d-m-Y');
 					
 					$pdf = new JobcardPDFHeaderFooter(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs, $tint_color, $customer_po_num);	
+					$pdf->setData($company, $workorder_id, $formated_created_date, $article, $material, $compiled_by, $barcode_read, $operator, $checker, $authorized_by, $axicon_verifier, $approved_by, $packer, $format_approval_date, $roll_issued_by, $cutter, $cartons, $single_ref, $act_excess, $sticker_mtr, $settings, $total_mtrs);	
 
 					$pdf->SetPrintHeader(true);
 					$pdf->SetPrintFooter(true);  
@@ -3550,7 +2982,7 @@ class JobManagerController extends Controller
 					$pdf->AddPage('P', 'A4');
 
 					// set some text to print
-					$view = View::make('erp/Jobmanager/jobcard-pdf-template')
+					$view = View::make('erp/Jobmanager/jga-jobcard-pdf-template')
 								->with([
 										'buyer' 		   => $buyer,
 										'customer' 		   => $customer,
@@ -3644,30 +3076,23 @@ class JobManagerController extends Controller
 	public function getCustomersListByBuyerId(Request $request)
 	{
 		try {
-				$buyer_id = $request['selected_buyer_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
-
-				if($buyer_id == null)
-				{
+				if($request['selected_buyer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				else
-				{
-					$customers_list  = 	DB::table('customers')
-										->join('jobcard_main_table', 'jobcard_main_table.customer_id', 'customers.id')
-										->where('jobcard_main_table.company_id', '=', session()->get('company'))
-										->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-										->pluck('customers.company_name','customers.id')
-										->all();
-					return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
-				}
+				$jc_main_table = session()->get('company_name') === 'spectrraprints'?'spectrra_jobcard_main_tables':'jobcard_main_table';
+
+				$customers_list  = 	DB::table($jc_main_table)
+								->join('customers', $jc_main_table.'.customer_id', 'customers.id')
+								->where($jc_main_table.'.company_id',  session()->get('company'))
+								->where($jc_main_table.'.buyer_id', $request['selected_buyer_id'])
+								->where($jc_main_table.'.is_non_artwork_template', 0)
+								->pluck('customers.company_name','customers.id')
+								->all();
+				
+				return response()->json(['error'=> false,'message' =>'Success', 'customers_list' => $customers_list], 200);
 					
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3681,31 +3106,16 @@ class JobManagerController extends Controller
 	public function getJobcardIdListByBuyerCustomerId(Request $request)
 	{
 		try {
-				$buyer_id    = $request['selected_buyer_id'];
-				$customer_id = $request['selected_customer_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
-
-				if($buyer_id == null || $customer_id == null)
-				{
+				if($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null){
 					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
 				}
-				else
-				{
-					$jobcard_id_list  = DB::table('jobcard_main_table')
-											->where('jobcard_main_table.company_id', '=', session()->get('company'))
-											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-											->where('jobcard_main_table.customer_id', '=', $customer_id)
-											->pluck('jobcard_main_table.work_order_id','jobcard_main_table.id')
-											->all();
-					return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
-				}
+
+        		$jobcard_id_list  = $this->jobcard_ids_obj->getJobcardIds($request, 0);
+
+				return response()->json(['error'=> false,'message' =>'Success', 'jobcard_id_list' => $jobcard_id_list], 200);
 					
 	
-			} catch (\Exctesteption $e) {
+			} catch (\Exception $e) {
 				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
 			}
 	}
@@ -3715,41 +3125,20 @@ class JobManagerController extends Controller
 	 * @author <Praveen>
 	 * @param  $buyer_id, $customer_id, $jobcard_id
 	 * @return equivalent jobcard list
-	 */  
+	 */
 	public function getJobcardsListByBuyerCustomerJobcardId(Request $request)
 	{
 		try {
-				$buyer_id    = $request['selected_buyer_id'];
-				$customer_id = $request['selected_customer_id'];
-				$jobcard_id  = $request['selected_jobcard_id'];
-
-				if(session()->get('company') == "" || session()->get('company') == null)
-				{
-					return view('erp.home');
-				}
-
-				if($buyer_id == null || $customer_id == null || $jobcard_id == null)
-				{
-					return response()->json(['error'=> true,'message' =>'Parameter Missing'], 400);
-				}
-				else
-				{
-					$jobcards_list  = DB::table('jobcard_main_table')
-											->join('customers', 'jobcard_main_table.customer_id', 'customers.id')
-											->join('buyers', 'jobcard_main_table.buyer_id', 'buyers.id')
-											->where('jobcard_main_table.company_id', '=', session()->get('company'))
-											->where('jobcard_main_table.buyer_id', '=', $buyer_id)
-											->where('jobcard_main_table.customer_id', '=', $customer_id)
-											->where('jobcard_main_table.id', '=', $jobcard_id)
-											->select('jobcard_main_table.id as jobcard_id', 'jobcard_main_table.work_order_id', 'customers.company_name', 'buyers.buyer_name')
-											->first();
-					return response()->json(['error'=> false,'message' =>'Success', 'jobcards_list' => $jobcards_list], 200);
-				}
-					
-	
-			} catch (\Exctesteption $e) {
-				return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+			if ($request['selected_buyer_id'] == null || $request['selected_customer_id'] == null || $request['selected_jobcard_id'] == null) {
+				return response()->json(['error' => true, 'message' => 'Parameter Missing'], 400);
 			}
+
+			$jobcards_list  = $this->jobcard_ids_obj->getJobcardList($request, 0);
+
+			return response()->json(['error' => false, 'message' => 'Success', 'jobcards_list' => $jobcards_list], 200);
+		} catch (\Exception $e) {
+			return response()->json(['Message' => $e->getMessage(), 'Line' => $e->getLine(), 'File' => $e->getFile()]);
+		}
 	}
 	 public function generateDivTesco(Request $request)
 	{
@@ -3968,30 +3357,7 @@ class JobManagerController extends Controller
 		
 		
 		
-//		$svgarr = explode(',_',$request->svg);
-//		$name=$request->name;
-//        $svg=urldecode($request->svg);
-//        define ('PDF_FONT_NAME_MAIN', 'frankgothcnbt');
-//        define ('PDF_FONT_NAME_DATA', 'frankgothcnbt');
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
-//        PDF::SetFont('frankgothcnbt');
-//		PDF::SetAutoPageBreak(TRUE);
-//		$j=0;
-//		foreach($svgarr as $value)
-//		{
-//			PDF::SetMargins(0, 0, 0, false);
-//			PDF::setImageScale(1);
-//			PDF::AddPage('L', array(80,127));
-//			$svg=urldecode($value);
-//			file_put_contents(public_path('/storage/app/template/demo_'.$j.'.svg'), $svg);
-//			$html = '<img style="width:480px;height:302.36220472px;border:1px solid #333" src="'.public_path('/storage/app/template/demo_'.$j.'.svg').'">';
-//			PDF::writeHTMLCell(129, 82.5, -1,0, $html, '', 0, 0, false, 'L', false);
-//			$j++;
-//		}
-//		PDF::deletePage(1);
-//        PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-//        print_r(url('/storage/app/template/'.$name.'.pdf'));
+
 	} 
 	
 	
@@ -4036,26 +3402,11 @@ class JobManagerController extends Controller
 			 }
 			 else
 			 {
-//				 $img = Image::make(public_path('/storage/app/template/barcode_'.$i.'.png'));
-//
-//				// now you are able to resize the instance
-//				$img->resize(150, 50);
-//
-//				// finally we save the image as a new file
-//				$img->save(public_path('/storage/app/template/barcode_RESIZE.png'));
-				 
 				 PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), -1.1, 2,41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			
 				PDF::Image(public_path('/storage/app/template/'.$bar_finarr[$i].'.png'), 38.7, 2, 41.5, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
 			 }
 			
-			
-			
-			
-//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), -1.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-//			
-//			PDF::Image(public_path('/storage/app/template/barcode_'.$i.'.png'), 39.7, 2, 42, 13, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-//			
 			$i++;
 		}
 		$j=0;
@@ -4169,19 +3520,15 @@ class JobManagerController extends Controller
 		 $svg=urldecode($request->svg);
 		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
 		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-	 
-	 
-	 
 	   
-	   $customer = DB::table("erp_orders")
+	   	 $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
 	 
 	 
-	 	$sticker = DB::table("orchestra_standard_carton_sticker_orders")
+	 	 $sticker = DB::table("orchestra_standard_carton_sticker_orders")
 						->select('*')
 						->where('uvc',$request->style_no)
 						->where('po',$request->buyer_no)
@@ -4213,9 +3560,7 @@ class JobManagerController extends Controller
 	   $this->template_desc = "Standard Polybag";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
-//	   
-//		 define ('PDF_FONT_NAME_MAIN', 'calibri');
-//		 define ('PDF_FONT_NAME_DATA', 'calibri');
+
 			// Custom Header
 		  PDF::setHeaderCallback(function($pdf) {
 			$pdf->SetY(0);
@@ -4378,19 +3723,13 @@ class JobManagerController extends Controller
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('calibrib');
 		PDF::AddPage();
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 		PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		$td_size="";
 		$td_col="";
 		$total=0;
@@ -4526,11 +3865,9 @@ class JobManagerController extends Controller
 			'fontsize' => 12,
 			'stretchtext' => 4
 		);
-		 ///PDF::write1DBarcode('3531114195599', 'EAN13', '60', '72', '', 32, 0.45, $style, 'N');
 
 	    $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -4553,10 +3890,8 @@ class JobManagerController extends Controller
 		 
 		 $color=$request->color;
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
 		
 		$orchestra_color = DB::table('orchestra_color_code')->select('*')->where('code',$color)->get();
 		if(count($orchestra_color) > 0)
@@ -4572,12 +3907,9 @@ class JobManagerController extends Controller
         PDF::setPrintFooter(false);
 		PDF::SetAutoPageBreak(TRUE);
         PDF::SetFont('calibrib');
-		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		 
-//		PDF::SetAutoPageBreak(TRUE);
 		foreach($svgarr as $value)
         {
 			$svg=urldecode($value);
@@ -4696,8 +4028,6 @@ class JobManagerController extends Controller
          $svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-
 
 $style_no=$request->style_no;
 $buyer_no=$request->buyer_no;
@@ -4927,8 +4257,6 @@ $buyer_no=$request->buyer_no;
         PDF::AddPage('L',array(324,465));
 		PDF::setImageScale(1.66);
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-        //PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-        //PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 		
 		//Top Left Corner
 		PDF::Line(7, 6, 7, 12, $style6);
@@ -5007,16 +4335,12 @@ $buyer_no=$request->buyer_no;
 		 $buyer_no=$request->buyer_no;
 		 
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
         PDF::setPrintHeader(false);
         PDF::setPrintFooter(false);
 		PDF::SetAutoPageBreak(TRUE);
         PDF::SetFont('calibrib');
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		PDF::SetAutoPageBreak(TRUE);
@@ -5028,8 +4352,6 @@ $buyer_no=$request->buyer_no;
 			PDF::AddPage('L',array(324,465));
 			PDF::setImageScale(1.66);
 			$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-			//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-			//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
 
 			//Top Left Corner
 			PDF::Line(7, 6, 7, 12, $style6);
@@ -5097,13 +4419,8 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-SOL-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
-         //$svg=urldecode($request->svg);
          define ('PDF_FONT_NAME_MAIN', 'calibrib');
          define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-		
-			
-		
 	   
 	   $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5120,9 +4437,6 @@ $buyer_no=$request->buyer_no;
 	     $this->template_desc = "Solid Carton";
 		 $this->tesco_po_number = $request->buyer_no;
 		 $this->style = $request->style_no;
-//	   
-//		 define ('PDF_FONT_NAME_MAIN', 'calibri');
-//		 define ('PDF_FONT_NAME_DATA', 'calibri');
 			// Custom Header
 		  PDF::setHeaderCallback(function($pdf) {
 			$pdf->SetY(0);
@@ -5226,8 +4540,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5285,12 +4598,8 @@ $buyer_no=$request->buyer_no;
 		
 		});
         PDF::setImageScale(1.66);
-//        PDF::setPrintHeader(false);
-//        PDF::setPrintFooter(false);
         PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 		
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
         PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
@@ -5306,9 +4615,7 @@ $buyer_no=$request->buyer_no;
 			
 			if($i == 0)
 			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy=50;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
@@ -5318,9 +4625,7 @@ $buyer_no=$request->buyer_no;
 			else if($i == 2)
 			{
 				PDF::AddPage('P', 'A4');
-				//PDF::RoundedRect(10, 10, 150, 100, 0, '0000');
 				$yy=50;
-				//PDF::RoundedRect(12.5, 12.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
         PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
@@ -5329,9 +4634,7 @@ $buyer_no=$request->buyer_no;
 			}
 			else
 			{
-				//PDF::RoundedRect(10, 160, 150, 100, 0, '0000');
 				$yy += 112.5;
-				//PDF::RoundedRect(12.5, 162.5, 145, 95, 0, '0000');
 				
 				PDF::RoundedRect(10, 160, 150, 100, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(12.5, 162.5, 145, 95, 0.000001, '1111', null, $style6);
@@ -5342,7 +4645,6 @@ $buyer_no=$request->buyer_no;
 		 }
 		 $random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		 PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5354,11 +4656,6 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-STD-CS-".$request->buyer_no;
 		 $id=$request->id;
 		 $svg=urldecode($request->svg);
-//		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
-		
-		
 	   
 	   $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5481,8 +4778,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5540,19 +4836,16 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
+
 		PDF::SetFont('calibrib');
 		PDF::AddPage();
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
-		//PDF::RoundedRect(95, 255, 40, 30, 0.1, '1111', null, $style6);
-		//PDF::RoundedRect(140, 255, 40, 30, 0.1, '1111', 'null', $style6);
+
 		PDF::RoundedRect(10, 47.5, 150, 100, 0.000001, '1111', null, $style6);
 		PDF::RoundedRect(12.5, 50, 145, 95, 0.000001, '1111', null, $style6);
 		PDF::ImageSVG('@' . $svg, $x=12.5, $y=50, $w=145, $h=95, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5568,10 +4861,6 @@ $buyer_no=$request->buyer_no;
 		 $name=$request->style_no."-SOL-PS-".$request->buyer_no;
 		$id=$request->id;
 		 $svgarr = explode(',_',$request->svg);
-		 //$svg=urldecode($request->svg);
-//		 define ('PDF_FONT_NAME_MAIN', 'calibrib');
-//		 define ('PDF_FONT_NAME_DATA', 'calibrib');
-//          print_r($svg);
 		
 		  $customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
@@ -5694,8 +4983,6 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -5753,16 +5040,11 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1.66);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('calibrib');
 		PDF::AddPage('P', 'A4');
-		//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-		//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 		 
 		$style6 = array('width' => 0.353, 'cap' => '', 'join' => '', 'dash' => '', 'color' => '');
 		 
-//		PDF::SetAutoPageBreak(TRUE);
 		$i=0;
 		$j=0;
 		$yy=50;
@@ -5773,8 +5055,6 @@ $buyer_no=$request->buyer_no;
 			if($i == 3)
 			{
 				PDF::AddPage('P', 'A4');
-				//PDF::RoundedRect(10, 10, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 12.5, 95, 65, 0, '0000');
 				
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
@@ -5784,9 +5064,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else  if($i == 0)
 			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
-				
 				PDF::RoundedRect(55, 47.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 50, 95, 65, 0.000001, '1111', null, $style6);
 				$yy=50;
@@ -5795,8 +5072,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else if($i == 1)
 			{
-				//PDF::RoundedRect(10, 100, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 102.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 122.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 125, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
@@ -5804,8 +5079,6 @@ $buyer_no=$request->buyer_no;
 			}
 			else
 			{
-				//PDF::RoundedRect(10, 190, 100, 70, 0, '0000');
-				//PDF::RoundedRect(12.5, 192.5, 95, 65, 0, '0000');
 				PDF::RoundedRect(55, 197.5, 100, 70, 0.000001, '1111', null, $style6);
 				PDF::RoundedRect(57.5, 200, 95, 65, 0.000001, '1111', null, $style6);
 				$yy += 75;
@@ -5816,7 +5089,6 @@ $buyer_no=$request->buyer_no;
 		 }
 		$random = number_format(Carbon::now('Asia/Kolkata')->timestamp * rand(),0,'','');
 		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/'.$name.'.pdf'));
 	 
 		$file_path =  "/storage/app/template/".$name."."."pdf";	
 
@@ -5833,7 +5105,6 @@ $buyer_no=$request->buyer_no;
 	{
 		$svgarrfront=explode(',_',$request->svg); 
 		$name = $request->name;
-		//$svg1=urldecode($request->svg1); 
 		$svgarr=explode(',_',$request->svgRoot); 
 		 $id = $request->id;
 		 
@@ -6019,14 +5290,8 @@ $buyer_no=$request->buyer_no;
 		});
 		
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
-		//PDF::RoundedRect(10, 10, 61, 131, 0, '0000');
-		//PDF::SetFillColor(255, 255, 255);
-		//PDF::SetTextColor(0, 0, 0);
-		//PDF::ImageSVG('@' . $svg, $x=12.5, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
 		
 		PDF::SetFont('arial');
 		$count=0;
@@ -6039,9 +5304,6 @@ $buyer_no=$request->buyer_no;
 		foreach($arr_mer as $value)
 		{
 			$svg=urldecode($value);
-			//PDF::RoundedRect(80, 10, 61, 131, 0, '0000');
-			//PDF::ImageSVG('@' . $svg,  $x=$xx, $y=12.5, '49', '117', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			
 			
 			if($count%2==0)  
 			{  
@@ -6071,9 +5333,6 @@ $buyer_no=$request->buyer_no;
 		
 		exec("gs -dSAFER -dBATCH -dNOPAUSE -dNOCACHE -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK -dProcessColorModel=/DeviceCMYK -sOutputFile=".public_path('/storage/app/template/'.$name.'_cmyk.pdf')." ".public_path('/storage/app/template/'.$name.'.pdf'));
 		
-//        print_r(url('/storage/app/template/'.$name.'_cmyk.pdf'));
-		
-		//print_r(url('/storage/app/template/solid1.pdf'));
 		$file_path =  "/storage/app/template/".$name."_cmyk.pdf";	
 
 		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'_cmyk.pdf')],200);	
@@ -6216,8 +5475,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -6275,8 +5533,7 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
+
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
 		
@@ -6424,8 +5681,7 @@ $buyer_no=$request->buyer_no;
 			// Position at 15 mm from bottom
 			$pdf->SetY(-50);
 			$pdf->SetX(9.5);
-			// Set font
-			//$pdf->SetFont('frankgothcnbt');
+			
 			// Page number
 			$svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
 					<title>Qt Svg Document</title>
@@ -6483,8 +5739,6 @@ $buyer_no=$request->buyer_no;
 		
 		});
 		PDF::setImageScale(1);
-//		PDF::setPrintHeader(false);
-//		PDF::setPrintFooter(false);
 		PDF::SetFont('alternategothic2bt');
 		PDF::AddPage();
 		
@@ -6918,37 +6172,73 @@ $buyer_no=$request->buyer_no;
 		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
 	}
 	
-   public function printWashPdf(Request $request)
-	{			
-
+	public function printWashPdf(Request $request)
+    {
+        
 		$svgarr = explode(',_',$request->svg);
-	    $name = $request->name;
-	    $id = $request->id;
-	   
-	   
-	   $customer = DB::table("erp_orders")
+		$pro_family_image = $request->pro_family_image;
+		$id = $request->id;
+		$activity_label = $request->activity_label;
+		$uvc_style = $request->style_no;
+
+		$customer = DB::table("erp_orders")
 						->join('customers', 'erp_orders.customer_id', 'customers.id')
 						->select('customers.short_name')
 						->where('erp_orders.id',$id)
 						->get();
-		 $customer_name = $customer[0]->short_name;
-		 $this->customer_name = $customer_name;
+		$customer_name = $customer[0]->short_name;
+		$this->customer_name = $customer_name;
 		
-		 $this->created_date = $request->created_at;
-		
-		 $this->template_name = "";
-		 $this->template_zone = "";
-	     $this->template_desc = "Taffeta Wash Care Label";
-		 $this->tesco_po_number = $request->buyer_no;
-		 $this->style = $request->style_no;
+		$this->created_date = $request->created_at;
 	   
-		 define ('PDF_FONT_NAME_MAIN', 'calibri');
-		 define ('PDF_FONT_NAME_DATA', 'calibri');
-			// Custom Header
-		  PDF::setHeaderCallback(function($pdf) {
+		$this->template_name = "";
+		$this->template_zone = "";
+		$this->template_desc = "Taffeta Wash Care Label";
+		$this->tesco_po_number = $request->buyer_no;
+		$this->style = $request->style_no;
+
+		if($activity_label == "PUERICULTURE")
+		{
+			$this->size_text = "25 x 152mm";
+		}
+		else
+		{
+			$this->size_text = "25 x 165mm";
+		}
+
+        //$svg=urldecode($request->svg);
+		
+		$made_in_select=$request->made_in_select;
+		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$made_in_select)->get();
+		
+		
+		$care_instruction_select = explode(',',$request->care_instruction_select_fin); 
+		$casval = "";
+		$cascount = 1 ;
+		foreach($care_instruction_select as $cval)
+		{
+			$casval .= 'WHEN '.$cval.' THEN '.$cascount;
+			$cascount++;
+		}
+		$orchestra_care_instruction = DB::table('orchestra_care_instruction')->select('*')->whereIn('id',$care_instruction_select)->orderByRaw("CASE id
+		".$casval."
+		ELSE ".$cascount." END")->get();
+		
+		//print_r($orchestra_countries);
+		
+		//print_r($orchestra_countries);
+		
+        $svg=urldecode($request->svg); 
+        $svg_back=urldecode($request->svg_back); 
+        $svg_middle=urldecode($request->svg_middle); 
+        define ('PDF_FONT_NAME_MAIN', 'calibri');
+		define ('PDF_FONT_NAME_DATA', 'calibri');
+		
+		PDF::setHeaderCallback(function($pdf) {
 			$pdf->SetY(0);
 		  $name=$this->template_name;
 		  $zone=$this->template_zone;
+		  $size_text=$this->size_text;
 			$tesco_po_number=$this->tesco_po_number;
 			if($tesco_po_number == null || $tesco_po_number == "null")
 			{
@@ -7038,7 +6328,7 @@ $buyer_no=$request->buyer_no;
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REF : '.$name.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 127x80mm</text>
+					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$size_text.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
 					<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO :</text>
 					</g>
@@ -7122,123 +6412,245 @@ $buyer_no=$request->buyer_no;
 		
 		});
 
+        PDF::setImageScale(1);
+        PDF::SetFont('calibrib');
+		PDF::AddPage('P', 'A4');
 
-	
-		$selectedWashCare = OrchestraWashCare::where('id',$request->parentId)->first();
-	
 
-		$orchestra_countries = DB::table('orchestra_countries')->select('*')->where('id',$selectedWashCare->made_in_id)->get();
-		
-		$orchestra_care_instruction = DB::table('orchestra_care_instruction')
-					->select('*')->whereIn('id',explode(',',$selectedWashCare->care_instruction_id))->get();
-		
-		$svg=urldecode($request->svg); 
-		$svg_back=urldecode($request->svg_back); 
-		$svg_middle=urldecode($request->svg_middle); 
-		
-		PDF::setImageScale(1);
-		PDF::SetFont('tahoma', '',  1.5, '', true);
-		PDF::AddPage();
-		
-	
+        $data_fin_back=explode(',_',$request->data_fin_back); 
+
 		$tbl='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;line-height:1.35">Fabriqué en - Made in - <br> Fabricado en - <br>Fabricado em - <br>Fabbricato in - <br>Vervaardigd in  - <br>Hergestellt in -<br><span style="font-family:Tahoma">  ﺻﻨﻊ ب </span>-<br> παράγεται στην</p>';
 		
-		$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries[0]->french.' - '.$orchestra_countries[0]->english.' - '.$orchestra_countries[0]->spanish.' - '.$orchestra_countries[0]->portuguese.' - <br>'.$orchestra_countries[0]->italian.' - '.$orchestra_countries[0]->dutch.' - '.$orchestra_countries[0]->german.' - <br><span style="font-family:Tahoma">'.$orchestra_countries[0]->arabic.'</span> - '.$orchestra_countries[0]->greek.'</p>';
-		$tbl2="";
-		foreach($orchestra_care_instruction as $value)
+
+
+		$orchestra_washing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->washing_select)->get();
+		$orchestra_whitening_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->whitening_select)->get();
+		$orchestra_dryer_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->dryer_select)->get();
+		$orchestra_ironing_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->ironing_select)->get();
+		$orchestra_cleaning_select = DB::table('orchestra_care_symbols')->select('*')->where('id',$request->cleaning_select)->get();
+
+		$wash_iso = $orchestra_washing_select{0}->cofreet_symbols;
+		$wash_astm = $orchestra_washing_select{0}->astms_symbol;
+
+		$whit_iso = $orchestra_whitening_select{0}->cofreet_symbols;
+		$whit_astm = $orchestra_whitening_select{0}->astms_symbol;
+
+		$dry_iso = $orchestra_dryer_select{0}->cofreet_symbols;
+		$dry_astm = $orchestra_dryer_select{0}->astms_symbol;
+
+		$iron_iso = $orchestra_ironing_select{0}->cofreet_symbols;
+		$iron_astm = $orchestra_ironing_select{0}->astms_symbol;
+
+		$clean_iso = $orchestra_cleaning_select{0}->cofreet_symbols;
+		$clean_astm = $orchestra_cleaning_select{0}->astms_symbol;
+
+		if($activity_label == "PUERICULTURE")
 		{
-			$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->spanish.' - '.$value->portuguese.' - '.$value->italian.' - '.$value->dutch.' - '.$value->german.' - <span style="font-family:Tahoma">'.$value->arabic.'</span> - '.$value->greek.'</p><br><br>';
-		}
-		
-		$tbl3="";
-		$orchestra_wash_care_composition = DB::table('orchestra_wash_care_composition')
-					->select('*')->where('owcl_id',$request->parentId)->get();
-		$composition = json_decode($request->composition);
-		$page_id = "";
-		foreach($orchestra_wash_care_composition as $key => $value)
-		{
-			
-			if($value->page_id != $page_id )
+			$tbl1='<p  style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->dutch.' - <br>'.$orchestra_countries{0}->german.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->greek.' - <br><span style="font-family:Tahoma"> - '.$orchestra_countries{0}->arabic.'</span></p>';
+			$tbl2="";
+			foreach($orchestra_care_instruction as $value)
 			{
-					$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$value->parts_id)->get();
-					if(count($orchestra_parts) > 0)
-					{
-						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%)">'.$orchestra_parts[0]->french.' - '.$orchestra_parts[0]->english.' - '.$orchestra_parts[0]->spanish.' - '.$orchestra_parts[0]->portuguese.' - '.$orchestra_parts[0]->italian.' - '.$orchestra_parts[0]->dutch.' - '.$orchestra_parts[0]->german.' - <span>'.$orchestra_parts[0]->arabic.'</span> - '.$orchestra_parts[0]->greek.'</p><br><br>';
-					}
+				$tbl2.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left">'.$value->french.' - '.$value->english.' - '.$value->dutch.' - '.$value->german.' - '.$value->spanish.' - '.$value->greek.' - <span style="font-family:Tahoma">'.$value->arabic.'</span></p><br><br>';
 			}
-			
-				$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('id',$value->composition_id)->get();
+
+
+			//print_r($tbl2);
+			$tbl3="";
+			$composition = json_decode($request->composition);
+			//print_r($composition);
+			foreach($composition as $key => $value)
+			{
 				
-				$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$value->percentage.'% '.$orchestra_compositions[0]->french.' - '.$orchestra_compositions[0]->english.' - '.$orchestra_compositions[0]->spanish.' - '.$orchestra_compositions[0]->portuguese.' - '.$orchestra_compositions[0]->italian.' - '.$orchestra_compositions[0]->dutch.' - '.$orchestra_compositions[0]->german.' - <span style="font-family:Tahoma">'.$orchestra_compositions[0]->arabic.'</span> - '.$orchestra_compositions[0]->greek.'</p><br><br>';
-				$page_id = $value->page_id;
-
-		}
-		$xx=12.5;
-		$i=0;
-		foreach($svgarr as $value)
-		{
-			$svg=urldecode($value);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-        	PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			PDF::SetFillColor(255, 255, 255);
-			PDF::SetTextColor(0, 0, 0);
-			PDF::writeHTMLCell('25.5', '40', $xx, '172.5', $tbl, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('26', '40', $xx, '191.8', $tbl1, '', 0, 0, true, 'C', true);
-			PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
-			$xx += 37.5;
-			$i++;
-			
-			if($i == 5)
-			{
-				PDF::AddPage();
-				$i=0;
-				$xx=12.5;
+				$express_value = explode('_',$value[0]);
+				if($express_value[0] != "Select Option" && $express_value[0] != 0)
+				{
+						$exp_value = explode('_',$value[0]);
+						$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
+					
+						$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->greek.' - <span style="font-family:Tahoma">'.$orchestra_parts{0}->arabic.'</span></p><br><br>';
+				}
+				foreach($value as $key1 => $value1)
+				{
+					$exp_val = explode('_',$value1);
+					$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+					
+					$tbl3.='<p style="font-size:5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->greek.' - <span style="font-family:Tahoma">'.$orchestra_compositions{0}->arabic.'</span></p><br><br>';
+				}
 			}
-		}
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=42.5, '<p style="font-size:12px">Back</p>', '', 0, 0, true, 'C', true);
-		PDF::ImageSVG('@' . $svg_back, $xx, $y=50, '25.5', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		PDF::writeHTMLCell('22', '40', $xx + 2.25, '62.5', $tbl2, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25', '40', $xx + 1, '147.5', $tbl3, '', 0, 0, true, 'C', true);
-		PDF::writeHTMLCell('25.5', '40', $xx, $y=217.5, '<p style="font-size:12px">Front</p>', '', 0, 0, true, 'C', true);
-		PDF::AddPage();
-		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=50, '55.5', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		
-		//print_r($i);
-//		if($i == 0)
-//		{
-//			PDF::ImageSVG('@' . $svg_back, $x=12.5, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//      		PDF::ImageSVG('@' . $svg_middle, $x=50, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//			PDF::writeHTMLCell('22', '40', '14', '25', $tbl2, '', 1, 1, true, 'C', true);
-//			PDF::writeHTMLCell('25', '40', '13.5', '110', $tbl3, '', 1, 1, true, 'C', true);
-//
-//		}
-//		else if($i == 1)
-//		{
-//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
-//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
-//		}
-//		else if($i == 2)
-//		{
-//			PDF::ImageSVG('@' . $svg_back, $x=$xx, $y=12.5, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//      		PDF::ImageSVG('@' . $svg_middle, $x=$xx+37.5, $y=12.5, '55', '82.5', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-//			PDF::writeHTMLCell('22', '40', $xx+1.5, '25', $tbl2, '', 1, 1, true, 'C', true);
-//			PDF::writeHTMLCell('25', '40', $xx+0.5, '110', $tbl3, '', 1, 1, true, 'C', true);
-//		}
-		
-	  
-		
-//		PDF::writeHTMLCell('8', '10', '16.2', '61', $tbl, '', 1, 1, true, 'C', true);
-		
-	
-		PDF::Output( public_path('/storage/app/template/'.$name.'.pdf'), 'F');
-		//print_r(url('/storage/app/template/solid1.pdf'));
-	   
-	    $file_path =  "/storage/app/template/".$name.".pdf";	
 
-		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$name.'.pdf')],200);	
-	}
+			$xx=12.5;
+			$i=0;
+			$j=0;
+			foreach($svgarr as $value)
+			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
+				$svg=urldecode($value);
+				$svg_back=urldecode($data_fin_back[$j]);
+
+				PDF::Rect($x=$xx + 27.5, $y=50, '25', '152');
+				PDF::Rect($x=$xx, $y=50, '25', '152');
+			
+				PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG('@' . $svg_back, $x=$xx + 27.5, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=150.7, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		
+				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=150.7, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($dry_astm),  $x=$xx+10.5, $y=150.7, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=150.7, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=150.7, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+				PDF::ImageSVG($file=public_path($pro_family_image), $x=$xx+36, $y=50, $w=15, $h=15, $link='', $align='R', $palign='', $border=0, $fitonpage=false);
+
+				
+				PDF::writeHTMLCell('26', '40', $xx, '176', $tbl1, '', 0, 0, true, 'C', true);
+				PDF::writeHTMLCell('22', '40', $xx + 29.5, '60', $tbl2, '', 0, 0, true, 'C', true);
+				PDF::SetFillColor(255, 255, 255);
+				PDF::SetTextColor(0, 0, 0);
+				$xx += 65;
+				$i++;
+				$j++;
+			}
+
+			PDF::AddPage();
+
+			PDF::Rect($x=75, $y=50, '25', '152');
+			PDF::Rect($x=105, $y=50, '25', '152');
+
+			PDF::ImageSVG('@' . $svg_middle, $x=75, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::writeHTMLCell('25', '40', 75.3, '142.5', $tbl3, '', 0, 0, true, 'C', true);
+			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/premaman_4.svg'), $x=105, $y=50, '25', '152', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		}
+		else
+		{
+			$country_svg = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+			width="71.37px" height="468.22px" viewBox="0 0 71.37 468.22" style="enable-background:new 0 0 71.37 468.22;"
+			xml:space="preserve">
+
+			<text transform="transform=matrix(1.0909 0 0 1 5 410)" style="font-size: 5.5px;font-family: Calibri"><tspan x="0" y="0">'.$orchestra_countries{0}->french.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->english.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->spanish.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->portuguese.'</tspan><tspan x="5" y="6">'.$orchestra_countries{0}->italian.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->dutch.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->german.'</tspan><tspan x="12" y="12" style="font-family:Tahoma">'.$orchestra_countries{0}->arabic.'</tspan><tspan style="stroke-width:0.3;stroke: cmyk(0%, 0%, 0%, 100%);fill:cmyk(0%, 0%, 0%, 100%);"> - </tspan><tspan>'.$orchestra_countries{0}->greek.'</tspan></text>
+			
+			</svg>';
+
+			$tbl1='<p  style="font-size:5.5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;">'.$orchestra_countries{0}->french.' - '.$orchestra_countries{0}->english.' - '.$orchestra_countries{0}->spanish.' - '.$orchestra_countries{0}->portuguese.' - <br>'.$orchestra_countries{0}->italian.' - '.$orchestra_countries{0}->dutch.' - '.$orchestra_countries{0}->german.' - <br><span style="font-family:Tahoma;">'.$orchestra_countries{0}->arabic.'</span> - '.$orchestra_countries{0}->greek.'</p>';
+			$tbl2="";
+			foreach($orchestra_care_instruction as $value)
+			{
+				$tbl2.='<p style="font-size:4.5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;text-align:left;font-weight:bold;">'.ucfirst($value->french).' - '.ucfirst($value->english).' - '.ucfirst($value->spanish).' - '.ucfirst($value->portuguese).' - '.ucfirst($value->italian).' - '.ucfirst($value->dutch).' - '.ucfirst($value->german).' - <span style="font-family:Tahoma;font-weight:bold;">'.ucfirst($value->arabic).'</span> - '.ucfirst($value->greek).'</p>';
+			}
+
+			//print_r($tbl2);
+			$tbl3="";
+			$composition = json_decode($request->composition);
+			//print_r($composition);
+			foreach($composition as $key => $value)
+			{
+				
+				$express_value = explode('_',$value[0]);
+				if($express_value[0] != 0)
+				{
+						$exp_value = explode('_',$value[0]);
+						$orchestra_parts = DB::table('orchestra_parts')->select('*')->where('id',$exp_value[0])->get();
+					
+						$tbl3.='<p style="font-size:5.5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;font-weight:bold;">'.$orchestra_parts{0}->french.' - '.$orchestra_parts{0}->english.' - '.$orchestra_parts{0}->spanish.' - '.$orchestra_parts{0}->portuguese.' - '.$orchestra_parts{0}->italian.' - '.$orchestra_parts{0}->dutch.' - '.$orchestra_parts{0}->german.' - <span style="font-family:Tahoma;font-weight:bold;">'.$orchestra_parts{0}->arabic.'</span> - '.$orchestra_parts{0}->greek.'</p><br><br>';
+				}
+				foreach($value as $key1 => $value1)
+				{
+					$exp_val = explode('_',$value1);
+					$orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
+					
+					$tbl3.='<p style="font-size:5.5px;color:cmyk(0%, 0%, 0%, 100%);font-family:Calibri;font-weight:bold;">'.$exp_val[2].'% '.$orchestra_compositions{0}->french.' - '.$orchestra_compositions{0}->english.' - '.$orchestra_compositions{0}->spanish.' - '.$orchestra_compositions{0}->portuguese.' - '.$orchestra_compositions{0}->italian.' - '.$orchestra_compositions{0}->dutch.' - '.$orchestra_compositions{0}->german.' - <span style="font-family:Tahoma;font-weight:bold;">'.$orchestra_compositions{0}->arabic.'</span> - '.$orchestra_compositions{0}->greek.'</p><br><br>';
+				}
+			}
+
+
+			$xx=12.5;
+			$i=0;
+			$j=0;
+			foreach($svgarr as $value)
+			{
+				if($i == 3)
+				{
+					PDF::AddPage('P', 'A4');
+					$i=0;
+					$xx=12.5;
+				}
+
+				$svg=urldecode($value);
+				$svg_back=urldecode($data_fin_back[$j]);
+
+				PDF::Rect($x=$xx, $y=50, '25', '165');
+				PDF::Rect($x=$xx + 27.5, $y=50, '25', '165');
+
+				PDF::ImageSVG('@' . $svg, $x=$xx, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+				PDF::ImageSVG('@' . $country_svg, $x=$xx, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				
+				PDF::ImageSVG('@' . $svg_back, $x=$xx + 27.5, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+				PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+		
+				PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+		
+				PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=151, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+				PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=160, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+				PDF::ImageSVG($file=public_path($pro_family_image), $x=$xx+36, $y=50, $w=15, $h=15, $link='', $align='R', $palign='', $border=0, $fitonpage=false);
+
+				
+				//PDF::writeHTMLCell('26', '40', $xx-0.1, '192.5', $tbl1, '', 0, 0, true, 'C', true);
+				PDF::writeHTMLCell('22.7', '40', $xx + 29, '62.5', $tbl2, '', 0, 0, true, 'C', true);
+				PDF::SetFillColor(255, 255, 255);
+				PDF::SetTextColor(0, 0, 0);
+				$xx += 65;
+				$i++;
+				$j++;
+			}
+
+			PDF::AddPage();
+			PDF::Rect($x=75, $y=50, '25', '165');
+			PDF::ImageSVG('@' . $svg_middle, $x=75, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			PDF::writeHTMLCell('25', '40', 75.3, '147.5', $tbl3, '', 0, 0, true, 'C', true);
+			PDF::Rect($x=105, $y=50, '25', '165');
+			PDF::ImageSVG($file=public_path('/storage/app/template/Orchestra/WCL/wcl_4.svg'), $x=105, $y=50, '25', '165', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+			
+		}
+
+		$item_name = str_replace( " ", "_", $request->ref_name );
+		
+		PDF::Output( public_path('/storage/app/template/'.$item_name.'_ID_'.$uvc_style.'.pdf'), 'F');
+
+		$file_path =  '/storage/app/template/'.$item_name.'_ID_'.$uvc_style.'.pdf';	
+
+		return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.$item_name.'_ID_'.$uvc_style.'.pdf')],200);	
+
+    	//print_r(url('/storage/app/template/'.$item_name.'_ID_'.$owcl->uvc.'.pdf'));
+
+		// PDF::Output( public_path('/storage/app/template/solid1.pdf'), 'F');
+        // print_r(url('/storage/app/template/solid1.pdf'));
+
+    } 
 		/**
 		 * Function to update uuid value for existing data in erp_order_details table.
 		 * @author <Praveen>
@@ -7264,300 +6676,6 @@ $buyer_no=$request->buyer_no;
 		}
 
 		public function proofDivTescoLabelos(Request $request)
-		{
-	
-		   $data_back=explode(',_',$request->data_back);
-		   $data_back_text=explode(',_',$request->data_back_text);
-		   $data_front=explode(',_',$request->data_front);
-		   $data_front_image=explode(',_',$request->data_front_image);
-		   $svgStringBack=urldecode($data_back[0]);
-		   $svgStringBackText=urldecode($data_back_text[0]);
-		   $svgStringFrontImage=urldecode($data_front_image[0]);
-		   $tesco_size_department = $request->tesco_size_department;
-	
-		   $wash_astm = $request->wash_astm;
-		   $wash_iso = $request->wash_iso;
-		   $whit_astm = $request->whit_astm;
-		   $whit_iso = $request->whit_iso;
-		   $dry_astm = $request->dry_astm;
-		   $dry_iso = $request->dry_iso;
-		   $iron_astm = $request->iron_astm;
-		   $iron_iso = $request->iron_iso;
-		   $clean_astm = $request->clean_astm;
-		   $clean_iso = $request->clean_iso;
-	
-		   $white_wash_astm = $request->white_wash_astm;
-		   $white_wash_iso = $request->white_wash_iso;
-		   $white_whit_astm = $request->white_whit_astm;
-		   $white_whit_iso = $request->white_whit_iso;
-		   $white_dry_astm = $request->white_dry_astm;
-		   $white_dry_iso = $request->white_dry_iso;
-		   $white_iron_astm = $request->white_iron_astm;
-		   $white_iron_iso = $request->white_iron_iso;
-		   $white_clean_astm = $request->white_clean_astm;
-		   $white_clean_iso = $request->white_clean_iso;
-	
-		   define ('PDF_FONT_NAME_MAIN', 'arialuni');
-		   define ('PDF_FONT_NAME_DATA', 'arialuni');
-		   PDF::SetFont('arialuni');
-	
-		   $this->tesco_po_number = $request->tesco_po_number;
-		   $this->style = $request->style;
-		   $this->template_name = $request->template_name;
-		   $this->created_date = $request->created_date;
-		   $this->customer_name = $request->customer_name;
-	
-		   PDF::setHeaderCallback(function($pdf) {
-			   $name=$this->template_name;
-			   $zone="";
-				 $tesco_po_number=$this->tesco_po_number;
-				 $style=$this->style;
-				 $tesco_description="";
-				 $date=date_create($this->created_date);
-				 $created_date =  date_format($date,"d.m.Y");
-				 $image_file= K_PATH_IMAGES.'logo_example.jpg';
-				 $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
-						 <title>Qt Svg Document</title>
-						 <desc>Generated with Qt</desc>
-						 <defs>
-						 </defs>
-						 <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
-						 <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
-						 </g>
-						 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
-								 <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
-						 </svg>
-						 <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
-	   
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x140mm</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
-						 </g>
-						 </g>
-						 </svg>';
-						 $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-				 });
-								 
-				 // Custom Footer
-				 PDF::setFooterCallback(function($pdf) {
-				 $tesco_po_number=$this->tesco_po_number;
-				 $customer_name=$this->customer_name;
-				 // Position at 15 mm from bottom
-				 $pdf->SetY(-50);
-				 $pdf->SetX(9.5);
-				 // Page number
-				 $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
-						 <title>Qt Svg Document</title>
-						 <desc>Generated with Qt</desc>
-						 <defs>
-						 </defs>
-						 <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
-						 <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
-						 </g>
-						 <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
-						 </g>
-						 <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
-						 <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
-						 </g>
-						 <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
-						 <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
-						 </g>
-						 </g>
-						 </svg>';
-						 
-						  $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			 
-			 });
-		   
-		   
-			 
-		   $i=0;
-		   $xx=15;
-		   foreach($data_front as $value)
-		   {
-			   
-			   if($i == 6)
-			   {
-				   $i=0;
-				   $xx=15;
-			   }
-	
-			   if($i == 0)
-			   {
-				   PDF::AddPage();
-			   }
-			   
-			   $svgString=urldecode($value);
-	
-			   if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
-			   {
-				   $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-				   viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
-			  <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
-			  <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
-			  </svg>';
-				   PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   }
-			   PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   $xx+=30;
-			   $i++;
-		   }
-	
-		   if($i == 6)
-		   {
-			   $xx=15;
-			   PDF::AddPage();
-		   }
-	
-		   PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.176, $h=140.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		   
-	
-		   PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=140.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	
-		   if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
-		   {
-			   PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-	   
-			   PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		   }
-		   else
-		   {
-			   PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-	   
-			   PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-	   
-			   PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-			   PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-		   }
-	
-		   
-	
-		   PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
-		   
-		   $file_path =  '/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf';	
-
-		   return response()->json(['error'=> false,'message' =>'success', 'file_path' => $file_path,'url'=>url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf')],200);
-		} 
-		 
-
-	 public function printDivTescoLabelos(Request $request)
      {
 
         $data_back=explode(',_',$request->data_back);
@@ -7567,7 +6685,7 @@ $buyer_no=$request->buyer_no;
         $svgStringBack=urldecode($data_back[0]);
         $svgStringBackText=urldecode($data_back_text[0]);
         $svgStringFrontImage=urldecode($data_front_image[0]);
-
+        $tesco_size_department = $request->tesco_size_department;
 
         $wash_astm = $request->wash_astm;
         $wash_iso = $request->wash_iso;
@@ -7579,6 +6697,489 @@ $buyer_no=$request->buyer_no;
         $iron_iso = $request->iron_iso;
         $clean_astm = $request->clean_astm;
         $clean_iso = $request->clean_iso;
+        if($request->template_name != "GCLB25/M11410G"){
+
+            $woolmark_logo_file = $request->woolmark_logo_file;
+        }
+        else{
+            $woolmark_logo_file = $request->white_woolmark_logo_file;
+        }
+        $woolmark_logo_id = $request->woolmark_logo_id;
+
+        $white_wash_astm = $request->white_wash_astm;
+        $white_wash_iso = $request->white_wash_iso;
+        $white_whit_astm = $request->white_whit_astm;
+        $white_whit_iso = $request->white_whit_iso;
+        $white_dry_astm = $request->white_dry_astm;
+        $white_dry_iso = $request->white_dry_iso;
+        $white_iron_astm = $request->white_iron_astm;
+        $white_iron_iso = $request->white_iron_iso;
+        $white_clean_astm = $request->white_clean_astm;
+        $white_clean_iso = $request->white_clean_iso;
+
+        define ('PDF_FONT_NAME_MAIN', 'arialuni');
+        define ('PDF_FONT_NAME_DATA', 'arialuni');
+        PDF::SetFont('arialuni');
+
+        $this->tesco_po_number = $request->tesco_po_number;
+        $this->style = $request->style;
+        $this->template_name = $request->template_name;
+        $this->created_date = $request->created_date;
+        $this->customer_name = $request->customer_name;
+
+        PDF::setHeaderCallback(function($pdf) {
+            $name=$this->template_name;
+            $zone="";
+              $tesco_po_number=$this->tesco_po_number;
+              $style=$this->style;
+              $tesco_description="";
+              $date=date_create($this->created_date);
+              $created_date =  date_format($date,"d.m.Y");
+              $image_file= K_PATH_IMAGES.'logo_example.jpg';
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188.244mm" height="50.1333mm" viewBox="0 0 1024 264" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1024,0 L1024,264 L0,264 L0,0"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal" style="&#10;    /* border-radius: 27px; */&#10;">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L666,65 L666,66 L499,66 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,65 L500,65 L500,144 L499,144 L499,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L821,65 L821,66 L665,66 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L969,65 L969,66 L820,66 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,65 L969,65 L969,105 L968,105 L968,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,104 L969,104 L969,144 L968,144 L968,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,182 L821,182 L821,183 L499,183 L499,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L500,143 L500,183 L499,183 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,182 L969,182 L969,183 L820,183 L820,182"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M968,143 L969,143 L969,183 L968,183 L968,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L666,143 L666,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,144 L665,144 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,65 L666,65 L666,105 L665,105 L665,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,65 L821,65 L821,105 L820,105 L820,65"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L821,104 L821,105 L665,105 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M665,104 L666,104 L666,143 L665,143 L665,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,143 L820,143 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L969,104 L969,105 L820,105 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,104 L821,104 L821,144 L820,144 L820,104"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M499,143 L821,143 L821,144 L499,144 L499,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L969,143 L969,144 L820,144 L820,143"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M820,143 L821,143 L821,183 L820,183 L820,143"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L1016,212 L1016,213 L8,213 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,213 L1016,213 L1016,214 L8,214 L8,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,212 L8,214 L9,213 L9,212 L8,212"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,213 L1015,214 L1016,214 L1016,212 L1015,213"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L1016,216 L1016,217 L8,217 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,217 L1016,217 L1016,218 L8,218 L8,217"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,216 L8,218 L9,217 L9,216 L8,216"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1015,217 L1015,218 L1016,218 L1016,216 L1015,217"/>
+                      </g>
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56cm" height="37cm" version="1.1">
+                              <image xlink:href="'.public_path('/images/jupiter.jpg').'" x="174" y="66" height="65px" width="116px" style=""/>
+                      </svg>
+                      <g xmlns="http://www.w3.org/2000/svg" fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="35" font-style="normal" font-weight="700">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="50" y="176" font-family="Times New Roman" font-size="30" font-weight="700" font-style="normal">Jupiter Garments Accessories</text>
+    
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="507" y="127" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x140mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+              });
+                              
+              // Custom Footer
+              PDF::setFooterCallback(function($pdf) {
+              $tesco_po_number=$this->tesco_po_number;
+              $customer_name=$this->customer_name;
+              // Position at 15 mm from bottom
+              $pdf->SetY(-50);
+              $pdf->SetX(9.5);
+              // Page number
+              $svg='<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="188mm" height="65.2667mm" viewBox="0 0 1360 168" version="1.2" baseProfile="tiny">
+                      <title>Qt Svg Document</title>
+                      <desc>Generated with Qt</desc>
+                      <defs>
+                      </defs>
+                      <g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel">
+                      <g fill="#ffffff" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M0,0 L1360,0 L1360,168 L0,168 L0,0"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L1352,52 L1352,53 L8,53 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,53 L1352,53 L1352,54 L8,54 L8,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,52 L8,54 L9,53 L9,52 L8,52"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,53 L1351,54 L1352,54 L1352,52 L1351,53"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L1352,56 L1352,57 L8,57 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,57 L1352,57 L1352,58 L8,58 L8,57"/>
+                      </g>
+                      <g fill="#9a9a9a" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M8,56 L8,58 L9,57 L9,56 L8,56"/>
+                      </g>
+                      <g fill="#eeeeee" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M1351,57 L1351,58 L1352,58 L1352,56 L1351,57"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)" font-family="Helvetica" font-size="12" font-weight="400" font-style="normal">
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M385,79 L386,79 L386,157 L385,157 L385,79"/>
+                      <path vector-effect="non-scaling-stroke" fill-rule="evenodd" d="M764,79 L765,79 L765,157 L764,157 L764,79"/>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">CUSTOMER : '.$customer_name.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="41" y="152" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">PO NO : '.$tesco_po_number.'</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="100" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">APPROVED BY : </text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="405" y="152" font-family="Times New Roman" font-size="23" font-weight="700" font-style="normal">PREPARED BY:</text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="784" y="103" font-family="Times New Roman" font-size="23" font-weight="400" font-style="normal">COMMENTS IF ANY :</text>
+                      </g>
+                      </g>
+                      </svg>';
+                      
+                       $pdf->ImageSVG('@' . $svg, '', '', '', '', $link='', $align='', $palign='', $border=0, $fitonpage=false);
+          
+          });
+        
+          
+          
+        $i=0;
+        $xx=15;
+        if($woolmark_logo_id == 1)
+        {
+            $wool_x=21.15;
+        }
+        else if($woolmark_logo_id == 2)
+        {
+            $wool_x=23;
+        }
+        else
+        {
+            $wool_x=0;
+        }
+
+        foreach($data_front as $value)
+        {
+            
+            if($i == 6)
+            {
+                $i=0;
+                $xx=15;
+                if($woolmark_logo_id == 1)
+                {
+                    $wool_x=21.15;
+                }
+                else if($woolmark_logo_id == 2)
+                {
+                    $wool_x=23;
+                }
+                else
+                {
+                    $wool_x=0;
+                }
+            }
+
+            if($i == 0)
+            {
+                PDF::AddPage();
+                $html_note_dept = '<h3 style="font-weight:bold">'.$tesco_size_department.'</h3>';
+                PDF::writeHTMLCell($w=0, $h=0, $x=0, $y=50, $html_note_dept, $border=0, $ln=1, $fill=0, $reseth=true, $align='C', $autopadding=false);
+            }
+            
+            $svgString=urldecode($value);
+
+            
+
+            if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLW25/M11378G" || $request->template_name == "GCLB25/M11410G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=139.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=139.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11364G" || $request->template_name == "GCLW25/M11372G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=139.508, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=139.508, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11375G" || $request->template_name == "GCLW25/M11367G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=147.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=147.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW20/M11473G" || $request->template_name == "GCLW20/M11474G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=20.176, $h=142.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=20.176, $h=142.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11374G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.176, $h=148.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.176, $h=148.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+
+            if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G" && $request->template_name != "GCLW25/M11374G" && $request->template_name != "GCLW25/M11372G" && $request->template_name != "GCLW20/M11473G" && $request->template_name != "GCLW20/M11474G" )
+            {
+                if($woolmark_logo_id == 1)
+                {
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=91, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+                else if($woolmark_logo_id == 2)
+                {
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+            }
+
+            $xx+=30;
+            $wool_x+=30;
+            $i++;
+        }
+
+        if($i == 6)
+        {
+            $xx=15;
+            PDF::AddPage();
+        }
+
+        if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLW25/M11378G" || $request->template_name == "GCLB25/M11410G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.176, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+        }
+        else if($request->template_name == "GCLW25/M11364G" || $request->template_name == "GCLW25/M11372G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.176, $h=139.708, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=139.708, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11375G" || $request->template_name == "GCLW25/M11367G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.176, $h=147.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=147.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11473G" || $request->template_name == "GCLW20/M11474G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=20.176, $h=142.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=20.176, $h=142.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11374G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.176, $h=148.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.176, $h=148.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+
+        
+
+        if($request->template_name == "GCLW25/M11374G"){
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11375G") {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11367G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11473G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+4.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+4.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+8.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+8.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+12.1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+12.1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+15.5, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+15.5, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11474G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+4.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+4.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+8.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+8.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+12.1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+12.1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+15.5, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+15.5, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLB25/M11410G") {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name != "GCLW25/M11364G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+
+        PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');
+        print_r(url('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'));
+    }
+		 
+
+	 public function printDivTescoLabelos(Request $request)
+     {
+
+		$data_back=explode(',_',$request->data_back);
+        $data_back_text=explode(',_',$request->data_back_text);
+        $data_front=explode(',_',$request->data_front);
+        $data_front_image=explode(',_',$request->data_front_image);
+        $svgStringBack=urldecode($data_back[0]);
+        $svgStringBackText=urldecode($data_back_text[0]);
+        $svgStringFrontImage=urldecode($data_front_image[0]);
+
+        $wash_astm = $request->wash_astm;
+        $wash_iso = $request->wash_iso;
+        $whit_astm = $request->whit_astm;
+        $whit_iso = $request->whit_iso;
+        $dry_astm = $request->dry_astm;
+        $dry_iso = $request->dry_iso;
+        $iron_astm = $request->iron_astm;
+        $iron_iso = $request->iron_iso;
+        $clean_astm = $request->clean_astm;
+        $clean_iso = $request->clean_iso;
+
+        if($request->template_name != "GCLB25/M11410G"){
+
+            $woolmark_logo_file = $request->woolmark_logo_file;
+        }
+        else{
+            $woolmark_logo_file = $request->white_woolmark_logo_file;
+        }
+        
+        $woolmark_logo_id = $request->woolmark_logo_id;
 
         $white_wash_astm = $request->white_wash_astm;
         $white_wash_iso = $request->white_wash_iso;
@@ -7601,10 +7202,22 @@ $buyer_no=$request->buyer_no;
         $this->created_date = $request->created_date;
         $this->customer_name = $request->customer_name;
         
-        
-          
         $i=0;
         $xx=15;
+
+        if($woolmark_logo_id == 1)
+        {
+            $wool_x=21.15;
+        }
+        else if($woolmark_logo_id == 2)
+        {
+            $wool_x=23;
+        }
+        else
+        {
+            $wool_x=0;
+        }
+        
         foreach($data_front as $value)
         {
             
@@ -7612,6 +7225,18 @@ $buyer_no=$request->buyer_no;
             {
                 $i=0;
                 $xx=15;
+                if($woolmark_logo_id == 1)
+                {
+                    $wool_x=21.15;
+                }
+                else if($woolmark_logo_id == 2)
+                {
+                    $wool_x=23;
+                }
+                else
+                {
+                    $wool_x=0;
+                }
             }
 
             if($i == 0)
@@ -7621,20 +7246,64 @@ $buyer_no=$request->buyer_no;
             
             $svgString=urldecode($value);
             //print_r($svgString);
+
             
-            if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
+
+            //PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=93, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLB25/M11410G")
             {
-                $svgStringBlack = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                viewBox="0 0 71.37 397.35" style="enable-background:new 0 0 71.37 397.35;" xml:space="preserve">
-           <rect x="0.25" y="0.25" style="fill-rule:evenodd;clip-rule:evenodd;" width="70.87" height="396.85"/>
-           <rect x="0.25" y="0.25" style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:2.6131;" width="70.87" height="396.85"/>
-           </svg>';
-                PDF::ImageSVG('@' . $svgStringBlack, $x=$xx, $y=80, $w=25.176, $h=141.008, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.378, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.378, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11364G" || $request->template_name == "GCLW25/M11372G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=139.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=139.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11375G" || $request->template_name == "GCLW25/M11367G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=147, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=147, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW20/M11473G" || $request->template_name == "GCLW20/M11474G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=20, $h=142, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=20, $h=142, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11378G")
+            {
+                
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25.5, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25.5, $h=139.208, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            }
+            else if($request->template_name == "GCLW25/M11374G")
+            {
+                PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=148, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+                PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=148, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             }
 
-            PDF::ImageSVG('@' . $svgString, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG('@' . $svgStringFrontImage, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            
+            if($request->template_name != "GCLW25/M11364G" && $request->template_name != "GCLW25/M11367G" && $request->template_name != "GCLW25/M11375G" && $request->template_name != "GCLW25/M11374G" && $request->template_name != "GCLW25/M11372G" && $request->template_name != "GCLW20/M11473G" && $request->template_name != "GCLW20/M11474G" )
+            {
+                if($woolmark_logo_id == 1)
+                {
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=91, $w=13.5, $h=15, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+                else if($woolmark_logo_id == 2)
+                {
+                    PDF::ImageSVG($file=public_path($woolmark_logo_file), $x=$wool_x, $y=92, $w=9.5, $h=11.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+                }
+            }
+            
             $xx+=30;
+            $wool_x+=30;
             $i++;
         }
 
@@ -7644,49 +7313,172 @@ $buyer_no=$request->buyer_no;
             PDF::AddPage();
         }
 
-        PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLW25/M11378G" || $request->template_name == "GCLB25/M11410G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25.378, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25.378, $h=139.165, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11364G" || $request->template_name == "GCLW25/M11372G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=139.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=139.5, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11375G" || $request->template_name == "GCLW25/M11367G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=147, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=147, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11473G" || $request->template_name == "GCLW20/M11474G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=20, $h=142, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=20, $h=142, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11374G")
+        {
+            PDF::ImageSVG('@' . $svgStringBack, $x=$xx, $y=80, $w=25, $h=148, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+    
+            PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=148, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+
         
 
-        PDF::ImageSVG('@' . $svgStringBackText, $x=$xx, $y=80, $w=25, $h=140, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        if($request->template_name == "GCLW25/M11374G"){
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
 
-        if($request->template_name == "GCL25B/M13278G" || $request->template_name == "GCL25B/M13279G")
-        {
-            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
-    
-            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
-            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
-            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
-            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         }
-        else
-        {
+        else if($request->template_name == "GCLW25/M11375G") {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.1, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.8, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW25/M11367G") {
+
             PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
-    
+
             PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
+
             PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
+
             PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
-    
+
             PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=94.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
             PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
         }
-        
+        else if($request->template_name == "GCLW20/M11473G") {
 
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+4.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+4.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+8.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+8.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+12.1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+12.1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+15.5, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+15.5, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLW20/M11474G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+4.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+4.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+8.3, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+8.3, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+12.1, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+12.1, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+15.5, $y=91, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+15.5, $y=94.9, $w=3, $h=3, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name == "GCLB25/M11410G") {
+            PDF::ImageSVG($file=public_path($white_wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($white_clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($white_clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else if($request->template_name != "GCLW25/M11364G") {
+
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=95.3, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=99.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        else {
+            PDF::ImageSVG($file=public_path($wash_astm), $x=$xx+1.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($wash_iso), $x=$xx+1.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($whit_astm), $x=$xx+5.8, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($whit_iso), $x=$xx+5.8, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($dry_astm), $x=$xx+10.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($dry_iso), $x=$xx+10.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($iron_astm), $x=$xx+15.5, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($iron_iso), $x=$xx+15.5, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+
+            PDF::ImageSVG($file=public_path($clean_astm), $x=$xx+20, $y=92.9, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+            PDF::ImageSVG($file=public_path($clean_iso), $x=$xx+20, $y=97.5, $w=4, $h=4, $link='', $align='', $palign='', $border=0, $fitonpage=false);
+        }
+        
         //print_r($svgStringBack);
 
         PDF::Output( public_path('/storage/app/template/'.str_replace("/","_",$this->style).'_'.substr($request->template_name, strrpos($request->template_name, '/') + 1).'.pdf'), 'F');

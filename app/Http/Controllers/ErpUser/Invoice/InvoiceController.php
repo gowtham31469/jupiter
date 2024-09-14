@@ -1,31 +1,34 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Invoice;
 
+use DB;
+use PDF;
+use Auth;
+use Mail;
+use View;
+use Response;
+use App\History;
+use App\Invoices;
+use Carbon\Carbon;
+use App\EventHistory;
+use App\InvoiceAddress;
+use App\InvoiceDetails;
+use App\Classes\Invoice;
+use App\ErpOrderDetails;
+use App\InvExtraCharges;
+use App\ErpOrders as Erp;
+use App\ErpOrdersInvoice; 
 use Illuminate\Http\Request;
+use App\FinancialYearResetDate;
+use App\OrderManagementHistory;
+use Elibyy\TCPDF\Facades\TCPDF;
+use App\Classes\invoiceTCPDF;   
+use App\Classes\ErpCompanySession;
+use App\Classes\InvoiceIDGenerator;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-use Response;
-use View;
-use DB;
-use Auth;
-use Mail;
-use App\ErpOrders as Erp;
-use App\ErpOrderDetails;
-use App\ErpOrdersInvoice; 
-use App\Invoices;
-use App\InvoiceDetails;
-use App\InvExtraCharges;
-use PDF;
-use App\Classes\Invoice;
-use App\InvoiceAddress;
-use Elibyy\TCPDF\Facades\TCPDF;
-use App\Classes\invoiceTCPDF;
-use App\EventHistory;
-use App\History;
-use Carbon\Carbon;
-use App\FinancialYearResetDate;
-use App\Classes\InvoiceIDGenerator;
+use App\Classes\FPDF_Merge;
 
 class InvoiceController extends Controller
 {
@@ -39,6 +42,8 @@ class InvoiceController extends Controller
     public function __construct()
     {
 		$this->middleware('erpuser');
+        $role = "INVOICE MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
         $this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
         
@@ -51,9 +56,10 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+        $set_company_session = new ErpCompanySession();
         
-        $objInv     = new Invoice();
-        $companies  = $objInv->setCompany();
+        $companies = $set_company_session->setCompanySession();
+        
         $invoices   = Invoices::join('customers','invoice.customer_id','customers.id')
                             ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                             ->join('buyers','invoice.buyer_id','buyers.id')
@@ -69,8 +75,10 @@ class InvoiceController extends Controller
      * @return create invoice view
      */
     public function create(){
-        $objInv     = new Invoice();
-        $companies  = $objInv->setCompany();
+        $set_company_session = new ErpCompanySession();
+        
+        $companies = $set_company_session->setCompanySession();
+
         $customers  = DB::table('customers')
                               ->where('is_active','=',1)
                               ->get();
@@ -92,7 +100,6 @@ class InvoiceController extends Controller
             $po_list   = Erp::where('customer_id',$customer_id)
                             ->join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
                             ->whereIn('erp_order_details.status',[6,8])
-                            // ->whereIn('erp_orders.status',[6,8])
                             ->where('erp_order_details.company_id',session()->get('company'))
                             ->join('customers','erp_orders.customer_id','customers.id')
                             ->join('buyers','erp_orders.buyer_id','buyers.id')
@@ -116,7 +123,6 @@ class InvoiceController extends Controller
     public function erpOrderList(Request $request)
     {
         try {
-            $customer_id = Auth::guard('erpuser')->id(); 
             $erp_id      = $request->erp_id;
             $orderlist   = ErpOrderDetails::whereIn('erp_order_id',$erp_id)
                             ->join('company','erp_order_details.company_id','company.id')
@@ -126,10 +132,9 @@ class InvoiceController extends Controller
                             ->leftjoin('freight_terms','freight_terms.id','customers.freight_type')
                             ->where('erp_order_details.pending_orders','!=' , 0)
                             ->where('erp_order_details.company_id',session()->get('company'))
-                            //->whereIn('erp_orders.status',[6,8])
                             ->whereIn('erp_order_details.status',[6,8])
-                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as reference_name','erp_order_details.reference_name as ref_no','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'))
-							->orderBy('erp_order_details.id', 'asc')
+                            ->select('erp_order_details.id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','erp_orders.po_no','erp_order_details.style_no','erp_order_details.order_quantity','erp_order_details.rate','erp_order_details.size','erp_order_details.custom_ref_name as ref_no','erp_order_details.reference_name as reference_name','customers.place_of_supply','erp_order_details.ocn_number','erp_order_details.template_id','erp_orders.erp_id as erp_id','buyers.template_table','buyers.item_master_table','erp_order_details.pending_orders as pending_qnty','erp_orders.po_file','erp_orders.customer_id','customers.gstin_number','erp_orders.id as erpid','credit_limit','customers.freight_type as freight_id','freight_terms.freight_terms as delvry_thru','customers.nominated_forwarder','erp_order_details.buyer_po_number',DB::raw("0".' as "delvry_qnty"'), 'erp_order_details.color_code')
+							->orderBy('erp_order_details.template_id', 'asc')
                             ->get();
             if ($orderlist[0]->freight_id == 3) {
                 $orderlist[0]->delvry_thru  = DB::table('nominated_forwarders')->where('id',$orderlist[0]->nominated_forwarder)->value('forwarder');       
@@ -148,16 +153,25 @@ class InvoiceController extends Controller
                           ->select('*')
                           ->first();
 
-
             foreach ($orderlist as $key => $value){
                $details = DB::table($value->template_table)
                             ->where($value->template_table.'.item_id',$value->template_id)
-                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax','hierarchy_id')->first();                     
-                $value->hsn_code = $details->hsn_code;
+                            ->select($value->template_table.'.hsn_code',$value->template_table.'.tax')->first();                     
+                $value->hsn_code = $details->hsn_code === null ? '-' : $details->hsn_code;
+                $value->ocn_number = $value->ocn_number === null ? '-' : $value->ocn_number;
+                $value->color_code = $value->color_code === null ? '-' : $value->color_code;
+                
                 $value->tax = $details->tax;
-                $value->item_name =  DB::table($value->item_master_table)->where('id',$details->hierarchy_id)->value('item_name');
+                $value->item_name =  DB::table('price_taxation')
+                                    ->where([
+                                        'customer_id' => $value->customer_id,
+                                        'buyer_id'    => $value->buyer_id,
+                                        'template_id' => $value->template_id,
+                                    ])
+                                    ->value('custom_name');
             }
-            $result      = response()->json(['error'=> false,'message' =>'success','orderlist'=>$orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details],200);
+
+            $result      = response()->json(['error'=> false,'message' =>'success','orderlist' => $orderlist,'bill_to'=>$bill_to,'ship_to'=>$ship_to,'company_details'=>$company_details, 'place_of_supply' => $orderlist[0]->place_of_supply],200);
         }
         catch (\Exception $e)
         {
@@ -192,17 +206,9 @@ class InvoiceController extends Controller
         try 
         {
             $orders        =  $request['finalData'];
-            $htmlData      =  $request->htmlData;
-            $tax_amnt      =  $request->tax_amnt;
-            $ewayNo        =  $request->ewayNo; 
-            $creditTerms   =  $request->creditTerms;
-            $taxTotal      = $request->taxTotal;
             $place_of_supply = $request->place_of_supply;
             $roundOff      = $request->roundOff;
-            $amntInwords   = $request->amntInwords;
             $grandTotal    = $request->grandTotal;
-            // $invoiceNo     = $request->invoiceNo;
-            $invoiceDate   = $request->invoiceDate;
             $delivery_at   = $request->delivery_at;
             $eChargesArr   = $request['eCharges'];
 
@@ -259,10 +265,6 @@ class InvoiceController extends Controller
                 $billTo_id    =  $billAdd->id;   
             }            
 
-            $company_details =  DB::table('company')
-                                ->where('id',session()->get('company'))
-                                ->first();         
-
             if ($orders) {
                 $invoiceData = Invoices::create([
                                 'customer_id'    => $orders[0]['customer_id'],
@@ -300,6 +302,8 @@ class InvoiceController extends Controller
                     $size = $value['size'] == ""?"null":$value['size'];
                     $hsn_code = $value['hsn_code']==""?0: $value['hsn_code'];
                     $status = $pendingQnty==0?5:6;
+                    $order_status = $pendingQnty==0?7:8;
+                    $order_status_text = $pendingQnty==0?"Order Dispatched":"Partially Dispatched";
                     if ($status==5) {
                         $par_count++;
                     }
@@ -324,6 +328,7 @@ class InvoiceController extends Controller
                         'item'          =>  $value['item_name'], 
                         'buyer_po_number' =>  $value['buyer_po_number'],          
                         'company_id'    =>  session()->get('company'),
+                        'color_code'    => $value['color_code'],
                     ]);
                    
                     ErpOrderDetails::where('id',$value['id'])
@@ -331,6 +336,7 @@ class InvoiceController extends Controller
                             'delivered_quantity'   => ( $value['order_quantity'] - $pendingQnty ),
                             'pending_orders'       => $pendingQnty,
                             'status'               => $status,
+                            'order_status_id'      => $order_status,
                             'invoice_number'       => $invoiceNo,
                             'invoice_created_by'   => Auth::guard('erpuser')->id(),
                             'invoice_created_date' => $this->current_date
@@ -342,14 +348,56 @@ class InvoiceController extends Controller
                     ]);
 
 
-                $historyId = History::where('erp_order_details_id',ErpOrderDetails::where('erp_order_id',$orders[0]['erpid'])->first()->id)->first()->id;
+                    $erp_order_details = ErpOrderDetails::where('id',$value['id'])->first();
 
-                $invAction = EventHistory::create([
-                'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
-                'history_id'   => $historyId,
-                'created_by'   => Auth::guard('erpuser')->id(),
-                ]);
+                    $historyId = \App\History::where('erp_order_details_id', $erp_order_details->id)->value('id');
+                    
+                    EventHistory::create([
+                        'action_id'    => $place_of_supply == 1 ? 14 : 15 ,
+                        'history_id'   => $historyId,
+                        'created_by'   => Auth::guard('erpuser')->id(),
+                    ]);
 
+                    $order_qty_table     = $erp_order_details->order_qnty_table_name;
+					$order_qnty_table_id = $erp_order_details->order_qnty_table_id;
+
+					switch ($value['buyer_name']) {
+                        case 'Orchestra':
+                            // get the first letter of each word for a given string
+                            $result_str  =  str_replace("_"," ",str_replace("_orders_qty","",$order_qty_table));
+                            $qnty_id = '';
+                            foreach (explode(' ', $result_str) as $word)
+                            {
+                                $qnty_id .= strtolower($word[0]);
+                            }
+                            $main_table  = $order_qty_table != "non_artwork_orders_quanty"?str_replace("_qty","",$order_qty_table):str_replace("_quanty","",$order_qty_table);
+                            $order_qty_field = $order_qty_table != "non_artwork_orders_quanty"?$qnty_id.'_id':"non_artwork_order_id";
+                            $order_status_field = $order_qty_table != "non_artwork_orders_quanty"?'status':'order_status';
+                            break;
+                        case 'Tesco':
+                            // get the first letter of each word for a given string
+                            $order_qty_field  =  $order_qty_table != "non_artwork_orders_quanty"?str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table)):"non_artwork_order_id";
+                            $main_table  = str_replace("_quanty","",$order_qty_table);
+                            $order_status_field = 'order_status';
+                            break;
+                        
+                        default:
+                            // get the first letter of each word for a given string
+                            $order_qty_field  =  $order_qty_table != "non_artwork_orders_quanty"?str_replace("_orders_quanty","_order_id",str_replace(strtolower($value['buyer_name'])."_","",$order_qty_table)):"non_artwork_order_id";
+                            $main_table  = str_replace("_quanty","",$order_qty_table);
+                            $order_status_field = 'order_status';
+                            break;
+                    }
+
+					$main_table_id = DB::table($order_qty_table)->where('id',$order_qnty_table_id)->value($order_qty_field);
+                    
+
+					DB::table($main_table)->where('id',$main_table_id)->update([$order_status_field => $order_status_text]);
+					
+					 // update order status as "Order dispatched" in order management history table
+					OrderManagementHistory::where([['order_table_name', $main_table], ['order_table_id', $main_table_id]])->update([
+						'order_status' => $order_status,
+					]);
 
                 }
                 $erpStatus = ($par_count !=0 && $ful_count!=0) ? 6:$status;
@@ -376,14 +424,9 @@ class InvoiceController extends Controller
         try
         {
             $inv_id   = $request->invoice_id;
-            // $invoice_details  = DB::table('invoice')
-            //                     ->join('cu')
-            //                     ->where('invoice_id',$inv_id)->get();
 
             $invoice_details  =      Invoices::join('customers','invoice.customer_id','customers.id')
-                                // ->join('invoice_details','invoice_details.invoice_id','invoice.id')
                                 ->join('buyers','invoice.buyer_id','buyers.id')
-                                // ->where('invoice_details.company_id',session()->get('company'))
                                 ->where('invoice_id',$inv_id)
                                 ->select('invoice.invoice_id','erp_id','buyers.buyer_name','buyers.id as buyer_id','customers.company_name','customers.id as customer_id','po_no','invoice_file','invoice.id')
                                 ->distinct('invoice.id')
@@ -408,7 +451,6 @@ class InvoiceController extends Controller
         try {
             $objInv     = new Invoice();
             $inv_id      = $request->id;
-            $ddmmyy="DD/MM/YYYY";
             $inv_details = $objInv->getInvoiceDetails($inv_id);
             $ship_to = $objInv->getShippTo($inv_details);
             $bill_to = $objInv->getBillTo($inv_details);
@@ -449,14 +491,11 @@ class InvoiceController extends Controller
             $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
             $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
             
-            
             $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
+                ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to]);
             ob_start();
-            // define ('PDF_FONT_NAME_MAIN', 'helvetica');
-            // define ('PDF_FONT_NAME_DATA', 'helvetica');
             $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $pdf->setCompanyData($company_details);
+            $pdf->setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords);
             //margins
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -477,15 +516,20 @@ class InvoiceController extends Controller
             $pdf->AddPage('P', 'A4');
             $pdf->SetXY(5.3, 24);
             $pdf->writeHTML($dynView->render());
-            // PDF::SetPrintHeader(false);
-            // PDF::SetPrintFooter(false);
-            // PDF::AddPage();
-            // PDF::writeHTML($dynView->render());
+            
             $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
 
-            Invoices::where('id', $inv_id)->update(['eway_no'=> $eway_no ,'invoice_file'=>'/storage/app/public/invoices/invoices_'.$inv_id.'.pdf']);
+            Invoices::where('id', $inv_id)
+            ->update(
+                [
+                    'eway_no' => $eway_no,
+                    'invoice_file' => '/storage/app/public/invoices/invoices_' . $inv_id . '.pdf'
+                ]
+            );
+
             $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
-            //Mail notiication
+            
+            //Mail notification
             // $useremail = "aswathy@wizroots.com";
             $useremail = $inv_details[0]->email;
             Mail::send('mails.invoice', ['title' => 'Invoice','to_email' => $useremail], function ($message) use ($useremail,$attachment)
@@ -514,6 +558,7 @@ class InvoiceController extends Controller
     {
         try{
             $objInv      = new Invoice();
+            $merge = new FPDF_Merge();
             $inv_id      = $request->inv_id;
             $amntInwords = $request->amntInwords;
             $eway_no     = $request->eway_no;
@@ -525,13 +570,17 @@ class InvoiceController extends Controller
                                 ->first();
             $extra_charges  = InvExtraCharges::where('invoice_id',$inv_id)->get();
             $uniqueTaxes    = $objInv->getTaxDetails($inv_details);
-            
-            
+
+            $invoice = array('Original', 'Duplicate', 'Second Duplicate');
+            foreach($invoice as $key => $value){
+
+                $key_val = strtolower(str_replace(' ', '_', $value));
+
                 $dynView = View::make('template')
-                ->with(['company_details' => $company_details, 'inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to,'inv_details'=>$inv_details,'eway_no'=> $eway_no,'amntInwords'=>$amntInwords , 'eChargesArr'=>$extra_charges,'uniqueTaxes'=>$uniqueTaxes]);
+                    ->with(['inv_details' => $inv_details, 'ship_to'=>$ship_to,'bill_to'=>$bill_to]);
                 ob_start();
                 $pdf = new invoiceTCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-                $pdf->setCompanyData($company_details);
+                $pdf->setCompanyData($company_details, $inv_details, $uniqueTaxes, $eway_no, $extra_charges, $amntInwords);
                 //margins
                 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
                 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -544,52 +593,26 @@ class InvoiceController extends Controller
 
                 // set image scale factor
                 $pdf->setImageScale(0.8);
-
                 // set font
                 $pdf->SetFont('helvetica', '', 8);
 
-                // add a page
-                // $pdf->AddPage('P', 'A4');
-                // $pdf->SetXY(5.3, 24);
-                // for ($i=0; $i <3 ; $i++) { 
-                //     $pdf->AddPage('P', 'A4');
-                //     $pdf->SetXY(5.3, 24);
-                //      // $pdf->Cell(10, -20, 'Customer Copy ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                //     $pdf->writeHTML($dynView->render());
-                    
-                // }
+                $pdf->AddPage('P', 'A4');
+                $pdf->SetXY(5.3, 24);
+                $pdf->writeHTML($dynView->render()); 
+                $pdf->SetFont('helvetica', '', 10);
+                $pdf->writeHTMLCell($w='', $h='', $x='', $y='2', $value, $border=0, $ln=0, $fill=0, $reseth=true, $align='C', $autopadding=true);
+                $pdf->Output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'), 'F');
+                ob_end_clean();
 
-                $invoice = array(1, 2, 3);
-                foreach($invoice as $value){
-                    switch($value){
-                         case 1: 
-                            $copy="text for invoice 1";
-                            $pdf->AddPage('P', 'A4');
-                            $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                            $pdf->writeHTML($dynView->render()); 
-                         break;
-                         case 2: 
-                            $copy="text for invoice 2";
-                            $pdf->AddPage('P', 'A4');
-                            $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20, $copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                            $pdf->writeHTML($dynView->render());  
-                         break;
-                         case 3: 
-                            $copy="text for invoice 3";
-                            $pdf->AddPage('P', 'A4');
-                            $pdf->SetXY(5.3, 24);
-                            // $pdf->Cell(10, -20,$copy, 0, false, 'C', 0, '', 0, false, 'T', 'M');
-                            $pdf->writeHTML($dynView->render());         
-                         break;      
-                    }
-                }
+                $merge->add(public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'));
+
+                unlink(public_path('storage/app/public/invoices/invoices_'.$inv_id.'_'.$key_val.'.pdf'));
+            }
      
-            $pdfdata =$pdf->output( public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf'), 'F');
+            $merge->Output(public_path("/storage/app/public/invoices/invoices_".$inv_id.".pdf") , 'F');
 
-            $attachment =  public_path('storage/app/public/invoices/invoices_'.$inv_id.'.pdf');
             return "/storage/app/public/invoices/invoices_".$inv_id.".pdf";
+
         } 
         catch (\Exception $e)
         {

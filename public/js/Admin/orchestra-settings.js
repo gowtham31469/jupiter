@@ -104,11 +104,7 @@ function orchestraSettings() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -177,11 +173,7 @@ function addOrchestraGarments() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -226,11 +218,7 @@ function getOrchestraGarmentById(id) {
                 $('#editOrchestraGarmentsModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -277,11 +265,7 @@ function editOrchestraGarments() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -321,11 +305,7 @@ function makeGarmentEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraSettings();
@@ -367,11 +347,7 @@ function makeGarmentDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraSettings();
@@ -436,11 +412,7 @@ function ageGroup() {
                 $('#orchestra-age-group-list-table_length select').addClass('form-control input-sm');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -491,11 +463,7 @@ function addOrchestraAgegroup() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -541,11 +509,7 @@ function getOrchestraAgeGroupById(id) {
                 $('#editOrchestraAgeGroupModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -593,11 +557,7 @@ function editOrchestraAgeGroup() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -637,11 +597,7 @@ function makeAgeGroupEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 ageGroup();
@@ -683,11 +639,7 @@ function makeAgeGroupDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 ageGroup();
@@ -755,11 +707,7 @@ function countries() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -820,11 +768,7 @@ function addOrchestraCountries() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -880,11 +824,7 @@ function getOrchestraCountryById(id) {
                 $('#editOrchestraCountryModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -942,11 +882,7 @@ function editOrchestraCountry() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -986,11 +922,7 @@ function makeCountryEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 countries();
@@ -1032,11 +964,7 @@ function makeCountryDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 countries();
@@ -1102,11 +1030,7 @@ function productFamily() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1160,11 +1084,7 @@ function addOrchestraProductFamily() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1213,11 +1133,7 @@ function getOrchestraProductFamilyById(id) {
                 $('#editOrchestraProductFamilyModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1268,11 +1184,7 @@ function editOrchestraProductFamily() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1312,11 +1224,7 @@ function makeProductFamilyEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 productFamily();
@@ -1358,11 +1266,7 @@ function makeProductFamilyDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 productFamily();
@@ -1430,11 +1334,7 @@ function specialInstruction() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1495,11 +1395,7 @@ function addOrchestraSpecialInstruction() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1555,11 +1451,7 @@ function getOrchestraSpecialInstructionById(id) {
                 $('#editOrchestraSpecialInstructionModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1617,11 +1509,7 @@ function editOrchestraSpecialInstruction() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1661,11 +1549,7 @@ function makeSpecialInstructionEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 specialInstruction();
@@ -1707,11 +1591,7 @@ function makeSpecialInstructionDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 specialInstruction();
@@ -1778,11 +1658,7 @@ function compositions() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1834,7 +1710,7 @@ function addOrchestraComposition() {
                 208: function() {
                     $('#composition_error').removeClass('hidden');
                     $('#composition_error').removeAttr('style');
-                    $('#composition_error').html('Composition[English] already excists.')
+                    $('#composition_error').html('Composition[English] already exists.')
                     $("#composition_error").addClass("alert alert-warning");
                 },
                 400: function() {
@@ -1843,11 +1719,7 @@ function addOrchestraComposition() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1903,11 +1775,7 @@ function getOrchestraCompositionById(id) {
                 $('#editOrchestraCompositionModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -1960,16 +1828,12 @@ function editOrchestraComposition() {
                 208: function() {
                     $('#composition_update_error').removeClass('hidden');
                     $('#composition_update_error').removeAttr('style');
-                    $('#composition_update_error').html('Composition[English] already excists.')
+                    $('#composition_update_error').html('Composition[English] already exists.')
                     $("#composition_update_error").addClass("alert alert-warning");
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2009,11 +1873,7 @@ function makeCompositionEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 compositions();
@@ -2055,11 +1915,7 @@ function makeCompositionDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 compositions();
@@ -2126,11 +1982,7 @@ function parts() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2191,11 +2043,7 @@ function addOrchestraPart() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2251,11 +2099,7 @@ function getOrchestraPartById(id) {
                 $('#editOrchestraPartModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2313,11 +2157,7 @@ function editOrchestraPart() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2357,11 +2197,7 @@ function makePartEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 parts();
@@ -2403,11 +2239,7 @@ function makePartDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 parts();
@@ -2472,11 +2304,7 @@ function sizeChart() {
                 $('#orchestra-size-chart-list-table_length select').addClass('form-control input-sm');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2528,11 +2356,7 @@ function addOrchestraSizeChart() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2579,11 +2403,7 @@ function getOrchestraSizeChartById(id) {
                 $('#editOrchestraSizeChartModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2632,11 +2452,7 @@ function editOrchestraSizeChart() {
                 },
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2676,11 +2492,7 @@ function makeOrchestraSizeChartEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 sizeChart();
@@ -2722,11 +2534,7 @@ function makeOrchestraSizeChartDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 sizeChart();
@@ -2774,7 +2582,7 @@ function orchestraSymbols() {
                     } else {
                         orchestra_metadata += '<td><a href="#"><i class="fa fa-check filterbtn options fa-button status" aria-hidden="true" title="Make Enabled" id="make_symbols_enabled" data-placement="left"></i></a>';
                     }
-                    orchestra_metadata += '</td></tr>';
+                    orchestra_metadata += '<a href="#"><i class="fa fa-pencil filterbtn options fa-button edit-orchestra-symbols" aria-hidden="true" title="Edit Symbol" id="edit-orchestra-symbols" data-placement="left"></i></a></td></tr>';
                 });
                 orchestra_metadata += '</tbody></table></div>';
                 $('.content').html(orchestra_metadata)
@@ -2789,11 +2597,7 @@ function orchestraSymbols() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2847,11 +2651,7 @@ function addOrchestraSymbols(cofreet_symbols, astms_symbol, category_id, care_in
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2902,11 +2702,7 @@ function editOrchestraSymbols(id, cofreet_symbols, astms_symbol, category_id, ca
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -2922,7 +2718,7 @@ function editOrchestraSymbols(id, cofreet_symbols, astms_symbol, category_id, ca
  * @param id,csrf_token
  * @author <praveen>
  */
-function makeSymbolEnabled(id, csrf_token) {
+function makeOrcSymbolEnabled(id, csrf_token) {
     try {
         if (isSubmitting) {
             return;
@@ -2947,11 +2743,7 @@ function makeSymbolEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraSymbols();
@@ -2968,7 +2760,7 @@ function makeSymbolEnabled(id, csrf_token) {
  * @param id,csrf_token
  * @author <praveen>
  */
-function makeSymbolDisabled(id, csrf_token) {
+function makeOrcSymbolDisabled(id, csrf_token) {
     try {
         if (isSubmitting) {
             return;
@@ -2993,11 +2785,7 @@ function makeSymbolDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraSymbols();
@@ -3027,8 +2815,8 @@ $(document).on("click", ".edit-orchestra-symbols", function() {
     $('#editOrchestraSymbolsModal').modal('show');
     // $('#myModal').modal('hide');
     $('#edit_orchestra_symbols_id').val(trid);
-    $('#edit_symbol_category').val(cat_id);
-    $('#edit_care_instruction').val(cat_text);
+    $('#edit_orc_symbol_category').val(cat_id);
+    $('#edit_orc_care_instruction').val(cat_text);
     $('#astms_image').attr('src', astms_img);
     $('#cofreet_image').attr('src', cofreet_img);
 });
@@ -3114,7 +2902,7 @@ function readeditwoolURL(input) {
 }
 
 
-$("#cofreet_symbol").add("#astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
+$("#cofreet_symbol").add("#edit_orc_astms_symbol").add("#edit_cofreet_symbol").add("#astms_symbol").add("#orc_astms_symbol").add("#white_iso_symbol").add("#white_astms_symbol").add("#iso_symbol").change(function() {
     readURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
@@ -3154,7 +2942,7 @@ $("#edit_woolmark_logo").change(function() {
 
 });
 
-$("#edit_cofreet_symbol").add("#edit_astms_symbol").add("#edit_iso_symbol").add("#edit_white_iso_symbol").add("#edit_white_astms_symbol").change(function() {
+$("#edit_astms_symbol").add("#edit_iso_symbol").add("#edit_white_iso_symbol").add("#edit_white_astms_symbol").change(function() {
     editreadURL(this);
     if (".hidden_" + this.id != "undefined") {
         $(".hidden_" + this.id).removeClass('hidden')
@@ -3218,11 +3006,7 @@ function orchestraColorCode() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -3271,11 +3055,7 @@ function addColorCode() {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -3311,11 +3091,7 @@ function makeColorEnabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraColorCode();
@@ -3352,11 +3128,7 @@ function makeColorDisabled(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 orchestraColorCode();
@@ -3400,11 +3172,7 @@ function getOrchestraColorCodeById(id) {
                 $('#editOrchestraColorCodeModal').modal('show');
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();
@@ -3450,11 +3218,7 @@ function editOrchestraColorCode() {
 
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 $(".loader").hide();

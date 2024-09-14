@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/Erp/custom.css') }}">
+	<link rel="stylesheet" href="{{ asset('css/Erp/jobcard.css') }}">
 	<link href="{{ asset('js/datatables/jquery.dataTables.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('js/datatables/responsive.bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     
@@ -65,7 +66,7 @@
     <script src="{{ asset('js/datatables/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('js/datatables/responsive.bootstrap.min.js') }}"></script>
     
-	 <script type="text/javascript" src="{{ asset('js/Chart.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/Chart.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/dropzone.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
 
@@ -80,21 +81,25 @@
     <script type="text/javascript" src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('js/jquery.nicescroll-ajax.js') }}" type="text/javascript"></script>
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script> -->
-<script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+	<script src="{{ asset('js/jquery.easy-autocomplete.min.js') }}">
 	</script><script src="{{ asset('js/toastr.js') }}"></script>
 	<!-- For Data Manipulation   -->
 	<script src="{{ asset('js/Erp/store.js') }}"></script>
 	<script src="{{ asset('js/Erp/update.js') }}"></script>
 	<script src="{{ asset('js/Erp/userProfile.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-manager.js') }}"></script>
-	<script src="{{ asset('js/Erp/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/non-artwork-job-card-manager.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-artwork.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/job-card-common.js') }}"></script>
 	<script src="{{ asset('js/Erp/print-manager.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-download.js') }}"></script>
     <script src="{{ asset('js/common/tesco-care-label-download.js') }}"></script>
 	<script src="{{ asset('js/Erp/erp-settings.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/non-artwork-jc-edit.js') }}"></script>
+	<script src="{{ asset('js/Erp/jobcard/spectrra-job-card.js') }}"></script>
+    <script src="{{ asset('js/common/spectrra-metadata-dropdown.js') }}"></script>
 	<script>
 		var base_url = "<?php echo  url('/') ?>";
 		var csrf_token = $('meta[name="csrf-token"]').attr('content');

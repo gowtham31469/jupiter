@@ -602,7 +602,7 @@ function extraQuantityLabelTescoRepeatOrderCustomer(type,id,name,zone,po_number,
                                         </table>
                                         </div>`;
 
-			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><div class="form-group has-feedback has-success"><input type="text" maxlength="7" class="form-control  input-sm purchase_order_number" required value="" placeholder="PO Number"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
+			$('.quantity_care_label_reorder').html('<form id="qty_table_care_label_reorder">'+quantity_html+'<div class="po_div"></div><div class="form-group has-feedback has-success"><input type="text" maxlength="9" class="form-control  input-sm purchase_order_number" required value="" placeholder="PO Number" onkeydown="return validatePoValue(event)"> <label style="color:red" id="po_already_error" class="hidden">PO Number already exists</label><div class="help-block with-errors"></div><button style="margin-left: 10px;" class="btn btn-primary submitbutton pull-right">Submit</button><button type="button" class="btn btn-danger remove_care_label_reorder pull-right">Close</button><div id="svgdiv" style="visibility:hidden"><svg id="ean-13"></svg></div></form>')
 
 			var split_template = data.template_file[0].template_file.split(',')
 

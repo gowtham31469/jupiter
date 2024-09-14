@@ -21,6 +21,7 @@ class ErpOrders
 	private $financial_year;
 	private $tesco_material_obj;
 	private $erp_id_gen_obj;
+	private $financial_year_date_format;
 	
 	/**
 	 * Create a new controller instance.
@@ -140,7 +141,7 @@ class ErpOrders
 				$this->financial_year_start,
 				$this->today_date,
 				$this->financial_year,
-				$this->month
+				$this->month,null
 			);
 			
 			$new_erp_order = Erp::create([
@@ -394,7 +395,7 @@ class ErpOrders
 					$this->financial_year_start,
 					$this->today_date,
 					$this->financial_year,
-					$this->month
+					$this->month,null
 				);
 
 				$erp_orders = Erp::create([
@@ -476,7 +477,7 @@ class ErpOrders
 
 			// unique id for array creation
 			// combination of erpid-refname-styleno-buyerpo-ordertype
-			$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag;
+			$unique_id = 'ERP-'.str_replace(' ', '-', $orders->item_name).'-'.$erp_orders->id.'-'.$orders->uvc.'-'.$orders->po.'-'.$orders->order_flag.'-'.$orders->color_code;
 
 			// write data into history tables
 			$action_id      = DB::table('actions')
@@ -528,6 +529,7 @@ class ErpOrders
 						$erp_order_details_id = ErpOrderDetails::insertGetId([
 							'erp_order_id'     		=> $erp_orders->id,
 							'style_no'         		=> $orders->uvc,
+							'color_code'         	=> $orders->color_code,
 							'order_quantity'   		=> $vals->quantity,
 							'pending_orders'		=> $vals->quantity,
 							'size'         	   		=> $vals->size,

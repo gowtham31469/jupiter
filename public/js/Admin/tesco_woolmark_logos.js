@@ -110,11 +110,7 @@ function woolMarkLogos()
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -163,11 +159,7 @@ function addWoolmarkLogo(woolmark_symbol, woolmark_logo_text) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -217,11 +209,7 @@ function editWoolmarkLogo(id,woolmark_logo, woolmark_logo_text) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -266,11 +254,7 @@ function getTescoWoolmarkLogoById(id) {
               $('#editWoolmarkModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -311,11 +295,7 @@ function enableWoolmarkLogo(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             woolMarkLogos();
@@ -357,11 +337,7 @@ function disableWoolmarkLogo(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 woolMarkLogos();

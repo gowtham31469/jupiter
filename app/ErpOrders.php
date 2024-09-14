@@ -37,7 +37,7 @@ class ErpOrders extends Model
      */
     public function orderDetails()
     {
-        return $this->hasMany('App\ErpOrderDetails', 'erp_order_id')->withTrashed();
+        return $this->hasMany('App\ErpOrderDetails', 'erp_order_id')->with('company')->withTrashed();
     }
 	/**
      * Get the buyer.

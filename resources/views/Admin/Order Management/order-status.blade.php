@@ -54,6 +54,10 @@
     input[type="number"] {
         -moz-appearance: textfield;
     }
+
+    .dropdown-menu span.text{
+        white-space:normal;
+    }
 </style>
 {{-- Hidden div for svg rendering --}}
 <div id="modaldiv">
@@ -485,19 +489,19 @@
                     <input type="hidden" id="label_template_name">
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '10')) !!}
+                        {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '9', "onkeydown" => "return validatePoValue(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '10')) !!}
+                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8')) !!}
+                        {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','required','maxlength' => '8', "onkeydown" => "return validatePoValue(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
@@ -509,13 +513,27 @@
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_fabric_code', 'Fabric Batch Code', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '7')) !!}
+                        {!! Form::text('tesco_care_fabric_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Fabric Batch Code', 'maxlength' => '5', "onkeypress" => "return isNumber(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '7')) !!}
+                        {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+
+                    <div class="form-group has-feedback">
+                        {!! Form::label('internal_reference', 'PACKAGING SUPPLIER INTERNAL REF ', ['class' => 'form_label']) !!}
+                        {!! Form::text('internal_reference',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'PACKAGING SUPPLIER INTERNAL REF', 'maxlength' => '10')) !!}
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    
+                    <div class="form-group has-feedback" id="wool_mark_batch_code_div">
+                        {!! Form::label('tesco_care_woolmark_batch_code', 'Woolmark Batch Code', ['class' => 'form_label']) !!}
+                        {!! Form::text('tesco_care_woolmark_batch_code',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Woolmark Batch Code', 'maxlength' => '9')) !!}
                         <div class="help-block with-errors"></div>
                     </div>
                     <div class="form-group has-feedback">
@@ -527,50 +545,27 @@
                         </div>
                         <div class="help-block with-errors"></div>
                     </div>
-                    <div class="align-items form-group has-feedback">
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_exclusive_trim',null,null,['id' => 'tesco_care_exclusive_trim']) !!} Exclusive of Trims
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_non_textile_part',null,null,['id' => 'tesco_care_non_textile_part']) !!} Contains Non Textile Parts
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                {!! Form::checkbox('tesco_care_part_of_set',null,null,['id' => 'tesco_care_part_of_set']) !!} Part of Set
-                            </label>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
                     <div class="label-metadata-select"></div>
                     <hr>
                     <div class="row hidden" id="baby_sleeping_bag_div">
                         <div class="col-md-12">
-                            <div class="alert alert-danger" role="alert">These 3 fields are required only if the size chart selected is “Baby Sleeping Bags”</div>
+                            <div class="alert alert-danger" role="alert">The Tog Value is required only if the size chart selected is “Baby Sleeping Bags”</div>
                         </div>
                         <div class="col-md-12">
                             <div class="align-items form-group0 has-feedback">
-                                <div class="checkbox">
+                                <div class="checkbox hidden">
                                     <label>
                                         {!! Form::checkbox('tesco_care_bs_en',null,null,['id' => 'tesco_care_bs_en']) !!} Conforms to BS EN 16781:2018
                                     </label>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div class="checkbox form-group has-feedback">
+                                <div class="checkbox form-group has-feedback hidden">
                                     <label>
                                         {!! Form::checkbox('tesco_care_sleep_bag_symbol',null,null,['id' => 'tesco_care_sleep_bag_symbol']) !!} <img class="baby-sleep-bag-symbol" src="{{ asset('images/i symbol.png') }}" />
                                     </label>
                                     <div class="help-block with-errors"></div>
                                 </div>
-                                <div class="form-group has-feedback form-inline">
-                                    {!! Form::label('tesco_care_tog', 'TOG', ['class' => 'form_label']) !!}
-                                    {!! Form::text('tesco_care_tog',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'TOG')) !!}
-                                </div>
+                                <div class="tog-div"></div>
                             </div>
                         </div>
                     </div>
@@ -710,15 +705,15 @@
                     </div>
                     @foreach($buyers as $buyer)
                     <a class="buyer-card-link" style="cursor: pointer;">
-                        <div class="card buyers-card elevation-2dp active-buyer" data-name="{{$buyer->buyer_name}}" data-value="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
+                        <div class="buyers-card elevation-2dp active-buyer" data-name="{{$buyer->buyer_name}}" data-value="{{$buyer->id}}" id="{{ strtolower($buyer->buyer_name) }}">
                             <img src="{{$buyer->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
                         </div>
                     </a>
                     @endforeach
                 </div>
-                <div class="modal-footer buyer-selection-modal-footer">
+                <!-- <div class="modal-footer buyer-selection-modal-footer">
                     {!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-                </div>
+                </div> -->
                 {!! Form::close() !!}
             </div>
         </div>
@@ -791,15 +786,37 @@
     <script src="{{ asset('js/common/tesco-swing-ticket-orders.js') }}"></script>
     <script src="{{ asset('js/common/tesco-swing-ticket-order-status.js') }}"></script>
     <script src="{{ asset('js/common/view-tesco-swing-ticket-orders.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-sticker-orders.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-order-status-common.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-label-order.js') }}"></script>
+    <script src="{{ asset('js/common/orchestra-care-label-download.js') }}"></script>
 
     <script>
         localStorage.removeItem("page_navigation");
+        localStorage.removeItem("wash_composition");
         var buyer_count = $('#invisible__count_id').val();
         $(function() {
             $('[data-toggle="tooltip"]').tooltip()
             $('.po').attr("disabled", "disabled");
         })
         $(document).ready(function() {
+
+            var arr = []; // Array to hold the keys
+            // Iterate over localStorage and insert the keys that meet the condition into arr
+            for (var i = 0; i < localStorage.length; i++) {
+                if (localStorage.key(i).substring(0, 22) == 'wash_composition_final') {
+                    arr.push(localStorage.key(i));
+                }
+                else if (localStorage.key(i).substring(0, 23) == 'care_instruction_select') {
+                    arr.push(localStorage.key(i));
+                }
+            }
+
+            // Iterate over arr and remove the items by key
+            for (var i = 0; i < arr.length; i++) {
+                localStorage.removeItem(arr[i]);
+            }
+            
             /* Show logo on left side */
             $('.logo').html('Orders');
 

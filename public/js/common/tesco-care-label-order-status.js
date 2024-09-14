@@ -30,6 +30,29 @@ $( () => {
                     showSnackbar();
                 } else {
                     loadCareLabelDetails(data, user_type)
+
+                    var template_id = data.order_details.template_id
+                    
+                    if(template_id == 122 || template_id == 128 || template_id == 129)
+                    {
+                        $('#uk_ce_mark_div').addClass('hidden');
+                        $('#flammability_div').addClass('hidden');
+                    } else if(template_id == 123 || template_id == 125)
+                    {
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    } else if(template_id == 126 || template_id == 130 || template_id == 131)
+                    {
+                        $('#flammability_div').addClass('hidden');
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    } else if(template_id == 124 || template_id == 127)
+                    {
+                        $('#uk_ce_mark_div').addClass('hidden');
+                        $('#flammability_div').addClass('hidden');
+                        $('#wool_mark_logo_div').addClass('hidden');
+                        $('#wool_mark_batch_code_div').addClass('hidden');
+                    }
                 }
 
             },
@@ -51,10 +74,12 @@ $( () => {
     loadCareLabelDetails = (order_data, user_role) => {
         var user_type = user_role.toLowerCase();
         
-        $('.garment-component-div, .label-metadata-select, .tesco-care-quantity-div').html('');
+        $('.garment-component-div, .label-metadata-select, .tesco-care-quantity-div, .tog-div').html('');
+
+        $('#baby_sleeping_bag_div').addClass("hidden");
 
         var metadata_select_div = ` <div class="form-group has-feedback">
-                                     <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
+                                    <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_coo" name="tesco_care_coo">
                                             <option value="">-- Select Country Of Origin --</option>`;
                                             $.each(order_data.coo, function (id, name) {
@@ -65,7 +90,7 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_supplier" class="component-label">Supplier </label>
+                                    <label for="tesco_care_supplier" class="component-label">Supplier </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_supplier" name="tesco_care_supplier" onchange="getMoq(this, '`+user_type+`', 'update')">
                                             <option value="">-- Select Supplier --</option>`;
                                             $.each(order_data.tesco_suppliers, function (id, name) {
@@ -76,11 +101,42 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
+                                    <label for="tesco_care_part_of_two_piece_set" class="component-label">Part of Two Piece Set </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_part_of_two_piece_set" name="tesco_care_part_of_two_piece_set">
                                         <optgroup label="Select Part of Two Piece Set">
                                             <option value="">None</option>`;
                                             $.each(order_data.part_of_two_piece_set, function (id, name) {
+
+                                                metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
+
+                                            });
+                                        metadata_select_div += `</optgroup></select>
+                                    </div>
+                                    <div class="form-group has-feedback" id="wool_mark_logo_div">
+                                     <label for="tesco_care_woolmark_logo" class="component-label">Woolmark Logo </label>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_woolmark_logo" name="tesco_care_woolmark_logo">
+                                            <option value="">-- Select Woolmark Logo --</option>`;
+                                            $.each(order_data.woolmark_logos, function (id, value) {
+
+                                                metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.woolmark_logo+`' /> `+value.woolmark_logo_text+`" value="`+value.id+`" >`+value.woolmark_logo_text+`</option>`;
+
+                                            });
+                                        metadata_select_div += `</select>
+                                    </div>
+                                    <div class="form-group has-feedback" id="uk_ce_mark_div">
+                                     <label for="tesco_care_uk_ce_mark" class="component-label">UK/CE Mark </label>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_uk_ce_mark" name="tesco_care_uk_ce_mark">
+                                            <optgroup label="Select UK/CE Mark">
+                                                <option value="yes">Yes</option>
+                                                <option value="no">No</option>
+                                            </optgroup></select>
+                                    </div>
+                                    <div class="form-group has-feedback" id="flammability_div">
+                                     <label for="tesco_care_flammability" class="component-label">Flammability </label>
+                                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_flammability" name="tesco_care_flammability">
+                                        <optgroup label="Select Flammability">
+                                            <option value="">None</option>`;
+                                            $.each(order_data.flammability, function (id, name) {
 
                                                 metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
 
@@ -173,9 +229,34 @@ $( () => {
                                                                         });
                                                                     metadata_select_div += `</select>
                                                                 </div>
+                                                                <h4 class="text-center">Optional Garment Statements</h4>
+                                                                <div class="form-group has-feedback">
+                                                                <label for="tesco_care_garment_statements" class="component-label">Garment Statements</label>
+                                                                    <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_statements" name="tesco_care_garment_statements" required>
+                                                                        <option value="">-- Select Garment Statements --</option>`;
+                                                                        $.each(order_data.garment_statements, function (id, name) {
+
+                                                                            metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
+                            
+                                                                        });
+                                                                    metadata_select_div += `</select>
+                                                                </div>
                                                                 `
 
         $('.label-metadata-select').append(metadata_select_div);
+
+        var tog_div_html = `<div class="form-group has-feedback">
+        <label for="tesco_care_tog_rating" class="component-label">Tog Rating</label>
+            <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_tog_rating" name="tesco_care_tog_rating">
+                <option value="">-- Select Tog Rating --</option>`;
+                $.each(order_data.tog_rating, function (id, name) {
+
+                    tog_div_html += `<option value=` + id + `>` + name + `</option>`;
+
+                });
+            tog_div_html += `</select></div>`;
+
+        $('.tog-div').html(tog_div_html);
 
         var fiber_component_div = `<div class="col-md-12">
         <h4 class="pull-left">Garment Component & Fibres</h4>
@@ -204,7 +285,7 @@ $( () => {
             for (let fiber_index = 1; fiber_index <= 6; fiber_index++) {
                 fiber_component_div +=  `<div class="col-xs-8">
                     <div class="form-group has-feedback">
-                        <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
+                        <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
                             <option value="">-- Select Select Fiber --</option>`;
                             $.each(order_data.fabriclists, function (id, name) {
 
@@ -218,7 +299,7 @@ $( () => {
                 <div class="col-xs-4">
                     <div class="form-group has-feedback">
                     <div class="input-group">
-                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100">
+                        <input type="number" class="form-control input-sm fiber-individual-percentage" max="100" id="fiber_individual_percentage_`+component_index+`_`+fiber_index+`" name="fiber_individual_percentage[]" data-max-error= "Value must be <= 100" min="0" readonly>
                         <div class="input-group-addon">%</div>
                     </div>
                     <div class="help-block with-errors"></div>
@@ -325,13 +406,24 @@ $( () => {
         $('.selectpicker').prop('disabled', false);
         $(".selectpicker").selectpicker("refresh");
         $('#update_tesco_label_order_status_form').validator('update');
+        $(".fiber-individual-percentage").prop("readonly", true);
+
+        if(!$('#tesco_care_woolmark_logo').val())
+        {
+            $('#tesco_care_woolmark_batch_code').prop('disabled', true);
+        }
     }
 
     validateTescoLabelOrder = (user_role) => {
 
         $('#update_tesco_label_order_status_form').validator().on('submit', function (e) {
             if (e.isDefaultPrevented()) {
-
+                console.log("Form submission prevented due to validation errors.");
+                // Log each invalid field
+                $('#update_tesco_label_order_status_form').find(':invalid').each(function(index, element) {
+                    console.log("Validation error in field:", element.name || element.id, "Value:", $(element).val());
+                    console.log("Error details:", element.validationMessage);
+                });
             } else {
                 e.preventDefault();
                 $('#submit_label_order_btn').prop('disabled',true)
@@ -393,5 +485,17 @@ $( () => {
             }
         });
     }
+
+
+$(document).off('change', '#tesco_care_woolmark_logo').on('change', '#tesco_care_woolmark_logo', (e) => {
+    if ($(e.target).val()) {
+        // Enable the input by setting disabled property to false
+        $('#tesco_care_woolmark_batch_code').prop('disabled', false);
+    } else {
+        // Disable the input by setting disabled property to true
+        $('#tesco_care_woolmark_batch_code').prop('disabled', true);
+        $('#tesco_care_woolmark_batch_code').val("");
+    }
+});
 
 });

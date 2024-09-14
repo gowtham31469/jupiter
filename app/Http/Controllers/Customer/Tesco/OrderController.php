@@ -36,6 +36,8 @@ class OrderController extends Controller
     private $thl3;
     private $tsl1;
     private $tsl3;
+    private $tcl5;
+    private $tsl2;
     private $tcl1_type;
     private $tcl2_type;
     private $tcl4_type;
@@ -43,10 +45,14 @@ class OrderController extends Controller
     private $thl3_type;
     private $tsl1_type;
     private $tsl3_type;
+    private $tcl5_type;
+    private $tsl2_type;
+    private $tesco_washcare_orders_type;
     private $current_date;
     private $ratio_pack_type;
     private $financial_year_date;
     private $buyer_id;
+
     
     /**
      * Create a new controller instance.
@@ -98,8 +104,8 @@ class OrderController extends Controller
     {
 	    $customer_id = Auth::guard('web_customer')->id();
       $year = explode('-', $request->year);
-      $from_date = $year[0].'-'.$this->financial_year_date;
-      $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString();
+      $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+      $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";
 		
 	    $customer_role_id = DB::table('customer_profile')->select('*')->where('id',$customer_id)->first();
 
@@ -1761,7 +1767,7 @@ class OrderController extends Controller
           $data['order_details']->type = 'tesco_swingticket_orders';
         }
 
-        if (array_intersect(["GCL25W/M12723G", "GCL25W/M13220G","GCL25B/M13278G","GCL25B/M13279G"], $artwork)) {
+        if (array_intersect(["GCLW25/M11363G", "GCLW25/M11364G", "GCLW25/M11367G", "GCLW25/M11372G", "GCLW25/M11374G", "GCLW25/M11375G", "GCLW25/M11378G", "GCLB25/M11410G", "GCLW20/M11473G", "GCLW20/M11474G"], $artwork)) {
           $data['order_details']  = TescoWashcareOrders::with([
             'quantities',
             'garment_components',

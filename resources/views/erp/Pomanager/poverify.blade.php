@@ -349,45 +349,21 @@ transform: scale(1);
 </div>
 
 <!-- Buyer selection Modal -->
-<div class="modal buyer-selection-modal fade" id="buyerSelectionModalCenter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog buyer-selection-modal-dialog" role="document">
-		<div class="modal-content buyer-selection-modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title buyer-modal-title" id="myModalLabel">Select a Company</h4>
-			</div>
-			<div class="modal-body buyer-selection-modal-body">
-				<div class="alert alert-warning" role="alert" id="hidden-buyer-div" style="display: none;margin-bottom: 5px;">
-					<strong>Warning!</strong> Select a Company to proceed.
-				</div>
-				@foreach($companies as $company)
-				<a class="buyer-card-link" style="cursor: pointer;">
-                         <div class="card buyers-card elevation-2dp active-buyer" data-name ="{{$company->name}}"  data-value ="{{$company->company}}" id="{{ strtolower( str_replace(' ','',$company->name)) }}">
-                          <img src="{{$company->logo}}" class="img-fluid" alt="Responsive image" height="120" class="img-fluid float-none">
-                         </div>
-                     </a> @endforeach
-			</div>
-			<div class="modal-footer buyer-selection-modal-footer">
-				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
-			</div>
-			{!! Form::close() !!}
-		</div>
-	</div>
-</div>
+@include('erp.components.company-selection-modal')
 
 {{-- Snackbar html code --}}
 <div id="snackbar"><span class="snackbar_span"></span></div>
 
 {{-- Order Details modal --}}
 <div class="modal fade bd-example-modal-lg" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog modal-lg buyer-selection-modal-dialog" role="document">
-		<div class="modal-content buyer-selection-modal-content" style="color: #333;">
+	<div class="modal-dialog modal-lg erp-selection-modal-dialog" role="document">
+		<div class="modal-content erp-selection-modal-content" style="color: #333;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Order Details</h4>
 			</div>
 
-			<div class="modal-body buyer-selection-modal-body scroll">
+			<div class="modal-body erp-selection-modal-body scroll">
 				<label class="label new-po-upload label-info hidden">New po has been uploaded before verify please download the latest pdf</label>
 				<label class="label label-danger label-required-error hidden">Please check the checkbox</label>
 				<input type="hidden" id="erp_order_id">
@@ -399,6 +375,7 @@ transform: scale(1);
 							<th>PO Number</th>
 							<th>Style No</th>
 							<th>Reference</th>
+							<th>Color</th>
 							<th>Size</th>
 							<th>Quantity</th>
 							<th>Price</th>
@@ -475,7 +452,7 @@ transform: scale(1);
 
 			</div>
 
-			<div class="modal-footer buyer-selection-modal-footer">
+			<div class="modal-footer erp-selection-modal-footer">
 				
 				{!! Form::button('Close', ['class' => 'btn btn-default btn-sm','data-dismiss' => 'modal'] ) !!}
 				<button class="btn btn-primary btn-submit btn-sm" onclick="submit()" type="button" id="submit_button">Submit</button>
@@ -531,7 +508,7 @@ transform: scale(1);
 
 			
 			$.ajax({
-				url: base_url + "/erp/po-manager/set_company_session",
+				url: base_url + "/erp/set-erp-company-session",
 				type: "Post",
 				dataType: "json",
 				data: {
@@ -615,6 +592,11 @@ transform: scale(1);
 		var j = 0;
 		var error_msg = 0;
 
+		var id=[];
+		$('#order-details-table tbody tr').each(function () {
+			id.push($(this).attr('id'));
+		})
+
 		if ($('input[name=po-number-radio]:checked').val() == "not-ok") {
 			var po = true;
 			i++;
@@ -690,6 +672,7 @@ transform: scale(1);
 					reference: reference,
 					qty: qty,
 					price: price,
+					ids:id,
 					po_complete: po_complete,
 					comment: comment,
 					commenttext: commenttext,
@@ -791,6 +774,9 @@ transform: scale(1);
 					{
 						index.buyer_po_number='-'
 					}
+
+					var color_code = index.color_code != null ? index.color_code : "-";
+
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
                           	<td class="">` + i + `</td>
@@ -798,6 +784,7 @@ transform: scale(1);
 							  <td class="po_number_td">` + index.buyer_po_number + `</td>
 							  <td class="style_no_td">` + index.style_no + `</td>
 							  <td class="reference_td">` + index.template_name + `</td>
+							  <td class="color_td">` + color_code + `</td>
 							  <td class="size_td">` + size + `</td>
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>

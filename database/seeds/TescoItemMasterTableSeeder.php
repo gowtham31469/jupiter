@@ -372,7 +372,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 36,
                 'company_id' => 1,
                 'parent_id' => 33,
-                'item_name' => 'GCL25W/M12723G',
+                'item_name' => 'GCL25B/M13278G',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -382,7 +382,7 @@ class TescoItemMasterTableSeeder extends Seeder
                 'id' => 37,
                 'company_id' => 1,
                 'parent_id' => 33,
-                'item_name' => 'GCL25W/M13220G',
+                'item_name' => 'GCL25B/M13279G',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0
@@ -420,7 +420,7 @@ class TescoItemMasterTableSeeder extends Seeder
             41 => 
             array (
                 'id' => 41,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 0,
                 'item_name' => 'Swing Tickets',
                 'ref_no' => '',
@@ -430,7 +430,7 @@ class TescoItemMasterTableSeeder extends Seeder
             42 => 
             array (
                 'id' => 42,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 41,
                 'item_name' => 'CE Non Rfid Swing Ticket',
                 'ref_no' => '',
@@ -440,7 +440,7 @@ class TescoItemMasterTableSeeder extends Seeder
             43 => 
             array (
                 'id' => 43,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFC/01/M13020C',
                 'ref_no' => '',
@@ -450,7 +450,7 @@ class TescoItemMasterTableSeeder extends Seeder
             44 => 
             array (
                 'id' => 44,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFK/01/M13021C',
                 'ref_no' => '',
@@ -460,7 +460,7 @@ class TescoItemMasterTableSeeder extends Seeder
             45 => 
             array (
                 'id' => 45,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFC/01/M13022C',
                 'ref_no' => '',
@@ -470,7 +470,7 @@ class TescoItemMasterTableSeeder extends Seeder
             46 => 
             array (
                 'id' => 46,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFB/01/M13023C',
                 'ref_no' => '',
@@ -480,7 +480,7 @@ class TescoItemMasterTableSeeder extends Seeder
             47 => 
             array (
                 'id' => 47,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
@@ -490,7 +490,7 @@ class TescoItemMasterTableSeeder extends Seeder
             48 => 
             array (
                 'id' => 48,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
@@ -500,7 +500,7 @@ class TescoItemMasterTableSeeder extends Seeder
             49 => 
             array (
                 'id' => 49,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
@@ -510,7 +510,7 @@ class TescoItemMasterTableSeeder extends Seeder
             50 => 
             array (
                 'id' => 50,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'GE/01/M13114C',
                 'ref_no' => '',
@@ -520,7 +520,7 @@ class TescoItemMasterTableSeeder extends Seeder
             51 => 
             array (
                 'id' => 51,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFK/01/M13163C',
                 'ref_no' => '',
@@ -530,7 +530,7 @@ class TescoItemMasterTableSeeder extends Seeder
             52 => 
             array (
                 'id' => 52,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFB/01/M13233C',
                 'ref_no' => '',
@@ -540,9 +540,109 @@ class TescoItemMasterTableSeeder extends Seeder
             53 => 
             array (
                 'id' => 53,
-                'company_id' => 1,
+                'company_id' => 2,
                 'parent_id' => 42,
                 'item_name' => 'FFC/01/M13304C',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            54 => 
+            array (
+                'id' => 54,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11363G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            55 => 
+            array (
+                'id' => 55,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11364G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            56 => 
+            array (
+                'id' => 56,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11367G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            57 => 
+            array (
+                'id' => 57,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11372G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            58 => 
+            array (
+                'id' => 58,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11374G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            59 => 
+            array (
+                'id' => 59,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11375G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            60 => 
+            array (
+                'id' => 60,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW25/M11378G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            61 => 
+            array (
+                'id' => 61,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLB25/M11410G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            62 => 
+            array (
+                'id' => 62,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW20/M11473G',
+                'ref_no' => '',
+                'tag_name' => '',
+                'is_qrcode_required' => 0
+            ),
+            63 => 
+            array (
+                'id' => 63,
+                'company_id' => 1,
+                'parent_id' => 33,
+                'item_name' => 'GCLW20/M11474G',
                 'ref_no' => '',
                 'tag_name' => '',
                 'is_qrcode_required' => 0

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Customer;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use App\Classes\CustomerDashboard;
-use Response;
-use View;
 use DB;
 use Auth;
-use Carbon\Carbon;
-use App\FinancialYearResetDate;
+use View;
 use Session;
+use Response;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\FinancialYearResetDate;
+use App\Classes\CustomerDashboard;
 use App\Classes\TescoCareMetadata;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use App\Classes\TescoSwingTicketMetadata;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -32,6 +33,8 @@ class HomeController extends Controller
     private $financial_year_date;
     private $financial_year_start;
     private $financial_year_end;
+    private $financial_year_date_format;
+    private $today_date;
     /**
      * Create a new controller instance.
      *
@@ -83,11 +86,11 @@ class HomeController extends Controller
 
             if(Session::get('fiscal-year') != null) {
               $year = explode('-', Session::get('fiscal-year'));
-              $from_date = $year[0].'-'.$this->financial_year_date;
-              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+              $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+              $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
             } else {
-              $from_date = $this->financial_year_start;
-              $to_date =$this->financial_year_end; 
+              $from_date = $this->financial_year_start." 00:00:00";
+              $to_date =$this->financial_year_end." 23:59:59"; 
             }
             
             $customObj   = new CustomerDashboard();
@@ -142,11 +145,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
 
           $customObj   = new CustomerDashboard();
@@ -181,11 +184,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
           $customObj   = new CustomerDashboard();
 
@@ -220,11 +223,11 @@ class HomeController extends Controller
       try {
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
           $customObj   = new CustomerDashboard();
           $customer_id = Auth::guard('web_customer')->id();
@@ -272,11 +275,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         
         if($customer_role_id->role_id == 1)
@@ -326,11 +329,11 @@ class HomeController extends Controller
 
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
                    
           if($customer_role_id->role_id == 1)
@@ -375,11 +378,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         if($customer_role_id->role_id == 1)
         { 
@@ -428,11 +431,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
                    
         if($customer_role_id->role_id == 1)
@@ -477,11 +480,11 @@ class HomeController extends Controller
 
         if(Session::get('fiscal-year') != null) {
           $year = explode('-', Session::get('fiscal-year'));
-          $from_date = $year[0].'-'.$this->financial_year_date;
-          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+          $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+          $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
         } else {
-          $from_date = $this->financial_year_start;
-          $to_date =$this->financial_year_end; 
+          $from_date = $this->financial_year_start." 00:00:00";
+          $to_date =$this->financial_year_end." 23:59:59"; 
         }
         
         if($customer_role_id->role_id == 1)
@@ -529,11 +532,11 @@ class HomeController extends Controller
           }
           if(Session::get('fiscal-year') != null) {
             $year = explode('-', Session::get('fiscal-year'));
-            $from_date = $year[0].'-'.$this->financial_year_date;
-            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+            $from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+            $to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
           } else {
-            $from_date = $this->financial_year_start;
-            $to_date =$this->financial_year_end; 
+            $from_date = $this->financial_year_start." 00:00:00";
+            $to_date =$this->financial_year_end." 23:59:59"; 
           }
                      
         if($customer_role_id->role_id == 1)
@@ -588,7 +591,7 @@ class HomeController extends Controller
      * Show the customer orders.
      * @return \Illuminate\Http\Response
      */
-    public function customerOrders(TescoCareMetadata $caremeta)
+    public function customerOrders(TescoCareMetadata $caremeta, TescoSwingTicketMetadata $swingTicketMetadata)
     {
         try{
             $customer_id = Auth::guard('web_customer')->user()->id;
@@ -615,14 +618,23 @@ class HomeController extends Controller
 
             $part_of_two_piece_set = $caremeta->getPartOfTwoPieceSet();
 
+            $garment_statements = $caremeta->getGarmentStatements();
+            $tog_rating = $caremeta->getTogRatings();
+            $flammability = $caremeta->getFlammabilityTexts();
+            $woolmarkLogos = $swingTicketMetadata->getwoolmarkLogos();
+
             return view('customer/customer-orders',['buyers' => $buyers,
               'buyer_count' => $buyer_count,'symbols' => $symbols,
               'tesco_suppliers' => $tesco_suppliers,'coo' => $coo,
               'kids_warning' => $kids_warning,'components' => $components,
               'fabriclists' => $fabriclists,
-                'additional_instructions' => $additional_instructions]);
+              'additional_instructions' => $additional_instructions,
+              'garment_statements' => $garment_statements,
+              'tog_rating' => $tog_rating,
+              'flammability' => $flammability,
+              'woolmark_logos' => $woolmarkLogos,
+            ]);
             
-            // return view('customer/customer-orders')->with(['buyers' => $buyers,'buyer_count' => $buyer_count]);
         } catch (\Exception $e) {
                  return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
         

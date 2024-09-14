@@ -24,10 +24,45 @@ function loadTemplatePreview() {
                         $('.templateDiv').append('<div class="col-md-4"><object style="width:50%;border: 2px #333 solid;height: 153px;width: 235px;" id="svg2" class="center-block svg2" data="' + value[0].template_file + '" type="image/svg+xml"></object><div class=" col-md-12 col-lg-12 " style="margin-top: 10px;padding: 10px;border: 1px dashed #333;text-align: center;"><table class="table table-user-information"><tbody><tr><td class="pull-left">Template Name :</td><td class="pull-left">'+value[0].template_name+'</td></tr><tr><td class="pull-left">Reference Number :</td><td class="pull-left">'+value[0].ref_no+'</td></tr><tr><td class="pull-left">Company Name : </td><td class="pull-left">'+value[0].company_name+'</td></tr></tbody></table></div></div>')
 
                     } else {
+                        
+                        var temp_file_split = value[0].template_file.split(',')
+
                         if(value[0].type == "Labels")
                         {
-                            //alert()
-                            var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="height: 800px;"></div><div class="col-md-2"><img style="margin-left: 150px;height: 800px;" src="/images/BACK.png"></div>';
+                            var object_ref = '<div class="col-md-2"><img src="/images/FRONT.png" style="margin-left: 45px;height: 600px;"></div><div class="col-md-2"><img style="margin-left: 110px;height: 600px;" src="/images/BACK.png"></div>';
+                        }
+                        else if(value[0].type == "Swing Tickets")
+                        {
+                            var ref_no_split = value[0].ref_no.split('/')
+                            if(value[0].ref_no == "GE/01/M13114C")
+                            {
+                                if(value[0].item_id == "47")
+                                {
+                                    var object_ref = '<div class="col-md-2"><img src="/images/tickets/M13114C-Opt1/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 125px;height: 400px;" src="/images/tickets/M13114C-Opt1/Back.png"></div>';
+                                }
+                                else if(value[0].item_id == "48")
+                                {
+                                    var object_ref = '<div class="col-md-2"><img src="/images/tickets/M13114C-Opt2/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 125px;height: 400px;" src="/images/tickets/M13114C-Opt2/Back.png"></div>';
+                                }
+                                else if(value[0].item_id == "49")
+                                {
+                                    var object_ref = '<div class="col-md-2"><img src="/images/tickets/M13114C-Opt3/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 125px;height: 400px;" src="/images/tickets/M13114C-Opt3/Back.png"></div>';
+                                }
+                                else if(value[0].item_id == "50")
+                                {
+                                    var object_ref = '<div class="col-md-2"><img src="/images/tickets/M13114C-Opt4/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 125px;height: 400px;" src="/images/tickets/M13114C-Opt4/Back.png"></div>';
+                                }
+                                
+                            }
+                            else if(value[0].ref_no == "FFC/01/M13304C")
+                            {
+                                var object_ref = '<div class="col-md-2"><img src="/images/tickets/'+ref_no_split[2]+'/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 265px;height: 400px;" src="/images/tickets/'+ref_no_split[2]+'/Back.png"></div>';
+                            }
+                            else
+                            {
+                                var object_ref = '<div class="col-md-2"><img src="/images/tickets/'+ref_no_split[2]+'/Front.png" style="height: 400px;"></div><div class="col-md-2"><img style="    margin-left: 125px;height: 400px;" src="/images/tickets/'+ref_no_split[2]+'/Back.png"></div>';
+                            }
+                            
                         }
                         else
                         {
@@ -48,11 +83,7 @@ function loadTemplatePreview() {
 
         },
         error: function(errorXHR, errorStatus, errorThrown) {
-          this.tryCount++;
-          if (this.tryCount <= this.retryLimit) {
-              $.ajax(this);
-              return;
-          }
+            console.log(errorThrown);
         },
         complete: function () {
             $(".loader").hide();
@@ -235,11 +266,7 @@ function mapStoredValues(oDetails) {
                      
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                    this.tryCount++;
-                    if (this.tryCount <= this.retryLimit) {
-                        $.ajax(this);
-                        return;
-                    }
+                console.log(errorThrown);
                 },
                complete: function () {
                    isSubmitting = false;

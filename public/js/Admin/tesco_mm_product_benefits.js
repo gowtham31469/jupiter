@@ -42,7 +42,7 @@ function tescoMMProductBenefits() {
       $('.tesco-sidebar').show();
       
       $.ajax({
-          url: base_url + "/admin/tesco/settings/tesco-mm-product-benfits",
+          url: base_url + "/admin/tesco/settings/tesco-mm-product-benefits",
           type: "POST",
           dataType: "json",
           data: {
@@ -92,11 +92,7 @@ function tescoMMProductBenefits() {
             $('#tesco-components-list-table_length select').addClass('form-control input-sm');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -122,7 +118,7 @@ function addMMProductBenefits() {
       
 
     $.ajax({
-          url: base_url + "/admin/tesco/add-tesco-mm-product-benfits",
+          url: base_url + "/admin/tesco/add-tesco-mm-product-benefits",
           method: 'POST',
           data: {
             _token: csrf_token,
@@ -150,7 +146,7 @@ function addMMProductBenefits() {
               208: function() {
                   $('#benefits_error').removeClass('hidden');
                   $('#benefits_error').removeAttr('style');
-                  $('#benefits_error').html('MM Product Benefits[English] already excists.')
+                  $('#benefits_error').html('MM Product Benefits[English] already exists.')
                   $("#benefits_error").addClass("alert alert-warning");
               },
               400: function() {
@@ -159,11 +155,7 @@ function addMMProductBenefits() {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -185,7 +177,7 @@ function gettescoMMProductBenefitsById(id) {
       }
       isSubmitting = true;
       $.ajax({
-          url: base_url + "/admin/tesco/get-tesco-mm-product-benfits",
+          url: base_url + "/admin/tesco/get-tesco-mm-product-benefits",
           dataType: "json",
           method: "get",
           data: { id: id },
@@ -213,11 +205,7 @@ function gettescoMMProductBenefitsById(id) {
               $('#editMMProductBenefitsModal').modal('show');
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -243,7 +231,7 @@ function updateMMProductBenefits() {
       var template_id = $('#edit_template_id_mm').val();
       
       $.ajax({
-          url: base_url + "/admin/tesco/update-tesco-mm-product-benfits",
+          url: base_url + "/admin/tesco/update-tesco-mm-product-benefits",
           dataType: "json",
           beforeSend: function() {
               $(".loader").show();
@@ -275,16 +263,12 @@ function updateMMProductBenefits() {
               208: function() {
                   $('#mm_product_benefits_error').removeClass('hidden');
                   $('#mm_product_benefits_error').removeAttr('style');
-                  $('#mm_product_benefits_error').html('MM Product Benefits already excists.')
+                  $('#mm_product_benefits_error').html('MM Product Benefits already exists.')
                   $("#mm_product_benefits_error").addClass("alert alert-warning");
               },
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
               $(".loader").hide();
@@ -307,7 +291,7 @@ function enableMMProductBenefits(id, csrf_token) {
       }
       isSubmitting = true;
       $.ajax({
-          url: base_url + "/admin/tesco/make-tesco-mm-product-benfits-enabled",
+          url: base_url + "/admin/tesco/make-tesco-mm-product-benefits-enabled",
           dataType: "json",
           beforeSend: function() {
               $(".loader").show();
@@ -325,11 +309,7 @@ function enableMMProductBenefits(id, csrf_token) {
               }
           },
           error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+              console.log(errorThrown);
           },
           complete: function() {
             tescoMMProductBenefits();
@@ -353,7 +333,7 @@ function disableMMProductBenefits(id, csrf_token) {
         }
         isSubmitting = true;
         $.ajax({
-            url: base_url + "/admin/tesco/make-tesco-mm-product-benfits-disabled",
+            url: base_url + "/admin/tesco/make-tesco-mm-product-benefits-disabled",
             dataType: "json",
             beforeSend: function() {
                 $(".loader").show();
@@ -371,11 +351,7 @@ function disableMMProductBenefits(id, csrf_token) {
                 }
             },
             error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
             },
             complete: function() {
                 tescoMMProductBenefits();

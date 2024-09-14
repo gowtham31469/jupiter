@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\StoreTescoLabelOrder;
 use App\Classes\TescoCareLabelParser;
 use App\Classes\UpdateTescoLabelOrder;
+use App\Classes\TescoSwingTicketMetadata;
 use App\Http\Requests\TescoLabelOrderRequest;
 
 class CareLabelOrdersController extends Controller
@@ -23,8 +24,9 @@ class CareLabelOrdersController extends Controller
     private $parselabel;
     private $updateLabelOrder;
     private $caremeta;
+    private $woolmarkLogos;
 
-    public function __construct(Modules $module, StoreTescoLabelOrder $storeorder, TescoCareMetadata $caremeta,  TescoCareLabelParser $parselabel,UpdateTescoLabelOrder $updateLabelOrder)
+    public function __construct(Modules $module, StoreTescoLabelOrder $storeorder, TescoCareMetadata $caremeta,  TescoCareLabelParser $parselabel,UpdateTescoLabelOrder $updateLabelOrder, TescoSwingTicketMetadata $swingTicketMetadata)
     {
         $this->module = $module;
 
@@ -35,6 +37,7 @@ class CareLabelOrdersController extends Controller
         $this->parselabel = $parselabel;
         
         $this->updateLabelOrder = $updateLabelOrder;
+        $this->woolmarkLogos = $swingTicketMetadata->getwoolmarkLogos();
 
     }
 
@@ -59,7 +62,11 @@ class CareLabelOrdersController extends Controller
                     'fabriclists' => $this->caremeta->getCareLabelFabrics(),
                     'template' => $request['template'],
                     'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
-                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet(),
+                    'garment_statements' => $this->caremeta->getGarmentStatements(),
+                    'tog_rating' => $this->caremeta->getTogRatings(),
+                    'flammability' => $this->caremeta->getFlammabilityTexts(),
+                    'woolmark_logos' => $this->woolmarkLogos,
                 ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -111,9 +118,7 @@ class CareLabelOrdersController extends Controller
 
             $request->validated();
 
-            $response = $this->storeorder->storeTescoLabelOrder($request, 'admin');
-
-            return $response;
+            return $this->storeorder->storeTescoLabelOrder($request, 'admin');
         }
     }
 
@@ -137,7 +142,11 @@ class CareLabelOrdersController extends Controller
                     'components' => $this->caremeta->getCareLabelComponents(),
                     'fabriclists' => $this->caremeta->getCareLabelFabrics(),
                     'additional_instructions' => $this->caremeta->getCareLabelInstructions(),
-                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet()
+                    'part_of_two_piece_set' => $this->caremeta->getPartOfTwoPieceSet(),
+                    'garment_statements' => $this->caremeta->getGarmentStatements(),
+                    'tog_rating' => $this->caremeta->getTogRatings(),
+                    'flammability' => $this->caremeta->getFlammabilityTexts(),
+                    'woolmark_logos' => $this->woolmarkLogos,
                 ], 200);
             } else {
                 return response()->json(['error' => true, 'message' => 'Error'], 400);

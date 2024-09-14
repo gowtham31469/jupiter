@@ -124,8 +124,8 @@ class DashboardController extends Controller
 
 			if(Session::get('fiscal-year') != null) {
 				$year = explode('-', Session::get('fiscal-year'));
-				$from_date = $year[0].'-'.$this->financial_year_date;
-				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+				$from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";	 
 			} else {
 				$from_date = $this->financial_year_start;
 				$to_date =$this->financial_year_end; 
@@ -164,8 +164,8 @@ class DashboardController extends Controller
 
 			if(Session::get('fiscal-year') != null) {
 				$year = explode('-', Session::get('fiscal-year'));
-				$from_date = $year[0].'-'.$this->financial_year_date;
-				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+				$from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+				$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59"; 
 			} else {
 				$from_date = $this->financial_year_start;
 				$to_date =$this->financial_year_end; 
@@ -217,8 +217,8 @@ class DashboardController extends Controller
 			$fiscal_year   = $request->fiscal_year;
 
 			$year = explode('-', $fiscal_year);
-			$from_date = $year[0].'-'.$this->financial_year_date;
-			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString();
+			$from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";
 			
 			foreach($row_id as $value)
 			{
@@ -367,8 +367,8 @@ class DashboardController extends Controller
 			$fiscal_year   = $request->fiscal_year;
 
 			$year = explode('-', $fiscal_year);
-			$from_date = $year[0].'-'.$this->financial_year_date;
-			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString();
+			$from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";
 
 			foreach($row_id as $value)
 			{
@@ -508,8 +508,8 @@ class DashboardController extends Controller
 			$fiscal_year   = $request->fiscal_year;
 
 			$year = explode('-', $fiscal_year);
-			$from_date = $year[0].'-'.$this->financial_year_date;
-			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString(); 
+			$from_date = $year[0].'-'.$this->financial_year_date." 00:00:00";
+			$to_date =Carbon::parse($from_date)->addYear()->subDay()->toDateString()." 23:59:59";
 			
 			foreach($row_id as $value)
 			{

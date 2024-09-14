@@ -35,12 +35,14 @@ use App\MainLabelOrdersQty;
 use View;
 use DB;
 use App\Classes\ERPOrderStatusCheck;
+use App\Classes\OrchestraTreeStructure;
 use App\Classes\ErpOrders;
 use Carbon\Carbon;
 use App\OrchestraParcelDetails;
 use App\OrchestraParcelQuantityDetails;
 use Auth;
 use App\Classes\EditErpOrders;
+use App\Classes\OrchestraOrderStatus;
 use App\Classes\CleanString;
 
 use App\ErpOrders as Erp;
@@ -59,6 +61,8 @@ class OrderManagementCntrl extends Controller
     {
         $this->middleware('auth');
         $this->edit_erp_obj    = new EditErpOrders();
+        $this->orc_tree_structure    = new OrchestraTreeStructure();
+        $this->orchestra_order_status_obj    = new OrchestraOrderStatus();
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
     }
 
@@ -114,25 +118,26 @@ class OrderManagementCntrl extends Controller
      * @return Json Value
      */
 	
-    public function Orders()
+    public function Orders(Request $request)
     {
-		
-		 $UVC_TCO_array1 = [];
-         // check for po data missing for SKU Code(In price CSV)
-         $parcel_qty_details = OrchestraParcelQuantityDetails::select(DB::raw('distinct on (orchestra_parcel_details."UVC_TCO") orchestra_parcel_details."UVC_TCO"'))->join('orchestra_parcel_details', 'orchestra_parcel_quantity_details.UVC_TCO', 'orchestra_parcel_details.UVC_TCO')->groupBy('orchestra_parcel_details.UVC_TCO')->get()->toArray();
+        $season_code=$request->season_code;
 
-         foreach ($parcel_qty_details as $key => $value) {
-           array_push($UVC_TCO_array1, $value['UVC_TCO']);
-         }
-		
-			
-        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC","BuyerPONo") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
+        $data['sticker_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC","BuyerPONo") "UVC"'),'id',DB::raw("'-' as \"Season\""),'BuyerPONo','SupplierName','Theme as Description','NomApple as Style_Name','Quantity','IsSTD as Type',DB::raw("'Stickers' as \"OrderType\""),'sticker_order_status as Order Status',DB::raw("'-' as \"Disney\""))->whereIn('orchestra_parcel_details.Season_Code',$season_code)->where('orchestra_parcel_details.is_price_data_exists',1)->where('orchestra_parcel_details.Po_Status_Code_Description','!=','Cancelled.')->groupBy('id','UVC')->get();
 
-        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney','IsSTD as Type','Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereNotIn('UVC_TCO', $UVC_TCO_array1)->groupBy('id','UVC')->get();
+        $data['label_orders'] = DB::table('orchestra_parcel_details')->select(DB::raw('distinct on ("UVC") "UVC"'),'id','Season_Code as Season',DB::raw("'-' as \"BuyerPONo\""),'SupplierName','Theme as Description','NomApple as Style_Name','Licence_Code as Disney','IsSTD as Type','Quantity',DB::raw("'Labels' as \"OrderType\""),'order_status as Order Status')->whereIn('orchestra_parcel_details.Season_Code',$season_code)->where('orchestra_parcel_details.is_price_data_exists',1)->where('orchestra_parcel_details.Po_Status_Code_Description','!=','Cancelled.')->groupBy('id','UVC')->get();
         
         echo json_encode($data);
     } 
-	
+    
+    public function seasonCodeFilter()
+    {
+        $data = OrchestraParcelDetails::join('orchestra_parcel_quantity_details', 'orchestra_parcel_details.UVC', 'orchestra_parcel_quantity_details.UVC')
+            ->select('orchestra_parcel_details.Season_Code')
+            ->groupBy('orchestra_parcel_details.Season_Code')
+            ->get();
+
+        echo json_encode($data);
+    }
 	/**
      * Show the label orders details.
      *
@@ -141,417 +146,172 @@ class OrderManagementCntrl extends Controller
 	
     public function labelOrderDetails(Request $request)
     {
-            $uvc=$request->uvc;
-            $data['order_details'] = DB::table('orchestra_parcel_details')
-                                        ->select('orchestra_parcel_details.*','orchestra_parcel_details.Size_Range_Label as Age','orchestra_parcel_details.Start_Print_Date	 as HangTag_Print_Date','orchestra_size_chart.cm',DB::raw("sum(orchestra_parcel_details.\"Quantity\") as \"Sum\""), DB::raw("'null' as \"PrixEurope\""), DB::raw("'null' as \"PrixClubEurope\""), DB::raw("'null' as \"Prix_Vente_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Club_Arabie_Saoudite\""), DB::raw("'null' as \"Prix_Vente_Canada\""), DB::raw("'null' as \"Prix_Club_Canada\""), DB::raw("'null' as \"Prix_Vente_Suisse\""), DB::raw("'null' as \"Prix_Club_Suisse\""), DB::raw("'null' as \"Prix_Vente_Maroc\""), DB::raw("'null' as \"Prix_Club_Maroc\""), DB::raw("'null' as \"Prix_Vente_Ile_Maurice\""), DB::raw("'null' as \"Prix_Club_Ile_Maurice\""), DB::raw("'null' as \"Prix_Vente_ALGERIE\""), DB::raw("'null' as \"Prix_Club_ALGERIE\""), DB::raw("'null' as \"Prix_Vente_USA\""), DB::raw("'null' as \"Prix_Club_USA\""))
-                                        ->leftJoin('orchestra_size_chart','orchestra_parcel_details.Size_Label','=','orchestra_size_chart.age')
-                                        ->where('orchestra_parcel_details.UVC',$uvc)
-                                        ->groupBy('orchestra_parcel_details.id','Size_Label','orchestra_size_chart.cm')
-                                        ->orderBy('orchestra_parcel_details.id','asc')
-                                        ->get();
-		
-		$data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
-		
-            // get price details for po data
-            foreach($data['order_details'] as $key => $value)
-            {
-                $price_data = DB::table('orchestra_parcel_quantity_details')
-                                ->select('orchestra_parcel_quantity_details.*')
-                                ->where('orchestra_parcel_quantity_details.UVC_TCO', $value->SKU_Code)
+        $uvc=$request->uvc;
+        $season_code=$request->season_code;
+        $data['order_details'] = DB::table('orchestra_parcel_details as opd')
+                                ->leftJoin('orchestra_size_chart','opd.Size_Label','=','orchestra_size_chart.age')
+                                ->select(DB::raw('SUM("Quantity") as "Sum"'),DB::raw('Min(opd.id) as id'),DB::raw('Min(opd."Start_Print_Date") as Start_Print_Date'),"orchestra_size_chart.cm","opd.Size_Range_Label","opd.Season_Code","opd.UVC" ,"opd.Size","opd.UVC_TCO","opd.Color_Code","opd.BarcodeForPricesTags","opd.SKU_Code","opd.FactoryCode","opd.Family_Code","opd.Activity_Code","opd.Activity_Label","opd.Licence_Code","opd.Theme")
+                                ->where('UVC',$uvc)
+                                ->where('Season_Code',$season_code)
+                                ->where('Po_Status_Code_Description','!=','Cancelled.')
+                                ->groupBy("Size_Label","orchestra_size_chart.cm","opd.Size_Range_Label","opd.SKU_Code","opd.Size","opd.UVC_TCO","opd.BarcodeForPricesTags","opd.FactoryCode","opd.Family_Code","opd.Color_Code","opd.Season_Code","opd.UVC","opd.Activity_Code","opd.Activity_Label","opd.Licence_Code","opd.Theme")
+                                ->orderBy(DB::raw('MIN(opd.id)'),'asc')
                                 ->get();
-                
-                foreach ($price_data as $key1 => $value2) 
-                {
-                    $currency = $value2->Currency;
 
-                    switch ($currency) {
-                        case "EUR":
-                            $value->PrixEurope  = $value2->Price;
-                            $value->PrixClubEurope = $value2->Club_Price;
-                            break;
-                        case "SAR":
-                            $value->Prix_Vente_Arabie_Saoudite  = $value2->Price;
-                            $value->Prix_Club_Arabie_Saoudite = $value2->Club_Price;
-                            break;
-                        case "CAD":
-                            $value->Prix_Vente_Canada  = $value2->Price;
-                            $value->Prix_Club_Canada = $value2->Club_Price;
-                            break;
-                        case "CHF":
-                            $value->Prix_Vente_Suisse  = $value2->Price;
-                            $value->Prix_Club_Suisse = $value2->Club_Price;
-                            break;
-                        case "MAD":
-                            $value->Prix_Vente_Maroc  = $value2->Price;
-                            $value->Prix_Club_Maroc = $value2->Club_Price;
-                            break;
-                        case "MUR":
-                            $value->Prix_Vente_Ile_Maurice  = $value2->Price;
-                            $value->Prix_Club_Ile_Maurice = $value2->Club_Price;
-                            break;
-                        case "DZD":
-                            $value->Prix_Vente_ALGERIE  = $value2->Price;
-                            $value->Prix_Club_ALGERIE = $value2->Club_Price;
-                            break;
-                        case "USD":
-                            $value->Prix_Vente_USA  = $value2->Price;
-                            $value->Prix_Club_USA = $value2->Club_Price;
-                            break;
-                        default:
-                            echo json_encode("Invalid Currency");
+        $data['buyer_po'] = DB::table('orchestra_parcel_details')->select('BuyerPONo')->where('UVC',$uvc)->where('Season_Code',$season_code)->where('Po_Status_Code_Description','!=','Cancelled.')->groupBy('BuyerPONo')->orderBy('orchestra_parcel_details.BuyerPONo','asc')->get();
+
+        $data['color_wcl'] = DB::table('orchestra_parcel_details')->select('orchestra_parcel_details.Color_Code')->where('orchestra_parcel_details.UVC',$uvc)
+        ->where('Season_Code',$season_code)->where('Po_Status_Code_Description','!=','Cancelled.')->groupBy('orchestra_parcel_details.Color_Code') ->orderBy('orchestra_parcel_details.Color_Code','asc')->get();
+
+        if(count($data['order_details']) > 0)
+        {
+            if($data['order_details']{0}->Licence_Code === 'DI')
+            {
+                $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
+
+                if($treeviewData)
+                {
+                    $childs = array();
+                    foreach($treeviewData as &$item) 
+                    {
+                    $childs[$item->parent_id][] = &$item;
+                    unset($item);
                     }
-                }
+                    foreach($treeviewData as &$item) 
+                    {
+                        if (isset($childs[$item->id]))
+                        {
+                            $item->children = $childs[$item->id];
+                            unset($item);
+                        }
+                    }
+                    $tree = $childs[0];
+                    $data['treefinalData']=$tree;
+
+                } 
+            }
+            else
+            {   
+                $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('tag_name','hang')->orWhere('id','104')->orWhere('id','105')->orderBy('item_name', 'asc')->get()->toArray();
+
+                if($treeviewData)
+                {
+                    $childs = array();
+                    foreach($treeviewData as &$item) 
+                    {
+                    $childs[$item->parent_id][] = &$item;
+                    unset($item);
+                    }
+                    foreach($treeviewData as &$item) 
+                    {
+                        if (isset($childs[$item->id]))
+                        {
+                            $item->children = $childs[$item->id];
+                            unset($item);
+                        }
+                    }
+                    $tree = $childs[0];
+                    $data['treefinalData']=$tree;
+
+                } 
             }
 
-            $data['barcode'] = DB::table('orchestra_parcel_details')->select('*')->where('UVC',$uvc)->groupBy('id','BuyerPONo')->orderBy('orchestra_parcel_details.BuyerPONo','asc')->get();
-        
-           $total_qty = DB::table('orchestra_parcel_details')->select('*',DB::raw("sum(\"Quantity\") as total_qty"))->where('UVC',$uvc)->groupBy('id','UVC')->get();
-            $data['total_qty']=$total_qty{0}->total_qty;
-            // Licence_Code = DI for disney
-            if($total_qty{0}->Licence_Code === 'DI')
+            $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_hang_tag_orders_qty','orchestra_hang_tag_orders.id','orchestra_hang_tag_orders_qty.oht_id')->select('orchestra_hang_tag_orders.*','orchestra_hang_tag_orders_qty.quantity',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)
+            ->where('season_code',$season_code)->where('status','!=','Order Cancelled')->get();
+
+            $data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->join('orchestra_heat_transfer_orders_qty','orchestra_heat_transfer_orders.id','orchestra_heat_transfer_orders_qty.oht_id')->select('orchestra_heat_transfer_orders.*','orchestra_heat_transfer_orders_qty.quantity',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('uvc',$uvc)
+            ->where('season_code',$season_code)->where('status','!=','Order Cancelled')->get();
+
+            $data['treeviewheat_transfer'] = $this->orc_tree_structure->treeViewHT();
+
+            $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_special_tag_orders_qty','orchestra_special_tag_orders.id','orchestra_special_tag_orders_qty.ost_id')->select('orchestra_special_tag_orders.*','orchestra_special_tag_orders_qty.quantity',DB::raw("'Special Tag' as \"TemplateName\""))->where('uvc',$uvc)
+            ->where('season_code',$season_code)->where('status','!=','Order Cancelled')->get();
+
+            $data['treeviewspecial'] = $this->orc_tree_structure->treeViewSpecial();
+
+            $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_main_label_orders_qty','orchestra_main_label_orders.id','orchestra_main_label_orders_qty.oml_id')->select('orchestra_main_label_orders.*','orchestra_main_label_orders_qty.quantity',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)
+            ->where('season_code',$season_code)->where('status','!=','Order Cancelled')->get();
+
+            $data['treeviewmain_label'] = $this->orc_tree_structure->treeViewMain();
+
+            $data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->join('orchestra_size_label_orders_qty','orchestra_size_label_orders.id','orchestra_size_label_orders_qty.osl_id')->select('orchestra_size_label_orders.*','orchestra_size_label_orders_qty.quantity',DB::raw("'Size Label' as \"TemplateName\""))->where('uvc',$uvc)
+            ->where('season_code',$season_code)->where('status','!=','Order Cancelled')->get();
+
+            $data['treeviewsize_label'] = $this->orc_tree_structure->treeViewSize();
+
+            $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('season_code',$season_code)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
+
+
+            if($data['order_details']{0}->Licence_Code === 'DI')
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','5')->get();
-                $data['orchestra_template']=$orchestra_template{0}->template_file;
-                $data['orchestra_template_id']=5;
+                if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
+                {
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->orWhere('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','8')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.id','!=','203')->where('orchestra_item_master.id','!=','9')->where('orchestra_item_master.id','!=','4')->orderBy('orchestra_item_master.item_name', 'asc')->get();
+                    $data['treeviewwash_label'] = $treeviewwash_label;
+                }
+                else
+                {
+                    $treeviewwash_label= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'orchestra_item_master.parent_id','orchestra_template.template_file')->where('orchestra_item_master.parent_id','3')->where('orchestra_item_master.id','!=','202')->where('orchestra_item_master.tag_name','wcl_pmm')->orderBy('orchestra_item_master.item_name', 'asc')->get();
+                    $data['treeviewwash_label'] = $treeviewwash_label;
+                }
                 
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1-disney.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
-				
-                $data['orchestra_wash_template_id']=5;
-				
-				$factory_code = $data['order_details']{0}->FactoryCode;
-				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
-				
-				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
-				
-				if(count($customer_active) > 0)
-				{
-					$data['customer_active'] = "active";
-				}
-				else
-				{
-					$data['customer_active'] = "inactive";
-				}
-
-				if(count($customer_id) > 0)
-				{
-					$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',5)->get();
-
-					if(count($carton_moq) > 0)
-					{
-						$data['wash_moq']=$carton_moq{0}->moq;
-					}
-					else
-					{
-						$data['wash_moq']=1;
-					}
-
-
-				}
-				else
-				{
-					$data['wash_moq']=1;
-				}
-				
-				
-                
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','5')->where('disney',1)->get();
-                $data['orchestra_template_front']=$orchestra_template_front;
-				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('tag_name','disney')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewData){
-                        $childs = array();
-                        foreach($treeviewData as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewData as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treefinalData']=$tree;
-
-               } 
             }
             else
             {
-                $orchestra_template = DB::table('orchestra_template')->select('*')->where('item_id','4')->get();
-                $data['orchestra_template']=$orchestra_template{0}->template_file;
-                $data['orchestra_template_id']=4;
-                
-                $data['orchestra_wash_template_front']="/storage/app/template/Orchestra/WCL/sticker1.svg";
-                $data['orchestra_wash_template_back']="/storage/app/template/Orchestra/WCL/sticker2.svg";
-                $data['orchestra_wash_template_middle']="/storage/app/template/Orchestra/WCL/sticker3.svg";
-                $data['orchestra_wash_template_id']=4;
-				
-				$factory_code = $data['order_details']{0}->FactoryCode;
-				$customer_id = DB::table('customers')->select('*')->where('factory_code',$factory_code)->get();
-				
-				$customer_active = DB::table('customers')->select('*')->where('factory_code',$factory_code)->where('is_active',1)->get();
-				
-				if(count($customer_active) > 0)
-				{
-					$data['customer_active'] = "active";
-				}
-				else
-				{
-					$data['customer_active'] = "inactive";
-				}
-				
+                if($data['order_details']{0}->Activity_Label != "PUERICULTURE")
+                {
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','4')->get();
 
-				if(count($customer_id) > 0)
-				{
-					$carton_moq = DB::table('price_taxation')->select('*')->where('customer_id',$customer_id{0}->id)->where('buyer_id',1)->where('template_id',4)->get();
+                    $data['treeviewwash_label'] = array(["id" => "4", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
+                }
+                else
+                {
+                    $orc_template_name= DB::table("orchestra_item_master")->join('orchestra_template','orchestra_template.item_id','=','orchestra_item_master.id')->select('orchestra_item_master.item_name','orchestra_template.template_file')->orWhere('orchestra_item_master.id','202')->get();
 
-					if(count($carton_moq) > 0)
-					{
-						$data['wash_moq']=$carton_moq{0}->moq;
-					}
-					else
-					{
-						$data['wash_moq']=1;
-					}
-
-
-				}
-				else
-				{
-					$data['wash_moq']=1;
-				}
-                
-                $orchestra_template_front = DB::table('orchestra_template')->select('*')->where('item_id','4')->where('disney', 0)->get();
-                $data['orchestra_template_front']=$orchestra_template_front;
-				
-				
-				 $treeviewData= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('tag_name','hang')->orWhere('id','104')->orWhere('id','105')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewData){
-                        $childs = array();
-                        foreach($treeviewData as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewData as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treefinalData']=$tree;
-
-               } 
+                    $data['treeviewwash_label'] = array(["id" => "202", "text" => $orc_template_name{0}->item_name, "parent_id" => "null","template_file" => $orc_template_name{0}->template_file]);
+                }
             }
-        
-         // $treeviewData= DB::table("orchestra_item_master")->select('id','item_name as text','parent_id')->orWhere('id','6')->orWhere('parent_id','6')->orWhere('id','1')->get()->toArray();
-         
-        
-        $treeviewspecial= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','103')->orWhere('id','104')->orWhere('id','105')->orWhere('tag_name','special')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewspecial){
-                        $childs = array();
-                        foreach($treeviewspecial as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewspecial as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treeviewspecial']=$tree;
 
-               }
-		
-		 $treeviewheat_transfer= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','62')->orWhere('id','63')->orWhere('tag_name','heat_transfer')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewheat_transfer){
-                        $childs = array();
-                        foreach($treeviewheat_transfer as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewheat_transfer as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treeviewheat_transfer']=$tree;
-
-               }
-		
-		$treeviewmain_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','main')->orWhere('tag_name','MS')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewmain_label){
-                        $childs = array();
-                        foreach($treeviewmain_label as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewmain_label as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treeviewmain_label']=$tree;
-
-               }
-		
-		$treeviewsize_label= DB::table("orchestra_item_master")->select('id',DB::raw("(CASE WHEN ref_no = '' THEN item_name ELSE CONCAT(item_name,' - ',ref_no) END) as text"),'parent_id')->orWhere('id','1')->orWhere('id','2')->orWhere('id','10')->orWhere('id','13')->orWhere('tag_name','size')->orWhere('tag_name','MS')->orWhere('tag_name','main_size')->orderBy('item_name', 'asc')->get()->toArray();
-            if($treeviewsize_label){
-                        $childs = array();
-                        foreach($treeviewsize_label as &$item) 
-                        {
-                        $childs[$item->parent_id][] = &$item;
-                        unset($item);
-                        }
-                        foreach($treeviewsize_label as &$item) 
-                        {
-                            if (isset($childs[$item->id]))
-                            {
-                                $item->children = $childs[$item->id];
-                                unset($item);
-                            }
-                        }
-                        $tree = $childs[0];
-                        $data['treeviewsize_label']=$tree;
-
-               }
-		
-        $code=$data['order_details']{0}->Family_Code;
-		
-        $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->select('*',DB::raw("'Hang Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
-		
-		$data['orchestra_hang_tag_orders_id']=DB::table('orchestra_hang_tag_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
-		
-        if(count($data['orchestra_hang_tag_orders']) > 0)
-        {
-            $data['orchestra_hang_tag_orders_qty']=DB::table('orchestra_hang_tag_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_hang_tag_orders_id'])->orderBy('orchestra_hang_tag_orders_qty.parcel_id','asc')->get();
-        }
-        else
-        {
-            $data['orchestra_hang_tag_orders_qty']="";
-        }
-        $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->select('*',DB::raw("'Special Tag' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
-		
-		$data['orchestra_special_tag_orders_id']=DB::table('orchestra_special_tag_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
-        if(count($data['orchestra_special_tag_orders']) > 0)
-        {
-            $data['orchestra_special_tag_orders_qty']=DB::table('orchestra_special_tag_orders_qty')->select('*')->whereIn('ost_id',$data['orchestra_special_tag_orders_id'])->get();
-        }
-        else
-        {
-            $data['orchestra_special_tag_orders_qty']="";
-        }     
-		
-		$data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->select('*',DB::raw("'Heat Transfer' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
-		
-		$data['orchestra_heat_transfer_orders_id']=DB::table('orchestra_heat_transfer_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
-        if(count($data['orchestra_heat_transfer_orders']) > 0)
-        {
-            $data['orchestra_heat_transfer_orders_qty']=DB::table('orchestra_heat_transfer_orders_qty')->select('*')->whereIn('oht_id',$data['orchestra_heat_transfer_orders_id'])->orderBy('orchestra_heat_transfer_orders_qty.parcel_id','asc')->get();
-        }
-        else
-        {
-            $data['orchestra_heat_transfer_orders_qty']="";
-        }
-		
-		$data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->select('*',DB::raw("'Main Label' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
-		
-		$data['orchestra_main_label_orders_id']=DB::table('orchestra_main_label_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
-        if(count($data['orchestra_main_label_orders']) > 0)
-        {
-            $data['orchestra_main_label_orders_qty']=DB::table('orchestra_main_label_orders_qty')->select('*')->whereIn('oml_id',$data['orchestra_main_label_orders_id'])->get();
-        }
-        else
-        {
-            $data['orchestra_main_label_orders_qty']="";
-        }
-        
-		$data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->select('*',DB::raw("'Size Label' as \"TemplateName\""))->where('uvc',$uvc)->where('status','!=','Order Cancelled')->get();
-		
-		$data['orchestra_size_label_orders_id']=DB::table('orchestra_size_label_orders')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->pluck('id');
-        if(count($data['orchestra_size_label_orders']) > 0)
-        {
-            $data['orchestra_size_label_orders_qty']=DB::table('orchestra_size_label_orders_qty')->select('*')->whereIn('osl_id',$data['orchestra_size_label_orders_id'])->orderBy('orchestra_size_label_orders_qty.parcel_id','asc')->get();
-        }
-        else
-        {
-            $data['orchestra_size_label_orders_qty']="";
-        }
-		
-       if($data['order_details']{0}->FactoryCode == "HF-FREEUSD")
-	   {
-				$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select(DB::raw('distinct on ("card_flag") "card_flag"'),'*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.card_flag','asc')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
-		   
-		   $data['orchestra_wash_care_label_orders_po']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
-	   }
-	   else
-	   {
-			$data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->select('*','orchestra_wash_care_label_orders.template_name as TemplateName')->where('uvc',$uvc)->where('status','!=','Order Cancelled')->orderBy('orchestra_wash_care_label_orders.po','asc')->get();
-	   }
-        foreach($data['orchestra_wash_care_label_orders'] as $value1)
-        {
-            $orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->get();
-            $value1->qty=$orchestra_wash_label_orders_qty;
-            
-             $orchestra_wash_care_composition=DB::table('orchestra_wash_care_composition')->leftJoin('orchestra_compositions','orchestra_compositions.id','=','orchestra_wash_care_composition.composition_id')->leftJoin('orchestra_parts','orchestra_parts.id','=','orchestra_wash_care_composition.parts_id')->select('orchestra_wash_care_composition.*','orchestra_compositions.french','orchestra_compositions.english','orchestra_compositions.spanish','orchestra_compositions.portuguese','orchestra_compositions.italian','orchestra_compositions.dutch','orchestra_compositions.german','orchestra_compositions.russian','orchestra_compositions.chinese','orchestra_compositions.arabic','orchestra_compositions.greek','orchestra_compositions.turkish','orchestra_parts.french as parts_french','orchestra_parts.english as parts_english','orchestra_parts.spanish as parts_spanish','orchestra_parts.portuguese as parts_portuguese','orchestra_parts.italian as parts_italian','orchestra_parts.dutch as parts_dutch','orchestra_parts.german as parts_german','orchestra_parts.russian as parts_russian','orchestra_parts.chinese as parts_chinese','orchestra_parts.arabic as parts_arabic','orchestra_parts.greek as parts_greek','orchestra_parts.turkish as parts_turkish')->orderBy('orchestra_wash_care_composition.id','asc')->where('owcl_id',$value1->id)->get();
-             $value1->composition=$orchestra_wash_care_composition;
-            $care_instructions=array();
-            foreach(explode(',',$value1->care_instruction_id) as $value2)
+            foreach($data['orchestra_wash_care_label_orders'] as $value1)
             {
-                array_push($care_instructions,$value2);
+                $orchestra_wash_label_orders_qty=DB::table('orchestra_wash_care_label_orders_qty')->select('*')->where('owcl_id',$value1->id)->get();
+                $value1->qty=$orchestra_wash_label_orders_qty;
+
+                $orchestra_wash_care_composition=DB::table('orchestra_wash_care_composition')->leftJoin('orchestra_compositions','orchestra_compositions.id','=','orchestra_wash_care_composition.composition_id')->leftJoin('orchestra_parts','orchestra_parts.id','=','orchestra_wash_care_composition.parts_id')->select('orchestra_wash_care_composition.*','orchestra_compositions.french','orchestra_compositions.english','orchestra_compositions.spanish','orchestra_compositions.portuguese','orchestra_compositions.italian','orchestra_compositions.dutch','orchestra_compositions.german','orchestra_compositions.russian','orchestra_compositions.chinese','orchestra_compositions.arabic','orchestra_compositions.greek','orchestra_compositions.turkish','orchestra_parts.french as parts_french','orchestra_parts.english as parts_english','orchestra_parts.spanish as parts_spanish','orchestra_parts.portuguese as parts_portuguese','orchestra_parts.italian as parts_italian','orchestra_parts.dutch as parts_dutch','orchestra_parts.german as parts_german','orchestra_parts.russian as parts_russian','orchestra_parts.chinese as parts_chinese','orchestra_parts.arabic as parts_arabic','orchestra_parts.greek as parts_greek','orchestra_parts.turkish as parts_turkish')->orderBy('orchestra_wash_care_composition.id','asc')->where('owcl_id',$value1->id)->get();
+                $value1->composition=$orchestra_wash_care_composition;
+                $care_instructions=array();
+                foreach(explode(',',$value1->care_instruction_id) as $value2)
+                {
+                    array_push($care_instructions,$value2);
+                }
+                $value1->care_instruction=$care_instructions;
             }
-            $value1->care_instruction=$care_instructions;
+
+            $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_composition'] = DB::table('orchestra_compositions')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_countries'] = DB::table('orchestra_countries')->where('is_enabled',1)->select('*')->get();
+
+            $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->where('is_enabled',1)->select('*')->get(); 
+            
+            $data['orchestra_parts'] = DB::table('orchestra_parts')->where('is_enabled',1)->select('*')->get();
+            
+            $factory = $data['order_details']{0}->FactoryCode;
+            $data['customers']=DB::table('customers')->join('customer_buyers','customer_buyers.customer_id','=','customers.id')->where('customers.factory_code',$factory)->where('customer_buyers.buyer_id',1)->select('*')->get();
+            if(count($data['customers']) > 0)
+            {
+                $cust_id = $data['customers']{0}->id;
+                $data['merchandisers']=DB::table('merchandisers')->where('buyer_id',1)->select('*')->get();
+            }
+            else
+            {
+                $data['merchandisers']="";
+            }
+
         }
-		        $factory = $data['order_details']{0}->FactoryCode;
-		  		$data['customers']=DB::table('customers')->join('customer_buyers','customer_buyers.customer_id','=','customers.id')->where('customers.factory_code',$factory)->where('customer_buyers.buyer_id',1)->select('*')->get();
-				if(count($data['customers']) > 0)
-				{
-					$cust_id = $data['customers']{0}->id;
-					$data['merchandisers']=DB::table('merchandisers')->where('buyer_id',1)->select('*')->get();
-				}
-				else
-				{
-					$data['merchandisers']="";
-				}
-				
-                $data['orchestra_care_symbols'] = DB::table('orchestra_care_symbols')->where('is_enabled',1)->select('*')->get();
-                $data['orchestra_composition'] = DB::table('orchestra_compositions')->where('is_enabled',1)->select('*')->get();
-                $data['orchestra_countries'] = DB::table('orchestra_countries')->where('is_enabled',1)->select('*')->get();
-                $data['orchestra_care_instruction'] = DB::table('orchestra_care_instruction')->where('is_enabled',1)->select('*')->get(); 
-                $data['orchestra_parts'] = DB::table('orchestra_parts')->where('is_enabled',1)->select('*')->get();
-                $pro_family = DB::table('orchestra_product_family')->where('is_enabled',1)->select('*')->where('code',$code)->get();
-				if(count($pro_family) > 0)
-				{
-					$data['product_family'] = DB::table('orchestra_product_family')->select('*')->where('code',$code)->get();
-				}
-				else
-				{
-					$data['product_family'] ="";
-				}
-                echo json_encode($data);
+
+        echo json_encode($data);
     }
 	
 	/**
@@ -790,6 +550,8 @@ class OrderManagementCntrl extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id;
         $template_back_id = $request->template_back_id;
+        $theme_label = $request->theme_label;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -844,6 +606,7 @@ class OrderManagementCntrl extends Controller
                     'uvc' => $uvc,
                     'template_front_id'      => $template_front_id,
                     'template_back_id'      => $template_back_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'customer_id'    => $factory{0}->id,
@@ -922,6 +685,7 @@ class OrderManagementCntrl extends Controller
 										'uvc' => $uvc,
 										'template_front_id'      => $template_front_id,
 										'template_back_id'      => $template_back_id,
+                                        'ocn_number'      => $ocn_number,
 										'svg_path'    => "", 
 										'status'    => $status,
 										'customer_id'    => $factory{0}->id,
@@ -930,7 +694,8 @@ class OrderManagementCntrl extends Controller
 										'pi_status'           => $pi_status,
 										'po_status'           => $po_status,
 					 					'color_code'          => $value1['Color_Code'],
-					 					'template_type'       => "single"
+					 					'template_type'       => "single",
+                                        'theme_reference'    => $theme_label,
 							 ]);
 				$i=0;
 				foreach($tot_qty_table as $value)
@@ -1316,6 +1081,7 @@ class OrderManagementCntrl extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1368,6 +1134,7 @@ class OrderManagementCntrl extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1444,6 +1211,7 @@ class OrderManagementCntrl extends Controller
              	$inserted = HeatTransferOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1492,6 +1260,7 @@ class OrderManagementCntrl extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = $request->tot_qty_table;
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1543,6 +1312,7 @@ class OrderManagementCntrl extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1618,6 +1388,7 @@ class OrderManagementCntrl extends Controller
              	$inserted = MainLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1657,6 +1428,7 @@ class OrderManagementCntrl extends Controller
     {
         //$delivery_date = $request->delivery_date;
         $template_id = $request->template_id;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $size = explode(',',$request->size);
@@ -1710,6 +1482,7 @@ class OrderManagementCntrl extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_id,
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "", 
                     'status'    => $status,
                     'orchestra_parcel_details_id'    => $parcel_id,
@@ -1786,6 +1559,7 @@ class OrderManagementCntrl extends Controller
              $inserted = SizeLabelOrders::create([
                                     'uvc' => $uvc,
 									'template_id'      => $template_id,
+                                    'ocn_number'      => $ocn_number,
 									'svg_path'    => "", 
 									'status'    => $status,
 									'orchestra_parcel_details_id'    => $parcel_id,
@@ -1832,6 +1606,7 @@ class OrderManagementCntrl extends Controller
     public function setSpecialTag(Request $request)
     {
         $delivery_date = $request->delivery_date;
+        $ocn_number = $request->ocn_number;
         $template_front_id = $request->template_front_id;
         $tot_qty_table = $request->tot_qty_table;
 		//$final_qty =$request->tot_qty_table;
@@ -1883,6 +1658,7 @@ class OrderManagementCntrl extends Controller
                 ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id, 
+                    'ocn_number'      => $ocn_number,
                     'svg_path'    => "",
                     'final_qty'    => $tot_qty_table, 
                     'customer_id'    => $factory{0}->id,
@@ -1956,6 +1732,7 @@ class OrderManagementCntrl extends Controller
              	$inserted = SpecialTagOrders::create([
                                     'uvc' => $uvc,
                                     'template_id'      => $template_front_id, 
+                                    'ocn_number'      => $ocn_number,
                                     'svg_path'    => "", 
 				 					'final_qty'    => $value,
                         			'customer_id'    => $factory{0}->id,
@@ -1997,6 +1774,9 @@ class OrderManagementCntrl extends Controller
     {
         $carton_template_id = $request->carton_template_id; 
         $polybag_template_id = $request->polybag_template_id;
+        $ocn_number = $request->ocn_number;
+        $theme_reference = $request->theme_reference;
+        $parcel_code = $request->parcel_code;
         $tot_qty_poly = explode(',',$request->tot_qty_poly);
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
         $size = explode(',',$request->size);
@@ -2051,6 +1831,8 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height,  
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
@@ -2093,6 +1875,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height,
 				  				'customer_id'    => $factory{0}->id, 
                                 'svg_path'    => "", 
@@ -2132,6 +1916,8 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height, 
 					    'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -2173,6 +1959,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height,
 				   				'width'           => $width,
                         		'customer_id'    => $factory{0}->id,
@@ -2221,6 +2009,9 @@ class OrderManagementCntrl extends Controller
         //$delivery_date = $request->delivery_date;
         $carton_template_id = $request->carton_template_id; 
         $size = explode(',',$request->size);
+        $ocn_number = $request->ocn_number;
+        $theme_reference = $request->theme_reference;
+        $parcel_code = $request->parcel_code;
 		$size_break = explode(',',$request->size_break);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2282,6 +2073,8 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $polybag_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height, 
                         'customer_id'    => $factory{0}->id,
                         'no_of_carton'    => $no_of_carton, 
@@ -2307,7 +2100,7 @@ class OrderManagementCntrl extends Controller
 									'ospbs_id' => $poly_id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'size_break'      => "",
 									'quantity'    => $final_order_qty,
 									'quantity_sets'    => $final_order_qty
@@ -2326,6 +2119,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $polybag_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height, 
 				  				'customer_id'    => $factory{0}->id,
                                 'no_of_carton'    => $no_of_carton, 
@@ -2348,7 +2143,7 @@ class OrderManagementCntrl extends Controller
                                         'ospbs_id' => $inserted_poly->id,
                                         'size'      => "",
 										'barcode'      => $barcode[0],
-										'uvc_tco'      => "",
+										'uvc_tco'      => $parcel_code,
 										'size_break'      => "",
                                         'quantity'    => $final_order_qty,
                                         'quantity_sets'    => $final_order_qty
@@ -2369,6 +2164,8 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'template_id'      => $carton_template_id,
                         'po'               => $po,
+                        'ocn_number'       => $ocn_number,
+                        'theme_reference'  => $theme_reference,
                         'height'           => $height, 
 					    'width'           => $width,
                         'customer_id'    => $factory{0}->id,
@@ -2394,7 +2191,7 @@ class OrderManagementCntrl extends Controller
 									'oscs_id' => $carton_id,
 									'size'      => "",
 									'barcode'      => $barcode[0],
-									'uvc_tco'      => "",
+									'uvc_tco'      => $parcel_code,
 									'quantity'    => $final_order_qty_sets,
 									'quantity_sets'    => $final_order_qty_sets
 				 ]);
@@ -2411,6 +2208,8 @@ class OrderManagementCntrl extends Controller
                                 'uvc' => $uvc,
                                 'template_id'      => $carton_template_id,
                                 'po'               => $po,
+                                'ocn_number'       => $ocn_number,
+                                'theme_reference'  => $theme_reference,
                                 'height'           => $height, 
 				   				'width'           => $width,
 				   				'customer_id'    => $factory{0}->id,
@@ -2435,7 +2234,7 @@ class OrderManagementCntrl extends Controller
                                         'oscs_id' => $inserted->id,
                                         'size'      => "",
 										'barcode'      => $barcode[0],
-										'uvc_tco'      => "",
+										'uvc_tco'      => $parcel_code,
                                         'quantity'    => $final_order_qty_sets,
                                         'quantity_sets'    => $final_order_qty_sets
                     ]);
@@ -2454,6 +2253,7 @@ class OrderManagementCntrl extends Controller
 	public function setSolidStickersOs(Request $request)
 	{
         $tot_qty_carton = explode(',',$request->tot_qty_carton); 
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
 		$barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2505,6 +2305,7 @@ class OrderManagementCntrl extends Controller
                         'uvc'              => $uvc,
                         'height'           => $height, 
 					   	'width'           => $width,
+                        'ocn_number'       => $ocn_number,
                         'customer_id'    => $factory{0}->id,
                         'svg_path'         => "", 
                         'status'           => $status,
@@ -2572,6 +2373,7 @@ class OrderManagementCntrl extends Controller
 	public function setSolidPolyBagStickersOs(Request $request)
 	{
         $tot_qty_poly = explode(',',$request->tot_qty_poly); 
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2589,6 +2391,7 @@ class OrderManagementCntrl extends Controller
                    ->update([
                         'height'           => $height,
                         'group_id'    => $age,
+                        'ocn_number'       => $ocn_number,
 		  ]);
 		$deleted = SolidPolyStickerOrdersQty::where('ospbs_id', '=', $poly_id)
 					->delete();
@@ -2648,6 +2451,7 @@ class OrderManagementCntrl extends Controller
 	public function setStandardCartonStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $ocn_number = $request->ocn_number;
 		$size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2668,6 +2472,7 @@ class OrderManagementCntrl extends Controller
                    ->update([
                         'height'           => $height,
 					   	'width'           => $width,
+                        'ocn_number'       => $ocn_number,
                         'no_of_carton'    => $no_of_carton, 
                         'total_polybag'    => $total_polybag, 
                         'final_order_qty_sets'    => $final_order_qty_sets, 
@@ -2730,6 +2535,7 @@ class OrderManagementCntrl extends Controller
 	public function setStandardPolyBagStickersOs(Request $request)
 	{
         $uvc =$request->uvc;
+        $ocn_number = $request->ocn_number;
         $size = explode(',',$request->size);
         $barcode = explode(',',$request->barcode);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2747,6 +2553,7 @@ class OrderManagementCntrl extends Controller
                    ->update([
                         'final_order_qty_sets'    => $final_order_qty_sets, 
                         'group_id'    => $age,
+                        'ocn_number'       => $ocn_number,
                   ]);
 			
         $deleted = StandardPolyStickersQty::where('ospbs_id', '=', $poly_id)
@@ -2812,6 +2619,7 @@ class OrderManagementCntrl extends Controller
         
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
+        $ocn_number = $request->ocn_number;
         $template_name = $request->template_name;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
@@ -2868,24 +2676,20 @@ class OrderManagementCntrl extends Controller
 		
         if($id != "null")
         {
-			$po_wcl = WashLabelOrders::where('uvc',$uvc)->where('season_code',$season_code)->where('po',$po_select)->where('status','!=','Order Cancelled')->select('*')->get();
-
-			
-			if(count($po_wcl) > 0)
-			{
 				WashLabelOrders::where('id',$id)
                    ->update([
                         'uvc' => $uvc,
                         'template_id'      => $template_front_id,
-                        //'merchandisers_id'      => $merchandisers,
+                        'merchandisers_id'      => $merchandisers,
                         'template_name'      => $template_name,
+                        'ocn_number'      => $ocn_number,
                         'washing_id'      => $washing_select,
                         'whitening_id'      => $whitening_select,
                         'dryer_id'      => $dryer_select,
                         'ironing_id'      => $ironing_select,
                         'cleaning_id'      => $cleaning_select,
                         'made_in_id'      => $made_in_select,
-					    'color_code'      => $color_code,
+					    //'color_code'      => $color_code,
 					    'card_flag'      => $card_flag,
                         'po'    => $po_select,
                         'care_instruction_id'      => $care_instruction_select,
@@ -2893,9 +2697,9 @@ class OrderManagementCntrl extends Controller
                         'svg_path'    => "", 
                         'status'    => "Buyer Approval Pending",
 						'orchestra_parcel_details_id'    => $parcel_id,
-						'season_code'    => $season_code,
-					    'pi_status'           => $pi_status,
-					   	'po_status'           => $po_status,
+						//'season_code'    => $season_code,
+					    //'pi_status'           => $pi_status,
+					   	//'po_status'           => $po_status,
                   ]);
                 $deleted = WashLabelOrdersQty::where('owcl_id', '=', $id)
                             ->delete();
@@ -2948,80 +2752,7 @@ class OrderManagementCntrl extends Controller
 
             ]);
 			return $id;
-			}
-			else
-			{
-				$inserted = WashLabelOrders::create([
-                                'uvc' => $uvc,
-                                'template_id'      => $template_front_id,
-                                'merchandisers_id'      => $merchandisers,
-                                'template_name'      => $template_name,
-                                'washing_id'      => $washing_select,
-                                'whitening_id'      => $whitening_select,
-                                'dryer_id'      => $dryer_select,
-                                'ironing_id'      => $ironing_select,
-                                'cleaning_id'      => $cleaning_select,
-                                'made_in_id'      => $made_in_select,
-				   				'color_code'      => $color_code,
-								'card_flag'      => $card_flag,
-				   				'po'      => $po_select,
-                                'care_instruction_id'      => $care_instruction_select,
-                        		'customer_id'    => $factory{0}->id,
-                                'svg_path'    => "", 
-                                'status'    => "Buyer Approval Pending",
-								'orchestra_parcel_details_id'    => $parcel_id,
-								'season_code'    => $season_code,
-				   				'pi_status'           => $pi_status,
-				   				'po_status'           => $po_status,
-                     ]);
-                $i=0;
-                foreach($tot_qty_table as $value)
-                {
-                     WashLabelOrdersQty::create([
-                                        'owcl_id' => $inserted->id,
-                                        'size'      => $size[$i],
-                                        'uvc_tco'      => $uvc_tco[$i],
-                                        'barcode'      => $barcode[$i],
-                                        'quantity'    => $value
-                             ]);
-                    $i++;
-                }
-         $k=1;
-         $composition = json_decode($request->composition);
-            foreach($composition as $key => $value)
-            {
-                foreach($value as $key1 => $value1)
-                {
-                    $exp_val = explode('_',$value1);
-                    if($exp_val[0] == "Select Option")
-                    {
-                        $parts_id=0;
-                    }
-                    else
-                    {
-                        $parts_id=$exp_val[0];
-                    }
-                    $orchestra_compositions = DB::table('orchestra_compositions')->select('*')->where('english',$exp_val[1])->get();
-                    $composition_id=$orchestra_compositions{0}->id;
-                    $percent=$exp_val[2];
-                    WashCareComposition::create([
-                                        'owcl_id' => $inserted->id,
-                                        'parts_id'      => $parts_id,
-                                        'composition_id'      => $composition_id,
-                                        'percentage'    => $percent,
-                                        'page_id'    => $k,
-                             ]);
-                }
-                $k++;
-            }
-			DB::table("orchestra_parcel_details")->where('UVC',$uvc)
-                        ->update([
-                          'order_status' => "Order Placed"
-
-            ]);
-			return  $inserted->id;
-			}
-              
+			  
         }
         else
         {
@@ -3030,6 +2761,7 @@ class OrderManagementCntrl extends Controller
                                 'template_id'      => $template_front_id,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
+                                'ocn_number'      => $ocn_number,
                                 'washing_id'      => $washing_select,
                                 'whitening_id'      => $whitening_select,
                                 'dryer_id'      => $dryer_select,
@@ -3104,6 +2836,7 @@ class OrderManagementCntrl extends Controller
         //$delivery_date = $request->delivery_date;
         $template_front_id = $request->template_front_id; 
         $template_name = $request->template_name;
+        $ocn_number = $request->ocn_number;
         $tot_qty_table = explode(',',$request->tot_qty_table);
         $uvc_tco = explode(',',$request->uvc_tco);
         $barcode = explode(',',$request->barcode);
@@ -3162,20 +2895,21 @@ class OrderManagementCntrl extends Controller
                 
             // get quantity_table ids.
             $quantity_table_ids = DB::table('orchestra_wash_care_label_orders_qty')->select('id')->where('owcl_id',$id)->get();
-        
+            
             WashLabelOrders::where('id',$id)
             ->update([
                     'uvc' => $uvc,
                     'template_id'      => $template_front_id,
                     //'merchandisers_id'      => $merchandisers,
                     'template_name'      => $template_name,
+                    'ocn_number'      => $ocn_number,
                     'washing_id'      => $washing_select,
                     'whitening_id'      => $whitening_select,
                     'dryer_id'      => $dryer_select,
                     'ironing_id'      => $ironing_select,
                     'cleaning_id'      => $cleaning_select,
                     'made_in_id'      => $made_in_select,
-                    'color_code'      => $color_code,
+                    //'color_code'      => $color_code,
                     'card_flag'      => $card_flag,
                     'po'    => $po_select,
                     'care_instruction_id'      => $care_instruction_select,
@@ -3281,6 +3015,7 @@ class OrderManagementCntrl extends Controller
                $inserted = WashLabelOrders::create([
                                 'uvc' => $uvc,
                                 'template_id'      => $template_front_id,
+                                'ocn_number'      => $ocn_number,
                                 'merchandisers_id'      => $merchandisers,
                                 'template_name'      => $template_name,
                                 'washing_id'      => $washing_select,
@@ -3457,6 +3192,7 @@ class OrderManagementCntrl extends Controller
         try 
         {
             $erp_obj    = new ErpOrders();
+            $po_number      = $request->po_number_updation;
             $formartStr_obj   = new CleanString();
             $table_name = $request->tableName;
             $row_id     = $request->id;
@@ -3498,6 +3234,7 @@ class OrderManagementCntrl extends Controller
             $data   = DB::table($table_name)->where('id',$row_id)
                         ->update([
                           'po_file' => $destination_path_insert,
+                          'po_number' => $po_number,
                           'po_status' => $po_status,
                           'po_uploaded_at' => Carbon::now('Asia/Kolkata')->toDateTimeString()
 
@@ -3816,29 +3553,9 @@ class OrderManagementCntrl extends Controller
 	
     public function getExistingLabelOrderStatusPo(Request $request)
     {
-		 $uvc        =   $request->uvc;
-          $data['orchestra_hang_tag_orders']=DB::table('orchestra_hang_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_hang_tag_orders.template_front_id')->where('orchestra_hang_tag_orders.status','!=','Order Cancelled')->select('orchestra_hang_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Hang Tag' as \"TemplateName\""),DB::raw("'Hang Tag' as \"TemplateType\""),DB::raw("'orchestra_hang_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_special_tag_orders']=DB::table('orchestra_special_tag_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_special_tag_orders.template_id')->where('orchestra_special_tag_orders.status','!=','Order Cancelled')->select('orchestra_special_tag_orders.*','orchestra_item_master.company_id', DB::raw("'Special Tag' as \"TemplateName\""),DB::raw("'Special Tag' as \"TemplateType\""),DB::raw("'orchestra_special_tag_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_main_label_orders']=DB::table('orchestra_main_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_main_label_orders.template_id')->where('orchestra_main_label_orders.status','!=','Order Cancelled')->select('orchestra_main_label_orders.*','orchestra_item_master.company_id',DB::raw("'Main Label' as \"TemplateName\""),DB::raw("'Main Label' as \"TemplateType\""),DB::raw("'orchestra_main_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_size_label_orders']=DB::table('orchestra_size_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_size_label_orders.template_id')->where('orchestra_size_label_orders.status','!=','Order Cancelled')->select('orchestra_size_label_orders.*','orchestra_item_master.company_id',DB::raw("'Size Label' as \"TemplateName\""),DB::raw("'Size Label' as \"TemplateType\""),DB::raw("'orchestra_size_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();		
-		
-		  $data['orchestra_heat_transfer_orders']=DB::table('orchestra_heat_transfer_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_heat_transfer_orders.template_id')->where('orchestra_heat_transfer_orders.status','!=','Order Cancelled')->select('orchestra_heat_transfer_orders.*','orchestra_item_master.company_id',DB::raw("'Heat Transfer' as \"TemplateName\""),DB::raw("'Heat Transfer' as \"TemplateType\""),DB::raw("'orchestra_heat_transfer_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_wash_care_label_orders']=DB::table('orchestra_wash_care_label_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_wash_care_label_orders.template_id')->where('orchestra_wash_care_label_orders.status','!=','Order Cancelled')->select('orchestra_wash_care_label_orders.*','orchestra_item_master.company_id','orchestra_wash_care_label_orders.template_name as TemplateName',DB::raw("'Wash Care Labels' as \"TemplateType\""),DB::raw("'orchestra_wash_care_label_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_solid_carton_sticker_orders']=DB::table('orchestra_solid_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_carton_sticker_orders.template_id')->where('orchestra_solid_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Carton Stickers' as \"TemplateName\""),DB::raw("'Solid Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		  $data['orchestra_solid_poly_bag_sticker_orders']=DB::table('orchestra_solid_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_solid_poly_bag_sticker_orders.template_id')->where('orchestra_solid_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_solid_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Solid Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Solid Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_solid_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		 $data['orchestra_standard_carton_sticker_orders']=DB::table('orchestra_standard_carton_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_carton_sticker_orders.template_id')->where('orchestra_standard_carton_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_carton_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Carton Stickers' as \"TemplateName\""),DB::raw("'Standard Carton Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_carton_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		 $data['orchestra_standard_poly_bag_sticker_orders']=DB::table('orchestra_standard_poly_bag_sticker_orders')->join('orchestra_item_master','orchestra_item_master.id','orchestra_standard_poly_bag_sticker_orders.template_id')->where('orchestra_standard_poly_bag_sticker_orders.status','!=','Order Cancelled')->select('orchestra_standard_poly_bag_sticker_orders.*','orchestra_item_master.company_id',DB::raw("'Standard Poly Bag Stickers' as \"TemplateName\""),DB::raw("'Standard Poly Bag Stickers' as \"TemplateType\""),DB::raw("'orchestra_standard_poly_bag_sticker_orders' as \"tableName\""))->where('uvc',$uvc)->get();
-		
-		
-		 echo json_encode($data);
+        $uvc        =   $request->uvc;
+        $data       =   $this->orchestra_order_status_obj->getExistingLabelOrderStatusPo($uvc);		
+		echo json_encode($data);
     } 
 	/**
      * This Function is used to map the existing PO to new artworks.

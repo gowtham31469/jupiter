@@ -1,21 +1,23 @@
 <?php
 namespace App\Http\Controllers\ErpUser\Pomanager;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Response;
-use View;
-use Auth;
 use DB;
+use Auth;
+use View;
 use Session;
-use App\ErpOrders as Erp;
-use App\ErpOrderDetails as ErpOrderDetails;
-use Carbon\Carbon;
+use Response;
 use App\History;
+use Carbon\Carbon;
+use App\ErpOrders as Erp;
+use Illuminate\Http\Request;
+use App\Classes\ErpCompanySession;
 use App\Classes\TescoMaterialQuery;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Input;
+use App\Classes\ErpUserMappedTemplates;
+use Illuminate\Support\Facades\Validator;
+use App\ErpOrderDetails as ErpOrderDetails;
 
 class PoManagerController extends Controller
 {
@@ -30,6 +32,8 @@ class PoManagerController extends Controller
     public function __construct()
     {
 		$this->middleware('erpuser');
+		$role = "PO MANAGER";
+        $this->middleware('role_permission:'.$role);
 		// get the current time
 		$this->current_date = Carbon::now('Asia/Kolkata')->toDateTimeString();
 
@@ -44,63 +48,15 @@ class PoManagerController extends Controller
      */
     public function index()
     { 
-			$customer_id = Auth::guard('erpuser')->id();
-			$new_orders_count=0;
-			$hold_orders_count=0;
-			
-			$buyers = DB::table('erpuser_buyer')
-								->where('erpuser_buyer.erp_user',$customer_id)
-								->pluck('erpuser_buyer.buyer')
-								->all();
-			
-			$companies = 	DB::table('erpuser_company_mapping')
-										->join('company','erpuser_company_mapping.company','company.id')
-										->where('erpuser_company_mapping.erp_user',$customer_id)
-										->select('erpuser_company_mapping.*','company.name', 'company.logo')
-										->get();
-			
-			$company_id = DB::table('company')
-										->select('company.*')
-										->first();
-			
-			if(session()->get('company') == "" && session()->get('company') == null)
-			{
-				session()->put('company', $company_id->id);
-				session()->put('company_name', strtolower( str_replace(' ','',$company_id->name)) );
-			}
-	
-			if($customer_id != 1)
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-										->where('erpusers_template_mapping.company',session()->get('company'))
-									->where('erpusers_template_mapping.erp_user',$customer_id)
-									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
-									->get();
-			}
-			else
-			{
-				$templates   = 		DB::table('erpusers_template_mapping')
-									->join('buyers','erpusers_template_mapping.buyer','buyers.id')
-									->where('erpusers_template_mapping.company',session()->get('company'))
-									->select('erpusers_template_mapping.*','buyers.template_table','buyers.item_master_table','buyers.id as buyer_id')
-									->get();
-			}
+		$new_orders_count=0;
+		$hold_orders_count=0;
 		
-		 $new_orders = array();
-		 $i=1;
-		 foreach($templates as $value)
-		 {
-			$arr_template =  DB::table($value->template_table)
-							->where('hierarchy_id',$value->templates)
-							//->where('flag',1)
-							->distinct('hierarchy_id')->pluck('item_id');
-			 if($arr_template)
-			 {
-				$new_orders[$value->buyer_id."-".$i] = $arr_template;
-			 }
-			 $i++;
-		 }
+		$erp_user_mapped_template_obj = new ErpUserMappedTemplates();
+		$set_company_session = new ErpCompanySession();
+        
+        $companies = $set_company_session->setCompanySession();
+        
+        $new_orders = $erp_user_mapped_template_obj->getPermittedTemplates();
 		
 		 $orders_erp = array();
 		 
@@ -110,10 +66,10 @@ class PoManagerController extends Controller
 			$buyer_id = $split_key[0];
 			foreach($values as $valuess)
 			{
-				//$buyer_id = explode("-",$key);
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
+										 ->where('erp_order_details.company_id',session()->get('company'))
 										 ->where('erp_order_details.template_id',$valuess)
 										 ->where('erp_orders.buyer_id', $buyer_id)
 										 ->where(function($q) {
@@ -260,37 +216,6 @@ class PoManagerController extends Controller
 	}
 	
 	/**
-	 * setCompanySession function
-	 * 
-	 * Store company data into session.
-	 * @param Request $request
-	 * @return void
-	 */
-	public function setCompanySession(Request $request)
-	{
-		$company_id = $request->company_id;
-		$company_name = $request->company_name;
-
-		if (session()->has('company') && session()->has('company_name')) {
-			// delete existing company session 
-			session()->forget('company');
-			session()->forget('company_name');
-
-			// update company session data
-			session()->put('company', $company_id);
-			session()->put('company_name', $company_name);
-		}
-		else 
-		{
-			// create company session data
-			session(['company' => $company_id, 'company_name' => $company_name]);
-		}
-		
-		return response()->json(['error'=> false,'message' =>'success'],200);
-		 
-	}
-	
-	/**
      * Update the status of PO.
      * @author [Gowtham] <[gowtham@wizroots.com]>
      * @return \Illuminate\Http\Response
@@ -407,17 +332,19 @@ class PoManagerController extends Controller
 			$count = $request->count_i;
 			$count_j = $request->count_j;
 			$erp_order_id = $request->erp_order_id;
+			$erp_od_ids = $request->ids;
 			$purchase_order_number = $request->purchase_order_number;
 			$customer_name = $request->customer_name;
 			$erp_user     = Auth::guard('erpuser')->id();
 
 			// Get Erp status table id for 'Jobcard Created' and 'Cancelled' status.
-			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Invoice Generated', 'Partial Invoice'])->pluck('id')->all();
+			$erp_status_ids = DB::table('erp_status')->whereIn('status_name', ['Jobcard Created', 'Cancelled', 'Moved To JC Queue', 'Order Dispatched', 'Partially Dispatched'])->pluck('id')->all();
 
 			$orderlist   = ErpOrderDetails::join('erp_orders', 'erp_order_details.erp_order_id', 'erp_orders.id')
 					->where('erp_order_details.order_quantity', '!=' ,0)
 					->where('erp_order_details.erp_order_id', $erp_order_id)
 					->whereNotIn('erp_order_details.status', $erp_status_ids)
+					->whereIn('erp_order_details.id', $erp_od_ids)
 					->select('erp_order_details.*', 'erp_orders.customer_id', 'erp_orders.po_no', 'erp_orders.buyer_id')
 					->get();
 
@@ -583,109 +510,11 @@ class PoManagerController extends Controller
 	public function insertHistoryData($data, $action_id, $erp_user, $commenttext)
 	{
 		try {
-				$buyer_id       = $data->buyer_id;
-				$buyer          = DB::table('buyers')->select('buyer_name')->where('id', '=', $buyer_id)->first();
-				$template       = 'Available';
-				$qty_row_id     = $data->order_qnty_table_id;
-				$qnty_table     = $data->order_qnty_table_name;
-				$customer_id    = $data->customer_id;
-				$customer       = DB::table('customers')->select('pi_required', 'po_required')->where('id', '=', $customer_id)->first();
-
-				if($buyer->buyer_name === 'Tesco'){
-
-					$main_table     = str_replace("_quanty","",$qnty_table);
-					$qnty_id        = str_replace("_orders_quanty","_order_id",str_replace("tesco_","",$qnty_table));
-					$order_details  = DB::table($qnty_table)
-										->select($main_table.'.*')
-										->where($qnty_table.'.id', $qty_row_id)
-										->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id)
-										->first();
-					$season         = $order_details->season_code;
-					$country        = $order_details->zone;
-					$style_zone     = strtolower($country).'_style_ref';
-					$template_id    = $order_details->template_id;
-					$template_level = $this->tesco_material_obj->tescoMaterialDetails($template_id, $main_table);
-					
-					$material_name  = $template_level->material;
-					$material_sub   = $template_level->material_sub;
-					$material_ref   = $template_level->ref;
-					
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->purchase_order_no;
-					}
-
-					$buyer_po       = $order_details->po_number;
-					$style          = $order_details->zone === "joint" ? $order_details->uk_style_ref . '/' . $order_details->ce_style_ref : $order_details->$style_zone;
-					$ocn_number     = $order_details->ocn_number;
-					
-
-				} else if($buyer->buyer_name === 'Orchestra'){
-
-					$main_table     = str_replace("_qty","",$qnty_table);
-					$result_str     = str_replace("_"," ",str_replace("_orders","",$main_table));
-					$qnty_id        = '';
-					foreach (explode(' ', $result_str) as $word)
-					{
-					   $qnty_id .= strtolower($word[0]);
-					}
-					
-					$order_details  = DB::table($qnty_table)->select($main_table.'.*')->where($qnty_table.'.id', $qty_row_id)->join($main_table, $main_table.'.id', $qnty_table.'.'.$qnty_id.'_id')
-									->first();
-					
-					// template front and back id storing in orchestra_hang_tag_orders table
-					$template_id = $main_table === 'orchestra_hang_tag_orders'?$order_details->template_front_id:$order_details->template_id;
-
-					$template_data = DB::table('orchestra_item_master')
-									->where('orchestra_item_master.id', $template_id)
-									->select('orchestra_item_master.material_id', 'orchestra_item_master.item_name', 'orchestra_item_master.sub_material_id')->first();
-					$material_name  = DB::table('orchestra_item_master')->where('id', '=', $template_data->material_id)->value('item_name');
-					$material_sub  = DB::table('orchestra_item_master')->where('id', '=', $template_data->sub_material_id)->value('item_name');
-					
-					$material_ref   = $template_data->item_name;
-					
-					if ($customer->pi_required == 1 && $customer->po_required== 0) {
-						$customer_po  = $order_details->pi_id;
-					}
-					else if($customer->po_required== 1){
-						$customer_po  = $order_details->po_number;
-					}
-					
-					$buyer_po       = $order_details->po;
-					$style          = $order_details->uvc;
-					$ocn_number     = null;
-					$season         = $order_details->season_code;
-					$country        = null;
-
-				} else {
-
-					$template       = 'Not Available';
-
-				}
-
-
-				$history_id = History::updateOrCreate(['erp_order_details_id' => $data->id], [
-					'buyer_id'             => $buyer_id,
-					'template'             => $template,
-					'season'               => $season,
-					'country'              => $country,
-					'customer_id'          => $customer_id,
-					'material'             => $material_name,
-					'mat_sub'              => $material_sub,
-					'reference'            => $material_ref,
-					'style'                => $style,
-					'po'                   => $customer_po,
-					'buyer_po'             => $buyer_po,
-					'ocn'                  => $ocn_number,
-					'created_at'           => $this->current_date,
-					'updated_at'           => $this->current_date,
-				]);
+				$history_id = History::where('erp_order_details_id', $data->id)->value('id');
 
 				DB::table('event_history')
 				->insert([
-					'history_id'  => $history_id->id,
+					'history_id'  => $history_id,
 					'action_id'   => $action_id,
 					'created_by'  => $erp_user,
 					'reason'      => $commenttext,

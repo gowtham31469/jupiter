@@ -85,6 +85,8 @@
 									@if(!$value->is_admin)
 									<a href="#" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Edit" data-placement="left"></i></a>
 									<a href="#" data-target="#deleteModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i class="fa fa-trash filterbtn options delete-user fa-button" title="Delete" data-placement="left"></i></a>
+									@else
+									<a href="#" data-backdrop="static" data-keyboard="false"><i class="fa fa-pencil filterbtn options edit-user fa-button" title="Edit" data-placement="left"></i></a>
 									@endif
 								</td>
 							</tr>
@@ -470,6 +472,11 @@
 					$('#edit_user_company').selectpicker('val', company);
 					$('#edit_user_buyer').selectpicker('val', buyer);
 					$('#edit_user_form').validator('validate');
+
+					if(data.is_admin == true){
+						$('#edit_user_email').prop("readonly", true);
+					}
+
 					/* Rendering Templates */
 					if (Object.values(data.templates).length) {
 						/*	Append Jstree Arrays  */

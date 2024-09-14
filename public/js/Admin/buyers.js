@@ -60,11 +60,7 @@
               $('#buyers-list-table_length select').addClass('form-control input-sm');
          },
          error: function(errorXHR, errorStatus, errorThrown) {
-            this.tryCount++;
-            if (this.tryCount <= this.retryLimit) {
-                $.ajax(this);
-                return;
-            }
+            console.log(errorThrown);
          },
          complete: function () {
               /** [To make top menu active] */
@@ -128,9 +124,9 @@
                        $('.snackbar_span').html("Something went wrong!!");
                        showSnackbar();
                   },
-                  409: function() {
+                  409: function(data) {
                        $('#buyer_result').removeAttr('style');
-                       $('#buyer_result').html('Email already registered.')
+                       $('#buyer_result').html(data.responseJSON.message)
                        $("#buyer_result").addClass("alert alert-warning");
                   },
                   422: function() {
@@ -140,11 +136,7 @@
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
                       /** [ To make top menu active ] */
@@ -210,11 +202,7 @@
                  $('#editBuyerModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                console.log(errorThrown);
               },
              complete: function () {
                  /** [ To make top menu active ] */
@@ -290,11 +278,7 @@
                 }
            },
            error: function(errorXHR, errorStatus, errorThrown) {
-              this.tryCount++;
-              if (this.tryCount <= this.retryLimit) {
-                  $.ajax(this);
-                  return;
-              }
+            console.log(errorThrown);
            },
            complete: function () {
                      /** [ To make top menu active ] */
@@ -371,11 +355,7 @@
                     $('#merchandisers-list-table_length select').addClass('form-control input-sm');
                },
                error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                },
                complete: function () {
                     /** [To make top menu active] */
@@ -437,11 +417,7 @@
                    }
               },
               error: function(errorXHR, errorStatus, errorThrown) {
-                  this.tryCount++;
-                  if (this.tryCount <= this.retryLimit) {
-                      $.ajax(this);
-                      return;
-                  }
+                  console.log(errorThrown);
                },
               complete: function () {
                         /** [ To make top menu active ] */
@@ -504,11 +480,7 @@
                  $('#editMerchandiserModal').modal('show');
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
                   /** [ To make top menu active ] */
@@ -568,11 +540,7 @@
                   }
              },
              error: function(errorXHR, errorStatus, errorThrown) {
-                this.tryCount++;
-                if (this.tryCount <= this.retryLimit) {
-                    $.ajax(this);
-                    return;
-                }
+                console.log(errorThrown);
              },
              complete: function () {
                      /** [ To make top menu active ] */
@@ -645,11 +613,7 @@
                      }
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                   this.tryCount++;
-                   if (this.tryCount <= this.retryLimit) {
-                       $.ajax(this);
-                       return;
-                   }
+                   console.log(errorThrown);
                 },
                 complete: function () {
                   buyers();
@@ -702,11 +666,7 @@
                      }
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                   this.tryCount++;
-                   if (this.tryCount <= this.retryLimit) {
-                       $.ajax(this);
-                       return;
-                   }
+                   console.log(errorThrown);
                 },
                 complete: function () {
                   buyers();
@@ -758,11 +718,7 @@
                      }
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                   this.tryCount++;
-                   if (this.tryCount <= this.retryLimit) {
-                       $.ajax(this);
-                       return;
-                   }
+                   console.log(errorThrown);
                 },
                 complete: function () {
                   merchandiser();
@@ -815,11 +771,7 @@
                      }
                 },
                 error: function(errorXHR, errorStatus, errorThrown) {
-                   this.tryCount++;
-                   if (this.tryCount <= this.retryLimit) {
-                       $.ajax(this);
-                       return;
-                   }
+                   console.log(errorThrown);
                 },
                 complete: function () {
                   merchandiser();
@@ -838,3 +790,13 @@
       console.log("Error:"+e)
      }
     }
+
+/**
+ * 
+ * Method to replace spaces from buyer name
+ */
+  function nospaces(t){
+    if(t.value.match(/\s/g)){
+      t.value=t.value.replace(/\s/g,'-');
+    }
+  }

@@ -9,7 +9,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand grid-menu" href="/customer/dashboard"><i class="fa fa-th" aria-hidden="true"></i></a>   
+                    <a class="navbar-brand grid-menu" data-toggle="tooltip" data-placement="bottom" title="Main menu"  href="/customer/dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g transform="translate(-1132 18)"><rect width="8" height="8" rx="3" transform="translate(1132 -8)" fill="#e3a7c0"/><rect width="8" height="8" rx="3" transform="translate(1142 -8)" fill="#b0abcb"/><rect width="8" height="8" rx="3" transform="translate(1132 -18)" fill="#bad5f0"/><rect width="8" height="8" rx="3" transform="translate(1142 -18)" fill="#a5d5d5"/></g></svg></a>   
                     <span class="navbar-brand logo" href="#">JGA</span>
                 </div>
 
@@ -25,6 +25,7 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown season_code-nav-menu"></li>
                         <li class="dropdown year-nav-menu"></li>
                         <li class="dropdown buyer-nav-menu"></li>
                         <li><a class="notification" style="cursor: pointer;" data-target="#sendFeedbackModal" data-toggle="modal" data-backdrop="static" data-keyboard="false"><i style="font-size: 18px; margin-top: -1px;" class="fa fa-comment fa-1x" aria-hidden="true"></i></a></li>
