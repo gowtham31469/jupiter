@@ -2384,7 +2384,7 @@ function printDivTesco(data, name, obj) {
 
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = $(this).find('.ce_single_ean').val()
@@ -2393,7 +2393,7 @@ function printDivTesco(data, name, obj) {
 				}
 				jsbarcodetescoean(barcode_change, 'barcode', svgDoc)
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = $(this).find('.ce_ratio_itf').val()
@@ -4761,7 +4761,7 @@ function GenerateDivTesco(data, name, obj) {
 				svgDoc.getElementById("tpnd").innerHTML = $(this).find('.uk_ratio_tpnd').val();
 				qr_tpnd = $(this).find('.uk_ratio_tpnd').val();
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = $(this).find('.ce_single_ean').val()
@@ -4800,7 +4800,7 @@ function GenerateDivTesco(data, name, obj) {
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
 				
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = $(this).find('.ce_ratio_itf').val()
@@ -6956,7 +6956,7 @@ function dynamicSVGTemplatescard(id, item) {
 				} else {
 					svgDoc.getElementById("unit_per_case").innerHTML = '';
 				}
-				if (item.template_name === "THL 3") {
+				if ((item.template_name === "THL 3") || (item.template_name === "TCL 5")) {
 					/** [ Dynamically change svg barcode ] */
 					if (ce_single_ean != '' && ce_single_ean.length === 13) {
 						var barcodecheck = checkjsbarcodeean(ce_single_ean);
@@ -6971,29 +6971,6 @@ function dynamicSVGTemplatescard(id, item) {
 							$('.barcode-error').html('');
 							jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
 							svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
-						}
-					} else {
-						barcode_checks = 0;
-						$('.barcode-error').html('');
-						svgDoc.getElementById("barcode").innerHTML = '';
-						svgDoc.getElementById("barcode_number").innerHTML = '';
-					}
-				}
-				else if (item.template_name === "TCL 5") {
-					/** [ Dynamically change svg barcode ] */
-					if (ce_ratio_itf != '' && ce_ratio_itf.length === 14) {
-						var barcodecheck = checkjsbarcodeitf(ce_ratio_itf);
-						if (barcodecheck == "false") {
-							barcode_checks++;
-							$('.barcode-error').html('');
-							svgDoc.getElementById("barcode_number").innerHTML = '';
-							/**  [ Show validation error message ] **/
-							$('.barcode-error').html('<span style="color:#F44336">Enter a valid barcode.</span>');
-						} else {
-							barcode_checks = 0;
-							$('.barcode-error').html('');
-							jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-							svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
 						}
 					} else {
 						barcode_checks = 0;

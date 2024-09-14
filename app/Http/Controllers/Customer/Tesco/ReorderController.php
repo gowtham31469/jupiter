@@ -1418,6 +1418,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl1_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+					
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1471,6 +1477,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl2_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1525,6 +1537,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl4_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1581,6 +1599,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl5_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1638,6 +1662,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl1_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1692,6 +1722,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl3_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1746,6 +1782,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl1_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1802,6 +1844,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl2_order_id = $newTasks->id;
+
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -1859,6 +1907,12 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl3_order_id = $newTasks->id;
+					
+					$po_split= explode(",",$tasks->qr_code);
+					$po_split[0]=$po;
+					$new_qr = implode(",",$po_split);
+					$newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;

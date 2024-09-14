@@ -2654,7 +2654,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
 
 				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.ean_barcode
@@ -2694,7 +2694,7 @@ function downloadPrint(data, name,style_no,buyer_no,id,order_type,obj,art_temp_i
 				
 				
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode
@@ -4495,7 +4495,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 
 				svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
 			}
-			if ((name == "THL3-sticker")) {
+			if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.ean_barcode
@@ -4506,7 +4506,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 				
 				svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
 				svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-			} else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+			} else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
 				if (zone == "CE") {
 					var barcode_change = val.itf_barcode
@@ -6025,6 +6025,7 @@ function updateArtwork(obj) {
 
                         var tr = "";
                         var i = 1;
+                        var barcode_temp = "";
                         $(data.order_details.quantities).each(function (key, value) {
 
                             if ((TemplateName == "TCL1" && zone == "CE") || (TemplateName == "TCL2" && zone == "CE") || (TemplateName == "TSL1" && zone == "CE") || (TemplateName == "THL1" && zone == "CE")) {
@@ -6041,6 +6042,7 @@ function updateArtwork(obj) {
                                 var barcode_td = value.ean_barcode;
                                 var maxlength = 13;
                                 var tpnd = value.orms_tpn;
+                                barcode_temp = value.itf_barcode
 
                                 var th_td = '<td><div class="form-group has-feedback"> <input type="text" class="form-control input-sm ce_single_size" disabled required="" id="os_single_size_' + i + '" name="os_single_size_' + i + '"  value="' + value.size + '" placeholder="Enter Size" maxlength="9" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>';
 
@@ -6095,7 +6097,7 @@ function updateArtwork(obj) {
                                 var delete_td = '<a href="#"><i class="fa fa-trash filterbtn options fa-button delete-row" title="Delete" data-placement="left" onclick="removeRowOs(this)"></i></a>';
                             }
 
-                            tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits."  name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter '+barcode_tr+'"><label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"> <input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."> <div class="help-block with-errors"></div></div></td></tr>';
+                            tr += '<tr><td class="tpnd"><div class="form-group has-feedback"> <input disabled type="text" class="form-control input-sm orms_tpnd" required="" id="os_tpnd_' + i + '" data-minlength="' + tpn_len + '" maxlength="' + tpn_len + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + tpn_len + ' digits."  name="os_tpnd_' + i + '" onkeypress="return isNumber(event)" value="' + tpnd + '" placeholder="' + tpn_th + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td><td class="barcode"><div class="form-group has-feedback"> <input  disabled type="text" class="form-control input-sm ce_ratio_itf" required="" data-minlength="' + maxlength + '" maxlength="' + maxlength + '" data-required-error="Mandatory Field." data-minlength-error="Enter ' + maxlength + ' digits." id="os_barcode_' + i + '" onkeyup="dynamicSVGTemplates()" name="os_barcode_' + i + '" onkeypress="return isNumber(event)" value="' + barcode_td + '" placeholder="Enter '+barcode_tr+'"> '+barcode_temp+' <label class="barcode_error hidden" style="color:red;margin-left: -55px;position: absolute;">Enter Valid Barcode</label><div class="help-block with-errors"></div></div></td><td class="size"><div class="form-group has-feedback"> <input disabled type="text" maxlength="' + unit_len + '" class="form-control input-sm ce_ratio_cpc" required="" id="os_case_qty_' + i + '" name="os_case_qty_' + i + '" onkeypress="return isNumber(event)" value="' + unit_qty + '" placeholder="Enter ' + qty + '" onkeyup="dynamicSVGTemplates()"><div class="help-block with-errors"></div></div></td>' + th_td + '<td> <div class="form-group has-feedback has-success"> <input disabled min="' + moq + '" onInput="checkLength(6,this)" type="number" class="form-control  input-sm tot_qty_table" value="' + value.count + '" required placeholder="Quantity" data-min-error="Quantity Should be >= ' + moq + '."> <div class="help-block with-errors"></div></div></td></tr>';
                             row_id = i;
                             i++;
                             
@@ -7129,7 +7131,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 
     var orms_tpn = $('#os_tpnd_1').val();
     var case_size = $('#os_case_qty_1').val();
-    var ce_ratio_itf = $('#os_barcode_1').val();
+    var ce_single_ean = $('#os_barcode_1').val();
     var description = $('#tesco_description').val().replace(/&/g, '&#038;');
     /** [ Dynamically change svg CE single tpnd number ] */
     if (orms_tpn != '') {
@@ -7148,10 +7150,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
         svgDoc.getElementById("unit_per_case").innerHTML = '';
     }
 
-    if (ce_ratio_itf != '' && ce_ratio_itf.length === 14) {
+    if (ce_single_ean != '' && ce_single_ean.length === 13) {
 
-        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-        svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
+        jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+        svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
 
     } else {
         svgDoc.getElementById("barcode").innerHTML = '';

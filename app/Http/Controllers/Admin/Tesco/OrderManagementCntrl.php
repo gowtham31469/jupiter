@@ -1665,7 +1665,7 @@ class OrderManagementCntrl extends Controller
 				else if($name == "TCL5-sticker")
 				{
           $lasttpn = substr($qr_code[$qr_count]->orms_tpn , -3);
-          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->itf_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
+          $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$qr_count]->ean_barcode."/".$lasttpn.",".$qr_code[$qr_count]->orms_tpn;
           if($qr_check == $qr_code[$qr_count]->qr_code)
           {
             PDF::write2DBarcode($qr_code[$qr_count]->qr_code, 'QRCODE,Q', 89, $qr_y-1.5, 17, 17, $style, 'N');
@@ -1795,7 +1795,7 @@ class OrderManagementCntrl extends Controller
           }
           else if($name == "TCL5-sticker")
           {
-            $barcode=$qr_code[$i]->itf_barcode;
+            $barcode=$qr_code[$i]->ean_barcode;
           }
           else if($name == "THL1-sticker")
           {
@@ -1813,17 +1813,13 @@ class OrderManagementCntrl extends Controller
              PDF::ImageSVG('@' . $svg, $x=0, $y=0, $w=127, $h=80, $link='', $align='', $palign='', $border=0, $fitonpage=true);
             if($name != "TCL2-sticker" && $name != "TCL4-sticker")
             {
-                 if($name != "THL3-sticker")
-                 {
+                if(($name != "THL3-sticker") && ($name != "TCL5-sticker"))
+                {
                      if($qr_flag == 1)
                     {
                       if($name == "THL1-sticker")
                               {
                         PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 6, 54, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-                      }
-                      else if($name == "TCL5-sticker")
-                      {
-                        PDF::Image(public_path('/storage/app/template/'.$barcode.'.png'), 10, 53, 50, 16, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
                       }
                       else
                       {
@@ -1890,7 +1886,7 @@ class OrderManagementCntrl extends Controller
             else if($name == "TCL5-sticker")
             {
               $lasttpn = substr($qr_code[$i]->orms_tpn , -3);
-              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->itf_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
+              $qr_check = $qr_code_details{0}->po_number.",".$qr_code[$i]->ean_barcode."/".$lasttpn.",".$qr_code[$i]->orms_tpn;
               if($qr_check == $qr_code[$i]->qr_code)
               {
                 PDF::write2DBarcode($qr_code[$i]->qr_code, 'QRCODE,Q', 74, 5, 17, 17, $style, 'N');
@@ -1941,7 +1937,7 @@ class OrderManagementCntrl extends Controller
             }
             else if($name == "TCL5-sticker")
             {
-              $barcode_unlink=$qr_code[$j]->itf_barcode;
+              $barcode_unlink=$qr_code[$j]->ean_barcode;
             }
             else if($name == "THL1-sticker")
             {
@@ -3407,7 +3403,13 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl1_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+					
+          $newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
 				}
@@ -3459,6 +3461,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl2_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3512,6 +3520,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl4_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3567,6 +3581,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl5_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3622,6 +3642,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl1_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+          
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3675,6 +3701,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl3_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3728,6 +3760,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl1_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3783,6 +3821,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl2_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;
@@ -3837,6 +3881,12 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl3_order_id = $newTasks->id;
+
+          $po_split= explode(",",$tasks->qr_code);
+          $po_split[0]=$po;
+          $new_qr = implode(",",$po_split);
+          $newTask->qr_code = $new_qr;
+          
 					$newTask->count = $counts[$i];
 					$newTask->save();
 					$i++;

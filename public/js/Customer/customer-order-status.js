@@ -3930,7 +3930,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
 
                     svgDoc.getElementById("tpnd").innerHTML = val.tpnd;
                 }
-                if ((name == "THL3-sticker")) {
+                if ((name == "THL3-sticker") || (name == "TCL5-sticker")) {
 
                     if (zone == "CE") {
                         var barcode_change = val.ean_barcode
@@ -3941,7 +3941,7 @@ function downloadArtwork(data, name,style_no,buyer_no,id,order_type,obj,art_temp
                     
                     svgDoc.getElementById("barcode").setAttribute("style", "visibility:none");
                     svgDoc.getElementById("barcode_number").innerHTML = barcode_change;
-                } else if ((name == "TCL1-sticker") || (name == "TCL5-sticker") || (name == "THL1-sticker")) {
+                } else if ((name == "TCL1-sticker") || (name == "THL1-sticker")) {
 
                     if (zone == "CE") {
                         var barcode_change = val.itf_barcode
@@ -5007,7 +5007,7 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
 
     var orms_tpn = $('#os_tpnd_1').val();
     var case_size = $('#os_case_qty_1').val();
-    var ce_ratio_itf = $('#os_barcode_1').val();
+    var ce_single_ean = $('#os_barcode_1').val();
     var description = $('#tesco_description').val().replace(/&/g, '&#038;');
     /** [ Dynamically change svg CE single tpnd number ] */
     if (orms_tpn != '') {
@@ -5026,10 +5026,10 @@ function dynamicSVGTemplatescard(svgDoc, template_name, zone, type) {
         svgDoc.getElementById("unit_per_case").innerHTML = '';
     }
 
-    if (ce_ratio_itf != '' && ce_ratio_itf.length === 14) {
+    if (ce_single_ean != '' && ce_single_ean.length === 13) {
 
-        jsbarcodetesco(ce_ratio_itf, 'barcode', svgDoc)
-        svgDoc.getElementById("barcode_number").innerHTML = ce_ratio_itf;
+        jsbarcodetescoean(ce_single_ean, 'barcode', svgDoc)
+        svgDoc.getElementById("barcode_number").innerHTML = ce_single_ean;
 
     } else {
         svgDoc.getElementById("barcode").innerHTML = '';
