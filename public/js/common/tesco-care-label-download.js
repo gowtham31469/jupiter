@@ -401,11 +401,11 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else  if(name2 == "GCLW20/M11473G")
                     {
-                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 166)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 167)");
                     }
                     else  if(name2 == "GCLW20/M11474G")
                     {
-                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 166)");
+                        svgDoc.getElementById("packaging_reference_number_1_").setAttribute('transform', "matrix(1.0039, 0, 0, 1, 6.5, 167)");
                     }
                     else  if(name2 == "GCLW25/M11374G")
                     {
