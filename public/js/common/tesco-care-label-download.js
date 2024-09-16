@@ -491,9 +491,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
 
                     setVisibilityForSize(svgDoc);
-                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","262","48.2","262","35","269")
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","269","48.2","269","35","275")
                     }
                     else if(name2 == "GCLW25/M11372G")
                     {
@@ -530,9 +534,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else if(val.uk_size.toLowerCase() == "newborn")
                 {
                     setVisibilityForSize(svgDoc);
-                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","262","48.2","262","35","269")
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","269","48.2","269","35","275")
                     }
                     else if(name2 == "GCLW25/M11372G")
                     {
@@ -569,9 +577,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else if(val.uk_size == "up to 1M")
                 {
                     setVisibilityForSize(svgDoc);
-                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","262","48.2","262","35","269")
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","269","48.2","269","35","275")
                     }
                     else if(name2 == "GCLW25/M11372G")
                     {
@@ -608,9 +620,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 else if(val.uk_size == "up to 3M")
                 {
                     setVisibilityForSize(svgDoc);
-                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","23.2","262","48.2","262","35","269")
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","23.2","269","48.2","269","35","275")
                     }
                     else if(name2 == "GCLW25/M11372G")
                     {
@@ -648,9 +664,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     setVisibilityForSize(svgDoc);
                     
-                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                    if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                     {
                         setTransformations(svgDoc,"1.0039","0.8105","21","272","46","272","35","280")
+                    }
+                    else if(name2 == "GCLW25/M11374G")
+                    {
+                        setTransformations(svgDoc,"1.0039","0.8105","21","272","46","272","35","279")
                     }
                     else if(name2 == "GCLW25/M11372G")
                     {
@@ -685,9 +705,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.4656","272","51.9983","272","1.0148")
+                        }
+                        else if(name2 == "GCLW25/M11374G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","269.5","45.42","269.5","19.4656","274.5","51.9983","274.5","1.0148")
                         }
                         else if(name2 == "GCLW25/M11378G")
                         {
@@ -716,9 +740,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.2656","272","51.7983","272","1.0148")
+                        }
+                        else if(name2 == "GCLW25/M11374G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","269.5","45.42","269.5","19.4656","274.5","51.9983","274.5","1.0148")
                         }
                         else if(name2 == "GCLW25/M11378G")
                         {
@@ -749,9 +777,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
-                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.8656","272","52.3656","272","0.9105")
+                        }
+                        else if(name2 == "GCLW25/M11374G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","269.5","45.42","269.5","19.4656","274.5","51.9983","274.5","1.0148")
                         }
                         else if(name2 == "GCLW25/M11378G")
                         {
@@ -780,9 +812,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
 
-                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.8656","272","52.3656","272","0.8255")
+                        }
+                        else if(name2 == "GCLW25/M11374G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","269.5","45.42","269.5","19.4656","274.5","51.9983","274.5","1.0148")
                         }
                         else if(name2 == "GCLW25/M11378G")
                         {
@@ -811,9 +847,13 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
                         svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
-                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G" || name2 == "GCLW25/M11374G")
+                        if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"16.5","266","45.42","266","19.9656","272","51","272","1.0148")
+                        }
+                        else if(name2 == "GCLW25/M11374G")
+                        {
+                            setMYTransformations(svgDoc,"15.12","269.5","45.42","269.5","19.4656","274.5","51.9983","274.5","1.0148")
                         }
                         else if(name2 == "GCLW25/M11378G")
                         {
