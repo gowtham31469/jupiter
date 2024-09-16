@@ -1196,7 +1196,7 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
             }
             else
             {
-                $limited_length = 19;
+                $limited_length = 18;
             }
 
             if($line_length > $limited_length)
