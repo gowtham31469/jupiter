@@ -18,20 +18,20 @@ $(function () {
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + localStorage.getItem("template_group") + '</strong></h4></div>');
             getSizechart(size_id, size_department, user_role,template_id, callback);
 
-            if(template_id == 122 || template_id == 128 || template_id == 129)
+            if(template_id == 54 || template_id == 60 || template_id == 61)
             {
                 $('#uk_ce_mark_div').addClass('hidden');
                 $('#flammability_div').addClass('hidden');
-            } else if(template_id == 123 || template_id == 125)
+            } else if(template_id == 55 || template_id == 57)
             {
                 $('#wool_mark_logo_div').addClass('hidden');
                 $('#wool_mark_batch_code_div').addClass('hidden');
-            } else if(template_id == 126 || template_id == 130 || template_id == 131)
+            } else if(template_id == 58 || template_id == 62 || template_id == 63)
             {
                 $('#flammability_div').addClass('hidden');
                 $('#wool_mark_logo_div').addClass('hidden');
                 $('#wool_mark_batch_code_div').addClass('hidden');
-            } else if(template_id == 124 || template_id == 127)
+            } else if(template_id == 56 || template_id == 59)
             {
                 $('#uk_ce_mark_div').addClass('hidden');
                 $('#flammability_div').addClass('hidden');
