@@ -938,11 +938,11 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
             if(sample.length > 1)
             {
-                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 205px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'\xa0\xa0\xa0\xa0\xa0AT '+sample[1]+'</div>'); 
             }
             else
             {
-                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 210px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
+                $('#splitdiv').html('<div id="breaking_words" style="inline-size: 205px;overflow-wrap: break-word;whitespace:pre;">'+sample[0]+'</div>'); 
             }
 
             $chunk_str = chunksplit("breaking_words")
