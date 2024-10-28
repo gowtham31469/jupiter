@@ -6727,6 +6727,28 @@ $buyer_no=$request->buyer_no;
         $this->created_date = $request->created_date;
         $this->customer_name = $request->customer_name;
 
+		if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLB25/M11410G" || $request->template_name == "GCLW25/M11378G")
+        {
+
+            $this->size_dimension = "25x139mm";
+        }
+        else if($request->template_name == "GCLW25/M11372G" || $request->template_name == "GCLW25/M11364G")
+        {
+            $this->size_dimension = "25x139.5mm";
+        }
+        else if($request->template_name == "GCLW25/M11367G" || $request->template_name == "GCLW25/M11375G")
+        {
+            $this->size_dimension = "25x147mm";
+        }
+        else if($request->template_name == "GCLW20/M11473G" || $request->template_name == "GCLW20/M11474G")
+        {
+            $this->size_dimension = "20x142mm";
+        }
+        else if($request->template_name == "GCLW25/M11374G")
+        {
+            $this->size_dimension = "20x148mm";
+        }
+
         PDF::setHeaderCallback(function($pdf) {
             $name=$this->template_name;
             $zone="";
@@ -6811,7 +6833,7 @@ $buyer_no=$request->buyer_no;
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">STYLE : '.$style.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="90" font-family="Times New Roman" font-size="12" font-weight="400" font-style="normal">REF : '.$name.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="671" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DATE : '.$created_date.'</text>
-                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: 25x140mm</text>
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$this->size_dimension.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
                       </g>
