@@ -36,6 +36,51 @@
         margin-left: 5px;
         position: absolute;
     }
+    #customPopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.popup-content p {
+  color: #555;
+  margin: 15px 0;
+}
+
+.popup-content button {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background: #0056b3;
+}
+
 </style>
 </head>
 <body>
