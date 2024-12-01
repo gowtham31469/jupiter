@@ -25,26 +25,39 @@ $( () => {
             $('#remove_component_btn').remove();
             $('.top-content').html('<div class="page-header" style="margin: 10px 0 20px;border-bottom: 2px solid #eee;"><h4><strong>Create Order For - ' + order_data.order_details.item_master.template_name + '</strong></h4></div>');
 
-            if(template_id == 54 || template_id == 60 || template_id == 61)
+            if(template_id == 54 || template_id == 60 || template_id == 61 || template_id == 75)
             {
                 $('#uk_ce_mark_div').addClass('hidden');
                 $('#flammability_div').addClass('hidden');
-            } else if(template_id == 55 || template_id == 57)
+            } else if(template_id == 55 || template_id == 57 || template_id == 67 || template_id == 68 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79)
             {
                 $('#wool_mark_logo_div').addClass('hidden');
                 $('#wool_mark_batch_code_div').addClass('hidden');
-            } else if(template_id == 58 || template_id == 62 || template_id == 63)
+            } else if(template_id == 58 || template_id == 62 || template_id == 63 || template_id == 64 || template_id == 65 || template_id == 66 || template_id == 71 || template_id == 72 || template_id == 73 || template_id == 74)
             {
                 $('#flammability_div').addClass('hidden');
                 $('#wool_mark_logo_div').addClass('hidden');
                 $('#wool_mark_batch_code_div').addClass('hidden');
-            } else if(template_id == 56 || template_id == 59)
+            } else if(template_id == 56 || template_id == 59 || template_id == 69 || template_id == 70 || template_id == 80 || template_id == 81 || template_id == 82 || template_id == 83)
             {
                 $('#uk_ce_mark_div').addClass('hidden');
                 $('#flammability_div').addClass('hidden');
                 $('#wool_mark_logo_div').addClass('hidden');
                 $('#wool_mark_batch_code_div').addClass('hidden');
             }
+
+            if(template_id == 58 || template_id == 66 || template_id == 73 || template_id == 74)
+            {
+                $('#tesco_care_uk_ce_mark').val("yes")
+                $('#tesco_care_uk_ce_mark').prop('disabled', true);
+                $(".selectpicker").selectpicker("refresh");
+            }
+
+            if(template_id == 54 || template_id == 55 || template_id == 56 || template_id == 62 || template_id == 64 || template_id == 66 || template_id == 67 || template_id == 69 || template_id == 71 || template_id == 73 || template_id == 75 || template_id == 76 || template_id == 77 || template_id == 80 || template_id == 82)
+            {
+                $('.ex_non_ex_div').addClass('hidden');
+            }
+
         });
 
     }
@@ -68,6 +81,11 @@ $( () => {
         $('#tesco_care_supplier').val(order_data.order_details.tesco_metadata_supplier_id)
         $('#tesco_care_part_of_two_piece_set').val(order_data.order_details.potps_id)
         $('#tesco_care_woolmark_logo').val(order_data.order_details.woolmark_logo_id)
+        $('#tesco_ex_non_ex').val(order_data.order_details.exclusive_or_non_exclusive)
+        $('#tesco_care_address_name').val(order_data.order_details.address_name)
+        $('#tesco_care_address_line_1').val(order_data.order_details.address_line1)
+        $('#tesco_care_address_line_2').val(order_data.order_details.address_line2)
+        $('#tesco_care_address_line_3').val(order_data.order_details.address_line3)
         $('#tesco_care_woolmark_batch_code').val(order_data.order_details.woolmark_batch_code)
         $('#tesco_care_uk_ce_mark').val(order_data.order_details.uk_ce_mark)
         $('#tesco_care_flammability').val(order_data.order_details.flammability_id)

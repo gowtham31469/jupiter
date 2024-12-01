@@ -33,26 +33,39 @@ $( () => {
 
                     var template_id = data.order_details.template_id
                     
-                    if(template_id == 54 || template_id == 60 || template_id == 61)
+                    if(template_id == 54 || template_id == 60 || template_id == 61 || template_id == 75)
                     {
                         $('#uk_ce_mark_div').addClass('hidden');
                         $('#flammability_div').addClass('hidden');
-                    } else if(template_id == 55 || template_id == 57)
+                    } else if(template_id == 55 || template_id == 57 || template_id == 67 || template_id == 68 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79)
                     {
                         $('#wool_mark_logo_div').addClass('hidden');
                         $('#wool_mark_batch_code_div').addClass('hidden');
-                    } else if(template_id == 58 || template_id == 62 || template_id == 63)
+                    } else if(template_id == 58 || template_id == 62 || template_id == 63 || template_id == 64 || template_id == 65 || template_id == 66 || template_id == 71 || template_id == 72 || template_id == 73 || template_id == 74)
                     {
                         $('#flammability_div').addClass('hidden');
                         $('#wool_mark_logo_div').addClass('hidden');
                         $('#wool_mark_batch_code_div').addClass('hidden');
-                    } else if(template_id == 56 || template_id == 59)
+                    } else if(template_id == 56 || template_id == 59 || template_id == 69 || template_id == 70 || template_id == 80 || template_id == 81 || template_id == 82 || template_id == 83)
                     {
                         $('#uk_ce_mark_div').addClass('hidden');
                         $('#flammability_div').addClass('hidden');
                         $('#wool_mark_logo_div').addClass('hidden');
                         $('#wool_mark_batch_code_div').addClass('hidden');
                     }
+
+                    if(template_id == 58 || template_id == 66 || template_id == 73 || template_id == 74)
+                    {
+                        $('#tesco_care_uk_ce_mark').val("yes")
+                        $('#tesco_care_uk_ce_mark').prop('disabled', true);
+                        $(".selectpicker").selectpicker("refresh");
+                    }
+
+                    if(template_id == 54 || template_id == 55 || template_id == 56 || template_id == 62 || template_id == 64 || template_id == 66 || template_id == 67 || template_id == 69 || template_id == 71 || template_id == 73 || template_id == 75 || template_id == 76 || template_id == 77 || template_id == 80 || template_id == 82)
+                    {
+                        $('.ex_non_ex_div').addClass('hidden');
+                    }
+
                 }
 
             },
@@ -77,6 +90,8 @@ $( () => {
         $('.garment-component-div, .label-metadata-select, .tesco-care-quantity-div, .tog-div').html('');
 
         $('#baby_sleeping_bag_div').addClass("hidden");
+        //console.log(order_data.order_details)
+        //console.log(order_data.order_details.address_line1)
 
         var metadata_select_div = ` <div class="form-group has-feedback">
                                     <label for="tesco_care_coo" class="component-label">Country Of Origin </label>
@@ -123,6 +138,11 @@ $( () => {
                                             });
                                         metadata_select_div += `</select>
                                     </div>
+                                    <div class="form-group has-feedback">
+                                            <label for="tesco_care_woolmark_batch_code" class="form_label">Woolmark Batch Code</label>
+                                            <input class="form-control input-sm " placeholder="Woolmark Batch Code" maxlength="9" disabled="disabled" name="tesco_care_woolmark_batch_code" type="text" value="`+order_data.woolmark_batch_code+`" id="tesco_care_woolmark_batch_code">
+                                            <div class="help-block with-errors"></div>
+                                    </div>
                                     <div class="form-group has-feedback" id="uk_ce_mark_div">
                                      <label for="tesco_care_uk_ce_mark" class="component-label">UK/CE Mark </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_uk_ce_mark" name="tesco_care_uk_ce_mark">
@@ -142,6 +162,35 @@ $( () => {
 
                                             });
                                         metadata_select_div += `</optgroup></select>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label for="tesco_ex_non_ex" class="form_label">Select Exclusive/Non Exclusive</label>
+                                        <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex" tabindex="-98">
+                                            <option value="">-- Select Exclusive/Non Exclusive --</option>
+                                            <option value="exclusive">Exclusive</option>
+                                            <option value="non-exclusive">Non Exclusive</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label for="tesco_care_address_name" class="form_label">Address Name</label>
+                                        <input class="form-control input-sm " placeholder="Address Name" name="tesco_care_address_name" type="text" disabled="disabled" value="`+order_data.order_details.address_name+`" id="tesco_care_address_name">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group has-feedback has-success">
+                                        <label for="tesco_care_address_line_1" class="form_label">Address Line 1</label>
+                                        <input class="form-control input-sm " placeholder="Address Line 1" name="tesco_care_address_line_1" type="text" disabled="disabled" value="`+order_data.order_details.address_line1+`" id="tesco_care_address_line_1">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group has-feedback has-success">
+                                        <label for="tesco_care_address_line_2" class="form_label">Address Line 2</label>
+                                        <input class="form-control input-sm " placeholder="Address Line 2" name="tesco_care_address_line_2" type="text" disabled="disabled" value="`+order_data.order_details.address_line2+`" id="tesco_care_address_line_2">
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group has-feedback has-success">
+                                        <label for="tesco_care_address_line_3" class="form_label">Address Line 3</label>
+                                        <input class="form-control input-sm " placeholder="Address Line 3" name="tesco_care_address_line_3" type="text" disabled="disabled" value="`+order_data.order_details.address_line3+`" id="tesco_care_address_line_3">
+                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <hr>
                                     <h4 class="text-center">Care Instructions</h4>
@@ -412,6 +461,16 @@ $( () => {
         {
             $('#tesco_care_woolmark_batch_code').prop('disabled', true);
         }
+
+        var label_template_id = $('#label_template_id').val()
+
+        if(label_template_id == 58 || label_template_id == 66 || label_template_id == 73 || label_template_id == 74)
+        {
+            $('#tesco_care_uk_ce_mark').prop('disabled', true);
+        }
+
+        
+
     }
 
     validateTescoLabelOrder = (user_role) => {
@@ -495,6 +554,26 @@ $(document).off('change', '#tesco_care_woolmark_logo').on('change', '#tesco_care
         // Disable the input by setting disabled property to true
         $('#tesco_care_woolmark_batch_code').prop('disabled', true);
         $('#tesco_care_woolmark_batch_code').val("");
+    }
+});
+
+$(document).off('change', '#tesco_ex_non_ex').on('change', '#tesco_ex_non_ex', (e) => {
+    if ($(e.target).val() == "non-exclusive") {
+        // Enable the input by setting disabled property to false
+        $('#tesco_care_address_name').prop('disabled', false);
+        $('#tesco_care_address_line_1').prop('disabled', false);
+        $('#tesco_care_address_line_2').prop('disabled', false);
+        $('#tesco_care_address_line_3').prop('disabled', false);
+    } else {
+        // Disable the input by setting disabled property to true
+        $('#tesco_care_address_name').prop('disabled', true);
+        $('#tesco_care_address_name').val("");
+        $('#tesco_care_address_line_1').prop('disabled', true);
+        $('#tesco_care_address_line_1').val("");
+        $('#tesco_care_address_line_2').prop('disabled', true);
+        $('#tesco_care_address_line_2').val("");
+        $('#tesco_care_address_line_3').prop('disabled', true);
+        $('#tesco_care_address_line_3').val("");
     }
 });
 

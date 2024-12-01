@@ -28,6 +28,15 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/easy-autocomplete.themes.min.css') }}">
      <link rel="stylesheet" type="text/css" href="{{ asset('css/daterangepicker.css') }}" />
+     <style>
+    .asterisk {
+        color: red;
+        font-size: 12px;
+        margin-top: 0px;
+        margin-left: 5px;
+        position: absolute;
+    }
+</style>
 </head>
 <body class="customer-wallpaper">
     <div class="container-fluid">

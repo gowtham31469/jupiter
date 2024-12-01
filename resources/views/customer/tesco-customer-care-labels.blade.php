@@ -12,6 +12,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_po', 'Tesco PO Number', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
         {!! Form::text('tesco_care_po',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Tesco PO Number','required','maxlength' => '9', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
@@ -20,6 +21,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
         {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
@@ -28,6 +30,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_ce_style', 'Option ID', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
         {!! Form::text('tesco_care_ce_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Option ID','maxlength' => '8', "onkeydown" => "return validatePoValue(event)")) !!}
         <div class="help-block with-errors"></div>
         </div>
@@ -36,6 +39,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_uk_style', 'UK Style Number', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
         {!! Form::text('tesco_care_uk_style',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'UK Style Number','required','maxlength' => '8')) !!}
         <div class="help-block with-errors"></div>
         </div>
@@ -73,15 +77,16 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_supplier', 'Supplier', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             {{  Form::select('tesco_care_supplier',$tesco_suppliers,'',array('class' => 'selectpicker form-control input-sm','id'=>'tesco_care_supplier','required', 'data-live-search' => 'true', 'onchange' => 'getMoq(this, "customer", "create")')) }}
             <div class="help-block with-errors"></div>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Two Piece Set', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_care_part_of_two_piece_set', 'Part of Set', ['class' => 'form_label']) !!}
             <select name="tesco_care_part_of_two_piece_set" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_part_of_two_piece_set">
-            <optgroup label="Select Part of Two Piece Set">
+            <optgroup label="Select Part of Set">
                 <option value="">None</option>
                 @foreach ($part_of_two_piece_set as $key => $value)
                 <option value="{{ $key }}">
@@ -139,6 +144,50 @@
             </optgroup>
             </select>
             <div class="help-block with-errors"></div>
+        </div>
+    </div>
+
+    <div class="col-md-2 ex_non_ex_div">
+        <div class="form-group has-feedback">
+            {!! Form::label('tesco_ex_non_ex', 'Select Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
+            <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex">
+                <option value="">-- Select Exclusive/Non Exclusive --</option>
+                <option value="exclusive">Exclusive</option>
+                <option value="non-exclusive">Non Exclusive</option>
+            </select>
+            <div class="help-block with-errors"></div>
+        </div>
+    </div>
+
+    <div class="col-md-2 ex_non_ex_div">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_address_name', 'Address Name', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_address_name',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address Name','disabled' => 'disabled')) !!}
+        <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
+     <div class="col-md-2 ex_non_ex_div">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_address_line_1', 'Address Line 1', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_address_line_1',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address Line 1','disabled' => 'disabled')) !!}
+        <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 ex_non_ex_div">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_address_line_2', 'Address Line 2', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_address_line_2',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address Line 2','disabled' => 'disabled')) !!}
+        <div class="help-block with-errors"></div>
+        </div>
+    </div>
+    
+    <div class="col-md-2 ex_non_ex_div">
+        <div class="form-group has-feedback">
+        {!! Form::label('tesco_care_address_line_3', 'Address Line 3', ['class' => 'form_label']) !!}
+        {!! Form::text('tesco_care_address_line_3',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Address Line 3','disabled' => 'disabled')) !!}
+        <div class="help-block with-errors"></div>
         </div>
     </div>
     <div class="col-md-2">
@@ -219,6 +268,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_wash_instruction', 'Wash Instruction', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_wash_instruction"  id="tesco_care_wash_instruction" required>
                 <option value="">-- Select Wash Instruction --</option>
                 @if(!empty($symbols['Washing']))
@@ -233,6 +283,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_bleach_instruction', 'Bleach Instruction', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_bleach_instruction"  id="tesco_care_bleach_instruction" required>
                 <option value="">-- Select Bleach Instruction --</option>
                 @if(!empty($symbols['Whitening']))
@@ -247,6 +298,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_dry_instruction', 'Dry Instruction', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_instruction"  id="tesco_care_dry_instruction" required>
                 <option value="">-- Select Dry Instruction --</option>
                 @if(!empty($symbols['Dryer']))
@@ -261,6 +313,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_iron_instruction', 'Iron Instruction', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_iron_instruction"  id="tesco_care_iron_instruction" required>
                 <option value="">-- Select Iron Instruction --</option>
                 @if(!empty($symbols['Ironing']))
@@ -275,6 +328,7 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_dry_clean_instruction', 'Dry Clean Instruction', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select class="form-control selectpicker input-sm" data-live-search="true" name="tesco_care_dry_clean_instruction"  id="tesco_care_dry_clean_instruction" required>
                 <option value="">-- Select Dry Clean Instruction --</option>
                 @if(!empty($symbols['Prof Cleaning']))

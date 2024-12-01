@@ -120,6 +120,11 @@ class StoreTescoLabelOrder
             'flammability_id'                => $request->tesco_care_flammability,
             'garment_statement_id'           => $request->tesco_care_garment_statements,
             'garment_statement_text'         => $translation_texts['garment_statement_text'],
+            'exclusive_or_non_exclusive'     => $request->tesco_ex_non_ex,
+            'address_name'                   => $request->tesco_care_address_name,
+            'address_line1'                  => $request->tesco_care_address_line_1,
+            'address_line2'                  => $request->tesco_care_address_line_2,
+            'address_line3'                  => $request->tesco_care_address_line_3,
         );
 
         $washcare_order_id = TescoWashcareOrders::create($insert_data)->id;
