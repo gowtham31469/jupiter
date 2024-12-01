@@ -814,7 +814,36 @@ function tescoOrders(callback) {
 								$(".loader").show();
 							},
 							success: function (data) {
+								
+								
 								if (data.length > 0) {
+
+									var label_temp_id = data[0][0].item_id;
+								if(label_temp_id == "55" || label_temp_id == "57" || label_temp_id == "58" || label_temp_id == "62" || label_temp_id == "63" || label_temp_id == "64" || label_temp_id == "65" || label_temp_id == "66" || label_temp_id == "67" || label_temp_id == "68" || label_temp_id == "71" || label_temp_id == "72" || label_temp_id == "73" || label_temp_id == "74" || label_temp_id == "76" || label_temp_id == "77" || label_temp_id == "78" || label_temp_id == "79")
+								{
+									  // Create the popup container
+									const popupContainer = document.createElement('div');
+									popupContainer.id = 'customPopup';
+
+									// Create the content for the popup
+									popupContainer.innerHTML = `
+										<div class="popup-content">
+										<h2>Important Notice</h2>
+										<p>UK/CE symbol is used in this label. To be used only when the product is tested against the toy standard.</p>
+										<button id="closePopup">OK</button>
+										</div>
+									`;
+
+									// Append the popup to the body
+									document.body.appendChild(popupContainer);
+
+									// Add click event to close the popup
+									document.getElementById('closePopup').addEventListener('click', () => {
+										popupContainer.remove();
+									});
+
+								}
+								
 									$('.templateDiv').html('');
 									$.each(data, function (index, value) {
 										if (value[0].id == "3" || value[0].id == "5" || value[0].id == "10" || value[0].id == "12") {
