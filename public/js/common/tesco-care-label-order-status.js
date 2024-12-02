@@ -163,6 +163,7 @@ $( () => {
                                             });
                                         metadata_select_div += `</optgroup></select>
                                     </div>
+                                    <div class="ex_non_ex_div">
                                     <div class="form-group has-feedback">
                                         <label for="tesco_ex_non_ex" class="form_label">Select Exclusive/Non Exclusive</label>
                                         <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex" tabindex="-98">
@@ -191,6 +192,7 @@ $( () => {
                                         <label for="tesco_care_address_line_3" class="form_label">Address Line 3</label>
                                         <input class="form-control input-sm " placeholder="Address Line 3" name="tesco_care_address_line_3" type="text" disabled="disabled" value="`+order_data.order_details.address_line3+`" id="tesco_care_address_line_3">
                                         <div class="help-block with-errors"></div>
+                                    </div>
                                     </div>
                                     <hr>
                                     <h4 class="text-center">Care Instructions</h4>
