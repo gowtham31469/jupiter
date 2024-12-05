@@ -50,6 +50,8 @@ $(function () {
             if(template_id == 57 || template_id == 58 || template_id == 59 || template_id == 60 || template_id == 61 || template_id == 63 || template_id == 65 || template_id == 68 || template_id == 70 || template_id == 72 || template_id == 74 || template_id == 78 || template_id == 79 || template_id == 81 || template_id == 83)
             {
                 $('.ex_non_ex_div').addClass('hidden');
+                $('#tesco_ex_non_ex').val('exclusive')
+                $(".selectpicker").selectpicker("refresh");
             }
             
 

@@ -8,6 +8,7 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Order Details</h4>
+        <h5 style="color:red;">Fields marked (*) are mandatory</h5>
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
@@ -149,7 +150,8 @@
     <div class="col-md-2 ex_non_ex_div">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_ex_non_ex', 'Select Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
-            <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex">
+        <span class="asterisk">(*)</span>
+            <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" required data-live-search="true" id="tesco_ex_non_ex">
                 <option value="">-- Select Exclusive/Non Exclusive --</option>
                 <option value="exclusive">Exclusive</option>
                 <option value="non-exclusive">Non Exclusive</option>
@@ -212,6 +214,7 @@
 <div class="row garment-component-div">
     <div class="col-md-12">
         <h4 class="pull-left">Garment Component & Fibres</h4>
+        <span class="asterisk" style="margin-top:11px">(*)</span>
         <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'admin', 'tesco_care_label_order_form')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
     </div>
     
