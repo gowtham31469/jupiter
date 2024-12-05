@@ -517,7 +517,7 @@
                         <div class="help-block with-errors"></div>
                     </div>
 
-                    <div class="form-group has-feedback">
+                    <div class="form-group has-feedback leather_div">
                         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
                         {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
                         <div class="help-block with-errors"></div>

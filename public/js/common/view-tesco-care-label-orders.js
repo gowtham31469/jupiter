@@ -58,6 +58,11 @@ $( () => {
                 $('.ex_non_ex_div').addClass('hidden');
             }
 
+            if(template_id == 55 || template_id == 56 || template_id == 57 || template_id == 58 || template_id == 59 || template_id == 66 || template_id == 67 || template_id == 68 || template_id == 73 || template_id == 74 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79 || template_id == 80 || template_id == 81)
+            {
+                $('.leather_div').addClass('hidden');
+            }
+
         });
 
     }
