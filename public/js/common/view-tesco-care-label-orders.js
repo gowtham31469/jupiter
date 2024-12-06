@@ -125,6 +125,15 @@ $( () => {
             $('#tesco_care_tog_rating').val(order_data.order_details.tog)
         }
 
+        if(template_id == '64' || template_id == '65' )
+        {
+            $('#baby_sleeping_bag_div').removeClass("hidden");
+
+            $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
+            $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
+            $('#tesco_care_tog_rating').val(order_data.order_details.tog)
+        }
+
         var div_html = '<input class="table-id-hidden" id="Washcare_order_id" name="washcare_order_id" type="hidden" value="' + order_data.order_details.id + '">';
 
         $('.label-order-invisible-div').html(div_html);

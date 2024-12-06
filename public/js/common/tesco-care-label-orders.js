@@ -289,6 +289,12 @@ $(function () {
                 if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
+
+                if(template_id == '64' || template_id == '65' )
+                {
+                    $('#baby_sleeping_bag_div').removeClass("hidden");
+                }
+
                 if(callback != null) {
                     let sized_callback = callback.bind(this, size_chart);
                     sized_callback();
