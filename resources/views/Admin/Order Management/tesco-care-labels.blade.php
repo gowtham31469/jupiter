@@ -64,8 +64,9 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select name="tesco_care_coo" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_coo" required>
-                <option>Select Country Of Origin</option>
+                <option value="">Select Country Of Origin</option>
                 @foreach ($coo as $key => $value)
                 <option value="{{ $key }}" {{ ( strtolower($value) === 'made in india') ? "selected" : "" }}>
                     {{ $value }}
@@ -149,10 +150,10 @@
     </div>
     <div class="col-md-2 ex_non_ex_div">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_ex_non_ex', 'Select Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
+            {!! Form::label('tesco_ex_non_ex', 'Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
         <span class="asterisk">(*)</span>
             <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" required data-live-search="true" id="tesco_ex_non_ex">
-                <option value="">-- Select Exclusive/Non Exclusive --</option>
+                <option value="">-- Exclusive/Non Exclusive --</option>
                 <option value="exclusive">Exclusive</option>
                 <option value="non-exclusive">Non Exclusive</option>
             </select>

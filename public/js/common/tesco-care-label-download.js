@@ -119,6 +119,29 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 svgDoc.getElementById("sn_value").innerHTML = "SN:"+val.eqos_site_code;
                 svgDoc.getElementById("style_value").innerHTML = "STYLE:"+ val.uk_style_ref;
 
+                
+                if(val.exclusive_or_non_exclusive == "non-exclusive")
+                {
+
+
+                    var non_exc_text = val.address_line1 + val.address_line2 + val.address_line3
+
+
+                    $non_exc_array = chunkSubstrpercentage(non_exc_text, 28);
+                    
+                    var non_exc_chunks = '<tspan x="0" y="0">Produced for:</tspan><tspan x="0" y="6">'+ val.address_name +'</tspan>'
+                    $y=12
+
+                    $($non_exc_array).each(function(index,non_exc_val){
+                        non_exc_chunks += '<tspan x="0" y="'+$y+'">'+non_exc_val.replace('&', '&amp;')+'</tspan>';
+                        $y+=6
+                    });
+                    
+                    svgDoc.getElementById("exclusive_div").setAttribute("visibility", "hidden");
+                    svgDoc.getElementById("non_exclusive_div").innerHTML = non_exc_chunks
+
+                }
+
                 if(name2 == "GCLW25/M11364G")
                 {
                         if(val.uk_ce_mark == "yes")

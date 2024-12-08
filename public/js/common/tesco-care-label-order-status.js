@@ -170,9 +170,9 @@ $( () => {
                                     </div>
                                     <div class="ex_non_ex_div">
                                     <div class="form-group has-feedback">
-                                        <label for="tesco_ex_non_ex" class="form_label">Select Exclusive/Non Exclusive</label>
+                                        <label for="tesco_ex_non_ex" class="form_label">Exclusive/Non Exclusive</label>
                                         <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex" tabindex="-98">
-                                            <option value="">-- Select Exclusive/Non Exclusive --</option>
+                                            <option value="">-- Exclusive/Non Exclusive --</option>
                                             <option value="exclusive">Exclusive</option>
                                             <option value="non-exclusive">Non Exclusive</option>
                                         </select>
