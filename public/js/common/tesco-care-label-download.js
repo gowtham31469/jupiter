@@ -126,17 +126,22 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                     var non_exc_text = val.address_line1 + val.address_line2 + val.address_line3
 
+                    var address_name = val.address_name != null ? val.address_name : "";
 
-                    $non_exc_array = chunkSubstrpercentage(non_exc_text, 28);
-                    
-                    var non_exc_chunks = '<tspan x="0" y="0">Produced for:</tspan><tspan x="0" y="6">'+ val.address_name +'</tspan>'
-                    $y=12
+                    var non_exc_chunks = '<tspan x="0" y="0">Produced for:</tspan><tspan x="0" y="6">'+ address_name +'</tspan>'
 
-                    $($non_exc_array).each(function(index,non_exc_val){
-                        non_exc_chunks += '<tspan x="0" y="'+$y+'">'+non_exc_val.replace('&', '&amp;')+'</tspan>';
-                        $y+=6
-                    });
+                    if(non_exc_text != 0)
+                    {
+                        $non_exc_array = chunkSubstrpercentage(non_exc_text, 28);
                     
+                        $y=12
+    
+                        $($non_exc_array).each(function(index,non_exc_val){
+                            non_exc_chunks += '<tspan x="0" y="'+$y+'">'+non_exc_val.replace('&', '&amp;')+'</tspan>';
+                            $y+=6
+                        });
+                    }
+
                     svgDoc.getElementById("exclusive_div").setAttribute("visibility", "hidden");
                     svgDoc.getElementById("non_exclusive_div").innerHTML = non_exc_chunks
 
@@ -262,25 +267,25 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 }
                 else
                 {
-                    if(name2 == "GCLW25/M11364G" || name2 == "GCLW25/M11372G")
+                    if(name2 == "GCLW25/M11372G")
                     {
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 121.2519)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 126.2514)");
                         svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 131.2509)");
                     }
-                    else if(name2 == "GCLW25/M11363G" || name2 == "GCLW25/M11368G" || name2 == "GCLB25/M11410G")
+                    else if(name2 == "GCLW25/M11368G" || name2 == "GCLB25/M11410G")
                     {
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 124.1455)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 128.6455)");
                         svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 133.1455)");
                     }
-                    else if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
+                    else if(name2 == "GCLW25/M11375G")
                     {
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 131.8876)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 136.8871)");
                         svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 141.8866)");
                     }
-                    else if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
+                    else if(name2 == "GCLW20/M11474G")
                     {
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 124.8013)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 129.8008)");
@@ -291,6 +296,30 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 128.8781)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 133.3781)");
                         svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 137.8781)");
+                    }
+                    else if(name2 == "GCLW25/M11363G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 141)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 146)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 151)");
+                    }
+                    else if(name2 == "GCLW25/M11364G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 140)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 145)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 150)");
+                    }
+                    else if(name2 == "GCLW25/M11367G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 150.3)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 155.3)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 160.3)");
+                    }
+                    else if(name2 == "GCLW20/M11473G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 142)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 147)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 152)");
                     }
                     
                     svgDoc.getElementById("batch_code").innerHTML = "";
