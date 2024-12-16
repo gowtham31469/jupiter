@@ -200,25 +200,26 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc_back_text.getElementById("wash_text_2").setAttribute('transform', "translate(5.5 222.55) scale(0.65 1)");
                     }
                 }
-                else if(name2 == "GCLW25/M11374G")
-                {
-                    if(val.uk_ce_mark == "yes")
-                    {
-                        svgDoc_front_text.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_1").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_2").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_3").removeAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_4").removeAttribute("visibility", "hidden");
-                    }
-                    else
-                    {
-                        svgDoc_front_text.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_1").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_2").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_3").setAttribute("visibility", "hidden");
-                        svgDoc.getElementById("uk_ce_text_4").setAttribute("visibility", "hidden");
-                    }
-                } else if(name2 == "GCLW25/M11372G")
+                // else if(name2 == "GCLW25/M11374G")
+                // {
+                //     if(val.uk_ce_mark == "yes")
+                //     {
+                //         svgDoc_front_text.getElementById("uk_ce_mark").removeAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_1").removeAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_2").removeAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_3").removeAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_4").removeAttribute("visibility", "hidden");
+                //     }
+                //     else
+                //     {
+                //         svgDoc_front_text.getElementById("uk_ce_mark").setAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_1").setAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_2").setAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_3").setAttribute("visibility", "hidden");
+                //         svgDoc.getElementById("uk_ce_text_4").setAttribute("visibility", "hidden");
+                //     }
+                // } 
+                else if(name2 == "GCLW25/M11372G")
                 {
                     if(val.uk_ce_mark == "yes")
                     {
@@ -269,9 +270,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 {
                     if(name2 == "GCLW25/M11372G")
                     {
-                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 121.2519)");
-                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 126.2514)");
-                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 131.2509)");
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 114)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 119)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 124)");
                     }
                     else if(name2 == "GCLW25/M11368G" || name2 == "GCLB25/M11410G")
                     {
@@ -320,6 +321,12 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 142)");
                         svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 147)");
                         svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 152)");
+                    }
+                    else if(name2 == "GCLW25/M11378G")
+                    {
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.59858, 119.3)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 124.3)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 35.5985, 129.3)");
                     }
                     
                     svgDoc.getElementById("batch_code").innerHTML = "";
