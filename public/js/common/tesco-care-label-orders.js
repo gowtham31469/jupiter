@@ -289,10 +289,18 @@ $(function () {
                 if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
+                else {
+                    $('#tesco_care_tog_rating').val("1")
+                    $(".selectpicker").selectpicker("refresh");
+                }
 
                 if(template_id == '64' || template_id == '65' )
                 {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
+                }
+                else {
+                    $('#tesco_care_tog_rating').val("1")
+                    $(".selectpicker").selectpicker("refresh");
                 }
 
                 if(callback != null) {

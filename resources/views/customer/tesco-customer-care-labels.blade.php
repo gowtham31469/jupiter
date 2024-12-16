@@ -423,15 +423,13 @@
         </div>
         <div class="form-group has-feedback form-inline">
             {!! Form::label('tesco_care_tog_rating', 'Tog Rating', ['class' => 'form_label']) !!}
-                <select name="tesco_care_tog_rating" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_tog_rating">
-                <optgroup label="Select Tog Rating">
-                    <option value="">None</option>
+                <select name="tesco_care_tog_rating" class="selectpicker form-control input-sm" required data-live-search="true" id="tesco_care_tog_rating">
+                <option value="">-- Select Tog Rating --</option>
                     @foreach ($tog_rating as $key => $value)
                     <option value="{{ $key }}">
                         {{ $value }}
                     </option>
                     @endforeach
-                </optgroup>
                 </select>
                 <div class="help-block with-errors"></div>
         </div>
