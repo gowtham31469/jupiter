@@ -288,9 +288,9 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     }
                     else if(name2 == "GCLW20/M11474G")
                     {
-                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 124.8013)");
-                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 129.8008)");
-                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 134.8004)");
+                        svgDoc.getElementById("po_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 120)");
+                        svgDoc.getElementById("sn_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 125)");
+                        svgDoc.getElementById("style_value").setAttribute('transform', "matrix(1, 0, 0, 1, 28, 130)");
                     }
                     else if(name2 == "GCLW25/M11374G")
                     {
