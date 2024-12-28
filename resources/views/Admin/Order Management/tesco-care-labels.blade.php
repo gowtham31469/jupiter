@@ -8,6 +8,7 @@
 <div class="row">
     <div class="col-md-12">
         <h4>Order Details</h4>
+        <h5 style="color:red;">Fields marked (*) are mandatory</h5>
     </div>
     <div class="col-md-2">
         <div class="form-group has-feedback">
@@ -53,7 +54,7 @@
         </div>
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-2 leather_div">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
         {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
@@ -63,8 +64,9 @@
     <div class="col-md-2">
         <div class="form-group has-feedback">
             {!! Form::label('tesco_care_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
             <select name="tesco_care_coo" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_coo" required>
-                <option>Select Country Of Origin</option>
+                <option value="">Select Country Of Origin</option>
                 @foreach ($coo as $key => $value)
                 <option value="{{ $key }}" {{ ( strtolower($value) === 'made in india') ? "selected" : "" }}>
                     {{ $value }}
@@ -148,9 +150,10 @@
     </div>
     <div class="col-md-2 ex_non_ex_div">
         <div class="form-group has-feedback">
-            {!! Form::label('tesco_ex_non_ex', 'Select Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
-            <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex">
-                <option value="">-- Select Exclusive/Non Exclusive --</option>
+            {!! Form::label('tesco_ex_non_ex', 'Exclusive/Non Exclusive', ['class' => 'form_label']) !!}
+        <span class="asterisk">(*)</span>
+            <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" required data-live-search="true" id="tesco_ex_non_ex">
+                <option value="">-- Exclusive/Non Exclusive --</option>
                 <option value="exclusive">Exclusive</option>
                 <option value="non-exclusive">Non Exclusive</option>
             </select>
@@ -212,6 +215,7 @@
 <div class="row garment-component-div">
     <div class="col-md-12">
         <h4 class="pull-left">Garment Component & Fibres</h4>
+        <span class="asterisk" style="margin-top:11px">(*)</span>
         <button class="btn btn-primary add-garment-component-btn pull-right" type="button" data-id="3" id="add_garment_component_btn" onclick="addComponent(this, 'admin', 'tesco_care_label_order_form')"><i class="fa fa-plus" aria-hidden="true"></i> Garment Component</button> 
     </div>
     
@@ -418,15 +422,13 @@
         </div>
         <div class="form-group has-feedback form-inline">
             {!! Form::label('tesco_care_tog_rating', 'Tog Rating', ['class' => 'form_label']) !!}
-                <select name="tesco_care_tog_rating" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_care_tog_rating">
-                <optgroup label="Select Tog Rating">
-                    <option value="">None</option>
+                <select name="tesco_care_tog_rating" class="selectpicker form-control input-sm" required data-live-search="true" id="tesco_care_tog_rating">
+                    <option value="">-- Select Tog Rating --</option>
                     @foreach ($tog_rating as $key => $value)
                     <option value="{{ $key }}">
                         {{ $value }}
                     </option>
                     @endforeach
-                </optgroup>
                 </select>
                 <div class="help-block with-errors"></div>
         </div>

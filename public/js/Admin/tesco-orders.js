@@ -227,7 +227,7 @@ function tescoOrders(callback) {
 																		<div>
 																			<label><input type="radio" class="pdf_parser_type" name="zone" value="UK" style="margin-right: 5px;">UK</label>
 																			<label><input type="radio" class="pdf_parser_type" name="zone" value="CE" style="margin-right: 5px;">CE</label>
-																			<label><input type="radio" class="pdf_parser_type" name="zone" value="BOTH" style="margin-right: 5px;">Both</label>
+																			<label class="hidden"><input type="radio" class="pdf_parser_type" name="zone" value="BOTH" style="margin-right: 5px;">Both</label>
 																		</div>
 																		<div class="help-block with-errors"></div>
 																		</div>
@@ -958,6 +958,14 @@ function tescoOrders(callback) {
 
 							}
 							else if(ref_template_name == "GCLW25/M11367G")
+							{
+								$('#tesco_care_size_chart').val("9").prop('disabled', true);;
+							}
+							else if(ref_template_name == "GCLB25/M11399G")
+							{
+								$('#tesco_care_size_chart').val("9").prop('disabled', true);;
+							}
+							else if(ref_template_name == "GCLB25/M11407G")
 							{
 								$('#tesco_care_size_chart').val("9").prop('disabled', true);;
 							}

@@ -316,7 +316,7 @@
         <div class="form-group has-feedback">
             {!! Form::label('swing_coo', 'Country Of Origin', ['class' => 'form_label']) !!}
             <select name="swing_coo" class="selectpicker form-control input-sm" data-live-search="true" required>
-                <option>Select Country Of Origin</option>
+                <option value="">Select Country Of Origin</option>
                 @foreach ($coo as $key => $value)
                 <option value="{{ $key }}" {{ ( strtolower($value) === 'made in india') ? "selected" : "" }}>
                     {{ $value }}

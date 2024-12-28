@@ -50,6 +50,13 @@ $(function () {
             if(template_id == 57 || template_id == 58 || template_id == 59 || template_id == 60 || template_id == 61 || template_id == 63 || template_id == 65 || template_id == 68 || template_id == 70 || template_id == 72 || template_id == 74 || template_id == 78 || template_id == 79 || template_id == 81 || template_id == 83)
             {
                 $('.ex_non_ex_div').addClass('hidden');
+                $('#tesco_ex_non_ex').val('exclusive')
+                $(".selectpicker").selectpicker("refresh");
+            }
+
+            if(template_id == 55 || template_id == 56 || template_id == 57 || template_id == 58 || template_id == 59 || template_id == 66 || template_id == 67 || template_id == 68 || template_id == 73 || template_id == 74 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79 || template_id == 80 || template_id == 81)
+            {
+                $('.leather_div').addClass('hidden');
             }
             
 
@@ -282,6 +289,20 @@ $(function () {
                 if (size_department === 'Baby Sleeping Bags') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
                 }
+                else {
+                    $('#tesco_care_tog_rating').val("1")
+                    $(".selectpicker").selectpicker("refresh");
+                }
+
+                if(template_id == '64' || template_id == '65' )
+                {
+                    $('#baby_sleeping_bag_div').removeClass("hidden");
+                }
+                else {
+                    $('#tesco_care_tog_rating').val("1")
+                    $(".selectpicker").selectpicker("refresh");
+                }
+
                 if(callback != null) {
                     let sized_callback = callback.bind(this, size_chart);
                     sized_callback();

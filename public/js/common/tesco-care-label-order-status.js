@@ -66,6 +66,11 @@ $( () => {
                         $('.ex_non_ex_div').addClass('hidden');
                     }
 
+                    if(template_id == 55 || template_id == 56 || template_id == 57 || template_id == 58 || template_id == 59 || template_id == 66 || template_id == 67 || template_id == 68 || template_id == 73 || template_id == 74 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79 || template_id == 80 || template_id == 81)
+                    {
+                        $('.leather_div').addClass('hidden');
+                    }
+
                 }
 
             },
@@ -163,10 +168,11 @@ $( () => {
                                             });
                                         metadata_select_div += `</optgroup></select>
                                     </div>
+                                    <div class="ex_non_ex_div">
                                     <div class="form-group has-feedback">
-                                        <label for="tesco_ex_non_ex" class="form_label">Select Exclusive/Non Exclusive</label>
+                                        <label for="tesco_ex_non_ex" class="form_label">Exclusive/Non Exclusive</label>
                                         <select name="tesco_ex_non_ex" class="selectpicker form-control input-sm" data-live-search="true" id="tesco_ex_non_ex" tabindex="-98">
-                                            <option value="">-- Select Exclusive/Non Exclusive --</option>
+                                            <option value="">-- Exclusive/Non Exclusive --</option>
                                             <option value="exclusive">Exclusive</option>
                                             <option value="non-exclusive">Non Exclusive</option>
                                         </select>
@@ -191,6 +197,7 @@ $( () => {
                                         <label for="tesco_care_address_line_3" class="form_label">Address Line 3</label>
                                         <input class="form-control input-sm " placeholder="Address Line 3" name="tesco_care_address_line_3" type="text" disabled="disabled" value="`+order_data.order_details.address_line3+`" id="tesco_care_address_line_3">
                                         <div class="help-block with-errors"></div>
+                                    </div>
                                     </div>
                                     <hr>
                                     <h4 class="text-center">Care Instructions</h4>

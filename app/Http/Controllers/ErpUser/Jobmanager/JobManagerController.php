@@ -629,6 +629,11 @@ class JobManagerController extends Controller
 																	$value->additional_care_text_3=$order_omp{0}->additional_care_text_3;
 																	$value->kids_warning_text=$order_omp{0}->kids_warning_text;
 																	$value->exclusive_trims_text=$order_omp[0]->garment_statement_text;
+																	$value->exclusive_or_non_exclusive=$order_omp[0]->exclusive_or_non_exclusive;
+																	$value->address_name=$order_omp[0]->address_name;
+																	$value->address_line1=$order_omp[0]->address_line1;
+																	$value->address_line2=$order_omp[0]->address_line2;
+																	$value->address_line3=$order_omp[0]->address_line3;
 																	$value->contains_non_textile_part_text=null;
 																	$value->part_of_set_text=null;
                 													$value->tesco_size_department=$tesco_size_department[0]->department_name;

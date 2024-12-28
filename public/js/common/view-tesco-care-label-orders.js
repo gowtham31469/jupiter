@@ -58,6 +58,11 @@ $( () => {
                 $('.ex_non_ex_div').addClass('hidden');
             }
 
+            if(template_id == 55 || template_id == 56 || template_id == 57 || template_id == 58 || template_id == 59 || template_id == 66 || template_id == 67 || template_id == 68 || template_id == 73 || template_id == 74 || template_id == 76 || template_id == 77 || template_id == 78 || template_id == 79 || template_id == 80 || template_id == 81)
+            {
+                $('.leather_div').addClass('hidden');
+            }
+
         });
 
     }
@@ -105,7 +110,23 @@ $( () => {
 
         $('#tesco_care_kids_warning').val(order_data.order_details.kids_warning_id)
 
+        var order_template_id = order_data.order_details.template_id
+
+        if(order_template_id == 57 || order_template_id == 58 || order_template_id == 59 || order_template_id == 60 || order_template_id == 61 || order_template_id == 63 || order_template_id == 65 || order_template_id == 68 || order_template_id == 70 || order_template_id == 72 || order_template_id == 74 || order_template_id == 78 || order_template_id == 79 || order_template_id == 81 || order_template_id == 83)
+        {
+            $('.ex_non_ex_div').addClass('hidden');
+        }
+
         if (order_data.order_details.size_department_text === 'Baby Sleeping Bags') {
+            $('#baby_sleeping_bag_div').removeClass("hidden");
+
+            $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
+            $('#tesco_care_sleep_bag_symbol').prop('checked', order_data.order_details.baby_sleeping_bag_symbol)
+            $('#tesco_care_tog_rating').val(order_data.order_details.tog)
+        }
+
+        if(template_id == '64' || template_id == '65' )
+        {
             $('#baby_sleeping_bag_div').removeClass("hidden");
 
             $('#tesco_care_bs_en').prop('checked', order_data.order_details.bs_en_declaration)
