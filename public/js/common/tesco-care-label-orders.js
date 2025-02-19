@@ -157,7 +157,7 @@ $(function () {
                         garment_comp_div += `<div class="col-xs-8">
                                                         <div class="form-group has-feedback">
                                                         <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_` + component_count + `_` + fiber_count + `" name="tesco_care_fiber[]">
-                                                        <option value="">-- Select Fiber --</option>`;
+                                                        <option value="">-- Select Fibre --</option>`;
                         $.each(data.data.fabriclists, function (i, item) {
                             garment_comp_div += `<option value=` + i + `>` + item + `</option>`;
                         });
@@ -286,20 +286,10 @@ $(function () {
                 $('.tesco-care-quantity-div').html(quantity_html);
 
                 // show only for "Baby Sleeping Bags"
-                if (size_department === 'Baby Sleeping Bags') {
+                if (size_department === 'Baby Sleeping Bags' || template_id == '64' || template_id == '65') {
                     $('#baby_sleeping_bag_div').removeClass("hidden");
-                }
-                else {
-                    $('#tesco_care_tog_rating').val("1")
-                    $(".selectpicker").selectpicker("refresh");
-                }
-
-                if(template_id == '64' || template_id == '65' )
-                {
-                    $('#baby_sleeping_bag_div').removeClass("hidden");
-                }
-                else {
-                    $('#tesco_care_tog_rating').val("1")
+                } else {
+                    $('#tesco_care_tog_rating').val("1");
                     $(".selectpicker").selectpicker("refresh");
                 }
 
@@ -399,60 +389,72 @@ $(function () {
         var form_obj = [{
             "template_id": localStorage.getItem("templates")
         }];
-       
-        var formData = $('#tesco_care_label_order_form').serialize() + '&' + $.param(form_obj[0]);
-        $.ajax({
-            type: "post",
-            url: base_url + "/" + user_type + "/tesco/submit-care-label-order",
-            data: formData,
-            headers: {
-                'X-CSRF-TOKEN': csrf_token
-            },
-            dataType: "json",
-            beforeSend: function () {
-                $(".loader").show();
-                $('.label-order-submit-btn').prop('disabled', true);
-            },
-            statusCode: {
-                200: function (response) {
 
-                        $('#hidden_id').val(response.data.last_insertion)
-
-                        if(response.data.is_order_count_empty == 0){
-                            $('.create-download-artwork').css('display', 'inline-block')
-                        }
-
-                        $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
-
-                        $("#alert_success").delay(3000).slideUp(200, function () {
-                            $(this).alert('close');
-                        });
-
-                        $('.order-cancel-btn').show();
-
-                        postLabelOrderSubmit(user_type, response.data);
-
-                        $(window).scrollTop(0);
-                    },
-                    400: function (error) {
-                        $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
-                        $('.label-order-submit-btn').prop('disabled', false);
-                    },
-                    422: function (errorXHR) {
-                        var error_msg = ``;
-                        $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
-                            error_msg += `<li>` + valueOfElement + `</li>`;
-                        });
-                        $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
-                        $('.label-order-submit-btn').prop('disabled', false);
-                        $(window).scrollTop(0);
-                    }
-            },
-            complete: function () {
-                
-                $(".loader").hide();
+        if($('#tesco_ex_non_ex').val() == "non-exclusive")
+        {
+            if($('#tesco_care_address_name').val() == "" || $('#tesco_care_address_line_1').val() == "")
+            {
+                alert("Address Name & Address Line 1 are required");
+                return;
             }
-        });
+        }
+        
+
+        var formData = $('#tesco_care_label_order_form').serialize() + '&' + $.param(form_obj[0]);
+            $.ajax({
+                type: "post",
+                url: base_url + "/" + user_type + "/tesco/submit-care-label-order",
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrf_token
+                },
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loader").show();
+                    $('.label-order-submit-btn').prop('disabled', true);
+                },
+                statusCode: {
+                    200: function (response) {
+    
+                            $('#hidden_id').val(response.data.last_insertion)
+    
+                            if(response.data.is_order_count_empty == 0){
+                                $('.create-download-artwork').css('display', 'inline-block')
+                            }
+    
+                            $('#result').html('<div class="alert alert-success alert-dismissible" id="alert_success"><strong>Success! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Your order has been placed successfully</div>');
+    
+                            $("#alert_success").delay(3000).slideUp(200, function () {
+                                $(this).alert('close');
+                            });
+    
+                            $('.order-cancel-btn').show();
+    
+                            postLabelOrderSubmit(user_type, response.data);
+    
+                            $(window).scrollTop(0);
+                        },
+                        400: function (error) {
+                            $('#result').html('<div class="alert alert-danger alert-dismissible"><strong>Error! </strong> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Something went wrong !! Try again</div>');
+                            $('.label-order-submit-btn').prop('disabled', false);
+                        },
+                        422: function (errorXHR) {
+                            var error_msg = ``;
+                            $.each(errorXHR.responseJSON.errors, function (indexInArray, valueOfElement) {
+                                error_msg += `<li>` + valueOfElement + `</li>`;
+                            });
+                            $('#result').html('<div class="alert alert-danger">' + error_msg + '</div>');
+                            $('.label-order-submit-btn').prop('disabled', false);
+                            $(window).scrollTop(0);
+                        }
+                },
+                complete: function () {
+                    
+                    $(".loader").hide();
+                }
+            });
+    
+        
     }
 
     postLabelOrderSubmit = (user_type, data) => {

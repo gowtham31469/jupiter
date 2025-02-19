@@ -226,7 +226,7 @@ $( () => {
                                 garment_comp_div += `<div class="col-xs-8">
                                                                     <div class="form-group has-feedback">
                                                                     <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_` + index + `_` + fiber_count + `" name="tesco_care_fiber[]" disabled>
-                                                                    <option value="">-- Select Fiber --</option>`;
+                                                                    <option value="">-- Select Fibre --</option>`;
                                 $.each(data.data.fabriclists, function (fabric_index, item) {
 
                                     garment_comp_div += fibre_composition_id === parseInt(fabric_index) ? `<option value=` + fabric_index + ` selected>` + item + `</option>` : `<option value=` + fabric_index + `>` + item + `</option>`;
