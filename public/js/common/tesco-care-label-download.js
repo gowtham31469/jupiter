@@ -123,8 +123,10 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                 if(val.exclusive_or_non_exclusive == "non-exclusive")
                 {
 
+                    var address_line2_text = val.address_line2 != null ? val.address_line2 : "";
+                    var address_line3_text = val.address_line3 != null ? val.address_line3 : "";
 
-                    var non_exc_text = val.address_line1 + val.address_line2 + val.address_line3
+                    var non_exc_text = val.address_line1 + address_line2_text + address_line3_text
 
                     var address_name = val.address_name != null ? val.address_name : "";
 

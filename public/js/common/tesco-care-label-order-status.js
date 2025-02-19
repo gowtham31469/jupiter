@@ -224,9 +224,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_dry_instruction" class="component-label">Dry Instruction </label>
+                                     <label for="tesco_care_dry_instruction" class="component-label">Drying Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_dry_instruction" name="tesco_care_dry_instruction" required>
-                                            <option value="">-- Select Dry Instruction --</option>`;
+                                            <option value="">-- Select Drying Instruction --</option>`;
                                             $.each(order_data.symbols['Dryer'], function (id, value) {
                                                 
                                                 metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -235,9 +235,9 @@ $( () => {
                                         metadata_select_div += `</select>
                                     </div>
                                     <div class="form-group has-feedback">
-                                     <label for="tesco_care_iron_instruction" class="component-label">Iron Instruction </label>
+                                     <label for="tesco_care_iron_instruction" class="component-label">Ironing Instruction </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_iron_instruction" name="tesco_care_iron_instruction" required>
-                                            <option value="">-- Select Iron Instruction --</option>`;
+                                            <option value="">-- Select Ironing Instruction --</option>`;
                                             $.each(order_data.symbols['Ironing'], function (id, value) {
 
                                                 metadata_select_div += `<option data-id="`+value.id+`" data-content="<img class='tesco-care-symbols' src='`+value.iso_symbols+`' /> `+value.degree+`" value="`+value.id+`" >`+value.degree+`</option>`;
@@ -342,7 +342,7 @@ $( () => {
                 fiber_component_div +=  `<div class="col-xs-8">
                     <div class="form-group has-feedback">
                         <select class="selectpicker form-control input-sm tesco-care-fiber-class" data-live-search="true" id="tesco_care_fiber_`+component_index+`_`+fiber_index+`" name="tesco_care_fiber[]">
-                            <option value="">-- Select Select Fiber --</option>`;
+                            <option value="">-- Select Select Fibre --</option>`;
                             $.each(order_data.fabriclists, function (id, name) {
 
                                 fiber_component_div += `<option value=` + id + `>` + name + `</option>`;
