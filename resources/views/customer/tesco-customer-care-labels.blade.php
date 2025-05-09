@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="col-md- leather_div">
+    <div class="col-md-2 leather_div">
         <div class="form-group has-feedback">
         {!! Form::label('tesco_care_leather_id', 'Leather & Suede ID', ['class' => 'form_label']) !!}
         {!! Form::text('tesco_care_leather_id',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'Leather & Suede ID', 'maxlength' => '10')) !!}
