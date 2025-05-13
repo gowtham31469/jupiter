@@ -38,7 +38,6 @@
             <li id="7" onclick="tescoComponents()"><a>Component</a></li>
             <li id="8" onclick="tescoFabricList()"><a>Fabrics</a></li>
             <li id="9" onclick="tescoKidsWarningStmt()"><a>Warning Statements</a></li>
-            {{-- <li id="9" onclick="tescoTranslations()"><a>Translation</a></li> --}}
             <li id="10" onclick="tescoLabelSizeChart()"><a>Label Size Chart</a></li>
             <li id="11" onclick="tescoSeasonCodes()"><a>Season Code</a></li>
             <li id="12" onclick="tescoProductDescriptions()"><a>Product Description</a></li>
@@ -49,6 +48,7 @@
             <li id="17" onclick="tescoFlammability()"><a>Flammability</a></li>
             <li id="18" onclick="tescoGarmentStatements()"><a>Garment Statement</a></li>
             <li id="19" onclick="tescoTog()"><a>TOG</a></li>
+            <li id="20" onclick="tescoCareAdditionalInstructions()"><a>Care Additional Instructions</a></li>
           </ul>
         </div>
         <div class="content">
@@ -61,6 +61,7 @@
     @include('Admin.Settings.includes.tesco-components')
     @include('Admin.Settings.includes.tesco-fabriclist')
     @include('Admin.Settings.includes.tesco-warnstatement')
+    @include('Admin.Settings.includes.tesco-care-instruction')
     @include('Admin.Settings.includes.tesco-translation')
     @include('Admin.Settings.includes.tesco-label-sizechart')
     @include('Admin.Settings.includes.tesco-product-description')
@@ -2083,6 +2084,7 @@
     <script src="{{ asset('js/Admin/tesco-flammability.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-garment-statement.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-tog.js') }}"></script>
+    <script src="{{ asset('js/admin/settings/tesco/tesco-settings.js') }}"></script>
     <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()

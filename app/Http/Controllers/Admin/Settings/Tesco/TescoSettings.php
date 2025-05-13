@@ -30,6 +30,7 @@ use App\TescoSeasonCode;
 use App\TescoProductDescription;
 use App\NonArtworkSizeChart;
 use App\NonArtworkUom;
+use Carbon\Carbon;
 
 class TescoSettings extends Controller
 {
@@ -2610,6 +2611,124 @@ try {
       $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
     }
     return $result;
+}
+
+/**
+ * Care Additional Instructions list show using ajax.
+ * @return \Illuminate\Http\Response
+ */
+public function tescoCareAdditionalInstructionsList(){
+  try {
+      $tesco_care_instructions = DB::table('tesco_care_additional_instructions')->select('id', 'english','polish', 'czech', 'slovak', 'hungarian','is_enabled')->orderBy('is_enabled','desc')->get();
+      return response()->json(['error'=>'false','message' =>'success', 'tesco_care_instructions' => $tesco_care_instructions]);
+  }
+  catch (\Exception $e){
+      return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  }
+}
+
+/**
+ * Add Care Additional Instruction.
+ * @param \Illuminate\Http\Request
+ * @return \Illuminate\Http\Response
+ */
+public function addTescoCareInstruction(Request $request){
+  try {
+      if(DB::table('tesco_care_additional_instructions')->where('english','ilike',$request['english'])->exists()){
+          $result = response()->json(['error'=> true,'message' =>'Instruction [English] Already Exists'],208);
+      }else{
+          $inserted = DB::table('tesco_care_additional_instructions')->insert([
+                  'english'   => $request['english'],
+                  'polish'    => $request['polish'],
+                  'czech'     => $request['czech'],
+                  'slovak'    => $request['slovak'],
+                  'hungarian' => $request['hungarian'],
+                  'created_at' => Carbon::now('Asia/Kolkata')->toDateTimeString(),
+                  'is_enabled' => 1
+          ]);
+          $result = $inserted ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+      }
+  } catch (\Exception $e) {
+      $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  }
+  return $result;
+}
+
+/**
+ * Get Care Additional Instruction details by ID for editing.
+ * @param Care Additional Instruction id
+ * @return \Illuminate\Http\Response
+ */
+public function getTescoCareInstructionById(Request $request){
+  try {
+        $id = $request['id'];
+        $tesco_care_instruction = DB::table('tesco_care_additional_instructions')->select('*')->where('id',$id)->get();
+        return response()->json(['error'=>'false','message' =>'success', 'tesco_care_instruction' => $tesco_care_instruction]);
+  }
+  catch (\Exception $e){
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  }
+}
+
+/**
+* Update Care Additional Instruction by id.
+* @param Care Additional Instruction id
+* @return \Illuminate\Http\Response
+*/
+public function updateTescoCareInstructionById(Request $request){
+  try {
+      $id = $request['id'];
+      if(DB::table('tesco_care_additional_instructions')->where('english','ilike',$request['english'])->where('id','!=',$id)->exists()){
+            $result = response()->json(['error'=> true,'message' =>'Instruction [English] Already Exists'],208);
+      } else {
+          $updated = DB::table('tesco_care_additional_instructions')->where('id',$id)->update([
+                                    'english'   => $request['english'],
+                                    'polish'    => $request['polish'],
+                                    'czech'     => $request['czech'],
+                                    'slovak'    => $request['slovak'],
+                                    'hungarian' => $request['hungarian']
+                    ]);
+        $result = $updated ? response()->json(['error'=> false,'message' =>'success'],200):response()->json(['error'=> true,'message' =>'Error'],400);
+      }        
+  } catch (\Exception $e) {
+            $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+  }
+  return $result;
+}
+
+/**
+   * Make Care Additional Instruction enabled
+   * @param Care Additional Instruction id
+   * @return boolean true or false
+   */
+public function enableTescoCareInstruction(Request $request){
+    try {
+          $id = $request['id'];
+          DB::table('tesco_care_additional_instructions')->where('id',$id)->update([
+                  'is_enabled'  => 1
+          ]);
+          $result = response()->json(['error'=> false,'message' =>'Success'],200);
+    } catch (\Exception $e) {
+              $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+    return $result;
+}
+
+/**
+ * Make Care Additional Instruction disabled
+ * @return boolean true or false
+ */
+public function disableTescoCareInstruction(Request $request){
+    try {
+        $id = $request['id'];
+        DB::table('tesco_care_additional_instructions')->where('id',$id)->update([
+          'is_enabled'  => 0
+        ]);
+        $result = response()->json(['error'=> false,'message' =>'Success'],200);
+    } catch (\Exception $e) {
+        $result = response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    }
+        return $result;
 }
 
 }
