@@ -125,7 +125,7 @@ $( () => {
             $('#tesco_care_tog_rating').val(order_data.order_details.tog)
         }
 
-        if(template_id == '64' || template_id == '65' )
+        if(order_template_id == '64' || order_template_id == '65' )
         {
             $('#baby_sleeping_bag_div').removeClass("hidden");
 

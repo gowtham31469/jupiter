@@ -390,6 +390,14 @@ Route::prefix('admin')->group(function () {
 		Route::put('/enable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@enableTescoWarningStmt');
 		Route::put('/disable-tesco-warn-stmt', 'Admin\Settings\Tesco\TescoSettings@disableTescoWarningStmt');
 
+		#Tesco Care Additional Instructions
+		Route::post('/settings/get-care-additional-instructions', 'Admin\Settings\Tesco\TescoSettings@tescoCareAdditionalInstructionsList');
+		Route::post('/add-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@addTescoCareInstruction');
+		Route::get('/get-tesco-care-instruction-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCareInstructionById');
+		Route::put('/update-tesco-care-instruction-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoCareInstructionById');
+		Route::put('/enable-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@enableTescoCareInstruction');
+		Route::put('/disable-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@disableTescoCareInstruction');
+
 		#Tesco Translation
 		Route::post('/settings/get-tesco-translation-lists', 'Admin\Settings\Tesco\TescoSettings@tescoTranslationLists');
 		Route::post('/add-tesco-translation', 'Admin\Settings\Tesco\TescoSettings@addTescoTranslation');
@@ -1014,3 +1022,20 @@ Route::post('customer_filter_level1', 'Customer\Report\ReportController@level1Fi
 Route::post('customer_filter_level2', 'Customer\Report\ReportController@level2Filter')->name('customer_filter_level2');
 Route::post('customer_getTableFields', 'Customer\Report\ReportController@customer_getTableFields')->name('customer_getTableFields');
 Route::post('customer_setUpDatatable', 'Customer\Report\ReportController@customer_setUpDatatable')->name('customer_setUpDatatable');
+
+Route::post('/settings/tesco-additional-instructions', 'Admin\Settings\Tesco\AdditionalInstructionsController@tescoAdditionalInstructions');
+Route::post('/add-tesco-additional-instruction', 'Admin\Settings\Tesco\AdditionalInstructionsController@addTescoAdditionalInstruction');
+Route::get('/get-tesco-additional-instruction', 'Admin\Settings\Tesco\AdditionalInstructionsController@getTescoAdditionalInstruction');
+Route::put('/update-tesco-additional-instruction', 'Admin\Settings\Tesco\AdditionalInstructionsController@updateTescoAdditionalInstruction');
+Route::put('/make-tesco-additional-instruction-enabled', 'Admin\Settings\Tesco\AdditionalInstructionsController@enableAdditionalInstruction');
+Route::put('/make-tesco-additional-instruction-disabled', 'Admin\Settings\Tesco\AdditionalInstructionsController@disableAdditionalInstruction');
+
+Route::prefix('admin/tesco')->group(function () {
+    // Care Additional Instructions routes
+    Route::post('/settings/get-care-additional-instructions', 'Admin\Settings\Tesco\TescoSettings@tescoCareAdditionalInstructionsList');
+    Route::post('/add-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@addTescoCareInstruction');
+    Route::get('/get-tesco-care-instruction-details', 'Admin\Settings\Tesco\TescoSettings@getTescoCareInstructionById');
+    Route::put('/update-tesco-care-instruction-details', 'Admin\Settings\Tesco\TescoSettings@updateTescoCareInstructionById');
+    Route::put('/enable-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@enableTescoCareInstruction');
+    Route::put('/disable-tesco-care-instruction', 'Admin\Settings\Tesco\TescoSettings@disableTescoCareInstruction');
+});
