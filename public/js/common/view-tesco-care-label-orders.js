@@ -75,6 +75,12 @@ $( () => {
         {
             $('.create-download-artwork').css('display','inline-block')
         }
+
+
+        if(order_data.order_details.order_status == "Order Placed")
+        {
+            $('.order-cancel-btn').css('display','inline-block')
+        }
         
         $('#tesco_care_po').val(order_data.order_details.po_number)
         $('#tesco_care_eqos').val(order_data.order_details.eqos_site_code)

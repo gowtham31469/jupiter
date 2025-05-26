@@ -149,12 +149,12 @@ $( () => {
                                             <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group has-feedback" id="uk_ce_mark_div">
-                                     <label for="tesco_care_uk_ce_mark" class="component-label">UK/CE Mark </label>
+                                    <label for="tesco_care_uk_ce_mark" class="component-label">UK/CE Mark </label>
                                         <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_uk_ce_mark" name="tesco_care_uk_ce_mark">
-                                            <optgroup label="Select UK/CE Mark">
+                                                <option value="">-- Select UK/CE Mark --</option>
                                                 <option value="yes">Yes</option>
                                                 <option value="no">No</option>
-                                            </optgroup></select>
+                                        </select>
                                     </div>
                                     <div class="form-group has-feedback" id="flammability_div">
                                      <label for="tesco_care_flammability" class="component-label">Flammability </label>

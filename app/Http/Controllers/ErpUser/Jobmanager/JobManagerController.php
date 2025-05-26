@@ -859,7 +859,7 @@ class JobManagerController extends Controller
 									{
 										$tesco_item_master=DB::table('tesco_item_master')->where('id',$order_details[0]->template_id)->select('*')->get();
 			
-										foreach($order_details as $value)
+										foreach($order_details as $key => $value)
 										{
 											if($ref_name == "TSL 2")
 											{
@@ -881,6 +881,11 @@ class JobManagerController extends Controller
 																	->where('id',$value->order_qnty_table_id)
 																	->select('*')
 																	->get();
+
+											if (!isset($order_details_omp[0])) {
+												unset($order_details[$key]);
+												continue;
+											}
 											
 											$order_table = str_replace("_quanty","",$value->order_qnty_table_name);
 											$order_id  = strtolower(str_replace(" ","",$ref_name).'_order_id');
