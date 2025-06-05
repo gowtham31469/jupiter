@@ -545,7 +545,15 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
 
                     if(name2 == "GCLW20/M11473G" || name2 == "GCLW20/M11474G")
                     {
-                        svgDoc_back_text.getElementById("wyprod_text").setAttribute('transform', "translate(27 6)");
+                        if(val.country_of_origin_id == 53)
+                        {
+                            svgDoc_back_text.getElementById("wyprod_text").setAttribute('transform', "translate(27 6)  scale(0.9 1)");
+                        }
+                        else
+                        {
+                            svgDoc_back_text.getElementById("wyprod_text").setAttribute('transform', "translate(27 6)");
+                        }
+                        
                     }
                     else
                     {
@@ -842,8 +850,12 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                     else if(val.uk_size == "1-2Y" || val.uk_size == "2-3Y" || val.uk_size == "3-4Y" || val.uk_size == "4-5Y" || val.uk_size == "5-6Y" || val.uk_size == "6-7Y" || val.uk_size == "7-8Y" || val.uk_size == "8-9Y" || val.uk_size == "9-10Y")
                     {
 
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
+                        //svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
+                        //svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
+
+                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
+                        
                         if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
                             setMYTransformations(svgDoc,"15.12","266","45.42","266","19.8656","272","52.3656","272","0.9105")
@@ -866,18 +878,21 @@ function downloadArtworkLabels(data, name,style_no,buyer_no,id,order_type,obj,ar
                         }
                         else if(name2 == "GCLW20/M11474G")
                         {
-                            setMYTransformations(svgDoc,"12","254","36","254","15","260","41.5","260","1.0148")
+                            setMYTransformations(svgDoc,"12","254","36","254","15.4","260","41.5","260","1.0148")
                         }
                         else
                         {
-                            setMYTransformations(svgDoc,"15.12","250","45.42","250","19.8656","256","52.3656","256","0.9105")
+                            setMYTransformations(svgDoc,"15.12","250","45.42","250","18.8656","256","51","256","0.9105")
                         }
 
                     }
                     else if(val.uk_size == "10-11Y" || val.uk_size == "11-12Y" || val.uk_size == "12-13Y" || val.uk_size == "13-14Y" || val.uk_size == "14-15Y" || val.uk_size == "15-16Y")
                     {
-                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
-                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
+                        //svgDoc.getElementById("uk_size").innerHTML = val.uk_size.replaceAll("Y", ' years');
+                        //svgDoc.getElementById("ce_size").innerHTML = val.ce_size.replaceAll("Y", ' years');
+
+                        svgDoc.getElementById("uk_size").innerHTML = val.uk_size;
+                        svgDoc.getElementById("ce_size").innerHTML = val.ce_size;
 
                         if(name2 == "GCLW25/M11367G" || name2 == "GCLW25/M11375G")
                         {
