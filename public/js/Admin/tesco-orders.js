@@ -1333,7 +1333,7 @@ function createOrders(parsedObj = false, oType = false) {
 						<div class="col-md-3">\
 							<div class="form-group has-feedback">\
 								<label for="tesco_eqos">EQOS Site Code</label>\
-								<input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" maxlength="7">\
+								<input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()" minlength="6" maxlength="7">\
 								<div class="help-block with-errors"></div>\
 							</div>\
 						</div>\
