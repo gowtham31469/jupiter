@@ -370,7 +370,7 @@
                         </div>
                         <div class="form-group has-feedback">
                             <label for="tesco_eqos">EQOS Site Code</label>
-                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" maxlength="7" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
+                            <input type="text" class="form-control" name="tesco_eqos" id="tesco_eqos" required="" placeholder="Enter EQOS Site Code" minlength="6" maxlength="7" onkeypress="return isNumber(event)" onkeyup="dynamicSVGTemplates()">
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group has-feedback">
