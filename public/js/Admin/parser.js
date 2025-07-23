@@ -471,13 +471,13 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
 
-    parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
+    // parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
 
-    if(zone === 'ce') {
-        parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', false);
-     } else {
-        parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
-     }
+    // if(zone === 'ce') {
+    //     parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', false);
+    //  } else {
+    //     parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
+    //  }
    
    parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
 
