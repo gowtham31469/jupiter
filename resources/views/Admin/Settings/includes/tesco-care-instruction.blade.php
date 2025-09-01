@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="TescoCareInstructionLabel">Add Care Additional Instruction</h4>
             </div>
-            {!! Form::open(['id' => 'add-tesco-care-instruction-form', 'data-toggle' => 'validator', 'role' => 'form', 'onsubmit' => 'return false;']) !!}
+            {!! Form::open(['id' => 'add-tesco-care-instruction-form', 'data-toggle' => 'validator', 'role' => 'form']) !!}
             <div class="modal-body">
                 <div id="care_instruction_error"></div>
                 <div class="row">
@@ -64,7 +64,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="editTescoCareInstructionLabel">Edit Care Additional Instruction</h4>
             </div>
-            {!! Form::open(['id' => 'edit-tesco-care-instruction-form', 'data-toggle' => 'validator', 'role' => 'form', 'onsubmit' => 'return false;']) !!}
+            {!! Form::open(['id' => 'edit-tesco-care-instruction-form', 'data-toggle' => 'validator', 'role' => 'form']) !!}
             <div class="modal-body">
                 <div id="care_instruction_update_error"></div>
                 {!! Form::hidden('edit_tesco_care_instruction_id',$value = null, array('id'=>'edit_tesco_care_instruction_id','class' => 'form-control input-sm')) !!}
@@ -114,134 +114,3 @@
         </div>
     </div>
 </div>
-
-<style>
-.required-field:after {
-    content: " *";
-    color: red;
-}
-.form_label.required-field {
-    color: red;
-}
-.is-invalid {
-    border-color: red !important;
-}
-</style>
-
-<script type="text/javascript">
-// Wait for jQuery to be defined
-(function checkJQuery() {
-    if (typeof jQuery !== 'undefined') {
-        // jQuery is loaded, initialize our code
-        jQuery(document).ready(function($) {
-            // Initialize form validation
-            function validateForm(formId) {
-                var isValid = true;
-                $(formId + ' [required]').each(function() {
-                    if (!$(this).val()) {
-                        isValid = false;
-                        $(this).addClass('is-invalid');
-                        // Clear the help-block text to remove the default required message
-                        $(this).closest('.form-group').find('.help-block').html('');
-                    } else {
-                        $(this).removeClass('is-invalid');
-                        $(this).closest('.form-group').find('.help-block').html('');
-                    }
-                });
-                return isValid;
-            }
-
-            // Reset form and validation state
-            function resetForm(formId) {
-                $(formId)[0].reset();
-                $(formId + ' .is-invalid').removeClass('is-invalid');
-                $(formId + ' .help-block').html('');
-                $(formId + ' .alert').remove();
-            }
-
-            // Add form submission
-            $('#add-tesco-care-instruction-form').on('submit', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (validateForm('#add-tesco-care-instruction-form')) {
-                    addTescoCareInstruction();
-                }
-                return false;
-            });
-
-            // Add button click handler
-            $('.btn-primary[type="submit"]').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var form = $(this).closest('form');
-                if (form.attr('id') === 'add-tesco-care-instruction-form') {
-                    if (validateForm('#add-tesco-care-instruction-form')) {
-                        addTescoCareInstruction();
-                    }
-                } else if (form.attr('id') === 'edit-tesco-care-instruction-form') {
-                    if (validateForm('#edit-tesco-care-instruction-form')) {
-                        updateTescoCareInstruction();
-                    }
-                }
-                return false;
-            });
-
-            // Edit form submission
-            $('#edit-tesco-care-instruction-form').on('submit', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                if (validateForm('#edit-tesco-care-instruction-form')) {
-                    updateTescoCareInstruction();
-                }
-                return false;
-            });
-
-            // Reset forms when modals are closed
-            $('#addTescoCareInstructionModal').on('hidden.bs.modal', function() {
-                resetForm('#add-tesco-care-instruction-form');
-            });
-
-            $('#editTescoCareInstructionModal').on('hidden.bs.modal', function() {
-                resetForm('#edit-tesco-care-instruction-form');
-            });
-
-            // Enable/Disable buttons
-            $(document).on('click', '#enableTescoCareInstruction', function(e) {
-                e.preventDefault();
-                var id = $(this).closest('tr').attr('id');
-                enableTescoCareInstruction(id, csrf_token);
-            });
-
-            $(document).on('click', '#disableTescoCareInstruction', function(e) {
-                e.preventDefault();
-                var id = $(this).closest('tr').attr('id');
-                disableTescoCareInstruction(id, csrf_token);
-            });
-
-            // Edit button
-            $(document).on('click', '.edit-tesco-care-instruction', function(e) {
-                e.preventDefault();
-                var id = $(this).closest('tr').attr('id');
-                getTescoCareInstructionById(id);
-            });
-
-            // Remove HTML5 validation messages
-            $('form').on('invalid', 'input, select, textarea', function(e) {
-                e.preventDefault();
-                $(this).addClass('is-invalid');
-            });
-
-            // Add input validation handlers
-            $('input[required]').on('input', function() {
-                if ($(this).val()) {
-                    $(this).removeClass('is-invalid');
-                    $(this).closest('.form-group').find('.help-block').html('');
-                }
-            });
-        });
-    } else {
-        // jQuery not loaded yet, check again in 100ms
-        setTimeout(checkJQuery, 100);
-    }
-})();
-</script> 
