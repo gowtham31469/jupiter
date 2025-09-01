@@ -1,3 +1,56 @@
+var isSubmitting = false;
+
+$('#add-tesco-care-instruction-form').validator().on('submit', function (e) {
+    
+        
+    if (e.isDefaultPrevented())
+    {
+    }
+    else
+    {
+       e.preventDefault();
+       /* call addColorCode function from orchestra-settings.js*/
+       addTescoCareInstruction();
+
+    }
+  });
+
+  $(document).on('click', '#enableTescoCareInstruction', function(e) {
+    
+     var id = $(this).closest('tr').attr('id');
+     
+     /* call makeColorEnabled function from orchestra-settings.js*/
+     enableTescoCareInstruction(id,csrf_token)
+ });
+
+ /** To disable part  on click **/
+ $(document).on('click', '#disableTescoCareInstruction', function(e) {
+     var id = $(this).closest('tr').attr('id');
+     
+     /* call makeColorDisabled function from orchestra-settings.js*/
+     disableTescoCareInstruction(id,csrf_token)
+ });
+
+ $(document).on('click','.edit-tesco-care-instruction',function(e){
+     var id = $(this).closest('tr').attr('id');
+     e.preventDefault();
+     /* call getOrchestraColorCodeById function from orchestra-settings.js*/
+     getTescoCareInstructionById(id);
+ });
+  /** submit edit orchestra Color code form **/
+  $('#edit-tesco-care-instruction-form').validator().on('submit', function (e) {
+   if (e.isDefaultPrevented())
+   {
+
+   }
+   else
+   {
+      e.preventDefault();
+      /* call editOrchestraColorCode function from orchestra-settings.js*/
+      updateTescoCareInstruction();
+   }
+ });
+
 /**
  * Function to list Care Additional Instructions
  */
