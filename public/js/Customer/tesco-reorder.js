@@ -591,9 +591,14 @@ function extraQuantityLabelTescoRepeatOrderCustomer(type,id,name,zone,po_number,
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="`+uk_ean_check+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="`+ce_ean_check+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control tot_qty_table_label_reorder input-sm tesco-quantity-field" required placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+					var ukVal = (uk_ean_check === null || uk_ean_check === undefined) ? '' : uk_ean_check;
+					var ceVal = (ce_ean_check === null || ce_ean_check === undefined) ? '' : ce_ean_check;
+
+					var required_field = (uk_ean_check !== null && uk_ean_check !== undefined) ? 'required' : '';
+
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="`+ukVal+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="`+ceVal+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control tot_qty_table_label_reorder input-sm tesco-quantity-field" placeholder="Quantity" `+required_field+` id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
 										</tr>`;
 				}
@@ -807,9 +812,14 @@ function extraQuantityLabelTesco(type,id,name,zone,po_number,liid)
 
                     }
 
-                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="`+uk_ean_check+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="`+ce_ean_check+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
-                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control tot_qty_table_label_reorder input-sm tesco-quantity-field" required placeholder="Quantity" id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
+					var ukVal = (uk_ean_check === null || uk_ean_check === undefined) ? '' : uk_ean_check;
+					var ceVal = (ce_ean_check === null || ce_ean_check === undefined) ? '' : ce_ean_check;
+
+					var required_field = (uk_ean_check !== null && uk_ean_check !== undefined) ? 'required' : '';
+
+                    quantity_html += `</td> <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="UK EAN Number" id="uk_ean_` + valueOfElement.id + `" name="uk_ean[]" value="`+ukVal+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback"><input class="form-control input-sm" readonly placeholder="CE EAN Number" id="ce_ean_` + valueOfElement.id + `" name="ce_ean[]" value="`+ceVal+`" type="text" data-minlength="13" maxlength="13" data-minlength-error="Enter 13 digits." onkeypress="return isNumber(event)" onkeyup="return validateEanBarcodeValue(this)"><div class="help-block with-errors"></div></div></td>
+                                            <td><div class="form-group has-feedback label-quantity-feedback"><input type="number" class="form-control tot_qty_table_label_reorder input-sm tesco-quantity-field" placeholder="Quantity" `+required_field+` id="quantity_` + valueOfElement.id + `" name="quantity[]"><div class="help-block with-errors"></div></div></td>
                                             <input type='hidden' id='secondary_size_data_` + valueOfElement.id + `' name='secondary_size_data[]' value='` + JSON.stringify(secondary_sizes) + `'>
 										</tr>`;
 				}
