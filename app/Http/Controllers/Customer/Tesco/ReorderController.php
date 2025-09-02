@@ -1231,7 +1231,7 @@ class ReorderController extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->washcare_order_id = $newTasks->id;
-					$newTask->quantity = $counts[$i];
+					$newTask->quantity = !empty($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
         }

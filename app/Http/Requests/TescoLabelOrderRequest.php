@@ -28,7 +28,7 @@ class TescoLabelOrderRequest extends FormRequest
     {
         return [ 
             'tesco_care_po'                    => ['required', new ValidateTescoCarePo],
-            'tesco_care_eqos'                  => ['required', 'numeric', 'digits:7'],
+            'tesco_care_eqos'                  => ['required', 'numeric', 'digits_between:6,7'],
             'tesco_care_ce_style'              => ['required', new ValidateTescoCareOptionId],
             'tesco_care_uk_style'              => ['required', 'size:8'],
             'tesco_care_fabric_code'           => ['nullable', 'numeric', 'digits:5'],

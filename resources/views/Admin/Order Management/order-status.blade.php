@@ -495,7 +495,7 @@
 
                     <div class="form-group has-feedback">
                         {!! Form::label('tesco_care_eqos', 'EQOS Supplier Number', ['class' => 'form_label']) !!}
-                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
+                        {!! Form::text('tesco_care_eqos',$value = '', array('class' => 'form-control input-sm ','placeholder' => 'EQOS Supplier Number','required','minlength' => '6','maxlength' => '7', "onkeypress" => "return isNumber(event)")) !!}
                         <div class="help-block with-errors"></div>
                     </div>
 

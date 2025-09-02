@@ -3210,18 +3210,20 @@ class OrderManagementCntrl extends Controller
 				
 				$data['tesco']=DB::table('tesco_washcare_orders_quanty')->where('washcare_order_id',$id)->select('*')->get();
 				$i=0;
+        //print_r($data['tesco']);
 				foreach($data['tesco'] as $value)
 				{
 					$tasks = TescoWashcareOrdersQuantity::find($value->id);
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->washcare_order_id = $newTasks->id;
-					$newTask->quantity = $counts[$i];
+					$newTask->quantity = !empty($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
         }
         
         $data['tesco_component']=DB::table('tesco_washcare_orders_component_mapping')->where('washcare_order_id',$id)->select('*')->get();
+        //print_r($data['tesco_component']);
 				foreach($data['tesco_component'] as $value)
 				{
 					$tasks = TescoWashcareOrdersComponentMapping::find($value->id);
