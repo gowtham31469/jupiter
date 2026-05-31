@@ -49,6 +49,7 @@
             <li id="18" onclick="tescoGarmentStatements()"><a>Garment Statement</a></li>
             <li id="19" onclick="tescoTog()"><a>TOG</a></li>
             <li id="20" onclick="tescoCareAdditionalInstructions()"><a>Care Additional Instructions</a></li>
+            <li id="21" onclick="tescoPartOfSet()"><a>Part of Set</a></li>
           </ul>
         </div>
         <div class="content">
@@ -72,7 +73,8 @@
     @include('Admin.Settings.includes.tesco-flammability')
     @include('Admin.Settings.includes.tesco-garment-statement')
     @include('Admin.Settings.includes.tesco-tog')
-    
+    @include('Admin.Settings.includes.tesco-part-of-set')
+
     {{-- Add Orchestra Garments Modal --}}
     <div class="modal fade" id="addOrchestraGarmentsModal" tabindex="-1" role="dialog" aria-labelledby="orchestraGarmentsLabel">
         <div class="modal-dialog" role="document">
@@ -2084,6 +2086,7 @@
     <script src="{{ asset('js/Admin/tesco-flammability.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-garment-statement.js') }}"></script>
     <script src="{{ asset('js/Admin/tesco-tog.js') }}"></script>
+    <script src="{{ asset('js/Admin/tesco-part-of-set.js') }}"></script>
     <script src="{{ asset('js/admin/settings/tesco/tesco-settings.js') }}"></script>
     <script>
     $(function() {
