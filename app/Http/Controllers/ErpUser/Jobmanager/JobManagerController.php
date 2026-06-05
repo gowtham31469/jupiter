@@ -598,6 +598,7 @@ class JobManagerController extends Controller
 																	$value->bs_en_declaration=$order_omp{0}->bs_en_declaration;
 																	$value->internal_reference=$order_omp{0}->internal_reference;
 																	$value->customer_name=$customer_name{0}->short_name;
+																	$value->country_of_origin_id=$order_omp{0}->country_of_origin_id;
 																	$value->country_of_origin_text=$order_omp{0}->country_of_origin_text;
 																	$value->wash_iso=$order_omp{0}->wash_iso;
 																	$value->wash_astm=$order_omp{0}->wash_astm;
@@ -795,6 +796,7 @@ class JobManagerController extends Controller
                 $value->product_desc_text=$order_omp[0]->product_desc_text;
                 $value->item_name=$tesco_item_master[0]->item_name;
                 $value->product_benefit_text=$order_omp[0]->product_benefit_text;
+                $value->country_of_origin_id=$order_omp[0]->country_of_origin_id;
                 $value->country_of_origin_text=$order_omp[0]->country_of_origin_text;
                 $value->mm_product_benefit_text=$order_omp[0]->mm_product_benefit_text;
                 $value->product_benefit_id=$order_omp[0]->product_benefit_id;
