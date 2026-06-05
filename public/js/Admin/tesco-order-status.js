@@ -1065,36 +1065,80 @@ function submitOs(obj)
                     }],
                     "pageLength": 25,
                     "order": [
-                        [10, "desc"]
+                        [11, "desc"]
                     ],
-                    scrollX:        true,
-                    "aoColumns": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
+                    scrollX: true,
+                    dom: "<'row'<'col-sm-4'l><'col-sm-8'<'pull-right'B><'pull-right'f>>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    buttons: [
                         {
+                            extend: 'excel',
+                            text: '<i class="fa fa-file-excel-o"></i> Export Excel',
+                            className: 'os-export-btn',
+                            title: 'Order Status - ' + new Date().toLocaleDateString('en-GB'),
+                            exportOptions: {
+                                // Col 0:Style No, 1:Order Type, 2:PO Num(hidden), 3:OCN, 4:Season, 5:BuyerPO,
+                                // 6:Zone, 7:Ref No, 8:Template Type, 9:Company, 10:Order Date, 11:Delivery Date,
+                                // 12:Order Status, 13:Artwork(skip), 14:Artwork Status, 15:PI, 16:PO Status, 17:PO Num,
+                                // 18:Print Proof(skip), 19:Update Po(skip)
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17],
+                                modifier: {
+                                    search: 'applied',
+                                    order: 'applied'
+                                },
+                                format: {
+                                    body: function(data, row, column, node) {
+                                        return $('<div>').html(data).text().trim();
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    "aoColumns": [
+                        null,  // 0  Style No
+                        null,  // 1  Order Type
+                        null,  // 2  PO Number (hidden)
+                        null,  // 3  OCN No
+                        null,  // 4  Season Code
+                        null,  // 5  Buyer Po
+                        null,  // 6  Zone
+                        null,  // 7  Reference No
+                        null,  // 8  Template Type
+                        null,  // 9  Company
+                        {      // 10 Order Date
                             "sType": "date-uk"
                         },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
+                        null,  // 11 Delivery Date
+                        null,  // 12 Order Status
+                        null,  // 13 Artwork
+                        null,  // 14 Artwork Status
+                        null,  // 15 PI Status
+                        null,  // 16 PO Status
+                        null,  // 17 PO Number
+                        null,  // 18 Print Proof
+                        null,  // 19 Update Po
                     ],
                     initComplete: function () {
                         $("#datatable-tesco-orders_filter input").addClass('form-control input-sm');
                         $("#datatable-tesco-orders_filter input").attr('placeholder', 'Data Search');
                         $('#datatable-tesco-orders_length select').addClass('form-control input-sm');
+                        $('<style>').html('\
+                            .os-export-btn,\
+                            .os-export-btn:hover,\
+                            .os-export-btn:focus,\
+                            .os-export-btn:active {\
+                                background: #343a40 !important;\
+                                background-image: none !important;\
+                                border-color: #2d3436 !important;\
+                                color: #fff !important;\
+                                padding: 6px 14px !important;\
+                                margin-left: 10px !important;\
+                                font-size: 13px !important;\
+                                font-weight: 600 !important;\
+                                border-radius: 5px !important;\
+                                box-shadow: none !important;\
+                                text-shadow: none !important;\
+                            }\
+                        ').appendTo('head');
                         // $('.datatable-tesco-orders .filters td').each( function () {
                         //     if($(this).text() != "")
                         //     {
@@ -1135,8 +1179,8 @@ function submitOs(obj)
  * @return {[type]}      [description]
  */
 function tescoStatusTable(data, path) {
-    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;display:none'>PO Number</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Print Proof</th><th style='text-align: center;'>Update Po</th>";
-    var thfilter = "<td style='text-align: center;'></td><td style='text-align: center;display:none'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'>PO Number</td><td style='text-align: center;'></td>";
+    var th = "<th style='text-align: center;'>Style No</th><th style='text-align: center;'>Order Type</th><th style='text-align: center;display:none'>PO Number</th><th style='text-align: center;'>OCN No</th><th style='text-align: center;'>Season Code</th><th style='text-align: center;'>Buyer Po</th><th style='text-align: center;'>Zone</th><th style='text-align: center;'>Reference No</th><th style='text-align: center;'>Template Type</th><th style='text-align: center;'>Company</th><th style='text-align: center;'>Order Date</th><th style='text-align: center;'>Delivery Date</th><th style='text-align: center;'>Order Status</th><th style='text-align: center;'>Artwork</th><th style='text-align: center;'>Artwork Status</th><th style='text-align: center;'>PI Status</th><th style='text-align: center;'>PO Status</th><th style='text-align: center;'>PO Number</th><th style='text-align: center;'>Print Proof</th><th style='text-align: center;'>Update Po</th>";
+    var thfilter = "<td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;display:none'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'></td><td style='text-align: center;'>PO Number</td><td style='text-align: center;'></td>";
     var tr = "";
     var columnsIn = data[0];
 
@@ -1394,10 +1438,11 @@ function tescoStatusTable(data, path) {
                     }
                     
 
+                    var orderTypeBadge = span_style !== '' ? span_style : '-';
                     if (value['order_status'] != 'Saved'){
-                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="'+updateArtworkMethod+'">' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" onclick="'+updateArtworkMethod+'">' + style_no + '</a></td><td align="center">' + orderTypeBadge + '</td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     } else {
-                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + span_style + '' + style_no + '</a></td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
+                        tr += '<td align="center" data-id="' + value.tableID + '" data-table="' + value.tableName + '" data-template="' + value.TemplateName.replace(/ /g, "") + '"><a class="" href="javascript:void(0)" data-toggle= "modal" data-target="#savedOrderAlertBox">' + style_no + '</a></td><td align="center">' + orderTypeBadge + '</td><td style="text-align: center;display:none">'+value['PO Number']+'</td>';
                     }
 
                 } else if (key == "DeliveryDate") {
