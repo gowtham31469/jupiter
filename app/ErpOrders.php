@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Classes\ErpOrders as ErpOrdersHelper;
 
 class ErpOrders extends Model
 {
@@ -53,6 +54,14 @@ class ErpOrders extends Model
     {
         return $this->belongsTo('App\ErpStatus', 'status');
     }
+
+	/**
+	 * Strip the internal "YYYY|" year prefix so po_no is always customer-visible.
+	 */
+	public function getPoNoAttribute($value)
+	{
+		return ErpOrdersHelper::extractOriginalPoNumber($value);
+	}
 	
 	/**
       * Get Order Details.

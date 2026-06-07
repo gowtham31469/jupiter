@@ -64,6 +64,43 @@ class ErpOrders
 	}
 
 	/**
+	 * Prepend current year as "YYYY|po_number" for internal uniqueness across years.
+	 * Safe to call on values already in internal format.
+	 */
+	public static function generateInternalPoNumber($poNumber, $year = null)
+	{
+		if (empty($poNumber)) return $poNumber;
+		if (self::hasYearPrefix($poNumber)) return $poNumber;
+		$year = $year ?? Carbon::now('Asia/Kolkata')->format('Y');
+		return $year . '|' . $poNumber;
+	}
+
+	/** Strip the "YYYY|" prefix and return the customer-visible PO number. */
+	public static function extractOriginalPoNumber($storedPoNumber)
+	{
+		if (empty($storedPoNumber)) return $storedPoNumber;
+		if (self::hasYearPrefix($storedPoNumber)) {
+			return explode('|', $storedPoNumber, 2)[1];
+		}
+		return $storedPoNumber;
+	}
+
+	/** Return the year portion of an internal PO number, or null for legacy records. */
+	public static function extractPoYear($storedPoNumber)
+	{
+		if (empty($storedPoNumber) || !self::hasYearPrefix($storedPoNumber)) return null;
+		return explode('|', $storedPoNumber, 2)[0];
+	}
+
+	/** True when the string starts with exactly four digits followed by "|". */
+	private static function hasYearPrefix($poNumber)
+	{
+		if (strpos($poNumber, '|') === false) return false;
+		$parts = explode('|', $poNumber, 2);
+		return strlen($parts[0]) === 4 && ctype_digit($parts[0]);
+	}
+
+	/**
 	 * Update tesco orders details in erp_orders table
 	 *
 	 * @param [type] $request
@@ -106,22 +143,28 @@ class ErpOrders
 			$po_file   = $orders->po_file;
 		}
 
-		$erp_order = Erp::where([
-			'buyer_id' => $request['buyer_id'],
-			'customer_id' => $orders->tesco_supplier_id,
-			'po_no' => $po_no,
-		])
-		->select('id', 'status')
-		->first();
-		
+		$raw_po_no      = $po_no;
+		$internal_po_no = self::generateInternalPoNumber($po_no);
+
+		$erp_order = Erp::where('buyer_id', $request['buyer_id'])
+			->where('customer_id', $orders->tesco_supplier_id)
+			->where(function ($q) use ($internal_po_no, $raw_po_no) {
+				$q->where('po_no', $internal_po_no)->orWhere('po_no', $raw_po_no);
+			})
+			->select('id', 'status', 'po_no')
+			->first();
+
 		if ($erp_order) {
 
-			Erp::where('id', $erp_order->id)
-				->update([
-					'status' => 1,
-					'previous_status' => $erp_order->status,
-					'po_file' => $po_file
-				]);
+			$update_payload = [
+				'status'          => 1,
+				'previous_status' => $erp_order->status,
+				'po_file'         => $po_file,
+			];
+			if (($erp_order->getAttributes()['po_no'] ?? null) !== $internal_po_no) {
+				$update_payload['po_no'] = $internal_po_no;
+			}
+			Erp::where('id', $erp_order->id)->update($update_payload);
 
 			$erp_order_id = $erp_order->id;
 
@@ -130,38 +173,38 @@ class ErpOrders
 				$orders,
 				$erp_order,
 				$request['buyer_id'],
-				$po_no,
+				$raw_po_no,
 				$request['tableName']
 			);
-			
+
 		} else {
 
-			// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
+			// erp id format : "yymmxxxxx". and for old orders "ERPID-01"
 			$erp_id = $this->erp_id_gen_obj->generateErpID(
 				$this->financial_year_start,
 				$this->today_date,
 				$this->financial_year,
 				$this->month,null
 			);
-			
+
 			$new_erp_order = Erp::create([
 				'buyer_id'         => $request['buyer_id'],
 				'customer_id'      => $orders->tesco_supplier_id,
-				'po_no'            => $po_no,
+				'po_no'            => $internal_po_no,
 				'po_file'          => $po_file,
 				'status'		   => 1,
 				'created_at'       => $this->current_date,
 				'erp_id'           => $erp_id
 			]);
-			
+
 			$erp_order_id = $new_erp_order->id;
-			
+
 			$this->insertOrderDetails(
 				$qnty_table,
 				$orders,
 				$new_erp_order,
 				$request['buyer_id'],
-				$po_no,
+				$raw_po_no,
 				$request['tableName']
 			);
 		}
@@ -362,21 +405,27 @@ class ErpOrders
 			->where('status_name', $order_status)
 			->first();
 
-			$erp_orders = Erp::where([
-				'buyer_id' => $buyer_id,
-				'customer_id' => $orders->customer_id,
-				'po_no' => $po_no
-			])
-			->first();
+			$raw_po_no      = $po_no;
+			$internal_po_no = self::generateInternalPoNumber($po_no);
 
+			$erp_orders = Erp::where('buyer_id', $buyer_id)
+				->where('customer_id', $orders->customer_id)
+				->where(function ($q) use ($internal_po_no, $raw_po_no) {
+					$q->where('po_no', $internal_po_no)->orWhere('po_no', $raw_po_no);
+				})
+				->select('id', 'status', 'po_no')
+				->first();
 
 			if ($erp_orders) {
 
-				Erp::where('id', $erp_orders->id)
-				->update([
-					'status' => 1,
-					'po_file' => $po_file
-				]);
+				$update_payload = [
+					'status'  => 1,
+					'po_file' => $po_file,
+				];
+				if (($erp_orders->getAttributes()['po_no'] ?? null) !== $internal_po_no) {
+					$update_payload['po_no'] = $internal_po_no;
+				}
+				Erp::where('id', $erp_orders->id)->update($update_payload);
 
 				$this->insertOrchestraOrderDetails(
 					$qnty_table,
@@ -387,10 +436,10 @@ class ErpOrders
 					$erp_orders->id,
 					$table_name,
 					$order_status_id,
-					$po_no
+					$raw_po_no
 				);
 			} else {
-				// erp id format : "yymmxxxxx". and for old orders "ERPID-01" 
+				// erp id format : "yymmxxxxx". and for old orders "ERPID-01"
 				$erp_id = $this->erp_id_gen_obj->generateErpID(
 					$this->financial_year_start,
 					$this->today_date,
@@ -401,7 +450,7 @@ class ErpOrders
 				$erp_orders = Erp::create([
 					'buyer_id'         => $buyer_id,
 					'customer_id'      => $orders->customer_id,
-					'po_no'            => $po_no,
+					'po_no'            => $internal_po_no,
 					'po_file'          => $po_file,
 					'status'		   => 1,
 					'created_at'       => $this->current_date,
@@ -417,7 +466,7 @@ class ErpOrders
 					$erp_orders->id,
 					$table_name,
 					$order_status_id,
-					$po_no
+					$raw_po_no
 				);
 			}
 			
