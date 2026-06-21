@@ -217,7 +217,7 @@ class OrderManagementCntrl extends Controller
      */
     public function Orders(Request $request)
     {
-      $year = explode('-', $request->year);
+      $year = explode('-', $request->year ?? date('Y'));
       $from_date = ($year[0].'-'.$this->financial_year_date)." 00:00:00";
       $to_date =(Carbon::parse($from_date)->addYear()->subDay()->toDateString())." 23:59:59"; 
       
@@ -2720,7 +2720,7 @@ class OrderManagementCntrl extends Controller
     {
             $type         =   $request->type;
 		    $id           =   $request->id;
-			$counts       =   explode(',',$request->counts);
+			$counts       =   array_map(function($v) { return $v === '' ? null : (int)$v; }, explode(',', $request->counts));
 			if($type == "tesco_tcl1_orders")
 			{
 				$tasks = TescoTCL1Orders::find($id);
@@ -2764,7 +2764,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl1_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -2812,7 +2812,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl2_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -2860,7 +2860,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl4_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -2909,7 +2909,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tcl5_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -2959,7 +2959,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl1_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3008,7 +3008,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->thl3_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3057,7 +3057,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl1_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3107,7 +3107,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl2_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3157,7 +3157,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->tsl3_order_id = $newTasks->id;
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3363,7 +3363,7 @@ class OrderManagementCntrl extends Controller
       $po           =   $request->po;
 	  $ocn_number   =   $request->ocn;
 	  $manufacture_date  =   $request->manufacture_date;
-	  $counts       =   explode(',',$request->counts);
+	  $counts       =   array_map(function($v) { return $v === '' ? null : (int)$v; }, explode(',', $request->counts));
       if($type == "tesco_tcl1_orders")
       {
         $tasks = TescoTCL1Orders::find($id);
@@ -3416,7 +3416,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 					
-          $newTask->count = $counts[$i];
+          $newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3474,7 +3474,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3533,7 +3533,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3594,7 +3594,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3655,7 +3655,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
           
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3714,7 +3714,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3773,7 +3773,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3834,7 +3834,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
 
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3894,7 +3894,7 @@ class OrderManagementCntrl extends Controller
           $new_qr = implode(",",$po_split);
           $newTask->qr_code = $new_qr;
           
-					$newTask->count = $counts[$i];
+					$newTask->count = isset($counts[$i]) ? $counts[$i] : 0;
 					$newTask->save();
 					$i++;
 				}
@@ -3961,7 +3961,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->washcare_order_id = $newTasks->id;
-					$newTask->quantity = $counts[$i];
+					$newTask->quantity = isset($counts[$i]) ? $counts[$i] : null;
 					$newTask->save();
 					$i++;
         }
@@ -4048,7 +4048,7 @@ class OrderManagementCntrl extends Controller
 					$newTask = $tasks->replicate();
 					$newTask->save();
 					$newTask->swingticket_order_id = $newTasks->id;
-					$newTask->quantity = $counts[$i];
+					$newTask->quantity = isset($counts[$i]) ? $counts[$i] : null;
 					$newTask->save();
 					$i++;
         }

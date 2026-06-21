@@ -476,6 +476,11 @@ Route::prefix('admin')->group(function () {
 		Route::get('/get-tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@getTescoGarmentStatement');
 		Route::put('/update-tesco-garment-statement', 'Admin\Settings\Tesco\GarmentStatementController@updateTescoGarmentStatement');
 
+		Route::post('/settings/tesco-part-of-set', 'Admin\Settings\Tesco\PartOfSetController@tescoPartOfSet');
+		Route::post('/add-tesco-part-of-set', 'Admin\Settings\Tesco\PartOfSetController@addTescoPartOfSet');
+		Route::get('/get-tesco-part-of-set', 'Admin\Settings\Tesco\PartOfSetController@getTescoPartOfSet');
+		Route::put('/update-tesco-part-of-set', 'Admin\Settings\Tesco\PartOfSetController@updateTescoPartOfSet');
+
 		Route::post('/settings/brands', 'Admin\Settings\Tesco\TescoSettings@tescoBrands');
 		Route::post('/add-tesco-brands', 'Admin\Settings\Tesco\TescoSettings@addTescoBrands');
 		Route::get('/get-tesco-brands-details', 'Admin\Settings\Tesco\TescoSettings@getTescoBrandsById');

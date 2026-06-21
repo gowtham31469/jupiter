@@ -321,7 +321,7 @@ function parseSingleType(data) {
         var header = [];
         var values = [];
         var tabula = JSON.parse(data.details.table);
-        // Only remove last row if it's a total row (doesn't have a TPND in first column)
+        // Only remove last row if it's a total row (empty first column or text says "total")
         var lastRow = tabula[0].data[tabula[0].data.length - 1];
         if(lastRow && lastRow[0] && (lastRow[0].text === '' || lastRow[0].text.toLowerCase() === 'total')) {
             tabula[0].data.pop();
