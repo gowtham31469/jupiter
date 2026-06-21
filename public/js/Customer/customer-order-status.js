@@ -7054,10 +7054,10 @@ function approveTescoArtwork() {
 }
 
 
-function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso,tesco_size_department,woolmark_logo_file,white_woolmark_logo_file,woolmark_logo_id) {
-	
+function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_front_image,po_number,style,template_name,created_at,customer_name,wash_astm,wash_iso,whit_astm,whit_iso,dry_astm,dry_iso,iron_astm,iron_iso,clean_astm,clean_iso,white_wash_astm,white_wash_iso,white_whit_astm,white_whit_iso,white_dry_astm,white_dry_iso,white_iron_astm,white_iron_iso,white_clean_astm,white_clean_iso,tesco_size_department,woolmark_logo_file,white_woolmark_logo_file,woolmark_logo_id,id) {
+
 	var url = "";
-	
+
 	$.ajax({
 		url: base_url + "/customer/tesco/proof-div-tescolabelos",
 		type: "post",
@@ -7095,7 +7095,8 @@ function PopupTescoLabelsProofManager(data_front,data_back,data_back_text,data_f
             tesco_size_department:tesco_size_department,
 			woolmark_logo_file:woolmark_logo_file,
 			white_woolmark_logo_file:white_woolmark_logo_file,
-            woolmark_logo_id:woolmark_logo_id
+            woolmark_logo_id:woolmark_logo_id,
+            id:id
 		},
 		tryCount: 0,
 		retryLimit: 2,
