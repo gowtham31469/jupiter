@@ -6738,6 +6738,7 @@ $buyer_no=$request->buyer_no;
         $this->template_name = $request->template_name;
         $this->created_date = $request->created_date;
         $this->customer_name = $request->customer_name;
+        $this->order_id = $request->id;
 
 		if($request->template_name == "GCLW25/M11363G" || $request->template_name == "GCLB25/M11410G" || $request->template_name == "GCLW25/M11378G")
         {
@@ -6767,6 +6768,7 @@ $buyer_no=$request->buyer_no;
               $tesco_po_number=$this->tesco_po_number;
               $style=$this->style;
               $tesco_description="";
+              $artwork_id="WCL-".$this->order_id;
               $date=date_create($this->created_date);
               $created_date =  date_format($date,"d.m.Y");
               $image_file= K_PATH_IMAGES.'logo_example.jpg';
@@ -6848,6 +6850,9 @@ $buyer_no=$request->buyer_no;
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="129" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">SIZE: '.$this->size_dimension.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="505" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">DESCRIPTION : '.$tesco_description.'</text>
                       <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="826" y="168" font-family="Times New Roman" font-size="16" font-weight="400" font-style="normal">REV.NO:</text>
+                      </g>
+                      <g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="0.3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)" font-family="Times New Roman" font-size="20" font-weight="600" font-style="normal">
+                      <text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="969" y="240" text-anchor="end" font-family="Times New Roman" font-size="20" font-weight="600" font-style="normal">ARTWORK ID: '.$artwork_id.'</text>
                       </g>
                       </g>
                       </svg>';
