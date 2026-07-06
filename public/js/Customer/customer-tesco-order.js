@@ -265,6 +265,13 @@ function tescoOrders(callback) {
                                                                                     <div class="help-block with-errors"></div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="ce-single-po-upload hidden">
+                                                                                <div class="form-group files" id="ce_single_file">
+                                                                                    <label>Upload CE PO</label>
+                                                                                    <input type="file" name="ce_purchase_order" id="ce_purchase_order" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                            </div>
                                                                             <div class="orms-ce-po-upload hidden">
                                                                                 <div class="form-group files" id="orms_single_file ">
                                                                                     <label>Upload CE ORMS PO</label>
@@ -343,18 +350,24 @@ function tescoOrders(callback) {
                     if(zone === 'UK' && globalOrderType === 1) {
                         $(".po-upload").removeClass("hidden");
                         $('#po_upload').prop('required', true);
+                        $(".ce-single-po-upload").addClass("hidden");
+                        $('#ce_purchase_order').prop('required', false);
                         $(".ce-po-upload").addClass("hidden");
                         $('#ce_orms').prop('required', false);
                         $('#ce_retek').prop('required', false);
                     } else if(zone === 'CE' && globalOrderType === 1) {
                         $(".po-upload").addClass("hidden");
                         $('#po_upload').prop('required', false);
-                        $(".ce-po-upload").removeClass("hidden");
-                        $('#ce_orms').prop('required', true);
-                        $('#ce_retek').prop('required', true);
+                        $(".ce-single-po-upload").removeClass("hidden");
+                        $('#ce_purchase_order').prop('required', true);
+                        $(".ce-po-upload").addClass("hidden");
+                        $('#ce_orms').prop('required', false);
+                        $('#ce_retek').prop('required', false);
                     } else {
                         $(".po-upload").addClass("hidden");
                         $('#po_upload').prop('required', false);
+                        $(".ce-single-po-upload").addClass("hidden");
+                        $('#ce_purchase_order').prop('required', false);
                         $(".ce-po-upload").addClass("hidden");
                         $('#ce_orms').prop('required', false);
                         $('#ce_retek').prop('required', false);
@@ -911,6 +924,8 @@ function tescoOrders(callback) {
                         if(data.node.original.zone === 'UK' && globalOrderType === 1) {
                             $(".po-upload").removeClass("hidden");
                             $('#po_upload').prop('required', true);
+                            $(".ce-single-po-upload").addClass("hidden");
+                            $('#ce_purchase_order').prop('required', false);
                             $(".ce-po-upload").addClass("hidden");
                             $('#ce_orms').prop('required', false);
                             $('#ce_retek').prop('required', false);
@@ -919,14 +934,18 @@ function tescoOrders(callback) {
                         } else if(data.node.original.zone === 'CE' && globalOrderType === 1) {
                             $(".po-upload").addClass("hidden");
                             $('#po_upload').prop('required', false);
-                            $(".ce-po-upload").removeClass("hidden");
-                            $('#ce_orms').prop('required', true);
-                            $('#ce_retek').prop('required', true);
+                            $(".ce-single-po-upload").removeClass("hidden");
+                            $('#ce_purchase_order').prop('required', true);
+                            $(".ce-po-upload").addClass("hidden");
+                            $('#ce_orms').prop('required', false);
+                            $('#ce_retek').prop('required', false);
                             $(".orms-ce-po-upload").addClass("hidden");
 							$('#orms_po_upload').prop('required', false);
                         } else {
                             $(".po-upload").addClass("hidden");
                             $('#po_upload').prop('required', false);
+                            $(".ce-single-po-upload").addClass("hidden");
+                            $('#ce_purchase_order').prop('required', false);
                             $(".ce-po-upload").addClass("hidden");
                             $('#ce_orms').prop('required', false);
                             $('#ce_retek').prop('required', false);
@@ -1045,9 +1064,11 @@ function tescoOrders(callback) {
 								var purchase_order = $('#po_upload').prop('files')[0];
 								var ce_orms_purchase_order = $('#ce_orms')[0].files[0];
 								var ce_retek_purchase_order = $('#ce_retek')[0].files[0];
+								var ce_purchase_order = $('#ce_purchase_order')[0].files[0];
 								formData.append('purchase_order', purchase_order);
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
+								formData.append('ce_purchase_order', ce_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
 								if(template_type === 'tesco_care_labels') {
@@ -8409,6 +8430,8 @@ function selectNewOrder()
 	if (back_zone === 'UK' && order_type_back === "1") {
 		$(".po-upload").removeClass("hidden");
 		$('#po_upload').prop('required', true);
+		$(".ce-single-po-upload").addClass("hidden");
+		$('#ce_purchase_order').prop('required', false);
 		$(".ce-po-upload").addClass("hidden");
 		$('#ce_orms').prop('required', false);
 		$('#ce_retek').prop('required', false);
@@ -8416,15 +8439,16 @@ function selectNewOrder()
 
 		$(".po-upload").addClass("hidden");
 		$('#po_upload').prop('required', false);
-		$(".ce-po-upload").removeClass("hidden");
-		$('#ce_orms').prop('required', true);
-		$('#ce_retek').prop('required', true);
-	} else {
-		$(".po-upload").addClass("hidden");
-		$('#po_upload').prop('required', false);
+		$(".ce-single-po-upload").removeClass("hidden");
+		$('#ce_purchase_order').prop('required', true);
 		$(".ce-po-upload").addClass("hidden");
 		$('#ce_orms').prop('required', false);
 		$('#ce_retek').prop('required', false);
+	} else {
+		$(".po-upload").addClass("hidden");
+		$('#po_upload').prop('required', false);
+		$(".ce-single-po-upload").addClass("hidden");
+		$('#ce_purchase_order').prop('required', false);
 	}
 	reOrderTesco()
 }

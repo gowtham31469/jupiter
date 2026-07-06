@@ -24,25 +24,35 @@ function parseUKPurchaseOrder(data, callback) {
 }
 
 /**
+ * Match a raw label cell read from a CE PO's info block against a known field label.
+ * Tabula's lattice mode sometimes clips 1-2 leading characters off a label depending on
+ * how a specific PDF renders that cell's boundary - real examples seen: "VPN :" -> "PN :",
+ * "Style No :" -> "tyle No :", "Season Code :" -> "eason Code :". An exact match would miss
+ * these, so match by suffix instead, requiring most of the label to still be present to
+ * avoid false positives.
+ * @param  {string} rawLabel label text actually read from the PDF (colon/value stripped)
+ * @param  {string} target   known field label to match against, e.g. 'VPN'
+ * @return {boolean}
+ */
+function ceLabelMatches(rawLabel, target) {
+    if (!rawLabel || rawLabel.length > target.length) { return false; }
+    return target.length - rawLabel.length <= 3 && target.substr(target.length - rawLabel.length) === rawLabel;
+}
+
+/**
  * Method to parse the json string object.
  * Invoked inside uploadPurchaseOrder() method.
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseCEPurchaseOrder(data, callback) {
    try {
-        var cParsedObj = {};
-        //Parse the ORMS data
-        cParsedObj.purchaseOrder  =  data.details.orms.order_number;
         //Check for Purchase Order Type
-        var po_type = data.details.retek.retek_po_type;
+        var cParsedObj;
+        var po_type = data.type;
         switch(po_type) {
-            case 'single':
-                    cParsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                    parseSingleTypeForCE(data.details.retek, cParsedObj);
+            case 'single': cParsedObj = parseSingleTypeForCE(data);
                 break;
-            case 'ratio' :
-                    cParsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
-                    parseRatioTypeForCE(data.details.retek, cParsedObj);
+            case 'ratio': cParsedObj = parseRatioTypeForCE(data);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
@@ -54,6 +64,12 @@ function parseCEPurchaseOrder(data, callback) {
         console.error("Error:"+e);
     }
 }
+
+// NOTE: parseSingleORMSTable / parseRatioORMSTable are still used by the CE Care Label
+// and Swing Ticket PO parsers below (uploadPurchaseOrderForLabels / uploadPurchaseOrderForSwingTickets),
+// which are a separate feature (TescoCareLabelParser / TescoSwingTicketParser backends) that
+// still upload two files (ORMS + RETEK) and are out of scope for the sticker-order single-file
+// change - left active/unchanged.
 
 /**
  * Method to parse the ORMS quantity table from CE ORMS table for SINGLE Type
@@ -81,7 +97,7 @@ function parseSingleORMSTable(tabula) {
                             header.push('ITF_Barcode');
                         break;
                 }
-                
+
             } else {
                 if(i === 2 && table_length !== 4) {
                     val = val.text.split(' ');
@@ -91,16 +107,16 @@ function parseSingleORMSTable(tabula) {
                         row[header[i]] = '-';
                     }
                     row[header[3]] = val[0];
-                   
+
                 } else {
                    row[header[i]] = val.text;
                 }
-                  
+
             }
         });
         if(index !== 0) {
-           values.push(row); 
-        } 
+           values.push(row);
+        }
     });
     return values;
 
@@ -119,16 +135,19 @@ function parseRatioORMSTable(tabula) {
 }
 
 /**
- * Method to parse data for CE SINGLE type.
+ * LEGACY two-file (ORMS + RETEK) CE SINGLE-type parser, still used by the CE Care Label
+ * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
+ * single-file change. Renamed from parseSingleTypeForCE (now the single-file sticker
+ * version below) to avoid a name collision; body unchanged.
  * @param  {json} json string to be parsed.
  * @return {object}     Object array with all the required fields.
  */
-function parseSingleTypeForCE(data, cParsedObj) {
+function parseSingleTypeForCELabels(data, cParsedObj) {
     //********************************************* SUPPLIER INFO SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);      
+        cParsedObj.supplierCode = readSupplierCode(supplier);
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -175,16 +194,19 @@ function parseSingleTypeForCE(data, cParsedObj) {
 }
 
 /**
- * Method to parse data for CE RATIO type.
+ * LEGACY two-file (ORMS + RETEK) CE RATIO-type parser, still used by the CE Care Label
+ * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
+ * single-file change. Renamed from parseRatioTypeForCE (now the single-file sticker
+ * version below) to avoid a name collision; body unchanged.
  * @param  {json} json string to be parsed.
  * @return {object}     Object array with all the required fields.
  */
-function parseRatioTypeForCE(data, cParsedObj) {
+function parseRatioTypeForCELabels(data, cParsedObj) {
     //********************************************* SUPPLIER INFO SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);     
+        cParsedObj.supplierCode = readSupplierCode(supplier);
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
@@ -225,10 +247,192 @@ function parseRatioTypeForCE(data, cParsedObj) {
         var row = {};
         row.tpnd = ormsQty.tpnd;
         row.itf = ormsQty.itf;
-        row.cpc = element[2].text;   
+        row.cpc = element[2].text;
         values.push(row);
     });
     cParsedObj.orderQuantity = values;
+}
+
+/**
+ * Method to parse data for CE SINGLE type from a single-file CE PO PDF.
+ * Mirrors UK's parseSingleType() - the CE RETEK-sheet table layout is the
+ * same shape, just one fewer leading id column (SKU instead of TPND+TPNB),
+ * so the header is built explicitly rather than derived from PDF text.
+ * @param  {json} data response from createOrderForCE
+ * @return {object}     Object array with all the required fields.
+ */
+function parseSingleTypeForCE(data) {
+    try {
+        var cParsedObj = {};
+        cParsedObj.purchaseOrder = data.po_number;
+
+        //********************************************* SUPPLIER INFO SECTION *********************************
+        if (data.details.hasOwnProperty("supplier")) {
+            var supplier = JSON.parse(data.details.supplier);
+            cParsedObj.supplierCode = readSupplierCode(supplier);
+        }
+
+        //********************************************* ORDER INFORMATION SECTION *********************************
+        // Scan every cell for a known "Label : value" prefix instead of relying on a fixed
+        // row/column index - when a value (e.g. 24 Char Description) is blank on a real PO,
+        // the row's non-empty cell count shifts and position-based indexing reads the wrong
+        // cell (verified against a real order where this produced "Unit Of Measure :" instead
+        // of the description).
+        var info = JSON.parse(data.details.info);
+        $.each(info[0].data, function(ind, ele) {
+            $.each(ele, function(i, cell) {
+                var text = cell.text || '';
+                var colonIndex = text.indexOf(':');
+                if(colonIndex === -1) { return; }
+                var label = text.substring(0, colonIndex).trim();
+                //The value is normally merged into the same cell after the colon (e.g.
+                //"VPN : 909-0762"), but Tabula sometimes splits label and value into
+                //adjacent cells instead (seen with "24 Char Description" on some real
+                //POs). Only fall back to the next cell when it's a plain value (no colon
+                //of its own) - otherwise it's a different field's own "label : value" cell
+                //(e.g. "Product Description : ..."), not a continuation of this one, and
+                //borrowing it would silently attribute the wrong text to this field.
+                var sameCellValue = text.substring(colonIndex + 1).trim();
+                var nextCellText = ele[i + 1] ? (ele[i + 1].text || '') : '';
+                var nextCellIsPlainValue = nextCellText !== '' && nextCellText.indexOf(':') === -1;
+                var value = sameCellValue || (nextCellIsPlainValue ? nextCellText.trim() : '');
+                if(ceLabelMatches(label, 'VPN')) {
+                    //VPN is the primary CE style number, but it's sometimes left blank on
+                    //a real PO - Style No (below) fills in as a fallback in that case.
+                    if(value) { cParsedObj.styleNumber = value; }
+                } else if(ceLabelMatches(label, 'Style No')) {
+                    if(!cParsedObj.styleNumber && value) { cParsedObj.styleNumber = value; }
+                } else if(ceLabelMatches(label, '24 Char Description')) {
+                    cParsedObj.shortDescription = value;
+                } else if(ceLabelMatches(label, 'Season Code')) {
+                    if(value) { cParsedObj.seasonCode = value; }
+                }
+            });
+        });
+
+        //********************************************* ORDER QUANTITY SECTION ************************************
+        // Wrapped in its own try/catch so a problem here (e.g. an unexpected table shape)
+        // doesn't discard the info fields (styleNumber/shortDescription/seasonCode) already
+        // parsed above - previously any error in this section made the whole function return
+        // undefined, silently dropping fields that had already been read correctly.
+        cParsedObj.orderQuantity = [];
+        try {
+            // CE table columns (verified against a real single-type PO): SKU, <blank spacer
+            // column>, Colour, Size, Single Qty, Case Size, Case Qty, EAN Barcode, ITF Barcode,
+            // Unit Selling Price, Unit cost, HTS, Quota Category. SKU is mapped to 'TPND' so it
+            // lines up with the key renderParsedValues() reads. The blank spacer column (index 1)
+            // has no header entry, so it's dropped automatically below.
+            var header = ['TPND', null, 'Colour', 'Size', 'Single_Qty', 'Case_Size', 'Case_Qty', 'EAN_Barcode', 'ITF_Barcode', 'Unit_Selling_Price', 'Unit_cost', 'HTS', 'Quota_Category'];
+            var values = [];
+            var tabula = JSON.parse(data.details.table);
+
+            //Drop the leading blank header/border row and the trailing "Total Quantity" row.
+            //Both are merged cells so their one bit of text can land at any column index and
+            //aren't reliably the first/last row for every PO layout - filter by content instead:
+            //a real data row always has several populated cells (SKU/Colour/Size/quantities),
+            //while blank and total rows have at most one or two.
+            var rows = $.grep(tabula[0].data, function(row) {
+                var nonEmptyCount = 0;
+                $.each(row, function(i, cell) {
+                    if(cell.text !== '') { nonEmptyCount++; }
+                });
+                return nonEmptyCount > 2;
+            });
+
+            $.each(rows, function(index, element) {
+                var row = {};
+                $.each(element, function(i, val) {
+                    if(header[i]) {
+                        row[header[i]] = val.text;
+                    }
+                });
+                values.push(row);
+            });
+            cParsedObj.orderQuantity = values;
+        } catch(qe) {
+            console.error("Error parsing CE single order quantity table:"+qe);
+        }
+        return cParsedObj;
+    } catch(e) {
+        console.error("Error:"+e);
+    }
+}
+
+/**
+ * Method to parse data for CE RATIO type from a single-file CE PO PDF.
+ * @param  {json} data response from createOrderForCE
+ * @return {object}     Object array with all the required fields.
+ */
+function parseRatioTypeForCE(data) {
+    var cParsedObj = {};
+    try {
+        cParsedObj.purchaseOrder = data.po_number;
+
+        //********************************************* SUPPLIER INFO SECTION *********************************
+        if (data.details.hasOwnProperty("supplier")) {
+            var supplier = JSON.parse(data.details.supplier);
+            cParsedObj.supplierCode = readSupplierCode(supplier);
+        }
+
+        //********************************************* ORDER INFORMATION SECTION *********************************
+        // Scan every cell for a known label instead of relying on a fixed row index - the CE_ratio_info_col_1/2
+        // crops don't always come back with the same row count/order (e.g. rows with a blank value can be
+        // skipped by Tabula's stream mode), so position-based indexing can silently read the wrong row.
+        // Label and value are normally separate adjacent cells here (unlike the single-type crop, where
+        // they're merged into one cell), but check the same cell too in case a PO renders differently.
+        var info = JSON.parse(data.details.info);
+        $.each(info[0].data, function(ind, ele) {
+            $.each(ele, function(i, cell) {
+                var text = cell.text || '';
+                var label = text.replace(/:.*$/, '').trim();
+                var colonIndex = text.indexOf(':');
+                var sameCell = colonIndex !== -1 ? text.substring(colonIndex + 1).trim() : '';
+                var value = sameCell || (ele[i + 1] ? (ele[i + 1].text || '').trim() : '');
+                if(ceLabelMatches(label, 'VPN')) {
+                    //VPN is the primary CE style number, but it's sometimes left blank on
+                    //a real PO - Style No (below) fills in as a fallback in that case.
+                    if(value) { cParsedObj.styleNumber = value; }
+                } else if(ceLabelMatches(label, 'Style No')) {
+                    if(!cParsedObj.styleNumber && value) { cParsedObj.styleNumber = value; }
+                } else if(ceLabelMatches(label, '24 Char Description')) {
+                    if(value) { cParsedObj.shortDescription = value; }
+                } else if(ceLabelMatches(label, 'Season Code')) {
+                    if(value) { cParsedObj.seasonCode = value; }
+                }
+            });
+        });
+    } catch(e) {
+        console.error("Error parsing CE ratio info section:"+e);
+    }
+
+    //********************************************* ORDER QUANTITY SECTION ************************************
+    // Wrapped in its own try/catch so a problem here doesn't discard the info fields
+    // (styleNumber/shortDescription/seasonCode) already parsed above.
+    cParsedObj.orderQuantity = [];
+    try {
+        // Ratio Pack row columns: Ratio Pack Description, Ratio Pack cost, No of Singles
+        // per Ratio, Qty of Ratio Packs, ITF Barcode, SKU, Order Value, Quota Category.
+        var tabula = [];
+        var packA = JSON.parse(data.details.ratioPackA);
+        tabula.push(packA);
+        if (data.details.hasOwnProperty("ratioPackB")) {
+            var packB = JSON.parse(data.details.ratioPackB);
+            tabula.push(packB);
+        }
+
+        var values = [];
+        $.each(tabula, function(index,element) {
+            var row = {};
+            row.cpc  = element[2].text;
+            row.itf  = element[4].text;
+            row.tpnd = element[5].text;
+            values.push(row);
+        });
+        cParsedObj.orderQuantity = values;
+    } catch(qe) {
+        console.error("Error parsing CE ratio order quantity table:"+qe);
+    }
+    return cParsedObj;
 }
 
 /**
@@ -477,13 +681,13 @@ function renderParsedValues(parsedObj) {
 
     // parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
 
-    // if(zone === 'ce') {
-    //     parsedObj.styleNumber != null?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', false);
-    //  } else {
-    //     parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
-    //  }
-   
-   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
+    if(zone === 'ce') {
+        parsedObj.styleNumber?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').attr('readonly', false);
+     } else {
+        parsedObj.styleNumber?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').attr('readonly', false);
+     }
+
+   parsedObj.seasonCode?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').attr('readonly', false);
 
     $('#tesco_description').val(parsedObj.shortDescription);
 	if(typeof parsedObj.originalDescription !== 'undefined') {
@@ -752,11 +956,11 @@ function parseVPNDescription(tabula) {
                         switch(po_type) {
                             case 'single':
                                     parsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                                    parseSingleTypeForCE(data.details.retek, parsedObj);
+                                    parseSingleTypeForCELabels(data.details.retek, parsedObj);
                                 break;
                             case 'ratio' :
-                                    parsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
-                                    parseRatioTypeForCE(data.details.retek, parsedObj);
+                                    parsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table);
+                                    parseRatioTypeForCELabels(data.details.retek, parsedObj);
                                 break;
                             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                                 break;
