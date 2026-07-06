@@ -1341,130 +1341,208 @@ class OrderController extends Controller
     }
 
         /**
-     * Method to create tesco order for CE zone from purchase order using Tabula-Java
+     * LEGACY two-file (ORMS + RETEK) CE parser. Superseded by the single-file
+     * createOrderForCE() below, which parses the RETEK-sheet layout only
+     * (the RETEK sheet already contains everything the ORMS join used to
+     * provide: SKU/EAN/ITF/size/case-size, in one table). Kept commented out
+     * for reference, not deleted.
+     * @return \Illuminate\Http\Response
+     */
+    // public function createOrderForCE_legacy($request) {
+    //   try {
+
+    //       $output = array();
+    //       $orms_data = array();
+    //       $retek_data = array();
+    //       $template_type = 'TCL';
+    //       //Check the files has been uploaded or not
+    //       if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
+    //         //Move the orms file
+    //         $orms = $request->file('ce_orms_purchase_order');
+    //         $orms_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $orms->getClientOriginalName());
+    //         $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
+
+    //         //Move the retek file
+    //         $retek = $request->file('ce_retek_purchase_order');
+    //         $retek_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $retek->getClientOriginalName());
+    //         $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
+
+    //         //Parse ORMS File
+    //         if(!$this->parseORMS($orms_path)) {
+    //           return response()->json(['error' => 'Unrecognized ORMS file'], 400);
+    //         }
+    //         list($orms_no, $retek_no)  = $this->parseORMS($orms_path);
+    //         $orms_data['order_number'] = trim($orms_no);
+    //         $orms_data['retek_number'] = trim($retek_no);
+    //         //Check the RETEK purchase order validation
+    //         //Check the purchase order type whether it is Single or Ratio.
+    //         $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
+
+    //         //Get last 3 digits from ORMS Retek PO number and Retek po number
+    //         $retek_po_number_short = (strlen($retek_data['retek_po_number'])>=3)?(substr($retek_data['retek_po_number'], -3)):($retek_data['retek_po_number']);
+    //         $orms_retekpo_number_short = (strlen($orms_data['retek_number'])>=3)?(substr($orms_data['retek_number'], -3)):($orms_data['retek_number']);
+    //         //Compare RETEK PO number from both the sheets
+    //         if(($retek_data['retek_po_number'] !== $orms_data['retek_number']) && $retek_po_number_short !==  $orms_retekpo_number_short ) {
+    //           return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
+    //         }
+    //         $po_type   = $this->checkPOType($retek_path);
+    //         $arr = explode(' ',trim($po_type));
+    //         $retek_data['retek_po_type'] = strtolower($arr[0]);
+
+    //         //Check for Packing Method to identify whether it is TCL or THL
+    //         //If Packing Method is 'HANGING' then it is THL
+    //         //If Packing Method is 'BOX' or something like that then it is TCL
+    //         $isTHL = $this->checkPackingMethod($retek_path);
+    //         if(gettype($isTHL) !== 'boolean') {
+    //           return response()->json(['error' => $isTHL], 400);
+    //         } else if($isTHL){
+    //           $template_type = 'THL';
+    //         }
+
+    //         //Validate the Template and Packaging Method.
+    //         switch ($request->template_name) {
+    //           case 'TCL 1 (QR), TCL 2 (QR) & TSL 1':
+    //             if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'TCL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 (QR), TCL 2 (QR) & TSL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+    //           case 'TCL 4 & TSL 3':
+    //             if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+    //           case 'THL 1 (QR)':
+    //             if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'THL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+    //           case 'THL 3 (QR)':
+    //             if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'THL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+    //           case 'TCL 5 (QR)':
+    //             if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+    //           case 'TCL 4 (QR), TSL 3 & TSL 2':
+    //             if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
+    //               return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 (QR), TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
+    //             }
+    //             break;
+
+    //           default:
+    //             return response()->json(['error' => 'Unknown Template Name for CE'], 400);
+    //             break;
+    //         }
+
+    //         switch ($retek_data['retek_po_type']) {
+    //           case 'single':
+    //             $orms_table = $this->parseORMSTable($orms_path, 'single');
+    //             $orms_data['order_table']  = $orms_table;
+    //             $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
+    //             $retek_data['info'] = $retek_single_data['info'];
+    //             $retek_data['table'] = $retek_single_data['table'];
+    //             break;
+    //           case 'ratio':
+    //             $orms_table = $this->parseORMSTable($orms_path, 'ratio');
+    //             $orms_data['order_table']  = $orms_table;
+    //             $ratio_table          = $this->extractCERatioTable($retek_path, 'CE');//Check for Ratio Pack B
+    //             $retek_ratio_data     = $this->cropVerticalPDF($retek_path, 'ratio', 'CE');
+    //             $retek_data['info']   = json_encode($retek_ratio_data['info']);
+    //             $retek_data['ratioPackA']  = json_encode($ratio_table[0]);
+    //             break;
+    //           default:
+    //             return response()->json(['error' => 'Unknown PO Type'], 400);
+    //             break;
+    //         }
+
+    //         $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
+    //         $output['orms'] = $orms_data;
+    //         $output['retek'] = $retek_data;
+    //         return response()->json(['details' =>$output], 200);
+
+    //       } else {
+    //         return response()->json(['error' => 'File not found'], 400);
+    //       }
+    //     } catch (\Exception $e) {
+    //       return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+    //     }
+    // }
+
+    /**
+     * Method to create tesco order for CE zone from a single purchase order PDF using Tabula-Java.
+     * Mirrors createOrderForUK() - the CE "RETEK" sheet layout already contains everything
+     * (SKU/EAN/ITF/size/case-size) that used to require a second ORMS file to join in.
      * @return \Illuminate\Http\Response
      */
     public function createOrderForCE($request) {
       try {
+        //Check the file has been uploaded or not
+        if($request->hasFile('ce_purchase_order')) {
+          $file = $request->file('ce_purchase_order');
+          $name = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $file->getClientOriginalName());
+          $path = $file->move('storage/app/TESCO/purchaseOrder/CE', time().'_'.$name);
 
-          $output = array();
-          $orms_data = array();
-          $retek_data = array();
-          $template_type = 'TCL';
-          //Check the files has been uploaded or not
-          if($request->hasFile('ce_orms_purchase_order') && $request->hasFile('ce_retek_purchase_order')) {
-            //Move the orms file
-            $orms = $request->file('ce_orms_purchase_order');
-            $orms_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $orms->getClientOriginalName());
-            $orms_path = $orms->move('storage/app/TESCO/purchaseOrder/CE/ORMS', time().'_'.$orms_filename);
+          //Read the Purchase Order Series
+          $po_number = $this->getPOSeries($path);
 
-            //Move the retek file
-            $retek = $request->file('ce_retek_purchase_order');
-            $retek_filename = preg_replace("/[^A-Za-z0-9\_\-\.]/", '', $retek->getClientOriginalName());
-            $retek_path = $retek->move('storage/app/TESCO/purchaseOrder/CE/RETEK', time().'_'.$retek_filename);
+          //Check the type of PO
+          $po_type = $this->checkPOType($path);
+          $arr = explode(' ',trim($po_type));
+          $po_type = strtolower($arr[0]);
 
-            //Parse ORMS File
-            if(!$this->parseORMS($orms_path)) {
-              return response()->json(['error' => 'Unrecognized ORMS file'], 400);
-            }
-            list($orms_no, $retek_no)  = $this->parseORMS($orms_path);
-            $orms_data['order_number'] = trim($orms_no);
-            $orms_data['retek_number'] = trim($retek_no);
-            //Check the RETEK purchase order validation
-            //Check the purchase order type whether it is Single or Ratio.
-            $retek_data['retek_po_number'] = trim($this->getPOSeries($retek_path));
-
-            //Get last 3 digits from ORMS Retek PO number and Retek po number
-            $retek_po_number_short = (strlen($retek_data['retek_po_number'])>=3)?(substr($retek_data['retek_po_number'], -3)):($retek_data['retek_po_number']);
-            $orms_retekpo_number_short = (strlen($orms_data['retek_number'])>=3)?(substr($orms_data['retek_number'], -3)):($orms_data['retek_number']);
-            //Compare RETEK PO number from both the sheets
-            if(($retek_data['retek_po_number'] !== $orms_data['retek_number']) && $retek_po_number_short !==  $orms_retekpo_number_short ) {
-              return response()->json(['error' => 'RETEK Purchase Order Number Mismatch'], 400);
-            }
-            $po_type   = $this->checkPOType($retek_path);
-            $arr = explode(' ',trim($po_type));
-            $retek_data['retek_po_type'] = strtolower($arr[0]);
-
-            //Check for Packing Method to identify whether it is TCL or THL
-            //If Packing Method is 'HANGING' then it is THL
-            //If Packing Method is 'BOX' or something like that then it is TCL
-            $isTHL = $this->checkPackingMethod($retek_path);
-            if(gettype($isTHL) !== 'boolean') {
-              return response()->json(['error' => $isTHL], 400);
-            } else if($isTHL){
-              $template_type = 'THL';
-            }
-            
-            //Validate the Template and Packaging Method.
-            switch ($request->template_name) {
-              case 'TCL 1 (QR), TCL 2 (QR) & TSL 1':
-                if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 1 (QR), TCL 2 (QR) & TSL 1', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-              case 'TCL 4 & TSL 3':
-                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 & TSL 3', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-              case 'THL 1 (QR)':
-                if($retek_data['retek_po_type'] !== 'ratio' || $template_type !== 'THL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 1 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-              case 'THL 3 (QR)':
-                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'THL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'THL 3 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-              case 'TCL 5 (QR)':
-                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 5 (QR)', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-              case 'TCL 4 (QR), TSL 3 & TSL 2':
-                if($retek_data['retek_po_type'] !== 'single' || $template_type !== 'TCL') {
-                  return response()->json(['error' => 'Template and PO Mismatch', 'template' => 'TCL 4 (QR), TSL 3 & TSL 2', 'template type' => $template_type, 'po type' => $retek_data['retek_po_type']], 422);
-                }
-                break;
-  
-              default:
-                return response()->json(['error' => 'Unknown Template Name for CE'], 400);
-                break;
-            }
-
-            switch ($retek_data['retek_po_type']) {
-              case 'single':
-                $orms_table = $this->parseORMSTable($orms_path, 'single');
-                $orms_data['order_table']  = $orms_table;
-                $retek_single_data = $this->cropPDF($retek_path, 'single', 'CE');
-                $retek_data['info'] = $retek_single_data['info'];
-                $retek_data['table'] = $retek_single_data['table'];
-                break;
-              case 'ratio':
-                $orms_table = $this->parseORMSTable($orms_path, 'ratio');
-                $orms_data['order_table']  = $orms_table;
-                $ratio_table          = $this->extractCERatioTable($retek_path, 'CE');//Check for Ratio Pack B
-                $retek_ratio_data     = $this->cropVerticalPDF($retek_path, 'ratio', 'CE');
-                $retek_data['info']   = json_encode($retek_ratio_data['info']);
-                $retek_data['ratioPackA']  = json_encode($ratio_table[0]);
-                break;
-              default:
-                return response()->json(['error' => 'Unknown PO Type'], 400);
-                break;
-            }
-
-            $retek_data['supplier'] = $this->getSupplierInfo($retek_path);
-            $output['orms'] = $orms_data;
-            $output['retek'] = $retek_data;
-            return response()->json(['details' =>$output], 200);
-          
-          } else {
-            return response()->json(['error' => 'File not found'], 400);
+          //Validate the Template against the PO's Single/Ratio type. TCL and THL PDFs are
+          //structurally identical (verified against real THL1/THL3 samples - both report
+          //"Packaging Method : BOXED (FLAT)", the same as TCL, so that field can't reliably
+          //distinguish TCL from THL). There's no other reliable signal in the document, so
+          //TCL vs THL is trusted from the template the user already picked in the UI - only
+          //the Single/Ratio type is verified against the PDF.
+          switch ($request->template_name) {
+            case 'TCL 1 (QR), TCL 2 (QR) & TSL 1':
+            case 'THL 1 (QR)':
+              if($po_type !== 'ratio') {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => $request->template_name, 'po type' => $po_type], 422);
+              }
+              break;
+            case 'TCL 4 & TSL 3':
+            case 'THL 3 (QR)':
+            case 'TCL 5 (QR)':
+            case 'TCL 4 (QR), TSL 3 & TSL 2':
+              if($po_type !== 'single') {
+                return response()->json(['error' => 'Template and PO Mismatch', 'template' => $request->template_name, 'po type' => $po_type], 422);
+              }
+              break;
+            default:
+              return response()->json(['error' => 'Unknown Template Name for CE'], 400);
+              break;
           }
-        } catch (\Exception $e) {
-          return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+
+          switch ($po_type) {
+            case 'single':
+              $data = $this->cropPDF($path, 'single', 'CE');
+              break;
+            case 'ratio':
+              $ratio_table = $this->extractCERatioTable($path, 'CE');
+              $ratio_info  = $this->cropVerticalPDF($path, 'ratio', 'CE');
+              $data = ['info' => json_encode($ratio_info['info'])];
+              if($ratio_table) {
+                $data['ratioPackA'] = json_encode($ratio_table[0]);
+              }
+              break;
+            default:
+              return response()->json(['error' => 'Unknown PO Type'], 400);
+              break;
+          }
+          $data['supplier'] = $this->getSupplierInfo($path);
+          return response()->json(['details' => $data, 'type' => $po_type, 'po_number' => $po_number], 200);
+        } else {
+          return response()->json(['error' => 'File not found'], 400);
         }
+      } catch (\Exception $e) {
+        return response()->json(['Message' =>$e->getMessage(),'Line' => $e->getLine(),'File' => $e->getFile()]);
+      }
     }
 
     /**
