@@ -258,6 +258,13 @@ function tescoOrders(callback) {
                                                                                     <div class="help-block with-errors"></div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="ce-care-label-po-upload hidden">
+                                                                                <div class="form-group files" id="ce_care_label_file">
+                                                                                    <label>Upload CE PO</label>
+                                                                                    <input type="file" name="ce_care_label_purchase_order" id="ce_care_label_purchase_order" class="form-control" accept="application/pdf" onchange="ValidateSingleInput(this);" required/>
+                                                                                    <div class="help-block with-errors"></div>
+                                                                                </div>
+                                                                            </div>
 																			<div class="orms-ce-po-upload hidden">
                                                                                 <div class="form-group files" id="orms_single_file ">
                                                                                     <label>Upload CE ORMS PO</label>
@@ -346,6 +353,8 @@ function tescoOrders(callback) {
 						$(".ce-po-upload").addClass("hidden");
 						$('#ce_orms').prop('required', false);
 						$('#ce_retek').prop('required', false);
+						$(".ce-care-label-po-upload").addClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', false);
 					} else if (zone === 'CE' && globalOrderType === 1) {
 						$(".po-upload").addClass("hidden");
 						$('#po_upload').prop('required', false);
@@ -354,6 +363,8 @@ function tescoOrders(callback) {
 						$(".ce-po-upload").addClass("hidden");
 						$('#ce_orms').prop('required', false);
 						$('#ce_retek').prop('required', false);
+						$(".ce-care-label-po-upload").addClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', false);
 					} else {
 						$(".po-upload").addClass("hidden");
 						$('#po_upload').prop('required', false);
@@ -362,6 +373,8 @@ function tescoOrders(callback) {
 						$(".ce-po-upload").addClass("hidden");
 						$('#ce_orms').prop('required', false);
 						$('#ce_retek').prop('required', false);
+						$(".ce-care-label-po-upload").addClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', false);
 						$(".orms-ce-po-upload").addClass("hidden");
 						$('#orms_po_upload').prop('required', false);
 					}
@@ -375,16 +388,14 @@ function tescoOrders(callback) {
 							if (parserPOzone === 'UK') {
 								$(".po-upload").removeClass("hidden");
 								$('#po_upload').prop('required', true);
-								$(".ce-po-upload").addClass("hidden");
-								$('#ce_orms').prop('required', false);
-								$('#ce_retek').prop('required', false);
+								$(".ce-care-label-po-upload").addClass("hidden");
+								$('#ce_care_label_purchase_order').prop('required', false);
 							} else{
 								$(".po-upload").addClass("hidden");
 								$('#po_upload').prop('required', false);
-								$(".ce-po-upload").removeClass("hidden");
-								$('#ce_orms').prop('required', true);
-								$('#ce_retek').prop('required', true);
-							} 
+								$(".ce-care-label-po-upload").removeClass("hidden");
+								$('#ce_care_label_purchase_order').prop('required', true);
+							}
 						}
 					} else if(globalOrderType === 0 && temp_type === 'tesco_care_labels') {
 						$("#tesco_care_parser_type_div").addClass("hidden");
@@ -414,21 +425,18 @@ function tescoOrders(callback) {
 					if (parserPOzone === 'UK' && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
 						$(".po-upload").removeClass("hidden");
 						$('#po_upload').prop('required', true);
-						$(".ce-po-upload").addClass("hidden");
-						$('#ce_orms').prop('required', false);
-						$('#ce_retek').prop('required', false);
+						$(".ce-care-label-po-upload").addClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', false);
 					} else if ((parserPOzone === 'CE' || parserPOzone === 'BOTH') && globalOrderType === 1 && temp_type === 'tesco_care_labels') {
 						$(".po-upload").addClass("hidden");
 						$('#po_upload').prop('required', false);
-						$(".ce-po-upload").removeClass("hidden");
-						$('#ce_orms').prop('required', true);
-						$('#ce_retek').prop('required', true);
+						$(".ce-care-label-po-upload").removeClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', true);
 					} else {
 						$(".po-upload").addClass("hidden");
 						$('#po_upload').prop('required', false);
-						$(".ce-po-upload").addClass("hidden");
-						$('#ce_orms').prop('required', false);
-						$('#ce_retek').prop('required', false);
+						$(".ce-care-label-po-upload").addClass("hidden");
+						$('#ce_care_label_purchase_order').prop('required', false);
 					}
 				});
 
@@ -943,6 +951,8 @@ function tescoOrders(callback) {
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+							$(".ce-care-label-po-upload").addClass("hidden");
+							$('#ce_care_label_purchase_order').prop('required', false);
 							$(".orms-ce-po-upload").addClass("hidden");
 							$('#orms_po_upload').prop('required', false);
 						} else if (data.node.original.zone === 'CE' && globalOrderType === 1) {
@@ -953,6 +963,8 @@ function tescoOrders(callback) {
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+							$(".ce-care-label-po-upload").addClass("hidden");
+							$('#ce_care_label_purchase_order').prop('required', false);
 							$(".orms-ce-po-upload").addClass("hidden");
 							$('#orms_po_upload').prop('required', false);
 						} else {
@@ -963,6 +975,8 @@ function tescoOrders(callback) {
 							$(".ce-po-upload").addClass("hidden");
 							$('#ce_orms').prop('required', false);
 							$('#ce_retek').prop('required', false);
+							$(".ce-care-label-po-upload").addClass("hidden");
+							$('#ce_care_label_purchase_order').prop('required', false);
 							$(".orms-ce-po-upload").addClass("hidden");
 							$('#orms_po_upload').prop('required', false);
 						}
@@ -1014,16 +1028,14 @@ function tescoOrders(callback) {
 									if (parserPOzone === 'UK') {
 										$(".po-upload").removeClass("hidden");
 										$('#po_upload').prop('required', true);
-										$(".ce-po-upload").addClass("hidden");
-										$('#ce_orms').prop('required', false);
-										$('#ce_retek').prop('required', false);
-									} else { 
+										$(".ce-care-label-po-upload").addClass("hidden");
+										$('#ce_care_label_purchase_order').prop('required', false);
+									} else {
 										$(".po-upload").addClass("hidden");
 										$('#po_upload').prop('required', false);
-										$(".ce-po-upload").removeClass("hidden");
-										$('#ce_orms').prop('required', true);
-										$('#ce_retek').prop('required', true);
-									} 
+										$(".ce-care-label-po-upload").removeClass("hidden");
+										$('#ce_care_label_purchase_order').prop('required', true);
+									}
 								}
 							} else if(globalOrderType === 1 && template_type === 'tesco_swing_tickets') {
 								// Hide Zone selector div
@@ -1034,10 +1046,9 @@ function tescoOrders(callback) {
 								// For swing tickets upload CE ORMS PO only
 								$(".orms-ce-po-upload").removeClass("hidden");
 								$('#orms_po_upload').prop('required', true);
-								$(".ce-po-upload").addClass("hidden");
+								$(".ce-care-label-po-upload").addClass("hidden");
+								$('#ce_care_label_purchase_order').prop('required', false);
 								$(".po-upload").addClass("hidden");
-								$('#ce_orms').prop('required', false);
-								$('#ce_retek').prop('required', false);
 								$('#po_upload').prop('required', false);
 
 								localStorage.setItem("zone", 'CE');
@@ -1080,10 +1091,12 @@ function tescoOrders(callback) {
 								var ce_orms_purchase_order = $('#ce_orms')[0].files[0];
 								var ce_retek_purchase_order = $('#ce_retek')[0].files[0];
 								var ce_purchase_order = $('#ce_purchase_order')[0].files[0];
+								var ce_care_label_purchase_order = $('#ce_care_label_purchase_order')[0].files[0];
 								formData.append('purchase_order', purchase_order);
 								formData.append('ce_orms_purchase_order', ce_orms_purchase_order);
 								formData.append('ce_retek_purchase_order', ce_retek_purchase_order);
 								formData.append('ce_purchase_order', ce_purchase_order);
+								formData.append('ce_care_label_purchase_order', ce_care_label_purchase_order);
 								formData.append('type', localStorage.getItem("template type"));
 								formData.append('template_name', localStorage.getItem("template_group").replace(" with QR", ""));
 								if(template_type === 'tesco_care_labels') {
@@ -10404,6 +10417,8 @@ function selectNewOrder()
 		$(".ce-po-upload").addClass("hidden");
 		$('#ce_orms').prop('required', false);
 		$('#ce_retek').prop('required', false);
+		$(".ce-care-label-po-upload").addClass("hidden");
+		$('#ce_care_label_purchase_order').prop('required', false);
 	} else if (back_zone === 'CE' && order_type_back === "1") {
 
 		$(".po-upload").addClass("hidden");
@@ -10413,6 +10428,8 @@ function selectNewOrder()
 		$(".ce-po-upload").addClass("hidden");
 		$('#ce_orms').prop('required', false);
 		$('#ce_retek').prop('required', false);
+		$(".ce-care-label-po-upload").addClass("hidden");
+		$('#ce_care_label_purchase_order').prop('required', false);
 	} else {
 		$(".po-upload").addClass("hidden");
 		$('#po_upload').prop('required', false);
