@@ -65,11 +65,12 @@ function parseCEPurchaseOrder(data, callback) {
     }
 }
 
-// NOTE: parseSingleORMSTable / parseRatioORMSTable are still used by the CE Care Label
-// and Swing Ticket PO parsers below (uploadPurchaseOrderForLabels / uploadPurchaseOrderForSwingTickets),
-// which are a separate feature (TescoCareLabelParser / TescoSwingTicketParser backends) that
-// still upload two files (ORMS + RETEK) and are out of scope for the sticker-order single-file
-// change - left active/unchanged.
+// NOTE: parseSingleORMSTable is still used by the CE Swing Ticket PO parser below
+// (uploadPurchaseOrderForSwingTickets), a separate feature (TescoSwingTicketParser backend)
+// that still uploads two files (ORMS + RETEK) and is out of scope for the single-file
+// conversion - left active/unchanged. parseRatioORMSTable is no longer called anywhere
+// (the CE Care Label parser it used to feed was converted to single-file below) but is
+// kept, not deleted, per the same policy as the other legacy parsers in this file.
 
 /**
  * Method to parse the ORMS quantity table from CE ORMS table for SINGLE Type
@@ -134,124 +135,127 @@ function parseRatioORMSTable(tabula) {
     return values;
 }
 
-/**
- * LEGACY two-file (ORMS + RETEK) CE SINGLE-type parser, still used by the CE Care Label
- * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
- * single-file change. Renamed from parseSingleTypeForCE (now the single-file sticker
- * version below) to avoid a name collision; body unchanged.
- * @param  {json} json string to be parsed.
- * @return {object}     Object array with all the required fields.
- */
-function parseSingleTypeForCELabels(data, cParsedObj) {
-    //********************************************* SUPPLIER INFO SECTION *********************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    if (data.hasOwnProperty("supplier")) {
-        var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);
-    }
-    //********************************************* ORDER INFORMATION SECTION *********************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-
-    var info = JSON.parse(data.info);
-    $.each(info[0].data, function(ind, ele) {
-        var row_length = ele.length;
-        switch(ind) {
-            case 0:
-                //Extract VPN - CE STYLE NUMBER
-                var new_element = removeEmptyValues(ele);
-                var vpn = new_element[0].text.split(":");
-                cParsedObj.styleNumber  = vpn[1].trim();
-                break;
-            case 1:
-                //Extract 24 Char Description
-                var new_element = removeEmptyValues(ele);
-                cParsedObj.shortDescription = new_element[2].text;
-                break;
-            case 2:
-                //Extract Season Code
-                var new_element = removeEmptyValues(ele);
-                var season = new_element[1].text.split(":");
-                cParsedObj.seasonCode = season[1];
-                break;
-        }
-    });
-
-
-    //********************************************* ORDER QUANTITY SECTION ************************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    var tabula = JSON.parse(data.table);
-    var ormsQty = cParsedObj.orderQuantity;
-    tabula[0].data.pop(); //Remove the total quantity row from the object
-    tabula[0].data.shift(); //Remove the table headers from the array
-    var retek_size = [];    //Create a new array with size as index and casesize as value
-    for(var i in tabula[0].data) {
-        retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
-    }
-    //Size wise mapping of ORMS and RETEK tables.
-    $.each(ormsQty, function(index,element) {
-        ormsQty[index].Case_Size = retek_size[element.Size];
-    });
-}
-
-/**
- * LEGACY two-file (ORMS + RETEK) CE RATIO-type parser, still used by the CE Care Label
- * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
- * single-file change. Renamed from parseRatioTypeForCE (now the single-file sticker
- * version below) to avoid a name collision; body unchanged.
- * @param  {json} json string to be parsed.
- * @return {object}     Object array with all the required fields.
- */
-function parseRatioTypeForCELabels(data, cParsedObj) {
-    //********************************************* SUPPLIER INFO SECTION *********************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    if (data.hasOwnProperty("supplier")) {
-        var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);
-    }
-    //********************************************* ORDER INFORMATION SECTION *********************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-
-    var info = JSON.parse(data.info);
-    $.each(info[0].data, function(ind, ele) {
-        switch(ind) {
-            case 0:
-                //Extract VPN - CE STYLE NUMBER
-                cParsedObj.styleNumber  = ele[1].text;
-                break;
-            case 2:
-                //Extract 24 Char Description
-                cParsedObj.shortDescription = ele[1].text;
-                break;
-            case 3:
-                //Extract Season Code
-                cParsedObj.seasonCode = ele[1].text;
-                break;
-
-        }
-    });
-
-
-    //********************************************* ORDER QUANTITY SECTION ************************************
-    //********************************************* PARSE THE JSON TABULA *************************************
-    var tabula = [];
-    var packA = JSON.parse(data.ratioPackA);
-    tabula.push(packA);
-    if (data.hasOwnProperty("ratioPackB")) {
-        var packB = JSON.parse(data.ratioPackB);
-        tabula.push(packB);
-    }
-    var ormsQty = cParsedObj.orderQuantity;
-
-    var values = [];
-    $.each(tabula, function(index,element) {
-        var row = {};
-        row.tpnd = ormsQty.tpnd;
-        row.itf = ormsQty.itf;
-        row.cpc = element[2].text;
-        values.push(row);
-    });
-    cParsedObj.orderQuantity = values;
-}
+// LEGACY two-file (ORMS + RETEK) CE Care Label parsers. Superseded by the single-file
+// parseSingleTypeForCE()/parseRatioTypeForCE() now used directly by uploadPurchaseOrderForLabels().
+// Kept commented out for reference, not deleted.
+// /**
+//  * LEGACY two-file (ORMS + RETEK) CE SINGLE-type parser, still used by the CE Care Label
+//  * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
+//  * single-file change. Renamed from parseSingleTypeForCE (now the single-file sticker
+//  * version below) to avoid a name collision; body unchanged.
+//  * @param  {json} json string to be parsed.
+//  * @return {object}     Object array with all the required fields.
+//  */
+// function parseSingleTypeForCELabels(data, cParsedObj) {
+//     //********************************************* SUPPLIER INFO SECTION *********************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//     if (data.hasOwnProperty("supplier")) {
+//         var supplier = JSON.parse(data.supplier);
+//         cParsedObj.supplierCode = readSupplierCode(supplier);
+//     }
+//     //********************************************* ORDER INFORMATION SECTION *********************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//
+//     var info = JSON.parse(data.info);
+//     $.each(info[0].data, function(ind, ele) {
+//         var row_length = ele.length;
+//         switch(ind) {
+//             case 0:
+//                 //Extract VPN - CE STYLE NUMBER
+//                 var new_element = removeEmptyValues(ele);
+//                 var vpn = new_element[0].text.split(":");
+//                 cParsedObj.styleNumber  = vpn[1].trim();
+//                 break;
+//             case 1:
+//                 //Extract 24 Char Description
+//                 var new_element = removeEmptyValues(ele);
+//                 cParsedObj.shortDescription = new_element[2].text;
+//                 break;
+//             case 2:
+//                 //Extract Season Code
+//                 var new_element = removeEmptyValues(ele);
+//                 var season = new_element[1].text.split(":");
+//                 cParsedObj.seasonCode = season[1];
+//                 break;
+//         }
+//     });
+//
+//
+//     //********************************************* ORDER QUANTITY SECTION ************************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//     var tabula = JSON.parse(data.table);
+//     var ormsQty = cParsedObj.orderQuantity;
+//     tabula[0].data.pop(); //Remove the total quantity row from the object
+//     tabula[0].data.shift(); //Remove the table headers from the array
+//     var retek_size = [];    //Create a new array with size as index and casesize as value
+//     for(var i in tabula[0].data) {
+//         retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
+//     }
+//     //Size wise mapping of ORMS and RETEK tables.
+//     $.each(ormsQty, function(index,element) {
+//         ormsQty[index].Case_Size = retek_size[element.Size];
+//     });
+// }
+//
+// /**
+//  * LEGACY two-file (ORMS + RETEK) CE RATIO-type parser, still used by the CE Care Label
+//  * PO parser (uploadPurchaseOrderForLabels), which is out of scope for the sticker-order
+//  * single-file change. Renamed from parseRatioTypeForCE (now the single-file sticker
+//  * version below) to avoid a name collision; body unchanged.
+//  * @param  {json} json string to be parsed.
+//  * @return {object}     Object array with all the required fields.
+//  */
+// function parseRatioTypeForCELabels(data, cParsedObj) {
+//     //********************************************* SUPPLIER INFO SECTION *********************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//     if (data.hasOwnProperty("supplier")) {
+//         var supplier = JSON.parse(data.supplier);
+//         cParsedObj.supplierCode = readSupplierCode(supplier);
+//     }
+//     //********************************************* ORDER INFORMATION SECTION *********************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//
+//     var info = JSON.parse(data.info);
+//     $.each(info[0].data, function(ind, ele) {
+//         switch(ind) {
+//             case 0:
+//                 //Extract VPN - CE STYLE NUMBER
+//                 cParsedObj.styleNumber  = ele[1].text;
+//                 break;
+//             case 2:
+//                 //Extract 24 Char Description
+//                 cParsedObj.shortDescription = ele[1].text;
+//                 break;
+//             case 3:
+//                 //Extract Season Code
+//                 cParsedObj.seasonCode = ele[1].text;
+//                 break;
+//
+//         }
+//     });
+//
+//
+//     //********************************************* ORDER QUANTITY SECTION ************************************
+//     //********************************************* PARSE THE JSON TABULA *************************************
+//     var tabula = [];
+//     var packA = JSON.parse(data.ratioPackA);
+//     tabula.push(packA);
+//     if (data.hasOwnProperty("ratioPackB")) {
+//         var packB = JSON.parse(data.ratioPackB);
+//         tabula.push(packB);
+//     }
+//     var ormsQty = cParsedObj.orderQuantity;
+//
+//     var values = [];
+//     $.each(tabula, function(index,element) {
+//         var row = {};
+//         row.tpnd = ormsQty.tpnd;
+//         row.itf = ormsQty.itf;
+//         row.cpc = element[2].text;
+//         values.push(row);
+//     });
+//     cParsedObj.orderQuantity = values;
+// }
 
 /**
  * Method to parse data for CE SINGLE type from a single-file CE PO PDF.
@@ -949,18 +953,14 @@ function parseVPNDescription(tabula) {
                                 break;
                         }
 					} else {
-                        //Parse the ORMS data
-                        parsedObj.purchaseOrder  =  data.details.orms.order_number;
-                        //Check for Purchase Order Type
-                        var po_type = data.details.retek.retek_po_type;
+                        //Single-file CE upload - same response shape/parsers as the sticker
+                        //orders feature (the RETEK sheet layout already contains everything
+                        //needed, no separate ORMS file to join in).
+                        var po_type = data.type;
                         switch(po_type) {
-                            case 'single':
-                                    parsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                                    parseSingleTypeForCELabels(data.details.retek, parsedObj);
+                            case 'single': parsedObj = parseSingleTypeForCE(data);
                                 break;
-                            case 'ratio' :
-                                    parsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table);
-                                    parseRatioTypeForCELabels(data.details.retek, parsedObj);
+                            case 'ratio': parsedObj = parseRatioTypeForCE(data);
                                 break;
                             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                                 break;
