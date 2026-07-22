@@ -415,7 +415,10 @@ function parseRatioTypeForCE(data) {
     cParsedObj.orderQuantity = [];
     try {
         // Ratio Pack row columns: Ratio Pack Description, Ratio Pack cost, No of Singles
-        // per Ratio, Qty of Ratio Packs, ITF Barcode, SKU, Order Value, Quota Category.
+        // per Ratio, Qty of Ratio Packs, ITF Barcode, SKU, TPNB, Order Value, Quota Category.
+        // TPNB (index 6), not SKU (index 5), is the ORMS-TPN-equivalent identifier here -
+        // verified against a real TCL1/TCL2/TSL1 order where both columns are populated
+        // with different values and TPNB is the one the review page should show.
         var tabula = [];
         var packA = JSON.parse(data.details.ratioPackA);
         tabula.push(packA);
@@ -429,7 +432,7 @@ function parseRatioTypeForCE(data) {
             var row = {};
             row.cpc  = element[2].text;
             row.itf  = element[4].text;
-            row.tpnd = element[5].text;
+            row.tpnd = element[6].text;
             values.push(row);
         });
         cParsedObj.orderQuantity = values;
@@ -683,7 +686,9 @@ function renderParsedValues(parsedObj) {
     var zone        = localStorage.getItem("zone").toLowerCase();
     var type        = localStorage.getItem("template type");
 
-    // parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
+    //PO Number is always left editable (never readonly) so the user can correct it to match
+    //the zone's required length/format if the parsed PO series doesn't match exactly.
+    parsedObj.purchaseOrder?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false):$('#tesco_po_number').attr('readonly', false);
 
     if(zone === 'ce') {
         parsedObj.styleNumber?$('#tesco_ce_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_ce_style').attr('readonly', false);
