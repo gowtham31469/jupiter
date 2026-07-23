@@ -321,12 +321,14 @@ function parseSingleTypeForCE(data) {
         // undefined, silently dropping fields that had already been read correctly.
         cParsedObj.orderQuantity = [];
         try {
-            // CE table columns (verified against a real single-type PO): SKU, <blank spacer
-            // column>, Colour, Size, Single Qty, Case Size, Case Qty, EAN Barcode, ITF Barcode,
-            // Unit Selling Price, Unit cost, HTS, Quota Category. SKU is mapped to 'TPND' so it
-            // lines up with the key renderParsedValues() reads. The blank spacer column (index 1)
-            // has no header entry, so it's dropped automatically below.
-            var header = ['TPND', null, 'Colour', 'Size', 'Single_Qty', 'Case_Size', 'Case_Qty', 'EAN_Barcode', 'ITF_Barcode', 'Unit_Selling_Price', 'Unit_cost', 'HTS', 'Quota_Category'];
+            // CE table columns: SKU, TPNB, Colour, Size, Single Qty, Case Size, Case Qty,
+            // EAN Barcode, ITF Barcode, Unit Selling Price, Unit cost, HTS, Quota Category.
+            // TPNB (index 1), not SKU (index 0), is the ORMS-TPN-equivalent identifier -
+            // verified against a real TCL5 order where both columns are populated with
+            // different values and TPNB is the one the review page should show (same
+            // SKU-vs-TPNB mixup already fixed for the ratio-type table). SKU itself isn't
+            // needed downstream, so it's dropped (no header entry) rather than kept.
+            var header = [null, 'TPND', 'Colour', 'Size', 'Single_Qty', 'Case_Size', 'Case_Qty', 'EAN_Barcode', 'ITF_Barcode', 'Unit_Selling_Price', 'Unit_cost', 'HTS', 'Quota_Category'];
             var values = [];
             var tabula = JSON.parse(data.details.table);
 
