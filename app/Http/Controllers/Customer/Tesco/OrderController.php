@@ -1529,6 +1529,13 @@ class OrderController extends Controller
               $data = ['info' => json_encode($ratio_info['info'])];
               if($ratio_table) {
                 $data['ratioPackA'] = json_encode($ratio_table[0]);
+                //Some POs have a second ratio pack (Ratio Pack B) on the same page -
+                //extractCERatioTable() already collects every "Ratio Pack Description"
+                //match, so pass the second one through when present. The frontend
+                //(parseRatioTypeForCE) already checks for and handles this key.
+                if(isset($ratio_table[1])) {
+                  $data['ratioPackB'] = json_encode($ratio_table[1]);
+                }
               }
               break;
             default:
