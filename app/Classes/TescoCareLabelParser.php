@@ -177,6 +177,15 @@ class TescoCareLabelParser
             //Read the Purchase Order Series
             $po_number = $this->getPOSeries($path);
 
+            //CE POs use the 7-digit "RMS PO NUMBER" (from the Additional Comments Field on
+            //page 1) as the PO Number instead - it matches the CE PO Number field's 7-character
+            //validation, unlike the "Purchase Order" series number above (e.g. 990-20076, 9
+            //characters). Falls back to the series number if RMS PO Number isn't present.
+            $rms_po_number = $this->getRMSPONumber($path);
+            if($rms_po_number) {
+              $po_number = $rms_po_number;
+            }
+
             //Check the type of PO
             $po_type = $this->checkPOType($path);
             $arr = explode(' ',trim($po_type));
@@ -305,7 +314,30 @@ class TescoCareLabelParser
           $series    = $series[0]['data'][0][0]['text'];
           return $series;
       }
-  
+
+      /**
+       * Method to read the 7-digit RMS PO Number from the "Additional Comments Field"
+       * on page 1 (CE POs only - UK POs don't populate this field).
+       * @param  [string] $file PDF file path.
+       * @return [string|null]  RMS PO Number, or null if not found.
+       */
+      public function getRMSPONumber($file) {
+          $tabula        = Config::get('tabula.tabula_jar');
+          $rms_po_number = Config::get('tabula.ce_rms_po_number');
+          $result        = json_decode(shell_exec('java -jar '.$tabula.$rms_po_number.$file), true);
+          if(!isset($result[0]['data'])) {
+              return null;
+          }
+          foreach ($result[0]['data'] as $row) {
+              foreach ($row as $cell) {
+                  if(preg_match('/RMS PO NUMBER\s*:\s*(\d+)/i', $cell['text'], $matches)) {
+                      return $matches[1];
+                  }
+              }
+          }
+          return null;
+      }
+
       /**
        * Method to get the appropriate dimensions from the PDF
        * @param  [path] $file File to be cropped
