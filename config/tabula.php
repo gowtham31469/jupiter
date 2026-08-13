@@ -62,6 +62,20 @@ return [
     */
    'supplier_info' => ' -p 1  -a 65,480,240,734  -f JSON ',
 
+   /*
+     |--------------------------------------------------------------------------
+     | Dimension to find the "Additional Comments Field: * RMS PO NUMBER: ..."
+     | text on page 1. CE POs use this 7-digit RMS number as the PO Number
+     | (matches the CE PO Number field's 7-character validation) instead of
+     | the "Purchase Order" series number at the top (e.g. 990-20076, which is
+     | 9 characters and never fit). UK POs don't populate this field - verified
+     | empirically against real CE and UK sample POs.
+     |--------------------------------------------------------------------------
+     |
+     |
+     */
+    'ce_rms_po_number' => ' -p 1 -a 415,60,450,720 -f JSON ',
+
     /*
     |--------------------------------------------------------------------------
     | SET Tabula command for Get Information of SINGLE type
