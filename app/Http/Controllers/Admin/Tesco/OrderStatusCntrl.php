@@ -4037,6 +4037,7 @@ class OrderStatusCntrl extends Controller
         }
         
         $split_count =0;
+        $tesco_item_master = [];
 		foreach($order_details as $value)
 		{
             if($table_name_print == "tesco_washcare_orders")
