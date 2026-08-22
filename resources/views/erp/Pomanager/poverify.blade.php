@@ -324,23 +324,6 @@ transform: scale(1);
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($orders as $vals)
-
-					<tr id="{{$vals->id}}">
-						<td class="">{{ $loop->iteration }}</td>
-						<td>{{$vals->erp_id}}</td>
-						<td>{{$vals->company_name}}</td>
-						<td>{{$vals->po_no}}</td>
-						<td>{{$vals->partial_status == 0 ? "NO":"YES"}}</td>
-						@if($vals->status == 2)
-						<td><span class="label label-danger">{{$vals->status_name}}</span></td>
-						@else
-						<td><span class="label label-info">{{$vals->status_name}}</span></td>
-						@endif
-						<td>{{ explode(' ',$vals->po_created_date)[0] }}</td>
-						<td align="center"><a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('{{ $vals->id }}','{{ $vals->po_no }}','{{ $vals->buyer_id }}','{{ $vals->customer_id }}','{{ $vals->po_file }}')"><i class="fa fa-eye action-button-view"  title="" data-original-title="view Details"></i></a></td>
-					</tr>
-					@endforeach
 				</tbody>
 			</table>
 		</div>
@@ -553,7 +536,31 @@ transform: scale(1);
 
 	$('.company-nav-menu').html($('.company-nav-div').html());
 	var base_url = "<?php echo  url('/') ?>";
-	var table = $('#po-list-table').DataTable();
+	var table = $('#po-list-table').DataTable({
+		processing: true,
+		serverSide: true,
+		order: [],
+		ajax: {
+			url: base_url + "/erp/po-manager/po-verify-data",
+			type: "POST",
+			data: function(d) {
+				d._token = csrf_token;
+			}
+		},
+		columns: [
+			{ data: 'sl_no', orderable: false, searchable: false },
+			{ data: 'erp_id' },
+			{ data: 'company_name' },
+			{ data: 'po_no' },
+			{ data: 'partial_status' },
+			{ data: 'status_html', orderable: false },
+			{ data: 'po_created_date' },
+			{ data: 'actions', orderable: false, searchable: false, className: 'text-center' }
+		],
+		createdRow: function(row, data) {
+			$(row).attr('id', data.DT_RowId);
+		}
+	});
 
 	$("#po-list-table_filter input[type=search]").addClass('form-control');
 	$('.dataTables_length select').addClass('form-control');

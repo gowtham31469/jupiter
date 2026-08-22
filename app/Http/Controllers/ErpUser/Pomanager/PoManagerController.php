@@ -46,20 +46,21 @@ class PoManagerController extends Controller
      * @author [Gowtham] <[gowtham@wizroots.com]>
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    { 
-		$new_orders_count=0;
-		$hold_orders_count=0;
-		
+    /**
+     * Build the full set of PO-verify candidate rows (status Active/Hold, permitted
+     * templates for the current company/buyer). Shared by index() (for the new/hold
+     * counts) and poVerifyData() (for the server-side-paginated table) so both stay
+     * in sync with the exact same business rules - this loop is unchanged from the
+     * original index() implementation, only extracted so it isn't duplicated.
+     * @return array
+     */
+    private function getPoVerifyOrders()
+    {
 		$erp_user_mapped_template_obj = new ErpUserMappedTemplates();
-		$set_company_session = new ErpCompanySession();
-        
-        $companies = $set_company_session->setCompanySession();
-        
         $new_orders = $erp_user_mapped_template_obj->getPermittedTemplates();
-		
+
 		 $orders_erp = array();
-		 
+
 		 foreach($new_orders as $key => $values)
 		 {
 			$split_key = explode('-', $key);
@@ -79,7 +80,7 @@ class PoManagerController extends Controller
 										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
 										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
 										 ->get();
-		
+
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
@@ -104,12 +105,30 @@ class PoManagerController extends Controller
 					}
 				}
 			}
-			 
+
 		 }
+
+		usort($orders_erp, function($a, $b) {
+			return $b['created_at'] <=> $a['created_at'];
+		});
+
+		return array_values($orders_erp);
+    }
+
+    public function index()
+    {
+		$new_orders_count=0;
+		$hold_orders_count=0;
+
+		$set_company_session = new ErpCompanySession();
+
+        $companies = $set_company_session->setCompanySession();
+
+		$orders_erp = $this->getPoVerifyOrders();
 
 		foreach($orders_erp as $orders_erp_count)
 		{
-			
+
 				if($orders_erp_count->status == 1)
 				{
 					$new_orders_count++;
@@ -119,14 +138,96 @@ class PoManagerController extends Controller
 					$hold_orders_count++;
 				}
 		}
-		
-		usort($orders_erp, function($a, $b) {
-			return $b['created_at'] <=> $a['created_at'];
-		});
-		//return($orders_erp);
-		return view('erp.Pomanager.poverify',['orders' => $orders_erp,'companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
-	} 
-	
+
+		return view('erp.Pomanager.poverify',['companies' => $companies,'new_orders' => $new_orders_count,'hold_orders' => $hold_orders_count]);
+	}
+
+	/**
+	 * Server-side DataTables endpoint for the PO Verify list - was previously rendered
+	 * entirely into the initial page load (all matching rows at once). The underlying
+	 * data comes from several merged queries (see getPoVerifyOrders()), not a single
+	 * paginatable query, so search/sort/pagination are applied in PHP over that result
+	 * rather than pushed down to SQL.
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function poVerifyData(Request $request)
+	{
+		$orders_erp = $this->getPoVerifyOrders();
+		$records_total = count($orders_erp);
+
+		$search = trim((string) $request->input('search.value', ''));
+		if ($search !== '') {
+			$search_lower = strtolower($search);
+			$orders_erp = array_values(array_filter($orders_erp, function($vals) use ($search_lower) {
+				$partial_text = $vals->partial_status == 0 ? 'no' : 'yes';
+				$haystacks = [
+					(string) $vals->erp_id,
+					(string) $vals->company_name,
+					(string) $vals->po_no,
+					$partial_text,
+					(string) $vals->status_name,
+					(string) $vals->po_created_date,
+				];
+				foreach ($haystacks as $haystack) {
+					if (strpos(strtolower($haystack), $search_lower) !== false) {
+						return true;
+					}
+				}
+				return false;
+			}));
+		}
+
+		$records_filtered = count($orders_erp);
+
+		// Sortable columns map to the DataTables column index (see poverify.blade.php).
+		// Column 0 (Sl.No), 5 (Status badge) and 7 (Actions) aren't real sortable fields.
+		$sortable_columns = [1 => 'erp_id', 2 => 'company_name', 3 => 'po_no', 4 => 'partial_status', 6 => 'po_created_date'];
+		$order = $request->input('order');
+		if (!empty($order) && isset($sortable_columns[$order[0]['column']])) {
+			$sort_field = $sortable_columns[$order[0]['column']];
+			$sort_dir   = ($order[0]['dir'] ?? 'asc') === 'desc' ? -1 : 1;
+			usort($orders_erp, function($a, $b) use ($sort_field, $sort_dir) {
+				return $sort_dir * strcasecmp((string) $a->$sort_field, (string) $b->$sort_field);
+			});
+		}
+		// else: keep getPoVerifyOrders()'s default order (by erp_orders.created_at desc),
+		// matching the previous non-interactive behaviour on first load.
+
+		$start  = max(0, (int) $request->input('start', 0));
+		$length = (int) $request->input('length', 10);
+		$page_items = $length > 0 ? array_slice($orders_erp, $start, $length) : $orders_erp;
+
+		$data = [];
+		foreach ($page_items as $index => $vals) {
+			$status_class = $vals->status == 2 ? 'label label-danger' : 'label label-info';
+			$status_html  = '<span class="'.$status_class.'">'.e($vals->status_name).'</span>';
+
+			$onclick_args = implode(',', array_map(function($v) {
+				return "'".addslashes(e((string) $v))."'";
+			}, [$vals->id, $vals->po_no, $vals->buyer_id, $vals->customer_id, $vals->po_file]));
+			$actions_html = '<a class="pi_generation" href="javascript:void(0)" onclick="view_order_details('.$onclick_args.')"><i class="fa fa-eye action-button-view" title="" data-original-title="view Details"></i></a>';
+
+			$data[] = [
+				'sl_no'           => $start + $index + 1,
+				'erp_id'          => $vals->erp_id,
+				'company_name'    => $vals->company_name,
+				'po_no'           => $vals->po_no,
+				'partial_status'  => $vals->partial_status == 0 ? 'NO' : 'YES',
+				'status_html'     => $status_html,
+				'po_created_date' => explode(' ', $vals->po_created_date)[0] ?? '',
+				'actions'         => $actions_html,
+				'DT_RowId'        => $vals->id,
+			];
+		}
+
+		return response()->json([
+			'draw'            => (int) $request->input('draw', 1),
+			'recordsTotal'    => $records_total,
+			'recordsFiltered' => $records_filtered,
+			'data'            => $data,
+		]);
+	}
+
 	public function poOrdersList()
 	{
 		

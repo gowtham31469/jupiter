@@ -883,6 +883,7 @@ Route::group(['prefix' => 'erp'], function () {
 
 	Route::prefix('/po-manager')->group(function () {
 		Route::get('/', 'ErpUser\Pomanager\PoManagerController@index')->name('po-manager');
+		Route::post('/po-verify-data', 'ErpUser\Pomanager\PoManagerController@poVerifyData');
 		Route::Post('/get-order-details', 'ErpUser\Pomanager\PoManagerController@getOrderDetails');
 		Route::post('/order-details', 'ErpUser\Pomanager\PoManagerController@orderDetails');
 		Route::post('/submit-po-verify', 'ErpUser\Pomanager\PoManagerController@submitPoVerify');
