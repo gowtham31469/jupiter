@@ -4,11 +4,11 @@
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseUKPurchaseOrder(data, callback) {
-   try {
+    try {
         //Check for Purchase Order Type
         var parsedObj;
         var po_type = data.type;
-        switch(po_type) {
+        switch (po_type) {
             case 'single': parsedObj = parseSingleType(data);
                 break;
             case 'ratio': parsedObj = parseRatioType(data);
@@ -17,9 +17,9 @@ function parseUKPurchaseOrder(data, callback) {
                 break;
         }
         callback(parsedObj);
-    } catch(e) {
+    } catch (e) {
         // error statements
-        console.error("Error:"+e);
+        console.error("Error:" + e);
     }
 }
 
@@ -29,29 +29,29 @@ function parseUKPurchaseOrder(data, callback) {
  * @param  {string} xml Data obtained from uploadPurchaseOrder() method
  */
 function parseCEPurchaseOrder(data, callback) {
-   try {
+    try {
         var cParsedObj = {};
         //Parse the ORMS data
-        cParsedObj.purchaseOrder  =  data.details.orms.order_number;
+        cParsedObj.purchaseOrder = data.details.orms.order_number;
         //Check for Purchase Order Type
         var po_type = data.details.retek.retek_po_type;
-        switch(po_type) {
+        switch (po_type) {
             case 'single':
-                    cParsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                    parseSingleTypeForCE(data.details.retek, cParsedObj);
+                cParsedObj.orderQuantity = parseSingleORMSTable(data.details.orms.order_table);
+                parseSingleTypeForCE(data.details.retek, cParsedObj);
                 break;
-            case 'ratio' :
-                    cParsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
-                    parseRatioTypeForCE(data.details.retek, cParsedObj);
+            case 'ratio':
+                cParsedObj.orderQuantity = parseRatioORMSTable(data.details.orms.order_table);
+                parseRatioTypeForCE(data.details.retek, cParsedObj);
                 break;
             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                 break;
         }
 
         callback(cParsedObj);
-    } catch(e) {
+    } catch (e) {
         // error statements
-        console.error("Error:"+e);
+        console.error("Error:" + e);
     }
 }
 
@@ -64,43 +64,43 @@ function parseSingleORMSTable(tabula) {
     var header = [];
     var values = [];
     tabula.pop();  //Remove the total quantity row from the object
-    $.each(tabula, function(index, element) {
+    $.each(tabula, function (index, element) {
         var row = {};
         var table_length = element.length;
-        if(table_length === 4) {
-            element.splice(2,1);
+        if (table_length === 4) {
+            element.splice(2, 1);
         }
-        $.each(element, function(i, val) {
-            if(index === 0) {
-                switch(i) {
+        $.each(element, function (i, val) {
+            if (index === 0) {
+                switch (i) {
                     case 0: header.push('TPND');
                         break;
                     case 1: header.push('EAN_Barcode');
                         break;
                     case 2: header.push('Size');
-                            header.push('ITF_Barcode');
+                        header.push('ITF_Barcode');
                         break;
                 }
-                
+
             } else {
-                if(i === 2 && table_length !== 4) {
+                if (i === 2 && table_length !== 4) {
                     val = val.text.split(' ');
-                    if(typeof(val[1]) != "undefined" && val[1] !== null) {
+                    if (typeof (val[1]) != "undefined" && val[1] !== null) {
                         row[header[i]] = val[1];
                     } else {
                         row[header[i]] = '-';
                     }
                     row[header[3]] = val[0];
-                   
+
                 } else {
-                   row[header[i]] = val.text;
+                    row[header[i]] = val.text;
                 }
-                  
+
             }
         });
-        if(index !== 0) {
-           values.push(row); 
-        } 
+        if (index !== 0) {
+            values.push(row);
+        }
     });
     return values;
 
@@ -114,7 +114,7 @@ function parseSingleORMSTable(tabula) {
 function parseRatioORMSTable(tabula) {
     var values = [];
     values['tpnd'] = tabula[1][0]['text'];
-    values['itf']  = tabula[1][2]['text'];
+    values['itf'] = tabula[1][2]['text'];
     return values;
 }
 
@@ -128,20 +128,20 @@ function parseSingleTypeForCE(data, cParsedObj) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);      
+        cParsedObj.supplierCode = readSupplierCode(supplier);
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
     var info = JSON.parse(data.info);
-    $.each(info[0].data, function(ind, ele) {
+    $.each(info[0].data, function (ind, ele) {
         var row_length = ele.length;
-        switch(ind) {
+        switch (ind) {
             case 0:
                 //Extract VPN - CE STYLE NUMBER
                 var new_element = removeEmptyValues(ele);
                 var vpn = new_element[0].text.split(":");
-                cParsedObj.styleNumber  = vpn[1].trim();
+                cParsedObj.styleNumber = vpn[1].trim();
                 break;
             case 1:
                 //Extract 24 Char Description
@@ -165,11 +165,11 @@ function parseSingleTypeForCE(data, cParsedObj) {
     tabula[0].data.pop(); //Remove the total quantity row from the object
     tabula[0].data.shift(); //Remove the table headers from the array
     var retek_size = [];    //Create a new array with size as index and casesize as value
-    for(var i in tabula[0].data) {
+    for (var i in tabula[0].data) {
         retek_size[tabula[0].data[i][3].text] = tabula[0].data[i][5].text;
     }
     //Size wise mapping of ORMS and RETEK tables.
-    $.each(ormsQty, function(index,element) {
+    $.each(ormsQty, function (index, element) {
         ormsQty[index].Case_Size = retek_size[element.Size];
     });
 }
@@ -184,17 +184,17 @@ function parseRatioTypeForCE(data, cParsedObj) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.supplier);
-        cParsedObj.supplierCode = readSupplierCode(supplier);     
+        cParsedObj.supplierCode = readSupplierCode(supplier);
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
     var info = JSON.parse(data.info);
-    $.each(info[0].data, function(ind, ele) {
-        switch(ind) {
+    $.each(info[0].data, function (ind, ele) {
+        switch (ind) {
             case 0:
                 //Extract VPN - CE STYLE NUMBER
-                cParsedObj.styleNumber  = ele[1].text;
+                cParsedObj.styleNumber = ele[1].text;
                 break;
             case 2:
                 //Extract 24 Char Description
@@ -221,11 +221,11 @@ function parseRatioTypeForCE(data, cParsedObj) {
     var ormsQty = cParsedObj.orderQuantity;
 
     var values = [];
-    $.each(tabula, function(index,element) {
+    $.each(tabula, function (index, element) {
         var row = {};
         row.tpnd = ormsQty.tpnd;
         row.itf = ormsQty.itf;
-        row.cpc = element[2].text;   
+        row.cpc = element[2].text;
         values.push(row);
     });
     cParsedObj.orderQuantity = values;
@@ -259,7 +259,7 @@ function parseSingleType(data) {
             //     singleObj.supplierName = supplier[2][0].text.trim();
             // }
         }
-        
+
         //*********************************************************************************************************
         //*********************************************************************************************************
         //********************************************* ORDER INFORMATION SECTION *********************************
@@ -269,9 +269,9 @@ function parseSingleType(data) {
         //*********************************************************************************************************
 
         var info = JSON.parse(data.details.info);
-        $.each(info[0].data, function(ind, ele) {
+        $.each(info[0].data, function (ind, ele) {
             var row_length = ele.length;
-            switch(ind) {
+            switch (ind) {
                 case 0:
                     // singleObj.purchaseOrder = (row_length === 5) ? ele[4].text : ele[5].text;
                     singleObj.purchaseOrder = data.po_number;
@@ -287,25 +287,21 @@ function parseSingleType(data) {
                     var style = ele[0].text.split(":");
                     var tab = JSON.parse(data.details.table);
                     var size = tab[0].data[1][3].text;
-                    singleObj.styleNumber =  style[1].trim();
-					if(ele[3].text === size)
-					{
-                    	singleObj.shortDescription =  ele[2].text.trim();
-						singleObj.originalDescription = ele[2].text+ele[3].text;
-					}
-					else
-					{
-						if(ele[2].text.slice(-size.length) == size)
-						{
-							singleObj.shortDescription = ele[2].text.slice(0,-size.length)
-						}
-						else
-						{
-							singleObj.shortDescription = ele[2].text.trim();
-						}
-						singleObj.originalDescription = ele[2].text;
-						
-					}
+                    singleObj.styleNumber = style[1].trim();
+                    if (ele[3].text === size) {
+                        singleObj.shortDescription = ele[2].text.trim();
+                        singleObj.originalDescription = ele[2].text + ele[3].text;
+                    }
+                    else {
+                        if (ele[2].text.slice(-size.length) == size) {
+                            singleObj.shortDescription = ele[2].text.slice(0, -size.length)
+                        }
+                        else {
+                            singleObj.shortDescription = ele[2].text.trim();
+                        }
+                        singleObj.originalDescription = ele[2].text;
+
+                    }
                     break;
             }
         });
@@ -321,30 +317,30 @@ function parseSingleType(data) {
         var header = [];
         var values = [];
         var tabula = JSON.parse(data.details.table);
-        // Only remove last row if it's a total row (empty first column or text says "total")
+        // Only remove last row if it's a total row (doesn't have a TPND in first column)
         var lastRow = tabula[0].data[tabula[0].data.length - 1];
-        if(lastRow && lastRow[0] && (lastRow[0].text === '' || lastRow[0].text.toLowerCase() === 'total')) {
+        if (lastRow && lastRow[0] && (lastRow[0].text === '' || lastRow[0].text.toLowerCase() === 'total')) {
             tabula[0].data.pop();
         }
-        $.each(tabula[0].data, function(index,element) {
+        $.each(tabula[0].data, function (index, element) {
             var row = {};
             // element.pop();//Remove the extra space element from the array
-            $.each(element, function(i, val) {
-                if(index === 0) {
-                    header.push(val.text.replace(/ /g,"_"));
+            $.each(element, function (i, val) {
+                if (index === 0) {
+                    header.push(val.text.replace(/ /g, "_"));
                 } else {
-                    row[header[i]] = val.text;  
+                    row[header[i]] = val.text;
                 }
             });
-            if(index !== 0) {
-               values.push(row); 
-            } 
+            if (index !== 0) {
+                values.push(row);
+            }
         });
         singleObj.orderQuantity = values;
         return singleObj;
-        
-    } catch(e) {
-        console.error("Error:"+e);
+
+    } catch (e) {
+        console.error("Error:" + e);
     }
 }
 
@@ -359,18 +355,18 @@ function parseRatioType(data) {
     //********************************************* PARSE THE JSON TABULA *************************************
     if (data.details.hasOwnProperty("supplier")) {
         var supplier = JSON.parse(data.details.supplier);
-        ratioObj.supplierCode = readSupplierCode(supplier);    
+        ratioObj.supplierCode = readSupplierCode(supplier);
     }
     //********************************************* ORDER INFORMATION SECTION *********************************
     //********************************************* PARSE THE JSON TABULA *************************************
 
     var info = JSON.parse(data.details.info);
-    $.each(info[0].data, function(ind, ele) {
+    $.each(info[0].data, function (ind, ele) {
         var row_length = ele.length;
-        switch(ind) {
+        switch (ind) {
             case 0:
                 var new_element = removeEmptyValues(ele);
-                if(new_element.length < 2) {
+                if (new_element.length < 2) {
                     var po = new_element[0].text;
                     po = po.split(":");
                     ratioObj.purchaseOrder = po[1].trim();
@@ -388,14 +384,14 @@ function parseRatioType(data) {
                 ratioObj.seasonCode = season[0];
                 break;
             case 3:
-                ratioObj.styleNumber =  ele[1].text.trim();
+                ratioObj.styleNumber = ele[1].text.trim();
                 break;
             case 4:
                 //ele[1].text = ele[1].text.replace('12/18', '').trim();
-				//var short_desc = ele[1].text.split('  ');
-				//ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
-				var short_desc = ele[1].text.trim();
-				ratioObj.shortDescription = short_desc;
+                //var short_desc = ele[1].text.split('  ');
+                //ratioObj.shortDescription = (short_desc.length === 1) ? ele[1].text.trim() : ele[1].text.replace(short_desc[1], '').trim();
+                var short_desc = ele[1].text.trim();
+                ratioObj.shortDescription = short_desc;
         }
     });
 
@@ -411,26 +407,26 @@ function parseRatioType(data) {
         tabula.push(packB);
     }
     var values = [];
-    $.each(tabula, function(index,element) {
+    $.each(tabula, function (index, element) {
         var row = {};
-        $.each(element, function(i, val) {
-            switch(i) {
-                case 2 : row.upc =  val.text;
-                break;
+        $.each(element, function (i, val) {
+            switch (i) {
+                case 2: row.upc = val.text;
+                    break;
 
-                case 4 : row.itf =  val.text;
-                break;
+                case 4: row.itf = val.text;
+                    break;
 
-                case 5 : row.tpnd = val.text;
-                break;
+                case 5: row.tpnd = val.text;
+                    break;
             }
         });
         values.push(row);
-        
+
     });
     ratioObj.orderQuantity = values;
     return ratioObj;
-    
+
 }
 
 /**
@@ -454,13 +450,13 @@ function removeEmptyValues(element) {
  */
 function readSupplierCode(supplier) {
     var sup_code = '';
-    $.each(supplier[0]['data'], function(i,val) {
+    $.each(supplier[0]['data'], function (i, val) {
         var parse_text = val[0]['text'];
-        if(parse_text.search("Supplier No. :") !== -1) {
+        if (parse_text.search("Supplier No. :") !== -1) {
             var sup_info = parse_text.split(':');
-            if(sup_info[1]) {
+            if (sup_info[1]) {
                 sup_code = sup_info[1].trim();
-            } 
+            }
         }
     });
     return sup_code;
@@ -472,8 +468,8 @@ function readSupplierCode(supplier) {
  * @return {[type]}           [description]
  */
 function renderParsedValues(parsedObj) {
-    var zone        = localStorage.getItem("zone").toLowerCase();
-    var type        = localStorage.getItem("template type");
+    var zone = localStorage.getItem("zone").toLowerCase();
+    var type = localStorage.getItem("template type");
 
     // parsedObj.purchaseOrder != null?$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', true):$('#tesco_po_number').val(parsedObj.purchaseOrder).attr('readonly', false);
 
@@ -482,70 +478,70 @@ function renderParsedValues(parsedObj) {
     //  } else {
     //     parsedObj.styleNumber != null?$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', true):$('#tesco_uk_style').val(parsedObj.styleNumber).attr('readonly', false);
     //  }
-   
-   parsedObj.seasonCode != null?$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true):$('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
+
+    parsedObj.seasonCode != null ? $('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', true) : $('#tesco_season_code').val(parsedObj.seasonCode).attr('readonly', false);
 
     $('#tesco_description').val(parsedObj.shortDescription);
-	if(typeof parsedObj.originalDescription !== 'undefined') {
-		$('#tesco_description').prev().text($('#tesco_description').prev().text()+'(Full Description: '+parsedObj.originalDescription+')');
-		
-		$('#tesco_full_description').val(parsedObj.originalDescription);
-  	}
+    if (typeof parsedObj.originalDescription !== 'undefined') {
+        $('#tesco_description').prev().text($('#tesco_description').prev().text() + '(Full Description: ' + parsedObj.originalDescription + ')');
 
-    if(type === 'single') {
-        $.each(parsedObj.orderQuantity, function(i, j) {
+        $('#tesco_full_description').val(parsedObj.originalDescription);
+    }
+
+    if (type === 'single') {
+        $.each(parsedObj.orderQuantity, function (i, j) {
             var index = i + 1;
 
-            if(zone === 'ce') {
-                j.TPND != null?$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', true):$('#ce_single_orms_tpn_'+index).val(j.TPND).attr('readonly', false);
+            if (zone === 'ce') {
+                j.TPND != null ? $('#ce_single_orms_tpn_' + index).val(j.TPND).attr('readonly', true) : $('#ce_single_orms_tpn_' + index).val(j.TPND).attr('readonly', false);
             } else {
-                j.TPND != null?$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', true):$('#uk_single_tpnd_'+index).val(j.TPND).attr('readonly', false);
+                j.TPND != null ? $('#uk_single_tpnd_' + index).val(j.TPND).attr('readonly', true) : $('#uk_single_tpnd_' + index).val(j.TPND).attr('readonly', false);
             }
-            
-            j.EAN_Barcode != null?$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#'+zone+'_single_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
+
+            j.EAN_Barcode != null ? $('#' + zone + '_single_ean_' + index).val(j.EAN_Barcode).attr('readonly', true) : $('#' + zone + '_single_ean_' + index).val(j.EAN_Barcode).attr('readonly', false);
 
             // TCL5 special case start
-            j.ITF_Barcode != null?$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.ITF_Barcode).attr('readonly', false);
+            j.ITF_Barcode != null ? $('#' + zone + '_ratio_itf_' + index).val(j.ITF_Barcode).attr('readonly', true) : $('#' + zone + '_ratio_itf_' + index).val(j.ITF_Barcode).attr('readonly', false);
             // TCL5 special case end
 
-            j.Case_Size != null?$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', true):$('#'+zone+'_single_case_size_'+index).val(j.Case_Size).attr('readonly', false);
+            j.Case_Size != null ? $('#' + zone + '_single_case_size_' + index).val(j.Case_Size).attr('readonly', true) : $('#' + zone + '_single_case_size_' + index).val(j.Case_Size).attr('readonly', false);
 
-            j.Size != null?$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', true):$('#'+zone+'_single_size_'+index).val(j.Size).attr('readonly', false);
+            j.Size != null ? $('#' + zone + '_single_size_' + index).val(j.Size).attr('readonly', true) : $('#' + zone + '_single_size_' + index).val(j.Size).attr('readonly', false);
 
-            if(parsedObj.orderQuantity.length !== (i+1)) {
+            if (parsedObj.orderQuantity.length !== (i + 1)) {
                 $('.add-row-btn').trigger('click');
             }
-        });  
-    } else if(type === 'ratio') {
-        $.each(parsedObj.orderQuantity, function(i, j) {
+        });
+    } else if (type === 'ratio') {
+        $.each(parsedObj.orderQuantity, function (i, j) {
             var index = i + 1;
 
-            j.itf != null?$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', true):$('#'+zone+'_ratio_itf_'+index).val(j.itf).attr('readonly', false);
+            j.itf != null ? $('#' + zone + '_ratio_itf_' + index).val(j.itf).attr('readonly', true) : $('#' + zone + '_ratio_itf_' + index).val(j.itf).attr('readonly', false);
 
-            if(zone === 'ce') {
-                j.tpnd != null?$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_orms_tpn_'+index).val(j.tpnd).attr('readonly', false);
+            if (zone === 'ce') {
+                j.tpnd != null ? $('#' + zone + '_ratio_orms_tpn_' + index).val(j.tpnd).attr('readonly', true) : $('#' + zone + '_ratio_orms_tpn_' + index).val(j.tpnd).attr('readonly', false);
 
-                j.cpc != null?$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', true):$('#'+zone+'_ratio_cpc_'+index).val(j.cpc).attr('readonly', false);
+                j.cpc != null ? $('#' + zone + '_ratio_cpc_' + index).val(j.cpc).attr('readonly', true) : $('#' + zone + '_ratio_cpc_' + index).val(j.cpc).attr('readonly', false);
             } else {
-                j.tpnd != null?$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', true):$('#'+zone+'_ratio_tpnd_'+index).val(j.tpnd).attr('readonly', false);
+                j.tpnd != null ? $('#' + zone + '_ratio_tpnd_' + index).val(j.tpnd).attr('readonly', true) : $('#' + zone + '_ratio_tpnd_' + index).val(j.tpnd).attr('readonly', false);
 
-                j.upc != null?$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', true):$('#'+zone+'_ratio_upc_'+index).val(j.upc).attr('readonly', false);
+                j.upc != null ? $('#' + zone + '_ratio_upc_' + index).val(j.upc).attr('readonly', true) : $('#' + zone + '_ratio_upc_' + index).val(j.upc).attr('readonly', false);
             }
-            if(parsedObj.orderQuantity.length !== (i+1)) {
+            if (parsedObj.orderQuantity.length !== (i + 1)) {
                 $('.add-row-btn').trigger('click');
             }
-        }); 
+        });
     }
 
     // hide delete button 
-    $('.delete-row').addClass( 'hidden' );
+    $('.delete-row').addClass('hidden');
 }
 
-var _validFileExtensions = [".pdf"];    
+var _validFileExtensions = [".pdf"];
 function ValidateSingleInput(oInput) {
     if (oInput.type == "file") {
         var sFileName = oInput.value;
-         if (sFileName.length > 0) {
+        if (sFileName.length > 0) {
             var blnValid = false;
             for (var j = 0; j < _validFileExtensions.length; j++) {
                 var sCurExtension = _validFileExtensions[j];
@@ -554,11 +550,11 @@ function ValidateSingleInput(oInput) {
                     break;
                 }
             }
-             
+
             if (!blnValid) {
                 $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file format. Please upload a PDF file.");
                 showSnackbar();
-                $("#"+oInput.id).val(null);
+                $("#" + oInput.id).val(null);
                 return false;
             }
         }
@@ -582,59 +578,59 @@ function parseSingleXml(data) {
     //*********************************************************************************************************
     //*********************************************************************************************************
     //PO Number
-        var po_string = ''; 
-        $(xml).find('page[id="1"] textbox[id="1"] text').each(function() {
-            po_string += $(this).text();
-        });
-        singleObj.purchaseOrder = $.trim(po_string);
+    var po_string = '';
+    $(xml).find('page[id="1"] textbox[id="1"] text').each(function () {
+        po_string += $(this).text();
+    });
+    singleObj.purchaseOrder = $.trim(po_string);
 
     //Style Number
-        var style_number = ''; 
-        $(xml).find('page[id="2"] textbox[id="1"] text').each(function() {
-            style_number += $(this).text();
-        });
-        singleObj.styleNumber = $.trim(style_number);
+    var style_number = '';
+    $(xml).find('page[id="2"] textbox[id="1"] text').each(function () {
+        style_number += $(this).text();
+    });
+    singleObj.styleNumber = $.trim(style_number);
     //Season Code
-        var season_code = ''; 
-        $(xml).find('page[id="2"] textbox[id="4"] text').each(function(){ 
-            season_code += $(this).text();
-        });
-        singleObj.seasonCode = $.trim(season_code);
+    var season_code = '';
+    $(xml).find('page[id="2"] textbox[id="4"] text').each(function () {
+        season_code += $(this).text();
+    });
+    singleObj.seasonCode = $.trim(season_code);
 
     //Short Descriptionx
-        var short_desc = ''; 
-        $(xml).find('page[id="2"] textbox[id="2"] textline:nth-child(2) text').each(function() {
-            short_desc = ($(this).text() === '') ? short_desc += ' ' : short_desc += $(this).text();
-        });
-        singleObj.shortDescription = $.trim(short_desc);
+    var short_desc = '';
+    $(xml).find('page[id="2"] textbox[id="2"] textline:nth-child(2) text').each(function () {
+        short_desc = ($(this).text() === '') ? short_desc += ' ' : short_desc += $(this).text();
+    });
+    singleObj.shortDescription = $.trim(short_desc);
 
     //Brand
-        var brand = ''; 
-        $(xml).find('page[id="2"] textbox[id="0"] textline:nth-child(5) text').each(function() {
-            brand = ($(this).text() === '') ? brand += ' ' : brand += $(this).text();
-        });
-        singleObj.brand = $.trim(brand);
+    var brand = '';
+    $(xml).find('page[id="2"] textbox[id="0"] textline:nth-child(5) text').each(function () {
+        brand = ($(this).text() === '') ? brand += ' ' : brand += $(this).text();
+    });
+    singleObj.brand = $.trim(brand);
 
     //Supplier Name
-        var supplier_name = ''; 
-        $(xml).find('page[id="1"] textbox[id="21"] textline:nth-child(2) text').each(function() {
-            supplier_name = ($(this).text() === '') ? supplier_name += ' ' : supplier_name += $(this).text();
-        });
-        singleObj.supplierName = $.trim(supplier_name);
+    var supplier_name = '';
+    $(xml).find('page[id="1"] textbox[id="21"] textline:nth-child(2) text').each(function () {
+        supplier_name = ($(this).text() === '') ? supplier_name += ' ' : supplier_name += $(this).text();
+    });
+    singleObj.supplierName = $.trim(supplier_name);
 
     //Supplier Code
-        var supplier_code = ''; 
-        $(xml).find('page[id="1"] textbox[id="20"] textline text').each(function() {
-            supplier_code = ($(this).text() === '') ? supplier_code += ' ' : supplier_code += $(this).text();
-        });
-        singleObj.supplierCode = $.trim(supplier_code);
+    var supplier_code = '';
+    $(xml).find('page[id="1"] textbox[id="20"] textline text').each(function () {
+        supplier_code = ($(this).text() === '') ? supplier_code += ' ' : supplier_code += $(this).text();
+    });
+    singleObj.supplierCode = $.trim(supplier_code);
 
     //Cargo Ready Date
-        var cargo_ready_date = ''; 
-        $(xml).find('page[id="1"] textbox[id="26"] textline text').each(function() {
-            cargo_ready_date = ($(this).text() === '') ? cargo_ready_date += ' ' : cargo_ready_date += $(this).text();
-        });
-        singleObj.cargoReadyDate = $.trim(cargo_ready_date);
+    var cargo_ready_date = '';
+    $(xml).find('page[id="1"] textbox[id="26"] textline text').each(function () {
+        cargo_ready_date = ($(this).text() === '') ? cargo_ready_date += ' ' : cargo_ready_date += $(this).text();
+    });
+    singleObj.cargoReadyDate = $.trim(cargo_ready_date);
 
     //*********************************************************************************************************
     //*********************************************************************************************************
@@ -645,50 +641,50 @@ function parseSingleXml(data) {
     //*********************************************************************************************************
     singleObj.orderQuantity = {};
     //TPND collection
-        var tpnd = [];
-        $(xml).find('page[id="2"] textbox[id="12"] textline').each(function() {
-            var tpnd_no = '';
-            $(this).find('text').each(function() {
-                tpnd_no += $(this).text();
-            });
-            tpnd.push(parseInt(tpnd_no));
+    var tpnd = [];
+    $(xml).find('page[id="2"] textbox[id="12"] textline').each(function () {
+        var tpnd_no = '';
+        $(this).find('text').each(function () {
+            tpnd_no += $(this).text();
         });
-        singleObj.orderQuantity.TPND = tpnd;
+        tpnd.push(parseInt(tpnd_no));
+    });
+    singleObj.orderQuantity.TPND = tpnd;
 
     //EAN Barcode
-        var EAN_barcode = [];
-        $(xml).find('page[id="2"] textbox[id="22"] textline').not(':first-child').each(function() {
-            var ean_bc = '';
-            $(this).find('text').each(function() {
-                ean_bc += $(this).text();
-            });
-            EAN_barcode.push(parseInt(ean_bc));
+    var EAN_barcode = [];
+    $(xml).find('page[id="2"] textbox[id="22"] textline').not(':first-child').each(function () {
+        var ean_bc = '';
+        $(this).find('text').each(function () {
+            ean_bc += $(this).text();
         });
-         singleObj.orderQuantity.EANBarcode = EAN_barcode;
+        EAN_barcode.push(parseInt(ean_bc));
+    });
+    singleObj.orderQuantity.EANBarcode = EAN_barcode;
 
     //Size Collection
-        var size = [];
-        $(xml).find('page[id="2"] textbox[id="16"] textline').not(':first-child').each(function() {
-            var size_chart = '';
-            $(this).find('text').each(function() {
-                size_chart =  ($(this).text() === '') ? size_chart += ' ' : size_chart += $(this).text();
-            });
-            size.push($.trim(size_chart));
+    var size = [];
+    $(xml).find('page[id="2"] textbox[id="16"] textline').not(':first-child').each(function () {
+        var size_chart = '';
+        $(this).find('text').each(function () {
+            size_chart = ($(this).text() === '') ? size_chart += ' ' : size_chart += $(this).text();
         });
-        singleObj.orderQuantity.size = size;
+        size.push($.trim(size_chart));
+    });
+    singleObj.orderQuantity.size = size;
 
     //Units Per Case
-        var caseSize = [];
-        $(xml).find('page[id="2"] textbox[id="20"] textline').each(function() {
-            var case_size = '';
-            $(this).find('text').each(function() {
-                case_size += $(this).text();
-            });
-            caseSize.push($.trim(case_size));
-        });         
-        singleObj.orderQuantity.caseSize = caseSize;
+    var caseSize = [];
+    $(xml).find('page[id="2"] textbox[id="20"] textline').each(function () {
+        var case_size = '';
+        $(this).find('text').each(function () {
+            case_size += $(this).text();
+        });
+        caseSize.push($.trim(case_size));
+    });
+    singleObj.orderQuantity.caseSize = caseSize;
 
-        return singleObj;
+    return singleObj;
 }
 
 /**
@@ -699,11 +695,11 @@ function parseSingleXml(data) {
 function parseVPNDescription(tabula) {
     var values = [];
     var vpn = tabula[1][0]['text'];
-    if(vpn.includes('RPA')) {
+    if (vpn.includes('RPA')) {
         vpn = vpn.replace('RPA', '')
     }
     values['vpn'] = vpn;
-    values['24_desc']  = tabula[1][1]['text'] + tabula[2][1]['text'];
+    values['24_desc'] = tabula[1][1]['text'] + tabula[2][1]['text'];
     return values;
 }
 
@@ -715,28 +711,28 @@ function parseVPNDescription(tabula) {
  * Render the the order form with autofilled fields which are parsed from the customer PDF.
  * @return {xml} XML from the parser. 
  */
- function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, template_id) {
-	try {
-		$.ajax({
-			url: base_url + "/"+ role +"/tesco/po-upload-labels",
-			type: 'POST',
-			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-			data: formData,
-			dataType: 'JSON',
-			async: true,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			statusCode: {
-				200: function (data) {
+function uploadPurchaseOrderForLabels(formData, po_zone, role, size_id, template_id) {
+    try {
+        $.ajax({
+            url: base_url + "/" + role + "/tesco/po-upload-labels",
+            type: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: formData,
+            dataType: 'JSON',
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            statusCode: {
+                200: function (data) {
                     var parsedObj = {};
-					if (po_zone === 'UK') {
+                    if (po_zone === 'UK') {
                         //Check for Purchase Order Type
                         var po_type = data.type;
-                        switch(po_type) {
+                        switch (po_type) {
                             case 'single': parsedObj = parseSingleType(data);
                                 break;
                             case 'ratio': parsedObj = parseRatioType(data);
@@ -744,119 +740,119 @@ function parseVPNDescription(tabula) {
                             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                                 break;
                         }
-					} else {
+                    } else {
                         //Parse the ORMS data
-                        parsedObj.purchaseOrder  =  data.details.orms.order_number;
+                        parsedObj.purchaseOrder = data.details.orms.order_number;
                         //Check for Purchase Order Type
                         var po_type = data.details.retek.retek_po_type;
-                        switch(po_type) {
+                        switch (po_type) {
                             case 'single':
-                                    parsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                                    parseSingleTypeForCE(data.details.retek, parsedObj);
+                                parsedObj.orderQuantity = parseSingleORMSTable(data.details.orms.order_table);
+                                parseSingleTypeForCE(data.details.retek, parsedObj);
                                 break;
-                            case 'ratio' :
-                                    parsedObj.orderQuantity =  parseRatioORMSTable(data.details.orms.order_table); 
-                                    parseRatioTypeForCE(data.details.retek, parsedObj);
+                            case 'ratio':
+                                parsedObj.orderQuantity = parseRatioORMSTable(data.details.orms.order_table);
+                                parseRatioTypeForCE(data.details.retek, parsedObj);
                                 break;
                             default: console.log("Failed to identify Purchase Order Type!! Exiting..");
                                 break;
                         }
-					}
+                    }
                     // Compare size for atleast one match else raise error
-                        $.ajax({
-                            type: "get",
-                            url: base_url + "/" + role + "/tesco/care-size-lists",
-                            dataType: "json",
-                            data: {
-                                _token: csrf_token,
-                                size_id: size_id,
-                            },
-                            success: function (response) {
-                                var meta_size_chart = [];
-                                $.each(response.data, function (indexInArray, valueOfElement) {
-                                    meta_size_chart.push(valueOfElement);
-                                });
-                                if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
-                                    let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
-                                        let po_updated_size = order.Size;
-                                        // switch(order.Size) {
-                                        //     case 'TB':
-                                        //         po_updated_size = 'tiny baby';
-                                        //         break;
-                                        //     case 'NB':
-                                        //         po_updated_size = 'Newborn';
-                                        //         break;
-                                        //     case 'UP1M':
-                                        //         po_updated_size = 'up to 1M';
-                                        //         break;
-                                        //     case 'UP3M':
-                                        //         po_updated_size = 'up to 3M';
-                                        //         break;
-                                        //     default:
-                                        //         po_updated_size = order.Size;
-                                        // }
-                                        // po_updated_size = po_updated_size.replace("/", "-");
-                                        return po_updated_size;
-                                    });
-
-                                    // let size_chart;
-                                    // if(po_zone == 'UK'){
-                                    //     size_chart =  meta_size_chart.map(function (sizes) {
-                                    //         return sizes.uk_size;
-                                    //     });
-                                    // } else {
-                                    //     size_chart =  meta_size_chart.map(function (sizes) {
-                                    //         return sizes.ce_size;
-                                    //     });
+                    $.ajax({
+                        type: "get",
+                        url: base_url + "/" + role + "/tesco/care-size-lists",
+                        dataType: "json",
+                        data: {
+                            _token: csrf_token,
+                            size_id: size_id,
+                        },
+                        success: function (response) {
+                            var meta_size_chart = [];
+                            $.each(response.data, function (indexInArray, valueOfElement) {
+                                meta_size_chart.push(valueOfElement);
+                            });
+                            if (parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size")) {
+                                let po_size_chart = parsedObj.orderQuantity.map(function (order) {
+                                    let po_updated_size = order.Size;
+                                    // switch(order.Size) {
+                                    //     case 'TB':
+                                    //         po_updated_size = 'tiny baby';
+                                    //         break;
+                                    //     case 'NB':
+                                    //         po_updated_size = 'Newborn';
+                                    //         break;
+                                    //     case 'UP1M':
+                                    //         po_updated_size = 'up to 1M';
+                                    //         break;
+                                    //     case 'UP3M':
+                                    //         po_updated_size = 'up to 3M';
+                                    //         break;
+                                    //     default:
+                                    //         po_updated_size = order.Size;
                                     // }
+                                    // po_updated_size = po_updated_size.replace("/", "-");
+                                    return po_updated_size;
+                                });
 
-                                    var size_chart =  meta_size_chart.map(function (sizes) {
-                                        return sizes.po_size;
-                                    });
+                                // let size_chart;
+                                // if(po_zone == 'UK'){
+                                //     size_chart =  meta_size_chart.map(function (sizes) {
+                                //         return sizes.uk_size;
+                                //     });
+                                // } else {
+                                //     size_chart =  meta_size_chart.map(function (sizes) {
+                                //         return sizes.ce_size;
+                                //     });
+                                // }
 
-                                    // Intersection to find out atleast one size is common
-                                    let intersection = po_size_chart.filter(x => size_chart.includes(x));
-                                    if(intersection.length > 0) {
-                                        // renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
-                                        renderTescoCareOrders(role, template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone, meta_size_chart, size_chart));
-                                    } else {
-                                        $('.snackbar_span').html("Size details mismatch!! Please check the file");
-                                        showSnackbar();
-                                    }
-                                } else{
-                                    $('.snackbar_span').html("Ratio PO not supported!!");
-					                showSnackbar();
+                                var size_chart = meta_size_chart.map(function (sizes) {
+                                    return sizes.po_size;
+                                });
+
+                                // Intersection to find out atleast one size is common
+                                let intersection = po_size_chart.filter(x => size_chart.includes(x));
+                                if (intersection.length > 0) {
+                                    // renderTescoCareOrders(role, size_id, size_category, size_category_text,template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone));
+                                    renderTescoCareOrders(role, template_id, renderParsedLabelValues.bind(null, parsedObj, po_zone, meta_size_chart, size_chart));
+                                } else {
+                                    $('.snackbar_span').html("Size details mismatch!! Please check the file");
+                                    showSnackbar();
                                 }
+                            } else {
+                                $('.snackbar_span').html("Ratio PO not supported!!");
+                                showSnackbar();
                             }
-                        });
-				},
-				422: function (data) {
-					$('.snackbar_span').html("File Mismatch!! Please check the file.");
-					showSnackbar();
-				},
-				400: function () {
-					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
-					showSnackbar();
-				}
-			},
-			error: function (errorXHR, errorStatus, errorThrown) {},
-			complete: function () {
-				/** [To make top menu active] */
-				$(function () {
-					var url = window.location;
-					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-					$('.dynamic-menu a').filter(function () {
-						return this.href == url;
-					}).parent('li').addClass('current-page').find('a').addClass('active');
-				});
-				$(".loader").hide();
-			}
-		})
+                        }
+                    });
+                },
+                422: function (data) {
+                    $('.snackbar_span').html("File Mismatch!! Please check the file.");
+                    showSnackbar();
+                },
+                400: function () {
+                    $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
+                    showSnackbar();
+                }
+            },
+            error: function (errorXHR, errorStatus, errorThrown) { },
+            complete: function () {
+                /** [To make top menu active] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
 
-	} catch (e) {
-		// error statements
-		console.log("Error:" + e)
-	}
+    } catch (e) {
+        // error statements
+        console.log("Error:" + e)
+    }
 }
 
 /**
@@ -864,7 +860,7 @@ function parseVPNDescription(tabula) {
  * @param  {[type]} parsedObj [description]
  * @return {[type]}           [description]
  */
- function renderParsedLabelValues(parsedObj, po_zone, size_chart, zonal_size_chart) {
+function renderParsedLabelValues(parsedObj, po_zone, size_chart, zonal_size_chart) {
     var zonal = po_zone.toLowerCase();
     // var zone_size = zonal+'_size';
     var zone_size = 'po_size';
@@ -873,16 +869,16 @@ function parseVPNDescription(tabula) {
     // });
 
     // Purchase order
-    parsedObj.purchaseOrder != null?$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false):$('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
+    parsedObj.purchaseOrder != null ? $('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false) : $('#tesco_care_po').val(parsedObj.purchaseOrder).attr('readonly', false);
 
     // Style number
-    parsedObj.styleNumber != null?$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false):$('#tesco_care_'+zonal+'_style').val(parsedObj.styleNumber).attr('readonly', false);
+    parsedObj.styleNumber != null ? $('#tesco_care_' + zonal + '_style').val(parsedObj.styleNumber).attr('readonly', false) : $('#tesco_care_' + zonal + '_style').val(parsedObj.styleNumber).attr('readonly', false);
 
     var zonal_size_index = {};
-    $.each(size_chart, function (i, sizes) {    
+    $.each(size_chart, function (i, sizes) {
         zonal_size_index[sizes[zone_size]] = sizes.id;
     });
-    $.each(parsedObj.orderQuantity, function(i, j) {
+    $.each(parsedObj.orderQuantity, function (i, j) {
         let po_updated_size = j.Size;
         // switch(j.Size) {
         //     case 'TB':
@@ -901,52 +897,52 @@ function parseVPNDescription(tabula) {
         //         po_updated_size = j.Size;
         // }
         // po_updated_size = po_updated_size.replace("/", "-");
-        if($.inArray(po_updated_size, zonal_size_chart) != -1) {
+        if ($.inArray(po_updated_size, zonal_size_chart) != -1) {
             let index = zonal_size_index[po_updated_size];
             // EAN Barcode for UK
-            j.EAN_Barcode != null?$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#uk_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
+            j.EAN_Barcode != null ? $('#uk_ean_' + index).val(j.EAN_Barcode).attr('readonly', true) : $('#uk_ean_' + index).val(j.EAN_Barcode).attr('readonly', false);
 
             // EAN Barcode for CE
-            j.EAN_Barcode != null?$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#ce_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
+            j.EAN_Barcode != null ? $('#ce_ean_' + index).val(j.EAN_Barcode).attr('readonly', true) : $('#ce_ean_' + index).val(j.EAN_Barcode).attr('readonly', false);
             // Quantity
-            j.Single_Qty != null?$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false):$('#quantity_'+index).val(j.Single_Qty).attr('readonly', false);
+            j.Single_Qty != null ? $('#quantity_' + index).val(j.Single_Qty).attr('readonly', false) : $('#quantity_' + index).val(j.Single_Qty).attr('readonly', false);
         }
     });
- }
+}
 
 
- /**
- * SWING TICKETS PARSER
- * Tesco Create Order by PO upload Method.
- * Get the template type and zone from the form along with PDF.
- * File to be uploaded for parsing.
- * Render the the order form with autofilled fields which are parsed from the customer PDF.
- * @return {xml} XML from the parser. 
- */
-  function uploadPurchaseOrderForSwingTickets(formData, po_zone, role, size_id, template_id) {
-	try {
-		$.ajax({
-			url: base_url + "/"+ role +"/tesco/po-upload-swing-tickets",
-			type: 'POST',
-			headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-			data: formData,
-			dataType: 'JSON',
-			async: true,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function () {
-				$(".loader").show();
-			},
-			statusCode: {
-				200: function (data) {
+/**
+* SWING TICKETS PARSER
+* Tesco Create Order by PO upload Method.
+* Get the template type and zone from the form along with PDF.
+* File to be uploaded for parsing.
+* Render the the order form with autofilled fields which are parsed from the customer PDF.
+* @return {xml} XML from the parser. 
+*/
+function uploadPurchaseOrderForSwingTickets(formData, po_zone, role, size_id, template_id) {
+    try {
+        $.ajax({
+            url: base_url + "/" + role + "/tesco/po-upload-swing-tickets",
+            type: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: formData,
+            dataType: 'JSON',
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            statusCode: {
+                200: function (data) {
                     var parsedObj = {};
                     //Parse the ORMS data
-                    parsedObj.purchaseOrder  =  data.details.orms.order_number;
+                    parsedObj.purchaseOrder = data.details.orms.order_number;
 
                     //Parse the ORMS table from the response, treat them as single.
-                    parsedObj.orderQuantity =  parseSingleORMSTable(data.details.orms.order_table);
-                    parsedObj.vpn_desc =  parseVPNDescription(data.details.orms.vpn_description);
+                    parsedObj.orderQuantity = parseSingleORMSTable(data.details.orms.order_table);
+                    parsedObj.vpn_desc = parseVPNDescription(data.details.orms.vpn_description);
 
                     // Compare size for atleast one match else raise error
                     $.ajax({
@@ -962,8 +958,8 @@ function parseVPNDescription(tabula) {
                             $.each(response.data, function (indexInArray, valueOfElement) {
                                 meta_size_chart.push(valueOfElement);
                             });
-                            if(parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size") ) {
-                                let po_size_chart =  parsedObj.orderQuantity.map(function (order) {
+                            if (parsedObj.orderQuantity.length > 0 && parsedObj.orderQuantity[0].hasOwnProperty("Size")) {
+                                let po_size_chart = parsedObj.orderQuantity.map(function (order) {
                                     let po_updated_size = order.Size;
                                     // switch(order.Size) {
                                     //     case 'TB':
@@ -996,52 +992,52 @@ function parseVPNDescription(tabula) {
                                 //     });
                                 // }
 
-                                var size_chart =  meta_size_chart.map(function (sizes) {
+                                var size_chart = meta_size_chart.map(function (sizes) {
                                     return sizes.po_size;
                                 });
 
                                 // Intersection to find out atleast one size is common
                                 let intersection = po_size_chart.filter(x => size_chart.includes(x));
-                                if(intersection.length > 0) {
-                                    renderTescoSwingTicketOrders(role, template_id, renderParsedSwingTicketValues.bind(null,parsedObj, meta_size_chart, size_chart));
+                                if (intersection.length > 0) {
+                                    renderTescoSwingTicketOrders(role, template_id, renderParsedSwingTicketValues.bind(null, parsedObj, meta_size_chart, size_chart));
                                 } else {
                                     $('.snackbar_span').html("Size details mismatch!! Please check the file");
                                     showSnackbar();
                                 }
-                            } else{
+                            } else {
                                 $('.snackbar_span').html("Ratio PO not supported!!");
                                 showSnackbar();
                             }
                         }
                     });
-				},
-				422: function (data) {
-					$('.snackbar_span').html("File Mismatch!! Please check the file.");
-					showSnackbar();
-				},
-				400: function () {
-					$('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
-					showSnackbar();
-				}
-			},
-			error: function (errorXHR, errorStatus, errorThrown) {},
-			complete: function () {
-				/** [To make top menu active] */
-				$(function () {
-					var url = window.location;
-					$('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
-					$('.dynamic-menu a').filter(function () {
-						return this.href == url;
-					}).parent('li').addClass('current-page').find('a').addClass('active');
-				});
-				$(".loader").hide();
-			}
-		})
+                },
+                422: function (data) {
+                    $('.snackbar_span').html("File Mismatch!! Please check the file.");
+                    showSnackbar();
+                },
+                400: function () {
+                    $('.snackbar_span').html("Sorry!! You seem to have uploaded an invalid file. Please check the file or Try Manual Mode");
+                    showSnackbar();
+                }
+            },
+            error: function (errorXHR, errorStatus, errorThrown) { },
+            complete: function () {
+                /** [To make top menu active] */
+                $(function () {
+                    var url = window.location;
+                    $('.dynamic-menu a[href="' + url + '"]').parent('li').addClass('current-page');
+                    $('.dynamic-menu a').filter(function () {
+                        return this.href == url;
+                    }).parent('li').addClass('current-page').find('a').addClass('active');
+                });
+                $(".loader").hide();
+            }
+        })
 
-	} catch (e) {
-		// error statements
-		console.log("Error:" + e)
-	}
+    } catch (e) {
+        // error statements
+        console.log("Error:" + e)
+    }
 }
 
 function renderParsedSwingTicketValues(parsedObj, size_chart, zonal_size_chart) {
@@ -1049,21 +1045,21 @@ function renderParsedSwingTicketValues(parsedObj, size_chart, zonal_size_chart) 
     // console.log(size_chart);
     // console.log(zonal_size_chart);
     // Render 24 charcter description
-    parsedObj.vpn_desc["24_desc"] != null?$('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false):$('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false);
+    parsedObj.vpn_desc["24_desc"] != null ? $('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false) : $('#swing_24_char_desc').val(parsedObj.vpn_desc["24_desc"]).attr('readonly', false);
 
     // Render Option ID 
-    parsedObj.vpn_desc["vpn"] != null?$('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', true):$('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', false);
+    parsedObj.vpn_desc["vpn"] != null ? $('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', true) : $('#swing_option_id').val(parsedObj.vpn_desc["vpn"]).attr('readonly', false);
 
     var zone_size = 'po_size';
     // let zonal_size_chart =  size_chart.map(function (sizes) {
     //     return sizes[zone_size];
     // });
     var zonal_size_index = {};
-    $.each(size_chart, function (i, sizes) {    
+    $.each(size_chart, function (i, sizes) {
         zonal_size_index[sizes[zone_size]] = sizes.id;
     });
     // console.log(zonal_size_index);
-    $.each(parsedObj.orderQuantity, function(i, j) {
+    $.each(parsedObj.orderQuantity, function (i, j) {
         let po_updated_size = j.Size;
         // switch(j.Size) {
         //     case 'TB':
@@ -1083,11 +1079,11 @@ function renderParsedSwingTicketValues(parsedObj, size_chart, zonal_size_chart) 
         // }
         // po_updated_size = po_updated_size.replace("/", "-");
 
-        if($.inArray(po_updated_size, zonal_size_chart) != -1) {
+        if ($.inArray(po_updated_size, zonal_size_chart) != -1) {
             let index = zonal_size_index[po_updated_size];
-           
+
             // EAN Barcode for CE
-            j.EAN_Barcode != null?$('#swing_ean_'+index).val(j.EAN_Barcode).attr('readonly', true):$('#swing_ean_'+index).val(j.EAN_Barcode).attr('readonly', false);
+            j.EAN_Barcode != null ? $('#swing_ean_' + index).val(j.EAN_Barcode).attr('readonly', true) : $('#swing_ean_' + index).val(j.EAN_Barcode).attr('readonly', false);
 
         }
     });
