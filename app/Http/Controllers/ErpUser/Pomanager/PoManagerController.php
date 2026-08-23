@@ -77,8 +77,8 @@ class PoManagerController extends Controller
 											$q->where('erp_orders.status',1)
 											->orWhere('erp_orders.status',2);
 										 })
-										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at')
-										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date')
+										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at','erp_order_details.aw_date')
+										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date','erp_order_details.aw_date')
 										 ->get();
 
 				if(count($erp_order_details) > 0)
@@ -91,11 +91,21 @@ class PoManagerController extends Controller
 							 $erp_order_det["po_created_date"] = Carbon::parse($erp_order_det["po_created_date"])->format('d-m-Y');
 						}
 
+						// format artwork approved date to dd-mm-yyyy (null until the order is approved)
+						if($erp_order_det["aw_date"] != null)
+						{
+							 $erp_order_det["aw_date"] = Carbon::parse($erp_order_det["aw_date"])->format('d-m-Y');
+						}
+
 						if (array_key_exists($erp_order_det->id,$orders_erp))
 						{
 							if($orders_erp[$erp_order_det->id]['po_created_date'] < $erp_order_det['po_created_date'])
 							{
 								$orders_erp[$erp_order_det->id]['po_created_date']=$erp_order_det['po_created_date'];
+							}
+							if($erp_order_det['aw_date'] != null && ($orders_erp[$erp_order_det->id]['aw_date'] == null || $orders_erp[$erp_order_det->id]['aw_date'] < $erp_order_det['aw_date']))
+							{
+								$orders_erp[$erp_order_det->id]['aw_date']=$erp_order_det['aw_date'];
 							}
 						}
 						else
@@ -167,6 +177,7 @@ class PoManagerController extends Controller
 					$partial_text,
 					(string) $vals->status_name,
 					(string) $vals->po_created_date,
+					(string) $vals->aw_date,
 				];
 				foreach ($haystacks as $haystack) {
 					if (strpos(strtolower($haystack), $search_lower) !== false) {
@@ -180,8 +191,8 @@ class PoManagerController extends Controller
 		$records_filtered = count($orders_erp);
 
 		// Sortable columns map to the DataTables column index (see poverify.blade.php).
-		// Column 0 (Sl.No), 5 (Status badge) and 7 (Actions) aren't real sortable fields.
-		$sortable_columns = [1 => 'erp_id', 2 => 'company_name', 3 => 'po_no', 4 => 'partial_status', 6 => 'po_created_date'];
+		// Column 0 (Sl.No), 5 (Status badge) and 8 (Actions) aren't real sortable fields.
+		$sortable_columns = [1 => 'erp_id', 2 => 'company_name', 3 => 'po_no', 4 => 'partial_status', 6 => 'po_created_date', 7 => 'aw_date'];
 		$order = $request->input('order');
 		if (!empty($order) && isset($sortable_columns[$order[0]['column']])) {
 			$sort_field = $sortable_columns[$order[0]['column']];
@@ -215,6 +226,7 @@ class PoManagerController extends Controller
 				'partial_status'  => $vals->partial_status == 0 ? 'NO' : 'YES',
 				'status_html'     => $status_html,
 				'po_created_date' => explode(' ', $vals->po_created_date)[0] ?? '',
+				'artwork_approved_date' => $vals->aw_date ?: '-',
 				'actions'         => $actions_html,
 				'DT_RowId'        => $vals->id,
 			];

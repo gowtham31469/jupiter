@@ -320,6 +320,7 @@ transform: scale(1);
 						<th>Partial</th>
 						<th>Status</th>
 						<th>Created Date</th>
+						<th>Artwork Approved Date</th>
 						<th>Actions</th>
 					</tr>
 				</thead>
@@ -363,6 +364,7 @@ transform: scale(1);
 							<th>Quantity</th>
 							<th>Price</th>
 							<th>Status</th>
+							<th>Approved Date</th>
 
 						</tr>
 					</thead>
@@ -555,6 +557,7 @@ transform: scale(1);
 			{ data: 'partial_status' },
 			{ data: 'status_html', orderable: false },
 			{ data: 'po_created_date' },
+			{ data: 'artwork_approved_date' },
 			{ data: 'actions', orderable: false, searchable: false, className: 'text-center' }
 		],
 		createdRow: function(row, data) {
@@ -735,6 +738,14 @@ transform: scale(1);
 		}
 	}
 
+	function formatAwDate(dateStr) {
+		var d = new Date(dateStr);
+		if (isNaN(d.getTime())) { return "-"; }
+		var day = ("0" + d.getDate()).slice(-2);
+		var month = ("0" + (d.getMonth() + 1)).slice(-2);
+		return day + "-" + month + "-" + d.getFullYear();
+	}
+
 	function view_order_details(id, po_no, buyer_id, customer_id, po_file) {
 
 		$('#erp_order_id').val(id)
@@ -783,6 +794,7 @@ transform: scale(1);
 					}
 
 					var color_code = index.color_code != null ? index.color_code : "-";
+					var approved_date = index.aw_date != null ? formatAwDate(index.aw_date) : "-";
 
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
@@ -796,6 +808,7 @@ transform: scale(1);
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>
 							  <td><span class="` + label + `">` + index.status_name + `</span></td>
+							  <td class="approved_date_td">` + approved_date + `</td>
                           </tr>`)
 					i++;
 				})
