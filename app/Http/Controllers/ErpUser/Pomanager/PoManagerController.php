@@ -61,17 +61,29 @@ class PoManagerController extends Controller
 
 		 $orders_erp = array();
 
+		 // Collect all permitted template ids per buyer so we run one query per buyer
+		 // (chunked) instead of one query per template - the per-template loop was
+		 // firing hundreds of queries and taking 30s+ to load.
+		 $buyer_templates = array();
 		 foreach($new_orders as $key => $values)
 		 {
 			$split_key = explode('-', $key);
 			$buyer_id = $split_key[0];
 			foreach($values as $valuess)
 			{
+				$buyer_templates[$buyer_id][$valuess] = $valuess;
+			}
+		 }
+
+		 foreach($buyer_templates as $buyer_id => $template_ids)
+		 {
+			foreach(array_chunk(array_values($template_ids), 1000) as $template_chunk)
+			{
 				$erp_order_details = Erp::join('erp_order_details','erp_order_details.erp_order_id','erp_orders.id')
 										 ->join('customers','erp_orders.customer_id','customers.id')
 										 ->join('erp_status','erp_orders.status','erp_status.id')
 										 ->where('erp_order_details.company_id',session()->get('company'))
-										 ->where('erp_order_details.template_id',$valuess)
+										 ->whereIn('erp_order_details.template_id',$template_chunk)
 										 ->where('erp_orders.buyer_id', $buyer_id)
 										 ->where(function($q) {
 											$q->where('erp_orders.status',1)
