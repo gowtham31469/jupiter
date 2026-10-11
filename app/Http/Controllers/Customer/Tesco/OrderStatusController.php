@@ -2830,7 +2830,7 @@ class OrderStatusController extends Controller
 
                     $old_raw_po      = $po_details->purchase_order_no;
                     $old_internal_po = ErpOrders::generateInternalPoNumber($old_raw_po);
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(function($q) use ($old_internal_po, $old_raw_po) { $q->where('po_no',$old_internal_po)->orWhere('po_no',$old_raw_po); })->first();
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(ErpOrders::poNumberMatcher($old_raw_po))->first();
 
                     if($erp_previous_status)
                     {
@@ -3925,7 +3925,7 @@ class OrderStatusController extends Controller
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
             $internal_po    = ErpOrders::generateInternalPoNumber($po);
-            $erp_orders     = DB::table('erp_orders')->where(function($q) use ($internal_po, $po) { $q->where('po_no',$internal_po)->orWhere('po_no',$po); })->select('po_file')->first();
+            $erp_orders     = DB::table('erp_orders')->where(ErpOrders::poNumberMatcher($po))->select('po_file')->first();
 
             foreach($id as $val)
             {
@@ -4448,7 +4448,7 @@ class OrderStatusController extends Controller
                     $customer_id = Auth::guard('web_customer')->user()->company_id;
 
                     $internal_po = ErpOrders::generateInternalPoNumber($po_number_updation);
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(function($q) use ($internal_po, $po_number_updation) { $q->where('po_no',$internal_po)->orWhere('po_no',$po_number_updation); })->first();
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(ErpOrders::poNumberMatcher($po_number_updation))->first();
                     
                     if($erp_previous_status)
                     {

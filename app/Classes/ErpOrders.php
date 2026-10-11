@@ -92,6 +92,28 @@ class ErpOrders
 		return explode('|', $storedPoNumber, 2)[0];
 	}
 
+	/**
+	 * Query constraint that finds the current year's erp_orders row for a raw PO number:
+	 * the "YYYY|po" internal format, or a legacy un-prefixed row created this year.
+	 * Legacy rows from earlier years must not match - otherwise a reused PO number
+	 * gets appended to the old year's ERP order.
+	 * Usage: ->where(ErpOrders::poNumberMatcher($po_no))
+	 */
+	public static function poNumberMatcher($poNumber, $year = null)
+	{
+		$year        = $year ?? Carbon::now('Asia/Kolkata')->format('Y');
+		$raw_po      = self::extractOriginalPoNumber($poNumber);
+		$internal_po = self::generateInternalPoNumber($raw_po, $year);
+
+		return function ($q) use ($internal_po, $raw_po, $year) {
+			$q->where('erp_orders.po_no', $internal_po)
+				->orWhere(function ($legacy) use ($raw_po, $year) {
+					$legacy->where('erp_orders.po_no', $raw_po)
+						->whereYear('erp_orders.created_at', $year);
+				});
+		};
+	}
+
 	/** True when the string starts with exactly four digits followed by "|". */
 	private static function hasYearPrefix($poNumber)
 	{
@@ -148,9 +170,7 @@ class ErpOrders
 
 		$erp_order = Erp::where('buyer_id', $request['buyer_id'])
 			->where('customer_id', $orders->tesco_supplier_id)
-			->where(function ($q) use ($internal_po_no, $raw_po_no) {
-				$q->where('po_no', $internal_po_no)->orWhere('po_no', $raw_po_no);
-			})
+			->where(self::poNumberMatcher($raw_po_no))
 			->select('id', 'status', 'po_no')
 			->first();
 
@@ -410,9 +430,7 @@ class ErpOrders
 
 			$erp_orders = Erp::where('buyer_id', $buyer_id)
 				->where('customer_id', $orders->customer_id)
-				->where(function ($q) use ($internal_po_no, $raw_po_no) {
-					$q->where('po_no', $internal_po_no)->orWhere('po_no', $raw_po_no);
-				})
+				->where(self::poNumberMatcher($raw_po_no))
 				->select('id', 'status', 'po_no')
 				->first();
 
