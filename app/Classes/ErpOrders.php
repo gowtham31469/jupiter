@@ -64,14 +64,36 @@ class ErpOrders
 	}
 
 	/**
-	 * Prepend current year as "YYYY|po_number" for internal uniqueness across years.
+	 * Start date ("yyyy-mm-dd") of the financial year containing $date (default: today),
+	 * using the reset date from financial_year_reset_date - same rule the constructor
+	 * uses for ERP IDs. e.g. reset "04-01": 2026-10-10 -> 2026-04-01, 2027-02-05 -> 2026-04-01.
+	 */
+	public static function financialYearStart($date = null)
+	{
+		static $reset_date = null;
+		if ($reset_date === null) {
+			$reset_date = FinancialYearResetDate::value('financial_year_date') ?: '04-01';
+		}
+
+		$date     = Carbon::parse($date ?? Carbon::now('Asia/Kolkata')->format('Y-m-d'));
+		$fy_start = Carbon::parse($date->format('Y') . '-' . $reset_date);
+
+		if ($date->lt($fy_start)) {
+			$fy_start->subYear();
+		}
+		return $fy_start->toDateString();
+	}
+
+	/**
+	 * Prepend the current financial year's start year as "YYYY|po_number" for internal
+	 * uniqueness across financial years (e.g. Apr-2026 to Mar-2027 -> "2026|po").
 	 * Safe to call on values already in internal format.
 	 */
 	public static function generateInternalPoNumber($poNumber, $year = null)
 	{
 		if (empty($poNumber)) return $poNumber;
 		if (self::hasYearPrefix($poNumber)) return $poNumber;
-		$year = $year ?? Carbon::now('Asia/Kolkata')->format('Y');
+		$year = $year ?? substr(self::financialYearStart(), 0, 4);
 		return $year . '|' . $poNumber;
 	}
 
@@ -85,7 +107,7 @@ class ErpOrders
 		return $storedPoNumber;
 	}
 
-	/** Return the year portion of an internal PO number, or null for legacy records. */
+	/** Return the financial-year start year of an internal PO number, or null for legacy records. */
 	public static function extractPoYear($storedPoNumber)
 	{
 		if (empty($storedPoNumber) || !self::hasYearPrefix($storedPoNumber)) return null;
@@ -93,23 +115,25 @@ class ErpOrders
 	}
 
 	/**
-	 * Query constraint that finds the current year's erp_orders row for a raw PO number:
-	 * the "YYYY|po" internal format, or a legacy un-prefixed row created this year.
-	 * Legacy rows from earlier years must not match - otherwise a reused PO number
-	 * gets appended to the old year's ERP order.
+	 * Query constraint that finds the current financial year's erp_orders row for a raw
+	 * PO number: the "YYYY|po" internal format, or a legacy un-prefixed row created in
+	 * this financial year. Rows from earlier financial years must not match - otherwise
+	 * a reused PO number gets appended to the old year's ERP order.
 	 * Usage: ->where(ErpOrders::poNumberMatcher($po_no))
 	 */
-	public static function poNumberMatcher($poNumber, $year = null)
+	public static function poNumberMatcher($poNumber)
 	{
-		$year        = $year ?? Carbon::now('Asia/Kolkata')->format('Y');
+		$fy_start    = self::financialYearStart();
+		$fy_end      = Carbon::parse($fy_start)->addYear()->toDateString();
 		$raw_po      = self::extractOriginalPoNumber($poNumber);
-		$internal_po = self::generateInternalPoNumber($raw_po, $year);
+		$internal_po = self::generateInternalPoNumber($raw_po, substr($fy_start, 0, 4));
 
-		return function ($q) use ($internal_po, $raw_po, $year) {
+		return function ($q) use ($internal_po, $raw_po, $fy_start, $fy_end) {
 			$q->where('erp_orders.po_no', $internal_po)
-				->orWhere(function ($legacy) use ($raw_po, $year) {
+				->orWhere(function ($legacy) use ($raw_po, $fy_start, $fy_end) {
 					$legacy->where('erp_orders.po_no', $raw_po)
-						->whereYear('erp_orders.created_at', $year);
+						->where('erp_orders.created_at', '>=', $fy_start)
+						->where('erp_orders.created_at', '<', $fy_end);
 				});
 		};
 	}
