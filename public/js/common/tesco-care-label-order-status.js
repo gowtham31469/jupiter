@@ -288,8 +288,8 @@ $( () => {
                                                                 <h4 class="text-center">Optional Garment Statements</h4>
                                                                 <div class="form-group has-feedback">
                                                                 <label for="tesco_care_garment_statements" class="component-label">Garment Statements</label>
-                                                                    <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_statements" name="tesco_care_garment_statements" required>
-                                                                        <option value="">-- Select Garment Statements --</option>`;
+                                                                    <select class="selectpicker form-control input-sm " data-live-search="true" id="tesco_care_garment_statements" name="tesco_care_garment_statements">
+                                                                        <option value="">None</option>`;
                                                                         $.each(order_data.garment_statements, function (id, name) {
 
                                                                             metadata_select_div += `<option value=` + id + `>` + name + `</option>`;
