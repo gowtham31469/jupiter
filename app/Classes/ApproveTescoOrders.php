@@ -82,7 +82,10 @@ class ApproveTescoOrders
               $purchase_order_no     = $order_details->purchase_order_no;
             }         
             
-            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where('po_no', $purchase_order_no)->exists();
+            // erp_orders.po_no is stored with a "YYYY|" prefix (see ErpOrders::generateInternalPoNumber) -
+            // match both the internal and legacy raw formats, same as ErpOrders::updateTescoErpOrders() does.
+            $internal_po_no = ErpOrders::generateInternalPoNumber($purchase_order_no);
+            $erp_orders = Erp::where('buyer_id',$buyer_id)->where('customer_id',$order_details->tesco_supplier_id)->where(ErpOrders::poNumberMatcher($purchase_order_no))->exists();
 
             if ($erp_orders) 
             {

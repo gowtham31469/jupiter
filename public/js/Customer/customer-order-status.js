@@ -827,7 +827,7 @@ function tescoOrderStatus() {
                                         })
 
 
-                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
                                         if (coun == 0) {
                                             $('#map_po_status').addClass('hidden');
                                             $('#new_po1_status').addClass('hidden');
@@ -2181,7 +2181,7 @@ function tescoPOUpload(obj, id, po_file, tableName,style_no) {
                                         })
 
 
-                                        $('#selectpo_status').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
+                                        $('#po_select_div').html('<label>Select PO</label><select id="select_po_status" class="form-control">' + options + '</select>')
                                         if (coun == 0) {
                                             $('#map_po_status').addClass('hidden');
                                             $('#new_po1_status').addClass('hidden');

@@ -2827,13 +2827,15 @@ class OrderStatusController extends Controller
                 if ($jsonResponse === 'success' ) {
                     $buyer_id = $request->buyer_id;
                     $customer_id = Auth::guard('web_customer')->user()->company_id;
-                    
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_details->purchase_order_no)->first();
-                    
+
+                    $old_raw_po      = $po_details->purchase_order_no;
+                    $old_internal_po = ErpOrders::generateInternalPoNumber($old_raw_po);
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(ErpOrders::poNumberMatcher($old_raw_po))->first();
+
                     if($erp_previous_status)
                     {
                         $erp_moved_erp = ErpOrderDetails::where('erp_order_details.erp_order_id', $erp_previous_status->id)->where('status',1)->get();
-                    
+
                         if(count($erp_moved_erp) == 0)
                         {
                             if($erp_previous_status->previous_status != "" && $erp_previous_status->previous_status != null)
@@ -2843,13 +2845,13 @@ class OrderStatusController extends Controller
                                         'previous_status' => null,
                                 ]);
                             }
-                            
+
                         }
                     }
                 }
             }
 
-            if ($jsonResponse === 'success' ) 
+            if ($jsonResponse === 'success' )
             {
                 return response()->json(['error'=> false,'message' =>'Purchase Order Number added successfully','po_status' => $po_status],200);
             }
@@ -3922,8 +3924,9 @@ class OrderStatusController extends Controller
         {
             $id        =   explode(',',$request->id);
             $po        =   $request->po;
-            $erp_orders = DB::table('erp_orders')->where('po_no',$po)->select('po_file')->first();
-            
+            $internal_po    = ErpOrders::generateInternalPoNumber($po);
+            $erp_orders     = DB::table('erp_orders')->where(ErpOrders::poNumberMatcher($po))->select('po_file')->first();
+
             foreach($id as $val)
             {
                 $value    =  explode('-',$val);
@@ -3935,7 +3938,7 @@ class OrderStatusController extends Controller
                     $status = "PO Uploaded";
                     $po_file = $erp_orders->po_file;
                 }
-                else 
+                else
                 {
                     // if po is already uploaded, set status as po uploaded
                     if(sizeof($order_po_file) > 0)
@@ -3948,7 +3951,7 @@ class OrderStatusController extends Controller
                         $status = "PO Pending";
                         $po_file = $order_po_file;
                     }
-                    
+
                 }
 
                 DB::table($value[0])->where('id',$value[1])
@@ -4443,8 +4446,9 @@ class OrderStatusController extends Controller
                 if ($jsonResponse === 'success' ) {
                     $buyer_id = $request->buyer_id;
                     $customer_id = Auth::guard('web_customer')->user()->company_id;
-                    
-                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where('po_no',$po_number_updation)->first();
+
+                    $internal_po = ErpOrders::generateInternalPoNumber($po_number_updation);
+                    $erp_previous_status = Erp::where('buyer_id',$buyer_id)->where('customer_id',$customer_id)->where(ErpOrders::poNumberMatcher($po_number_updation))->first();
                     
                     if($erp_previous_status)
                     {
