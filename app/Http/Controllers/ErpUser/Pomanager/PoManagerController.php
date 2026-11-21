@@ -89,35 +89,28 @@ class PoManagerController extends Controller
 											$q->where('erp_orders.status',1)
 											->orWhere('erp_orders.status',2);
 										 })
-										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.created_at','erp_order_details.aw_date')
-										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.created_at as po_created_date','erp_order_details.aw_date')
+										 ->groupBy('erp_orders.id','customers.company_name','erp_status.status_name','erp_order_details.order_date','erp_order_details.aw_date')
+										 ->select('erp_orders.*','customers.company_name','erp_status.status_name','erp_order_details.order_date','erp_order_details.aw_date')
 										 ->get();
 
 				if(count($erp_order_details) > 0)
 				{
 					foreach($erp_order_details as $erp_order_det)
 					{
-						// format po created date to dd-mm-yyyy
-						if($erp_order_det["po_created_date"] != null)
-						{
-							 $erp_order_det["po_created_date"] = Carbon::parse($erp_order_det["po_created_date"])->format('d-m-Y');
-						}
-
-						// format artwork approved date to dd-mm-yyyy (null until the order is approved)
-						if($erp_order_det["aw_date"] != null)
-						{
-							 $erp_order_det["aw_date"] = Carbon::parse($erp_order_det["aw_date"])->format('d-m-Y');
-						}
-
+						// Dates stay raw ("Y-m-d H:i:s") here so min/max compare correctly - they
+						// are formatted to dd-mm-yyyy only when building the DataTables response.
+						// order_date = first date any line was submitted in the ordering portal (min).
+						// aw_date    = latest artwork approved date across lines (max, null until approved).
 						if (array_key_exists($erp_order_det->id,$orders_erp))
 						{
-							if($orders_erp[$erp_order_det->id]['po_created_date'] < $erp_order_det['po_created_date'])
+							$existing = $orders_erp[$erp_order_det->id];
+							if($erp_order_det->order_date != null && ($existing->order_date == null || $erp_order_det->order_date < $existing->order_date))
 							{
-								$orders_erp[$erp_order_det->id]['po_created_date']=$erp_order_det['po_created_date'];
+								$existing->order_date = $erp_order_det->order_date;
 							}
-							if($erp_order_det['aw_date'] != null && ($orders_erp[$erp_order_det->id]['aw_date'] == null || $orders_erp[$erp_order_det->id]['aw_date'] < $erp_order_det['aw_date']))
+							if($erp_order_det->aw_date != null && ($existing->aw_date == null || $existing->aw_date < $erp_order_det->aw_date))
 							{
-								$orders_erp[$erp_order_det->id]['aw_date']=$erp_order_det['aw_date'];
+								$existing->aw_date = $erp_order_det->aw_date;
 							}
 						}
 						else
@@ -177,10 +170,15 @@ class PoManagerController extends Controller
 		$orders_erp = $this->getPoVerifyOrders();
 		$records_total = count($orders_erp);
 
+		// raw "Y-m-d H:i:s" -> "dd-mm-yyyy" for display/search, "-" when empty
+		$format_date = function($date) {
+			return $date ? Carbon::parse($date)->format('d-m-Y') : '-';
+		};
+
 		$search = trim((string) $request->input('search.value', ''));
 		if ($search !== '') {
 			$search_lower = strtolower($search);
-			$orders_erp = array_values(array_filter($orders_erp, function($vals) use ($search_lower) {
+			$orders_erp = array_values(array_filter($orders_erp, function($vals) use ($search_lower, $format_date) {
 				$partial_text = $vals->partial_status == 0 ? 'no' : 'yes';
 				$haystacks = [
 					(string) $vals->erp_id,
@@ -188,8 +186,9 @@ class PoManagerController extends Controller
 					(string) $vals->po_no,
 					$partial_text,
 					(string) $vals->status_name,
-					(string) $vals->po_created_date,
-					(string) $vals->aw_date,
+					$format_date($vals->order_date),
+					$format_date($vals->created_at),
+					$format_date($vals->aw_date),
 				];
 				foreach ($haystacks as $haystack) {
 					if (strpos(strtolower($haystack), $search_lower) !== false) {
@@ -203,8 +202,9 @@ class PoManagerController extends Controller
 		$records_filtered = count($orders_erp);
 
 		// Sortable columns map to the DataTables column index (see poverify.blade.php).
-		// Column 0 (Sl.No), 5 (Status badge) and 8 (Actions) aren't real sortable fields.
-		$sortable_columns = [1 => 'erp_id', 2 => 'company_name', 3 => 'po_no', 4 => 'partial_status', 6 => 'po_created_date', 7 => 'aw_date'];
+		// Column 0 (Sl.No), 5 (Status badge) and 9 (Actions) aren't real sortable fields.
+		// Date fields are raw "Y-m-d H:i:s" values, so string comparison sorts them chronologically.
+		$sortable_columns = [1 => 'erp_id', 2 => 'company_name', 3 => 'po_no', 4 => 'partial_status', 6 => 'order_date', 7 => 'created_at', 8 => 'aw_date'];
 		$order = $request->input('order');
 		if (!empty($order) && isset($sortable_columns[$order[0]['column']])) {
 			$sort_field = $sortable_columns[$order[0]['column']];
@@ -237,8 +237,9 @@ class PoManagerController extends Controller
 				'po_no'           => $vals->po_no,
 				'partial_status'  => $vals->partial_status == 0 ? 'NO' : 'YES',
 				'status_html'     => $status_html,
-				'po_created_date' => explode(' ', $vals->po_created_date)[0] ?? '',
-				'artwork_approved_date' => $vals->aw_date ?: '-',
+				'order_date'      => $format_date($vals->order_date),
+				'erp_date'        => $format_date($vals->created_at),
+				'artwork_approved_date' => $format_date($vals->aw_date),
 				'actions'         => $actions_html,
 				'DT_RowId'        => $vals->id,
 			];
