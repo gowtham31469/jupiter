@@ -319,7 +319,8 @@ transform: scale(1);
 						<th>PO Number</th>
 						<th>Partial</th>
 						<th>Status</th>
-						<th>Created Date</th>
+						<th>Order Date</th>
+						<th>ERP Date</th>
 						<th>Artwork Approved Date</th>
 						<th>Actions</th>
 					</tr>
@@ -364,6 +365,8 @@ transform: scale(1);
 							<th>Quantity</th>
 							<th>Price</th>
 							<th>Status</th>
+							<th>Order Date</th>
+							<th>ERP Date</th>
 							<th>Approved Date</th>
 
 						</tr>
@@ -556,7 +559,8 @@ transform: scale(1);
 			{ data: 'po_no' },
 			{ data: 'partial_status' },
 			{ data: 'status_html', orderable: false },
-			{ data: 'po_created_date' },
+			{ data: 'order_date' },
+			{ data: 'erp_date' },
 			{ data: 'artwork_approved_date' },
 			{ data: 'actions', orderable: false, searchable: false, className: 'text-center' }
 		],
@@ -738,12 +742,11 @@ transform: scale(1);
 		}
 	}
 
+	// "yyyy-mm-dd[ hh:mm:ss]" -> "dd-mm-yyyy". Parsed from the string rather than
+	// new Date(), which Safari rejects for the space-separated timestamp format.
 	function formatAwDate(dateStr) {
-		var d = new Date(dateStr);
-		if (isNaN(d.getTime())) { return "-"; }
-		var day = ("0" + d.getDate()).slice(-2);
-		var month = ("0" + (d.getMonth() + 1)).slice(-2);
-		return day + "-" + month + "-" + d.getFullYear();
+		var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateStr || "");
+		return m ? m[3] + "-" + m[2] + "-" + m[1] : "-";
 	}
 
 	function view_order_details(id, po_no, buyer_id, customer_id, po_file) {
@@ -795,6 +798,9 @@ transform: scale(1);
 
 					var color_code = index.color_code != null ? index.color_code : "-";
 					var approved_date = index.aw_date != null ? formatAwDate(index.aw_date) : "-";
+					// order_date = submitted in the ordering portal, created_at = moved to ERP
+					var order_date = formatAwDate(index.order_date);
+					var erp_date = formatAwDate(index.created_at);
 
 					$('#order-details-table tbody').append(`
 						<tr id="` + index.id + `">
@@ -808,6 +814,8 @@ transform: scale(1);
 							  <td class="qty_td">` + index.order_quantity + `</td>
 							  <td class="price_td">` + index.price + `</td>
 							  <td><span class="` + label + `">` + index.status_name + `</span></td>
+							  <td class="order_date_td">` + order_date + `</td>
+							  <td class="erp_date_td">` + erp_date + `</td>
 							  <td class="approved_date_td">` + approved_date + `</td>
                           </tr>`)
 					i++;
