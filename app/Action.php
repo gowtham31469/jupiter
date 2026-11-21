@@ -8,3 +8,4 @@ class Action extends Model
 {
     protected $table = "actions";
 }
+//Action.php
